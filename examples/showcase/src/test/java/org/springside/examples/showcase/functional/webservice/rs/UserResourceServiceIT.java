@@ -1,7 +1,6 @@
 package org.springside.examples.showcase.functional.webservice.rs;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.List;
 
@@ -22,6 +21,9 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 		client.setBaseUrl(Start.BASE_URL + "/rs");
 	}
 
+	/**
+	 * 演示与Shiro的结合.
+	 */
 	@Test
 	public void getAllUser() {
 		List<UserDTO> userList = client.getAllUser();
@@ -30,12 +32,19 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 		assertEquals("admin", admin.getLoginName());
 	}
 
+	/**
+	 * 演示QueryParam与不同格式不同返回内容的Response.
+	 */
 	@Test
 	public void searchUserHtml() {
 		String html = client.searchUserReturnHtml("Admin");
 		assertEquals("<div>Admin, your mother call you...</div>", html);
 	}
 
+	/**
+	 * 演示QueryParam与不同格式不同返回内容的Response.
+	 * @throws Exception
+	 */
 	@Test
 	public void searchUserJson() throws Exception {
 		UserDTO admin = client.searchUserReturnJson("Admin");

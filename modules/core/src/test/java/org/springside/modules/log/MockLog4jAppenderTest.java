@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.log.MockLog4jAppender;
 
 public class MockLog4jAppenderTest {
 
@@ -51,12 +50,13 @@ public class MockLog4jAppenderTest {
 		assertNull(appender.getFirstLog());
 
 		//name
-		appender.addToLogger("org.springside.modules.unit.log");
+		appender.clearLogs();
+		appender.addToLogger("org.springside.modules.log");
 		logger.warn(testString);
 		assertNotNull(appender.getFirstLog());
 
 		appender.clearLogs();
-		appender.removeFromLogger("org.springside.modules.unit.log");
+		appender.removeFromLogger("org.springside.modules.log");
 		logger.warn(testString);
 		assertNull(appender.getFirstLog());
 

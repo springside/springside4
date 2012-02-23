@@ -50,8 +50,7 @@ public class UserResourceService {
 	private AccountManager accountManager;
 
 	/**
-	 * 获取所有用户.
-	 * 演示与SpringSecurity的结合.
+	 * 获取所有用户, 演示与Shiro的结合.
 	 */
 	@GET
 	@RequiresRoles("User")

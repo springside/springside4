@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.mapper.JsonMapper;
 
 /**
- * JSONP Mashup 服务端.
+ * 输出JsonP格式的Mashup 服务端, 支持被跨域调用.
  * 
  * @author calvin
  */
@@ -27,7 +27,6 @@ public class MashupServerController {
 		Map<String, String> map = Collections.singletonMap("html", "<p>Hello World!</p>");
 
 		//渲染返回结果.
-		//	Struts2Utils.renderJsonp(callbackName, map);
 		return mapper.toJsonP(callbackName, map);
 	}
 }

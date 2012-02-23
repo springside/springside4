@@ -12,7 +12,7 @@
 		<li>服务端演示使用Spring annotation定义MBean</li>
 	</ul>
 
-	<h2>用户故事：</h2>
+	<h3>用户故事：</h3>
 	<div>
 		使用JMX动态配置查看和配置Log4J日志等级。<br /> 客户端可使用JConsole或JManager, 远程进程URL为 localhost:2099
 		或完整版的service:jmx:rmi:///jndi/rmi://localhost:2099/jmxrmi

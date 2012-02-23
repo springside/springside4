@@ -14,16 +14,6 @@
 		</param-value>
 	</context-param>
 
-	<!-- CXF Servlet 配置 -->
-	<servlet>
-		<servlet-name>CXFServlet</servlet-name>
-		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CXFServlet</servlet-name>
-		<url-pattern>/services/*</url-pattern>
-	</servlet-mapping>
-
 	<!-- Jersey Servlet 配置 -->
 	<servlet>
 		<servlet-name>JerseyServlet</servlet-name>

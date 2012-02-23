@@ -28,10 +28,6 @@ import org.springside.modules.utils.spring.SpringContextHolder;
 @Ignore
 public class BaseFunctionalTestCase {
 
-	//Test Groups define
-	public final static String DAILY = "DAILY";
-	public final static String NIGHTLY = "NIGHTLY";
-
 	protected static Server jettyServer;
 
 	protected static DataSource dataSource;

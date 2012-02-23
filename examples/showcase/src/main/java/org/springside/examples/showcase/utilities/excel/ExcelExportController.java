@@ -23,7 +23,7 @@ import org.springside.modules.utils.web.Servlets;
 import com.google.common.collect.Maps;
 
 /**
- * 基于POI导出Excel文件的Action.
+ * 基于POI导出Excel文件的Controller.
  * 
  * @author calvin
  */
