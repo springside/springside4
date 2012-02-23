@@ -10,7 +10,7 @@
 
 		//使用JQuery.getJSON(url?callback=?)方式跨域名访问内容
 		function fetchMashupContent() {
-			$.getJSON(remoteUrl + "/web/mashup/mashup-server.action?callback=?", function(data) {
+			$.getJSON(remoteUrl + "/web/mashup?callback=?", function(data) {
 				$('#mashupContent').html(data.html);
 				$('#mashupContent').show();
 			});

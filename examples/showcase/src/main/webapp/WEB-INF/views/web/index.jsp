@@ -22,7 +22,7 @@
 			    3. CacheControlHeaderFilter为静态内容添加缓存控制 Header<br/>
 			    4. YUI Compressor 压缩js/css<br/>
 			</li>
-			<li><a href="${ctx}/web/mashup-client.action">跨域名Mashup演示</a> 演示基于JSONP Mashup 跨域名网站的内容.</li>
+			<li><a href="${ctx}/story/web/mashup-client">跨域名Mashup演示</a> 演示基于JSONP Mashup 跨域名网站的内容.</li>
 		</ul>
 		
 		<h3>用户故事：</h3>
