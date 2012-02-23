@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <acct_department ID="1" NAME="Development" MANAGER_ID="1"/>
+  <acct_department ID="2" NAME="Testing"  MANAGER_ID="2"/>
+  <acct_user ID="1" DEPARTMENT_ID="1" EMAIL="jack@springside.org.cn" LOGIN_NAME="user1" NAME="Jack" PASSWORD="user1"/>
+  <acct_user ID="2" DEPARTMENT_ID="2" EMAIL="kate@springside.org.cn" LOGIN_NAME="user2" NAME="Kate" PASSWORD="user2"/>
+  <acct_user ID="3" DEPARTMENT_ID="1" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user3" NAME="Sawyer" PASSWORD="user3"/>
+  <acct_user ID="4" DEPARTMENT_ID="2" EMAIL="ben@springside.org.cn" LOGIN_NAME="user4" NAME="Ben" PASSWORD="user4"/>
+</dataset>

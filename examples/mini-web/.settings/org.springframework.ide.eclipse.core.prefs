@@ -1,0 +1,20 @@
+#Thu Sep 09 23:15:57 CST 2010
+eclipse.preferences.version=1
+org.springframework.ide.eclipse.core.builders.enable.beanmetadatabuilder=true
+org.springframework.ide.eclipse.core.enable.project.preferences=false
+org.springframework.ide.eclipse.core.validator.enable.org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.enable.org.springframework.ide.eclipse.core.springvalidator=false
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanAlias-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanClass-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanConstructorArgument-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanDefinition-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanDefinitionHolder-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanFactory-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanInitDestroyMethod-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanProperty-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.beanReference-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.methodOverride-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.parsingProblems-org.springframework.ide.eclipse.beans.core.beansvalidator=true
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.requiredProperty-org.springframework.ide.eclipse.beans.core.beansvalidator=false
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.beans.core.toolAnnotation-org.springframework.ide.eclipse.beans.core.beansvalidator=false
+org.springframework.ide.eclipse.core.validator.rule.enable.org.springframework.ide.eclipse.core.springClasspath-org.springframework.ide.eclipse.core.springvalidator=false

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+	<!-- SpyMemcached客户端 -->
+	<bean id="spyMemcachedClient" class="org.springside.modules.memcached.SpyMemcachedClient" depends-on="memcachedSimulator">
+		<property name="memcachedClient">
+			<bean class="net.spy.memcached.spring.MemcachedClientFactoryBean">
+				<property name="servers" value="${memcached.url}" />
+				<!-- 默认是TEXT -->
+				<property name="protocol" value="TEXT" />
+				<!-- 默认是ARRAY_MOD -->
+				<property name="locatorType" value="CONSISTENT" />
+				<!-- 默认是2500毫秒 -->
+				<property name="opTimeout" value="1000" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 演示用的JMemcached, 模拟Memcached服务器 -->
+	<bean id="memcachedSimulator" class="org.springside.modules.memcached.MemcachedSimulator" lazy-init="false">
+		<property name="serverUrl" value="${memcached.url}" />
+	</bean>
+</beans>

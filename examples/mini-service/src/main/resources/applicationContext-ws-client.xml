@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:cxf="http://cxf.apache.org/core"
+	xsi:schemaLocation="http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+	<description>Apache CXF Web Service Client端配置</description>
+
+	<jaxws:client id="accountWebServiceClient" serviceClass="org.springside.examples.miniservice.webservice.ws.AccountWebService"
+		address="http://localhost:8080/mini-service/ws/accountservice" />
+</beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.springside</groupId>
+	<artifactId>springside</artifactId>
+	<version>4.0.0-SNAPSHOT</version>
+	<name>Springside</name>
+	<packaging>pom</packaging>
+	
+	<profiles>
+  	<profile>
+    	<id>all</id>
+    	<modules>
+				<module>modules/parent</module>
+				<module>modules/core</module>
+				<module>modules/extension</module>
+				<module>examples/mini-service</module>
+				<module>examples/mini-web</module>
+				<module>examples/showcase</module>
+				<module>tools/maven/archetype</module>
+	  	</modules>
+	  </profile>
+	  
+	  <profile>
+    	<id>modules</id>
+    	<modules>
+				<module>modules/parent</module>
+				<module>modules/core</module>
+				<module>modules/extension</module>
+				<module>tools/maven/archetype</module>
+	  	</modules>
+	  </profile>
+</profiles>
+</project>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+
+<Configure id="Server" class="org.eclipse.jetty.server.Server">
+
+	<Call id="MBeanServer" class="java.lang.management.ManagementFactory" name="getPlatformMBeanServer" />
+
+	<Get id="Container" name="container">
+		<Call name="addEventListener">
+			<Arg>
+				<New class="org.eclipse.jetty.jmx.MBeanContainer">
+					<Arg>
+						<Ref id="MBeanServer" />
+					</Arg>
+					<Call name="start" />
+				</New>
+			</Arg>
+		</Call>
+	</Get>
+</Configure>

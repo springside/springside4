@@ -1,0 +1,40 @@
+/* table */
+th, td {border-color: #999;}
+table.noborder th, table.noborder td {border: none;}
+
+form label {
+	width:100px;
+	display:inline-block;
+}
+
+/* header */
+#header {
+	border-bottom: 2px solid #658A16;
+}
+
+#header h2 {
+	letter-spacing: .1em;
+	margin:0.375em 0;
+	color: #658A16;
+}
+
+#header h3 {
+	letter-spacing: .1em;
+	margin:0.375m 0;
+	color: #BACE87;
+}
+
+/* leftbar */
+#leftbar a {
+	display: block;
+	padding: 0.3em;
+	padding-right: 0;
+	border-bottom: 1px dashed #eeeeee;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#leftbar a:hover {
+	color: #2a65ad;
+	background-color: #eeeeee;
+}

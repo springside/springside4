@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Account">
+	<resultMap id="departmentDetailMap" type="Department">
+		<id property="id" column="department_id" />
+		<result property="name" column="department_name" />
+		<association property="manager" column="manager_id" javaType="User">
+			<id property="id" column="manager_id" />
+			<result property="name" column="manager_name" />
+			<result property="email" column="manager_email" />
+		</association>
+		<collection property="userList" javaType="User">
+			<id property="id" column="user_id" />
+			<result property="name" column="user_name" />
+			<result property="email" column="user_email" />
+		</collection>
+	</resultMap>
+
+	<!-- 获取部门详细信息, 输出用resultMap关联嵌套对象 -->
+	<select id="getDepartmentDetail" parameterType="int" resultMap="departmentDetailMap">
+		select d.id as department_id,
+		d.name as
+		department_name,
+		m.id as
+		manager_id,
+		m.name as manager_name,
+		m.email as manager_email,
+		u.id as user_id,
+		u.name as user_name,
+		u.email as user_email
+		from acct_department d, acct_user m, acct_user u
+		where d.manager_id=m.id and d.id=u.department_id
+		and d.id=#{id}
+	</select>
+
+	<!--
+		获取用户: 输出直接映射到对象, login_name列要"as loginName"以方便映射 department_id as "department.id"创建department对象并赋值
+	-->
+	<select id="getUser" parameterType="int" resultType="User">
+		select id, name, email,
+		login_name as loginName,
+		department_id as "department.id"
+		from acct_user
+		where id=#{id}
+	</select>
+
+	<!-- 查询用户,演示: 1.输入用map传入多个参数 2.<where>语句, 智能添加where和and关键字 3.输出直接映射对象 -->
+	<select id="searchUser" parameterType="map" resultType="User">
+		select id, name, email,
+		login_name as loginName,
+		department_id as "department.id"
+		from acct_user
+		<where>
+			<if test="loginName != null">
+				login_name=#{loginName}
+			</if>
+			<if test="name != null">
+				and name=#{name}
+			</if>
+		</where>
+	</select>
+
+	<!-- 插入用户： 1.由数据库生成id并赋值到user对象 2.输入用对象, 嵌套属性表达式#{department.id} -->
+	<insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
+		insert into acct_user (
+		login_name, name, password, email, department_id)
+		values (#{loginName}, #{name}, #{password}, #{email},
+		#{department.id})
+	</insert>
+</mapper> 

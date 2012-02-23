@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>Email配置</description>
+
+	<!-- 邮件发送器 -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="username" value="springside.demo" />
+		<property name="password" value="demoforyou" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<!-- 使用gmail smtp server的必须参数 -->
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 文本邮件服务类 -->
+	<bean id="simpleMailService" class="org.springside.examples.showcase.utilities.email.SimpleMailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="textTemplate">
+			<value><![CDATA[
+			用戶%1$s在%2$tF被修改.
+					System Administrator.
+			]]></value>
+		</property>
+	</bean>
+
+	<!-- MIME邮件服务类 -->
+	<bean id="mimeMailService" class="org.springside.examples.showcase.utilities.email.MimeMailService">
+		<property name="mailSender" ref="mailSender" />
+		<property name="velocityEngine" ref="mailVelocityEngine" />
+		<property name="templateFileName" value="mailTemplate.vm" />
+	</bean>
+
+	<!-- VelocityEngine -->
+	<bean id="mailVelocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+		<property name="resourceLoaderPath" value="classpath:/email/" />
+	</bean>
+</beans>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<description>导入ShowCase中的applicationContext文件列表</description>
+
+	<import resource="cache/applicationContext-ehcache.xml" />
+	<import resource="cache/applicationContext-memcached.xml" />
+	<import resource="email/applicationContext-email.xml" />
+	<import resource="jms/applicationContext-jms-simple.xml" />
+	<import resource="jms/applicationContext-jms-advanced.xml" />
+	<import resource="jmx/applicationContext-jmx.xml" />
+	<import resource="log/applicationContext-log.xml" />
+	<import resource="schedule/applicationContext-executor.xml" />
+	<import resource="schedule/applicationContext-quartz-cron-local.xml" />
+	<import resource="schedule/applicationContext-quartz-timer-cluster.xml" />
+	<import resource="security/applicationContext-shiro.xml" />
+	<import resource="webservice/applicationContext-rs-server.xml" />
+</beans>

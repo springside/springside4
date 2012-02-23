@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
+	default-lazy-init="true">
+
+	<description>使用JDK ScheduledExecutorService的定时任务配置</description>
+	
+	<!-- 定期执行的业务类 -->
+	<bean id="jdkExecutorJob" class="org.springside.examples.showcase.schedule.JdkExecutorJob" lazy-init="false">
+		<!-- 每次执行间隔60秒 -->
+		<property name="period" value="60" />
+		<!-- 首次执行延期2秒 -->
+		<property name="initialDelay" value="2" />
+		<!-- shutdown时等待任务完成, 最多等待20秒 -->
+		<property name="shutdownTimeout" value="20" />
+	</bean>
+	
+	<!-- 根据Cron表达式执行的业务类  -->
+	<bean id="springCronJob" class="org.springside.examples.showcase.schedule.SpringCronJob" lazy-init="false">
+		<!-- cron表达式 -->
+		<property name="cronExpression" value="* 15 9-17 * * MON-FRI"/>
+		<!-- shutdown时等待任务完成, 最多等待20秒 -->
+		<property name="shutdownTimeout" value="20" />
+	</bean>
+</beans>

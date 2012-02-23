@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+  <mapping path="/*" decorator="/WEB-INF/layouts/default.jsp"/>
+  <mapping path="/static/*" exclude="true"/>
+</sitemesh>

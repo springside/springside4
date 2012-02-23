@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <SS_USER ID="1" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="admin@springside.org.cn" LOGIN_NAME="admin" NAME="Admin" PLAIN_PASSWORD="admin" STATUS="enabled"/>
+  <SS_USER ID="2" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="user@springside.org.cn" LOGIN_NAME="user" NAME="Calvin" PLAIN_PASSWORD="user" STATUS="enabled"/>
+  <SS_USER ID="3" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="jack@springside.org.cn" LOGIN_NAME="user2" NAME="Jack" PLAIN_PASSWORD="user2" STATUS="enabled"/>
+  <SS_USER ID="4" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="kate@springside.org.cn" LOGIN_NAME="user3" NAME="Kate" PLAIN_PASSWORD="user3" STATUS="enabled"/>
+  <SS_USER ID="5" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user4" NAME="Sawyer" PLAIN_PASSWORD="user4" STATUS="enabled"/>
+  <SS_USER ID="6" CREATE_TIME="2009-07-11 08:52:25.805" EMAIL="ben@springside.org.cn" LOGIN_NAME="user5" NAME="Ben" PLAIN_PASSWORD="user5" STATUS="enabled"/>
+  <SS_ROLE ID="1" NAME="Admin"/>
+  <SS_ROLE ID="2" NAME="User"/>
+  <SS_USER_ROLE USER_ID="1" ROLE_ID="1"/>
+  <SS_USER_ROLE USER_ID="1" ROLE_ID="2"/>
+  <SS_USER_ROLE USER_ID="2" ROLE_ID="2"/>
+  <SS_USER_ROLE USER_ID="3" ROLE_ID="2"/>
+  <SS_USER_ROLE USER_ID="4" ROLE_ID="2"/>
+  <SS_USER_ROLE USER_ID="5" ROLE_ID="2"/>
+  <SS_USER_ROLE USER_ID="6" ROLE_ID="2"/>
+</dataset>

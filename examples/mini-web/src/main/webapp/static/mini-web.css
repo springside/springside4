@@ -1,0 +1,49 @@
+/* general */
+th, td {border-color: #999;}
+
+form label {
+	width:100px;
+	display:inline-block;
+}
+
+/* header */
+#title h2 {
+	letter-spacing: .1em;
+	margin:0.5em  0;
+}
+
+#title h3 {
+	color: #999;
+	letter-spacing: .1em;
+	margin:0.5em 0;
+}
+
+#menu ul {
+	margin:0 0 0 0;
+	padding: 0.5em;
+	font-weight: bold;
+	background: #BACE87;
+	border-top: 2px solid #658A16;
+	border-bottom: 2px solid #658A16;
+}
+
+#menu li {display: inline;}
+
+#menu ul a {
+	padding: 0.5em;
+	text-decoration: none;
+	color: #fff;
+}
+
+#menu a:hover {background: #658A16;}
+
+/* footer */
+#footer {
+	margin-top: 15px;
+	padding: 15px 0px 0px 0px;
+	font-size: 95%;
+	text-align: center;
+	border-top: 2px solid #658A16;
+}
+
+#footer a {color: #999;}

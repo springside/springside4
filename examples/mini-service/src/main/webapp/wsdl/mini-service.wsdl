@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="AccountService" targetNamespace="http://miniservice.examples.springside.org" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://miniservice.examples.springside.org" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema elementFormDefault="unqualified" targetNamespace="http://miniservice.examples.springside.org" version="1.0" xmlns:tns="http://miniservice.examples.springside.org" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:element name="createUser" type="tns:createUser"/>
+<xs:element name="createUserResponse" type="tns:createUserResponse"/>
+<xs:element name="getDepartmentDetail" type="tns:getDepartmentDetail"/>
+<xs:element name="getDepartmentDetailResponse" type="tns:getDepartmentDetailResponse"/>
+<xs:element name="searchUser" type="tns:searchUser"/>
+<xs:element name="searchUserResponse" type="tns:searchUserResponse"/>
+<xs:complexType name="searchUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="loginName" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element name="pageNo" type="xs:int"/>
+      <xs:element name="pageSize" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="searchUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:UserPageResult"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="UserPageResult">
+    <xs:complexContent>
+      <xs:extension base="tns:PageResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="userList">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" name="user" type="tns:User"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="PageResult">
+    <xs:complexContent>
+      <xs:extension base="tns:WSResult">
+        <xs:sequence>
+          <xs:element name="totalItems" type="xs:long"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="WSResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="code" type="xs:string"/>
+      <xs:element minOccurs="0" name="message" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="User">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="department" type="tns:Department"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:long"/>
+      <xs:element minOccurs="0" name="loginName" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="Department">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="manager" type="tns:User"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="userList">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element maxOccurs="unbounded" minOccurs="0" name="User" type="tns:User"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getDepartmentDetail">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="id" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="getDepartmentDetailResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:DepartmentResult"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="DepartmentResult">
+    <xs:complexContent>
+      <xs:extension base="tns:WSResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="department" type="tns:Department"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+<xs:complexType name="createUser">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="user" type="tns:User"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="createUserResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:IdResult"/>
+    </xs:sequence>
+  </xs:complexType>
+<xs:complexType name="IdResult">
+    <xs:complexContent>
+      <xs:extension base="tns:WSResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="id" type="xs:long"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="searchUserResponse">
+    <wsdl:part element="tns:searchUserResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDepartmentDetailResponse">
+    <wsdl:part element="tns:getDepartmentDetailResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUser">
+    <wsdl:part element="tns:createUser" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="searchUser">
+    <wsdl:part element="tns:searchUser" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createUserResponse">
+    <wsdl:part element="tns:createUserResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getDepartmentDetail">
+    <wsdl:part element="tns:getDepartmentDetail" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AccountService">
+    <wsdl:operation name="searchUser">
+      <wsdl:input message="tns:searchUser" name="searchUser">
+    </wsdl:input>
+      <wsdl:output message="tns:searchUserResponse" name="searchUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartmentDetail">
+      <wsdl:input message="tns:getDepartmentDetail" name="getDepartmentDetail">
+    </wsdl:input>
+      <wsdl:output message="tns:getDepartmentDetailResponse" name="getDepartmentDetailResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <wsdl:input message="tns:createUser" name="createUser">
+    </wsdl:input>
+      <wsdl:output message="tns:createUserResponse" name="createUserResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AccountServiceSoapBinding" type="tns:AccountService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="searchUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="searchUser">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="searchUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getDepartmentDetail">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getDepartmentDetail">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getDepartmentDetailResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createUser">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createUser">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createUserResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AccountService">
+    <wsdl:port binding="tns:AccountServiceSoapBinding" name="AccountServicePort">
+      <soap:address location="http://localhost:8080/mini-service/ws/accountservice"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

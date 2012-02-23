@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+	<ACCT_GROUP ID="1" NAME="管理员" />
+	<ACCT_GROUP ID="2" NAME="用户" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="1" PERMISSION="user:view" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="1" PERMISSION="user:edit" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="1" PERMISSION="group:view" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="1" PERMISSION="group:edit" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="2" PERMISSION="user:view" />
+	<ACCT_GROUP_PERMISSION GROUP_ID="2" PERMISSION="group:view" />
+	<ACCT_USER ID="1" EMAIL="admin@springside.org.cn" LOGIN_NAME="admin" NAME="Admin" PASSWORD="admin" />
+	<ACCT_USER ID="2" EMAIL="user@springside.org.cn" LOGIN_NAME="user" NAME="User" PASSWORD="user" />
+	<ACCT_USER ID="3" EMAIL="jack@springside.org.cn" LOGIN_NAME="user2" NAME="Jack" PASSWORD="user2" />
+	<ACCT_USER ID="4" EMAIL="kate@springside.org.cn" LOGIN_NAME="user3" NAME="Kate" PASSWORD="user3" />
+	<ACCT_USER ID="5" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user4" NAME="Sawyer" PASSWORD="user4" />
+	<ACCT_USER ID="6" EMAIL="ben@springside.org.cn" LOGIN_NAME="user5" NAME="Ben" PASSWORD="user5" />
+	<ACCT_USER_GROUP USER_ID="1" GROUP_ID="1" />
+	<ACCT_USER_GROUP USER_ID="1" GROUP_ID="2" />
+	<ACCT_USER_GROUP USER_ID="2" GROUP_ID="2" />
+	<ACCT_USER_GROUP USER_ID="3" GROUP_ID="2" />
+	<ACCT_USER_GROUP USER_ID="4" GROUP_ID="2" />
+	<ACCT_USER_GROUP USER_ID="5" GROUP_ID="2" />
+	<ACCT_USER_GROUP USER_ID="6" GROUP_ID="2" />
+</dataset>
