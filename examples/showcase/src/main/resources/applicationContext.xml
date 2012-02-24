@@ -26,9 +26,6 @@
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="org.springside.examples.showcase" />
 
-	<!-- 以静态变量保存ApplicationContext -->
-	<bean class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
-
 	<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<!-- Connection Info -->

@@ -32,3 +32,6 @@
 /modules/extension/.classpath
 /modules/extension/.project
 /modules/extension/.settings/org.eclipse.jdt.core.prefs
+/support/maven-archetype/target/
+/support/maven-archetype/.settings/
+/support/maven-archetype/.project

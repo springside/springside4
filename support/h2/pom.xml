@@ -4,7 +4,8 @@
 	<parent>
 		<artifactId>springside-parent</artifactId>
 		<groupId>org.springside</groupId>
-		<version>4.0.0-SNAPSHOT</version>
+		<version>4.0.0.RC1-SNAPSHOT</version>
+		<relativePath>../../modules/parent</relativePath>
 	</parent>
 	<groupId>org.springside</groupId>
 	<artifactId>h2-starts</artifactId>
@@ -67,6 +68,8 @@
 						<arguments>
 							<argument>-tcp</argument>
 							<argument>-web</argument>
+							<argument>-webPort</argument>
+							<argument>8090</argument>
 						</arguments>
 					</configuration>
 			</plugin>

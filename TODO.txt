@@ -72,7 +72,7 @@ TODO部分:
   * 用JUnit自带的Catetory的演示
   * 升级Selenium到最新版, 使用自带的Wait类
   * 升级Jquery-validation用法
-  * Cleanup 代码Header中SVN相关的部分
+  * 安全部分加入salt
   
 
 -----------------------------------------------------------------------------------
