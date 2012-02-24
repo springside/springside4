@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: SpyMemcachedClient.java 1303 2010-11-19 17:04:05Z calvinxiu $
  */
 package org.springside.modules.memcached;
 

@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: Digests.java 1667 2011-11-17 23:24:02Z calvinxiu $
  */
 package org.springside.modules.utils.security;
 
@@ -13,7 +11,6 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 
 import org.springside.modules.utils.Encodes;
-
 import org.springside.modules.utils.Exceptions;
 
 /**

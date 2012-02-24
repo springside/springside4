@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: JaxbMapper.java 1667 2011-11-17 23:24:02Z calvinxiu $
  */
 package org.springside.modules.mapper;
 
@@ -20,7 +18,6 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
-
 import org.springside.modules.utils.Exceptions;
 
 /**

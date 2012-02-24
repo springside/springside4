@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: Servlets.java 1661 2011-11-17 20:35:10Z calvinxiu $
  */
 package org.springside.modules.utils.web;
 

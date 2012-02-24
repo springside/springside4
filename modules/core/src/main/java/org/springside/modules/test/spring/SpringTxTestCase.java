@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: SpringTxTestCase.java 1594 2011-05-11 14:22:29Z calvinxiu $
  */
 package org.springside.modules.test.spring;
 

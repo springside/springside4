@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: Encodes.java 1667 2011-11-17 23:24:02Z calvinxiu $
  */
 package org.springside.modules.utils;
 
@@ -16,8 +14,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.Validate;
-
-import org.springside.modules.utils.Exceptions;
 
 /**
  * 封装各种格式的编码解码工具类.

@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: BeanMapper.java 1669 2011-11-18 00:06:55Z calvinxiu $
  */
 package org.springside.modules.mapper;
 

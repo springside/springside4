@@ -1,9 +1,7 @@
 /**
- * Copyright (c) 2005-2011 springside.org.cn
+ * Copyright (c) 2005-2012 springside.org.cn
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- * 
- * $Id: Fixtures.java 1667 2011-11-17 23:24:02Z calvinxiu $
  */
 package org.springside.modules.test.data;
 
@@ -28,9 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springside.modules.utils.PropertiesLoader;
-
 import org.springside.modules.utils.Exceptions;
+import org.springside.modules.utils.PropertiesLoader;
 
 /**
  * 基于DBUnit初始化测试数据到H2数据库的工具类.
