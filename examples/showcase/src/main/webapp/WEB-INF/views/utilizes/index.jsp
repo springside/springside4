@@ -36,5 +36,15 @@
 		<li>使用JConsole动态修改log4j的日志等级.(路径service:jmx:rmi:///jndi/rmi://localhost:2099/jmxrmi,名称Log4j:name=log4j)</li>
 		<li>Schedule测试用例使用MockAppender校验日志输出.</li>
 	</ul>
+	
+	<h3>其他常用工具</h3>
+	<p>全部演示在org.springside.examples.showcase.utilities目录</p>
+	<ul>
+		<li>JodaTime: 日期操作.</li>
+		<li>Dozer: 不同类型的对象互相复制与转换。</li>
+		<li>Apache Commons IO: IO操作。</li>
+		<li>Apache Commons Lang Validate: 防御式编程，校验输入参数.</li>
+		<li>Apache Commons Lang StringUtils: 字符串操作.</li>
+	</ul>
 </body>
 </html>

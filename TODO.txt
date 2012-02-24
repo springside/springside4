@@ -9,7 +9,6 @@ TODO部分:
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
   
 2.次要改动
-  * 补充Showcase的utilize描述
   * 整理CSS(整理项目BBS, 整理BluePrint CSS，将JQuery Validation中的milk css替换为message.css，jquery validate input框的.error替换为将替换为hightlight)
   * 修正Selenium Test case
  

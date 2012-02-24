@@ -29,7 +29,7 @@
 	<context:component-scan base-package="org.springside.examples.miniservice" />
 
 	<!-- 以静态变量保存ApplicationContext -->
-	<bean class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
+	<bean class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />
 
 	<!-- 数据源配置,在测试环境使用JDBC直接连接 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

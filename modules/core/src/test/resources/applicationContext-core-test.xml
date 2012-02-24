@@ -39,7 +39,7 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 
-	<bean id="springContextHolder" class="org.springside.modules.utils.spring.SpringContextHolder" lazy-init="false" />
+	<bean id="springContextHolder" class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />
 
 	<!-- JSR303 Validator定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
