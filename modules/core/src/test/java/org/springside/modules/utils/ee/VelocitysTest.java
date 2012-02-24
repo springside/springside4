@@ -1,4 +1,4 @@
-package org.springside.modules.utils.velocity;
+package org.springside.modules.utils.ee;
 
 import static org.junit.Assert.*;
 
@@ -7,7 +7,7 @@ import java.util.Map;
 import org.apache.velocity.app.VelocityEngine;
 import org.junit.Test;
 import org.springframework.ui.velocity.VelocityEngineFactory;
-import org.springside.modules.utils.velocity.Velocitys;
+import org.springside.modules.utils.ee.Velocitys;
 
 import com.google.common.collect.Maps;
 

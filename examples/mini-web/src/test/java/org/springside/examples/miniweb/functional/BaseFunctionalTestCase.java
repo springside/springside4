@@ -15,8 +15,8 @@ import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
+import org.springside.modules.test.spring.SpringContextHolder;
 import org.springside.modules.utils.PropertiesLoader;
-import org.springside.modules.utils.spring.SpringContextHolder;
 
 /**
  * 功能测试基类.

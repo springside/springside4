@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.utils.spring;
+package org.springside.modules.test.spring;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;

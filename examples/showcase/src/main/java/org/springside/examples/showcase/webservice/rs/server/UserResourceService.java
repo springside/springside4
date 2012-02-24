@@ -29,8 +29,8 @@ import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.webservice.WsConstants;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
+import org.springside.modules.jersey.WebExceptionFactory;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.jersey.WebExceptionFactory;
 
 import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.MultiPart;

@@ -22,7 +22,7 @@ import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
 import org.springside.examples.miniservice.webservice.ws.result.base.IdResult;
 import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.validator.Validators;
+import org.springside.modules.utils.ee.Validators;
 
 /**
  * WebService服务端实现类.

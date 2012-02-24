@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.utils.jersey;
+package org.springside.modules.jersey;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;

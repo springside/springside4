@@ -25,9 +25,9 @@ import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
+import org.springside.modules.jersey.WebExceptionFactory;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.jersey.WebExceptionFactory;
-import org.springside.modules.utils.validator.Validators;
+import org.springside.modules.utils.ee.Validators;
 
 /**
  * User资源的REST服务.

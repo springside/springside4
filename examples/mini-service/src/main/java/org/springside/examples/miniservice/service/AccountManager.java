@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.miniservice.dao.AccountDao;
 import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.entity.User;
-import org.springside.modules.utils.validator.Validators;
+import org.springside.modules.utils.ee.Validators;
 
 import com.google.common.collect.Maps;
 

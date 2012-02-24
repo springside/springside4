@@ -11,7 +11,7 @@ import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.modules.test.spring.SpringContextTestCase;
-import org.springside.modules.utils.validator.Validators;
+import org.springside.modules.utils.ee.Validators;
 
 @ContextConfiguration(locations = { "/applicationContext-test.xml" })
 public class AccountManagerTest extends SpringContextTestCase {

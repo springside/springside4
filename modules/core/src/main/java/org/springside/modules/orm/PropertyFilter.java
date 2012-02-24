@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.mapper.StringMapper;
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.web.Servlets;
+import org.springside.modules.utils.ee.Servlets;
 
 /**
  * 与具体ORM实现无关的属性过滤条件封装类, 主要记录页面中简单的搜索过滤条件.

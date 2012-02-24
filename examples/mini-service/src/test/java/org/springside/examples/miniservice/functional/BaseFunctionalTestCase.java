@@ -8,7 +8,7 @@ import org.junit.Ignore;
 import org.springside.examples.miniservice.Start;
 import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
-import org.springside.modules.utils.spring.SpringContextHolder;
+import org.springside.modules.test.spring.SpringContextHolder;
 
 /**
  * 功能测试基类.

@@ -14,8 +14,8 @@ import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
+import org.springside.modules.jersey.WebExceptionFactory;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.jersey.WebExceptionFactory;
 
 /**
  * Department资源的REST服务.
