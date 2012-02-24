@@ -10,7 +10,7 @@
 		<!-- 每次执行间隔60秒 -->
 		<property name="period" value="60" />
 		<!-- 首次执行延期2秒 -->
-		<property name="initialDelay" value="2" />
+		<property name="initialDelay" value="1" />
 		<!-- shutdown时等待任务完成, 最多等待20秒 -->
 		<property name="shutdownTimeout" value="20" />
 	</bean>
