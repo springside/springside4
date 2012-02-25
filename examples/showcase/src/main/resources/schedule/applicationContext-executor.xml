@@ -7,9 +7,9 @@
 	
 	<!-- 定期执行的业务类 -->
 	<bean id="jdkExecutorJob" class="org.springside.examples.showcase.schedule.JdkExecutorJob" lazy-init="false">
-		<!-- 每次执行间隔60秒 -->
-		<property name="period" value="60" />
-		<!-- 首次执行延期2秒 -->
+		<!-- 每次执行间隔120秒 -->
+		<property name="period" value="120" />
+		<!-- 首次执行延期1秒 -->
 		<property name="initialDelay" value="1" />
 		<!-- shutdown时等待任务完成, 最多等待20秒 -->
 		<property name="shutdownTimeout" value="20" />

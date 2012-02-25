@@ -11,10 +11,10 @@ TODO部分:
 2.次要改动
   * 整理CSS(整理项目BBS, 整理BluePrint CSS，将JQuery Validation中的milk css替换为message.css，jquery validate input框的.error替换为将替换为hightlight)
   * 修正Selenium Test case
+  * 晦气，再把Velocity回退成Freemarker
  
 3.其他非代码改动
   * 发布前打包Maven-Archetype的项目生成模板
-  * Makesure all bat work
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -23,7 +23,7 @@ TODO部分:
    * DAO框架增加MyBatis的使用，与Hibernate在不同的场景各展所长
    * 安全框架从SpringSecurity转为Apache Shiro.
    * SpringSide Modules的重构
-   * 使用SiteMesh3实现Layout
+   * 使用SiteMesh3实现Layout Decoration
    * CSS框架从YUI转为Blueprint
    * 演示Hibernate Validator
    * 升級Jackson1.9 演示，包括可擴展的對象, 對象循環引用，局部更新，自定义类型的持久化，自定义Naming策略，已存在對象等新特性.
@@ -51,7 +51,6 @@ TODO部分:
    * 使用Maven FailSafe插件分开单元测试和集成测试
    * cxf wsdl2java从ant改为用maven plugin
    * hibernate代码生成从ant改为用Eclipse插件
-   * 发布包中不再包含所有依赖jar，只包含源码,maven和ant命令.
 
 -----------------------------------------------------------------------------------
 4.0 正式版
@@ -66,12 +65,14 @@ TODO部分:
   * 包括Guava的Cache Builder做的简单缓存
   * Review HttpClient的使用
   * Review perf4j的使用
-  * 依赖包次要版本升级:JSW 3.5.7(需自行打包)
+  * 依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包)
   * Jersey的Jackson JSON绑定看有没有简化
-  * 用JUnit自带的Catetory的演示
-  * 升级Selenium到最新版, 使用自带的Wait类
+  * 用JUnit自带的Catetory的演示,Harmset演示
+  * Selenium使用自带的Wait类, 检查新版API变化
+  * 更深入演示PowerMock
   * 升级Jquery-validation用法
-  * 安全部分加入salt
+  * Hash与加密要加入salt
+  * 取消GBK编码的bat
   
 
 -----------------------------------------------------------------------------------
