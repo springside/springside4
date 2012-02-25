@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<h3>权限组列表</h3>
+	<h4 class="prepend-top">权限组列表</h4>
 	<c:if test="${not empty message}">
 		<div id="message" class="success">${message}</div>	
 	</c:if>

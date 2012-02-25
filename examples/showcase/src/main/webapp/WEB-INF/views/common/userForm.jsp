@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<h3>管理用户</h3>
+	<h2>管理用户</h2>
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/common/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<input type="hidden" name="workingVersion" value="${user.version}"/>

@@ -5,11 +5,6 @@
 <html>
 <head>
 	<title>综合演示用例</title>
-	<script language="javascript">
-		function disableUsers() {
-			$("#mainForm").submit();
-		}
-	</script>
 </head>
 
 <body>

@@ -43,7 +43,7 @@
 </head>
 
 <body>
-	<h3>管理用户</h3>
+	<h4 class="prepend-top">管理用户</h4>
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>

@@ -14,7 +14,7 @@
 <body>
 		<h2>Web高级演示</h2>
 
-		<h3>技术说明：</h3>
+		<h4>技术说明：</h4>
 		<ul>
 			<li>高性能Web2.0网站:<br/>
 			    1. 静态内容Servlet, 演示高效读取静态内容, 控制客户端缓存, 压缩传输, 弹出下载对话框.<br/>
@@ -22,10 +22,10 @@
 			    3. CacheControlHeaderFilter为静态内容添加缓存控制 Header<br/>
 			    4. YUI Compressor 压缩js/css<br/>
 			</li>
-			<li><a href="${ctx}/story/web/mashup-client">跨域名Mashup演示</a> 演示基于JSONP Mashup 跨域名网站的内容.</li>
+			<li><a href="${ctx}/web/mashup-client">跨域名Mashup演示</a> 演示基于JSONP Mashup 跨域名网站的内容.</li>
 		</ul>
 		
-		<h3>用户故事：</h3>
+		<h4>用户故事：</h4>
 		<ul>
 			<li>静态内容Servlet:<img src="${ctx}/static-content?contentPath=static/img/logo.jpg"/> <a href="${ctx}/static-content?contentPath=img/logo.jpg&download=true">图片下载链接</a></li>
 			<li>远程内容Servlet:<img src="${ctx}/mashup-content?contentUrl=<%=encodedImageUrl%>"/></li>

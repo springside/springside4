@@ -9,7 +9,7 @@
 </head>
 
 <body>
-	<h3>管理权限组</h3>
+	<h4 class="prepend-top">管理权限组</h4>
 	<form:form id="inputForm" modelAttribute="group" action="${ctx}/account/group/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${group.id}"/>
 		<fieldset>
