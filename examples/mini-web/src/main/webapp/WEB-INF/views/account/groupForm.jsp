@@ -9,23 +9,23 @@
 </head>
 
 <body>
-	<h4 class="prepend-top">管理权限组</h4>
 	<form:form id="inputForm" modelAttribute="group" action="${ctx}/account/group/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${group.id}"/>
-		<fieldset>
-			<p>
+		<fieldset class="prepend-top">
+			<legend>管理权限组</legend>
+			<div>
 				<label for="loginName">名称:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="loginName">权限列表:</label>
 				<form:checkboxes path="permissionList" items="${allPermissions}" itemLabel="displayName" itemValue="value" />
-			</p>	
+			</div>	
 		</fieldset>
-		<p>
+		<div>
 			<input class="button" type="submit" value="提交"/>&nbsp;	
 			<input class="button" type="button" value="返回" onclick="history.back()"/>
-		</p>
+		</div>
 	</form:form>
 </body>
 </html>

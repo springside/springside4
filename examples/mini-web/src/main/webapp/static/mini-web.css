@@ -1,5 +1,7 @@
 /* general */
-th, td {border-color: #999;}
+table {
+    border: 1px solid #CCCCCC;
+}
 
 form label {
 	width:100px;

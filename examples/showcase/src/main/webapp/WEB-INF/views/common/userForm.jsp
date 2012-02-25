@@ -9,27 +9,28 @@
 </head>
 
 <body>
-	<h2>管理用户</h2>
+	<h2>综合演示用例</h2>
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/common/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<input type="hidden" name="workingVersion" value="${user.version}"/>
 		<fieldset>
-			<p>
+			<legend>管理用户</legend>
+			<div>
 				<label for="loginName">登录名:</label>
 				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="name">用户名:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="plainPassword">密码:</label>
 				<input type="password" id="plainPassword" name="password" size="40" value="${user.plainPassword}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label>密码散列:</label>
 				<span>${user.shaPassword}</span>
-			</p>
+			</div>
 		</fieldset>
 		<p>
 			<input class="button" type="submit" value="提交"/>&nbsp;	

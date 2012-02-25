@@ -43,39 +43,40 @@
 </head>
 
 <body>
-	<h4 class="prepend-top">管理用户</h4>
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
-		<fieldset>
-			<p>
+		<fieldset class="prepend-top">
+			<legend>管理用户</legend>
+	
+			<div>
 				<label for="loginName">登录名:</label>
 				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="name">用户名:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="password">密码:</label>
 				<input type="password" id="password" name="password" size="40" value="${user.password}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="passwordConfirm">确认密码:</label>
 				<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="loginName">邮箱:</label>
 				<input type="text" id="email" name="email" size="40" value="${user.email}"/>
-			</p>
-			<p>
+			</div>
+			<div>
 				<label for="loginName">权限组:</label>
 				<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
-			</p>	
+			</div>	
 		</fieldset>
-		<p>
+		<div>
 			<input class="button" type="submit" value="提交"/>&nbsp;	
 			<input class="button" type="button" value="返回" onclick="history.back()"/>
-		</p>
+		</div>
 	</form:form>
 </body>
 </html>

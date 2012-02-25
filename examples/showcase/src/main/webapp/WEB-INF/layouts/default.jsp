@@ -11,10 +11,10 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
-<link href="${ctx}/static/showcase.min.css" type="text/css" rel="stylesheet" />
 <link href="${ctx}/static/blueprint/1.0.1/screen.css" type="text/css" rel="stylesheet" media="screen, projection" />
 <link href="${ctx}/static/blueprint/1.0.1/print.css" type="text/css" rel="stylesheet" media="print" />
 <!--[if lt IE 8]><link href="${ctx}/static/blueprint/1.0.1/ie.css" type="text/css" rel="stylesheet" media="screen, projection"><![endif]-->
+<link href="${ctx}/static/showcase.min.css" type="text/css" rel="stylesheet" />
 
 <script src="${ctx}/static/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 

@@ -1,6 +1,7 @@
-/* table */
-th, td {border-color: #999;}
-table.noborder th, table.noborder td {border: none;}
+/* general */
+table {
+    border: 1px solid #CCCCCC;
+}
 
 form label {
 	width:100px;
