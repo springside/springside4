@@ -1,7 +1,9 @@
   SpringSide is a Spring Framework based JavaEE application reference architecture. 
+  
   It shows the mainstream technologies and pragmatic practice in JavaEE.  
   
   It has 3 major examples:
+  
   1. mini-web focus on the minimal CRUD web application
   2. mini-service focus on the effective SOAP and REST web service.
   3. showcase demonstrate many other useful technologies used in a JavaEE application.
