@@ -12,7 +12,7 @@ import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
 
-@Ignore("unstatable on Jenkins")
+@Ignore("Unstatable on Jenkins")
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext-test.xml", "/schedule/applicationContext-executor.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
