@@ -14,11 +14,11 @@
 		<fieldset class="prepend-top">
 			<legend>管理权限组</legend>
 			<div>
-				<label for="loginName">名称:</label>
+				<label for="loginName" class="field">名称:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
 			</div>
 			<div>
-				<label for="loginName">权限列表:</label>
+				<label for="loginName" class="field">权限列表:</label>
 				<form:checkboxes path="permissionList" items="${allPermissions}" itemLabel="displayName" itemValue="value" />
 			</div>	
 		</fieldset>

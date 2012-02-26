@@ -16,26 +16,26 @@
 		<fieldset>
 			<legend>管理用户</legend>
 			<div>
-				<label for="loginName">登录名:</label>
+				<label for="loginName" class="field">登录名:</label>
 				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
 			</div>
 			<div>
-				<label for="name">用户名:</label>
+				<label for="name" class="field">用户名:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
 			</div>
 			<div>
-				<label for="plainPassword">密码:</label>
+				<label for="plainPassword" class="field">密码:</label>
 				<input type="password" id="plainPassword" name="password" size="40" value="${user.plainPassword}"/>
 			</div>
 			<div>
-				<label>密码散列:</label>
+				<label class="field">密码散列:</label>
 				<span>${user.shaPassword}</span>
 			</div>
 		</fieldset>
-		<p>
+		<div>
 			<input class="button" type="submit" value="提交"/>&nbsp;	
 			<input class="button" type="button" value="返回" onclick="history.back()"/>
-		</p>
+		</div>
 	</form:form>
 </body>
 </html>

@@ -3,8 +3,8 @@ table {
     border: 1px solid #CCCCCC;
 }
 
-form label {
-	width:100px;
+label.field {
+	width:98px;
 	display:inline-block;
 }
 

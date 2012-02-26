@@ -22,6 +22,7 @@
 /examples/showcase/.settings/org.eclipse.wst.common.component
 /examples/showcase/.settings/org.eclipse.wst.common.project.facet.core.xml
 /examples/showcase/bin/eclipse-local.bat
+/examples/showcase/bin/yuicompressor-2.4.7.jar
 /modules/core/target/
 /modules/core/bin/eclipse-local.bat
 /modules/core/.classpath

@@ -9,7 +9,6 @@ TODO部分:
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
   
 2.次要改动
-  * 整理CSS(整理项目BBS, 整理BluePrint CSS，将JQuery Validation中的milk css替换为message.css，jquery validate input框的.error替换为将替换为hightlight)
   * 修正Selenium Test case
   * 晦气，再把Velocity回退成Freemarker
  
@@ -73,6 +72,7 @@ TODO部分:
   * 升级Jquery-validation用法
   * Hash与加密要加入salt
   * 取消GBK编码的bat
+  * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
   
 
 -----------------------------------------------------------------------------------

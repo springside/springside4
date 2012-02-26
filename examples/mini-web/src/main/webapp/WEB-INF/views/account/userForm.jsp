@@ -49,27 +49,27 @@
 			<legend>管理用户</legend>
 	
 			<div>
-				<label for="loginName">登录名:</label>
+				<label for="loginName" class="field">登录名:</label>
 				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
 			</div>
 			<div>
-				<label for="name">用户名:</label>
+				<label for="name" class="field">用户名:</label>
 				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
 			</div>
 			<div>
-				<label for="password">密码:</label>
+				<label for="password" class="field">密码:</label>
 				<input type="password" id="password" name="password" size="40" value="${user.password}"/>
 			</div>
 			<div>
-				<label for="passwordConfirm">确认密码:</label>
+				<label for="passwordConfirm" class="field">确认密码:</label>
 				<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}"/>
 			</div>
 			<div>
-				<label for="loginName">邮箱:</label>
+				<label for="loginName" class="field">邮箱:</label>
 				<input type="text" id="email" name="email" size="40" value="${user.email}"/>
 			</div>
 			<div>
-				<label for="loginName">权限组:</label>
+				<label for="loginName" class="field">权限组:</label>
 				<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
 			</div>	
 		</fieldset>
