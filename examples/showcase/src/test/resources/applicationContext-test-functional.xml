@@ -29,7 +29,9 @@
 	</bean>
 
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
-	<context:component-scan base-package="org.springside.examples.showcase" />
+	<context:component-scan base-package="org.springside.examples.showcase">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
 
 	<!-- SpringContextHolder定义 -->
 	<bean class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />
