@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Mini-Web 帐号管理</title>
+	<title>帐号管理</title>
 </head>
 
 <body>
@@ -13,7 +13,7 @@
 		<div id="message" class="success">${message}</div>	
 	</c:if>
 	
-	<table>
+	<table id="contentTable">
 	<tr><th>名称</th><th>授权</th><th>操作</th></tr>
 	<c:forEach items="${groups}" var="group">
 		<tr>
@@ -21,14 +21,14 @@
 			<td>${group.permissionNames}</td>
 			<td>
 				<shiro:hasPermission name="group:edit">
-					<a href="update/${group.id}">修改</a> <a href="delete/${group.id}">删除</a>
+					<a href="update/${group.id}" id="editLink-${group.name}">修改</a> <a href="delete/${group.id}">删除</a>
 				</shiro:hasPermission>	
 			</td>
 		</tr>
 	</c:forEach>
 	</table>
 	<shiro:hasPermission name="group:edit">
-		<a href="create">新建权限组</a>
+		<a href="create">创建权限组</a>
 	</shiro:hasPermission>
 </body>
 </html>

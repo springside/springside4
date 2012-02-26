@@ -42,7 +42,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	public void createUser() {
 		//打开新增用户页面
 		s.clickTo(By.linkText(Gui.MENU_USER));
-		s.clickTo(By.linkText("增加新用户"));
+		s.clickTo(By.linkText("创建用户"));
 
 		//生成待输入的测试用户数据
 		User user = AccountData.getRandomUserWithGroup();
@@ -52,13 +52,19 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 		s.type(By.id("name"), user.getName());
 		s.type(By.id("password"), user.getPassword());
 		s.type(By.id("passwordConfirm"), user.getPassword());
+		List<WebElement> checkBoxes = s.findElements(By.name("groupList"));
 		for (Group group : user.getGroupList()) {
-			s.check(By.id("checkedGroupIds-" + group.getId()));
+			for (WebElement checkBox : checkBoxes) {
+				if (String.valueOf(group.getId()).equals(s.getValue(checkBox))) {
+					s.check(checkBox);
+				}
+			}
+
 		}
 		s.clickTo(By.xpath(Gui.BUTTON_SUBMIT));
 
 		//校验结果
-		assertTrue(s.isTextPresent("保存用户成功"));
+		assertTrue(s.isTextPresent("创建用户" + user.getLoginName() + "成功"));
 		verifyUser(user);
 	}
 
@@ -66,20 +72,29 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 * 校验用户数据的工具函数.
 	 */
 	private void verifyUser(User user) {
-		s.type(By.name("filter_EQS_loginName"), user.getLoginName());
-		s.clickTo(By.xpath(Gui.BUTTON_SEARCH));
-		s.clickTo(By.linkText("修改"));
 
-		assertEquals(user.getLoginName(), s.getText(By.id("loginName")));
-		assertEquals(user.getName(), s.getText(By.id("name")));
+		s.clickTo(By.id("editLink-" + user.getLoginName()));
 
+		assertEquals(user.getLoginName(), s.getValue(By.id("loginName")));
+		assertEquals(user.getName(), s.getValue(By.id("name")));
+
+		List<WebElement> checkBoxes = s.findElements(By.name("groupList"));
 		for (Group group : user.getGroupList()) {
-			assertTrue(s.isChecked(By.id("checkedGroupIds-" + group.getId())));
+			for (WebElement checkBox : checkBoxes) {
+				if (String.valueOf(group.getId()).equals(s.getValue(checkBox))) {
+					assertTrue(s.isChecked(checkBox));
+				}
+			}
 		}
 
 		List<Group> uncheckGroupList = Collections3.subtract(AccountData.getDefaultGroupList(), user.getGroupList());
 		for (Group group : uncheckGroupList) {
-			assertFalse(s.isChecked(By.id("checkedGroupIds-" + group.getId())));
+			for (WebElement checkBox : checkBoxes) {
+				if (String.valueOf(group.getId()).equals(s.getValue(checkBox))) {
+					assertFalse(s.isChecked(checkBox));
+				}
+			}
+
 		}
 	}
 
@@ -87,9 +102,9 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 * 创建用户时的输入校验测试. 
 	 */
 	@Test
-	public void inputValidateUser() {
+	public void inputInValidateUser() {
 		s.clickTo(By.linkText(Gui.MENU_USER));
-		s.clickTo(By.linkText("增加新用户"));
+		s.clickTo(By.linkText("创建用户"));
 
 		s.type(By.id("loginName"), "admin");
 		s.type(By.id("name"), "");
@@ -101,12 +116,11 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 
 		Threads.sleep(2000);
 
-		WebElement table = s.findElement(By.xpath("//form/table"));
-		assertEquals("用户登录名已存在", s.getTable(table, 0, 1));
-		assertEquals("必选字段", s.getTable(table, 1, 1));
-		assertEquals("请输入一个长度最少是 3 的字符串", s.getTable(table, 2, 1));
-		assertEquals("输入与上面相同的密码", s.getTable(table, 3, 1));
-		assertEquals("请输入正确格式的电子邮件", s.getTable(table, 4, 1));
+		assertEquals("用户登录名已存在", s.getText(By.xpath("//form/fieldset/div[1]/label[2]")));
+		assertEquals("必选字段", s.getText(By.xpath("//form/fieldset/div[2]/label[2]")));
+		assertEquals("请输入一个长度最少是 3 的字符串", s.getText(By.xpath("//form/fieldset/div[3]/label[2]")));
+		assertEquals("输入与上面相同的密码", s.getText(By.xpath("//form/fieldset/div[4]/label[2]")));
+		assertEquals("请输入正确格式的电子邮件", s.getText(By.xpath("//form/fieldset/div[5]/label[2]")));
 	}
 
 }

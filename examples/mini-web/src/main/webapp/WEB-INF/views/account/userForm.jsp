@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Mini-Web 帐号管理</title>
+	<title>帐号管理</title>
 	
 	<script>
 		$(document).ready(function() {
@@ -27,7 +27,7 @@
 						equalTo:"#password"
 					},
 					email:"email",
-					checkedGroupIds:"required"
+					groupList:"required"
 				},
 				messages: {
 					loginName: {

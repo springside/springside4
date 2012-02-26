@@ -38,37 +38,52 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	@Test
 	public void createGroup() {
 		s.clickTo(By.linkText(Gui.MENU_GROUP));
-		s.clickTo(By.linkText("增加新权限组"));
+		s.clickTo(By.linkText("创建权限组"));
 
 		//生成测试数据
 		Group group = AccountData.getRandomGroupWithPermissions();
 
 		//输入数据
 		s.type(By.id("name"), group.getName());
+
+		List<WebElement> checkBoxes = s.findElements(By.name("permissionList"));
 		for (String permission : group.getPermissionList()) {
-			s.check(By.id("checkedPermissions-" + permission));
+			for (WebElement checkBox : checkBoxes) {
+				if (permission.equals(s.getValue(checkBox))) {
+					s.check(checkBox);
+				}
+			}
 		}
+
 		s.clickTo(By.xpath(Gui.BUTTON_SUBMIT));
 
 		//校验结果
-		assertTrue(s.isTextPresent("保存权限组成功"));
+		assertTrue(s.isTextPresent("创建权限组" + group.getName() + "成功"));
 		verifyGroup(group);
 	}
 
 	private void verifyGroup(Group group) {
 		s.clickTo(By.linkText(Gui.MENU_GROUP));
 		s.clickTo(By.id("editLink-" + group.getName()));
+		assertEquals(group.getName(), s.getValue(By.id("name")));
 
-		assertEquals(group.getName(), s.getText(By.id("name")));
-
+		List<WebElement> checkBoxes = s.findElements(By.name("permissionList"));
 		for (String permission : group.getPermissionList()) {
-			assertTrue(s.isChecked(By.id("checkedPermissions-" + permission)));
+			for (WebElement checkBox : checkBoxes) {
+				if (permission.equals(s.getValue(checkBox))) {
+					assertTrue(s.isChecked(checkBox));
+				}
+			}
 		}
 
 		List<String> uncheckPermissionList = Collections3.subtract(AccountData.getDefaultPermissionList(),
 				group.getPermissionList());
 		for (String permission : uncheckPermissionList) {
-			assertFalse(s.isChecked(By.id("checkedPermissions-" + permission)));
+			for (WebElement checkBox : checkBoxes) {
+				if (permission.equals(s.getValue(checkBox))) {
+					assertFalse(s.isChecked(checkBox));
+				}
+			}
 		}
 	}
 }

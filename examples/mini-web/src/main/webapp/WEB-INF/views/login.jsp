@@ -8,7 +8,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Mini-Web登录页面</title>
+	<title>登录页</title>
 	<script>
 		$(document).ready(function() {
 			$("#loginForm").validate();

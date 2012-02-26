@@ -134,7 +134,16 @@ public class Selenium2 {
 	 */
 	public void check(By by) {
 		WebElement element = driver.findElement(by);
-		element.click();
+		check(element);
+	}
+
+	/**
+	 * 选中Element.
+	 */
+	public void check(WebElement element) {
+		if (!element.isSelected()) {
+			element.click();
+		}
 	}
 
 	/**
@@ -142,6 +151,13 @@ public class Selenium2 {
 	 */
 	public void uncheck(By by) {
 		WebElement element = driver.findElement(by);
+		uncheck(element);
+	}
+
+	/**
+	 * 取消Element的选中.
+	 */
+	public void uncheck(WebElement element) {
 		if (element.isSelected()) {
 			element.click();
 		}
@@ -156,10 +172,31 @@ public class Selenium2 {
 	}
 
 	/**
+	 * 判断Element有否被选中.
+	 */
+	public boolean isChecked(WebElement element) {
+		return element.isSelected();
+	}
+
+	/**
 	 * 获取Element的文本.
 	 */
 	public String getText(By by) {
 		return driver.findElement(by).getText();
+	}
+
+	/**
+	 * 获取Input框的value.
+	 */
+	public String getValue(By by) {
+		return driver.findElement(by).getAttribute("value");
+	}
+
+	/**
+	 * 获取Input框的value.
+	 */
+	public String getValue(WebElement element) {
+		return element.getAttribute("value");
 	}
 
 	/**

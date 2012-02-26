@@ -85,15 +85,26 @@ public class BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 登录管理员,如果用户还没有登录.
+	 * 登录管理员, 如果用户还没有登录.
 	 */
 	protected static void loginAsAdminIfNecessary() {
-		s.open("/account/user.action");
+		s.open("/account/user");
 
-		if ("Mini-Web 登录页".equals(s.getTitle())) {
+		if ("Mini-Web示例:登录页".equals(s.getTitle())) {
 			s.type(By.name("username"), "admin");
 			s.type(By.name("password"), "admin");
+			s.check(By.name("rememberMe"));
 			s.clickTo(By.xpath(Gui.BUTTON_LOGIN));
 		}
+	}
+
+	/**
+	 * 登录特定用户.
+	 */
+	protected static void login(String user, String password) {
+		s.open("/logout");
+		s.type(By.name("username"), user);
+		s.type(By.name("password"), password);
+		s.clickTo(By.xpath(Gui.BUTTON_LOGIN));
 	}
 }

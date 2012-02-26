@@ -1,5 +1,7 @@
 package org.springside.examples.miniweb.service.account;
 
+import java.io.Serializable;
+
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -75,7 +77,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		this.accountManager = accountManager;
 	}
 
-	public static class ShiroUser {
+	public static class ShiroUser implements Serializable {
+
+		private static final long serialVersionUID = -1748602382963711884L;
 		private String loginName;
 		private String name;
 

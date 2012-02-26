@@ -5,7 +5,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Mini-Web 帐号管理</title>
+	<title>帐号管理</title>
 </head>
 
 <body>
@@ -15,7 +15,7 @@
 			<legend>管理权限组</legend>
 			<div>
 				<label for="name" class="field">名称:</label>
-				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
+				<input type="text" id="name" name="name" size="40" value="${group.name}"/>
 			</div>
 			<div>
 				<label for="permissionList" class="field">权限列表:</label>

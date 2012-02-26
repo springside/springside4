@@ -21,12 +21,12 @@ public class SecurityIT extends BaseFunctionalTestCase {
 	@Test
 	public void checkAnonymous() {
 		//访问退出登录页面,退出之前的登录
-		s.open("/login!logout.action");
-		assertEquals("Mini-Web 登录页", s.getTitle());
+		s.open("/logout");
+		assertEquals("Mini-Web示例:登录页", s.getTitle());
 
 		//访问任意页面会跳转到登录界面
-		s.open("/account/user.action");
-		assertEquals("Mini-Web 登录页", s.getTitle());
+		s.open("/account/user");
+		assertEquals("Mini-Web示例:登录页", s.getTitle());
 	}
 
 	/**
@@ -35,8 +35,8 @@ public class SecurityIT extends BaseFunctionalTestCase {
 	@Test
 	public void checkUserPermission() {
 		//访问退出登录页面,退出之前的登录
-		s.open("/login!logout.action");
-		assertEquals("Mini-Web 登录页", s.getTitle());
+		s.open("/logout");
+		assertEquals("Mini-Web示例:登录页", s.getTitle());
 
 		//登录普通用户
 		s.type(By.name("username"), "user");
@@ -45,6 +45,6 @@ public class SecurityIT extends BaseFunctionalTestCase {
 
 		//校验用户权限组的操作单元格只有查看
 		s.clickTo(By.linkText(Gui.MENU_USER));
-		assertEquals("查看", s.getTable(By.xpath("//table[@id='contentTable']"), 1, UserColumn.OPERATIONS.ordinal()));
+		assertEquals("", s.getTable(By.xpath("//table[@id='contentTable']"), 1, UserColumn.OPERATIONS.ordinal()));
 	}
 }
