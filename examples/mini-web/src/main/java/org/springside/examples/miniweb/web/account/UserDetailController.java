@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.miniweb.entity.account.User;
 import org.springside.examples.miniweb.service.account.AccountManager;
@@ -34,13 +33,13 @@ public class UserDetailController {
 		b.registerCustomEditor(List.class, "groupList", groupListEditor);
 	}
 
-	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "update/{id}")
 	public String updateForm(Model model) {
 		model.addAttribute("allGroups", accountManager.getAllGroup());
 		return "account/userForm";
 	}
 
-	@RequestMapping(value = "save/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "修改用户" + user.getLoginName() + "成功");
@@ -61,5 +60,4 @@ public class UserDetailController {
 	public void setGroupListEditor(GroupListEditor groupListEditor) {
 		this.groupListEditor = groupListEditor;
 	}
-
 }

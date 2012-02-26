@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
@@ -23,14 +22,15 @@ public class UserDetailController {
 
 	private AccountManager accountManager;
 
-	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "update/{id}")
 	public String updateForm(Model model) {
 		return "common/userForm";
 	}
 
-	@RequestMapping(value = "save/{id}", method = RequestMethod.POST)
+	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
+		redirectAttributes.addFlashAttribute("message", "保存用户成功");
 		return "redirect:/common/user/";
 	}
 
@@ -43,5 +43,4 @@ public class UserDetailController {
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
 	}
-
 }

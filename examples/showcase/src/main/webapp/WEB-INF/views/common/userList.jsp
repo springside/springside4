@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
@@ -9,9 +8,10 @@
 
 <body>
 		<h2>综合演示用例</h2>
-		<%if(SecurityUtils.getSubject().getPrincipal()!=null){ %>
-		<div>你好, 用户<%=SecurityUtils.getSubject().getPrincipal()%>登录.&nbsp;&nbsp;</div>
-		<%} %>
+		<c:if test="${not empty message}">
+			<div id="message" class="success">${message}</div>	
+		</c:if>
+			
 		<div>
 		
 				<table>

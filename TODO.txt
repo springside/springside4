@@ -5,7 +5,7 @@
 TODO部分:
 
 1.主要改动
-  * 重做Login及其他安全页面(当前用户显示，页面权限控制，showcase的RS)
+  * 重做Login及其他安全页面(页面权限控制，showcase的RS,Test Helper, enable/diable用户)
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
   
 2.次要改动

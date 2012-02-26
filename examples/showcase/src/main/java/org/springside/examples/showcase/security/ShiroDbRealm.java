@@ -50,7 +50,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUsername());
 		if (user != null) {
-			return new SimpleAuthenticationInfo(user.getLoginName(), user.getShaPassword(), getName());
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()),
+					user.getShaPassword(), getName());
 		} else {
 			return null;
 		}
@@ -61,8 +62,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		String username = (String) principals.fromRealm(getName()).iterator().next();
-		User user = accountManager.findUserByLoginName(username);
+		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+		User user = accountManager.findUserByLoginName(shiroUser.getLoginName());
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Role role : user.getRoleList()) {
@@ -85,5 +86,29 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Autowired
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
+	}
+
+	public static class ShiroUser {
+		private String loginName;
+		private String name;
+
+		public ShiroUser(String loginName, String name) {
+			this.loginName = loginName;
+			this.name = name;
+		}
+
+		public String getLoginName() {
+			return loginName;
+		}
+
+		@Override
+		public String toString() {
+			return loginName;
+		}
+
+		public String getName() {
+			return name;
+		}
+
 	}
 }

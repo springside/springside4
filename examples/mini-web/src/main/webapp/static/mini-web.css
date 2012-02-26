@@ -9,15 +9,19 @@ label.field {
 }
 
 /* header */
-#title h2 {
+#title div.title {
+	font-size:2em;
+	color:#111;
 	letter-spacing: .1em;
-	margin:0.5em  0;
+	
 }
 
-#title h3 {
+#title span.subtitle {
+	font-size:1.5em;
 	color: #999;
 	letter-spacing: .1em;
-	margin:0.5em 0;
+	margin-bottom:0.75em;
+
 }
 
 #menu ul {

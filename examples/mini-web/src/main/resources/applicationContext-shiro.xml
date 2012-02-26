@@ -25,7 +25,8 @@
 				/login = authc
 				/logout = logout
 				/static/** = anon
-		    	/account/** = user		    				
+		    	/account/user/** = perms["user:view"]
+		    	/account/group/** = perms["group:view"] 		    				
 		 	</value>
 		</property>
 	</bean>

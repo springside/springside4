@@ -19,10 +19,16 @@
 		<tr>
 			<td>${group.name}</td>
 			<td>${group.permissionNames}</td>
-			<td><a href="update/${group.id}">修改</a> <a href="delete/${group.id}">删除</a></td>
+			<td>
+				<shiro:hasPermission name="group:edit">
+					<a href="update/${group.id}">修改</a> <a href="delete/${group.id}">删除</a>
+				</shiro:hasPermission>	
+			</td>
 		</tr>
 	</c:forEach>
 	</table>
-	<a href="create">新建权限组</a>
+	<shiro:hasPermission name="group:edit">
+		<a href="create">新建权限组</a>
+	</shiro:hasPermission>
 </body>
 </html>

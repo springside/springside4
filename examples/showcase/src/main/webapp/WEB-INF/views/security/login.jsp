@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.apache.shiro.web.filter.authc.FormAuthenticationFilter"%>
-<%@ page import="org.apache.shiro.authc.ExcessiveAttemptsException"%>
-<%@ page import="org.apache.shiro.authc.IncorrectCredentialsException"%>
+<%@ page import="org.apache.shiro.authc.LockedAccountException "%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -21,6 +20,13 @@
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
+		if(error.equals(LockedAccountException.class.getName())) {
+	%>
+		<div class="error prepend-top" >登录失败，请重试.</div>
+	<%
+	}else{
+		
+	}
 	%>
 		<div class="error prepend-top" >登录失败，请重试.</div>
 	<%

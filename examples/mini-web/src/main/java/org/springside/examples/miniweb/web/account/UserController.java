@@ -9,7 +9,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -49,28 +48,28 @@ public class UserController {
 		return "account/userList";
 	}
 
-	@RequestMapping(value = "create", method = RequestMethod.GET)
+	@RequestMapping(value = "create")
 	public String createForm(Model model) {
 		model.addAttribute("user", new User());
 		model.addAttribute("allGroups", accountManager.getAllGroup());
 		return "account/userForm";
 	}
 
-	@RequestMapping(value = "save", method = RequestMethod.POST)
+	@RequestMapping(value = "save")
 	public String save(User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "创建用户" + user.getLoginName() + "成功");
 		return "redirect:/account/user/";
 	}
 
-	@RequestMapping(value = "delete/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		accountManager.deleteUser(id);
 		redirectAttributes.addFlashAttribute("message", "删除用户成功");
 		return "redirect:/account/user/";
 	}
 
-	@RequestMapping(value = "checkLoginName", method = RequestMethod.GET)
+	@RequestMapping(value = "checkLoginName")
 	@ResponseBody
 	public String checkLoginName(@RequestParam("oldLoginName") String oldLoginName,
 			@RequestParam("loginName") String loginName) {
