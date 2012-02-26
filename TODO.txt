@@ -5,7 +5,7 @@
 TODO部分:
 
 1.主要改动
-  * 重做Login及其他安全页面，Review Shiro的Resource Base Access Control使用,Logout Filter
+  * 重做Login及其他安全页面(当前用户显示，页面权限控制，showcase的RS)
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
   
 2.次要改动
@@ -63,7 +63,6 @@ TODO部分:
   * 包括Guava的Cache Builder做的简单缓存
   * Review HttpClient的使用
   * Review perf4j的使用
-  * 依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包)
   * Jersey的Jackson JSON绑定看有没有简化
   * 用JUnit自带的Catetory的演示,Harmset演示
   * Selenium使用自带的Wait类, 检查新版API变化
@@ -72,6 +71,10 @@ TODO部分:
   * Hash与加密要加入salt
   * 取消GBK编码的bat
   * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
+  * 第三方repository也移到github
+  * 依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包)
+  * 参考改进404.jsp,500.jsp
+
   
 
 -----------------------------------------------------------------------------------

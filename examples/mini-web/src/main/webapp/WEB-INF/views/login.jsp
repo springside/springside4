@@ -8,7 +8,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Showcase 登录页面</title>
+	<title>Mini-Web登录页面</title>
 	<script>
 		$(document).ready(function() {
 			$("#loginForm").validate();
@@ -17,15 +17,14 @@
 </head>
 
 <body>
-	<h2>登录页面</h2>
-	<%
-	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-	if(error != null){
-	%>
-		<div class="error prepend-top" >登录失败，请重试.</div>
-	<%
-	}
-	%>
+<%
+		String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
+		if(error != null){
+		%>
+			<div class="error prepend-top" >登录失败，请重试.</div>
+		<%
+		}
+		%>
 	<form:form id="loginForm"  action="${ctx}/login" method="post">
 		<fieldset class="prepend-top">
 			<legend>登录</legend>

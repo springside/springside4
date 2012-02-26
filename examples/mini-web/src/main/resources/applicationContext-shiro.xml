@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd"
 	default-lazy-init="true">
 
 	<description>Shiro Configuration</description>
@@ -19,13 +17,16 @@
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
-		<property name="loginUrl" value="/login.action" />
-		<property name="successUrl" value="/account/user.action" />
-		<property name="unauthorizedUrl" value="/login.action" />
+		<property name="loginUrl" value="/login" />
+		<property name="successUrl" value="/account/user/" />
+		<property name="unauthorizedUrl" value="/login" />
 		<property name="filterChainDefinitions">
-		    <value>
-		    /account = authc			
-		 </value>
+			<value>
+				/login = authc
+				/logout = logout
+				/static/** = anon
+		    	/account/** = user		    				
+		 	</value>
 		</property>
 	</bean>
 

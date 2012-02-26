@@ -5,15 +5,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping
-public class StoryController {
+public class GeneralController {
 
-	@RequestMapping(value = "story/{page}")
+	@RequestMapping(value = "/story/{page}")
 	public String story(@PathVariable("page") String page) {
 		return "story/" + page;
 	}
 
-	@RequestMapping(value = "web/mashup-client")
+	@RequestMapping(value = "/web/mashup-client")
 	public String mashupClient() {
 		return "web/mashup-client";
 	}

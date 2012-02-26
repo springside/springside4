@@ -8,7 +8,6 @@
 	<h2>Shiro高级演示</h2>
 	<ul>
 		<li>Shiro REST接口的HttpBasic认证.</li>
-		<li>密码输入错误超过3次的帐号冻结功能演示</li>
 	</ul>
 
 	<h2>安全高级演示</h2>
