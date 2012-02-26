@@ -33,12 +33,11 @@
 	<!-- MIME邮件服务类 -->
 	<bean id="mimeMailService" class="org.springside.examples.showcase.utilities.email.MimeMailService">
 		<property name="mailSender" ref="mailSender" />
-		<property name="velocityEngine" ref="mailVelocityEngine" />
-		<property name="templateFileName" value="mailTemplate.vm" />
+		<property name="freemarkerConfiguration" ref="freemarkerConfiguration"/>
 	</bean>
 
-	<!-- VelocityEngine -->
-	<bean id="mailVelocityEngine" class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
-		<property name="resourceLoaderPath" value="classpath:/email/" />
+	<!-- 用于生成HTML邮件内容的Freemarker配置 -->
+	<bean id="freemarkerConfiguration" class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
+		<property name="templateLoaderPath" value="classpath:/email" />
 	</bean>
 </beans>

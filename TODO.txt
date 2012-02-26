@@ -10,7 +10,6 @@ TODO部分:
   
 2.次要改动
   * 修正Selenium Test case
-  * 晦气，再把Velocity回退成Freemarker
  
 3.其他非代码改动
   * 发布前打包Maven-Archetype的项目生成模板

@@ -629,9 +629,9 @@
 
 			<!-- template engine -->
 			<dependency>
-				<groupId>org.apache.velocity</groupId>
-				<artifactId>velocity</artifactId>
-				<version>1.7</version>
+				<groupId>org.freemarker</groupId>
+				<artifactId>freemarker</artifactId>
+				<version>2.3.18</version>
 			</dependency>
 
 			<!-- email -->

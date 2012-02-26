@@ -8,19 +8,22 @@ import java.util.Map;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
-import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springside.modules.utils.ee.Velocitys;
+import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
+
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
 
 /**
  * MIME邮件服务类.
  * 
- * 演示由Velocity引擎生成的的html格式邮件, 并带有附件.
+ * 演示由Freemarker引擎生成的的html格式邮件, 并带有附件.
  
  * @author calvin
  */
@@ -32,9 +35,7 @@ public class MimeMailService {
 
 	private JavaMailSender mailSender;
 
-	private VelocityEngine velocityEngine;
-
-	private String templateFileName;
+	private Template template;
 
 	/**
 	 * 发送MIME格式的用户修改通知邮件.
@@ -65,12 +66,20 @@ public class MimeMailService {
 	}
 
 	/**
-	 * 使用Velocity生成html格式内容.
+	 * 使用Freemarker生成html格式内容.
 	 */
 	private String generateContent(String userName) throws MessagingException {
 
-		Map context = Collections.singletonMap("userName", userName);
-		return Velocitys.renderFile(templateFileName, velocityEngine, DEFAULT_ENCODING, context);
+		try {
+			Map context = Collections.singletonMap("userName", userName);
+			return FreeMarkerTemplateUtils.processTemplateIntoString(template, context);
+		} catch (IOException e) {
+			logger.error("生成邮件内容失败, FreeMarker模板不存在", e);
+			throw new MessagingException("FreeMarker模板不存在", e);
+		} catch (TemplateException e) {
+			logger.error("生成邮件内容失败, FreeMarker处理失败", e);
+			throw new MessagingException("FreeMarker处理失败", e);
+		}
 	}
 
 	/**
@@ -93,12 +102,11 @@ public class MimeMailService {
 		this.mailSender = mailSender;
 	}
 
-	public void setVelocityEngine(VelocityEngine velocityEngine) {
-		this.velocityEngine = velocityEngine;
+	/**
+	 * 注入Freemarker引擎配置,构造Freemarker 邮件内容模板.
+	 */
+	public void setFreemarkerConfiguration(Configuration freemarkerConfiguration) throws IOException {
+		//根据freemarkerConfiguration的templateLoaderPath载入文件.
+		template = freemarkerConfiguration.getTemplate("mailTemplate.ftl", DEFAULT_ENCODING);
 	}
-
-	public void setTemplateFileName(String templateFileName) {
-		this.templateFileName = templateFileName;
-	}
-
 }
