@@ -72,7 +72,6 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 		dto.setLoginName(null);
 
 		try {
-
 			client.createUser(dto);
 			fail("Should thrown exception while invalid id");
 		} catch (UniformInterfaceException e) {

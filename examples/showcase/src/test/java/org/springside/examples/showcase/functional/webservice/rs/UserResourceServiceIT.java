@@ -11,6 +11,8 @@ import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rs.client.UserResourceClient;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
 
+import com.sun.jersey.api.client.UniformInterfaceException;
+
 public class UserResourceServiceIT extends BaseFunctionalTestCase {
 
 	private static UserResourceClient client;
@@ -25,8 +27,31 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	 * 演示与Shiro的结合.
 	 */
 	@Test
+	public void getAllUserWithWrongPassword() {
+		//wrong password
+		try {
+			client.getAllUser("admin", "wrongPassword");
+		} catch (UniformInterfaceException e) {
+			assertEquals(401, e.getResponse().getStatus());
+			return;
+		}
+		fail("Exception should happen");
+	}
+
+	@Test
+	public void getAllUserWithoutPermission() {
+		try {
+			client.getAllUser("user", "user");
+		} catch (UniformInterfaceException e) {
+			assertEquals(403, e.getResponse().getStatus());
+			return;
+		}
+		fail("Exception should happen");
+	}
+
+	@Test
 	public void getAllUser() {
-		List<UserDTO> userList = client.getAllUser();
+		List<UserDTO> userList = client.getAllUser("admin", "admin");
 		assertTrue(userList.size() >= 6);
 		UserDTO admin = userList.iterator().next();
 		assertEquals("admin", admin.getLoginName());

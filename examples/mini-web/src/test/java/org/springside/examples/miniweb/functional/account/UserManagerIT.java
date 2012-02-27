@@ -61,7 +61,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 			}
 
 		}
-		s.clickTo(By.xpath(Gui.BUTTON_SUBMIT));
+		s.clickTo(By.id("submit"));
 
 		//校验结果
 		assertTrue(s.isTextPresent("创建用户" + user.getLoginName() + "成功"));
@@ -112,7 +112,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 		s.type(By.id("passwordConfirm"), "abc");
 		s.type(By.id("email"), "abc");
 
-		s.clickTo(By.xpath(Gui.BUTTON_SUBMIT));
+		s.clickTo(By.id("submit"));
 
 		Threads.sleep(2000);
 

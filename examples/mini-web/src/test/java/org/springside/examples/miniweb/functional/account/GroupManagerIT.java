@@ -55,7 +55,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 			}
 		}
 
-		s.clickTo(By.xpath(Gui.BUTTON_SUBMIT));
+		s.clickTo(By.id("submit"));
 
 		//校验结果
 		assertTrue(s.isTextPresent("创建权限组" + group.getName() + "成功"));

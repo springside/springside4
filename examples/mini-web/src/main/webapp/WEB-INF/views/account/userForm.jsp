@@ -74,8 +74,8 @@
 			</div>	
 		</fieldset>
 		<div>
-			<input class="button" type="submit" value="提交"/>&nbsp;	
-			<input class="button" type="button" value="返回" onclick="history.back()"/>
+			<input id="submit" class="button" type="submit" value="提交"/>&nbsp;	
+			<input id="cancel" class="button" type="button" value="返回" onclick="history.back()"/>
 		</div>
 	</form:form>
 </body>

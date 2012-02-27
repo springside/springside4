@@ -16,7 +16,7 @@ public class AjaxIT extends BaseFunctionalTestCase {
 	@Test
 	public void mashup() {
 		s.open("/");
-		s.clickTo(By.linkText("Web高级演示"));
+		s.clickTo(By.linkText("Web演示"));
 		s.clickTo(By.linkText("跨域名Mashup演示"));
 
 		s.clickTo(By.xpath("//input[@value='获取内容']"));

@@ -45,8 +45,8 @@
 			</div>
 		</fieldset>
 		<div>
-			<input type="checkbox" id="rememberMe" name="rememberMe"/> <label for="rememberMe">记住我</label><span style="padding-left:10px;"><input class="button" type="submit" value="登录"/></span>
-			
+			<input type="checkbox" id="rememberMe" name="rememberMe"/> <label for="rememberMe">记住我</label>
+			<span style="padding-left:10px;"><input id="submit" class="button" type="submit" value="登录"/></span>
 		</div>
 			<div>(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</div>
 	</form:form>

@@ -53,7 +53,7 @@ public class UserResourceService {
 	 * 获取所有用户, 演示与Shiro的结合.
 	 */
 	@GET
-	@RequiresRoles("User")
+	@RequiresRoles("Admin")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public List<UserDTO> getAllUser() {
 		try {

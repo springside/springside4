@@ -6,6 +6,11 @@
 <html>
 <head>
 	<title>帐号管理</title>
+	<script>
+		$(document).ready(function() {
+			$("#inputForm").validate();
+		});
+	</script>
 </head>
 
 <body>
@@ -15,7 +20,7 @@
 			<legend>管理权限组</legend>
 			<div>
 				<label for="name" class="field">名称:</label>
-				<input type="text" id="name" name="name" size="40" value="${group.name}"/>
+				<input type="text" id="name" name="name" size="40" class="required" value="${group.name}"/>
 			</div>
 			<div>
 				<label for="permissionList" class="field">权限列表:</label>
@@ -23,8 +28,8 @@
 			</div>	
 		</fieldset>
 		<div>
-			<input class="button" type="submit" value="提交"/>&nbsp;	
-			<input class="button" type="button" value="返回" onclick="history.back()"/>
+			<input id="submit" class="button" type="submit" value="提交"/>&nbsp;	
+			<input id="cancel" class="button" type="button" value="返回" onclick="history.back()"/>
 		</div>
 	</form:form>
 </body>

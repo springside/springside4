@@ -29,7 +29,7 @@
 						<td>${user.email}&nbsp;</td>
 						<td>${user.roleNames}&nbsp;</td>
 						<td>${user.status}&nbsp;</td>
-						<td><a href="${ctx}/common/user/update/${user.id}" id="editLink-${user.name}">修改</a></td>
+						<td><a href="${ctx}/common/user/update/${user.id}" id="editLink-${user.loginName}">修改</a></td>
 					</tr>
 					</c:forEach>
 					

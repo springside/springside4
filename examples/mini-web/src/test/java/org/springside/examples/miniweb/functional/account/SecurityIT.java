@@ -41,7 +41,7 @@ public class SecurityIT extends BaseFunctionalTestCase {
 		//登录普通用户
 		s.type(By.name("username"), "user");
 		s.type(By.name("password"), "user");
-		s.clickTo(By.xpath(Gui.BUTTON_LOGIN));
+		s.clickTo(By.id("submit"));
 
 		//校验用户权限组的操作单元格只有查看
 		s.clickTo(By.linkText(Gui.MENU_USER));

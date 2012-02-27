@@ -34,8 +34,8 @@ public class UserResourceClient {
 	/**
 	 * 访问有SpringSecurity安全控制的页面, 进行HttpBasic的登录.
 	 */
-	public List<UserDTO> getAllUser() {
-		String authentication = Servlets.encodeHttpBasic("admin", "admin");
+	public List<UserDTO> getAllUser(String userName, String password) {
+		String authentication = Servlets.encodeHttpBasic(userName, password);
 		return client.path("/users").header(Servlets.AUTHENTICATION_HEADER, authentication)
 				.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<UserDTO>>() {
 				});
