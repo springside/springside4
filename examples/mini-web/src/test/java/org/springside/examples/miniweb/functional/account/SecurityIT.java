@@ -45,6 +45,6 @@ public class SecurityIT extends BaseFunctionalTestCase {
 
 		//校验用户权限组的操作单元格只有查看
 		s.clickTo(By.linkText(Gui.MENU_USER));
-		assertEquals("", s.getTable(By.xpath("//table[@id='contentTable']"), 1, UserColumn.OPERATIONS.ordinal()));
+		assertEquals("", s.getTable(By.id("contentTable"), 1, UserColumn.OPERATIONS.ordinal()));
 	}
 }
