@@ -8,6 +8,7 @@ package org.springside.modules.test.spring;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 /**
@@ -15,11 +16,11 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * 相比Spring原基类名字更短并保存了dataSource变量.
  *   
  * 子类需要定义applicationContext文件的位置, 如:
- * @ContextConfiguration(locations = { "/applicationContext-test.xml" })
+ * @ContextConfiguration(locations = { "/applicationContext.xml" })
  * 
  * @author calvin
  */
-
+@ActiveProfiles("test")
 public abstract class SpringTxTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 
 	protected DataSource dataSource;

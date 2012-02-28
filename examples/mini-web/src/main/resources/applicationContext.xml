@@ -64,22 +64,23 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<beans profile="production">
-	<!-- 定义受环境影响易变的变量 -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-		<property name="ignoreResourceNotFound" value="true" />
-		<property name="locations">
-			<list>
-				<!-- 标准配置 -->
-				<value>classpath*:/application.properties</value>
-				<!-- 本地开发环境配置 -->
-				<value>classpath*:/application.local.properties</value>
-				<!-- 服务器生产环境配置 -->
-				<value>file:/var/mini-web/application.server.properties</value>
-			</list>
-		</property>
-	</bean>
+		<!-- 定义受环境影响易变的变量 -->
+		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+			<property name="ignoreResourceNotFound" value="true" />
+			<property name="locations">
+				<list>
+					<!-- 标准配置 -->
+					<value>classpath*:/application.properties</value>
+					<!-- 本地开发环境配置 -->
+					<value>classpath*:/application.local.properties</value>
+					<!-- 服务器生产环境配置 -->
+					<value>file:/var/mini-web/application.server.properties</value>
+				</list>
+			</property>
+		</bean>
 	</beans>
+	
 	<beans profile="test">
 		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />

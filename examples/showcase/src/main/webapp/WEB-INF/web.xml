@@ -4,14 +4,41 @@
 	version="2.5">
 
 	<display-name>showcase</display-name>
+	
 	<!-- Spring ApplicationContext配置文件的路径,可使用通配符，用于后面的Spring Context Loader -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
 			classpath*:/applicationContext.xml
-			classpath*:/applicationContext-showcase.xml
+			classpath*:/applicationContext-showcases.xml
 		</param-value>
 	</context-param>
+	
+	<!-- 設定Spring Context的Profile -->
+	<context-param>
+    	<param-name>spring.profiles.active</param-name>
+    	<param-value>production</param-value>
+	</context-param>
+
+	<!--Spring ApplicationContext 载入 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- Spring MVC Servlet -->
+	<servlet>
+		<servlet-name>springServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
 
 	<!-- Jersey Servlet 配置 -->
 	<servlet>
@@ -33,31 +60,15 @@
 		<servlet-name>StaticContentServlet</servlet-name>
 		<servlet-class>org.springside.examples.showcase.web.StaticContentServlet</servlet-class>
 	</servlet>
-	<servlet>
-		<servlet-name>MashupContentServlet</servlet-name>
-		<servlet-class>org.springside.examples.showcase.web.MashupContentServlet</servlet-class>
-	</servlet>
-
-	<!-- Spring MVC Servlet -->
-	<servlet>
-		<servlet-name>springServlet</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>/WEB-INF/spring-mvc.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>springServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
-
 	<servlet-mapping>
 		<servlet-name>StaticContentServlet</servlet-name>
 		<url-pattern>/static-content</url-pattern>
 	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MashupContentServlet</servlet-name>
+		<servlet-class>org.springside.examples.showcase.web.MashupContentServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>MashupContentServlet</servlet-name>
 		<url-pattern>/mashup-content</url-pattern>
@@ -77,31 +88,6 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
-
-	<!-- Hibernate Open Session In View filter -->
-	<filter>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
-	</filter>
-
-	<!-- Shiro filter -->
-	<filter>
-		<filter-name>shiroFilter</filter-name>
-		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-	</filter>
-
-	<!-- Cache Control Header Filter -->
-	<filter>
-		<filter-name>cacheControlHeaderFilter</filter-name>
-		<filter-class>org.springside.examples.showcase.web.CacheControlHeaderFilter</filter-class>
-	</filter>
-
-	<filter>
-		<filter-name>sitemeshFilter</filter-name>
-		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
-	</filter>
-
-	<!-- Filter 映射 -->
 	<filter-mapping>
 		<filter-name>encodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -109,11 +95,21 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
+	<!-- Hibernate Open Session In View filter -->
+	<filter>
+		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
 		<url-pattern>/common/*</url-pattern>
 	</filter-mapping>
 
+	<!-- Shiro filter -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>shiroFilter</filter-name>
 		<url-pattern>/*</url-pattern>
@@ -121,21 +117,24 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
-	<filter-mapping>
-		<filter-name>sitemeshFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
+	<!-- Cache Control Header Filter -->
+	<filter>
+		<filter-name>cacheControlHeaderFilter</filter-name>
+		<filter-class>org.springside.examples.showcase.web.CacheControlHeaderFilter</filter-class>
+	</filter>
 	<filter-mapping>
 		<filter-name>cacheControlHeaderFilter</filter-name>
 		<url-pattern>/static/*</url-pattern>
 	</filter-mapping>
 
-
-	<!--Spring ApplicationContext 载入 -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	<filter>
+		<filter-name>sitemeshFilter</filter-name>
+		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sitemeshFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- 出错页面定义 -->
 	<error-page>

@@ -4,23 +4,26 @@
 	version="2.5">
 
 	<display-name>mini-service</display-name>
+
 	<!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔 此参数用于后面的Spring Context Loader -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath*:/applicationContext-test.xml
+			classpath*:/applicationContext.xml
 			classpath*:/applicationContext-rs-server.xml
 			classpath*:/applicationContext-ws-server.xml
 		</param-value>
+	</context-param>
+	
+	<!-- 設定Spring Context的Profile -->
+	<context-param>
+    	<param-name>spring.profiles.active</param-name>
+    	<param-value>test</param-value>
 	</context-param>
 
 	<!--Spring ApplicationContext 载入 -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-	<!-- Spring 刷新Introspector防止内存泄露 -->
-	<listener>
-		<listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
 	</listener>
 
 	<!-- CXF 配置 -->

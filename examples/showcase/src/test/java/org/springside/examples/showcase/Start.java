@@ -17,7 +17,7 @@ public class Start {
 	public static void main(String[] args) throws Exception {
 		Server server = JettyFactory.buildNormalServer(PORT, CONTEXT);
 		server.start();
-
+		System.out.println("Server running at " + BASE_URL);
 		System.out.println("Hit Enter in console to stop server");
 		if (System.in.read() != 0) {
 			server.stop();

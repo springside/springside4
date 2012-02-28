@@ -9,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
-import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.ee.Validators;
 
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class AccountManagerTest extends SpringContextTestCase {
 
 	@Autowired

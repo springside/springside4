@@ -4,6 +4,7 @@
 	version="2.5">
 
 	<display-name>mini-web</display-name>
+	
 	<!-- Spring ApplicationContext配置文件的路径,可使用通配符,多个路径用,号分隔
 		此参数用于后面的Spring Context Loader -->
 	<context-param>
@@ -14,6 +15,12 @@
 		</param-value>
 	</context-param>
 
+	<!-- 設定Spring Context的Profile -->
+	<context-param>
+    	<param-name>spring.profiles.active</param-name>
+    	<param-value>test</param-value>
+	</context-param>
+	
 	<!-- Filter 定义  -->
 	<!-- Character Encoding filter -->
 	<filter>
@@ -28,41 +35,37 @@
 			<param-value>true</param-value>
 		</init-param>
 	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
-	<!-- Hibernate Open Session in View filter-->
+	<!-- Open Entity Manager in View filter-->
 	<filter>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 	</filter>
+	<filter-mapping>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
 
 	<!-- Shiro Security filter-->
 	<filter>
 		<filter-name>shiroFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
 	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
 
 	<!-- Sitemesh filter -->
 	<filter>
 		<filter-name>sitemeshFilter</filter-name>
 		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
 	</filter>
-
-	<!-- Filter URL 映射 -->
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<filter-mapping>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<filter-mapping>
-		<filter-name>shiroFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
 	<filter-mapping>
 		<filter-name>sitemeshFilter</filter-name>
 		<url-pattern>/*</url-pattern>

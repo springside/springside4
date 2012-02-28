@@ -33,8 +33,6 @@ public class GroupDaoTest extends SpringTxTestCase {
 	 */
 	@Before
 	public void reloadSampleData() throws Exception {
-		simpleJdbcTemplate.update("drop all objects");
-		executeSqlScript("classpath:/sql/h2/schema.sql", false);
 		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 	}
 

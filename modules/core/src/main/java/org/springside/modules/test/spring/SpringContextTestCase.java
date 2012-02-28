@@ -5,6 +5,7 @@
  */
 package org.springside.modules.test.spring;
 
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 
 /**
@@ -15,5 +16,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
  * 
  * @author calvin
  */
+@ActiveProfiles("test")
 public abstract class SpringContextTestCase extends AbstractJUnit4SpringContextTests {
 }

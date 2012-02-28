@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.examples.miniservice.dao.AccountDao;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.entity.User;
@@ -25,7 +24,7 @@ import com.google.common.collect.Maps;
  * 
  * @author calvin
  */
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class AccountDaoTest extends SpringTxTestCase {
 
 	@Autowired
