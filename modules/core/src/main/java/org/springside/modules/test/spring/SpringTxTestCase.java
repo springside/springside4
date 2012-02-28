@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * 
  * @author calvin
  */
+
 public abstract class SpringTxTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 
 	protected DataSource dataSource;

@@ -6,6 +6,8 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.miniweb.dao.account.GroupDao;
@@ -34,7 +36,7 @@ public class AccountManager {
 	//-- User Manager --//
 	@Transactional(readOnly = true)
 	public User getUser(Long id) {
-		return userDao.get(id);
+		return userDao.findOne(id);
 	}
 
 	public void saveUser(User entity) {
@@ -62,12 +64,12 @@ public class AccountManager {
 
 	@Transactional(readOnly = true)
 	public List<User> getAllUser() {
-		return userDao.getAll("id", true);
+		return (List<User>) userDao.findAll(new Sort(Direction.ASC, "id"));
 	}
 
 	@Transactional(readOnly = true)
 	public User findUserByLoginName(String loginName) {
-		return userDao.findUniqueBy("loginName", loginName);
+		return userDao.findByLoginName(loginName);
 	}
 
 	/**
@@ -77,18 +79,20 @@ public class AccountManager {
 	 */
 	@Transactional(readOnly = true)
 	public boolean isLoginNameUnique(String newLoginName, String oldLoginName) {
-		return userDao.isPropertyUnique("loginName", newLoginName, oldLoginName);
+		return true;
+		//TODO
+		//return userDao.isPropertyUnique("loginName", newLoginName, oldLoginName);
 	}
 
 	//-- Group Manager --//
 	@Transactional(readOnly = true)
 	public Group getGroup(Long id) {
-		return groupDao.get(id);
+		return groupDao.findOne(id);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Group> getAllGroup() {
-		return groupDao.getAll("id", true);
+		return (List<Group>) groupDao.findAll((new Sort(Direction.ASC, "id")));
 	}
 
 	public void saveGroup(Group entity) {

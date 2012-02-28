@@ -43,7 +43,7 @@ public class User extends IdEntity {
 	private List<Group> groupList = Lists.newArrayList();//有序的关联对象集合
 
 	//字段非空且唯一, 用于提醒Entity使用者及生成DDL.
-	@Column(nullable = false, unique = true)
+	@Column(name = "LOGIN_NAME", nullable = false, unique = true)
 	public String getLoginName() {
 		return loginName;
 	}

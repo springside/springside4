@@ -5,10 +5,18 @@
 TODO部分:
 
 1.主要改动
+  * 引入Profile管理環境
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
+	--GroupDao
+	--checkunique
+	--Column Naming (loginName)
+	--testcase flush, hibernateMapping
+
 
 2.次要改动
   * 初始化数据不要再依赖Ant
+  * web.xml優化
+  * namespace 3.1
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -27,7 +35,6 @@ TODO部分:
    * 依赖包重要版本升级如：Maven 3.0, Hibernate 3.6.9, Jetty 7.6.3
 
 2. 次要改动
-   * Template工具引擎从Freemarker转为Velocity, 见Email演示.
    * Form内容对齐从Table改为Label+CSS
    * 升级SpyMemcached2.6版演示
    * 升级JodaTime2.0版演示

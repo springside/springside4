@@ -5,9 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.examples.miniweb.dao.account.GroupDao;
-import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.data.AccountData;
 import org.springside.examples.miniweb.entity.account.Group;
 import org.springside.examples.miniweb.entity.account.User;
@@ -19,7 +18,8 @@ import org.springside.modules.test.spring.SpringTxTestCase;
  * 
  * @author calvin
  */
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
+@ActiveProfiles("test")
 public class GroupDaoTest extends SpringTxTestCase {
 
 	@Autowired
@@ -33,6 +33,8 @@ public class GroupDaoTest extends SpringTxTestCase {
 	 */
 	@Before
 	public void reloadSampleData() throws Exception {
+		simpleJdbcTemplate.update("drop all objects");
+		executeSqlScript("classpath:/sql/h2/schema.sql", false);
 		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 	}
 
@@ -45,17 +47,19 @@ public class GroupDaoTest extends SpringTxTestCase {
 		Group group = AccountData.getRandomGroup();
 		groupDao.save(group);
 
-		User user = userDao.get(1L);
+		User user = userDao.findOne(1L);
 		user.getGroupList().add(group);
 		userDao.save(user);
-		userDao.flush();
+		//TODO
+		//userDao.flush();
 
 		int oldJoinTableCount = countRowsInTable("ACCT_USER_GROUP");
 		int oldUserTableCount = countRowsInTable("ACCT_USER");
 
 		//删除用户权限组, 中间表将减少1条记录,而用户表应该不受影响.
 		groupDao.delete(group.getId());
-		groupDao.flush();
+		//TODO
+		//groupDao.flush();
 
 		int newJoinTableCount = countRowsInTable("ACCT_USER_GROUP");
 		int newUserTableCount = countRowsInTable("ACCT_USER");
@@ -69,9 +73,10 @@ public class GroupDaoTest extends SpringTxTestCase {
 		Group group = AccountData.getRandomGroupWithPermissions();
 		groupDao.save(group);
 		//强制执行sql语句
-		groupDao.flush();
+		//TODO
+		//groupDao.flush();
 		//获取用户
-		group = groupDao.findUniqueBy("id", group.getId());
+		group = groupDao.findOne(group.getId());
 		assertTrue(group.getPermissionList().size() > 0);
 	}
 }

@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.data.AccountData;
 import org.springside.examples.miniweb.entity.account.User;
 import org.springside.modules.test.data.Fixtures;
@@ -38,22 +37,22 @@ public class UserDaoTest extends SpringTxTestCase {
 		User user = AccountData.getRandomUserWithGroup();
 		entityDao.save(user);
 		//强制执行sql语句
-		entityDao.flush();
+		//entityDao.flush();
 
 		//获取用户
-		user = entityDao.findUniqueBy("id", user.getId());
+		user = entityDao.findOne(user.getId());
 		assertEquals(1, user.getGroupList().size());
 
 		//删除用户的权限组
 		user.getGroupList().remove(0);
-		entityDao.flush();
-		user = entityDao.findUniqueBy("id", user.getId());
+		//entityDao.flush();
+		user = entityDao.findOne(user.getId());
 		assertEquals(0, user.getGroupList().size());
 
 		//删除用户
 		entityDao.delete(user.getId());
-		entityDao.flush();
-		user = entityDao.findUniqueBy("id", user.getId());
+		//entityDao.flush();
+		user = entityDao.findOne(user.getId());
 		assertNull(user);
 	}
 
@@ -63,6 +62,6 @@ public class UserDaoTest extends SpringTxTestCase {
 		User user = AccountData.getRandomUser();
 		user.setLoginName("admin");
 		entityDao.save(user);
-		entityDao.flush();
+		//entityDao.flush();
 	}
 }
