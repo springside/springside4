@@ -62,7 +62,11 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 		</dependency>
-		
+		<dependency>
+			<groupId>javassist</groupId>
+			<artifactId>javassist</artifactId>
+			<version>3.12.1.GA</version>
+		</dependency>		
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
