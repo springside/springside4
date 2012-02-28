@@ -8,9 +8,7 @@ TODO部分:
   * 引入Profile管理環境
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
 	--GroupDao
-	--checkunique
-	--Column Naming (loginName)
-	--testcase, hibernateMapping
+	--same thing as hibernateMapping?
 
 
 2.次要改动

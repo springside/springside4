@@ -72,18 +72,6 @@ public class AccountManager {
 		return userDao.findByLoginName(loginName);
 	}
 
-	/**
-	 * 检查用户名是否唯一.
-	 *
-	 * @return newLoginName在数据库中唯一或等于oldLoginName时返回true.
-	 */
-	@Transactional(readOnly = true)
-	public boolean isLoginNameUnique(String newLoginName, String oldLoginName) {
-		return true;
-		//TODO
-		//return userDao.isPropertyUnique("loginName", newLoginName, oldLoginName);
-	}
-
 	//-- Group Manager --//
 	@Transactional(readOnly = true)
 	public Group getGroup(Long id) {
