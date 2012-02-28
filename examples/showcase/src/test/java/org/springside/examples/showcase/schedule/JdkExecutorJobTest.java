@@ -12,9 +12,9 @@ import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
 
-@Ignore("Unstatable on Jenkins")
+@Ignore("Unstatable on Slow Jenkins")
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/schedule/applicationContext-executor.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-executor.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class JdkExecutorJobTest extends SpringTxTestCase {
 

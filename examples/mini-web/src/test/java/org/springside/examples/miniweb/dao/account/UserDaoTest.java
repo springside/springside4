@@ -18,7 +18,7 @@ import org.springside.modules.test.spring.SpringTxTestCase;
  * 
  * @author calvin
  */
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 public class UserDaoTest extends SpringTxTestCase {
 
 	@Autowired
@@ -36,8 +36,6 @@ public class UserDaoTest extends SpringTxTestCase {
 		//新建并保存带权限组的用户
 		User user = AccountData.getRandomUserWithGroup();
 		entityDao.save(user);
-		//强制执行sql语句
-		//entityDao.flush();
 
 		//获取用户
 		user = entityDao.findOne(user.getId());
@@ -45,23 +43,20 @@ public class UserDaoTest extends SpringTxTestCase {
 
 		//删除用户的权限组
 		user.getGroupList().remove(0);
-		//entityDao.flush();
 		user = entityDao.findOne(user.getId());
 		assertEquals(0, user.getGroupList().size());
 
 		//删除用户
 		entityDao.delete(user.getId());
-		//entityDao.flush();
 		user = entityDao.findOne(user.getId());
 		assertNull(user);
 	}
 
 	//期望抛出ConstraintViolationException的异常.
-	@Test(expected = org.hibernate.exception.ConstraintViolationException.class)
+	@Test(expected = org.springframework.dao.DataIntegrityViolationException.class)
 	public void savenUserNotUnique() {
 		User user = AccountData.getRandomUser();
 		user.setLoginName("admin");
 		entityDao.save(user);
-		//entityDao.flush();
 	}
 }

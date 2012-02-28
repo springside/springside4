@@ -14,7 +14,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-jms-simple.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml", "/jms/applicationContext-jms-simple.xml" })
 public class JmsSimpleTest extends SpringContextTestCase {
 
 	@Autowired

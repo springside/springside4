@@ -22,7 +22,7 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 //演示指定非默认名称的TransactionManager.
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class UserHibernateDaoTest extends SpringTxTestCase {

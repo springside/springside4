@@ -23,7 +23,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml", "/jms/applicationContext-jms-advanced.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml", "/jms/applicationContext-jms-advanced.xml" })
 public class JmsAdvancedTest extends SpringContextTestCase {
 
 	@Autowired

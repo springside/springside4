@@ -20,7 +20,7 @@ import org.springside.modules.test.spring.SpringTxTestCase;
  *  
  * @author calvin
  */
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class HibernateMappingTest extends SpringTxTestCase {
 	private static Logger logger = LoggerFactory.getLogger(HibernateMappingTest.class);

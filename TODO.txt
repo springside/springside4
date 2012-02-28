@@ -10,7 +10,7 @@ TODO部分:
 	--GroupDao
 	--checkunique
 	--Column Naming (loginName)
-	--testcase flush, hibernateMapping
+	--testcase, hibernateMapping
 
 
 2.次要改动

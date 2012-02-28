@@ -17,10 +17,9 @@ import org.springside.modules.utils.Threads;
  * 
  * @author calvin
  */
-@Ignore("Unstatable on Jenkins")
+@Ignore("Unstatable on Slow Jenkins")
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext-test.xml",
-		"/schedule/applicationContext-quartz-timer-cluster.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-quartz-timer-cluster.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class QuartzClusterableJobTest extends SpringTxTestCase {
 
