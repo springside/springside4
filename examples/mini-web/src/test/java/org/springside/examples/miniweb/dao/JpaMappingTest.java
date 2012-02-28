@@ -1,4 +1,4 @@
-package org.springside.examples.miniweb.dao.account;
+package org.springside.examples.miniweb.dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

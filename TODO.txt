@@ -8,13 +8,9 @@ TODO部分:
   * 引入Profile管理環境
   * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
 	--GroupDao
-	--same thing as hibernateMapping?
-
-
+	
 2.次要改动
   * 初始化数据不要再依赖Ant
-  * web.xml優化
-  * namespace 3.1
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -66,6 +62,7 @@ TODO部分:
   * Review perf4j的使用
   * Jersey的Jackson JSON绑定看有没有简化，并升级其他用法。
   * 升级Jquery-validation用法??
+  * JPA2.0特征
   * Hash与加密要加入salt
   * 用JUnit自带的Catetory的演示,Harmset演示
   * Selenium使用自带的Wait类, 检查新版API变化
@@ -75,6 +72,7 @@ TODO部分:
   * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包)
   * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
   * 参考springfuse改进404.jsp,500.jsp
+  
 
 3.其他非代码改动
   * 发布前打包Maven-Archetype的项目生成模板
