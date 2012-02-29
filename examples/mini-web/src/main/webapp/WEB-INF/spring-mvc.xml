@@ -14,6 +14,8 @@
 	
 	<mvc:annotation-driven />
 	
+	<mvc:view-controller path="/" view-name="redirect:/account/user/"/>
+	
 	<mvc:resources mapping="/static/**" location="/static/" />
 	
 	<mvc:default-servlet-handler/>

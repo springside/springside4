@@ -7,6 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class GeneralController {
 
+	@RequestMapping(value = "/index")
+	public String index() {
+		return "index";
+	}
+
 	@RequestMapping(value = "/story/{page}")
 	public String story(@PathVariable("page") String page) {
 		return "story/" + page;

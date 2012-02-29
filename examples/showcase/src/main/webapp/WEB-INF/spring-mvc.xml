@@ -14,6 +14,8 @@
 	
 	<mvc:annotation-driven />
 	
+	<mvc:view-controller path="/" view-name="forward:/index"/>
+	
 	<mvc:resources mapping="/static/**" location="/static/" />
 	
 	<mvc:default-servlet-handler/>
