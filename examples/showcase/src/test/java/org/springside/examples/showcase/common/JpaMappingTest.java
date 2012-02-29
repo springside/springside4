@@ -14,7 +14,7 @@ import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration()
+@TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class JpaMappingTest extends SpringTxTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(JpaMappingTest.class);
