@@ -25,7 +25,7 @@ import com.google.common.collect.Lists;
  * 用户.
  * 
  * 使用JPA annotation定义ORM关系.
- * 使用Hibernate annotation定义JPA 1.0未覆盖的部分.
+ * 使用Hibernate annotation定义JPA未覆盖的部分.
  * 
  * @author calvin
  */

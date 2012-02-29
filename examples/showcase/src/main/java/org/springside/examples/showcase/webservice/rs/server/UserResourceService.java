@@ -11,7 +11,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
@@ -21,7 +20,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.hibernate.ObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,13 +71,15 @@ public class UserResourceService {
 	public UserDTO getUser(@PathParam("id") Long id) {
 		try {
 			User entity = accountManager.getUserEffective(id);
+
+			if (entity == null) {
+				String message = "用户不存在(id:" + id + ")";
+				throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
+			}
+
 			return BeanMapper.map(entity, UserDTO.class);
-		} catch (ObjectNotFoundException e) {
-			String message = "用户不存在(id:" + id + ")";
-			throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
 		} catch (RuntimeException e) {
-			logger.error(e.getMessage(), e);
-			throw new WebApplicationException();
+			throw WebExceptionFactory.buildDefaultException(e, logger);
 		}
 	}
 
@@ -94,6 +94,12 @@ public class UserResourceService {
 			@QueryParam("format") @DefaultValue("json") String format) {
 		try {
 			User entity = accountManager.findUserByNameInitialized(name);
+
+			if (entity == null) {
+				String message = "用户不存在";
+				throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
+			}
+
 			if ("html".equals(format)) {
 				//返回html格式的特定字符串.
 				String html = "<div>" + entity.getName() + ", your mother call you...</div>";
@@ -103,12 +109,8 @@ public class UserResourceService {
 				UserDTO dto = BeanMapper.map(entity, UserDTO.class);
 				return Response.ok(dto, MediaType.APPLICATION_JSON).build();
 			}
-		} catch (ObjectNotFoundException e) {
-			String message = "用户不存在(name:" + name + ")";
-			throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
 		} catch (RuntimeException e) {
-			logger.error(e.getMessage(), e);
-			throw new WebApplicationException();
+			throw WebExceptionFactory.buildDefaultException(e, logger);
 		}
 	}
 
