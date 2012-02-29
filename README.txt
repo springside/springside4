@@ -10,3 +10,5 @@
  
 -------------------------------
 Please visit the wiki -- http://github.com/springside/springside4/wiki for the details.
+
+Enjoy it~
