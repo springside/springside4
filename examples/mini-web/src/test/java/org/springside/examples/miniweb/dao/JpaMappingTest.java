@@ -20,15 +20,15 @@ public class JpaMappingTest extends SpringTxTestCase {
 	private static Logger logger = LoggerFactory.getLogger(JpaMappingTest.class);
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager em;
 
 	@Test
 	public void allClassMapping() throws Exception {
 		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
-		Metamodel model = entityManager.getEntityManagerFactory().getMetamodel();
+		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();
-			entityManager.createQuery("select o from " + entityName + " o").getFirstResult();
+			em.createQuery("select o from " + entityName + " o").getFirstResult();
 			logger.info("ok: " + entityName);
 		}
 	}

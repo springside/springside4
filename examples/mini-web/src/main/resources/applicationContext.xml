@@ -23,7 +23,7 @@
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
 		p:dataSource-ref="dataSource" 
-		p:persistenceUnitName="miniwebPU"
+		p:persistenceUnitName="defaultPU"
 		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter" >
 		<property name="jpaProperties">
 			<props>
@@ -101,7 +101,6 @@
 		</bean>
 		
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />

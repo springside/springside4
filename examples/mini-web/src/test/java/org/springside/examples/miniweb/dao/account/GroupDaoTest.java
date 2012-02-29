@@ -2,8 +2,10 @@ package org.springside.examples.miniweb.dao.account;
 
 import static org.junit.Assert.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,6 +31,9 @@ public class GroupDaoTest extends SpringTxTestCase {
 	@Autowired
 	private UserDao userDao;
 
+	@PersistenceContext
+	private EntityManager em;
+
 	/**
 	 * 载入测试数据.
 	 */
@@ -41,8 +46,6 @@ public class GroupDaoTest extends SpringTxTestCase {
 	 * 测试删除权限组时删除用户-权限组的中间表.
 	 */
 	@Test
-	//TODO
-	@Ignore("Ignore for change to Spring Data JPA,bring it back later")
 	public void deleteGroup() {
 		//新增测试权限组并与admin用户绑定.
 		Group group = AccountData.getRandomGroup();
@@ -51,13 +54,16 @@ public class GroupDaoTest extends SpringTxTestCase {
 		User user = userDao.findOne(1L);
 		user.getGroupList().add(group);
 		userDao.save(user);
+		em.flush();
 
 		int oldJoinTableCount = countRowsInTable("ACCT_USER_GROUP");
 		int oldUserTableCount = countRowsInTable("ACCT_USER");
 
 		//删除用户权限组, 中间表将减少1条记录,而用户表应该不受影响.
-		groupDao.delete(group.getId());
+		groupDao.deleteWithReference(group.getId());
+		em.flush();
 
+		user = userDao.findOne(1L);
 		int newJoinTableCount = countRowsInTable("ACCT_USER_GROUP");
 		int newUserTableCount = countRowsInTable("ACCT_USER");
 		assertEquals(1, oldJoinTableCount - newJoinTableCount);

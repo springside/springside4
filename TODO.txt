@@ -6,8 +6,9 @@ TODO部分:
 
 1.主要改动
   * 引入Profile管理環境
-  * 用Spring Data JPA代替BaseDao基类,清理Hibernate基类及相关
-	--GroupDao
+  * 用Spring Data JPA代替BaseDao基类
+	--Showcase
+	--清理相关类
 	
 2.次要改动
   * 初始化数据不要再依赖Ant
@@ -64,6 +65,7 @@ TODO部分:
   * 升级Jquery-validation用法??
   * JPA2.0特征
   * Hash与加密要加入salt
+  * UT只初始化一次數據
   * 用JUnit自带的Catetory的演示,Harmset演示
   * Selenium使用自带的Wait类, 检查新版API变化
   * 更深入演示PowerMock
