@@ -28,26 +28,23 @@ import com.google.common.collect.Maps;
 //Spring Service Bean的标识.
 @Component
 //默认将类中的所有函数纳入事务管理.
-@Transactional
+@Transactional(readOnly = true)
 public class AccountManager {
 
 	private AccountDao accountDao = null;
 
 	private Validator validator = null;
 
-	@Transactional(readOnly = true)
 	public Department getDepartmentDetail(Long id) {
 		Validate.notNull(id, "id参数为空");
 		return accountDao.getDepartmentDetail(id);
 	}
 
-	@Transactional(readOnly = true)
 	public User getUser(Long id) {
 		Validate.notNull(id, "id参数为空");
 		return accountDao.getUser(id);
 	}
 
-	@Transactional(readOnly = true)
 	public List<User> searchUser(String loginName, String name) {
 		Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("loginName", loginName);
@@ -55,6 +52,7 @@ public class AccountManager {
 		return accountDao.searchUser(parameters);
 	}
 
+	@Transactional(readOnly = false)
 	public Long saveUser(User user) throws ConstraintViolationException {
 		Validate.notNull(user, "用户参数为空");
 		//使用Hibernate Validator校验请求参数

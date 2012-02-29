@@ -24,7 +24,7 @@ import org.springside.examples.miniweb.service.ServiceException;
 //Spring Bean的标识.
 @Component
 //默认将类中的所有public函数纳入事务管理.
-@Transactional
+@Transactional(readOnly = true)
 public class AccountManager {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
@@ -34,11 +34,11 @@ public class AccountManager {
 	private ShiroDbRealm shiroRealm;
 
 	//-- User Manager --//
-	@Transactional(readOnly = true)
 	public User getUser(Long id) {
 		return userDao.findOne(id);
 	}
 
+	@Transactional(readOnly = false)
 	public void saveUser(User entity) {
 		userDao.save(entity);
 		shiroRealm.clearCachedAuthorizationInfo(entity.getLoginName());
@@ -47,6 +47,7 @@ public class AccountManager {
 	/**
 	 * 删除用户,如果尝试删除超级管理员将抛出异常.
 	 */
+	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
 		if (isSupervisor(id)) {
 			logger.warn("操作员{}尝试删除超级管理员用户", SecurityUtils.getSubject().getPrincipal());
@@ -62,32 +63,30 @@ public class AccountManager {
 		return id == 1;
 	}
 
-	@Transactional(readOnly = true)
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll(new Sort(Direction.ASC, "id"));
 	}
 
-	@Transactional(readOnly = true)
 	public User findUserByLoginName(String loginName) {
 		return userDao.findByLoginName(loginName);
 	}
 
 	//-- Group Manager --//
-	@Transactional(readOnly = true)
 	public Group getGroup(Long id) {
 		return groupDao.findOne(id);
 	}
 
-	@Transactional(readOnly = true)
 	public List<Group> getAllGroup() {
 		return (List<Group>) groupDao.findAll((new Sort(Direction.ASC, "id")));
 	}
 
+	@Transactional(readOnly = false)
 	public void saveGroup(Group entity) {
 		groupDao.save(entity);
 		shiroRealm.clearAllCachedAuthorizationInfo();
 	}
 
+	@Transactional(readOnly = false)
 	public void deleteGroup(Long id) {
 		groupDao.delete(id);
 		shiroRealm.clearAllCachedAuthorizationInfo();

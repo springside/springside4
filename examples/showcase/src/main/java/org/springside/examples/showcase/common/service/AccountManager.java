@@ -25,6 +25,7 @@ import org.springside.modules.utils.security.Digests;
  */
 //Spring Service Bean的标识.
 @Component
+@Transactional(readOnly = true)
 public class AccountManager {
 	private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
@@ -47,7 +48,7 @@ public class AccountManager {
 	 * 
 	 */
 	//演示指定非默认名称的TransactionManager.
-	@Transactional("defaultTransactionManager")
+	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
 		if (isSupervisor(user)) {
@@ -74,7 +75,6 @@ public class AccountManager {
 		return (user.getId() != null && user.getId() == 1L);
 	}
 
-	@Transactional(readOnly = true)
 	public User getUser(Long id) {
 		return userHibernateDao.get(id);
 	}
@@ -82,7 +82,6 @@ public class AccountManager {
 	/**
 	 * 取得用户, 并对用户的延迟加载关联进行初始化.
 	 */
-	@Transactional(readOnly = true)
 	public User getInitializedUser(Long id) {
 		if (memcachedClient != null) {
 			return getUserFromMemcached(id);
@@ -118,7 +117,6 @@ public class AccountManager {
 	/**
 	 * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
 	 */
-	@Transactional(readOnly = true)
 	public User searchInitializedUserByName(String name) {
 		User user = userHibernateDao.findUniqueBy("name", name);
 		userHibernateDao.initUser(user);
@@ -128,7 +126,6 @@ public class AccountManager {
 	/**
 	 * 取得所有用户, 预加载用户的角色.
 	 */
-	@Transactional(readOnly = true)
 	public List<User> getAllUserWithRole() {
 		List<User> list = userHibernateDao.getAllUserWithRoleByDistinctHql();
 		logger.info("get {} user sucessful.", list.size());
@@ -138,12 +135,10 @@ public class AccountManager {
 	/**
 	 * 获取当前用户数量.
 	 */
-	@Transactional(readOnly = true)
 	public Long getUserCount() {
 		return userHibernateDao.getUserCount();
 	}
 
-	@Transactional(readOnly = true)
 	public User findUserByLoginName(String loginName) {
 		return userHibernateDao.findUniqueBy("loginName", loginName);
 	}
