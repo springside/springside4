@@ -72,7 +72,6 @@ TODO部分:
   * Selenium使用自带的Wait类, 检查新版API变化
   * 更深入演示PowerMock
   * 参考springfuse改进404.jsp,500.jsp
-  * 取消GBK编码的bat
   * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包),在pom.xml中标注自己提供的包
   * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
 
