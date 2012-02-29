@@ -82,3 +82,4 @@ TODO部分:
   
 需自行时常检查版本的依赖包
 1.Blueprint,jquery,yuicompressor,SpyMemcached,log4jdbc,jsw
+2.
