@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.showcase.cache.memcached.MemcachedObjectType;
-import org.springside.examples.showcase.common.dao.UserHibernateDao;
+import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.dao.UserMyBatisDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
+import org.springside.modules.orm.jpa.JpaUtils;
 import org.springside.modules.utils.security.Digests;
 
 /**
@@ -29,7 +30,7 @@ import org.springside.modules.utils.security.Digests;
 public class AccountManager {
 	private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
-	private UserHibernateDao userHibernateDao;
+	private UserJpaDao userJpaDao;
 
 	private UserMyBatisDao userMyBatisDao;
 
@@ -59,13 +60,17 @@ public class AccountManager {
 		String shaPassword = Digests.sha1Hex(user.getPlainPassword());
 		user.setShaPassword(shaPassword);
 
-		userHibernateDao.save(user);
+		userJpaDao.save(user);
 
 		if (shiroRealm != null) {
 			shiroRealm.clearCachedAuthorizationInfo(user.getLoginName());
 		}
 
 		sendNotifyMessage(user);
+	}
+
+	public List<User> getAllUser() {
+		return (List<User>) userJpaDao.findAll();
 	}
 
 	/**
@@ -76,13 +81,13 @@ public class AccountManager {
 	}
 
 	public User getUser(Long id) {
-		return userHibernateDao.get(id);
+		return userJpaDao.findOne(id);
 	}
 
 	/**
-	 * 取得用户, 并对用户的延迟加载关联进行初始化.
+	 * 取得用户，先尝试从缓存获取，然后用Mybatis查询.
 	 */
-	public User getInitializedUser(Long id) {
+	public User getUserEffective(Long id) {
 		if (memcachedClient != null) {
 			return getUserFromMemcached(id);
 		} else {
@@ -117,30 +122,22 @@ public class AccountManager {
 	/**
 	 * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
 	 */
-	public User searchInitializedUserByName(String name) {
-		User user = userHibernateDao.findUniqueBy("name", name);
-		userHibernateDao.initUser(user);
-		return user;
-	}
+	public User findUserByNameInitialized(String name) {
+		User user = userJpaDao.findByName(name);
+		JpaUtils.initLazyProperty(user.getRoleList());
 
-	/**
-	 * 取得所有用户, 预加载用户的角色.
-	 */
-	public List<User> getAllUserWithRole() {
-		List<User> list = userHibernateDao.getAllUserWithRoleByDistinctHql();
-		logger.info("get {} user sucessful.", list.size());
-		return list;
+		return user;
 	}
 
 	/**
 	 * 获取当前用户数量.
 	 */
 	public Long getUserCount() {
-		return userHibernateDao.getUserCount();
+		return userJpaDao.count();
 	}
 
 	public User findUserByLoginName(String loginName) {
-		return userHibernateDao.findUniqueBy("loginName", loginName);
+		return userJpaDao.findByLoginName(loginName);
 	}
 
 	/**
@@ -160,8 +157,8 @@ public class AccountManager {
 	}
 
 	@Autowired
-	public void setUserHibernateDao(UserHibernateDao userDao) {
-		this.userHibernateDao = userDao;
+	public void setUserJpaDao(UserJpaDao userJpaDao) {
+		this.userJpaDao = userJpaDao;
 	}
 
 	@Autowired
@@ -183,4 +180,5 @@ public class AccountManager {
 	public void setShiroRealm(ShiroDbRealm shiroRealm) {
 		this.shiroRealm = shiroRealm;
 	}
+
 }

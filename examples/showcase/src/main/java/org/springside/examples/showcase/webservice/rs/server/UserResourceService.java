@@ -57,7 +57,7 @@ public class UserResourceService {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public List<UserDTO> getAllUser() {
 		try {
-			List<User> entityList = accountManager.getAllUserWithRole();
+			List<User> entityList = accountManager.getAllUser();
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
 			throw WebExceptionFactory.buildDefaultException(e, logger);
@@ -72,7 +72,7 @@ public class UserResourceService {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public UserDTO getUser(@PathParam("id") Long id) {
 		try {
-			User entity = accountManager.getInitializedUser(id);
+			User entity = accountManager.getUserEffective(id);
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (ObjectNotFoundException e) {
 			String message = "用户不存在(id:" + id + ")";
@@ -93,7 +93,7 @@ public class UserResourceService {
 	public Response searchUser(@QueryParam("name") String name,
 			@QueryParam("format") @DefaultValue("json") String format) {
 		try {
-			User entity = accountManager.searchInitializedUserByName(name);
+			User entity = accountManager.findUserByNameInitialized(name);
 			if ("html".equals(format)) {
 				//返回html格式的特定字符串.
 				String html = "<div>" + entity.getName() + ", your mother call you...</div>";

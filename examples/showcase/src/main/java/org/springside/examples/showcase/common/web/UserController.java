@@ -17,7 +17,7 @@ public class UserController {
 
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
-		List<User> users = accountManager.getAllUserWithRole();
+		List<User> users = accountManager.getAllUser();
 		model.addAttribute("users", users);
 		return "common/userList";
 	}

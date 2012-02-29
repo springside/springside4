@@ -1,8 +1,8 @@
 package org.springside.examples.miniweb.dao.account;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
-@NoRepositoryBean
+/**
+ * GroupDao的扩展行为interface.
+ */
 public interface GroupDaoCustom {
 
 	/**

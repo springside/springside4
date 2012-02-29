@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 import org.springside.examples.miniweb.entity.account.Group;
 import org.springside.examples.miniweb.entity.account.User;
 
+/**
+ * GroupDao的扩展行为实现类.
+ */
 @Component
 public class GroupDaoImpl implements GroupDaoCustom {
 
@@ -24,7 +27,6 @@ public class GroupDaoImpl implements GroupDaoCustom {
 		List<User> users = (List<User>) em.createQuery(QUERY_USER_BY_GROUPID).setParameter(1, id).getResultList();
 		for (User u : users) {
 			u.getGroupList().remove(group);
-			em.persist(u);
 		}
 		em.remove(group);
 	}

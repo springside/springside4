@@ -3,15 +3,14 @@
 	xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:context="http://www.springframework.org/schema/context"  xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:p="http://www.springframework.org/schema/p"
 	xsi:schemaLocation="
-	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-	http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-	http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
-	http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
-	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd"
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.1.xsd
+		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
 	default-lazy-init="true">
 
 	<description>Spring公共配置 </description>
@@ -21,10 +20,11 @@
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" 
-		p:dataSource-ref="dataSource" 
-		p:persistenceUnitName="defaultPU"
-		p:jpaVendorAdapter-ref="hibernateJpaVendorAdapter" >
+	<!-- Jpa Entity Manager 配置 -->
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
+		<property name="dataSource" ref="dataSource"/> 
+		<property name="persistenceUnitName" value="defaultPU"/>
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -37,10 +37,13 @@
 	
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 
+	<!-- Spring Data Jpa配置 -->
  	<jpa:repositories base-package="org.springside.examples.miniweb"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
    
-	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" 
-		p:entityManagerFactory-ref="entityManagerFactory"/>
+	<!-- JPpa 事务配置 -->
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory"/>
+	</bean>
 
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />

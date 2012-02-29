@@ -95,13 +95,13 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
-	<!-- Hibernate Open Session In View filter -->
+	<!-- Open Entity Manager in View filter-->
 	<filter>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
-		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
 	</filter>
 	<filter-mapping>
-		<filter-name>hibernateOpenSessionInViewFilter</filter-name>
+		<filter-name>openEntityManagerInViewFilter</filter-name>
 		<url-pattern>/common/*</url-pattern>
 	</filter-mapping>
 

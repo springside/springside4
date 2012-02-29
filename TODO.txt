@@ -5,9 +5,7 @@
 TODO部分:
 
 1.主要改动
-  * 引入Profile管理環境
   * 用Spring Data JPA代替BaseDao基类
-	--Showcase
 	--清理相关类
 	
 2.次要改动
@@ -19,14 +17,15 @@ TODO部分:
    * MVC框架从Struts2转为Spring MVC3.  
    * DAO框架增加MyBatis的使用，与Hibernate在不同的场景各展所长
    * 安全框架从SpringSecurity转为Apache Shiro.
-   * SpringSide Modules的重构
    * 使用SiteMesh3实现Layout Decoration
    * CSS框架从YUI转为Blueprint
+   * Spring引入Profile概念统一测试、生产環境的配置
    * 演示Hibernate Validator
    * 升級Jackson1.9 演示，包括可擴展的對象, 對象循環引用，局部更新，自定义类型的持久化，自定义Naming策略，已存在對象等新特性.
    * 添加各种常用Utility的Demo, 升级Guava和Commons-Lang3.0.
    * 升级Selenium2.0演示，融合Selenium 1.0与2.0的API
    * Mock框架从EasyMock+JMock换成Mockito + PowerMock
+   * SpringSide Modules的重构
    * 依赖包重要版本升级如：Maven 3.0, Hibernate 3.6.9, Jetty 7.6.3
 
 2. 次要改动
@@ -55,7 +54,8 @@ TODO部分:
 
 1.主要改动
   * 升级Hibernate 4.0
-  * 升级Quartz2.x, Spring Schedule Executor配置升级
+  * Schedule演示升级，升级Quartz2.x,Spring Schedule Executor配置升级
+  * Search Form与分页
   
 2.次要改动
   * 包括Guava的Cache Builder做的简单缓存
@@ -64,16 +64,17 @@ TODO部分:
   * Jersey的Jackson JSON绑定看有没有简化，并升级其他用法。
   * 升级Jquery-validation用法??
   * JPA2.0特征
+  * Shiro的方法级权限控制, Test Helper, enable/diable用户抛出用户已锁定的异常.
   * Hash与加密要加入salt
   * UT只初始化一次數據
   * 用JUnit自带的Catetory的演示,Harmset演示
   * Selenium使用自带的Wait类, 检查新版API变化
   * 更深入演示PowerMock
-  * Shiro的方法级权限控制, Test Helper, enable/diable用户抛出用户已锁定的异常.
-  * 取消GBK编码的bat
-  * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包)
-  * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
   * 参考springfuse改进404.jsp,500.jsp
+  * 取消GBK编码的bat
+  * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包),在pom.xml中标注自己提供的包
+  * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
+
   
 
 3.其他非代码改动
