@@ -3,8 +3,9 @@
 目标：体现Spring4.0的主体框架与选型.
 
 TODO部分:
+文档：
+Shiro，Spring Profile, Mybatis提一下组合对象, blueprint,sitemesh3,hibernate validator,Selenium2, Mockito+PowerMock
 
-全部完成
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -22,7 +23,7 @@ TODO部分:
 	* 升级Selenium2.0演示，融合Selenium 1.0与2.0的API
 	* Mock框架从EasyMock+JMock换成Mockito + PowerMock
 	* SpringSide Modules的重构
-	* 依赖包重要版本升级如：Maven 3.0, Hibernate 3.6.9, Jetty 7.6.3
+	* 依赖包重要版本升级如：Maven 3.0, Hibernate 3.6.9, Jetty 7.6.1
 
 2. 次要改动
    * 升级SpyMemcached2.6版演示
@@ -33,7 +34,7 @@ TODO部分:
    * 删除已过期演示: CXF的ws-security和ws附件协议,Flash Chart, 驗證碼, JMX客户端
    * 依赖包版本的升级
        -- Spring 3.0.4->3.1.1, CXF 2.2.10->2.5.2, Jersey 1.3->1.11, Activemq 5.4.0->5.5.1, Jquery 1.4->1.7.1, Ehcache 1.6—>2.5.1
-       -- Guava r06->11, Commons-lang 2.5->3.1, HttpClient 4.0.1->4.2.0 Beta1, Velocity 1.6.4->1.7, Dozer 5.2.1->5.3.2
+       -- Guava r06->11, Commons-lang 2.5->3.1, HttpClient 4.0.1->4.2.0 Beta1, Dozer 5.2.1->5.3.2
        -- Commons-io 1.4->2.1, Commons pool 1.5.5->1.6, Commons Codec 1.4->1.6, Slf4j 1.6.2->1.6.4
        -- Junit 4.8.1->4.10, Perf4j 0.9.13->0.9.14, Jmemcached 0.8->1.0, yuicompressor 2.4.2->2.4.7, H2 1.2.142->1.3.164
        -- 所有maven插件升级到最新版
@@ -60,7 +61,7 @@ TODO部分:
   * Review HttpClient的使用
   * Review perf4j的使用
   * Jersey的Jackson JSON绑定看有没有简化，并升级其他用法。
-  * 升级Jquery-validation用法?? JQuery flash效果
+  * 升级Jquery-validation用法?? 
   * Ehcache2.x新功能演示
   * JPA2.0特征
   * Shiro的方法级权限控制, Test Helper, enable/diable用户抛出用户已锁定的异常.

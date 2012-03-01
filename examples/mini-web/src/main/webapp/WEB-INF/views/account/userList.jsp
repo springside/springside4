@@ -5,6 +5,11 @@
 <html>
 <head>
 	<title>帐号管理</title>
+	<script>
+	 $(document).ready(function() {
+		$("#message").fadeOut(3000);
+	});
+	</script>
 </head>
 
 <body>
@@ -14,20 +19,20 @@
 	</c:if>
 	
 	<table id="contentTable">
-	<tr><th>登录名</th><th>用户名</th><th>邮箱</th><th>权限组<th>操作</th></tr>
-	<c:forEach items="${users}" var="user">
-		<tr>
-			<td>${user.loginName}</td>
-			<td>${user.name}</td>
-			<td>${user.email}</td>
-			<td>${user.groupNames}</td>
-			<td>
-				<shiro:hasPermission name="user:edit">
-    				<a href="update/${user.id}" id="editLink-${user.name}">修改</a> <a href="delete/${user.id}">删除</a>
-				</shiro:hasPermission>
-			</td>
-		</tr>
-	</c:forEach>
+		<tr><th>登录名</th><th>用户名</th><th>邮箱</th><th>权限组<th>操作</th></tr>
+		<c:forEach items="${users}" var="user">
+			<tr>
+				<td>${user.loginName}</td>
+				<td>${user.name}</td>
+				<td>${user.email}</td>
+				<td>${user.groupNames}</td>
+				<td>
+					<shiro:hasPermission name="user:edit">
+	    				<a href="update/${user.id}" id="editLink-${user.name}">修改</a> <a href="delete/${user.id}">删除</a>
+					</shiro:hasPermission>
+				</td>
+			</tr>
+		</c:forEach>
 	</table>
 	<shiro:hasPermission name="user:edit">
 		<a href="create">创建用户</a>

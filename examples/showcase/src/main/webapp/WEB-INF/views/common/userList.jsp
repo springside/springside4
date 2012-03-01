@@ -4,36 +4,41 @@
 <html>
 <head>
 	<title>综合演示用例</title>
+	<script>
+	$(document).ready(function() {
+		$("#message").fadeOut(3000);
+	});
+	</script>
 </head>
 
 <body>
-		<h2>综合演示用例</h2>
-		<c:if test="${not empty message}">
-			<div id="message" class="success">${message}</div>	
-		</c:if>
+	<h2>综合演示用例</h2>
+	<c:if test="${not empty message}">
+		<div id="message" class="success">${message}</div>	
+	</c:if>
 			
-		<div>
-			<table>
+	<div>
+		<table>
+			<tr>
+				<th>登录名</th>
+				<th>姓名</th>
+				<th>电邮</th>
+				<th>角色</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			<c:forEach items="${users}" var="user">
 				<tr>
-					<th>登录名</th>
-					<th>姓名</th>
-					<th>电邮</th>
-					<th>角色</th>
-					<th>状态</th>
-					<th>操作</th>
+					<td>${user.loginName}&nbsp;</td>
+					<td>${user.name}&nbsp;</td>
+					<td>${user.email}&nbsp;</td>
+					<td>${user.roleNames}&nbsp;</td>
+					<td>${user.status}&nbsp;</td>
+					<td><a href="${ctx}/common/user/update/${user.id}" id="editLink-${user.loginName}">修改</a></td>
 				</tr>
-				<c:forEach items="${users}" var="user">
-					<tr>
-						<td>${user.loginName}&nbsp;</td>
-						<td>${user.name}&nbsp;</td>
-						<td>${user.email}&nbsp;</td>
-						<td>${user.roleNames}&nbsp;</td>
-						<td>${user.status}&nbsp;</td>
-						<td><a href="${ctx}/common/user/update/${user.id}" id="editLink-${user.loginName}">修改</a></td>
-					</tr>
-					</c:forEach>
+			</c:forEach>
 					
-				</table>
-		</div>
+		</table>
+	</div>
 </body>
 </html>
