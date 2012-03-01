@@ -3,9 +3,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
 	default-lazy-init="true">
 
-
 	<description>Shiro安全配置</description>
-
 
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroDbRealm" />
@@ -17,7 +15,7 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/" />
-		<property name="unauthorizedUrl" value="/" />
+		<property name="unauthorizedUrl" value="/login?unauthorized=true" />
 		<property name="filterChainDefinitions">
 			<value>
 				/login = authc

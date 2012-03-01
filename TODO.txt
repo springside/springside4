@@ -2,10 +2,9 @@
 
 目标：体现Spring4.0的主体框架与选型.
 
-TODO部分:
-文档：
-Shiro，Spring Profile, Mybatis提一下组合对象, blueprint,sitemesh3,hibernate validator,Selenium2, Mockito+PowerMock
+已完成，计划2012.03.05发布
 
+    Jersey文档-Jersey json client，Jersey Multipart演示取消返回值multi-part
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -60,7 +59,6 @@ Shiro，Spring Profile, Mybatis提一下组合对象, blueprint,sitemesh3,hibern
   * 包括Guava的Cache Builder做的简单缓存
   * Review HttpClient的使用
   * Review perf4j的使用
-  * Jersey的Jackson JSON绑定看有没有简化，并升级其他用法。
   * 升级Jquery-validation用法?? 
   * Ehcache2.x新功能演示
   * JPA2.0特征
@@ -73,6 +71,7 @@ Shiro，Spring Profile, Mybatis提一下组合对象, blueprint,sitemesh3,hibern
   * 参考springfuse改进404.jsp,500.jsp
   * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包),在pom.xml中标注自己提供的包
   * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
+  * No Content Error
 
   
 

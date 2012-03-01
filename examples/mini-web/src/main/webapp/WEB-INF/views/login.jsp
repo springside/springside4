@@ -17,14 +17,21 @@
 </head>
 
 <body>
-<%
-		String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-		if(error != null){
-		%>
-			<div class="error prepend-top" >登录失败，请重试.</div>
-		<%
-		}
-		%>
+	<%
+	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
+	if(error != null){
+	%>
+		<div class="error prepend-top">登录失败，请重试.</div>
+	<%
+	}
+	%>
+	<%
+	if(request.getParameter("unauthorized")!=null){
+	%>
+		<div class="error prepend-top">用户无权限，请登录其他用户或<a href="javascript:history.back()">返回上一页</a></div>
+	<%
+	}
+	%>
 	<form:form id="loginForm"  action="${ctx}/login" method="post">
 		<fieldset class="prepend-top">
 			<legend>登录</legend>

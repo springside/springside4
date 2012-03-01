@@ -77,6 +77,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		this.accountManager = accountManager;
 	}
 
+	/**
+	 * 自定义Authentication对象，使得Subject除了携带用户的登录名外还可以携带更多信息.
+	 */
 	public static class ShiroUser implements Serializable {
 
 		private static final long serialVersionUID = -1748602382963711884L;
@@ -92,6 +95,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			return loginName;
 		}
 
+		/**
+		 * 本函数输出将作为默认的<shiro:principal/>输出.
+		 */
 		@Override
 		public String toString() {
 			return loginName;

@@ -14,8 +14,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public class UserResouceService {
 	 */
 	@GET
 	@Path("{id}")
-	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public UserDTO getUser(@PathParam("id") Long id) {
 		try {
 			User entity = accountManager.getUser(id);
@@ -70,7 +70,7 @@ public class UserResouceService {
 	 */
 	@GET
 	@Path("search")
-	@Produces( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public List<UserDTO> searchUser(@QueryParam("loginName") String loginName, @QueryParam("name") String name) {
 		try {
 			List<User> entityList = accountManager.searchUser(loginName, name);
@@ -85,7 +85,7 @@ public class UserResouceService {
 	 * 创建用户, 请求数据为POST过来的JSON/XML格式编码的DTO, 返回表示所创建用户的URI.
 	 */
 	@POST
-	@Consumes( { MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
+	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public Response createUser(UserDTO user) {
 		//转换并创建用户
 		try {
@@ -97,10 +97,10 @@ public class UserResouceService {
 			return Response.created(createdUri).build();
 		} catch (ConstraintViolationException e) {
 			String message = Validators.convertMessage(e, "\n");
-			throw WebExceptionFactory.buildException(Status.BAD_REQUEST.getStatusCode(), message, logger);
+			throw WebExceptionFactory.buildException(Status.BAD_REQUEST, message, logger);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-			throw WebExceptionFactory.buildException(Status.BAD_REQUEST.getStatusCode(), message, logger);
+			throw WebExceptionFactory.buildException(Status.BAD_REQUEST, message, logger);
 		} catch (RuntimeException e) {
 			throw WebExceptionFactory.buildDefaultException(e, logger);
 		}
