@@ -1,4 +1,4 @@
-package org.springside.modules.shiro;
+package org.springside.modules.security.shiro;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -96,6 +96,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * @see org.springframework.web.filter.DelegatingFilterProxy DelegatingFilterProxy
  * @since 1.0
  */
+//因为与Spring JPA Data同时使用时，ShiroFilterFacotryBean的BeanPostProcessor报找不到XXDao类，因此暂时用取消BeanPostProcessor定义的方法规避
 public class ShiroFilterFactoryBean implements FactoryBean {
 
 	private static transient final Logger log = LoggerFactory.getLogger(ShiroFilterFactoryBean.class);

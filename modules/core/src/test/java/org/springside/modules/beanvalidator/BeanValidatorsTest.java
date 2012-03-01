@@ -1,4 +1,4 @@
-package org.springside.modules.utils.ee;
+package org.springside.modules.beanvalidator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -16,11 +16,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.test.spring.SpringContextTestCase;
-import org.springside.modules.utils.ee.Validators;
 
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
-public class ValidatorsTest extends SpringContextTestCase {
+public class BeanValidatorsTest extends SpringContextTestCase {
 
 	@Autowired
 	Validator validator;
@@ -32,7 +32,7 @@ public class ValidatorsTest extends SpringContextTestCase {
 
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		assertEquals(2, violations.size());
-		String result = Validators.convertMessage(violations, ",");
+		String result = BeanValidators.convertMessage(violations, ",");
 		assertTrue(StringUtils.contains(result, "邮件地址格式不正确"));
 		assertTrue(StringUtils.contains(result, "姓名不能为空"));
 	}
@@ -43,10 +43,10 @@ public class ValidatorsTest extends SpringContextTestCase {
 		customer.setEmail("aaa");
 
 		try {
-			Validators.validateWithException(validator, customer);
+			BeanValidators.validateWithException(validator, customer);
 			Assert.fail("should throw excepion");
 		} catch (ConstraintViolationException e) {
-			String result = Validators.convertMessage(e, ",");
+			String result = BeanValidators.convertMessage(e, ",");
 			assertTrue(StringUtils.contains(result, "邮件地址格式不正确"));
 			assertTrue(StringUtils.contains(result, "姓名不能为空"));
 		}

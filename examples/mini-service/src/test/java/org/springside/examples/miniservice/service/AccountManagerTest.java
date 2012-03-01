@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
+import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.test.spring.SpringContextTestCase;
-import org.springside.modules.utils.ee.Validators;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class AccountManagerTest extends SpringContextTestCase {
@@ -29,14 +29,14 @@ public class AccountManagerTest extends SpringContextTestCase {
 		try {
 			accountManager.saveUser(userDTOWithoutLoginName);
 		} catch (ConstraintViolationException e) {
-			assertEquals("登录名不能为空", Validators.convertMessage(e, ","));
+			assertEquals("登录名不能为空", BeanValidators.convertMessage(e, ","));
 		}
 		User userDTOWitWrongEmail = AccountData.getRandomUser();
 		userDTOWitWrongEmail.setEmail("abc");
 		try {
 			accountManager.saveUser(userDTOWitWrongEmail);
 		} catch (ConstraintViolationException e) {
-			assertEquals("邮件地址格式不正确", Validators.convertMessage(e, ","));
+			assertEquals("邮件地址格式不正确", BeanValidators.convertMessage(e, ","));
 		}
 
 	}

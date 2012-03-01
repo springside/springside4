@@ -10,7 +10,7 @@ import org.mockito.MockitoAnnotations;
 import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.service.ServiceException;
 import org.springside.examples.miniweb.service.account.AccountManager;
-import org.springside.modules.test.utils.ShiroTestHelper;
+import org.springside.modules.test.support.ShiroTestHelper;
 
 /**
  * SecurityEntityManager的测试用例, 测试Service层的业务逻辑.

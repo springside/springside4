@@ -15,7 +15,7 @@
 	<bean id="shiroDbRealm" class="org.springside.examples.miniweb.service.account.ShiroDbRealm" />
 
 	<!-- Shiro Filter -->
-	<bean id="shiroFilter" class="org.springside.modules.shiro.ShiroFilterFactoryBean">
+	<bean id="shiroFilter" class="org.springside.modules.security.shiro.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/account/user/" />

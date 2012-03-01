@@ -1,4 +1,4 @@
-package org.springside.modules.utils.ee;
+package org.springside.modules.web;
 
 import static org.junit.Assert.*;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springside.modules.utils.ee.Servlets;
+import org.springside.modules.web.Servlets;
 
 public class ServletsTest {
 

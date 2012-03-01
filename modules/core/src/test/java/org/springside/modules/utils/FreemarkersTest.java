@@ -1,4 +1,4 @@
-package org.springside.modules.utils.ee;
+package org.springside.modules.utils;
 
 import static org.junit.Assert.*;
 
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springside.modules.utils.FreeMarkers;
 
 import com.google.common.collect.Maps;
 

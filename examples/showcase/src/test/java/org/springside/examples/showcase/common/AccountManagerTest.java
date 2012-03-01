@@ -11,7 +11,7 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.common.service.ServiceException;
-import org.springside.modules.test.utils.ShiroTestHelper;
+import org.springside.modules.test.support.ShiroTestHelper;
 
 public class AccountManagerTest {
 

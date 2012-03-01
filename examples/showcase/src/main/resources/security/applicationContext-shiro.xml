@@ -11,7 +11,7 @@
 
 	<bean id="shiroDbRealm" class="org.springside.examples.showcase.security.ShiroDbRealm" />
 
-	<bean id="shiroFilter" class="org.springside.modules.shiro.ShiroFilterFactoryBean">
+	<bean id="shiroFilter" class="org.springside.modules.security.shiro.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/" />

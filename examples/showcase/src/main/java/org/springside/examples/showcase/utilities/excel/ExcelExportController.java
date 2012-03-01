@@ -18,7 +18,7 @@ import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springside.examples.showcase.utilities.excel.DummyDataGenerator.TemperatureAnomaly;
-import org.springside.modules.utils.ee.Servlets;
+import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
 

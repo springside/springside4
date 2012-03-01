@@ -21,8 +21,8 @@ import org.springside.examples.miniservice.webservice.ws.result.DepartmentResult
 import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
 import org.springside.examples.miniservice.webservice.ws.result.base.IdResult;
 import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
+import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.ee.Validators;
 
 /**
  * WebService服务端实现类.
@@ -87,7 +87,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			return new IdResult(userId);
 		} catch (ConstraintViolationException e) {
-			String message = Validators.convertMessage(e, "\n");
+			String message = BeanValidators.convertMessage(e, "\n");
 			return new IdResult().setError(WSResult.PARAMETER_ERROR, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";

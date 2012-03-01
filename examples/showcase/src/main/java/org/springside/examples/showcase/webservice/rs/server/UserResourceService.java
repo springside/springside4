@@ -27,8 +27,8 @@ import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.webservice.WsConstants;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
-import org.springside.modules.jersey.WebExceptionFactory;
 import org.springside.modules.mapper.BeanMapper;
+import org.springside.modules.rest.jersey.Jerseys;
 
 import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.MultiPart;
@@ -58,7 +58,7 @@ public class UserResourceService {
 			List<User> entityList = accountManager.getAllUser();
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 
@@ -74,12 +74,12 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在";
-				throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
 			}
 
 			if ("html".equals(format)) {
@@ -110,7 +110,7 @@ public class UserResourceService {
 				return Response.ok(dto, MediaType.APPLICATION_JSON).build();
 			}
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 
@@ -132,7 +132,7 @@ public class UserResourceService {
 		}
 
 		if (userName == null) {
-			throw WebExceptionFactory.buildException(450, "用戶名既不在Http Header也不在URL参数中", logger);
+			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中", logger);
 		}
 
 		return userName;

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.miniservice.dao.AccountDao;
 import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.entity.User;
-import org.springside.modules.utils.ee.Validators;
+import org.springside.modules.beanvalidator.BeanValidators;
 
 import com.google.common.collect.Maps;
 
@@ -56,7 +56,7 @@ public class AccountManager {
 	public Long saveUser(User user) throws ConstraintViolationException {
 		Validate.notNull(user, "用户参数为空");
 		//使用Hibernate Validator校验请求参数
-		Validators.validateWithException(validator, user);
+		BeanValidators.validateWithException(validator, user);
 
 		return accountDao.saveUser(user);
 	}

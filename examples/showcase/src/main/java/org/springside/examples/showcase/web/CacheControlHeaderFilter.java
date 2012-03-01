@@ -10,7 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springside.modules.utils.ee.Servlets;
+import org.springside.modules.web.Servlets;
 
 /**
  * 为Response设置客户端缓存控制Header的Filter.

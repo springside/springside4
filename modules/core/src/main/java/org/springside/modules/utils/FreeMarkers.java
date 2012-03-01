@@ -1,4 +1,4 @@
-package org.springside.modules.utils.ee;
+package org.springside.modules.utils;
 
 import java.io.IOException;
 import java.io.StringReader;

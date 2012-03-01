@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.utils.ee;
+package org.springside.modules.web;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;

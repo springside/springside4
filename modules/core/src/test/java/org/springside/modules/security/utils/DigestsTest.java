@@ -1,11 +1,11 @@
-package org.springside.modules.utils.security;
+package org.springside.modules.security.utils;
 
 import java.io.IOException;
 
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springside.modules.utils.security.Digests;
+import org.springside.modules.security.utils.Digests;
 
 public class DigestsTest {
 

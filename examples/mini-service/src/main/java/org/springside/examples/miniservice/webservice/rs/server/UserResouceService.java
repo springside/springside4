@@ -25,9 +25,9 @@ import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
-import org.springside.modules.jersey.WebExceptionFactory;
+import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.utils.ee.Validators;
+import org.springside.modules.rest.jersey.Jerseys;
 
 /**
  * User资源的REST服务.
@@ -56,12 +56,12 @@ public class UserResouceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw WebExceptionFactory.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 
@@ -77,7 +77,7 @@ public class UserResouceService {
 
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 
@@ -96,13 +96,13 @@ public class UserResouceService {
 			URI createdUri = uriInfo.getAbsolutePathBuilder().path(id.toString()).build();
 			return Response.created(createdUri).build();
 		} catch (ConstraintViolationException e) {
-			String message = Validators.convertMessage(e, "\n");
-			throw WebExceptionFactory.buildException(Status.BAD_REQUEST, message, logger);
+			String message = BeanValidators.convertMessage(e, "\n");
+			throw Jerseys.buildException(Status.BAD_REQUEST, message, logger);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-			throw WebExceptionFactory.buildException(Status.BAD_REQUEST, message, logger);
+			throw Jerseys.buildException(Status.BAD_REQUEST, message, logger);
 		} catch (RuntimeException e) {
-			throw WebExceptionFactory.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e, logger);
 		}
 	}
 

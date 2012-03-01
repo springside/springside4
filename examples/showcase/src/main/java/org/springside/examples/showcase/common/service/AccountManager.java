@@ -16,8 +16,8 @@ import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
-import org.springside.modules.orm.jpa.JpaUtils;
-import org.springside.modules.utils.security.Digests;
+import org.springside.modules.orm.jpa.Jpas;
+import org.springside.modules.security.utils.Digests;
 
 /**
  * 用户管理类.
@@ -124,7 +124,7 @@ public class AccountManager {
 	 */
 	public User findUserByNameInitialized(String name) {
 		User user = userJpaDao.findByName(name);
-		JpaUtils.initLazyProperty(user.getRoleList());
+		Jpas.initLazyProperty(user.getRoleList());
 
 		return user;
 	}

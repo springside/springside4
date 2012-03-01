@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.utils.security;
+package org.springside.modules.security.utils;
 
 import java.security.GeneralSecurityException;
 import java.util.Arrays;

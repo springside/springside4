@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.utils.ee;
+package org.springside.modules.beanvalidator;
 
 import java.util.List;
 import java.util.Set;
@@ -22,9 +22,9 @@ import com.google.common.collect.Lists;
  * @author badqiu
  * @author calvin
  */
-public class Validators {
+public class BeanValidators {
 
-	private Validators() {
+	private BeanValidators() {
 	}
 
 	/**
