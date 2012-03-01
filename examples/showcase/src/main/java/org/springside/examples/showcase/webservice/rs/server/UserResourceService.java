@@ -54,7 +54,7 @@ public class UserResourceService {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
 	public List<UserDTO> getAllUser() {
 		try {
-			List<User> entityList = accountManager.getAllUser();
+			List<User> entityList = accountManager.getAllUserInitialized();
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
 			throw Jerseys.buildDefaultException(e, logger);
@@ -146,6 +146,6 @@ public class UserResourceService {
 	public String multiPart(MultiPart multiPart) {
 		User user = multiPart.getBodyParts().get(0).getEntityAs(User.class);
 		String text = multiPart.getBodyParts().get(1).getEntityAs(String.class);
-		return user + ":" + text;
+		return user.getName() + ":" + text;
 	}
 }

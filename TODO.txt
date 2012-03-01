@@ -2,9 +2,7 @@
 
 目标：体现Spring4.0的主体框架与选型.
 
-已完成，计划2012.03.05发布
-
-  文档：ShiroFilter重写的问题，Jersey文档-quickstart，Jersey json client，Jersey Multipart，Jerseys的介绍，showcase部分
+  文档：sitemesh的混蛋路径配置，ShiroFilter重写的问题，Jersey文档-quickstart，Jersey json client，Jersey Multipart，Jerseys的介绍，showcase部分
   
 ---------------------------------------------------------------------------------
 已完成部分:

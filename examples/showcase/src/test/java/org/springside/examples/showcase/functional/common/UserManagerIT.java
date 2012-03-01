@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
+import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
 
 /**
  * 用户管理的功能测试.
  * 
  * @author calvin
  */
-public class UserManagerIT extends BaseFunctionalTestCase {
+public class UserManagerIT extends BaseSeleniumTestCase {
 
 	@Test
 	public void editUser() {

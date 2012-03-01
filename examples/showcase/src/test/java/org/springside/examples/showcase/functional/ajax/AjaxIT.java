@@ -4,14 +4,14 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
+import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
 
 /**
  * 测试Ajax Mashup.
  * 
  * @calvin
  */
-public class AjaxIT extends BaseFunctionalTestCase {
+public class AjaxIT extends BaseSeleniumTestCase {
 
 	@Test
 	public void mashup() {

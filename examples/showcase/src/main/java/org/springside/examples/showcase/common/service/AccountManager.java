@@ -73,6 +73,14 @@ public class AccountManager {
 		return (List<User>) userJpaDao.findAll();
 	}
 
+	public List<User> getAllUserInitialized() {
+		List<User> result = (List<User>) userJpaDao.findAll();
+		for (User user : result) {
+			Jpas.initLazyProperty(user.getRoleList());
+		}
+		return result;
+	}
+
 	/**
 	 * 判断是否超级管理员.
 	 */
