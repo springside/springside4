@@ -30,7 +30,6 @@ import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
 import org.springside.modules.mapper.BeanMapper;
 import org.springside.modules.rest.jersey.Jerseys;
 
-import com.sun.jersey.multipart.BodyPart;
 import com.sun.jersey.multipart.MultiPart;
 
 /**
@@ -144,14 +143,9 @@ public class UserResourceService {
 	@Path("/multipart")
 	@POST
 	@Consumes("multipart/mixed")
-	@Produces("multipart/mixed")
-	public MultiPart multiPart(MultiPart multiPart) {
+	public String multiPart(MultiPart multiPart) {
 		User user = multiPart.getBodyParts().get(0).getEntityAs(User.class);
 		String text = multiPart.getBodyParts().get(1).getEntityAs(String.class);
-
-		MultiPart output = new MultiPart().bodyPart(new BodyPart(user.getName() + " ok", MediaType.TEXT_PLAIN_TYPE))
-				.bodyPart(new BodyPart(text + " ok", MediaType.TEXT_PLAIN_TYPE));
-
-		return output;
+		return user + ":" + text;
 	}
 }

@@ -70,12 +70,6 @@ public class UserResourceClient {
 		MultiPart inputMultiPart = new MultiPart().bodyPart(new BodyPart(user, MediaType.APPLICATION_JSON_TYPE))
 				.bodyPart(new BodyPart(descriptionText, MediaType.TEXT_PLAIN_TYPE));
 
-		MultiPart outputMultiPart = client.path("/users/multipart").type("multipart/mixed")
-				.post(MultiPart.class, inputMultiPart);
-
-		String resultString = outputMultiPart.getBodyParts().get(0).getEntityAs(String.class) + ":"
-				+ outputMultiPart.getBodyParts().get(1).getEntityAs(String.class);
-		;
-		return resultString;
+		return client.path("/users/multipart").type("multipart/mixed").post(String.class, inputMultiPart);
 	}
 }
