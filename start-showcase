@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Showcase:init database data and start jetty."
+cd examples/showcase
+mvn antrun:run -Prefreshdb
+mvn jetty:run 
+
+
+echo "[INFO] http://localhost:8080/showcase"
+

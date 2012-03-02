@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo " Mini-Web:init database data and start jetty."
+
+cd examples/mini-web
+mvn antrun:run -Prefreshdb
+mvn jetty:run -Djetty.port=8081 
+
+echo "[INFO] http://localhost:8081/mini-web"
