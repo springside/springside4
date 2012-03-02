@@ -1,8 +1,10 @@
 ﻿4.0 RC1版 
 
 目标：体现Spring4.0的主体框架与选型.
+  Linux脚本,SpringContextHoler放回去免得惹事.
+  FieldSet的大小问题，BluePrint input.span,border,.colborder的使用
 
-  文档：sitemesh的混蛋路径配置，ShiroFilter重写的问题，Jersey文档-quickstart，Jersey json client，Jersey Multipart，Jerseys的介绍，showcase部分
+  文档：Jersey文档-quickstart，Jersey json client，Jersey Multipart，Jerseys的介绍，showcase部分
   
 ---------------------------------------------------------------------------------
 已完成部分:
@@ -44,33 +46,14 @@
 
 -----------------------------------------------------------------------------------
 4.0 正式版
-
-目标：细节修正
-
-1.主要改动
-  * 升级Hibernate 4.0
-  * Schedule演示升级，升级Quartz2.x,Spring Schedule Executor配置升级
-  * Search与分页演示
-  
-  
-2.次要改动
-  * 包括Guava的Cache Builder做的简单缓存
   * Review HttpClient的使用
   * Review perf4j的使用
   * 升级Jquery-validation用法?? 
-  * Ehcache2.x新功能演示
-  * JPA2.0特征
-  * Shiro的方法级权限控制, Test Helper, enable/diable用户抛出用户已锁定的异常.
   * Hash与加密要加入salt
-  * UT更智能的初始化數據,dirty data 的标签？？
-  * 用JUnit自带的Catetory的演示,Harmset演示
-  * Selenium使用自带的Wait类, 检查新版API变化
-  * 更深入演示PowerMock
-  * 参考springfuse改进404.jsp,500.jsp
   * 第三方repository也移到github，依赖包次要版本升级:JSW 3.5.7, Log4jdbc,Spymemcached(需自行打包),在pom.xml中标注自己提供的包
-  * 在Jenkins上运行覆盖率，Checkstyle，PMD，Findbugs检查
   * No Content Error
-
+  * 参考springfuse改进404.jsp,500.jsp
+ 
   
 
 3.其他非代码改动
