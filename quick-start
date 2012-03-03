@@ -20,11 +20,11 @@ echo "[Step 4] Init schema and data for all example projects."
 mvn antrun:run -Prefreshdb -Pexamples
 
 echo "[Step 5] Start all example projects."
-cd examples\mini-service
+cd  examples/mini-service
 mvn clean jetty:run -Djetty.port=8082 &
-cd ..\mini-web
+cd  ../mini-web
 mvn clean jetty:run -Djetty.port=8081 &
-cd ..\showcase
+cd  ../showcase
 mvn clean jetty:run &
 
 echo "[INFO] Please wait a moment then access below demo sites:"
