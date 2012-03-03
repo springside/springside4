@@ -9,4 +9,4 @@
   3. Showcase demonstrate many other interesting technologies.
  
 -------------------------------
-Please visit the wiki -- http://github.com/springside/springside4/wiki for the details.
+Offical Site: http://www.springside.org.cn
