@@ -382,22 +382,6 @@
 			<groupId>org.perf4j</groupId>
 			<artifactId>perf4j</artifactId>
 		</dependency>
-
-		<!-- assembly -->
-		<dependency>
-			<groupId>tanukisoft</groupId>
-			<artifactId>jsw</artifactId>
-			<type>zip</type>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jmx</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-start</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -494,39 +478,6 @@
 					</plugin>
 				</plugins>
 			</build>
-		</profile>
-		
-		<!-- 使用Assembly打包jsw+jetty+webapp可运行包的profile -->
-		<profile>
-			<id>package-bin</id>
-			<activation>
-				<property>
-					<name>package.bin</name>
-					<value>true</value>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-								<configuration>
-									<descriptors>
-										<descriptor>assembly/assembly-production.xml</descriptor>
-										<descriptor>assembly/assembly-test.xml</descriptor>
-									</descriptors>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
+		</profile>	
 	</profiles>
 </project>
