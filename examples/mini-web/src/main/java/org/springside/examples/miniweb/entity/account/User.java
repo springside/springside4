@@ -2,7 +2,6 @@ package org.springside.examples.miniweb.entity.account;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -42,8 +41,6 @@ public class User extends IdEntity {
 	private String email;
 	private List<Group> groupList = Lists.newArrayList();//有序的关联对象集合
 
-	//字段非空且唯一, 用于提醒Entity使用者及生成DDL.
-	@Column(nullable = false, unique = true)
 	public String getLoginName() {
 		return loginName;
 	}
