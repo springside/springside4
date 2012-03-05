@@ -923,6 +923,7 @@
 					<version>1.7</version>
 				</plugin>
 				
+				<!-- code style plugins -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-checkstyle-plugin</artifactId>

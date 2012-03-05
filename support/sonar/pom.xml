@@ -4,5 +4,6 @@
 	<groupId>org.springside.support</groupId>
 	<artifactId>springside-sonar</artifactId>
 	<version>4.0.0.RELEASE-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>Springside :: Support :: Sonar Profiles</name>
 </project>

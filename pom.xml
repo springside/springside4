@@ -39,10 +39,10 @@
 		</profile>
 		
 		<profile>
-			<id>sonar</id>					
+			<id>sonar</id>
 			<modules>
-					<module>modules/parent</module>
 					<module>support/sonar</module>
+					<module>modules/parent</module>
 					<module>modules/core</module>
 					<module>modules/extension</module>
 					<module>examples/mini-service</module>
