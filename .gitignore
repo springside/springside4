@@ -23,6 +23,7 @@
 /examples/showcase/.settings/org.eclipse.wst.common.project.facet.core.xml
 /examples/showcase/bin/eclipse-local.bat
 /examples/showcase/bin/yuicompressor-2.4.7.jar
+/modules/parent/target/
 /modules/core/target/
 /modules/core/bin/eclipse-local.bat
 /modules/core/.classpath
@@ -38,4 +39,5 @@
 /support/maven-archetype/.project
 /support/sonar/target/
 /logs
+/target
 /TODO.txt

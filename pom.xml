@@ -37,19 +37,5 @@
 				<module>examples/showcase</module>
 			</modules>
 		</profile>
-		
-		<profile>
-			<id>sonar</id>
-			<modules>
-					<module>support/sonar</module>
-					<module>modules/parent</module>
-					<module>modules/core</module>
-					<module>modules/extension</module>
-					<module>examples/mini-service</module>
-					<module>examples/mini-web</module>
-					<module>examples/showcase</module>
-			</modules>
-		</profile>
-		
 	</profiles>
 </project>
