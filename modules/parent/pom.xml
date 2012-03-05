@@ -948,9 +948,26 @@
 						        <version>2.7.1</version>
 						        <configuration>
 							    	<targetJdk>${jdk.version}</targetJdk>
-							        	<rulesets><ruleset>../../support/sonar/pmd.xml</ruleset></rulesets>
+							        <rulesets><ruleset>../../support/sonar/pmd.xml</ruleset></rulesets>
 						        </configuration>
 						    </plugin>
+						    <plugin>
+							    <groupId>org.codehaus.mojo</groupId>
+	        					<artifactId>findbugs-maven-plugin</artifactId>
+	        					<version>2.4.0</version>
+	        					<configuration>
+	        						<includeFilterFile>../../support/sonar/findbugs.xml</includeFilterFile>
+	        						<formats><format>html</format></formats> 
+	        					</configuration>
+      						</plugin>
+						    <plugin>
+					            <groupId>org.codehaus.mojo</groupId>
+					            <artifactId>cobertura-maven-plugin</artifactId>
+					            <version>2.5.1</version>
+					            <configuration>
+					              	<formats><format>html</format></formats>
+					            </configuration>
+					        </plugin>
 						</reportPlugins>
         			</configuration>
         		</plugin>
