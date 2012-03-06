@@ -32,12 +32,12 @@ import org.springside.modules.utils.PropertiesLoader;
 /**
  * 基于DBUnit初始化测试数据到H2数据库的工具类.
  */
-public class Fixtures {
+public class H2Fixtures {
 
 	private static Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-	private Fixtures() {
+	private H2Fixtures() {
 	}
 
 	/**
@@ -115,6 +115,8 @@ public class Fixtures {
 					tableNames.add(tableName);
 				}
 			}
+
+			rs.close();
 
 			deleteTable(h2DataSource, tableNames.toArray(new String[tableNames.size()]));
 		} catch (SQLException e) {

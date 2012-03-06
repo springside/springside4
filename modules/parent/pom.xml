@@ -939,7 +939,7 @@
 								<artifactId>maven-checkstyle-plugin</artifactId>
 								<version>2.9.1</version>
 								<configuration>
-									<configLocation>../../support/sonar/checkstyle.xml</configLocation>
+									<configLocation>../../support/sonar/springside-checkstyle.xml</configLocation>
 								</configuration>
 				  			</plugin>
 				  			<plugin>
@@ -948,7 +948,8 @@
 						        <version>2.7.1</version>
 						        <configuration>
 							    	<targetJdk>${jdk.version}</targetJdk>
-							        <rulesets><ruleset>../../support/sonar/pmd.xml</ruleset></rulesets>
+							        <rulesets><ruleset>../../support/sonar/springside-pmd.xml</ruleset></rulesets>
+							        <formats><format>html</format></formats>
 						        </configuration>
 						    </plugin>
 						    <plugin>
@@ -964,12 +965,18 @@
 	        					<artifactId>findbugs-maven-plugin</artifactId>
 	        					<version>2.4.0</version>
 	        					<configuration>
-	        						<includeFilterFile>../../support/sonar/findbugs.xml</includeFilterFile>
+	        						<includeFilterFile>../../support/sonar/springside-findbugs.xml</includeFilterFile>
 	        						<formats><format>html</format></formats> 
 	        					</configuration>
       						</plugin>
 						</reportPlugins>
         			</configuration>
+        		</plugin>
+        		
+        		<plugin>
+        		 	<groupId>org.codehaus.mojo</groupId>
+        		 	<artifactId>sonar-maven-plugin</artifactId>
+        		 	<version>2.0</version>
         		</plugin>
 			</plugins>
 		</pluginManagement>

@@ -8,7 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.modules.log.MockLog4jAppender;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -20,7 +20,7 @@ public class JdkExecutorJobTest extends SpringTxTestCase {
 
 	@Test
 	public void scheduleJob() throws Exception {
-		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 
 		//加载测试用logger appender
 		MockLog4jAppender appender = new MockLog4jAppender();

@@ -15,6 +15,9 @@ import java.io.StringWriter;
  */
 public class Exceptions {
 
+	private Exceptions() {
+	}
+
 	/**
 	 * 将CheckedException转换为UncheckedException.
 	 */
