@@ -17,8 +17,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springside.examples.miniservice.entity.User;
@@ -37,8 +35,6 @@ import org.springside.modules.rest.jersey.Jerseys;
 @Path("/users")
 public class UserResouceService {
 
-	private static Logger logger = LoggerFactory.getLogger(UserResouceService.class);
-
 	private AccountManager accountManager;
 
 	@Context
@@ -56,12 +52,12 @@ public class UserResouceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 
@@ -77,7 +73,7 @@ public class UserResouceService {
 
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 
@@ -97,12 +93,12 @@ public class UserResouceService {
 			return Response.created(createdUri).build();
 		} catch (ConstraintViolationException e) {
 			String message = BeanValidators.convertMessage(e, "\n");
-			throw Jerseys.buildException(Status.BAD_REQUEST, message, logger);
+			throw Jerseys.buildException(Status.BAD_REQUEST, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-			throw Jerseys.buildException(Status.BAD_REQUEST, message, logger);
+			throw Jerseys.buildException(Status.BAD_REQUEST, message);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 

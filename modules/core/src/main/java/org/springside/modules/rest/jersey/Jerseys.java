@@ -11,6 +11,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -19,6 +20,8 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.json.JSONConfiguration;
 
 public class Jerseys {
+
+	private static Logger logger = LoggerFactory.getLogger(Jerseys.class);
 
 	private Jerseys() {
 	}
@@ -36,14 +39,14 @@ public class Jerseys {
 	/**
 	 * 创建WebApplicationException并记打印日志, 使用标准状态码与自定义信息并记录错误信息.
 	 */
-	public static WebApplicationException buildException(Status status, String message, Logger logger) {
-		return buildException(status.getStatusCode(), message, logger);
+	public static WebApplicationException buildException(Status status, String message) {
+		return buildException(status.getStatusCode(), message);
 	}
 
 	/**
 	 * 创建WebApplicationException并打印日志, 使用自定义状态码与自定义信息并记录错误信息.
 	 */
-	public static WebApplicationException buildException(int status, String message, Logger logger) {
+	public static WebApplicationException buildException(int status, String message) {
 		logger.error(status + ":" + message);
 		return new WebApplicationException(Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build());
 	}
@@ -52,7 +55,7 @@ public class Jerseys {
 	 * 创建状态码为500的默认WebApplicatonExcetpion, 并在日志中打印RuntimeExcetpion的信息.
 	 * 如RuntimeException为WebApplicatonExcetpion则跳过不进行处理.
 	 */
-	public static WebApplicationException buildDefaultException(RuntimeException e, Logger logger) {
+	public static WebApplicationException buildDefaultException(RuntimeException e) {
 		if (e instanceof WebApplicationException) {
 			return (WebApplicationException) e;
 		} else {
