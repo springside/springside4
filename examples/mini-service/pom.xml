@@ -136,8 +136,8 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>net.sf.log4jdbc</groupId>
-			<artifactId>log4jdbc3</artifactId>	
+			<groupId>log4jdbc</groupId>
+			<artifactId>log4jdbc4</artifactId>	
 		</dependency>		
 		<!-- LOGGING end -->
 
