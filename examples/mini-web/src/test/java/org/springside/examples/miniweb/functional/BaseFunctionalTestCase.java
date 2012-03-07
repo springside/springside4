@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springside.examples.miniweb.Start;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
@@ -63,7 +63,7 @@ public class BaseFunctionalTestCase {
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 	}
 
 	/**

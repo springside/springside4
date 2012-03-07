@@ -20,8 +20,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import org.apache.shiro.authz.annotation.RequiresRoles;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
@@ -41,8 +39,6 @@ import com.sun.jersey.multipart.MultiPart;
 @Path("/users")
 public class UserResourceService {
 
-	private static Logger logger = LoggerFactory.getLogger(UserResourceService.class);
-
 	@Autowired
 	private AccountManager accountManager;
 
@@ -57,7 +53,7 @@ public class UserResourceService {
 			List<User> entityList = accountManager.getAllUserInitialized();
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 
@@ -73,12 +69,12 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 
@@ -96,7 +92,7 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在";
-				throw Jerseys.buildException(Status.NOT_FOUND, message, logger);
+				throw Jerseys.buildException(Status.NOT_FOUND, message);
 			}
 
 			if ("html".equals(format)) {
@@ -109,7 +105,7 @@ public class UserResourceService {
 				return Response.ok(dto, MediaType.APPLICATION_JSON).build();
 			}
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e, logger);
+			throw Jerseys.buildDefaultException(e);
 		}
 	}
 
@@ -131,7 +127,7 @@ public class UserResourceService {
 		}
 
 		if (userName == null) {
-			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中", logger);
+			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中");
 		}
 
 		return userName;

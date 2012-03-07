@@ -38,6 +38,7 @@
 /support/maven-archetype/.settings/
 /support/maven-archetype/.project
 /support/sonar/target/
+/support/script
 /logs
 /target
 /TODO.txt

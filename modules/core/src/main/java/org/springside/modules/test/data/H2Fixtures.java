@@ -27,87 +27,89 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springside.modules.utils.Exceptions;
-import org.springside.modules.utils.PropertiesLoader;
 
 /**
  * 基于DBUnit初始化测试数据到H2数据库的工具类.
  */
-public class Fixtures {
+public class H2Fixtures {
 
-	private static Logger logger = LoggerFactory.getLogger(PropertiesLoader.class);
-	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
-
-	private Fixtures() {
+	private H2Fixtures() {
 	}
 
+	private static Logger logger = LoggerFactory.getLogger(H2Fixtures.class);
+	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
+
 	/**
-	 * 插入XML文件中的数据到H2数据库.
+	 * 插入XML文件中的数据到数据库.
 	 *  
 	 * @param xmlFilePaths 符合Spring Resource路径格式的文件路径列表.
 	 */
-	public static void loadData(DataSource h2DataSource, String... xmlFilePaths) throws Exception {
-		execute(DatabaseOperation.INSERT, h2DataSource, xmlFilePaths);
+	public static void loadData(DataSource dataSource, String... xmlFilePaths) throws Exception {
+		execute(DatabaseOperation.INSERT, dataSource, xmlFilePaths);
 	}
 
 	/**
-	 * 先删除XML数据文件中涉及的表的数据, 再插入XML文件中的数据到H2数据库.
+	 * 先删除XML数据文件中涉及的表的数据, 再插入XML文件中的数据到数据库.
 	 * 
 	 * 在更新全部表时速度没有reloadAllTable快且容易产生锁死, 适合只更新小部分表的数据的情况.
 	 * 
 	 * @param xmlFilePaths 符合Spring Resource路径格式的文件路径列表.
 	 */
-	public static void reloadData(DataSource h2DataSource, String... xmlFilePaths) throws Exception {
-		execute(DatabaseOperation.CLEAN_INSERT, h2DataSource, xmlFilePaths);
+	public static void reloadData(DataSource dataSource, String... xmlFilePaths) throws Exception {
+		execute(DatabaseOperation.CLEAN_INSERT, dataSource, xmlFilePaths);
 	}
 
 	/**
-	 * 先删除数据库中所有表的数据, 再插入XML文件中的数据到H2数据库.
+	 * 在数据库中删除XML文件中涉及的表的数据. 
 	 * 
 	 * @param xmlFilePaths 符合Spring Resource路径格式的文件路径列表.
 	 */
-	public static void reloadAllTable(DataSource h2DataSource, String... xmlFilePaths) throws Exception {
-		deleteAllTable(h2DataSource);
-		loadData(h2DataSource, xmlFilePaths);
+	public static void deleteData(DataSource dataSource, String... xmlFilePaths) throws Exception {
+		execute(DatabaseOperation.DELETE_ALL, dataSource, xmlFilePaths);
 	}
 
 	/**
-	 * 在H2数据库中删除XML文件中涉及的表的数据. 
-	 * 
-	 * @param xmlFilePaths 符合Spring Resource路径格式的文件路径列表.
-	 */
-	public static void deleteData(DataSource h2DataSource, String... xmlFilePaths) throws Exception {
-		execute(DatabaseOperation.DELETE_ALL, h2DataSource, xmlFilePaths);
-	}
-
-	/**
-	 * 对XML文件中的数据在H2数据库中执行Operation.
+	 * 对XML文件中的数据在数据库中执行Operation.
 	 * 
 	 * @param xmlFilePaths 符合Spring Resource路径格式的文件列表.
 	 */
-	private static void execute(DatabaseOperation operation, DataSource h2DataSource, String... xmlFilePaths)
+	private static void execute(DatabaseOperation operation, DataSource dataSource, String... xmlFilePaths)
 			throws DatabaseUnitException, SQLException {
-		//注意这里HardCode了使用H2的Connetion
-		IDatabaseConnection h2Connection = new H2Connection(h2DataSource.getConnection(), null);
+		IDatabaseConnection connection = getConnection(dataSource);
 
 		for (String xmlPath : xmlFilePaths) {
 			try {
 				InputStream input = resourceLoader.getResource(xmlPath).getInputStream();
 				IDataSet dataSet = new FlatXmlDataSetBuilder().setColumnSensing(true).build(input);
-				operation.execute(h2Connection, dataSet);
+				operation.execute(connection, dataSet);
 			} catch (IOException e) {
 				logger.warn(xmlPath + " file not found", e);
 			}
 		}
 	}
 
+	protected static H2Connection getConnection(DataSource dataSource) throws DatabaseUnitException, SQLException {
+		return new H2Connection(dataSource.getConnection(), null);
+	}
+
+	/**
+	 * 先删除数据库中所有表的数据, 再插入XML文件中的数据到数据库.
+	 * 
+	 * @param xmlFilePaths 符合Spring Resource路径格式的文件路径列表.
+	 */
+	public static void reloadAllTable(DataSource dataSource, String... xmlFilePaths) throws Exception {
+		deleteAllTable(dataSource);
+		loadData(dataSource, xmlFilePaths);
+	}
+
 	/**
 	 * 删除所有的表,excludeTables除外.在删除期间disable外键检查.
 	 */
-	public static void deleteAllTable(DataSource h2DataSource, String... excludeTables) {
+	public static void deleteAllTable(DataSource dataSource, String... excludeTables) {
 
 		List<String> tableNames = new ArrayList<String>();
 		try {
-			ResultSet rs = h2DataSource.getConnection().getMetaData()
+			ResultSet rs = dataSource.getConnection().getMetaData()
 					.getTables(null, null, null, new String[] { "TABLE" });
 			while (rs.next()) {
 				String tableName = rs.getString("TABLE_NAME");
@@ -116,7 +118,9 @@ public class Fixtures {
 				}
 			}
 
-			deleteTable(h2DataSource, tableNames.toArray(new String[tableNames.size()]));
+			rs.close();
+
+			deleteTable(dataSource, tableNames.toArray(new String[tableNames.size()]));
 		} catch (SQLException e) {
 			Exceptions.unchecked(e);
 		}
@@ -126,8 +130,8 @@ public class Fixtures {
 	/**
 	 * 删除指定的表, 在删除期间disable外键的检查.
 	 */
-	public static void deleteTable(DataSource h2DataSource, String... tableNames) {
-		JdbcTemplate template = new JdbcTemplate(h2DataSource);
+	public static void deleteTable(DataSource dataSource, String... tableNames) {
+		JdbcTemplate template = new JdbcTemplate(dataSource);
 
 		template.update("SET REFERENTIAL_INTEGRITY FALSE");
 

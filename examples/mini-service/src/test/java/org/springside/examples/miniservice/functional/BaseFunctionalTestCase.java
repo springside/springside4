@@ -6,7 +6,7 @@ import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.springside.examples.miniservice.Start;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.spring.SpringContextHolder;
 
@@ -49,6 +49,6 @@ public class BaseFunctionalTestCase {
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 	}
 }

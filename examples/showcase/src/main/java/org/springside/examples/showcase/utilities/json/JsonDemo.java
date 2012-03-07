@@ -1,7 +1,6 @@
 package org.springside.examples.showcase.utilities.json;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonProcessingException;
@@ -132,7 +130,7 @@ public class JsonDemo {
 
 		//打印全部属性
 		JsonMapper normalMapper = JsonMapper.buildNormalMapper();
-		assertEquals("{\"nullValue\":null,\"name\":\"A\",\"defaultValue\":\"hello\"}", normalMapper.toJson(bean));
+		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalMapper.toJson(bean));
 
 		//不打印nullValue属性
 		JsonMapper nonNullMapper = JsonMapper.buildNonNullMapper();
@@ -212,7 +210,7 @@ public class JsonDemo {
 
 		@Override
 		public String toString() {
-			return new Integer(index).toString();
+			return String.valueOf(index);
 		}
 	}
 
@@ -262,7 +260,7 @@ public class JsonDemo {
 		child2.setParent(parent);
 		parent.getChilds().add(child2);
 
-		String jsonString = "{\"childs\":[{\"name\":\"child1\"},{\"name\":\"child2\"}],\"name\":\"parent\"}";
+		String jsonString = "{\"name\":\"parent\",\"childs\":[{\"name\":\"child1\"},{\"name\":\"child2\"}]}";
 		//打印parent的json输出，json字符串裡childs中的child1/child2都不包含到parent的屬性
 		assertEquals(jsonString, mapper.toJson(parent));
 
@@ -281,7 +279,7 @@ public class JsonDemo {
 
 		private String name;
 		private ParentChildBean parent;
-		public List<ParentChildBean> childs = Lists.newArrayList();
+		private List<ParentChildBean> childs = Lists.newArrayList();
 
 		public ParentChildBean() {
 		}
@@ -339,7 +337,7 @@ public class JsonDemo {
 	public static class ExtensibleBean {
 		private String name; // we always have name
 
-		private HashMap<String, String> properties = Maps.newHashMap();
+		private Map<String, String> properties = Maps.newHashMap();
 
 		public ExtensibleBean() {
 		}
@@ -367,7 +365,7 @@ public class JsonDemo {
 	 * 測試序列化Bean时使用不同的View序列化不同的属性组, 及@JsonIgnore標註的屬性.
 	 */
 	@Test
-	public void viewBean() throws JsonGenerationException, JsonMappingException, IOException {
+	public void viewBean() throws IOException {
 		ViewBean viewBean = new ViewBean();
 		viewBean.setName("Foo");
 		viewBean.setAge(16);
@@ -375,7 +373,7 @@ public class JsonDemo {
 		viewBean.setIgnoreValue("ignored");
 
 		ObjectWriter publicWriter = mapper.getMapper().writerWithView(Views.Public.class);
-		assertEquals("{\"otherValue\":\"others\",\"name\":\"Foo\"}", publicWriter.writeValueAsString(viewBean));
+		assertEquals("{\"name\":\"Foo\",\"otherValue\":\"others\"}", publicWriter.writeValueAsString(viewBean));
 		ObjectWriter internalWriter = mapper.getMapper().writerWithView(Views.Internal.class);
 		assertEquals("{\"age\":16,\"otherValue\":\"others\"}", internalWriter.writeValueAsString(viewBean));
 
