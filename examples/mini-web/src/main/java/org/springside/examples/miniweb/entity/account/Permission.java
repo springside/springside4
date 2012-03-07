@@ -15,9 +15,10 @@ public enum Permission {
 
 	GROUP_VIEW("group:view", "查看权限组"), GROUP_EDIT("group:edit", "修改权限组");
 
+	private static Map<String, Permission> valueMap = Maps.newHashMap();
+
 	public String value;
 	public String displayName;
-	private static Map<String, Permission> valueMap = Maps.newHashMap();
 
 	static {
 		for (Permission permission : Permission.values()) {

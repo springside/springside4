@@ -127,6 +127,7 @@ public class UserResourceService {
 		}
 
 		if (userName == null) {
+			//抛出自定义的异常450
 			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中");
 		}
 

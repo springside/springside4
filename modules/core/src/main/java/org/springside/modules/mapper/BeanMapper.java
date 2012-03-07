@@ -19,13 +19,13 @@ import com.google.common.collect.Lists;
  */
 public class BeanMapper {
 
-	private BeanMapper() {
-	}
-
 	/**
 	 * 持有Dozer单例, 避免重复创建DozerMapper消耗资源.
 	 */
 	private static DozerBeanMapper dozer = new DozerBeanMapper();
+
+	private BeanMapper() {
+	}
 
 	/**
 	 * 基于Dozer转换对象的类型.

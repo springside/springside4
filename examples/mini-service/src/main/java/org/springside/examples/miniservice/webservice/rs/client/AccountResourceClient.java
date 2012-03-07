@@ -12,6 +12,7 @@ import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.modules.rest.jersey.Jerseys;
 
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
@@ -64,9 +65,9 @@ public class AccountResourceClient {
 	 * 创建用户, 使用Post发送JSON编码的用户对象, 返回代表用户的url.
 	 */
 	public URI createUser(UserDTO user) {
-		ClientResponse response = client.path("/users").entity(user, MediaType.APPLICATION_JSON).post(
-				ClientResponse.class);
-		if (201 == response.getStatus()) {
+		ClientResponse response = client.path("/users").entity(user, MediaType.APPLICATION_JSON)
+				.post(ClientResponse.class);
+		if (Status.CREATED.getStatusCode() == response.getStatus()) {
 			return response.getLocation();
 		} else {
 			throw new UniformInterfaceException(response);

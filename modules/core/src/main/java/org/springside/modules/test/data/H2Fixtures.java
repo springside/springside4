@@ -33,11 +33,11 @@ import org.springside.modules.utils.Exceptions;
  */
 public class H2Fixtures {
 
-	private H2Fixtures() {
-	}
-
 	private static Logger logger = LoggerFactory.getLogger(H2Fixtures.class);
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
+
+	private H2Fixtures() {
+	}
 
 	/**
 	 * 插入XML文件中的数据到数据库.
@@ -108,9 +108,9 @@ public class H2Fixtures {
 	public static void deleteAllTable(DataSource dataSource, String... excludeTables) {
 
 		List<String> tableNames = new ArrayList<String>();
+		ResultSet rs = null;
 		try {
-			ResultSet rs = dataSource.getConnection().getMetaData()
-					.getTables(null, null, null, new String[] { "TABLE" });
+			rs = dataSource.getConnection().getMetaData().getTables(null, null, null, new String[] { "TABLE" });
 			while (rs.next()) {
 				String tableName = rs.getString("TABLE_NAME");
 				if (Arrays.binarySearch(excludeTables, tableName) < 0) {
@@ -118,11 +118,17 @@ public class H2Fixtures {
 				}
 			}
 
-			rs.close();
-
 			deleteTable(dataSource, tableNames.toArray(new String[tableNames.size()]));
 		} catch (SQLException e) {
 			Exceptions.unchecked(e);
+		} finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 
 	}

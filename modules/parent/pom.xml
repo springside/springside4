@@ -919,56 +919,7 @@
 					<version>1.7</version>
 				</plugin>
 				
-				<plugin>
-        			<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-site-plugin</artifactId>
-        			<version>3.0</version>
-        			<configuration>
-    					<reportPlugins>
-						    <plugin>
-						        <groupId>org.apache.maven.plugins</groupId>
-						        <artifactId>maven-jxr-plugin</artifactId>
-						        <version>2.3</version>
-						    </plugin>
-    						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-checkstyle-plugin</artifactId>
-								<version>2.9.1</version>
-								<configuration>
-									<configLocation>../../support/sonar/springside-checkstyle.xml</configLocation>
-								</configuration>
-				  			</plugin>
-				  			<plugin>
-						        <groupId>org.apache.maven.plugins</groupId>
-						        <artifactId>maven-pmd-plugin</artifactId>
-						        <version>2.7.1</version>
-						        <configuration>
-							    	<targetJdk>${jdk.version}</targetJdk>
-							        <rulesets><ruleset>../../support/sonar/springside-pmd.xml</ruleset></rulesets>
-							        <formats><format>html</format></formats>
-						        </configuration>
-						    </plugin>
-						    <plugin>
-					            <groupId>org.codehaus.mojo</groupId>
-					            <artifactId>cobertura-maven-plugin</artifactId>
-					            <version>2.5.1</version>
-					            <configuration>
-					              	<formats><format>html</format></formats>
-					            </configuration>
-					        </plugin>
-					        <plugin>
-							    <groupId>org.codehaus.mojo</groupId>
-	        					<artifactId>findbugs-maven-plugin</artifactId>
-	        					<version>2.4.0</version>
-	        					<configuration>
-	        						<includeFilterFile>../../support/sonar/springside-findbugs.xml</includeFilterFile>
-	        						<formats><format>html</format></formats> 
-	        					</configuration>
-      						</plugin>
-						</reportPlugins>
-        			</configuration>
-        		</plugin>
-        		
+				<!-- sonar插件 -->
         		<plugin>
         		 	<groupId>org.codehaus.mojo</groupId>
         		 	<artifactId>sonar-maven-plugin</artifactId>
