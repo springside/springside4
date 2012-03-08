@@ -8,7 +8,7 @@
 	<!-- 邮件发送器 -->
 	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
 		<property name="host" value="smtp.gmail.com" />
-		<property name="username" value="springside.demo" />
+		<property name="username" value="springside3.demo@gmail.com" />
 		<property name="password" value="demoforyou" />
 		<property name="javaMailProperties">
 			<props>
