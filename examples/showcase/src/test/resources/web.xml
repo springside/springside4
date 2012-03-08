@@ -102,7 +102,7 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>openEntityManagerInViewFilter</filter-name>
-		<url-pattern>/common/*</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
 	<!-- Shiro filter -->

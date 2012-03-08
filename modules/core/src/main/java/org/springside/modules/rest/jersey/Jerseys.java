@@ -48,7 +48,15 @@ public class Jerseys {
 	 */
 	public static WebApplicationException buildException(int status, String message) {
 		logger.error(status + ":" + message);
-		return new WebApplicationException(Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build());
+		return new WebApplicationException(buildResponse(status, message));
+	}
+
+	public static Response buildResponse(Status status, String message) {
+		return buildResponse(status.getStatusCode(), message);
+	}
+
+	public static Response buildResponse(int status, String message) {
+		return Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build();
 	}
 
 	/**

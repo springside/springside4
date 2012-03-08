@@ -6,16 +6,16 @@
 	<description>Shiro Configuration</description>
 
 	<!-- Shiro's main business-tier object for web-enabled applications -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="userDao">
 		<property name="realm" ref="shiroDbRealm" />
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
 
-	<!-- 項目自定义Realm -->
+	<!-- 項目自定义的Realm -->
 	<bean id="shiroDbRealm" class="org.springside.examples.miniweb.service.account.ShiroDbRealm" />
 
 	<!-- Shiro Filter -->
-	<bean id="shiroFilter" class="org.springside.modules.security.shiro.ShiroFilterFactoryBean">
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/account/user/" />
@@ -35,5 +35,16 @@
 		</property>
 	</bean>
 
+	<!-- 用户授权信息Cache -->
 	<bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+	
+	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+	
+	<!-- AOP式方法级权限检查  -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+	
+	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+    	<property name="securityManager" ref="securityManager"/>
+	</bean>
 </beans>
