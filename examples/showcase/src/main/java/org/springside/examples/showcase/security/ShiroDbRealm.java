@@ -31,17 +31,23 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.common.entity.Role;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
+import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
 	protected AccountManager accountManager;
 
 	public ShiroDbRealm() {
-		setCredentialsMatcher(new HashedCredentialsMatcher("SHA-1"));
+		super();
+		//指定使用SHA-1的Matcher, 而不是默认的SimpleCredentialsMatcher
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");
+		matcher.setHashIterations(1024);
+		setCredentialsMatcher(matcher);
 	}
 
 	/**
@@ -52,8 +58,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUsername());
 		if (user != null) {
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()),
-					user.getShaPassword(), getName());
+			byte[] salt = Encodes.decodeHex(user.getSalt());
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()), user.getPassword(),
+					ByteSource.Util.bytes(salt), getName());
 		} else {
 			return null;
 		}
@@ -69,6 +76,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Role role : user.getRoleList()) {
+				//基于Role的权限信息
 				info.addRole(role.getName());
 			}
 			return info;

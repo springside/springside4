@@ -20,7 +20,7 @@ import org.apache.commons.lang3.Validate;
  * 
  * 1.Commons-Codec的 hex/base64 编码
  * 2.自行编写的，将long进行base62编码以缩短其长度
- * 3.Commons-Lang的xml/html escape
+ * 3.Commons-Lang的xml/html/csv escape
  * 4.JDK提供的URLEncoder
  * 
  * @author calvin
@@ -75,14 +75,14 @@ public class Encodes {
 	/**
 	 * Base62(0_9A_Za_z)编码数字, long->String.
 	 */
-	public static String encodeBase62(long num) {
+	public static String encodeNumberToBase62(long num) {
 		return alphabetEncode(num, 62);
 	}
 
 	/**
 	 * Base62(0_9A_Za_z)解码数字, String->long.
 	 */
-	public static long decodeBase62(String str) {
+	public static long decodeBase62ToNumber(String str) {
 		return alphabetDecode(str, 62);
 	}
 
@@ -171,4 +171,5 @@ public class Encodes {
 			throw Exceptions.unchecked(e);
 		}
 	}
+
 }

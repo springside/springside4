@@ -6,7 +6,7 @@
 	<description>Shiro Configuration</description>
 
 	<!-- Shiro's main business-tier object for web-enabled applications -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="userDao">
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="userDao,groupDao">
 		<property name="realm" ref="shiroDbRealm" />
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
