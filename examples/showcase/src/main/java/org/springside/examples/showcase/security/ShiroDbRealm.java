@@ -20,6 +20,8 @@ package org.springside.examples.showcase.security;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -94,7 +96,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 * 更新用户授权信息缓存.
 	 */
 	public void clearCachedAuthorizationInfo(String principal) {
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, getName());
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(new ShiroUser(principal, null), getName());
 		clearCachedAuthorizationInfo(principals);
 	}
 
@@ -130,6 +132,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 		public String getName() {
 			return name;
+		}
+
+		@Override
+		public int hashCode() {
+			return HashCodeBuilder.reflectionHashCode(this, "name");
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return EqualsBuilder.reflectionEquals(this, obj, "name");
 		}
 
 	}
