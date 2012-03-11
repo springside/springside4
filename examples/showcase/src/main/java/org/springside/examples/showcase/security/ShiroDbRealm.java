@@ -23,6 +23,7 @@ import java.io.Serializable;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -44,7 +45,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 	public ShiroDbRealm() {
 		super();
-		//指定使用SHA-1的Matcher, 而不是默认的SimpleCredentialsMatcher
+		//指定使用SHA-1的Matcher,1024次迭代Hash,默认hex编码
 		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");
 		matcher.setHashIterations(1024);
 		setCredentialsMatcher(matcher);
@@ -58,6 +59,10 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUsername());
 		if (user != null) {
+			if (user.getStatus().equals("disabled")) {
+				throw new DisabledAccountException();
+			}
+
 			byte[] salt = Encodes.decodeHex(user.getSalt());
 			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()), user.getPassword(),
 					ByteSource.Util.bytes(salt), getName());

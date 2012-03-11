@@ -20,12 +20,17 @@
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
+		System.out.println(error);
+		if(error.contains("DisabledAccountException")){
+	%>		
+		<div class="error prepend-top" >用户已被disable,请登录其他用户.</div>
+	<% 
+		}else{
 	%>
 		<div class="error prepend-top" >登录失败，请重试.</div>
 	<%
+		}
 	}
-	%>
-	<% 
 	if(request.getParameter("unauthorized")!=null){
 	%>
 		<div class="error prepend-top">用户无权限，请登录其他用户或<a href="javascript:history.back()">返回上一页</a></div>

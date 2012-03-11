@@ -59,7 +59,7 @@ public class AccountManager {
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
-		//设定安全的密码，使用salt并经过1024次 sha-1 hash.
+		//设定安全的密码，使用salt并经过1024次 sha-1 hash
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {
 			byte[] salt = Digests.generateSalt(8);
 			user.setSalt(Encodes.encodeHex(salt));
