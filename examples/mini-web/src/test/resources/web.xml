@@ -10,7 +10,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>
-			classpath*:/applicationContext-test.xml
+			classpath*:/applicationContext.xml
 			classpath*:/applicationContext-shiro.xml
 		</param-value>
 	</context-param>
@@ -50,7 +50,6 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 	
-
 	<!-- Shiro Security filter-->
 	<filter>
 		<filter-name>shiroFilter</filter-name>

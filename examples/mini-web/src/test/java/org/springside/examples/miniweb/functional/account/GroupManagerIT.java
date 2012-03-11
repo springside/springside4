@@ -26,7 +26,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void viewGroupList() {
-		s.clickTo(By.linkText(Gui.MENU_GROUP));
+		s.click(By.linkText(Gui.MENU_GROUP));
 		WebElement table = s.findElement(By.xpath("//table[@id='contentTable']"));
 		assertEquals("管理员", s.getTable(table, 1, GroupColumn.NAME.ordinal()));
 		assertEquals("查看用戶,修改用户,查看权限组,修改权限组", s.getTable(table, 1, GroupColumn.PERMISSIONS.ordinal()));
@@ -37,8 +37,8 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void createGroup() {
-		s.clickTo(By.linkText(Gui.MENU_GROUP));
-		s.clickTo(By.linkText("创建权限组"));
+		s.click(By.linkText(Gui.MENU_GROUP));
+		s.click(By.linkText("创建权限组"));
 
 		//生成测试数据
 		Group group = AccountData.getRandomGroupWithPermissions();
@@ -55,7 +55,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 			}
 		}
 
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 
 		//校验结果
 		assertTrue(s.isTextPresent("创建权限组" + group.getName() + "成功"));
@@ -63,8 +63,8 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	}
 
 	private void verifyGroup(Group group) {
-		s.clickTo(By.linkText(Gui.MENU_GROUP));
-		s.clickTo(By.id("editLink-" + group.getName()));
+		s.click(By.linkText(Gui.MENU_GROUP));
+		s.click(By.id("editLink-" + group.getName()));
 		assertEquals(group.getName(), s.getValue(By.id("name")));
 
 		List<WebElement> checkBoxes = s.findElements(By.name("permissionList"));

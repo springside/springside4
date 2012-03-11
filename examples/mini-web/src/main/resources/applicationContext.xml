@@ -40,7 +40,7 @@
 	<!-- Spring Data Jpa配置 -->
  	<jpa:repositories base-package="org.springside.examples.miniweb"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
    
-	<!-- JPpa 事务配置 -->
+	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
@@ -103,6 +103,7 @@
 			</property>
 		</bean>
 		
+		<!-- 非Pool的简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -110,6 +111,7 @@
 			<property name="password" value="${jdbc.password}" />
 		</bean>
 		
+		<!-- 初始化数据结构 -->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
 		</jdbc:initialize-database>
