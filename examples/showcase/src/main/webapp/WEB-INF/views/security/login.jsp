@@ -20,10 +20,9 @@
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
-		System.out.println(error);
 		if(error.contains("DisabledAccountException")){
 	%>		
-		<div class="error prepend-top" >用户已被disable,请登录其他用户.</div>
+		<div class="error prepend-top" >用户已被屏蔽,请登录其他用户.</div>
 	<% 
 		}else{
 	%>

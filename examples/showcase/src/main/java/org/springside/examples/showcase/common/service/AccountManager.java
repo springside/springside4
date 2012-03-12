@@ -61,10 +61,10 @@ public class AccountManager {
 
 		//设定安全的密码，使用salt并经过1024次 sha-1 hash
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {
-			byte[] salt = Digests.generateSalt(8);
+			byte[] salt = Digests.generateSalt(ShiroDbRealm.SALT_SIZE);
 			user.setSalt(Encodes.encodeHex(salt));
 
-			byte[] shaPassword = Digests.sha1(user.getPlainPassword(), salt, 1024);
+			byte[] shaPassword = Digests.sha1(user.getPlainPassword(), salt, ShiroDbRealm.INTERATIONS);
 			user.setPassword(Encodes.encodeHex(shaPassword));
 		}
 		userJpaDao.save(user);

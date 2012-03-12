@@ -43,13 +43,16 @@ import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
+	public static final int INTERATIONS = 1024;
+	public static final int SALT_SIZE = 8;
+	public static final String ALGORITHM = "SHA-1";
 	protected AccountManager accountManager;
 
 	public ShiroDbRealm() {
 		super();
 		//指定使用SHA-1的Matcher,1024次迭代Hash,默认hex编码
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");
-		matcher.setHashIterations(1024);
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
+		matcher.setHashIterations(INTERATIONS);
 		setCredentialsMatcher(matcher);
 	}
 
