@@ -20,6 +20,6 @@ public class QuartzJob {
 	 */
 	public void execute() {
 		long userCount = accountManager.getUserCount();
-		logger.info("There are {} user in database.", userCount);
+		logger.info("There are {} user in database, printed by quartz local job.", userCount);
 	}
 }

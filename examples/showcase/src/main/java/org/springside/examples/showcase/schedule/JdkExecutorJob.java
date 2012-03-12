@@ -7,19 +7,19 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.support.DelegatingErrorHandlingRunnable;
 import org.springframework.scheduling.support.TaskUtils;
 import org.springside.examples.showcase.common.service.AccountManager;
-import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.Threads;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
- * 被ScheduledThreadPoolExecutor定时执行的任务类.
+ * 被ScheduledThreadPoolExecutor定时执行的任务类, 并强化了退出控制.
  */
 public class JdkExecutorJob implements Runnable {
 
@@ -61,7 +61,7 @@ public class JdkExecutorJob implements Runnable {
 	@Override
 	public void run() {
 		long userCount = accountManager.getUserCount();
-		logger.info("There are {} user in database.", userCount);
+		logger.info("There are {} user in database, printed by jdk timer job.", userCount);
 	}
 
 	/**

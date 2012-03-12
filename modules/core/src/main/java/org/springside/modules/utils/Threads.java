@@ -44,7 +44,7 @@ public class Threads {
 				pool.shutdownNow(); // Cancel currently executing tasks
 				// Wait a while for tasks to respond to being cancelled
 				if (!pool.awaitTermination(shutdownNowTimeout, timeUnit)) {
-					System.err.println("Pool did not terminate");
+					System.err.println("Pool did not terminated");
 				}
 			}
 		} catch (InterruptedException ie) {
@@ -62,7 +62,7 @@ public class Threads {
 		try {
 			pool.shutdownNow();
 			if (!pool.awaitTermination(timeout, timeUnit)) {
-				System.err.println("Pool did not terminate");
+				System.err.println("Pool did not terminated");
 			}
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();

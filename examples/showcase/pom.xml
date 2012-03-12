@@ -480,6 +480,9 @@
                 				<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
+                				<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}" src="src/main/resources/sql/${sql.type}/quartz.sql" onerror="continue">
+									<classpath refid="maven.test.classpath" />
+								</sql>
 
 								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}">
 									<dbconfig>

@@ -32,7 +32,6 @@ public class QuartzClusterableJob extends QuartzJobBean {
 	/**
 	 * 定时打印当前用户数到日志.
 	 */
-
 	@Override
 	protected void executeInternal(JobExecutionContext ctx) throws JobExecutionException {
 		AccountManager accountManager = applicationContext.getBean(AccountManager.class);
@@ -41,6 +40,6 @@ public class QuartzClusterableJob extends QuartzJobBean {
 		long userCount = accountManager.getUserCount();
 		String nodeName = (String) config.get("nodeName");
 
-		logger.info("There are {} user in database, print by {}'s job.", userCount, nodeName);
+		logger.info("There are {} user in database, printed by quartz cluster job on node {}.", userCount, nodeName);
 	}
 }
