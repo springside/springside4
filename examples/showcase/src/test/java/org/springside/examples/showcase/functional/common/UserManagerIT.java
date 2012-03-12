@@ -26,10 +26,17 @@ public class UserManagerIT extends BaseSeleniumTestCase {
 
 		//点击提交按钮
 		s.type(By.name("name"), "user_foo");
+		s.getSelectElement(By.name("status")).selectByValue("disabled");
 		s.click(By.id("submit"));
 
 		//重新进入用户修改页面, 检查最后修改者
 		s.click(By.id("editLink-user"));
 		assertEquals("user_foo", s.getValue(By.name("name")));
+		assertEquals("disabled", s.getSelectElement(By.name("status")).getFirstSelectedOption().getText());
+
+		//恢复原有值
+		s.type(By.name("name"), "user");
+		s.getSelectElement(By.name("status")).selectByValue("enabled");
+		s.click(By.id("submit"));
 	}
 }

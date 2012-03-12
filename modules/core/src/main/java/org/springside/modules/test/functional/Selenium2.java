@@ -14,6 +14,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
@@ -23,21 +24,21 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class Selenium2 {
 
-	public static int DEFAULT_WAIT_TIME = 20;
+	public static final int DEFAULT_WAIT_TIME = 20;
 	private WebDriver driver;
 	private String baseUrl;
 
 	public Selenium2(WebDriver driver, String baseUrl) {
 		this.driver = driver;
 		this.baseUrl = baseUrl;
-		setImplicitlyWait(DEFAULT_WAIT_TIME);
+		setTimeout(DEFAULT_WAIT_TIME);
 	}
 
 	/**
 	 * 不设置baseUrl的构造函数, 调用open函数时必须使用绝对路径. 
 	 */
 	public Selenium2(WebDriver driver) {
-		this(driver, null);
+		this(driver, "");
 	}
 
 	// Driver 函數  //
@@ -47,6 +48,27 @@ public class Selenium2 {
 	public void open(String url) {
 		final String urlToOpen = url.indexOf("://") == -1 ? baseUrl + (!url.startsWith("/") ? "/" : "") + url : url;
 		driver.get(urlToOpen);
+	}
+
+	/**
+	 * 获取当前页面.
+	 */
+	public String getLocation() {
+		return driver.getCurrentUrl();
+	}
+
+	/**
+	 * 回退历史页面。
+	 */
+	public void back() {
+		driver.navigate().back();
+	}
+
+	/**
+	 * 刷新页面。
+	 */
+	public void refresh() {
+		driver.navigate().refresh();
 	}
 
 	/**
@@ -66,7 +88,8 @@ public class Selenium2 {
 	/**
 	 * 设置如果查找不到Element时的默认最大等待时间。
 	 */
-	public void setImplicitlyWait(int seconds) {
+	public void setTimeout(int seconds) {
+		System.out.println("TIMEOUTS:" + driver.manage().timeouts());
 		driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
 	}
 
@@ -96,7 +119,7 @@ public class Selenium2 {
 	/**
 	 * 判断页面内是否存在Element.
 	 */
-	public boolean isPresent(By by) {
+	public boolean isElementPresent(By by) {
 		try {
 			driver.findElement(by);
 			return true;
@@ -108,7 +131,7 @@ public class Selenium2 {
 	/**
 	 * 判断Element是否可见.
 	 */
-	public boolean isDisplayed(By by) {
+	public boolean isVisible(By by) {
 		return driver.findElement(by).isDisplayed();
 	}
 
@@ -175,6 +198,13 @@ public class Selenium2 {
 	 */
 	public boolean isChecked(WebElement element) {
 		return element.isSelected();
+	}
+
+	/**
+	 * 返回Select Element,可搭配多种后续的Select操作.
+	 */
+	public Select getSelectElement(By by) {
+		return new Select(driver.findElement(by));
 	}
 
 	/**
