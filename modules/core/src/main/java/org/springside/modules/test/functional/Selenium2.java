@@ -89,7 +89,6 @@ public class Selenium2 {
 	 * 设置如果查找不到Element时的默认最大等待时间。
 	 */
 	public void setTimeout(int seconds) {
-		System.out.println("TIMEOUTS:" + driver.manage().timeouts());
 		driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
 	}
 
@@ -202,8 +201,9 @@ public class Selenium2 {
 
 	/**
 	 * 返回Select Element,可搭配多种后续的Select操作.
+	 * eg. s.getSelect(by).selectByValue(value);
 	 */
-	public Select getSelectElement(By by) {
+	public Select getSelect(By by) {
 		return new Select(driver.findElement(by));
 	}
 
@@ -218,7 +218,7 @@ public class Selenium2 {
 	 * 获取Input框的value.
 	 */
 	public String getValue(By by) {
-		return driver.findElement(by).getAttribute("value");
+		return getValue(driver.findElement(by));
 	}
 
 	/**
@@ -233,26 +233,27 @@ public class Selenium2 {
 	 * 等待Element的内容可见, timeout单位为秒.
 	 */
 	public void waitForVisible(By by, int timeout) {
-		(new WebDriverWait(driver, timeout)).until(ExpectedConditions.visibilityOfElementLocated(by));
+		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), timeout);
 	}
 
 	/**
 	 * 等待Element的内容为text, timeout单位为秒.
 	 */
 	public void waitForTextPresent(By by, String text, int timeout) {
-		(new WebDriverWait(driver, timeout)).until(ExpectedConditions.textToBePresentInElement(by, text));
+		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), timeout);
 	}
 
 	/**
 	 * 等待Element的value值为value, timeout单位为秒.
 	 */
 	public void waitForValuePresent(By by, String value, int timeout) {
-		(new WebDriverWait(driver, timeout)).until(ExpectedConditions.textToBePresentInElementValue(by, value));
+		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), timeout);
 	}
 
 	/**
 	 * 等待其他Conditions, timeout单位为秒.
 	 * 
+	 * @see #waitForTextPresent(By, String, int)
 	 * @see ExpectedConditions
 	 */
 	public void waitForCondition(ExpectedCondition conditon, int timeout) {

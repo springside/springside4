@@ -6,14 +6,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.shiro.authz.UnauthorizedException;
-import org.springframework.stereotype.Component;
 import org.springside.modules.rest.jersey.Jerseys;
 
 @Provider
-@Component
 public class ShiroExceptionMapper implements ExceptionMapper<UnauthorizedException> {
 	public Response toResponse(UnauthorizedException ex) {
-		return Jerseys.buildResponse(Status.UNAUTHORIZED, ex.getMessage());
+		return Jerseys.buildTextResponse(Status.UNAUTHORIZED, ex.getMessage());
 	}
 
 }
