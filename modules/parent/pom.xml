@@ -16,7 +16,7 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.0.0.RELEASE-SNAPSHOT</springside.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
-		<hibernate.version>3.6.9.Final</hibernate.version>
+		<hibernate.version>3.6.10.Final</hibernate.version>
 		<mybatis.version>3.0.6</mybatis.version>
 		<cxf.version>2.5.2</cxf.version>
 		<jersey.version>1.12</jersey.version>
@@ -163,11 +163,6 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>${hibernate.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-ehcache</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
