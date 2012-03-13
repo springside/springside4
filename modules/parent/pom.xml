@@ -235,9 +235,9 @@
 
 			<!-- sitemesh -->
 			<dependency>
-				<groupId>org.sitemesh</groupId>
+				<groupId>opensymphony</groupId>
 				<artifactId>sitemesh</artifactId>
-				<version>3.0-alpha-2</version>
+				<version>2.4.2</version>
 			</dependency>
 
 			<!-- j2ee web spec -->

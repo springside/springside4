@@ -129,7 +129,7 @@
 
 	<filter>
 		<filter-name>sitemeshFilter</filter-name>
-		<filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>sitemeshFilter</filter-name>
