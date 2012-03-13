@@ -11,7 +11,7 @@ import org.springside.examples.showcase.utilities.excel.ExcelExportController;
 import org.springside.modules.utils.Reflections;
 
 /**
- * 测试ExcelExportAction测试,演示Excel的读取.
+ * 测试ExcelExportController测试, 演示Excel的读取.
  * 
  * @author calvin
  */
