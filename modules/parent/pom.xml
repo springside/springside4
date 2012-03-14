@@ -17,7 +17,7 @@
 		<springside.version>4.0.0.RELEASE-SNAPSHOT</springside.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<hibernate.version>4.1.1.Final</hibernate.version>
-		<mybatis.version>3.0.6</mybatis.version>
+		<mybatis.version>3.1.0</mybatis.version>
 		<cxf.version>2.5.2</cxf.version>
 		<jersey.version>1.12</jersey.version>
 		<shiro.version>1.2.0</shiro.version>
@@ -203,7 +203,7 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.0.2</version>
+				<version>1.1.0</version>
 			</dependency>
 
 			<!-- spring orm -->
