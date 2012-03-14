@@ -38,7 +38,11 @@
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
+			<artifactId>cglib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
 		</dependency>
 		<!-- SPRING end -->
 
