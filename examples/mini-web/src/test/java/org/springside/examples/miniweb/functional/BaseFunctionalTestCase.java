@@ -1,5 +1,7 @@
 package org.springside.examples.miniweb.functional;
 
+import static org.junit.Assert.*;
+
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -10,6 +12,9 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.examples.miniweb.Start;
 import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
@@ -33,6 +38,8 @@ public class BaseFunctionalTestCase {
 	protected static DataSource dataSource;
 
 	protected static Selenium2 s;
+
+	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
 	public static void startAll() throws Exception {
@@ -70,9 +77,16 @@ public class BaseFunctionalTestCase {
 	 * 创建Selenium.
 	 */
 	protected static void createSelenium() throws Exception {
+		WebDriver driver = null;
 		Properties props = PropertiesLoader.loadProperties("classpath:/application.test.properties",
 				"classpath:/application.test-local.properties");
-		WebDriver driver = WebDriverFactory.createDriver(props.getProperty("selenium.driver"));
+		String driverName = props.getProperty("selenium.driver");
+		try {
+			driver = WebDriverFactory.createDriver(driverName);
+		} catch (Exception e) {
+			logger.error(driverName + " create fail, use HtmlUnitDriver instead");
+			driver = new HtmlUnitDriver();
+		}
 
 		s = new Selenium2(driver, Start.BASE_URL);
 	}
@@ -95,6 +109,7 @@ public class BaseFunctionalTestCase {
 			s.type(By.name("password"), "admin");
 			s.check(By.name("rememberMe"));
 			s.click(By.id("submit"));
+			assertEquals("Mini-Web示例:帐号管理", s.getTitle());
 		}
 	}
 

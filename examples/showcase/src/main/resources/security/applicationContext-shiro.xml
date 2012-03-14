@@ -11,7 +11,9 @@
 	</bean>
 
 	<!-- 項目自定义的Realm -->
-	<bean id="shiroDbRealm" class="org.springside.examples.showcase.security.ShiroDbRealm" />
+	<bean id="shiroDbRealm" class="org.springside.examples.showcase.security.ShiroDbRealm">
+		<property name="accountManager" ref="accountManager"/>
+	</bean>
 
 	<!-- Shiro Filter -->
 	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">

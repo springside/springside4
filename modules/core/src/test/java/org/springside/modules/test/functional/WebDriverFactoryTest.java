@@ -26,7 +26,6 @@ public class WebDriverFactoryTest {
 	FirefoxDriver firefoxDriver;
 	@Mock
 	InternetExplorerDriver internetExplorerDriver;
-
 	@Mock
 	ChromeDriver chromerDriver;
 	@Mock
@@ -53,6 +52,5 @@ public class WebDriverFactoryTest {
 				.thenReturn(remoteWebDriver);
 		driver = WebDriverFactory.createDriver("remote:localhost:3000:firefox");
 		assertTrue(driver instanceof RemoteWebDriver);
-
 	}
 }

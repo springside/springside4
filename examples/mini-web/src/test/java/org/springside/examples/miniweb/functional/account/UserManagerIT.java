@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springside.examples.miniweb.data.AccountData;
@@ -13,6 +14,7 @@ import org.springside.examples.miniweb.entity.account.User;
 import org.springside.examples.miniweb.functional.BaseFunctionalTestCase;
 import org.springside.examples.miniweb.functional.Gui;
 import org.springside.examples.miniweb.functional.Gui.UserColumn;
+import org.springside.examples.miniweb.functional.category.Daily;
 import org.springside.modules.utils.Collections3;
 import org.springside.modules.utils.Threads;
 
@@ -27,6 +29,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 * 查看用户列表.
 	 */
 	@Test
+	@Category(Daily.class)
 	public void viewUserList() {
 		s.click(By.linkText(Gui.MENU_USER));
 		WebElement table = s.findElement(By.id("contentTable"));

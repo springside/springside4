@@ -113,10 +113,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>taglibs</groupId>
-			<artifactId>standard</artifactId>
-		</dependency>
+	
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -260,6 +257,10 @@
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
+					<configuration>
+					<groups>org.springside.examples.miniweb.functional.category.Daily</groups>
+					<useSystemClassLoader>false</useSystemClassLoader>
+					</configuration>
 			</plugin>
 			<!--  cobertura插件, 设置不需要计算覆盖率的类  -->
 			<plugin>
