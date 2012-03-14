@@ -13,7 +13,7 @@ import org.springside.examples.miniservice.Start;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
-import org.springside.examples.miniservice.functional.category.Daily;
+import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.rs.client.AccountResourceClient;
@@ -31,7 +31,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
-	@Category(Daily.class)
+	@Category(Smoke.class)
 	public void getDeptartmentDetail() {
 		DepartmentDTO department = client.getDepartmentDetail(1L);
 		assertEquals("Development", department.getName());
@@ -50,7 +50,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
-	@Category(Daily.class)
+	@Category(Smoke.class)
 	public void searchUser() {
 		List<UserDTO> result = client.searchUser(null, null);
 		assertTrue(result.size() > 1);
@@ -60,7 +60,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
-	@Category(Daily.class)
+	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);

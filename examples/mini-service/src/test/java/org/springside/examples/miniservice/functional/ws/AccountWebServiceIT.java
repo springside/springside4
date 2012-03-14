@@ -18,7 +18,7 @@ import org.springside.examples.miniservice.Start;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
-import org.springside.examples.miniservice.functional.category.Daily;
+import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
 import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
@@ -44,7 +44,7 @@ public class AccountWebServiceIT extends BaseFunctionalTestCase {
 	 * 测试创建用户,在Spring applicaitonContext.xml中用<jaxws:client/>创建Client.
 	 */
 	@Test
-	@Category(Daily.class)
+	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 
@@ -80,7 +80,7 @@ public class AccountWebServiceIT extends BaseFunctionalTestCase {
 	 * 测试搜索用户,使用CXF的API自行动态创建Client.
 	 */
 	@Test
-	@Category(Daily.class)
+	@Category(Smoke.class)
 	public void searchUser() {
 		String address = Start.TEST_BASE_URL + "/ws/accountservice";
 

@@ -5,7 +5,7 @@ cd %~dp0
 cd ..
 
 set MAVEN_OPTS=%MAVEN_OPTS%
-call mvn antrun:run -Prefreshdb
+call mvn antrun:run -Prefresh-db
 
 cd bin
 pause
