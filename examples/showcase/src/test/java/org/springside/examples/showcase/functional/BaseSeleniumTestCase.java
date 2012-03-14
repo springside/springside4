@@ -41,7 +41,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 				"classpath:/application.test-local.properties");
 
 		WebDriver driver = WebDriverFactory.createDriver(props.getProperty("selenium.driver"));
-		s = new Selenium2(driver, Start.BASE_URL);
+		s = new Selenium2(driver, Start.TEST_BASE_URL);
 	}
 
 	/**

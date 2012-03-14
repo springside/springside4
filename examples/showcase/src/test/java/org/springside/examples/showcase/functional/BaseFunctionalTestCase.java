@@ -35,7 +35,7 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJetty() throws Exception {
 		if (jettyServer == null) {
-			jettyServer = JettyFactory.buildTestServer(Start.PORT, Start.CONTEXT);
+			jettyServer = JettyFactory.buildTestServer(Start.TEST_PORT, Start.CONTEXT);
 			jettyServer.start();
 			dataSource = SpringContextHolder.getBean("dataSource");
 		}

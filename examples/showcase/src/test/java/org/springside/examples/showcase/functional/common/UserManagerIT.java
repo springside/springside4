@@ -3,8 +3,10 @@ package org.springside.examples.showcase.functional.common;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
+import org.springside.examples.showcase.functional.category.Daily;
 
 /**
  * 用户管理的功能测试.
@@ -14,6 +16,13 @@ import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
 public class UserManagerIT extends BaseSeleniumTestCase {
 
 	@Test
+	@Category(Daily.class)
+	public void list() {
+		s.open("/");
+		s.click(By.linkText("综合演示"));
+		assertEquals("Showcase示例:综合演示用例", s.getTitle());
+	}
+
 	public void editUser() {
 		s.open("/");
 		s.click(By.linkText("综合演示"));

@@ -7,15 +7,18 @@ import javax.xml.ws.BindingProvider;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.dozer.DozerBeanMapper;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springside.examples.miniservice.Start;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
+import org.springside.examples.miniservice.functional.category.Daily;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
 import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
@@ -41,6 +44,7 @@ public class AccountWebServiceIT extends BaseFunctionalTestCase {
 	 * 测试创建用户,在Spring applicaitonContext.xml中用<jaxws:client/>创建Client.
 	 */
 	@Test
+	@Category(Daily.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 
@@ -76,8 +80,9 @@ public class AccountWebServiceIT extends BaseFunctionalTestCase {
 	 * 测试搜索用户,使用CXF的API自行动态创建Client.
 	 */
 	@Test
+	@Category(Daily.class)
 	public void searchUser() {
-		String address = BASE_URL + "/ws/accountservice";
+		String address = Start.TEST_BASE_URL + "/ws/accountservice";
 
 		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
 		proxyFactory.setAddress(address);

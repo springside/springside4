@@ -6,5 +6,5 @@
 	<description>Apache CXF Web Service Client端配置</description>
 
 	<jaxws:client id="accountWebServiceClient" serviceClass="org.springside.examples.miniservice.webservice.ws.AccountWebService"
-		address="http://localhost:8080/mini-service/ws/accountservice" />
+		address="http://localhost:8081/mini-service/ws/accountservice" />
 </beans>

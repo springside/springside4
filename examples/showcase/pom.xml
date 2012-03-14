@@ -405,6 +405,10 @@
 			<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
+					<configuration>
+						<groups>org.springside.examples.showcase.functional.category.Daily</groups>
+						<useSystemClassLoader>false</useSystemClassLoader>
+					</configuration>
 			</plugin>
 			<!-- cobertura插件 ,取消不需要计算覆盖率的类 -->
 			<plugin>
