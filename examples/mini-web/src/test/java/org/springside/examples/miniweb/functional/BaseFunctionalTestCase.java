@@ -94,7 +94,7 @@ public class BaseFunctionalTestCase {
 			s.type(By.name("username"), "admin");
 			s.type(By.name("password"), "admin");
 			s.check(By.name("rememberMe"));
-			s.clickTo(By.id("submit"));
+			s.click(By.id("submit"));
 		}
 	}
 
@@ -105,6 +105,6 @@ public class BaseFunctionalTestCase {
 		s.open("/logout");
 		s.type(By.name("username"), user);
 		s.type(By.name("password"), password);
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 	}
 }

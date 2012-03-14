@@ -2,7 +2,6 @@ package org.springside.examples.showcase.common.entity;
 
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -10,7 +9,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.Version;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -30,25 +28,14 @@ import com.google.common.collect.Lists;
 public class User extends IdEntity {
 	private String loginName;
 	private String plainPassword;
-	private String shaPassword;
+	private String password;
+	private String salt;
 	private String name;
 	private String email;
 	private String status;
-	private Integer version;
 
 	private List<Role> roleList = Lists.newArrayList(); //有序的关联对象集合
 
-	//Hibernate自动维护的Version字段
-	@Version
-	public Integer getVersion() {
-		return version;
-	}
-
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-
-	@Column(nullable = false, unique = true)
 	public String getLoginName() {
 		return loginName;
 	}
@@ -57,9 +44,7 @@ public class User extends IdEntity {
 		this.loginName = loginName;
 	}
 
-	/**
-	 * 演示用明文密码.
-	 */
+	@Transient
 	public String getPlainPassword() {
 		return plainPassword;
 	}
@@ -68,15 +53,20 @@ public class User extends IdEntity {
 		this.plainPassword = plainPassword;
 	}
 
-	/**
-	 * 演示用SHA1散列密码.
-	 */
-	public String getShaPassword() {
-		return shaPassword;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setShaPassword(String shaPassword) {
-		this.shaPassword = shaPassword;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public String getSalt() {
+		return salt;
+	}
+
+	public void setSalt(String salt) {
+		this.salt = salt;
 	}
 
 	public String getName() {

@@ -19,7 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.log.MockLog4jAppender;
 
-@Ignore("Unstatable on Jenkins")
+@Ignore("Unstable on Jenkins")
 public class ThreadsTest {
 
 	@Test

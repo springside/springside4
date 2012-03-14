@@ -20,9 +20,12 @@ package org.springside.examples.showcase.security;
 
 import java.io.Serializable;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -31,17 +34,26 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.common.entity.Role;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
+import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
+	public static final int INTERATIONS = 1024;
+	public static final int SALT_SIZE = 8;
+	public static final String ALGORITHM = "SHA-1";
 	protected AccountManager accountManager;
 
 	public ShiroDbRealm() {
-		setCredentialsMatcher(new HashedCredentialsMatcher("SHA-1"));
+		super();
+		//指定使用SHA-1的Matcher,1024次迭代Hash,默认hex编码
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
+		matcher.setHashIterations(INTERATIONS);
+		setCredentialsMatcher(matcher);
 	}
 
 	/**
@@ -52,8 +64,13 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUsername());
 		if (user != null) {
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()),
-					user.getShaPassword(), getName());
+			if (user.getStatus().equals("disabled")) {
+				throw new DisabledAccountException();
+			}
+
+			byte[] salt = Encodes.decodeHex(user.getSalt());
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()), user.getPassword(),
+					ByteSource.Util.bytes(salt), getName());
 		} else {
 			return null;
 		}
@@ -69,6 +86,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Role role : user.getRoleList()) {
+				//基于Role的权限信息
 				info.addRole(role.getName());
 			}
 			return info;
@@ -81,7 +99,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 * 更新用户授权信息缓存.
 	 */
 	public void clearCachedAuthorizationInfo(String principal) {
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(principal, getName());
+		SimplePrincipalCollection principals = new SimplePrincipalCollection(new ShiroUser(principal, null), getName());
 		clearCachedAuthorizationInfo(principals);
 	}
 
@@ -117,6 +135,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 		public String getName() {
 			return name;
+		}
+
+		@Override
+		public int hashCode() {
+			return HashCodeBuilder.reflectionHashCode(this, "name");
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return EqualsBuilder.reflectionEquals(this, obj, "name");
 		}
 
 	}

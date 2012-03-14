@@ -5,24 +5,32 @@ import java.io.IOException;
 import org.junit.Test;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springside.modules.security.utils.Digests;
+import org.springside.modules.utils.Encodes;
 
 public class DigestsTest {
 
 	@Test
 	public void digestString() {
-		String input = "foo message";
+		String input = "user";
+		byte[] sha1Result = Digests.sha1(input);
+		System.out.println("sha1 in hex result                               :" + Encodes.encodeHex(sha1Result));
 
-		System.out.println("sha1 in hex result              :" + Digests.sha1Hex(input));
-		System.out.println("sha1 in base64 result           :" + Digests.sha1Base64(input));
-		System.out.println("sha1 in base64 url result       :" + Digests.sha1Base64UrlSafe(input));
+		byte[] salt = Digests.generateSalt(8);
+		System.out.println("salt in hex                                      :" + Encodes.encodeHex(salt));
+		sha1Result = Digests.sha1(input, salt);
+		System.out.println("sha1 in hex result with salt                     :" + Encodes.encodeHex(sha1Result));
+
+		sha1Result = Digests.sha1(input, salt, 1024);
+		System.out.println("sha1 in hex result with salt and 1024 interations:" + Encodes.encodeHex(sha1Result));
+
 	}
 
 	@Test
 	public void digestFile() throws IOException {
 		Resource resource = new ClassPathResource("/log4j.properties");
-
-		System.out.println("md5: " + Digests.md5Hex(resource.getInputStream()));
-		System.out.println("sha1:" + Digests.sha1Hex(resource.getInputStream()));
+		byte[] md5result = Digests.md5(resource.getInputStream());
+		byte[] sha1result = Digests.sha1(resource.getInputStream());
+		System.out.println("md5: " + Encodes.encodeHex(md5result));
+		System.out.println("sha1:" + Encodes.encodeHex(sha1result));
 	}
 }

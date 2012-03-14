@@ -21,14 +21,14 @@ public class Identities {
 	}
 
 	/**
-	 * 封装JDK自带的UUID, 通过Random数字生成,中间有-分割
+	 * 封装JDK自带的UUID, 通过Random数字生成, 中间有-分割.
 	 */
 	public static String uuid() {
 		return UUID.randomUUID().toString();
 	}
 
 	/**
-	 * 封装JDK自带的UUID, 通过Random数字生成,中间无-分割
+	 * 封装JDK自带的UUID, 通过Random数字生成, 中间无-分割.
 	 */
 	public static String uuid2() {
 		return UUID.randomUUID().toString().replaceAll("-", "");
@@ -45,6 +45,6 @@ public class Identities {
 	 * 基于Base62编码的SecureRandom随机生成Long.
 	 */
 	public static String randomBase62() {
-		return Encodes.encodeBase62(random.nextLong());
+		return Encodes.encodeNumberToBase62(random.nextLong());
 	}
 }

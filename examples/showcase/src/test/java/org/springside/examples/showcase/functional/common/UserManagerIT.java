@@ -16,20 +16,27 @@ public class UserManagerIT extends BaseSeleniumTestCase {
 	@Test
 	public void editUser() {
 		s.open("/");
-		s.clickTo(By.linkText("综合演示"));
-		s.clickTo(By.id("editLink-user"));
+		s.click(By.linkText("综合演示"));
+		s.click(By.id("editLink-user"));
 
 		//修改用户需要登录管理员权限
 		s.type(By.name("username"), "admin");
 		s.type(By.name("password"), "admin");
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 
 		//点击提交按钮
 		s.type(By.name("name"), "user_foo");
-		s.clickTo(By.id("submit"));
+		s.getSelect(By.name("status")).selectByValue("disabled");
+		s.click(By.id("submit"));
 
 		//重新进入用户修改页面, 检查最后修改者
-		s.clickTo(By.id("editLink-user"));
+		s.click(By.id("editLink-user"));
 		assertEquals("user_foo", s.getValue(By.name("name")));
+		assertEquals("disabled", s.getSelect(By.name("status")).getFirstSelectedOption().getText());
+
+		//恢复原有值
+		s.type(By.name("name"), "user");
+		s.getSelect(By.name("status")).selectByValue("enabled");
+		s.click(By.id("submit"));
 	}
 }

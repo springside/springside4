@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -40,6 +41,8 @@ public class WebDriverFactory {
 			driver = new FirefoxDriver();
 		} else if (BrowserType.ie.name().equals(driverName)) {
 			driver = new InternetExplorerDriver();
+		} else if (BrowserType.chrome.name().equals(driverName)) {
+			driver = new ChromeDriver();
 		} else if (driverName.startsWith(BrowserType.remote.name())) {
 			String[] params = driverName.split(":");
 			Assert.isTrue(params.length == 4,
@@ -70,6 +73,6 @@ public class WebDriverFactory {
 	}
 
 	public enum BrowserType {
-		firefox, ie, remote
+		firefox, ie, chrome, remote
 	}
 }

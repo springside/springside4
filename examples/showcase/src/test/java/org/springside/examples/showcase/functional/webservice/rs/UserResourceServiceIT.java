@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.List;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springside.examples.showcase.Start;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
@@ -40,12 +39,11 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
-	@Ignore("not support yet")
 	public void getAllUserWithoutPermission() {
 		try {
 			client.getAllUser("user", "user");
 		} catch (UniformInterfaceException e) {
-			assertEquals(403, e.getResponse().getStatus());
+			assertEquals(401, e.getResponse().getStatus());
 			return;
 		}
 		fail("Exception should happen");

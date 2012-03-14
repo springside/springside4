@@ -16,7 +16,6 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springside.modules.utils.Encodes;
 import org.springside.modules.utils.Exceptions;
 
 /**
@@ -57,60 +56,14 @@ public class Cryptos {
 	}
 
 	/**
-	 * 使用HMAC-SHA1进行消息签名, 返回Hex编码的结果,长度为40字符.
-	 *	
-	 * @see #hmacSha1(String, byte[])
-	 */
-	public static String hmacSha1ToHex(String input, byte[] keyBytes) {
-		byte[] macResult = hmacSha1(input, keyBytes);
-		return Encodes.encodeHex(macResult);
-	}
-
-	/**
-	 * 使用HMAC-SHA1进行消息签名, 返回Base64编码的结果.
+	 * 校验HMAC-SHA1签名是否正确.
 	 * 
-	 * @see #hmacSha1(String, byte[])
-	 */
-	public static String hmacSha1ToBase64(String input, byte[] keyBytes) {
-		byte[] macResult = hmacSha1(input, keyBytes);
-		return Encodes.encodeBase64(macResult);
-	}
-
-	/**
-	 * 使用HMAC-SHA1进行消息签名, 返回Base64编码的URL安全的结果.
-	 * 
-	 * @see #hmacSha1(String, byte[])
-	 */
-	public static String hmacSha1ToBase64UrlSafe(String input, byte[] keyBytes) {
-		byte[] macResult = hmacSha1(input, keyBytes);
-		return Encodes.encodeUrlSafeBase64(macResult);
-	}
-
-	/**
-	 * 校验Hex编码的HMAC-SHA1签名是否正确.
-	 * 
-	 * @param hexMac Hex编码的签名
+	 * @param expected 已存在的签名
 	 * @param input 原始输入字符串
 	 * @param keyBytes 密钥
 	 */
-	public static boolean isHexMacValid(String hexMac, String input, byte[] keyBytes) {
-		byte[] expected = Encodes.decodeHex(hexMac);
+	public static boolean isMacValid(byte[] expected, String input, byte[] keyBytes) {
 		byte[] actual = hmacSha1(input, keyBytes);
-
-		return Arrays.equals(expected, actual);
-	}
-
-	/**
-	 * 校验Base64/Base64URLSafe编码的HMAC-SHA1签名是否正确.
-	 * 
-	 * @param base64Mac Base64/Base64URLSafe编码的签名
-	 * @param input 原始输入字符串
-	 * @param keyBytes 密钥
-	 */
-	public static boolean isBase64MacValid(String base64Mac, String input, byte[] keyBytes) {
-		byte[] expected = Encodes.decodeBase64(base64Mac);
-		byte[] actual = hmacSha1(input, keyBytes);
-
 		return Arrays.equals(expected, actual);
 	}
 
@@ -129,56 +82,25 @@ public class Cryptos {
 		}
 	}
 
-	/**
-	 * 生成HMAC-SHA1密钥, 返回Hex编码的结果,长度为40字符. 
-	 * @see #generateMacSha1Key()
-	 */
-	public static String generateMacSha1HexKey() {
-		return Encodes.encodeHex(generateMacSha1Key());
-	}
-
 	//-- DES function --//
 	/**
-	 * 使用DES加密原始字符串, 返回Hex编码的结果.
+	 * 使用DES加密原始字符串.
 	 * 
 	 * @param input 原始输入字符串
 	 * @param keyBytes 符合DES要求的密钥
 	 */
-	public static String desEncryptToHex(String input, byte[] keyBytes) {
-		byte[] encryptResult = des(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
-		return Encodes.encodeHex(encryptResult);
+	public static byte[] desEncrypt(String input, byte[] keyBytes) {
+		return des(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
 	}
 
 	/**
-	 * 使用DES加密原始字符串, 返回Base64编码的结果.
-	 * 
-	 * @param input 原始输入字符串
-	 * @param keyBytes 符合DES要求的密钥
-	 */
-	public static String desEncryptToBase64(String input, byte[] keyBytes) {
-		byte[] encryptResult = des(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
-		return Encodes.encodeBase64(encryptResult);
-	}
-
-	/**
-	 * 使用DES解密Hex编码的加密字符串, 返回原始字符串.
+	 * 使用DES解密加密的字符串, 返回原始字符串.
 	 * 
 	 * @param input Hex编码的加密字符串
 	 * @param keyBytes 符合DES要求的密钥
 	 */
-	public static String desDecryptFromHex(String input, byte[] keyBytes) {
-		byte[] decryptResult = des(Encodes.decodeHex(input), keyBytes, Cipher.DECRYPT_MODE);
-		return new String(decryptResult);
-	}
-
-	/**
-	 * 使用DES解密Base64编码的加密字符串, 返回原始字符串.
-	 * 
-	 * @param input Base64编码的加密字符串
-	 * @param keyBytes 符合DES要求的密钥
-	 */
-	public static String desDecryptFromBase64(String input, byte[] keyBytes) {
-		byte[] decryptResult = des(Encodes.decodeBase64(input), keyBytes, Cipher.DECRYPT_MODE);
+	public static String desDecrypt(byte[] input, byte[] keyBytes) {
+		byte[] decryptResult = des(input, keyBytes, Cipher.DECRYPT_MODE);
 		return new String(decryptResult);
 	}
 
@@ -216,55 +138,25 @@ public class Cryptos {
 		}
 	}
 
-	/**
-	 * 生成符合DES要求的Hex编码密钥, 长度为16字符.
-	 */
-	public static String generateDesHexKey() {
-		return Encodes.encodeHex(generateDesKey());
-	}
-
 	//-- AES funciton --//
 	/**
-	 * 使用AES加密原始字符串, 返回Hex编码的结果.
+	 * 使用AES加密原始字符串.
 	 * 
 	 * @param input 原始输入字符串
 	 * @param keyBytes 符合AES要求的密钥
 	 */
-	public static String aesEncryptToHex(String input, byte[] keyBytes) {
-		byte[] encryptResult = aes(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
-		return Encodes.encodeHex(encryptResult);
+	public static byte[] aesEncrypt(String input, byte[] keyBytes) {
+		return aes(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
 	}
 
 	/**
-	 * 使用AES加密原始字符串, 返回Base64编码的结果.
-	 * 
-	 * @param input 原始输入字符串
-	 * @param keyBytes 符合AES要求的密钥
-	 */
-	public static String aesEncryptToBase64(String input, byte[] keyBytes) {
-		byte[] encryptResult = aes(input.getBytes(), keyBytes, Cipher.ENCRYPT_MODE);
-		return Encodes.encodeBase64(encryptResult);
-	}
-
-	/**
-	 * 使用AES解密Hex编码的加密字符串, 返回原始字符串.
+	 * 使用AES解密字符串, 返回原始字符串.
 	 * 
 	 * @param input Hex编码的加密字符串
 	 * @param keyBytes 符合AES要求的密钥
 	 */
-	public static String aesDecryptFromHex(String input, byte[] keyBytes) {
-		byte[] decryptResult = aes(Encodes.decodeHex(input), keyBytes, Cipher.DECRYPT_MODE);
-		return new String(decryptResult);
-	}
-
-	/**
-	 * 使用AES解密Base64编码的加密字符串, 返回原始字符串.
-	 * 
-	 * @param input Base64编码的加密字符串
-	 * @param keyBytes 符合AES要求的密钥
-	 */
-	public static String aesDecryptFromBase64(String input, byte[] keyBytes) {
-		byte[] decryptResult = aes(Encodes.decodeBase64(input), keyBytes, Cipher.DECRYPT_MODE);
+	public static String aesDecrypt(byte[] input, byte[] keyBytes) {
+		byte[] decryptResult = aes(input, keyBytes, Cipher.DECRYPT_MODE);
 		return new String(decryptResult);
 	}
 
@@ -298,13 +190,5 @@ public class Cryptos {
 		} catch (GeneralSecurityException e) {
 			throw Exceptions.unchecked(e);
 		}
-	}
-
-	/**
-	 * 生成AES密钥, 返回Hex编码的结果,长度为32字符. 
-	 * @see #generateMacSha1Key()
-	 */
-	public static String generateAesHexKey() {
-		return Encodes.encodeHex(generateAesKey());
 	}
 }

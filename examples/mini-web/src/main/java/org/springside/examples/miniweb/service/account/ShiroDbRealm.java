@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.miniweb.entity.account.Group;
 import org.springside.examples.miniweb.entity.account.User;
 
+/**
+ * 自实现用户与权限查询.
+ * 演示关系，密码用明文存储，因此使用默认 的SimpleCredentialsMatcher.
+ */
 public class ShiroDbRealm extends AuthorizingRealm {
 
 	private AccountManager accountManager;
@@ -44,6 +48,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Group group : user.getGroupList()) {
+				//基于Permission的权限信息
 				info.addStringPermissions(group.getPermissionList());
 			}
 			return info;

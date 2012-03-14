@@ -28,7 +28,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void viewUserList() {
-		s.clickTo(By.linkText(Gui.MENU_USER));
+		s.click(By.linkText(Gui.MENU_USER));
 		WebElement table = s.findElement(By.id("contentTable"));
 		assertEquals("admin", s.getTable(table, 1, UserColumn.LOGIN_NAME.ordinal()));
 		assertEquals("Admin", s.getTable(table, 1, UserColumn.NAME.ordinal()));
@@ -41,8 +41,8 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	@Test
 	public void createUser() {
 		//打开新增用户页面
-		s.clickTo(By.linkText(Gui.MENU_USER));
-		s.clickTo(By.linkText("创建用户"));
+		s.click(By.linkText(Gui.MENU_USER));
+		s.click(By.linkText("创建用户"));
 
 		//生成待输入的测试用户数据
 		User user = AccountData.getRandomUserWithGroup();
@@ -61,7 +61,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 			}
 
 		}
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 
 		//校验结果
 		assertTrue(s.isTextPresent("创建用户" + user.getLoginName() + "成功"));
@@ -73,7 +73,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 */
 	private void verifyUser(User user) {
 
-		s.clickTo(By.id("editLink-" + user.getLoginName()));
+		s.click(By.id("editLink-" + user.getLoginName()));
 
 		assertEquals(user.getLoginName(), s.getValue(By.id("loginName")));
 		assertEquals(user.getName(), s.getValue(By.id("name")));
@@ -103,8 +103,8 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void inputInValidateUser() {
-		s.clickTo(By.linkText(Gui.MENU_USER));
-		s.clickTo(By.linkText("创建用户"));
+		s.click(By.linkText(Gui.MENU_USER));
+		s.click(By.linkText("创建用户"));
 
 		s.type(By.id("loginName"), "admin");
 		s.type(By.id("name"), "");
@@ -112,7 +112,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 		s.type(By.id("passwordConfirm"), "abc");
 		s.type(By.id("email"), "abc");
 
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 
 		Threads.sleep(2000);
 

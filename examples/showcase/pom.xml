@@ -67,10 +67,6 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-ehcache</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 		</dependency>
@@ -121,7 +117,7 @@
 		</dependency>
 		
 		<dependency>
-			<groupId>org.sitemesh</groupId>
+			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
 		</dependency>
 
@@ -333,10 +329,24 @@
 			<!-- for xxxDemo class -->
 			<scope>compile</scope>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+		</dependency>
+			
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
 		</dependency>
 
 		<dependency>
@@ -408,6 +418,7 @@
 					<instrumentation>
 						<excludes>
 							<exclude>**/entity/**/*.class</exclude>
+							<exclude>**/*Controller.class</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>
@@ -463,6 +474,9 @@
 								</waitfor>
                 				<echo>The h2 server started.</echo>
                 				<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
+									<classpath refid="maven.test.classpath" />
+								</sql>
+                				<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}" src="src/main/resources/sql/${sql.type}/quartz.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
 

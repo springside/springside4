@@ -12,7 +12,6 @@
 	<h2>综合演示用例</h2>
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/common/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
-		<input type="hidden" name="workingVersion" value="${user.version}"/>
 		<fieldset>
 			<legend>管理用户</legend>
 			<div>
@@ -25,11 +24,11 @@
 			</div>
 			<div>
 				<label for="plainPassword" class="field">密码:</label>
-				<input type="password" id="plainPassword" name="password" size="40" value="${user.plainPassword}"/>
+				<input type="password" id="plainPassword" name="password" size="40"/>
 			</div>
 			<div>
-				<label class="field">密码散列:</label>
-				<span>${user.shaPassword}</span>
+				<label for="status" class="field">状态:</label>
+				<form:select path="status" items="${allStatus}"/>
 			</div>
 		</fieldset>
 		<div>

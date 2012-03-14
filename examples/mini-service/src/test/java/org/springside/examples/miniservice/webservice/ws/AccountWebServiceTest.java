@@ -18,7 +18,7 @@ import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
 /**
  * Account WebService的单元测试用例.
  * 
- * 使用EasyMock对AccountManager进行模拟.
+ * 使用Mockito对AccountManager进行模拟.
  * 
  * @author calvin
  */
@@ -43,11 +43,14 @@ public class AccountWebServiceTest {
 	@Test
 	public void dozerBinding() {
 		Department department = AccountData.getRandomDepartment();
-		Mockito.when(mockAccountManager.getDepartmentDetail(Mockito.anyLong())).thenReturn(department);
+		Mockito.when(mockAccountManager.getDepartmentDetail(1L)).thenReturn(department);
 
 		DepartmentResult result = accountWebService.getDepartmentDetail(1L);
+
 		assertEquals(WSResult.SUCCESS, result.getCode());
+
 		DepartmentDTO dto = result.getDepartment();
+
 		assertEquals(department.getName(), dto.getName());
 		assertEquals(department.getUserList().get(0).getName(), dto.getUserList().get(0).getName());
 	}
@@ -57,10 +60,10 @@ public class AccountWebServiceTest {
 	 */
 	@Test
 	public void handleException() {
-		Mockito.when(mockAccountManager.getDepartmentDetail(Mockito.anyLong())).thenThrow(
-				new RuntimeException("Expected exception."));
+		Mockito.when(mockAccountManager.getDepartmentDetail(1L)).thenThrow(new RuntimeException("Expected exception."));
 
 		DepartmentResult result = accountWebService.getDepartmentDetail(1L);
+
 		assertEquals(WSResult.SYSTEM_ERROR, result.getCode());
 		assertEquals(WSResult.SYSTEM_ERROR_MESSAGE, result.getMessage());
 	}

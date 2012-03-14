@@ -29,7 +29,7 @@ public class ShiroTestHelper {
 	/**
 	 * 用Mockito快速創建一個已認證的用户.
 	 */
-	public static void mockSubject(String principal) {
+	public static void mockSubject(Object principal) {
 		Subject subject = Mockito.mock(Subject.class);
 		Mockito.when(subject.isAuthenticated()).thenReturn(true);
 		Mockito.when(subject.getPrincipal()).thenReturn(principal);

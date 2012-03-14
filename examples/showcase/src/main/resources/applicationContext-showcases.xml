@@ -11,7 +11,8 @@
 	<import resource="jms/applicationContext-jms-advanced.xml" />
 	<import resource="jmx/applicationContext-jmx.xml" />
 	<import resource="log/applicationContext-log.xml" />
-	<import resource="schedule/applicationContext-executor.xml" />
+	<import resource="schedule/applicationContext-jdk-timer.xml" />
+	<import resource="schedule/applicationContext-spring-cron.xml" />
 	<import resource="schedule/applicationContext-quartz-cron-local.xml" />
 	<import resource="schedule/applicationContext-quartz-timer-cluster.xml" />
 	<import resource="security/applicationContext-shiro.xml" />

@@ -2,6 +2,7 @@ package org.springside.examples.showcase.common.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +19,7 @@ import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
 import org.springside.modules.orm.jpa.Jpas;
 import org.springside.modules.security.utils.Digests;
+import org.springside.modules.utils.Encodes;
 
 /**
  * 用户管理类.
@@ -57,9 +59,14 @@ public class AccountManager {
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
-		String shaPassword = Digests.sha1Hex(user.getPlainPassword());
-		user.setShaPassword(shaPassword);
+		//设定安全的密码，使用salt并经过1024次 sha-1 hash
+		if (StringUtils.isNotBlank(user.getPlainPassword())) {
+			byte[] salt = Digests.generateSalt(ShiroDbRealm.SALT_SIZE);
+			user.setSalt(Encodes.encodeHex(salt));
 
+			byte[] shaPassword = Digests.sha1(user.getPlainPassword(), salt, ShiroDbRealm.INTERATIONS);
+			user.setPassword(Encodes.encodeHex(shaPassword));
+		}
 		userJpaDao.save(user);
 
 		if (shiroRealm != null) {

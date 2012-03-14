@@ -16,7 +16,7 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.0.0.RELEASE-SNAPSHOT</springside.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
-		<hibernate.version>3.6.9.Final</hibernate.version>
+		<hibernate.version>3.6.10.Final</hibernate.version>
 		<mybatis.version>3.0.6</mybatis.version>
 		<cxf.version>2.5.2</cxf.version>
 		<jersey.version>1.12</jersey.version>
@@ -166,11 +166,6 @@
 				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-ehcache</artifactId>
-				<version>${hibernate.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>org.hibernate.javax.persistence</groupId>
 				<artifactId>hibernate-jpa-2.0-api</artifactId>
 				<version>1.0.1.Final</version>
@@ -240,9 +235,9 @@
 
 			<!-- sitemesh -->
 			<dependency>
-				<groupId>org.sitemesh</groupId>
+				<groupId>opensymphony</groupId>
 				<artifactId>sitemesh</artifactId>
-				<version>3.0-alpha-2</version>
+				<version>2.4.2</version>
 			</dependency>
 
 			<!-- j2ee web spec -->
@@ -408,7 +403,7 @@
 			<dependency>
 				<groupId>org.quartz-scheduler</groupId>
 				<artifactId>quartz</artifactId>
-				<version>1.8.5</version>
+				<version>2.1.3</version>
 			</dependency>
 
 			<!-- CACHE begin -->
@@ -675,6 +670,18 @@
 				<version>4.10</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-core</artifactId>
+				<version>1.3.RC2</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>1.3.RC2</version>
+				<scope>test</scope>
+			</dependency>
 
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -876,15 +883,12 @@
 					<version>2.3.1</version>
 				</plugin>
 
-				<!-- eclipse插件,设定下载Source并屏蔽.svn文件 -->
+				<!-- eclipse插件,设定下载Source -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-eclipse-plugin</artifactId>
 					<version>2.9</version>
 					<configuration>
-						<sourceExcludes>
-							<sourceExclude>**/.svn/</sourceExclude>
-						</sourceExcludes>
 						<downloadSources>true</downloadSources>
 						<downloadJavadocs>false</downloadJavadocs>
 					</configuration>
@@ -909,7 +913,7 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>versions-maven-plugin</artifactId>
-					<version>1.2</version>
+					<version>1.3.1</version>
 				</plugin>
 
 				<!-- ant插件 -->
@@ -919,56 +923,14 @@
 					<version>1.7</version>
 				</plugin>
 				
+				<!-- exec java 插件 -->
 				<plugin>
-        			<groupId>org.apache.maven.plugins</groupId>
-        			<artifactId>maven-site-plugin</artifactId>
-        			<version>3.0</version>
-        			<configuration>
-    					<reportPlugins>
-						    <plugin>
-						        <groupId>org.apache.maven.plugins</groupId>
-						        <artifactId>maven-jxr-plugin</artifactId>
-						        <version>2.3</version>
-						    </plugin>
-    						<plugin>
-								<groupId>org.apache.maven.plugins</groupId>
-								<artifactId>maven-checkstyle-plugin</artifactId>
-								<version>2.9.1</version>
-								<configuration>
-									<configLocation>../../support/sonar/springside-checkstyle.xml</configLocation>
-								</configuration>
-				  			</plugin>
-				  			<plugin>
-						        <groupId>org.apache.maven.plugins</groupId>
-						        <artifactId>maven-pmd-plugin</artifactId>
-						        <version>2.7.1</version>
-						        <configuration>
-							    	<targetJdk>${jdk.version}</targetJdk>
-							        <rulesets><ruleset>../../support/sonar/springside-pmd.xml</ruleset></rulesets>
-							        <formats><format>html</format></formats>
-						        </configuration>
-						    </plugin>
-						    <plugin>
-					            <groupId>org.codehaus.mojo</groupId>
-					            <artifactId>cobertura-maven-plugin</artifactId>
-					            <version>2.5.1</version>
-					            <configuration>
-					              	<formats><format>html</format></formats>
-					            </configuration>
-					        </plugin>
-					        <plugin>
-							    <groupId>org.codehaus.mojo</groupId>
-	        					<artifactId>findbugs-maven-plugin</artifactId>
-	        					<version>2.4.0</version>
-	        					<configuration>
-	        						<includeFilterFile>../../support/sonar/springside-findbugs.xml</includeFilterFile>
-	        						<formats><format>html</format></formats> 
-	        					</configuration>
-      						</plugin>
-						</reportPlugins>
-        			</configuration>
-        		</plugin>
-        		
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>exec-maven-plugin</artifactId>
+					<version>1.2.1</version>
+				</plugin>
+				
+				<!-- sonar插件 -->
         		<plugin>
         		 	<groupId>org.codehaus.mojo</groupId>
         		 	<artifactId>sonar-maven-plugin</artifactId>
@@ -977,4 +939,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	</project>
+</project>

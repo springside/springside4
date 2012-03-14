@@ -26,20 +26,18 @@
 	</bean>
 
 	<!-- Timer式 Trigger定义-->
-	<bean id="timerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+	<bean id="timerTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
 		<property name="jobDetail" ref="timerJobDetail" />
 		<!-- 每次执行间隔5分钟 -->
 		<property name="repeatInterval" value="300000" />
 	</bean>
 
 	<!-- Timer JobDetail, 基于JobDetailBean实例化Job Class,可持久化到数据库实现集群 -->
-	<bean id="timerJobDetail" class="org.springframework.scheduling.quartz.JobDetailBean">
+	<bean id="timerJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
 		<property name="jobClass" value="org.springside.examples.showcase.schedule.QuartzClusterableJob" />
-		<!-- fail-over节点重新执行之前所有失败或未执行的任务, 默认为false. -->
-		<property name="requestsRecovery" value="true" />
 	</bean>
 
-	<!-- Timer Job的可配置属性 -->
+	<!-- Timer Job的可配置属性,在job中通过applicationContext动态获取 -->
 	<util:map id="timerJobConfig">
 		<entry key="nodeName" value="${server.node_name}" />
 	</util:map>

@@ -16,7 +16,7 @@ import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.modules.utils.Threads;
 
 /**
- * 使用Spring的ThreadPoolTaskScheduler执行Cron式任务的类.
+ * 使用Spring的ThreadPoolTaskScheduler执行Cron式任务的类, 并强化了退出控制.
  */
 public class SpringCronJob implements Runnable {
 
@@ -55,7 +55,7 @@ public class SpringCronJob implements Runnable {
 	@Override
 	public void run() {
 		long userCount = accountManager.getUserCount();
-		logger.info("There are {} user in database.", userCount);
+		logger.info("There are {} user in database, printed by spring cron job.", userCount);
 	}
 
 	public void setCronExpression(String cronExpression) {

@@ -41,10 +41,10 @@ public class SecurityIT extends BaseFunctionalTestCase {
 		//登录普通用户
 		s.type(By.name("username"), "user");
 		s.type(By.name("password"), "user");
-		s.clickTo(By.id("submit"));
+		s.click(By.id("submit"));
 
 		//校验用户权限组的操作单元格只有查看
-		s.clickTo(By.linkText(Gui.MENU_USER));
+		s.click(By.linkText(Gui.MENU_USER));
 		assertEquals("", s.getTable(By.id("contentTable"), 1, UserColumn.OPERATIONS.ordinal()));
 	}
 }

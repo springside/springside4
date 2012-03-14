@@ -47,8 +47,8 @@ public class Jerseys {
 	 * 创建WebApplicationException并打印日志, 使用自定义状态码与自定义信息并记录错误信息.
 	 */
 	public static WebApplicationException buildException(int status, String message) {
-		logger.error(status + ":" + message);
-		return new WebApplicationException(Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build());
+		logger.error("Restful Service Error, Status " + status + ":" + message);
+		return new WebApplicationException(buildTextResponse(status, message));
 	}
 
 	/**
@@ -59,9 +59,16 @@ public class Jerseys {
 		if (e instanceof WebApplicationException) {
 			return (WebApplicationException) e;
 		} else {
-			logger.error("500:" + e.getMessage(), e);
+			logger.error("Restful Service Error, Status 500:" + e.getMessage(), e);
 			return new WebApplicationException();
 		}
 	}
 
+	public static Response buildTextResponse(Status status, String message) {
+		return buildTextResponse(status.getStatusCode(), message);
+	}
+
+	public static Response buildTextResponse(int status, String message) {
+		return Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build();
+	}
 }

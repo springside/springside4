@@ -43,7 +43,7 @@ public class UserResourceService {
 	private AccountManager accountManager;
 
 	/**
-	 * 获取所有用户, 演示与Shiro的结合.
+	 * 获取所有用户, 演示与Shiro结合的方法级权限检查.
 	 */
 	@GET
 	@RequiresRoles("Admin")
@@ -127,6 +127,7 @@ public class UserResourceService {
 		}
 
 		if (userName == null) {
+			//抛出自定义的异常450
 			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中");
 		}
 

@@ -758,9 +758,6 @@
     <Bug pattern="INT_BAD_COMPARISON_WITH_NONNEGATIVE_VALUE"/>
   </Match>
   <Match>
-    <Bug pattern="EI_EXPOSE_REP"/>
-  </Match>
-  <Match>
     <Bug pattern="JLM_JSR166_LOCK_MONITORENTER"/>
   </Match>
   <Match>

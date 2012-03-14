@@ -6,15 +6,16 @@
 package org.springside.modules.test.functional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebDriverBackedSelenium;
 import org.openqa.selenium.WebElement;
-import org.springside.modules.utils.Threads;
-
-import com.thoughtworks.selenium.Selenium;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * 融合了Selenium 1.0 API与Selenium 2.0的By选择器的API.
@@ -23,16 +24,14 @@ import com.thoughtworks.selenium.Selenium;
  */
 public class Selenium2 {
 
-	public static final int DEFAULT_TIMEOUT = 5000;
-	public static final int DEFAULT_PAUSE_TIME = 250;
-
+	public static final int DEFAULT_WAIT_TIME = 20;
 	private WebDriver driver;
-	private Selenium selenium;
-	private int defaultTimeout = DEFAULT_TIMEOUT;
+	private String baseUrl;
 
 	public Selenium2(WebDriver driver, String baseUrl) {
 		this.driver = driver;
-		this.selenium = new WebDriverBackedSelenium(driver, baseUrl);
+		this.baseUrl = baseUrl;
+		setTimeout(DEFAULT_WAIT_TIME);
 	}
 
 	/**
@@ -42,13 +41,34 @@ public class Selenium2 {
 		this(driver, "");
 	}
 
+	// Driver 函數  //
 	/**
 	 * 打开地址,如果url为相对地址, 自动添加baseUrl.
-	 * @param url
 	 */
 	public void open(String url) {
-		selenium.open(url);
-		waitForPageToLoad();
+		final String urlToOpen = url.indexOf("://") == -1 ? baseUrl + (!url.startsWith("/") ? "/" : "") + url : url;
+		driver.get(urlToOpen);
+	}
+
+	/**
+	 * 获取当前页面.
+	 */
+	public String getLocation() {
+		return driver.getCurrentUrl();
+	}
+
+	/**
+	 * 回退历史页面。
+	 */
+	public void back() {
+		driver.navigate().back();
+	}
+
+	/**
+	 * 刷新页面。
+	 */
+	public void refresh() {
+		driver.navigate().refresh();
 	}
 
 	/**
@@ -59,11 +79,27 @@ public class Selenium2 {
 	}
 
 	/**
-	 * 获取页面地址.
+	 * 退出Selenium.
 	 */
-	public String getLocation() {
-		return driver.getCurrentUrl();
+	public void quit() {
+		driver.quit();
 	}
+
+	/**
+	 * 设置如果查找不到Element时的默认最大等待时间。
+	 */
+	public void setTimeout(int seconds) {
+		driver.manage().timeouts().implicitlyWait(seconds, TimeUnit.SECONDS);
+	}
+
+	/**
+	 * 获取WebDriver实例, 调用未封装的函数.
+	 */
+	public WebDriver getDriver() {
+		return driver;
+	}
+
+	//Elemenet 函數//
 
 	/**
 	 * 查找Element.
@@ -77,13 +113,6 @@ public class Selenium2 {
 	 */
 	public List<WebElement> findElements(By by) {
 		return driver.findElements(by);
-	}
-
-	/**
-	 * 判断页面内是否存在文本内容.
-	 */
-	public boolean isTextPresent(String text) {
-		return selenium.isTextPresent(text);
 	}
 
 	/**
@@ -101,7 +130,7 @@ public class Selenium2 {
 	/**
 	 * 判断Element是否可见.
 	 */
-	public boolean isDisplayed(By by) {
+	public boolean isVisible(By by) {
 		return driver.findElement(by).isDisplayed();
 	}
 
@@ -119,14 +148,6 @@ public class Selenium2 {
 	 */
 	public void click(By by) {
 		driver.findElement(by).click();
-	}
-
-	/**
-	 * 点击Element, 跳转到新页面.
-	 */
-	public void clickTo(By by) {
-		driver.findElement(by).click();
-		waitForPageToLoad();
 	}
 
 	/**
@@ -168,7 +189,7 @@ public class Selenium2 {
 	 */
 	public boolean isChecked(By by) {
 		WebElement element = driver.findElement(by);
-		return element.isSelected();
+		return isChecked(element);
 	}
 
 	/**
@@ -176,6 +197,14 @@ public class Selenium2 {
 	 */
 	public boolean isChecked(WebElement element) {
 		return element.isSelected();
+	}
+
+	/**
+	 * 返回Select Element,可搭配多种后续的Select操作.
+	 * eg. s.getSelect(by).selectByValue(value);
+	 */
+	public Select getSelect(By by) {
+		return new Select(driver.findElement(by));
 	}
 
 	/**
@@ -189,7 +218,7 @@ public class Selenium2 {
 	 * 获取Input框的value.
 	 */
 	public String getValue(By by) {
-		return driver.findElement(by).getAttribute("value");
+		return getValue(driver.findElement(by));
 	}
 
 	/**
@@ -197,6 +226,48 @@ public class Selenium2 {
 	 */
 	public String getValue(WebElement element) {
 		return element.getAttribute("value");
+	}
+
+	// WaitFor 函數 //
+	/**
+	 * 等待Element的内容可见, timeout单位为秒.
+	 */
+	public void waitForVisible(By by, int timeout) {
+		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), timeout);
+	}
+
+	/**
+	 * 等待Element的内容为text, timeout单位为秒.
+	 */
+	public void waitForTextPresent(By by, String text, int timeout) {
+		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), timeout);
+	}
+
+	/**
+	 * 等待Element的value值为value, timeout单位为秒.
+	 */
+	public void waitForValuePresent(By by, String value, int timeout) {
+		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), timeout);
+	}
+
+	/**
+	 * 等待其他Conditions, timeout单位为秒.
+	 * 
+	 * @see #waitForTextPresent(By, String, int)
+	 * @see ExpectedConditions
+	 */
+	public void waitForCondition(ExpectedCondition conditon, int timeout) {
+		(new WebDriverWait(driver, timeout)).until(conditon);
+	}
+
+	// Selenium1.0 函數 //
+
+	/**
+	 * 简单判断页面内是否存在文本内容.
+	 */
+	public boolean isTextPresent(String text) {
+		String bodyText = driver.findElement(By.tagName("body")).getText();
+		return bodyText.contains(text);
 	}
 
 	/**
@@ -211,62 +282,5 @@ public class Selenium2 {
 	 */
 	public String getTable(By by, int rowIndex, int columnIndex) {
 		return getTable(driver.findElement(by), rowIndex, columnIndex);
-	}
-
-	/**
-	 * 等待页面载入完成, timeout时间为defaultTimeout的值.
-	 */
-	public void waitForPageToLoad() {
-		waitForPageToLoad(defaultTimeout);
-	}
-
-	/**
-	 * 等待页面载入完成, timeout单位为毫秒.
-	 */
-	public void waitForPageToLoad(int timeout) {
-		selenium.waitForPageToLoad(String.valueOf(timeout));
-	}
-
-	/**
-	 * 等待Element的内容展现, timeout单位为毫秒.
-	 */
-	public void waitForVisible(By by, int timeout) {
-		long timeoutTime = System.currentTimeMillis() + timeout;
-		while (System.currentTimeMillis() < timeoutTime) {
-			if (isDisplayed(by)) {
-				return;
-			}
-			Threads.sleep(DEFAULT_PAUSE_TIME);
-		}
-		throw new RuntimeException("waitForVisible timeout");
-	}
-
-	/**
-	 * 退出Selenium.
-	 */
-	public void quit() {
-		driver.close();
-		driver.quit();
-	}
-
-	/**
-	 * 获取WebDriver实例, 调用未封装的函数.
-	 */
-	public WebDriver getDriver() {
-		return driver;
-	}
-
-	/**
-	 * 获取Selenium实例,调用未封装的函数.
-	 */
-	public Selenium getSelenium() {
-		return selenium;
-	}
-
-	/**
-	 * 设置默认页面超时.
-	 */
-	public void setDefaultTimeout(int defaultTimeout) {
-		this.defaultTimeout = defaultTimeout;
 	}
 }

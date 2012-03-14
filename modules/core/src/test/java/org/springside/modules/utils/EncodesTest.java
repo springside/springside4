@@ -32,9 +32,9 @@ public class EncodesTest {
 	public void base62Encode() {
 		long num = 63;
 
-		String result = Encodes.encodeBase62(num);
+		String result = Encodes.encodeNumberToBase62(num);
 		assertEquals("11", result);
-		assertEquals(num, Encodes.decodeBase62(result));
+		assertEquals(num, Encodes.decodeBase62ToNumber(result));
 	}
 
 	@Test
