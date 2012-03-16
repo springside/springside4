@@ -37,11 +37,11 @@
 			<legend>登录</legend>
 			<div>
 				<label for="username" class="field">名称:</label>
-				<input type="text" id="username" name="username" size="40" value="${username}" class="required"/>
+				<input type="text" id="username" name="username" size="25" value="${username}" class="required"/>
 			</div>
 			<div>
 				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40"  class="required"/>
+				<input type="password" id="password" name="password" size="25"  class="required"/>
 			</div>
 		</fieldset>
 		<div>

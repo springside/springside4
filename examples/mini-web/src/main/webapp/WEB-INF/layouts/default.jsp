@@ -20,7 +20,7 @@
 <script src="${ctx}/static/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
 <script src="${ctx}/static/jquery-validation/1.9.0/messages_cn.js" type="text/javascript"></script>
-<link href="${ctx}/static/jquery-validation/1.9.0/milk.css" type="text/css" rel="stylesheet" />
+<link href="${ctx}/static/jquery-validation/1.9.0/validate.css" type="text/css" rel="stylesheet" />
 
 <sitemesh:head/>
 </head>
