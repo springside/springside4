@@ -1,3 +1,5 @@
+Configuration Tunning for ActiveMQ.
+
 1.bin/active-admin.sh: uncomment JMX options and set JMX port to 1616.
                        set max memory from 512M to 2048M, and set new generation memory size. 
 2.conf/activemq.xml: set <system usage>, 1)memory from 20m to 512m, 2)disk from 1g to 10g, 3)temp from 100mb to 1g
