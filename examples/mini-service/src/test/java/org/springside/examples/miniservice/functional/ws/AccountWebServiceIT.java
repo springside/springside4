@@ -44,7 +44,6 @@ public class AccountWebServiceIT extends BaseFunctionalTestCase {
 	 * 测试创建用户,在Spring applicaitonContext.xml中用<jaxws:client/>创建Client.
 	 */
 	@Test
-	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 
