@@ -1,4 +1,4 @@
-Jetty配置文件示例
+Sample of jetty configuration file.
 
 1.jetty.xml:
-  a.从自动扫描改为显式定义应用的目录或war包路径.
+  a.Change auto-scan to Explicit define an web application directory	or war file.

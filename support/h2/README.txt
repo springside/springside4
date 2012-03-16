@@ -1,1 +1,1 @@
-运行Standalone版H2数据的命令
+Command to run a standalone H2 Database server.
