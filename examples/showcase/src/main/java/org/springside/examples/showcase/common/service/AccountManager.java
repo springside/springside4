@@ -14,8 +14,8 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.dao.UserMyBatisDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
-import org.springside.examples.showcase.security.PasswordService.HashPassword;
 import org.springside.examples.showcase.security.ShiroDbRealm;
+import org.springside.examples.showcase.security.ShiroDbRealm.HashPassword;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
 import org.springside.modules.orm.jpa.Jpas;
@@ -59,7 +59,7 @@ public class AccountManager {
 
 		//设定安全的密码，使用passwordService提供的salt并经过1024次 sha-1 hash
 		if (StringUtils.isNotBlank(user.getPlainPassword()) && shiroRealm != null) {
-			HashPassword hashPassword = shiroRealm.getPasswordService().encrypt(user.getPlainPassword());
+			HashPassword hashPassword = shiroRealm.encrypt(user.getPlainPassword());
 			user.setSalt(hashPassword.salt);
 			user.setPassword(hashPassword.password);
 		}
