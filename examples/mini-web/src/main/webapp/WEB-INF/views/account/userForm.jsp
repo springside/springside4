@@ -36,6 +36,12 @@
 					passwordConfirm: {
 						equalTo: "输入与上面相同的密码"
 					}
+				},
+				errorPlacement: function(error, element) {
+					if ( element.is(":checkbox") )
+						error.appendTo ( element.parent().next() );
+					else
+						error.insertAfter( element );
 				}
 			});
 		});
