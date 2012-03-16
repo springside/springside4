@@ -24,7 +24,7 @@
 			</div>
 			<div>
 				<label for="plainPassword" class="field">密码:</label>
-				<input type="password" id="plainPassword" name="password" size="40"/>
+				<input type="password" id="plainPassword" name="plainPassword" size="40"/>
 			</div>
 			<div>
 				<label for="status" class="field">状态:</label>

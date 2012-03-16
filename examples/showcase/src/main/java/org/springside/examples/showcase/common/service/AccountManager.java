@@ -14,12 +14,11 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.dao.UserMyBatisDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
+import org.springside.examples.showcase.security.PasswordService.HashPassword;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.memcached.SpyMemcachedClient;
 import org.springside.modules.orm.jpa.Jpas;
-import org.springside.modules.security.utils.Digests;
-import org.springside.modules.utils.Encodes;
 
 /**
  * 用户管理类.
@@ -50,7 +49,6 @@ public class AccountManager {
 	 * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
 	 * 
 	 */
-	//演示指定非默认名称的TransactionManager.
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
@@ -59,14 +57,13 @@ public class AccountManager {
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
-		//设定安全的密码，使用salt并经过1024次 sha-1 hash
-		if (StringUtils.isNotBlank(user.getPlainPassword())) {
-			byte[] salt = Digests.generateSalt(ShiroDbRealm.SALT_SIZE);
-			user.setSalt(Encodes.encodeHex(salt));
-
-			byte[] shaPassword = Digests.sha1(user.getPlainPassword(), salt, ShiroDbRealm.INTERATIONS);
-			user.setPassword(Encodes.encodeHex(shaPassword));
+		//设定安全的密码，使用passwordService提供的salt并经过1024次 sha-1 hash
+		if (StringUtils.isNotBlank(user.getPlainPassword()) && shiroRealm != null) {
+			HashPassword hashPassword = shiroRealm.getPasswordService().encrypt(user.getPlainPassword());
+			user.setSalt(hashPassword.salt);
+			user.setPassword(hashPassword.password);
 		}
+
 		userJpaDao.save(user);
 
 		if (shiroRealm != null) {
@@ -195,5 +192,4 @@ public class AccountManager {
 	public void setShiroRealm(ShiroDbRealm shiroRealm) {
 		this.shiroRealm = shiroRealm;
 	}
-
 }

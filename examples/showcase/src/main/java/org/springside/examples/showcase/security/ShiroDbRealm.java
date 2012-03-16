@@ -20,6 +20,8 @@ package org.springside.examples.showcase.security;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
@@ -28,14 +30,12 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.common.entity.Role;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
@@ -43,18 +43,9 @@ import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
-	public static final int INTERATIONS = 1024;
-	public static final int SALT_SIZE = 8;
-	public static final String ALGORITHM = "SHA-1";
 	protected AccountManager accountManager;
 
-	public ShiroDbRealm() {
-		super();
-		//指定使用SHA-1的Matcher,1024次迭代Hash,默认hex编码
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
-		matcher.setHashIterations(INTERATIONS);
-		setCredentialsMatcher(matcher);
-	}
+	protected PasswordService passwordService;
 
 	/**
 	 * 认证回调函数,登录时调用.
@@ -103,9 +94,21 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		clearCachedAuthorizationInfo(principals);
 	}
 
-	@Autowired
+	@PostConstruct
+	public void initCredentialsMatcher() {
+		setCredentialsMatcher(passwordService.getCredentialsMatcher());
+	}
+
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
+	}
+
+	public PasswordService getPasswordService() {
+		return passwordService;
+	}
+
+	public void setPasswordService(PasswordService passwordService) {
+		this.passwordService = passwordService;
 	}
 
 	/**
