@@ -66,12 +66,12 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>MashupContentServlet</servlet-name>
-		<servlet-class>org.springside.examples.showcase.web.MashupContentServlet</servlet-class>
+		<servlet-name>RemoteContentServlet</servlet-name>
+		<servlet-class>org.springside.examples.showcase.web.RemoteContentServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>MashupContentServlet</servlet-name>
-		<url-pattern>/mashup-content</url-pattern>
+		<servlet-name>RemoteContentServlet</servlet-name>
+		<url-pattern>/remote-content</url-pattern>
 	</servlet-mapping>
 
 	<!-- Filter 定义 -->

@@ -5,7 +5,3 @@ label.error {
   font-weight: bold;
   color: #EA5200;
 }
-
-label.checked {
-	 background:url("images/checked.gif") no-repeat 0px 0px;
-}

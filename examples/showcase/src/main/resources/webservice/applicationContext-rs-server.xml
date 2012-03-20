@@ -6,5 +6,5 @@
 
 	<bean class="org.springside.examples.showcase.webservice.rs.server.UserResourceService" />
 	
-	<bean class="org.springside.examples.showcase.webservice.rs.server.ShiroExceptionMapper"/>
+	<bean class="org.springside.examples.showcase.webservice.rs.server.ShiroExceptionMapper" scope="singleton"/>
 </beans>

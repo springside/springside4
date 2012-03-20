@@ -11,8 +11,10 @@ import org.springside.modules.test.functional.JettyFactory;
 public class Start {
 
 	public static final int PORT = 8080;
+	public static final int TEST_PORT = 8082;
 	public static final String CONTEXT = "/mini-web";
 	public static final String BASE_URL = "http://localhost:8080/mini-web";
+	public static final String TEST_BASE_URL = "http://localhost:8082/mini-web";
 
 	public static void main(String[] args) throws Exception {
 		Server server = JettyFactory.buildNormalServer(PORT, CONTEXT);

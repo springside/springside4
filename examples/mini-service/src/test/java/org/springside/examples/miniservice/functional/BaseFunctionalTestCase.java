@@ -5,6 +5,8 @@ import javax.sql.DataSource;
 import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.examples.miniservice.Start;
 import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
@@ -27,6 +29,8 @@ public class BaseFunctionalTestCase {
 
 	protected static DataSource dataSource;
 
+	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
+
 	@BeforeClass
 	public static void startAll() throws Exception {
 		startJetty();
@@ -38,8 +42,10 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJetty() throws Exception {
 		if (jettyServer == null) {
-			jettyServer = JettyFactory.buildTestServer(Start.PORT, Start.CONTEXT);
+			jettyServer = JettyFactory.buildTestServer(Start.TEST_PORT, Start.CONTEXT);
 			jettyServer.start();
+
+			logger.info("Jetty Server started");
 
 			dataSource = SpringContextHolder.getBean("dataSource");
 		}

@@ -8,9 +8,12 @@ import java.util.List;
 import org.dozer.DozerBeanMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import org.springside.examples.miniservice.Start;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
+import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.rs.client.AccountResourceClient;
@@ -24,10 +27,11 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	@BeforeClass
 	public static void setUpClient() throws Exception {
 		client = new AccountResourceClient();
-		client.setBaseUrl(BASE_URL + "/rs");
+		client.setBaseUrl(Start.TEST_BASE_URL + "/rs");
 	}
 
 	@Test
+	@Category(Smoke.class)
 	public void getDeptartmentDetail() {
 		DepartmentDTO department = client.getDepartmentDetail(1L);
 		assertEquals("Development", department.getName());
@@ -46,15 +50,17 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
+	@Category(Smoke.class)
 	public void searchUser() {
 		List<UserDTO> result = client.searchUser(null, null);
-		assertEquals(4, result.size());
+		assertTrue(result.size() > 1);
 
 		result = client.searchUser("user1", null);
 		assertEquals(1, result.size());
 	}
 
 	@Test
+	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);

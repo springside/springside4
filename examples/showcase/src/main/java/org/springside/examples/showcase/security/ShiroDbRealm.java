@@ -20,6 +20,8 @@ package org.springside.examples.showcase.security;
 
 import java.io.Serializable;
 
+import javax.annotation.PostConstruct;
+
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
@@ -29,32 +31,28 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.common.entity.Role;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
+import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
-	public static final int INTERATIONS = 1024;
-	public static final int SALT_SIZE = 8;
-	public static final String ALGORITHM = "SHA-1";
+	private static final int INTERATIONS = 1024;
+	private static final int SALT_SIZE = 8;
+	private static final String ALGORITHM = "SHA-1";
+
 	protected AccountManager accountManager;
 
-	public ShiroDbRealm() {
-		super();
-		//指定使用SHA-1的Matcher,1024次迭代Hash,默认hex编码
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
-		matcher.setHashIterations(INTERATIONS);
-		setCredentialsMatcher(matcher);
-	}
+	protected PasswordService passwordService;
 
 	/**
 	 * 认证回调函数,登录时调用.
@@ -82,7 +80,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
-		User user = accountManager.findUserByLoginName(shiroUser.getLoginName());
+		User user = accountManager.findUserByLoginName(shiroUser.loginName);
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Role role : user.getRoleList()) {
@@ -103,9 +101,32 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		clearCachedAuthorizationInfo(principals);
 	}
 
-	@Autowired
+	public HashPassword encrypt(String plainText) {
+		HashPassword result = new HashPassword();
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		result.salt = Encodes.encodeHex(salt);
+
+		byte[] hashPassword = Digests.sha1(plainText, salt, INTERATIONS);
+		result.password = Encodes.encodeHex(hashPassword);
+		return result;
+
+	}
+
+	@PostConstruct
+	public void initCredentialsMatcher() {
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
+		matcher.setHashIterations(INTERATIONS);
+
+		setCredentialsMatcher(matcher);
+	}
+
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
+	}
+
+	public static class HashPassword {
+		public String salt;
+		public String password;
 	}
 
 	/**
@@ -113,16 +134,16 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	public static class ShiroUser implements Serializable {
 		private static final long serialVersionUID = -1373760761780840081L;
-		private String loginName;
-		private String name;
+		public String loginName;
+		public String name;
 
 		public ShiroUser(String loginName, String name) {
 			this.loginName = loginName;
 			this.name = name;
 		}
 
-		public String getLoginName() {
-			return loginName;
+		public String getName() {
+			return name;
 		}
 
 		/**
@@ -133,18 +154,14 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			return loginName;
 		}
 
-		public String getName() {
-			return name;
-		}
-
 		@Override
 		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this, "name");
+			return HashCodeBuilder.reflectionHashCode(this, "loginName");
 		}
 
 		@Override
 		public boolean equals(Object obj) {
-			return EqualsBuilder.reflectionEquals(this, obj, "name");
+			return EqualsBuilder.reflectionEquals(this, obj, "loginName");
 		}
 
 	}

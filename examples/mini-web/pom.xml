@@ -50,7 +50,11 @@
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
+			<artifactId>cglib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
 		</dependency>
 		<!-- spring end -->
 
@@ -63,6 +67,10 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-ehcache</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.javax.persistence</groupId>
@@ -113,10 +121,7 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>taglibs</groupId>
-			<artifactId>standard</artifactId>
-		</dependency>
+	
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
@@ -256,11 +261,6 @@
 					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
-			<!-- 运行integration-test的插件 -->
-			<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-			</plugin>
 			<!--  cobertura插件, 设置不需要计算覆盖率的类  -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -302,7 +302,56 @@
 	
 	<profiles>
 		<profile>
-			<id>refreshdb</id>
+			<id>smoke-test</id>
+			<build>
+				<plugins>
+					<!-- 屏蔽单元测试执行 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+					<!-- 运行integration-test的插件 , 仅执行smoke test-->
+					<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<configuration>
+								<groups>org.springside.examples.miniweb.functional.category.Smoke</groups>
+								<useSystemClassLoader>false</useSystemClassLoader>
+							</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<!-- 屏蔽单元测试执行 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+					<!-- 运行integration-test的插件 , 仅执行smoke test-->
+					<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-failsafe-plugin</artifactId>
+							<configuration>
+								<useSystemClassLoader>false</useSystemClassLoader>
+							</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+			
+		<profile>
+			<id>refresh-db</id>
 			<build>
 				<plugins>
 					<plugin>

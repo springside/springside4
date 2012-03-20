@@ -6,6 +6,15 @@
 <html>
 <head>
 	<title>综合演示用例</title>	
+	<script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="${ctx}/static/jquery-validation/1.9.0/messages_cn.js" type="text/javascript"></script>
+	<link href="${ctx}/static/jquery-validation/1.9.0/validate.css" type="text/css" rel="stylesheet" />
+	
+	<script>
+		$(document).ready(function() {
+			$("#inputForm").validate();
+		});
+	</script>
 </head>
 
 <body>
@@ -16,15 +25,15 @@
 			<legend>管理用户</legend>
 			<div>
 				<label for="loginName" class="field">登录名:</label>
-				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
+				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}" class="required"/>
 			</div>
 			<div>
 				<label for="name" class="field">用户名:</label>
-				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
+				<input type="text" id="name" name="name" size="40" value="${user.name}" class="required"/>
 			</div>
 			<div>
 				<label for="plainPassword" class="field">密码:</label>
-				<input type="password" id="plainPassword" name="password" size="40"/>
+				<input type="password" id="plainPassword" name="plainPassword" size="40"/>
 			</div>
 			<div>
 				<label for="status" class="field">状态:</label>

@@ -36,6 +36,13 @@
 					passwordConfirm: {
 						equalTo: "输入与上面相同的密码"
 					}
+				},
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					if ( element.is(":checkbox") )
+						error.appendTo ( element.parent().next() );
+					else
+						error.insertAfter( element );
 				}
 			});
 		});
@@ -46,7 +53,10 @@
 	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset class="prepend-top">
+			
 			<legend>管理用户</legend>
+			
+			<div id="messageBox" class="error" style="display:none">输入有误，请先更正。</div>
 	
 			<div>
 				<label for="loginName" class="field">登录名:</label>

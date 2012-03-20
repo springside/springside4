@@ -17,6 +17,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
@@ -28,15 +30,18 @@ import org.slf4j.LoggerFactory;
  * 演示使用多线程安全的Apache HttpClient获取远程静态内容.
  * 
  * 演示访问地址如下(contentUrl已经过URL编码):
- * mashup-content?contentUrl=http%3A%2F%2Flocalhost%3A8080%2Fshowcase%2Fimg%2Flogo.jpg
+ * remote-content?contentUrl=http%3A%2F%2Flocalhost%3A8080%2Fshowcase%2Fimg%2Flogo.jpg
  * 
  * @author calvin
  */
-public class MashupContentServlet extends HttpServlet {
+public class RemoteContentServlet extends HttpServlet {
 
 	private static final long serialVersionUID = -8483811141908827663L;
 
-	private static Logger logger = LoggerFactory.getLogger(MashupContentServlet.class);
+	private static final int CONNECTION_POOL_SIZE = 10;
+	private static final int TIMEOUT_SECONDS = 20;
+
+	private static Logger logger = LoggerFactory.getLogger(RemoteContentServlet.class);
 
 	private HttpClient httpClient = null;
 
@@ -96,9 +101,15 @@ public class MashupContentServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() throws ServletException {
+		//Set connection pool
 		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
-		cm.setMaxTotal(100);
+		cm.setMaxTotal(CONNECTION_POOL_SIZE);
 		httpClient = new DefaultHttpClient(cm);
+
+		//set timeout
+		HttpParams httpParams = httpClient.getParams();
+		HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_SECONDS * 1000);
+		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SECONDS * 1000);
 	}
 
 	/**

@@ -8,6 +8,10 @@
 <html>
 <head>
 	<title>Showcase 登录页面</title>
+	<script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="${ctx}/static/jquery-validation/1.9.0/messages_cn.js" type="text/javascript"></script>
+	<link href="${ctx}/static/jquery-validation/1.9.0/validate.css" type="text/css" rel="stylesheet" />
+	
 	<script>
 		$(document).ready(function() {
 			$("#loginForm").validate();
@@ -45,7 +49,7 @@
 			</div>
 			<div>
 				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40"  class="required"/>
+				<input type="password" id="password" name="password" size="40" class="required"/>
 			</div>
 		</fieldset>
 		<div>

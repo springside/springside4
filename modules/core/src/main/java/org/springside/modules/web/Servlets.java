@@ -46,16 +46,16 @@ public class Servlets {
 	 * 设置客户端缓存过期时间 的Header.
 	 */
 	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
-		//Http 1.0 header
+		//Http 1.0 header, set a fix expires date.
 		response.setDateHeader("Expires", System.currentTimeMillis() + expiresSeconds * 1000);
-		//Http 1.1 header
+		//Http 1.1 header, set a time after now.
 		response.setHeader("Cache-Control", "private, max-age=" + expiresSeconds);
 	}
 
 	/**
 	 * 设置禁止客户端缓存的Header.
 	 */
-	public static void setDisableCacheHeader(HttpServletResponse response) {
+	public static void setNoCacheHeader(HttpServletResponse response) {
 		//Http 1.0 header
 		response.setDateHeader("Expires", 1L);
 		response.addHeader("Pragma", "no-cache");
@@ -142,9 +142,11 @@ public class Servlets {
 	}
 
 	/**
-	 * 取得带相同前缀的Request Parameters.
+	 * 取得带相同前缀的Request Parameters, copy from spring.
 	 * 
 	 * 返回的结果的Parameter名已去除前缀.
+	 * 
+	 * 比如有m2
 	 */
 	public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
 		Validate.notNull(request, "Request must not be null");
