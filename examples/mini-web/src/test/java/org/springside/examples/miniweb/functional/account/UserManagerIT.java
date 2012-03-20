@@ -16,7 +16,6 @@ import org.springside.examples.miniweb.functional.Gui;
 import org.springside.examples.miniweb.functional.Gui.UserColumn;
 import org.springside.examples.miniweb.functional.category.Smoke;
 import org.springside.modules.utils.Collections3;
-import org.springside.modules.utils.Threads;
 
 /**
  * 用户管理的功能测试, 测试页面JavaScript及主要用户故事流程.
@@ -117,13 +116,11 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 
 		s.click(By.id("submit"));
 
-		Threads.sleep(2000);
-
-		assertEquals("用户登录名已存在", s.getText(By.xpath("//fieldset/div[1]/label[2]")));
-		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div[2]/label[2]")));
-		assertEquals("请输入一个长度最少是 3 的字符串", s.getText(By.xpath("//fieldset/div[3]/label[2]")));
-		assertEquals("输入与上面相同的密码", s.getText(By.xpath("//fieldset/div[4]/label[2]")));
-		assertEquals("请输入正确格式的电子邮件", s.getText(By.xpath("//fieldset/div[5]/label[2]")));
+		assertEquals("用户登录名已存在", s.getText(By.xpath("//fieldset/div[2]/label[2]")));
+		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div[3]/label[2]")));
+		assertEquals("请输入一个长度最少是 3 的字符串", s.getText(By.xpath("//fieldset/div[4]/label[2]")));
+		assertEquals("输入与上面相同的密码", s.getText(By.xpath("//fieldset/div[5]/label[2]")));
+		assertEquals("请输入正确格式的电子邮件", s.getText(By.xpath("//fieldset/div[6]/label[2]")));
 	}
 
 }
