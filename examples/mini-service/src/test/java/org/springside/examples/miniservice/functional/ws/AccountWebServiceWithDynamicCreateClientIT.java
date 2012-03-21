@@ -4,7 +4,10 @@ import static org.junit.Assert.*;
 
 import javax.xml.ws.BindingProvider;
 
+import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.transport.http.HTTPConduit;
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.miniservice.Start;
@@ -20,15 +23,9 @@ import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
  * 
  * @author calvin
  */
-
 public class AccountWebServiceWithDynamicCreateClientIT extends BaseFunctionalTestCase {
 
-	/**
-	 * 测试搜索用户
-	 */
-	@Test
-	@Category(Smoke.class)
-	public void searchUser() {
+	public AccountWebService creatClient() {
 		String address = Start.TEST_BASE_URL + "/ws/accountservice";
 
 		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
@@ -40,7 +37,24 @@ public class AccountWebServiceWithDynamicCreateClientIT extends BaseFunctionalTe
 		((BindingProvider) accountWebServiceCreated).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				address);
 
-		UserListResult result = accountWebServiceCreated.searchUser(null, null);
+		//(可选)演示重新设定Timeout时间
+		HTTPClientPolicy policy = new HTTPClientPolicy();
+		policy.setReceiveTimeout(200000);
+		HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(accountWebServiceCreated).getConduit();
+		conduit.setClient(policy);
+
+		return accountWebServiceCreated;
+	}
+
+	/**
+	 * 测试搜索用户
+	 */
+	@Test
+	@Category(Smoke.class)
+	public void searchUser() {
+		AccountWebService accountWebService = creatClient();
+
+		UserListResult result = accountWebService.searchUser(null, null);
 
 		assertTrue(result.getUserList().size() >= 4);
 		assertEquals("Jack", result.getUserList().get(0).getName());
