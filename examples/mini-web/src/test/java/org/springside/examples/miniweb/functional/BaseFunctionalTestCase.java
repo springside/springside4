@@ -2,8 +2,6 @@ package org.springside.examples.miniweb.functional;
 
 import static org.junit.Assert.*;
 
-import java.util.Properties;
-
 import javax.sql.DataSource;
 
 import org.eclipse.jetty.server.Server;
@@ -12,7 +10,6 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.examples.miniweb.Start;
@@ -77,16 +74,11 @@ public class BaseFunctionalTestCase {
 	 * 创建Selenium.
 	 */
 	protected static void createSelenium() throws Exception {
-		WebDriver driver = null;
-		Properties props = PropertiesLoader.loadProperties("classpath:/application.test.properties",
+		PropertiesLoader propertiesLoader = new PropertiesLoader("classpath:/application.test.properties",
 				"classpath:/application.test-local.properties");
-		String driverName = props.getProperty("selenium.driver");
-		try {
-			driver = WebDriverFactory.createDriver(driverName);
-		} catch (Exception e) {
-			logger.error(driverName + " create fail, use HtmlUnitDriver instead");
-			driver = new HtmlUnitDriver();
-		}
+		String driverName = propertiesLoader.getProperty("selenium.driver");
+
+		WebDriver driver = WebDriverFactory.createDriver(driverName);
 
 		s = new Selenium2(driver, Start.TEST_BASE_URL);
 	}
