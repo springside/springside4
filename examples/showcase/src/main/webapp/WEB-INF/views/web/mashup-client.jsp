@@ -8,12 +8,15 @@
 	<script type="text/javascript">
 		var remoteUrl = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 
-		//使用JQuery.getJSON(url?callback=?)方式跨域名访问内容
+		//使用JQuery ajax jsonp方式跨域名访问内容
 		function fetchMashupContent() {
-			$.getJSON(remoteUrl + "/web/mashup?callback=?", function(data) {
-				$('#mashupContent').html(data.html);
-				$('#mashupContent').show();
-			});
+		$.ajax({
+				url:remoteUrl + "/web/mashup", 
+				dataType:"jsonp",
+				success:function(data) {
+					$('#mashupContent').html(data.content);
+					$('#mashupContent').show();
+			}});
 		}
 	</script>
 </head>
