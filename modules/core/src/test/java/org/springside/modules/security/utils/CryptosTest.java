@@ -12,7 +12,7 @@ public class CryptosTest {
 
 		//key可为任意字符串
 		//byte[] key = "a foo key".getBytes();
-		byte[] key = Cryptos.generateMacSha1Key();
+		byte[] key = Cryptos.generateHmacSha1Key();
 		assertEquals(20, key.length);
 
 		byte[] macResult = Cryptos.hmacSha1(input.getBytes(), key);

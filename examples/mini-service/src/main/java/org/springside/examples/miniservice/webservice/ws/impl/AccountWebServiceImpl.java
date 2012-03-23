@@ -5,6 +5,7 @@ import java.util.List;
 import javax.jws.WebService;
 import javax.validation.ConstraintViolationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,7 +88,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			return new IdResult(userId);
 		} catch (ConstraintViolationException e) {
-			String message = BeanValidators.convertMessage(e, "\n");
+			String message = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), "\n");
 			return new IdResult().setError(WSResult.PARAMETER_ERROR, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";

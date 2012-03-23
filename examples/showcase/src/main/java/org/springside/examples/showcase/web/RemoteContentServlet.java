@@ -45,6 +45,31 @@ public class RemoteContentServlet extends HttpServlet {
 
 	private HttpClient httpClient = null;
 
+	/**
+	 * 创建多线程安全的HttpClient实例.
+	 */
+	@Override
+	public void init() throws ServletException {
+		//Set connection pool
+		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
+		cm.setMaxTotal(CONNECTION_POOL_SIZE);
+		httpClient = new DefaultHttpClient(cm);
+
+		//set timeout
+		HttpParams httpParams = httpClient.getParams();
+		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SECONDS * 1000);
+	}
+
+	/**
+	 * 销毁HttpClient实例.
+	 */
+	@Override
+	public void destroy() {
+		if (httpClient != null) {
+			httpClient.getConnectionManager().shutdown();
+		}
+	}
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		//获取参数
@@ -56,7 +81,7 @@ public class RemoteContentServlet extends HttpServlet {
 		//远程访问获取内容
 		HttpEntity entity = fetchContent(contentUrl);
 		if (entity == null) {
-			response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + "is not found.");
+			response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + " is not found.");
 			return;
 		}
 
@@ -96,29 +121,4 @@ public class RemoteContentServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * 创建多线程安全的HttpClient实例.
-	 */
-	@Override
-	public void init() throws ServletException {
-		//Set connection pool
-		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
-		cm.setMaxTotal(CONNECTION_POOL_SIZE);
-		httpClient = new DefaultHttpClient(cm);
-
-		//set timeout
-		HttpParams httpParams = httpClient.getParams();
-		HttpConnectionParams.setConnectionTimeout(httpParams, TIMEOUT_SECONDS * 1000);
-		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SECONDS * 1000);
-	}
-
-	/**
-	 * 销毁HttpClient实例.
-	 */
-	@Override
-	public void destroy() {
-		if (httpClient != null) {
-			httpClient.getConnectionManager().shutdown();
-		}
-	}
 }

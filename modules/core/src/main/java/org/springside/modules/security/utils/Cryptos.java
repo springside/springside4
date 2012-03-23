@@ -74,7 +74,7 @@ public class Cryptos {
 	 * 生成HMAC-SHA1密钥,返回字节数组,长度为160位(20字节).
 	 * HMAC-SHA1算法对密钥无特殊要求, RFC2401建议最少长度为160位(20字节).
 	 */
-	public static byte[] generateMacSha1Key() {
+	public static byte[] generateHmacSha1Key() {
 		try {
 			KeyGenerator keyGenerator = KeyGenerator.getInstance(HMACSHA1);
 			keyGenerator.init(DEFAULT_HMACSHA1_KEYSIZE);

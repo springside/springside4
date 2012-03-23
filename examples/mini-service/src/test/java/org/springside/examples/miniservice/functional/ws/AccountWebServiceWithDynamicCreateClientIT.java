@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import javax.xml.ws.BindingProvider;
 
+import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.transport.http.HTTPConduit;
@@ -31,19 +32,19 @@ public class AccountWebServiceWithDynamicCreateClientIT extends BaseFunctionalTe
 		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
 		proxyFactory.setAddress(address);
 		proxyFactory.setServiceClass(AccountWebService.class);
-		AccountWebService accountWebServiceCreated = (AccountWebService) proxyFactory.create();
+		AccountWebService accountWebServiceProxy = (AccountWebService) proxyFactory.create();
 
 		//(可选)演示重新设定endpoint address.
-		((BindingProvider) accountWebServiceCreated).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+		((BindingProvider) accountWebServiceProxy).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				address);
 
 		//(可选)演示重新设定Timeout时间
-		HTTPClientPolicy policy = new HTTPClientPolicy();
-		policy.setReceiveTimeout(200000);
-		HTTPConduit conduit = (HTTPConduit) ClientProxy.getClient(accountWebServiceCreated).getConduit();
-		conduit.setClient(policy);
+		Client client = ClientProxy.getClient(accountWebServiceProxy);
+		HTTPConduit conduit = (HTTPConduit) client.getConduit();
+		HTTPClientPolicy policy = conduit.getClient();
+		policy.setReceiveTimeout(600000);
 
-		return accountWebServiceCreated;
+		return accountWebServiceProxy;
 	}
 
 	/**

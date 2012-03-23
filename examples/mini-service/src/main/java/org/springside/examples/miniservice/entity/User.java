@@ -17,7 +17,7 @@ public class User extends IdEntity {
 	private String email;
 	private Department department;
 
-	@NotBlank(message = "登录名不能为空")
+	@NotBlank
 	public String getLoginName() {
 		return loginName;
 	}
@@ -34,7 +34,7 @@ public class User extends IdEntity {
 		this.password = password;
 	}
 
-	@NotBlank(message = "姓名不能为空")
+	@NotBlank
 	public String getName() {
 		return name;
 	}
@@ -43,7 +43,7 @@ public class User extends IdEntity {
 		this.name = name;
 	}
 
-	@Email(message = "邮件地址格式不正确")
+	@Email
 	public String getEmail() {
 		return email;
 	}

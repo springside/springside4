@@ -38,6 +38,10 @@ public class PropertiesLoader {
 		properties = loadProperties(resourcesPaths);
 	}
 
+	public Properties getProperties() {
+		return properties;
+	}
+
 	/**
 	 * 取出Property，但以System的Property优先.
 	 */
@@ -52,7 +56,7 @@ public class PropertiesLoader {
 	/**
 	 * 载入多个文件, 文件路径使用Spring Resource格式.
 	 */
-	public static Properties loadProperties(String... resourcesPaths) throws IOException {
+	private Properties loadProperties(String... resourcesPaths) throws IOException {
 		Properties props = new Properties();
 
 		for (String location : resourcesPaths) {
