@@ -464,6 +464,9 @@
 							<configuration>
 								<groups>org.springside.examples.showcase.functional.category.Smoke</groups>
 								<useSystemClassLoader>false</useSystemClassLoader>
+								<systemPropertyVariables>
+									<selenium.driver>${selenium.driver}</selenium.driver>
+								</systemPropertyVariables>
 							</configuration>
 					</plugin>
 				</plugins>
@@ -488,6 +491,9 @@
 							<artifactId>maven-failsafe-plugin</artifactId>
 							<configuration>
 								<useSystemClassLoader>false</useSystemClassLoader>
+								<systemPropertyVariables>
+									<selenium.driver>${selenium.driver}</selenium.driver>
+								</systemPropertyVariables>
 							</configuration>
 					</plugin>
 				</plugins>
