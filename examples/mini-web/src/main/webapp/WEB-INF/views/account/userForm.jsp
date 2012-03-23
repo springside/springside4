@@ -15,18 +15,8 @@
 			$("#inputForm").validate({
 				rules: {
 					loginName: {
-						required: true,
 						remote: "${ctx}/account/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')
 					},
-					name: "required",
-					password: {
-						required: true,
-						minlength:3
-					},
-					passwordConfirm: {
-						equalTo:"#password"
-					},
-					email:"email",
 					groupList:"required"
 				},
 				messages: {
@@ -60,26 +50,26 @@
 	
 			<div>
 				<label for="loginName" class="field">登录名:</label>
-				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
+				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}" class="required"/>
 			</div>
 			<div>
 				<label for="name" class="field">用户名:</label>
-				<input type="text" id="name" name="name" size="40" value="${user.name}"/>
+				<input type="text" id="name" name="name" size="40" value="${user.name}" class="required"/>
 			</div>
 			<div>
 				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40" value="${user.password}"/>
+				<input type="password" id="password" name="password" size="40" value="${user.password}" minlength="3"/>
 			</div>
 			<div>
 				<label for="passwordConfirm" class="field">确认密码:</label>
-				<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}"/>
+				<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}" equalTo="#password"/>
 			</div>
 			<div>
-				<label for="loginName" class="field">邮箱:</label>
-				<input type="text" id="email" name="email" size="40" value="${user.email}"/>
+				<label for="email" class="field">邮箱:</label>
+				<input type="text" id="email" name="email" size="40" value="${user.email}" class="email"/>
 			</div>
 			<div>
-				<label for="loginName" class="field">权限组:</label>
+				<label for="groupList" class="field">权限组:</label>
 				<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
 			</div>	
 		</fieldset>
