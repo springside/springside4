@@ -14,6 +14,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springside.modules.utils.Collections3;
 
 import com.google.common.collect.Lists;
@@ -36,6 +37,7 @@ public class User extends IdEntity {
 
 	private List<Role> roleList = Lists.newArrayList(); //有序的关联对象集合
 
+	@NotBlank
 	public String getLoginName() {
 		return loginName;
 	}
@@ -69,6 +71,7 @@ public class User extends IdEntity {
 		this.salt = salt;
 	}
 
+	@NotBlank
 	public String getName() {
 		return name;
 	}
