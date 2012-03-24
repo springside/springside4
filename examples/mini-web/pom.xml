@@ -56,7 +56,7 @@
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 		</dependency>
-		<!-- spring end -->
+		<!-- SPRING end -->
 
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->

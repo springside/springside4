@@ -534,7 +534,7 @@
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
 				<artifactId>jaxb-impl</artifactId>
-				<version>2.2.5-b09</version>
+				<version>2.2.5</version>
 			</dependency>
 			<!-- XML end -->
 
@@ -654,7 +654,7 @@
 			<dependency>
 				<groupId>javax.mail</groupId>
 				<artifactId>mail</artifactId>
-				<version>1.4.4</version>
+				<version>1.4.5</version>
 			</dependency>
 			<dependency>
 				<groupId>javax.activation</groupId>

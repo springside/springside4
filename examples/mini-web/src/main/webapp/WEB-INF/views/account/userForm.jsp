@@ -58,7 +58,7 @@
 			</div>
 			<div>
 				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40" value="${user.password}" minlength="3"/>
+				<input type="password" id="password" name="password" size="40" value="${user.password}" class="required" minlength="3"/>
 			</div>
 			<div>
 				<label for="passwordConfirm" class="field">确认密码:</label>
