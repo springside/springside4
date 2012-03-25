@@ -2,6 +2,7 @@ package org.springside.examples.miniweb.web.account;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,12 +34,14 @@ public class UserDetailController {
 		b.registerCustomEditor(List.class, "groupList", groupListEditor);
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(Model model) {
 		model.addAttribute("allGroups", accountManager.getAllGroup());
 		return "account/userForm";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);

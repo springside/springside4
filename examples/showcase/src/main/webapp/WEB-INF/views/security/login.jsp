@@ -34,11 +34,6 @@
 	<%
 		}
 	}
-	if(request.getParameter("unauthorized")!=null){
-	%>
-		<div class="error prepend-top">用户无权限，请登录其他用户或<a href="javascript:history.back()">返回上一页</a></div>
-	<%
-	}
 	%>
 	<form:form id="loginForm"  action="${ctx}/login" method="post">
 		<fieldset class="prepend-top">

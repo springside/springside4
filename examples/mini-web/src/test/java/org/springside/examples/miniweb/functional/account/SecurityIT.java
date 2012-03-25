@@ -46,5 +46,10 @@ public class SecurityIT extends BaseFunctionalTestCase {
 		//校验用户权限组的操作单元格只有查看
 		s.click(By.linkText(Gui.MENU_USER));
 		assertEquals("", s.getTable(By.id("contentTable"), 1, UserColumn.OPERATIONS.ordinal()));
+
+		//强行访问无权限的url
+		s.open("/account/user/update/1");
+		assertTrue(s.getTitle().contains("403"));
+
 	}
 }
