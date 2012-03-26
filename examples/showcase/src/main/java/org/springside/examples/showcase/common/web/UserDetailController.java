@@ -2,9 +2,12 @@ package org.springside.examples.showcase.common.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +37,12 @@ public class UserDetailController {
 	}
 
 	@RequestMapping(value = "save/{id}")
-	public String save(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+	public String save(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
+			RedirectAttributes redirectAttributes) {
+		if (bindingResult.hasErrors()) {
+			return updateForm(model);
+		}
+
 		accountManager.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
 		return "redirect:/common/user/";

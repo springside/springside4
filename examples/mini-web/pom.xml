@@ -4,13 +4,13 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RELEASE-SNAPSHOT</version>
+		<version>4.0.0.RC2</version>
 		<relativePath>../../modules/parent</relativePath>
 	</parent>
 	
 	<groupId>org.springside.examples</groupId>
 	<artifactId>mini-web</artifactId>
-	<version>4.0.0.RELEASE-SNAPSHOT</version>
+	<version>4.0.0.RC2</version>
 	<packaging>war</packaging>
 	<name>Springside :: Example :: Mini-Web</name>
 
@@ -56,7 +56,7 @@
 			<groupId>asm</groupId>
 			<artifactId>asm</artifactId>
 		</dependency>
-		<!-- spring end -->
+		<!-- SPRING end -->
 
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->
@@ -320,6 +320,9 @@
 							<configuration>
 								<groups>org.springside.examples.miniweb.functional.category.Smoke</groups>
 								<useSystemClassLoader>false</useSystemClassLoader>
+								<systemPropertyVariables>
+									<selenium.driver>${selenium.driver}</selenium.driver>
+								</systemPropertyVariables>
 							</configuration>
 					</plugin>
 				</plugins>
@@ -344,6 +347,9 @@
 							<artifactId>maven-failsafe-plugin</artifactId>
 							<configuration>
 								<useSystemClassLoader>false</useSystemClassLoader>
+								<systemPropertyVariables>
+									<selenium.driver>${selenium.driver}</selenium.driver>
+								</systemPropertyVariables>
 							</configuration>
 					</plugin>
 				</plugins>

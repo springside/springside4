@@ -106,7 +106,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		byte[] salt = Digests.generateSalt(SALT_SIZE);
 		result.salt = Encodes.encodeHex(salt);
 
-		byte[] hashPassword = Digests.sha1(plainText, salt, INTERATIONS);
+		byte[] hashPassword = Digests.sha1(plainText.getBytes(), salt, INTERATIONS);
 		result.password = Encodes.encodeHex(hashPassword);
 		return result;
 

@@ -1,5 +1,6 @@
 package org.springside.examples.miniweb.web.account;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,14 @@ public class GroupDetailController {
 
 	private AccountManager accountManager;
 
+	@RequiresPermissions("group:edit")
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(Model model) {
 		model.addAttribute("allPermissions", Permission.values());
 		return "account/groupForm";
 	}
 
+	@RequiresPermissions("group:edit")
 	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("group") Group group, RedirectAttributes redirectAttributes) {
 		accountManager.saveGroup(group);

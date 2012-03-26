@@ -1,7 +1,6 @@
 package org.springside.modules.beanvalidator;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.Set;
 
@@ -16,7 +15,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.test.spring.SpringContextTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
@@ -32,9 +30,9 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		assertEquals(2, violations.size());
-		String result = BeanValidators.convertMessage(violations, ",");
-		assertTrue(StringUtils.contains(result, "邮件地址格式不正确"));
-		assertTrue(StringUtils.contains(result, "姓名不能为空"));
+		String result = StringUtils.join(BeanValidators.extractPropertyAndMessage(violations, " "), ",");
+		assertTrue(StringUtils.contains(result, "email not a well-formed email address"));
+		assertTrue(StringUtils.contains(result, "name may not be empty"));
 	}
 
 	@Test
@@ -46,9 +44,9 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 			BeanValidators.validateWithException(validator, customer);
 			Assert.fail("should throw excepion");
 		} catch (ConstraintViolationException e) {
-			String result = BeanValidators.convertMessage(e, ",");
-			assertTrue(StringUtils.contains(result, "邮件地址格式不正确"));
-			assertTrue(StringUtils.contains(result, "姓名不能为空"));
+			String result = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ",");
+			assertTrue(StringUtils.contains(result, "email not a well-formed email address"));
+			assertTrue(StringUtils.contains(result, "name may not be empty"));
 		}
 
 	}
@@ -59,7 +57,7 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 		String email;
 
-		@NotBlank(message = "姓名不能为空")
+		@NotBlank
 		public String getName() {
 			return name;
 		}
@@ -68,7 +66,7 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 			this.name = name;
 		}
 
-		@Email(message = "邮件地址格式不正确")
+		@Email
 		public String getEmail() {
 			return email;
 		}

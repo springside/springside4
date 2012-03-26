@@ -21,18 +21,12 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/account/user/" />
-		<property name="unauthorizedUrl" value="/login?unauthorized=true" />
 		<property name="filterChainDefinitions">
 			<value>
 				/login = authc
 				/logout = logout
 				/static/** = anon
-		    	/account/user/save/** = perms["user:edit"]
-		    	/account/user/delete/** = perms["user:edit"]
-		    	/account/user/** = perms["user:view"]
-		    	/account/group/save/** = perms["group:edit"]
-		    	/account/group/delete/** = perms["group:edit"]
-		    	/account/group/** = perms["group:view"] 		    				
+		    	/** = user
 		 	</value>
 		</property>
 	</bean>

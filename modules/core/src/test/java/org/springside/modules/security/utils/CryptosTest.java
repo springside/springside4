@@ -12,29 +12,14 @@ public class CryptosTest {
 
 		//key可为任意字符串
 		//byte[] key = "a foo key".getBytes();
-		byte[] key = Cryptos.generateMacSha1Key();
+		byte[] key = Cryptos.generateHmacSha1Key();
 		assertEquals(20, key.length);
 
-		byte[] macResult = Cryptos.hmacSha1(input, key);
+		byte[] macResult = Cryptos.hmacSha1(input.getBytes(), key);
 		System.out.println("hmac-sha1 key in hex      :" + Encodes.encodeHex(key));
 		System.out.println("hmac-sha1 in hex result   :" + Encodes.encodeHex(macResult));
 
-		assertTrue(Cryptos.isMacValid(macResult, input, key));
-	}
-
-	@Test
-	public void des() {
-		byte[] key = Cryptos.generateDesKey();
-		assertEquals(8, key.length);
-		String input = "foo message";
-
-		byte[] encryptResult = Cryptos.desEncrypt(input, key);
-		String descryptResult = Cryptos.desDecrypt(encryptResult, key);
-
-		System.out.println("des key in hex            :" + Encodes.encodeHex(key));
-		System.out.println("des encrypt in hex result :" + Encodes.encodeHex(encryptResult));
-
-		assertEquals(input, descryptResult);
+		assertTrue(Cryptos.isMacValid(macResult, input.getBytes(), key));
 	}
 
 	@Test
@@ -43,10 +28,27 @@ public class CryptosTest {
 		assertEquals(16, key.length);
 		String input = "foo message";
 
-		byte[] encryptResult = Cryptos.aesEncrypt(input, key);
+		byte[] encryptResult = Cryptos.aesEncrypt(input.getBytes(), key);
 		String descryptResult = Cryptos.aesDecrypt(encryptResult, key);
 
 		System.out.println("aes key in hex            :" + Encodes.encodeHex(key));
+		System.out.println("aes encrypt in hex result :" + Encodes.encodeHex(encryptResult));
+		assertEquals(input, descryptResult);
+	}
+
+	@Test
+	public void aesWithIV() {
+		byte[] key = Cryptos.generateAesKey();
+		byte[] iv = Cryptos.generateIV();
+		assertEquals(16, key.length);
+		assertEquals(16, iv.length);
+		String input = "foo message";
+
+		byte[] encryptResult = Cryptos.aesEncrypt(input.getBytes(), key, iv);
+		String descryptResult = Cryptos.aesDecrypt(encryptResult, key, iv);
+
+		System.out.println("aes key in hex            :" + Encodes.encodeHex(key));
+		System.out.println("iv in hex                 :" + Encodes.encodeHex(iv));
 		System.out.println("aes encrypt in hex result :" + Encodes.encodeHex(encryptResult));
 		assertEquals(input, descryptResult);
 	}

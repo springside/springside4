@@ -17,6 +17,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springside.examples.miniservice.entity.User;
@@ -92,7 +93,7 @@ public class UserResouceService {
 			URI createdUri = uriInfo.getAbsolutePathBuilder().path(id.toString()).build();
 			return Response.created(createdUri).build();
 		} catch (ConstraintViolationException e) {
-			String message = BeanValidators.convertMessage(e, "\n");
+			String message = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), "\n");
 			throw Jerseys.buildException(Status.BAD_REQUEST, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";

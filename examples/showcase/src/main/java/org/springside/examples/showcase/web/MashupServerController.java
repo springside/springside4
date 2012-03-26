@@ -17,14 +17,16 @@ import org.springside.modules.mapper.JsonMapper;
 @Controller
 public class MashupServerController {
 
+	private static final String DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME = "callback";
+
 	private JsonMapper mapper = JsonMapper.buildNormalMapper();
 
 	@RequestMapping("/web/mashup")
 	@ResponseBody
-	public String execute(@RequestParam("callback") String callbackName) {
+	public String execute(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
 		//设置需要被格式化为JSON字符串的内容.
-		Map<String, String> map = Collections.singletonMap("html", "<p>Hello World!</p>");
+		Map<String, String> map = Collections.singletonMap("content", "<p>Hello World!</p>");
 
 		//渲染返回结果.
 		return mapper.toJsonP(callbackName, map);

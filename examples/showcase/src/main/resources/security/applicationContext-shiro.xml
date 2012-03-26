@@ -22,7 +22,6 @@
 		<property name="securityManager" ref="securityManager" />
 		<property name="loginUrl" value="/login" />
 		<property name="successUrl" value="/" />
-		<property name="unauthorizedUrl" value="/login?unauthorized=true" />
 		<property name="filterChainDefinitions">
 			<value>
 				/login = authc

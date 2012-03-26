@@ -21,6 +21,9 @@ import org.springframework.core.io.ResourceLoader;
 /**
  * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的值.
  * 
+ * 本类有两种使用方法:
+ * 1. 
+ * 
  * @author calvin
  */
 public class PropertiesLoader {
@@ -29,13 +32,31 @@ public class PropertiesLoader {
 
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-	private PropertiesLoader() {
+	private Properties properties;
+
+	public PropertiesLoader(String... resourcesPaths) throws IOException {
+		properties = loadProperties(resourcesPaths);
+	}
+
+	public Properties getProperties() {
+		return properties;
+	}
+
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
+	public String getProperty(String key) {
+		String result = System.getProperty(key);
+		if (result != null) {
+			return result;
+		}
+		return properties.getProperty(key);
 	}
 
 	/**
 	 * 载入多个文件, 文件路径使用Spring Resource格式.
 	 */
-	public static Properties loadProperties(String... resourcesPaths) throws IOException {
+	private Properties loadProperties(String... resourcesPaths) throws IOException {
 		Properties props = new Properties();
 
 		for (String location : resourcesPaths) {

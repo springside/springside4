@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import javax.validation.ConstraintViolationException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -28,15 +29,19 @@ public class AccountManagerTest extends SpringContextTestCase {
 		userDTOWithoutLoginName.setLoginName(null);
 		try {
 			accountManager.saveUser(userDTOWithoutLoginName);
+			fail("exception should be thrown");
 		} catch (ConstraintViolationException e) {
-			assertEquals("登录名不能为空", BeanValidators.convertMessage(e, ","));
+			assertEquals("loginName may not be empty",
+					StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ','));
 		}
 		User userDTOWitWrongEmail = AccountData.getRandomUser();
 		userDTOWitWrongEmail.setEmail("abc");
 		try {
 			accountManager.saveUser(userDTOWitWrongEmail);
+			fail("exception should be thrown");
 		} catch (ConstraintViolationException e) {
-			assertEquals("邮件地址格式不正确", BeanValidators.convertMessage(e, ","));
+			assertEquals("email not a well-formed email address",
+					StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ","));
 		}
 
 	}

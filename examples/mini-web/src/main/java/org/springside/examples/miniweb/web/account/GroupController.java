@@ -2,6 +2,7 @@ package org.springside.examples.miniweb.web.account;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ public class GroupController {
 
 	private AccountManager accountManager;
 
+	@RequiresPermissions("group:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
 		List<Group> groups = accountManager.getAllGroup();
@@ -25,6 +27,7 @@ public class GroupController {
 		return "account/groupList";
 	}
 
+	@RequiresPermissions("group:edit")
 	@RequestMapping(value = "create")
 	public String createForm(Model model) {
 		model.addAttribute("group", new Group());
@@ -32,6 +35,7 @@ public class GroupController {
 		return "account/groupForm";
 	}
 
+	@RequiresPermissions("group:edit")
 	@RequestMapping(value = "save")
 	public String save(Group group, RedirectAttributes redirectAttributes) {
 		accountManager.saveGroup(group);
@@ -39,6 +43,7 @@ public class GroupController {
 		return "redirect:/account/group/";
 	}
 
+	@RequiresPermissions("group:edit")
 	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		accountManager.deleteGroup(id);
@@ -50,5 +55,4 @@ public class GroupController {
 	public void setAccountManager(AccountManager accountManager) {
 		this.accountManager = accountManager;
 	}
-
 }

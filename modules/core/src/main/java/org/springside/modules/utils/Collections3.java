@@ -88,4 +88,22 @@ public class Collections3 {
 		List list = extractToList(collection, propertyName);
 		return StringUtils.join(list, separator);
 	}
+
+	/**
+	 * 转换Collection为String, 中间以 separator分隔。
+	 */
+	public static String convertToString(final Collection collection, final String separator) {
+		return StringUtils.join(collection, separator);
+	}
+
+	/**
+	 * 转换Collection为String, 每个元素的前面加入prefix，后面加入postfix，如<div>mymessage</div>。
+	 */
+	public static String convertToString(final Collection collection, final String prefix, final String postfix) {
+		StringBuilder builder = new StringBuilder();
+		for (Object o : collection) {
+			builder.append(prefix).append(o).append(postfix);
+		}
+		return builder.toString();
+	}
 }

@@ -2,6 +2,7 @@ package org.springside.examples.miniweb.web.account;
 
 import java.util.List;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +42,7 @@ public class UserController {
 		b.registerCustomEditor(List.class, "groupList", groupListEditor);
 	}
 
+	@RequiresPermissions("user:view")
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
 		List<User> users = accountManager.getAllUser();
@@ -48,6 +50,7 @@ public class UserController {
 		return "account/userList";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "create")
 	public String createForm(Model model) {
 		model.addAttribute("user", new User());
@@ -55,6 +58,7 @@ public class UserController {
 		return "account/userForm";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "save")
 	public String save(User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
@@ -62,6 +66,7 @@ public class UserController {
 		return "redirect:/account/user/";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
 		accountManager.deleteUser(id);
@@ -69,6 +74,7 @@ public class UserController {
 		return "redirect:/account/user/";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "checkLoginName")
 	@ResponseBody
 	public String checkLoginName(@RequestParam("oldLoginName") String oldLoginName,
