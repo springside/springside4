@@ -17,6 +17,9 @@ public class Identities {
 
 	private static SecureRandom random = new SecureRandom();
 
+	private static final char[] ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+			.toCharArray();
+
 	private Identities() {
 	}
 
@@ -38,13 +41,20 @@ public class Identities {
 	 * 使用SecureRandom随机生成Long. 
 	 */
 	public static long randomLong() {
-		return random.nextLong();
+		return Math.abs(random.nextLong());
 	}
 
 	/**
-	 * 基于Base62编码的SecureRandom随机生成Long.
+	 * 基于Base62编码的SecureRandom随机生成bytes.
 	 */
-	public static String randomBase62() {
-		return Encodes.encodeNumberToBase62(random.nextLong());
+	public static String randomBase62(int length) {
+		byte[] randomBytes = new byte[length];
+		random.nextBytes(randomBytes);
+
+		char[] chars = new char[length];
+		for (int i = 0; i < length; i++) {
+			chars[i] = ALPHABET[((randomBytes[i] & 0xFF) % ALPHABET.length)];
+		}
+		return new String(chars);
 	}
 }

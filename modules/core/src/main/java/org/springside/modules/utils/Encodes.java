@@ -13,20 +13,17 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * 封装各种格式的编码解码工具类.
  * 
  * 1.Commons-Codec的 hex/base64 编码
- * 2.自行编写的，将long进行base62编码以缩短其长度
  * 3.Commons-Lang的xml/html/csv escape
  * 4.JDK提供的URLEncoder
  * 
  * @author calvin
  */
 public class Encodes {
-	private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
 
@@ -70,41 +67,6 @@ public class Encodes {
 	 */
 	public static byte[] decodeBase64(String input) {
 		return Base64.decodeBase64(input);
-	}
-
-	/**
-	 * Base62(0_9A_Za_z)编码数字, long->String.
-	 */
-	public static String encodeNumberToBase62(long num) {
-		return alphabetEncode(num, 62);
-	}
-
-	/**
-	 * Base62(0_9A_Za_z)解码数字, String->long.
-	 */
-	public static long decodeBase62ToNumber(String str) {
-		return alphabetDecode(str, 62);
-	}
-
-	private static String alphabetEncode(long num, int base) {
-		num = Math.abs(num);
-		StringBuilder sb = new StringBuilder();
-		for (; num > 0; num /= base) {
-			sb.append(ALPHABET.charAt((int) (num % base)));
-		}
-
-		return sb.toString();
-	}
-
-	private static long alphabetDecode(String str, int base) {
-		Validate.notBlank(str);
-
-		long result = 0;
-		for (int i = 0; i < str.length(); i++) {
-			result += ALPHABET.indexOf(str.charAt(i)) * Math.pow(base, i);
-		}
-
-		return result;
 	}
 
 	/**
