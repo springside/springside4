@@ -4,16 +4,25 @@
 	<diskStore path="java.io.tmpdir/hibernate/mini-web" />
 
 	<!-- DefaultCache setting. -->
-	<defaultCache maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU" eternal="false"
-		timeToIdleSeconds="300" timeToLiveSeconds="300" overflowToDisk="false" diskPersistent="false" />
-
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+            />
+            
 	<!-- Special objects setting. -->
-	<cache name="org.springside.examples.miniweb.entity.account.User" maxElementsInMemory="10000"
-		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
-	<cache name="org.springside.examples.miniweb.entity.account.User.groupList" maxElementsInMemory="10000"
-		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
-	<cache name="org.springside.examples.miniweb.entity.account.Group" maxElementsInMemory="10000"
-		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
-	<cache name="org.springside.examples.miniweb.entity.account.Group.permissionList" maxElementsInMemory="10000"
-		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000000" />
+	<cache name="org.springside.examples.miniweb.entity.account.User" maxElementsInMemory="1000"
+		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="10000" />
+	<cache name="org.springside.examples.miniweb.entity.account.User.groupList" maxElementsInMemory="1000"
+		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="10000" />
+	<cache name="org.springside.examples.miniweb.entity.account.Group" maxElementsInMemory="100"
+		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000" />
+	<cache name="org.springside.examples.miniweb.entity.account.Group.permissionList" maxElementsInMemory="100"
+		memoryStoreEvictionPolicy="LRU" eternal="true" diskPersistent="false" overflowToDisk="true" maxElementsOnDisk="1000" />
 </ehcache>
