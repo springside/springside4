@@ -20,6 +20,7 @@ import com.google.common.cache.LoadingCache;
 
 /**
  * 本地缓存演示，使用GuavaCache.
+ * 可以通过log4jdbc查看sql情况.
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
