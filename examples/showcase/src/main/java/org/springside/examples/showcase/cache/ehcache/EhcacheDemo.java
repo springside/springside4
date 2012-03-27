@@ -20,7 +20,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 @ContextConfiguration(locations = { "/cache/applicationContext-ehcache.xml" })
 public class EhcacheDemo extends SpringContextTestCase {
 
-	private static final String CACHE_NAME = "contentInfoCache";
+	private static final String CACHE_NAME = "demoCache";
 
 	@Autowired
 	private CacheManager ehcacheManager;
