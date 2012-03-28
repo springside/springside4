@@ -35,11 +35,8 @@
 
 	<!-- 用户授权/认证信息Cache, 采用EhCache RMI集群 -->
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManager" ref="shiroEhcacheManager"/>
+		<property name="cacheManagerConfigFile" value="classpath:/security/ehcache-shiro-rmi.xml"/>
 	</bean>
-	<bean id="shiroEhcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:/security/ehcache-shiro-rmi.xml" />
-	</bean>	
 	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
