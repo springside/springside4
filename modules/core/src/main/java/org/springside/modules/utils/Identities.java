@@ -17,9 +17,6 @@ public class Identities {
 
 	private static SecureRandom random = new SecureRandom();
 
-	private static final char[] ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-			.toCharArray();
-
 	private Identities() {
 	}
 
@@ -50,11 +47,6 @@ public class Identities {
 	public static String randomBase62(int length) {
 		byte[] randomBytes = new byte[length];
 		random.nextBytes(randomBytes);
-
-		char[] chars = new char[length];
-		for (int i = 0; i < length; i++) {
-			chars[i] = ALPHABET[((randomBytes[i] & 0xFF) % ALPHABET.length)];
-		}
-		return new String(chars);
+		return Encodes.encodeBase62(randomBytes);
 	}
 }

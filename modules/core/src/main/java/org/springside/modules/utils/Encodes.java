@@ -26,19 +26,21 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class Encodes {
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
+	private static final char[] ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+			.toCharArray();
 
 	private Encodes() {
 	}
 
 	/**
-	 * Hex编码, byte[]->String.
+	 * Hex编码.
 	 */
 	public static String encodeHex(byte[] input) {
 		return Hex.encodeHexString(input);
 	}
 
 	/**
-	 * Hex解码, String->byte[].
+	 * Hex解码.
 	 */
 	public static byte[] decodeHex(String input) {
 		try {
@@ -49,7 +51,7 @@ public class Encodes {
 	}
 
 	/**
-	 * Base64编码, byte[]->String.
+	 * Base64编码.
 	 */
 	public static String encodeBase64(byte[] input) {
 		return Base64.encodeBase64String(input);
@@ -63,10 +65,21 @@ public class Encodes {
 	}
 
 	/**
-	 * Base64解码, String->byte[].
+	 * Base64解码.
 	 */
 	public static byte[] decodeBase64(String input) {
 		return Base64.decodeBase64(input);
+	}
+
+	/**
+	 * Base62编码。
+	 */
+	public static String encodeBase62(byte[] input) {
+		char[] chars = new char[input.length];
+		for (int i = 0; i < input.length; i++) {
+			chars[i] = ALPHABET[((input[i] & 0xFF) % ALPHABET.length)];
+		}
+		return new String(chars);
 	}
 
 	/**
@@ -133,5 +146,4 @@ public class Encodes {
 			throw Exceptions.unchecked(e);
 		}
 	}
-
 }
