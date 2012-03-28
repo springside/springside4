@@ -33,7 +33,7 @@
 		</property>
 	</bean>
 
-	<!-- 用户授权/认证信息Cache, 采用EhCachrmi集群 -->
+	<!-- 用户授权/认证信息Cache, 采用EhCache RMI集群 -->
 	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
 		<property name="cacheManager" ref="shiroEhcacheManager"/>
 	</bean>
