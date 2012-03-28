@@ -19,11 +19,22 @@ public class Threads {
 	}
 
 	/**
-	 * sleep等待,单位毫秒,忽略InterruptedException.
+	 * sleep等待,单位为毫秒,忽略InterruptedException.
 	 */
 	public static void sleep(long millis) {
 		try {
 			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			// Ignore.
+		}
+	}
+
+	/**
+	 * sleep等待,忽略InterruptedException.
+	 */
+	public static void sleep(long duration, TimeUnit unit) {
+		try {
+			Thread.sleep(unit.toMillis(duration));
 		} catch (InterruptedException e) {
 			// Ignore.
 		}

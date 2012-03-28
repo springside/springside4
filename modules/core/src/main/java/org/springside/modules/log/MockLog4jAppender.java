@@ -5,13 +5,14 @@
  */
 package org.springside.modules.log;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.AppenderSkeleton;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
+
+import com.google.common.collect.Lists;
 
 /**
  * 在List中保存日志的Appender, 用于测试Log4j的日志输出.
@@ -22,7 +23,7 @@ import org.apache.log4j.spi.LoggingEvent;
  */
 public class MockLog4jAppender extends AppenderSkeleton {
 
-	private List<LoggingEvent> logs = new ArrayList<LoggingEvent>();
+	private List<LoggingEvent> logs = Lists.newArrayList();
 
 	/**
 	 * 返回之前append的第一个log.
@@ -38,13 +39,19 @@ public class MockLog4jAppender extends AppenderSkeleton {
 	 * 返回之前append的第一个log的信息.
 	 */
 	public String getFirstMessage() {
+		if (logs.isEmpty()) {
+			return null;
+		}
 		return getFirstLog().getMessage().toString();
 	}
 
 	/**
-	 * 返回之前appender的第一个log的按layout pattern格式化的信息.
+	 * 返回之前append的第一个log的按layout pattern格式化的信息.
 	 */
 	public String getFirstRenderedMessage() {
+		if (logs.isEmpty()) {
+			return null;
+		}
 		return getLayout().format(getFirstLog());
 	}
 
@@ -62,13 +69,19 @@ public class MockLog4jAppender extends AppenderSkeleton {
 	 * 返回之前append的最后一个log的信息.
 	 */
 	public String getLastMessage() {
+		if (getLastLog() == null) {
+			return null;
+		}
 		return getLastLog().getMessage().toString();
 	}
 
 	/**
-	 * 返回之前appender的最后一个log的按layout pattern格式化的信息.
+	 * 返回之前append的最后一个log的按layout pattern格式化的信息.
 	 */
 	public String getLastRenderedMessage() {
+		if (logs.isEmpty()) {
+			return null;
+		}
 		return getLayout().format(getLastLog());
 	}
 
@@ -77,6 +90,13 @@ public class MockLog4jAppender extends AppenderSkeleton {
 	 */
 	public List<LoggingEvent> getAllLogs() {
 		return logs;
+	}
+
+	/**
+	 * 返回Log的数量。
+	 */
+	public int getLogCount() {
+		return logs.size();
 	}
 
 	/**
