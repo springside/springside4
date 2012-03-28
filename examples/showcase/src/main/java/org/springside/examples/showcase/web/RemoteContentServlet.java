@@ -1,8 +1,11 @@
 package org.springside.examples.showcase.web;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -78,8 +81,38 @@ public class RemoteContentServlet extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "contentUrl parameter is required.");
 		}
 
-		//远程访问获取内容
-		HttpEntity entity = fetchContent(contentUrl);
+		//远程访问获取内容的方式
+		String client = request.getParameter("client");
+
+		InputStream input = null;
+		if ("apache".equals(client)) {
+			//使用Apache HttpClient
+			fetchContentByApacheHttpClient(response, contentUrl);
+		} else {
+			//使用JDK HttpUrlConnection
+			fetchContentByJDKConnection(response, contentUrl);
+		}
+	}
+
+	/**
+	 * 使用HttpClient取得内容.
+	 */
+	private void fetchContentByApacheHttpClient(HttpServletResponse response, String contentUrl) throws IOException {
+
+		//获取内容
+		HttpEntity entity = null;
+		HttpGet httpGet = new HttpGet(contentUrl);
+		try {
+			HttpContext context = new BasicHttpContext();
+			HttpResponse remoteResponse = httpClient.execute(httpGet, context);
+			entity = remoteResponse.getEntity();
+		} catch (Exception e) {
+			logger.error("fetch remote content" + contentUrl + "  error", e);
+			httpGet.abort();
+			return;
+		}
+
+		//404返回
 		if (entity == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + " is not found.");
 			return;
@@ -94,7 +127,6 @@ public class RemoteContentServlet extends HttpServlet {
 		//输出内容
 		InputStream input = entity.getContent();
 		OutputStream output = response.getOutputStream();
-
 		try {
 			//基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
 			IOUtils.copy(input, output);
@@ -103,22 +135,44 @@ public class RemoteContentServlet extends HttpServlet {
 			//保证InputStream的关闭.
 			IOUtils.closeQuietly(input);
 		}
+
 	}
 
-	/**
-	 * 使用HttpClient取得内容.
-	 */
-	private HttpEntity fetchContent(String targetUrl) {
-		HttpGet httpGet = new HttpGet(targetUrl);
-		HttpContext context = new BasicHttpContext();
+	private void fetchContentByJDKConnection(HttpServletResponse response, String contentUrl) throws IOException {
+
+		HttpURLConnection connection = (HttpURLConnection) new URL(contentUrl).openConnection();
+		//设置Socket超时
+		connection.setReadTimeout(TIMEOUT_SECONDS * 1000);
 		try {
-			HttpResponse remoteResponse = httpClient.execute(httpGet, context);
-			return remoteResponse.getEntity();
-		} catch (Exception e) {
-			logger.error("fetch remote content" + targetUrl + "  error", e);
-			httpGet.abort();
-			return null;
+			connection.connect();
+
+			//真正发出请求
+			InputStream input;
+			try {
+				input = connection.getInputStream();
+			} catch (FileNotFoundException e) {
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + " is not found.");
+				return;
+			}
+
+			//设置Header
+			response.setContentType(connection.getContentType());
+			if (connection.getContentLength() > 0) {
+				response.setContentLength(connection.getContentLength());
+			}
+
+			//输出内容
+			OutputStream output = response.getOutputStream();
+			try {
+				//基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
+				IOUtils.copy(input, output);
+				output.flush();
+			} finally {
+				//保证InputStream的关闭.
+				IOUtils.closeQuietly(input);
+			}
+		} finally {
+			connection.disconnect();
 		}
 	}
-
 }
