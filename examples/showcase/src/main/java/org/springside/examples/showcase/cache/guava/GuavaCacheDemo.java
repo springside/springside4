@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,10 +36,12 @@ public class GuavaCacheDemo extends SpringTxTestCase {
 	@Autowired
 	private AccountManager accountManager;
 
+	@Before
+	public void setup() throws Exception {
+	}
+
 	@Test
 	public void demo() throws Exception {
-
-		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 		////设置缓存最大个数为100，缓存过期时间为5秒
 		LoadingCache<Long, User> cache = CacheBuilder.newBuilder().maximumSize(100)
 				.expireAfterAccess(5, TimeUnit.SECONDS).build(new CacheLoader<Long, User>() {
@@ -50,6 +53,10 @@ public class GuavaCacheDemo extends SpringTxTestCase {
 
 				});
 
+		//初始化数据
+		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+
+		//插入appender用于assert。
 		MockLog4jAppender appender = new MockLog4jAppender();
 		appender.addToLogger(GuavaCacheDemo.class);
 
