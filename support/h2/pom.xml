@@ -65,6 +65,7 @@
 						<mainClass>org.h2.tools.Server</mainClass>
 						<arguments>
 							<argument>-tcp</argument>
+							<arguments>-tcpAllowOthers</arguments>
 							<argument>-web</argument>
 							<argument>-webPort</argument>
 							<argument>8090</argument>

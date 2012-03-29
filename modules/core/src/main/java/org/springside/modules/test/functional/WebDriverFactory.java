@@ -31,8 +31,8 @@ public class WebDriverFactory {
 	/**
 	 * 根据driverName创建各种WebDriver的简便方法.
 	 * 
-	 * 当持续集成服务器安装在非Windows机器上, 没有IE浏览器与XWindows时, 需要使用remote dirver调用远程的Windows机器.
-	 * drivername如remote:192.168.0.2:3000:firefox, 此时要求远程服务器在http://192.168.0.2:3000/wd上启动selnium remote服务.
+	 * 当持续集成服务器安装在非Windows机器上, 没有IE浏览器与XWindows时, 需要使用remote driver调用远程的Windows机器.
+	 * drivername如remote:192.168.0.2:3000:firefox, 此时要求远程服务器在http://192.168.0.2:3000/wd上启动selenium remote服务.
 	 * @throws MalformedURLException 
 	 */
 	public static WebDriver createDriver(String driverName) {
