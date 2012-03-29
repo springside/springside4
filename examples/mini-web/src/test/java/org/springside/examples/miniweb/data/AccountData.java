@@ -34,7 +34,7 @@ public class AccountData {
 		return user;
 	}
 
-	public static User getRandomUserWithGroup() {
+	public static User getRandomUserWithOneGroup() {
 		User user = getRandomUser();
 		user.getGroupList().add(getRandomDefaultGroup());
 		return user;

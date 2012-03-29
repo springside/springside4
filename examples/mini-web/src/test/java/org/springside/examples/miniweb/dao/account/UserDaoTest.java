@@ -2,6 +2,9 @@ package org.springside.examples.miniweb.dao.account;
 
 import static org.junit.Assert.*;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +26,8 @@ public class UserDaoTest extends SpringTxTestCase {
 
 	@Autowired
 	private UserDao entityDao;
+	@PersistenceContext
+	private EntityManager em;
 
 	@Before
 	public void reloadSampleData() throws Exception {
@@ -34,8 +39,9 @@ public class UserDaoTest extends SpringTxTestCase {
 	//@Rollback(false) 
 	public void crudEntityWithGroup() {
 		//新建并保存带权限组的用户
-		User user = AccountData.getRandomUserWithGroup();
+		User user = AccountData.getRandomUserWithOneGroup();
 		entityDao.save(user);
+		em.flush();
 
 		//获取用户
 		user = entityDao.findOne(user.getId());
@@ -43,13 +49,19 @@ public class UserDaoTest extends SpringTxTestCase {
 
 		//删除用户的权限组
 		user.getGroupList().remove(0);
+		entityDao.save(user);
+		em.flush();
+
 		user = entityDao.findOne(user.getId());
 		assertEquals(0, user.getGroupList().size());
 
 		//删除用户
 		entityDao.delete(user.getId());
+		em.flush();
+
 		user = entityDao.findOne(user.getId());
 		assertNull(user);
+
 	}
 
 	//期望抛出ConstraintViolationException的异常.
@@ -58,5 +70,6 @@ public class UserDaoTest extends SpringTxTestCase {
 		User user = AccountData.getRandomUser();
 		user.setLoginName("admin");
 		entityDao.save(user);
+		em.flush();
 	}
 }
