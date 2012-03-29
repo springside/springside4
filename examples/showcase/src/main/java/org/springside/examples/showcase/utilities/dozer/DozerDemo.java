@@ -7,47 +7,67 @@ import java.util.List;
 import org.junit.Test;
 import org.springside.modules.mapper.BeanMapper;
 
+/**
+ * 演示Dozer如何只要属性名相同，可以罔顾属性类型是基础类型<->String的差别，Array转为List，甚至完全另一种DTO的差别。
+ * 并且能完美解决循环依赖问题。
+ */
 public class DozerDemo {
 
 	/**
-	 * 演示Dozer如何只要属性名相同，可以罔顾属性类型是基础类型<->String的差别，甚至完全另一种DTO的差别。
+	 * 从一个ProductDTO实例，创建出一个新的Product实例。
 	 */
 	@Test
-	public void mapByClassName() {
+	public void map() {
 		ProductDTO productDTO = new ProductDTO();
 		productDTO.setName("car");
 		productDTO.setPrice("200");
+
 		PartDTO partDTO = new PartDTO();
 		partDTO.setName("door");
+		partDTO.setProduct(productDTO);
+
 		productDTO.setParts(new PartDTO[] { partDTO });
 
 		Product product = BeanMapper.map(productDTO, Product.class);
 
 		assertEquals("car", product.getName());
+		//原来的字符串被Map成Double。
 		assertEquals(new Double(200), product.getPrice());
+		//原来的PartDTO同样被Map成Part。
 		assertEquals("door", product.getParts().get(0).getName());
+		//Part中循环依赖的Product同样被赋值。
+		assertEquals("car", product.getParts().get(0).getProduct().getName());
+
 	}
 
+	/**
+	 * 演示将一个ProductDTO实例的内容，Copy到另一个已存在的Product实例.
+	 */
 	@Test
 	public void copy() {
 		ProductDTO productDTO = new ProductDTO();
 		productDTO.setName("car");
 		productDTO.setPrice("200");
+
 		PartDTO partDTO = new PartDTO();
 		partDTO.setName("door");
+		partDTO.setProduct(productDTO);
+
 		productDTO.setParts(new PartDTO[] { partDTO });
 
+		//已存在的Product实例
 		Product product = new Product();
 		product.setName("horse");
 		product.setWeight(new Double(20));
 
 		BeanMapper.copy(productDTO, product);
 
-		assertEquals("car", product.getName());
+		//原来的20的属性被覆盖成200，同样被从字符串被专为Double。
 		assertEquals(new Double(200), product.getPrice());
-		assertEquals("door", product.getParts().get(0).getName());
 		//DTO中没有的属性值,在Product中被保留
 		assertEquals(new Double(20), product.getWeight());
+		//Part中循环依赖的Product同样被赋值。
+		assertEquals("car", product.getParts().get(0).getProduct().getName());
 	}
 
 	public static class Product {
@@ -92,6 +112,9 @@ public class DozerDemo {
 	}
 
 	public static class Part {
+		//反向依赖Product
+		private Product product;
+
 		private String name;
 
 		public String getName() {
@@ -102,6 +125,13 @@ public class DozerDemo {
 			this.name = name;
 		}
 
+		public Product getProduct() {
+			return product;
+		}
+
+		public void setProduct(Product product) {
+			this.product = product;
+		}
 	}
 
 	public static class ProductDTO {
@@ -138,6 +168,9 @@ public class DozerDemo {
 	}
 
 	public static class PartDTO {
+		//反向依赖ProductDTO
+		private ProductDTO product;
+
 		private String name;
 
 		public String getName() {
@@ -146,6 +179,14 @@ public class DozerDemo {
 
 		public void setName(String name) {
 			this.name = name;
+		}
+
+		public ProductDTO getProduct() {
+			return product;
+		}
+
+		public void setProduct(ProductDTO product) {
+			this.product = product;
 		}
 
 	}
