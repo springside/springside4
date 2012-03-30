@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC2</version>
+		<version>4.0.0.RELEASE-SNAPSHOT</version>
 		<relativePath>../../modules/parent</relativePath>
 	</parent>
 
@@ -195,6 +195,10 @@
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
 		<!-- SECURITY end -->
 

@@ -47,7 +47,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 		s.click(By.linkText("创建用户"));
 
 		//生成待输入的测试用户数据
-		User user = AccountData.getRandomUserWithGroup();
+		User user = AccountData.getRandomUserWithOneGroup();
 
 		//输入数据
 		s.type(By.id("loginName"), user.getLoginName());

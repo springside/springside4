@@ -1,9 +1,8 @@
 package org.springside.modules.utils;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.springside.modules.utils.Encodes;
 
 public class EncodesTest {
 
@@ -26,15 +25,6 @@ public class EncodesTest {
 		String input = "haha,i am a very long message";
 		String result = Encodes.encodeUrlSafeBase64(input.getBytes());
 		assertEquals(input, new String(Encodes.decodeBase64(result)));
-	}
-
-	@Test
-	public void base62Encode() {
-		long num = 63;
-
-		String result = Encodes.encodeNumberToBase62(num);
-		assertEquals("11", result);
-		assertEquals(num, Encodes.decodeBase62ToNumber(result));
 	}
 
 	@Test

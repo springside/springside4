@@ -50,6 +50,7 @@ public class GroupDaoTest extends SpringTxTestCase {
 		//新增测试权限组并与admin用户绑定.
 		Group group = AccountData.getRandomGroup();
 		groupDao.save(group);
+		em.flush();
 
 		User user = userDao.findOne(1L);
 		user.getGroupList().add(group);
@@ -75,6 +76,7 @@ public class GroupDaoTest extends SpringTxTestCase {
 		//新建并保存带权限组的用户
 		Group group = AccountData.getRandomGroupWithPermissions();
 		groupDao.save(group);
+		em.flush();
 		//获取用户
 		group = groupDao.findOne(group.getId());
 		assertTrue(group.getPermissionList().size() > 0);

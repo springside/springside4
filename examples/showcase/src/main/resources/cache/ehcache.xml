@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ehcache>
+<ehcache updateCheck="false">
 
 	<diskStore path="java.io.tmpdir" />
 
 	<!-- DefaultCache setting. -->
-	<defaultCache maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU" eternal="false"
-		timeToIdleSeconds="300" timeToLiveSeconds="300" overflowToDisk="false" diskPersistent="false" />
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		overflowToDisk="true" maxEntriesLocalDisk="100000" />
 
 	<!-- Special objects setting. -->
-	<!-- Refresh ContentInfoCache every hour. -->
-	<cache name="contentInfoCache" overflowToDisk="false" eternal="false" diskPersistent="false" timeToLiveSeconds="3600" timeToIdleSeconds="3600" maxElementsInMemory="10000" memoryStoreEvictionPolicy="LRU"/>
+	<!-- Refresh demoCache every hour，按Cache实际大小而不是Element数量进行限制，超过限制后不保存到磁盘。 -->
+	<cache name="demoCache" maxBytesLocalHeap="10M" eternal="false" timeToIdleSeconds="3600"
+		timeToLiveSeconds="3600" overflowToDisk="false" />
 </ehcache>

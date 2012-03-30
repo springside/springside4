@@ -38,6 +38,7 @@
 			<input id="submit" class="button" type="submit" value="提交"/>&nbsp;	
 			<input id="cancel" class="button" type="button" value="返回" onclick="history.back()"/>
 		</div>
+		<div>(保存后将发送JMS消息通知改动，而消息接收者将发送提醒邮件)</div>
 	</form:form>
 </body>
 </html>

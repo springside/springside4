@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringContextTestCase;
 
 /**
- * 本地缓存策略,使用EhCache, 支持限制总数, Idle time/LRU失效, 持久化到磁盘等功能.
+ * 演示Ehcache的配置.
  * 
  * 配置见applicationContext-ehcache.xml与ehcache.xml
  * 
@@ -20,7 +20,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 @ContextConfiguration(locations = { "/cache/applicationContext-ehcache.xml" })
 public class EhcacheDemo extends SpringContextTestCase {
 
-	private static final String CACHE_NAME = "contentInfoCache";
+	private static final String CACHE_NAME = "demoCache";
 
 	@Autowired
 	private CacheManager ehcacheManager;
@@ -28,7 +28,7 @@ public class EhcacheDemo extends SpringContextTestCase {
 	private Cache cache;
 
 	@Test
-	public void normal() {
+	public void demo() {
 
 		cache = ehcacheManager.getCache(CACHE_NAME);
 

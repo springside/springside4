@@ -13,35 +13,34 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.Validate;
 
 /**
  * 封装各种格式的编码解码工具类.
  * 
  * 1.Commons-Codec的 hex/base64 编码
- * 2.自行编写的，将long进行base62编码以缩短其长度
  * 3.Commons-Lang的xml/html/csv escape
  * 4.JDK提供的URLEncoder
  * 
  * @author calvin
  */
 public class Encodes {
-	private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
+	private static final char[] ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+			.toCharArray();
 
 	private Encodes() {
 	}
 
 	/**
-	 * Hex编码, byte[]->String.
+	 * Hex编码.
 	 */
 	public static String encodeHex(byte[] input) {
 		return Hex.encodeHexString(input);
 	}
 
 	/**
-	 * Hex解码, String->byte[].
+	 * Hex解码.
 	 */
 	public static byte[] decodeHex(String input) {
 		try {
@@ -52,7 +51,7 @@ public class Encodes {
 	}
 
 	/**
-	 * Base64编码, byte[]->String.
+	 * Base64编码.
 	 */
 	public static String encodeBase64(byte[] input) {
 		return Base64.encodeBase64String(input);
@@ -66,45 +65,21 @@ public class Encodes {
 	}
 
 	/**
-	 * Base64解码, String->byte[].
+	 * Base64解码.
 	 */
 	public static byte[] decodeBase64(String input) {
 		return Base64.decodeBase64(input);
 	}
 
 	/**
-	 * Base62(0_9A_Za_z)编码数字, long->String.
+	 * Base62编码。
 	 */
-	public static String encodeNumberToBase62(long num) {
-		return alphabetEncode(num, 62);
-	}
-
-	/**
-	 * Base62(0_9A_Za_z)解码数字, String->long.
-	 */
-	public static long decodeBase62ToNumber(String str) {
-		return alphabetDecode(str, 62);
-	}
-
-	private static String alphabetEncode(long num, int base) {
-		num = Math.abs(num);
-		StringBuilder sb = new StringBuilder();
-		for (; num > 0; num /= base) {
-			sb.append(ALPHABET.charAt((int) (num % base)));
+	public static String encodeBase62(byte[] input) {
+		char[] chars = new char[input.length];
+		for (int i = 0; i < input.length; i++) {
+			chars[i] = ALPHABET[((input[i] & 0xFF) % ALPHABET.length)];
 		}
-
-		return sb.toString();
-	}
-
-	private static long alphabetDecode(String str, int base) {
-		Validate.notBlank(str);
-
-		long result = 0;
-		for (int i = 0; i < str.length(); i++) {
-			result += ALPHABET.indexOf(str.charAt(i)) * Math.pow(base, i);
-		}
-
-		return result;
+		return new String(chars);
 	}
 
 	/**
@@ -171,5 +146,4 @@ public class Encodes {
 			throw Exceptions.unchecked(e);
 		}
 	}
-
 }

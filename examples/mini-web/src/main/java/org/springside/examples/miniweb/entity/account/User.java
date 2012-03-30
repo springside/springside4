@@ -75,7 +75,6 @@ public class User extends IdEntity {
 
 	//多对多定义
 	@ManyToMany
-	//中间表定义,表名采用默认命名规则
 	@JoinTable(name = "acct_user_group", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "group_id") })
 	//Fecth策略定义
 	@Fetch(FetchMode.SUBSELECT)

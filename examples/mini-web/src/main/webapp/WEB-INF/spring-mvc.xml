@@ -25,7 +25,7 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
         <property name="exceptionMappings">  
             <props>  
                 <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  

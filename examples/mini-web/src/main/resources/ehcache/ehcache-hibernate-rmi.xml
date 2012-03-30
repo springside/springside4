@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false">
+
+	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"
+		properties="peerDiscovery=automatic,multicastGroupAddress=230.0.0.1,multicastGroupPort=4446" />
+	<cacheManagerPeerListenerFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerListenerFactory" />
+
+	<diskStore path="java.io.tmpdir/hibernate/mini-web" />
+
+	<!-- DefaultCache setting. -->
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false" timeToIdleSeconds="300" timeToLiveSeconds="600"
+		overflowToDisk="true" maxEntriesLocalDisk="100000" />
+
+	<!-- Special objects setting. -->
+	<cache name="org.springside.examples.miniweb.entity.account.User" maxEntriesLocalHeap="1000" eternal="true"
+		overflowToDisk="true" maxEntriesLocalDisk="10000">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
+	</cache>
+	<cache name="org.springside.examples.miniweb.entity.account.User.groupList" maxEntriesLocalHeap="1000" eternal="true"
+		overflowToDisk="true" maxEntriesLocalDisk="10000">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
+	</cache>
+	<cache name="org.springside.examples.miniweb.entity.account.Group" maxEntriesLocalHeap="100" eternal="true"
+		overflowToDisk="true" maxEntriesLocalDisk="1000">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
+	</cache>
+	<cache name="org.springside.examples.miniweb.entity.account.Group.permissionList" maxEntriesLocalHeap="100"
+		eternal="true" overflowToDisk="true" maxEntriesLocalDisk="1000">
+		<cacheEventListenerFactory class="net.sf.ehcache.distribution.RMICacheReplicatorFactory"
+			properties="replicatePuts=false,replicateUpdatesViaCopy=false" />
+	</cache>
+</ehcache>
