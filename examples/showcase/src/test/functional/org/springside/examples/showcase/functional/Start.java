@@ -1,4 +1,4 @@
-package org.springside.examples.showcase;
+package org.springside.examples.showcase.functional;
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.functional.JettyFactory;
