@@ -333,6 +333,9 @@
 							<includes>
 								<include>**/*IT.java</include>
 							</includes>
+							<systemPropertyVariables>
+								<selenium.driver>${selenium.driver}</selenium.driver>
+							</systemPropertyVariables>
 						</configuration>
 					</plugin>		
 				</plugins>
@@ -351,6 +354,9 @@
 							<includes>
 								<include>**/*IT.java</include>
 							</includes>
+							<systemPropertyVariables>
+								<selenium.driver>${selenium.driver}</selenium.driver>
+							</systemPropertyVariables>
 						</configuration>
 					</plugin>	
 				</plugins>
