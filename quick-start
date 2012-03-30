@@ -9,7 +9,7 @@ echo "[Step 1] Install all springside modules to local maven repository, and gen
 mvn clean install -Pmodules -Dmaven.test.skip=true
 
 echo "[Step 2] Generate Eclipse project files for all projects"	
-mvn -Pall eclipse:clean eclipse:eclipse
+mvn eclipse:clean eclipse:eclipse -Pall 
  
 echo "[Step 3] Start H2 Standalone database."
 cd support/h2
@@ -17,7 +17,7 @@ mvn exec:java -PwithoutBrowser &
 cd ../../
 
 echo "[Step 4] Init schema and data for all example projects."
-mvn antrun:run -Prefreshdb -Pexamples
+mvn antrun:run -Prefresh-db,examples
 
 echo "[Step 5] Start all example projects."
 cd  examples/mini-service
