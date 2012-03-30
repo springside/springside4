@@ -19,7 +19,7 @@ start "H2 Database" %MVN% exec:java -PwithoutBrowser
 cd ..\..\
 
 echo [Step 4] Init schema and data for all example projects.
-call %MVN% antrun:run -Prefreshdb -Pexamples
+call %MVN% antrun:run -Prefresh-db -Pexamples
 if errorlevel 1 goto error
 
 echo [Step 5] Start all example projects.

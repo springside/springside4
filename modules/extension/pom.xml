@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-parent</artifactId>
+		<artifactId>springside-project</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 	<artifactId>springside-extension</artifactId>
 	<packaging>jar</packaging>
