@@ -12,7 +12,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.examples.miniweb.Start;
 import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;

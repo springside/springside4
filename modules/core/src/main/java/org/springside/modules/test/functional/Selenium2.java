@@ -99,7 +99,7 @@ public class Selenium2 {
 		return driver;
 	}
 
-	//Elemenet 函數//
+	//Element 函數//
 
 	/**
 	 * 查找Element.

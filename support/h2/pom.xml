@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<artifactId>springside-parent</artifactId>
 		<groupId>org.springside</groupId>
+		<artifactId>springside-project</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
-		<relativePath>../../modules/parent</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 	<groupId>org.springside</groupId>
 	<artifactId>h2-starts</artifactId>
@@ -65,6 +65,7 @@
 						<mainClass>org.h2.tools.Server</mainClass>
 						<arguments>
 							<argument>-tcp</argument>
+							<arguments>-tcpAllowOthers</arguments>
 							<argument>-web</argument>
 							<argument>-webPort</argument>
 							<argument>8090</argument>

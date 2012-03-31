@@ -7,7 +7,6 @@ import javax.ws.rs.core.MediaType;
 import org.springframework.beans.factory.annotation.Required;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
-import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.rest.jersey.Jerseys;
 import org.springside.modules.web.Servlets;
 
@@ -56,8 +55,7 @@ public class UserResourceClient {
 	 * 无公共DTO类定义, 取得返回JSON字符串后自行转换DTO.
 	 */
 	public UserDTO searchUserReturnJson(String name) {
-		String jsonString = client.path("/users/search").queryParam("name", name).get(String.class);
-		return JsonMapper.buildNormalMapper().fromJson(jsonString, UserDTO.class);
+		return client.path("/users/search").queryParam("name", name).get(UserDTO.class);
 	}
 
 	/**

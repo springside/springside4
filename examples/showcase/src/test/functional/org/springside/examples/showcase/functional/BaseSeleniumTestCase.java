@@ -6,7 +6,6 @@ import org.junit.Ignore;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.examples.showcase.Start;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
 import org.springside.modules.utils.PropertiesLoader;

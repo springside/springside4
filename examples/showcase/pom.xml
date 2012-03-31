@@ -3,9 +3,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-parent</artifactId>
+		<artifactId>springside-project</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
-		<relativePath>../../modules/parent</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 
 	<groupId>org.springside.examples</groupId>
@@ -170,10 +170,6 @@
 			<artifactId>jersey-spring</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
 		</dependency>		
@@ -241,8 +237,12 @@
 
 		<!-- JSON -->
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
 		</dependency>
 		
 		<!-- XML begin -->
@@ -405,6 +405,25 @@
 
 	<build>
 		<plugins>
+			<!-- 增加functional test的Source目录 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/test/functional</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- test插件,设定內存/ClassLoader -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -458,26 +477,20 @@
 			<id>smoke-test</id>
 			<build>
 				<plugins>
-					<!-- 屏蔽单元测试执行 -->
+					<!-- 仅执行smoke test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<skip>true</skip>
+							<groups>org.springside.examples.showcase.functional.category.Smoke</groups>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+							<systemPropertyVariables>
+								<selenium.driver>${selenium.driver}</selenium.driver>
+							</systemPropertyVariables>
 						</configuration>
-					</plugin>
-					<!-- 运行integration-test的插件 , 仅执行smoke test-->
-					<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-failsafe-plugin</artifactId>
-							<configuration>
-								<groups>org.springside.examples.showcase.functional.category.Smoke</groups>
-								<useSystemClassLoader>false</useSystemClassLoader>
-								<systemPropertyVariables>
-									<selenium.driver>${selenium.driver}</selenium.driver>
-								</systemPropertyVariables>
-							</configuration>
-					</plugin>
+					</plugin>		
 				</plugins>
 			</build>
 		</profile>
@@ -486,25 +499,19 @@
 			<id>integration-test</id>
 			<build>
 				<plugins>
-					<!-- 屏蔽单元测试执行 -->
+					<!-- 执行所有functional test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<skip>true</skip>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+							<systemPropertyVariables>
+								<selenium.driver>${selenium.driver}</selenium.driver>
+							</systemPropertyVariables>
 						</configuration>
-					</plugin>
-					<!-- 运行integration-test的插件 , 仅执行smoke test-->
-					<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-failsafe-plugin</artifactId>
-							<configuration>
-								<useSystemClassLoader>false</useSystemClassLoader>
-								<systemPropertyVariables>
-									<selenium.driver>${selenium.driver}</selenium.driver>
-								</systemPropertyVariables>
-							</configuration>
-					</plugin>
+					</plugin>	
 				</plugins>
 			</build>
 		</profile>

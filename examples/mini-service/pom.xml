@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-parent</artifactId>
+		<artifactId>springside-project</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
-		<relativePath>../../modules/parent</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 	<groupId>org.springside.examples</groupId>
 	<artifactId>mini-service</artifactId>
@@ -108,20 +109,25 @@
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+		</dependency>
 		<!-- REST end -->
-		
+
 		<!-- VALIDATOR -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
-		
+
 		<!-- LOGGING begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -141,8 +147,8 @@
 		</dependency>
 		<dependency>
 			<groupId>log4jdbc</groupId>
-			<artifactId>log4jdbc4</artifactId>	
-		</dependency>		
+			<artifactId>log4jdbc4</artifactId>
+		</dependency>
 		<!-- LOGGING end -->
 
 		<!-- GENERAL UTILS begin -->
@@ -159,7 +165,7 @@
 			<artifactId>dozer</artifactId>
 		</dependency>
 		<!-- GENERAL UTILS end -->
-		
+
 		<!-- TEST begin -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -170,12 +176,12 @@
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 		</dependency>
-			
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -184,7 +190,7 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -208,6 +214,25 @@
 
 	<build>
 		<plugins>
+			<!-- 增加functional test的Source目录 -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-test-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>src/test/functional</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- junit插件設置內存 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -228,7 +253,7 @@
 						</excludes>
 					</instrumentation>
 				</configuration>
-			</plugin>	
+			</plugin>
 
 			<!-- eclipse插件, 设定wtp版本并添加springIDE nature -->
 			<plugin>
@@ -280,29 +305,23 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>smoke-test</id>
 			<build>
 				<plugins>
-					<!-- 屏蔽单元测试执行 -->
+					<!-- 仅执行smoke test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<skip>true</skip>
+							<groups>org.springside.examples.miniservice.functional.category.Smoke</groups>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
 						</configuration>
-					</plugin>
-					<!-- 运行integration-test的插件 , 仅执行smoke test-->
-					<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-failsafe-plugin</artifactId>
-							<configuration>
-								<groups>org.springside.examples.miniservice.functional.category.Smoke</groups>
-								<useSystemClassLoader>false</useSystemClassLoader>
-							</configuration>
-					</plugin>
+					</plugin>		
 				</plugins>
 			</build>
 		</profile>
@@ -311,22 +330,16 @@
 			<id>integration-test</id>
 			<build>
 				<plugins>
-					<!-- 屏蔽单元测试执行 -->
+					<!-- 执行所有functional test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<skip>true</skip>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
 						</configuration>
-					</plugin>
-					<!-- 运行integration-test的插件 , 仅执行smoke test-->
-					<plugin>
-							<groupId>org.apache.maven.plugins</groupId>
-							<artifactId>maven-failsafe-plugin</artifactId>
-							<configuration>
-								<useSystemClassLoader>false</useSystemClassLoader>
-							</configuration>
-					</plugin>
+					</plugin>	
 				</plugins>
 			</build>
 		</profile>
@@ -337,24 +350,25 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-        				<artifactId>maven-antrun-plugin</artifactId>
-        				<configuration>
-              				<target>
-                				<property file="src/main/resources/application.properties" />
+						<artifactId>maven-antrun-plugin</artifactId>
+						<configuration>
+							<target>
+								<property file="src/main/resources/application.properties" />
 
 								<property name="sql.type" value="h2" />
 								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
 
 								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-                				
-                				<echo>Waiting for the h2 server start...</echo>
-                				<waitfor maxwait="500" maxwaitunit="second">
-							        <and>
-							            <socket server="localhost" port="9092"/>
-							        </and>
+
+								<echo>Waiting for the h2 server start...</echo>
+								<waitfor maxwait="500" maxwaitunit="second">
+									<and>
+										<socket server="localhost" port="9092" />
+									</and>
 								</waitfor>
-                				<echo>The h2 server started.</echo>
-                				<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
+								<echo>The h2 server started.</echo>
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
+									src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
 
@@ -363,10 +377,11 @@
 										<property name="datatypeFactory" value="${dbunit.datatype}" />
 									</dbconfig>
 									<classpath refid="maven.test.classpath" />
-									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat" transaction="true"/>
-								</dbunit>                				
-              				</target>
-            			</configuration>
+									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat"
+										transaction="true" />
+								</dbunit>
+							</target>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>

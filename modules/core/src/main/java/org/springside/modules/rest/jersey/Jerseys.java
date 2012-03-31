@@ -15,9 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
-import com.sun.jersey.api.json.JSONConfiguration;
 
 public class Jerseys {
 
@@ -27,12 +24,10 @@ public class Jerseys {
 	}
 
 	/**
-	 * 创建JerseyClient, 设定JSON字符串使用Jackson解析.
+	 * 创建JerseyClient.
 	 */
 	public static WebResource createClient(String baseUrl) {
-		ClientConfig clientConfig = new DefaultClientConfig();
-		clientConfig.getFeatures().put(JSONConfiguration.FEATURE_POJO_MAPPING, Boolean.TRUE);
-		Client client = Client.create(clientConfig);
+		Client client = Client.create();
 		return client.resource(baseUrl);
 	}
 

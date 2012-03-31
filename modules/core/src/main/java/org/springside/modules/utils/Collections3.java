@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * Collections工具集.
- * 在JDK的Colllections和Guava的Collections2后, 命名为Collections3.
+ * 在JDK的Collections和Guava的Collections2后, 命名为Collections3.
  * 
  * @author calvin
  */

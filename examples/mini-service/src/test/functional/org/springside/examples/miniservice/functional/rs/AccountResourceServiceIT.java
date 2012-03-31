@@ -9,10 +9,10 @@ import org.dozer.DozerBeanMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import org.springside.examples.miniservice.Start;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
+import org.springside.examples.miniservice.functional.Start;
 import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
@@ -60,7 +60,6 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
-	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);

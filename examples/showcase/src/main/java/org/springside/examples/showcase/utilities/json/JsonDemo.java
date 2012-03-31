@@ -9,32 +9,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.codehaus.jackson.JsonGenerator;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.Version;
-import org.codehaus.jackson.annotate.JsonAnyGetter;
-import org.codehaus.jackson.annotate.JsonAnySetter;
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonManagedReference;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.MapperConfig;
-import org.codehaus.jackson.map.ObjectWriter;
-import org.codehaus.jackson.map.PropertyNamingStrategy;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.map.annotate.JsonView;
-import org.codehaus.jackson.map.deser.std.StdDeserializer;
-import org.codehaus.jackson.map.introspect.AnnotatedMethod;
-import org.codehaus.jackson.map.module.SimpleModule;
-import org.codehaus.jackson.map.ser.std.SerializerBase;
-import org.codehaus.jackson.type.JavaType;
-import org.joda.time.DateTime;
 import org.junit.Test;
 import org.springside.modules.mapper.JsonMapper;
 
+import com.fasterxml.jackson.annotation.JsonAnyGetter;
+import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.cfg.MapperConfig;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
@@ -113,7 +111,7 @@ public class JsonDemo {
 
 		//List<Bean>
 		String beanListString = "[{\"name\":\"A\"},{\"name\":\"B\"}]";
-		JavaType beanListType = mapper.constructParametricType(List.class, TestBean.class);
+		JavaType beanListType = mapper.createCollectionType(List.class, TestBean.class);
 		List<TestBean> beanList = mapper.fromJson(beanListString, beanListType);
 		System.out.println("Bean List:");
 		for (TestBean element : beanList) {
@@ -179,7 +177,7 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试对枚举的序列化,可以選擇用一個int字段而不是以Name來序列化，以減少長度.
+	 * 测试对枚举的序列化,可以選擇用一個int字段(但不是order)而不是以Name來序列化，以減少長度.
 	 */
 	@Test
 	public void enumData() {
@@ -215,15 +213,12 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试对日期的序列化.
+	 * 测试对日期的序列化,日期默认以Timestamp方式存储.
 	 */
 	@Test
 	public void dateData() {
-		DateTime jodaDate = new DateTime();
-
-		//日期默认以Timestamp方式存储
-		Date date = new Date(jodaDate.getMillis());
-		String tsString = String.valueOf(jodaDate.getMillis());
+		Date date = new Date();
+		String tsString = String.valueOf(date.getTime());
 
 		assertEquals(tsString, mapper.toJson(date));
 
@@ -231,45 +226,36 @@ public class JsonDemo {
 	}
 
 	/**
-	 * JSON字符串裡只含有Bean中部分的屬性時，更新一個已存在Bean，只覆蓋部分的屬性.
-	 */
-	@Test
-	public void updateBean() {
-		String jsonString = "{\"name\":\"A\"}";
-
-		TestBean bean = new TestBean();
-		bean.setDefaultValue("Foobar");
-		bean = mapper.update(bean, jsonString);
-		assertEquals("A", bean.getName());
-		assertEquals("Foobar", bean.getDefaultValue());
-	}
-
-	/**
 	 * 測試父子POJO間的循環引用.
 	 */
 	@Test
 	public void parentChildBean() {
-		//初始化对象关系，parent的Childs里含有 child1,child2, child1/child2的parent均指向parent.
+		//初始化对象关系，parent的children里含有 child1,child2, child1/child2的parent均指向parent.
 		ParentChildBean parent = new ParentChildBean("parent");
 
 		ParentChildBean child1 = new ParentChildBean("child1");
 		child1.setParent(parent);
-		parent.getChilds().add(child1);
+		parent.getChildren().add(child1);
 
 		ParentChildBean child2 = new ParentChildBean("child2");
 		child2.setParent(parent);
-		parent.getChilds().add(child2);
+		parent.getChildren().add(child2);
 
-		String jsonString = "{\"name\":\"parent\",\"childs\":[{\"name\":\"child1\"},{\"name\":\"child2\"}]}";
-		//打印parent的json输出，json字符串裡childs中的child1/child2都不包含到parent的屬性
+		//序列化是, json字符串裡children中的child1/child2都不包含到parent的屬性
+		String jsonString = "{\"name\":\"parent\",\"children\":[{\"name\":\"child1\"},{\"name\":\"child2\"}]}";
 		assertEquals(jsonString, mapper.toJson(parent));
 
-		//注意此時如果單獨打印child1，也不會打印parent，信息將丟失。
+		//注意此時如果單獨序列化child1，也不會打印parent，信息將丟失。
 		assertEquals("{\"name\":\"child1\"}", mapper.toJson(child1));
 
 		//反向序列化时，Json已很聪明的把parent填入child1/child2中.
 		ParentChildBean parentResult = mapper.fromJson(jsonString, ParentChildBean.class);
-		assertEquals("parent", parentResult.getChilds().get(0).getParent().getName());
+		assertEquals("parent", parentResult.getChildren().get(0).getParent().getName());
+
+		//单独反序列化child1，当然parent也是空
+		ParentChildBean child1Result = mapper.fromJson("{\"name\":\"child1\"}", ParentChildBean.class);
+		assertNull(child1Result.parent);
+		assertEquals("child1", child1Result.getName());
 	}
 
 	/**
@@ -279,7 +265,7 @@ public class JsonDemo {
 
 		private String name;
 		private ParentChildBean parent;
-		private List<ParentChildBean> childs = Lists.newArrayList();
+		private List<ParentChildBean> children = Lists.newArrayList();
 
 		public ParentChildBean() {
 		}
@@ -308,14 +294,30 @@ public class JsonDemo {
 		}
 
 		@JsonManagedReference
-		public List<ParentChildBean> getChilds() {
-			return childs;
+		public List<ParentChildBean> getChildren() {
+			return children;
 		}
 
 		@JsonManagedReference
-		public void setChilds(List<ParentChildBean> childs) {
-			this.childs = childs;
+		public void setChildren(List<ParentChildBean> children) {
+			this.children = children;
 		}
+	}
+
+	/**
+	 * JSON字符串裡只含有Bean中部分的屬性時，更新一個已存在Bean，只覆蓋部分的屬性.
+	 */
+	@Test
+	public void updateBean() {
+		String jsonString = "{\"name\":\"A\"}";
+
+		TestBean bean = new TestBean();
+		bean.setDefaultValue("Foobar");
+		bean = mapper.update(bean, jsonString);
+		//name被赋值
+		assertEquals("A", bean.getName());
+		//DefaultValue不在Json串中，依然保留。
+		assertEquals("Foobar", bean.getDefaultValue());
 	}
 
 	/**
@@ -326,8 +328,11 @@ public class JsonDemo {
 		//一个没有区分是变量还是Map的普通JSON字符串.
 		String jsonString = "{\"name\" : \"Foobar\",\"age\" : 37,\"occupation\" : \"coder man\"}";
 		ExtensibleBean extensibleBean = mapper.fromJson(jsonString, ExtensibleBean.class);
+		//固定属性
 		assertEquals("Foobar", extensibleBean.getName());
 		assertEquals(null, extensibleBean.getProperties().get("name"));
+
+		//可扩展属性
 		assertEquals("coder man", extensibleBean.getProperties().get("occupation"));
 	}
 
@@ -335,8 +340,9 @@ public class JsonDemo {
 	 * 演示用的可擴展Bean.@JsonAnySetter与@JsonAnyGetter是关键.
 	 */
 	public static class ExtensibleBean {
-		private String name; // we always have name
-
+		// 固定属性
+		private String name;
+		// 扩展属性
 		private Map<String, String> properties = Maps.newHashMap();
 
 		public ExtensibleBean() {
@@ -372,16 +378,14 @@ public class JsonDemo {
 		viewBean.setOtherValue("others");
 		viewBean.setIgnoreValue("ignored");
 
+		//public view
 		ObjectWriter publicWriter = mapper.getMapper().writerWithView(Views.Public.class);
 		assertEquals("{\"name\":\"Foo\",\"otherValue\":\"others\"}", publicWriter.writeValueAsString(viewBean));
+
+		//internal view
 		ObjectWriter internalWriter = mapper.getMapper().writerWithView(Views.Internal.class);
 		assertEquals("{\"age\":16,\"otherValue\":\"others\"}", internalWriter.writeValueAsString(viewBean));
 
-		//設置默認是否顯示沒有用@Json定義的屬性
-		JsonMapper newMapper = JsonMapper.buildNormalMapper();
-		newMapper.getMapper().configure(SerializationConfig.Feature.DEFAULT_VIEW_INCLUSION, false);
-		publicWriter = newMapper.getMapper().writerWithView(Views.Public.class);
-		assertEquals("{\"name\":\"Foo\"}", publicWriter.writeValueAsString(viewBean));
 	}
 
 	public static class Views {
@@ -439,14 +443,14 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试自定义转换器
+	 * 测试 自定义转换器，整体感觉稍显复杂。目标是将Money和Long互转.
 	 */
 	@Test
 	public void customConverter() {
 
 		JsonMapper newMapper = JsonMapper.buildNonNullMapper();
-		SimpleModule testModule = new SimpleModule("MyModule", new Version(1, 0, 0, null));
-		testModule.addSerializer(new MoneySerializer()); // assuming serializer declares correct class to bind to
+		SimpleModule testModule = new SimpleModule("MyModule", Version.unknownVersion());
+		testModule.addSerializer(new MoneySerializer());
 		testModule.addDeserializer(Money.class, new MoneyDeserializer());
 		newMapper.getMapper().registerModule(testModule);
 
@@ -462,7 +466,7 @@ public class JsonDemo {
 
 	}
 
-	public class MoneySerializer extends SerializerBase<Money> {
+	public class MoneySerializer extends StdSerializer<Money> {
 		public MoneySerializer() {
 			super(Money.class);
 		}
@@ -505,11 +509,35 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试修改属性名策略
-	 * @throws JsonMappingException 
+	 * 包含Money属性的对象.
+	 */
+	public static class User {
+		private String name;
+		private Money salary;
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public Money getSalary() {
+			return salary;
+		}
+
+		public void setSalary(Money salary) {
+			this.salary = salary;
+		}
+
+	}
+
+	/**
+	 * 测试修改 属性名策略
 	 */
 	@Test
-	public void customPropertyNameing() throws JsonMappingException {
+	public void customPropertyNaming() throws JsonMappingException {
 
 		TestBean bean = new TestBean("foo");
 		bean.setDefaultValue("bar");

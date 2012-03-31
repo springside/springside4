@@ -4,9 +4,9 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-parent</artifactId>
+		<artifactId>springside-project</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
-		<relativePath>../parent</relativePath>
+		<relativePath>../../</relativePath>
 	</parent>
 	<artifactId>springside-core</artifactId>
 	<packaging>jar</packaging>
@@ -41,11 +41,6 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<optional>true</optional>
@@ -55,7 +50,7 @@
 		<!-- REST begin -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
+			<artifactId>jersey-server</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -102,6 +97,11 @@
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>

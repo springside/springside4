@@ -10,7 +10,7 @@ call %MVN% clean install -Pmodules -Dmaven.test.skip=true
 if errorlevel 1 goto error
 
 echo [Step 2] Generate Eclipse project files for all projects
-call %MVN% -Pall eclipse:clean eclipse:eclipse
+call %MVN% eclipse:clean eclipse:eclipse -Pall
 if errorlevel 1 goto error
 
 echo [Step 3] Start H2 Standalone database.
@@ -19,7 +19,7 @@ start "H2 Database" %MVN% exec:java -PwithoutBrowser
 cd ..\..\
 
 echo [Step 4] Init schema and data for all example projects.
-call %MVN% antrun:run -Prefreshdb -Pexamples
+call %MVN% antrun:run -Prefresh-db,examples
 if errorlevel 1 goto error
 
 echo [Step 5] Start all example projects.
