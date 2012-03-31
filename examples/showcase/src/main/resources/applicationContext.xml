@@ -55,6 +55,9 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
 
+	<!-- hibernat validator -->
+	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
+
 	<beans profile="production">
 		<!-- 定义受环境影响易变的变量 -->
 		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
