@@ -23,10 +23,12 @@ public class JettyFactory {
 	 */
 	public static Server buildNormalServer(int port, String contextPath) {
 		Server server = new Server(port);
+		server.setStopAtShutdown(true);
+
 		WebAppContext webContext = new WebAppContext("src/main/webapp", contextPath);
 		webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
 		server.setHandler(webContext);
-		server.setStopAtShutdown(true);
+
 		return server;
 	}
 

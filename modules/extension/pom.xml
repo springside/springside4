@@ -119,9 +119,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<wtpversion>none</wtpversion>
-				</configuration>
 			</plugin>
 
 			<!-- source attach plugin -->
