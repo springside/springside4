@@ -32,25 +32,21 @@ public class JsonMapper {
 
 	private ObjectMapper mapper;
 
-	public JsonMapper() {
-		this(Include.ALWAYS);
-	}
-
 	public JsonMapper(Include include) {
 		mapper = new ObjectMapper();
 		//设置输出时包含属性的风格
 		mapper.setSerializationInclusion(include);
 		//设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
-		mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		//禁止使用int代表Enum的order()來反序列化Enum,非常危險
-		mapper.configure(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
+		mapper.enable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
 	}
 
 	/**
 	 * 创建输出全部属性到Json字符串的Mapper.
 	 */
 	public static JsonMapper buildNormalMapper() {
-		return new JsonMapper();
+		return new JsonMapper(Include.ALWAYS);
 	}
 
 	/**
@@ -162,9 +158,9 @@ public class JsonMapper {
 	 * 為False時時使用Enum的name()函數來讀寫Enum, 默認為False.
 	 * 注意本函數一定要在Mapper創建後, 所有的讀寫動作之前調用.
 	 */
-	public void setEnumUseToString(boolean value) {
-		mapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, value);
-		mapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, value);
+	public void enableEnumUseToString() {
+		mapper.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+		mapper.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
 	}
 
 	/**

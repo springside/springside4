@@ -560,7 +560,7 @@
 			<dependency>
 				<groupId>commons-io</groupId>
 				<artifactId>commons-io</artifactId>
-				<version>2.1</version>
+				<version>2.2</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-collections</groupId>
@@ -611,7 +611,7 @@
 			<dependency>
 				<groupId>org.apache.poi</groupId>
 				<artifactId>poi</artifactId>
-				<version>3.7</version>
+				<version>3.8</version>
 			</dependency>
 
 			<!-- validator -->
@@ -791,7 +791,17 @@
 					</configuration>
 				</plugin>
 
-				<!-- test插件, 增大内存且仅测试名称为*Test的类 -->
+				<!-- resource插件, 设定编码 -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.5</version>
+					<configuration>
+						<encoding>${project.build.sourceEncoding}</encoding>
+					</configuration>
+				</plugin>
+
+				<!-- test插件, 仅测试名称为*Test的类,使用支持分组测试的surefire-junit47 driver -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
@@ -806,8 +816,8 @@
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
 							<version>2.12</version>
-					</dependency>
-            </dependencies>
+						</dependency>
+					</dependencies>
 				</plugin>
 				
 				<!-- 增加更多的Source和Test Source目录插件 -->
@@ -824,7 +834,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- war插件, 设定war名称不带版本号 -->
+				<!-- war打包插件, 设定war包名称不带版本号 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
@@ -834,17 +844,7 @@
 					</configuration>
 				</plugin>
 
-				<!-- resource插件, 设定编码 -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
-					<configuration>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
-
-				<!-- jar相关插件 -->
+				<!-- jar打包相关插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-jar-plugin</artifactId>
@@ -899,7 +899,7 @@
 					</configuration>
 				</plugin>
 
-				<!-- dependency插件 -->
+				<!-- dependency相关插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>

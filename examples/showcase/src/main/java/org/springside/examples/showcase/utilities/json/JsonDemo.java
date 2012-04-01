@@ -9,19 +9,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
 import org.springside.modules.mapper.JsonMapper;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -44,6 +48,8 @@ import com.google.common.collect.Maps;
 public class JsonDemo {
 
 	private static JsonMapper mapper = JsonMapper.buildNonDefaultMapper();
+
+	//// 基本操作 演示 ////
 
 	/**
 	 * 序列化对象/集合到Json字符串.
@@ -139,6 +145,185 @@ public class JsonDemo {
 		assertEquals("{\"name\":\"A\"}", nonDefaultMaper.toJson(bean));
 	}
 
+	/*
+	 * 测试类似Jaxb的常用annotaion，如properName，ignore，propertyOrder
+	 */
+	@Test
+	public void jaxbStyleAnnoation() {
+		TestBean2 testBean = new TestBean2(1, "foo", 18);
+		//结果name属性输出在前，且被改名为productName，且age属性被ignore
+		assertEquals("{\"productName\":\"foo\",\"id\":1}", mapper.toJson(testBean));
+	}
+
+	//调转顺序
+	@JsonPropertyOrder({ "name", "id" })
+	public static class TestBean2 {
+
+		public long id;
+
+		@JsonProperty("productName")
+		public String name;
+
+		@JsonIgnore
+		public int age;
+
+		public TestBean2() {
+
+		}
+
+		public TestBean2(long id, String name, int age) {
+			this.id = id;
+			this.name = name;
+			this.age = age;
+		}
+
+	}
+
+	/**
+	 * 測試輸出jsonp格式內容.
+	 */
+	@Test
+	public void jsonp() {
+		TestBean bean = new TestBean("foo");
+		String jsonpString = mapper.toJsonP("callback", bean);
+		assertEquals("callback({\"name\":\"foo\"})", jsonpString);
+	}
+
+	/**
+	 * JSON字符串裡只含有Bean中部分的屬性時，更新一個已存在Bean，只覆蓋部分的屬性.
+	 */
+	@Test
+	public void updateBean() {
+		String jsonString = "{\"name\":\"A\"}";
+
+		TestBean bean = new TestBean();
+		bean.setDefaultValue("Foobar");
+		bean = mapper.update(bean, jsonString);
+		//name被赋值
+		assertEquals("A", bean.getName());
+		//DefaultValue不在Json串中，依然保留。
+		assertEquals("Foobar", bean.getDefaultValue());
+	}
+
+	/**
+	 * 演示用的Bean, 主要演示不同風格的Mapper對Null值，初始化後沒改變過的屬性值的處理.
+	 */
+	public static class TestBean {
+
+		private String name;
+		private String defaultValue = "hello"; //默认值没被修改过的属性，可能会不序列化
+		private String nullValue = null; //空值的据行，可能会不序列化
+
+		public TestBean() {
+		}
+
+		public TestBean(String name) {
+			this.name = name;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public String getDefaultValue() {
+			return defaultValue;
+		}
+
+		public void setDefaultValue(String defaultValue) {
+			this.defaultValue = defaultValue;
+		}
+
+		public String getNullValue() {
+			return nullValue;
+		}
+
+		public void setNullValue(String nullValue) {
+			this.nullValue = nullValue;
+		}
+
+		@Override
+		public String toString() {
+			return "TestBean [defaultValue=" + defaultValue + ", name=" + name + ", nullValue=" + nullValue + "]";
+		}
+	}
+
+	////特殊数据类型演示////
+
+	/**
+	 * 测试对枚举的序列化,可以選擇用一個int字段(但不是order)而不是以Name來序列化，以減少長度.
+	 */
+	@Test
+	public void enumData() {
+		//默認使用enum.name()
+		assertEquals("\"One\"", mapper.toJson(TestEnum.One));
+		assertEquals(TestEnum.One, mapper.fromJson("\"One\"", TestEnum.class));
+
+		//使用enum.toString()
+		//注意，index會通過toString序列成字符串而不是int,否則又和順序號混淆.
+		//注意配置必須在所有讀寫動作之前調用.
+		JsonMapper newMapper = JsonMapper.buildNormalMapper();
+		newMapper.enableEnumUseToString();
+		assertEquals("\"1\"", newMapper.toJson(TestEnum.One));
+		assertEquals(TestEnum.One, newMapper.fromJson("\"1\"", TestEnum.class));
+	}
+
+	/**
+	 * 枚舉類型的演示Bean.
+	 */
+	public static enum TestEnum {
+		One(1), Two(2), Three(3);
+
+		private int index;
+
+		TestEnum(int index) {
+			this.index = index;
+		}
+
+		@Override
+		public String toString() {
+			return String.valueOf(index);
+		}
+	}
+
+	/**
+	 * 测试对日期的序列化,日期默认以Timestamp方式存储，也可以用@JsonFormat格式化.
+	 */
+	@Test
+	public void dateData() {
+		DateBean dateBean = new DateBean();
+		Date date = new Date();
+		String timestampString = String.valueOf(date.getTime());
+		String format = "yyyy-MM-dd HH:mm:ss";
+		String formatedString = new DateTime(date).toString(format);
+
+		dateBean.startDate = date;
+		dateBean.endDate = date;
+
+		//to json
+		String expectedJson = "{\"startDate\":" + timestampString + ",\"endDate\":\"" + formatedString + "\"}";
+		assertEquals(expectedJson, mapper.toJson(dateBean));
+
+		//from json
+		Date expectedEndDate = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(formatedString).toDate();
+
+		DateBean resultBean = mapper.fromJson(expectedJson, DateBean.class);
+		assertEquals(date, resultBean.startDate);
+		assertEquals(expectedEndDate, resultBean.endDate);
+
+	}
+
+	public static class DateBean {
+
+		public Date startDate;
+		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
+		public Date endDate;
+
+	}
+
 	/**
 	 * 测试传入空对象,空字符串,Empty的集合,"null"字符串的结果.
 	 */
@@ -176,55 +361,7 @@ public class JsonDemo {
 		assertEquals(0, nullListResult.size());
 	}
 
-	/**
-	 * 测试对枚举的序列化,可以選擇用一個int字段(但不是order)而不是以Name來序列化，以減少長度.
-	 */
-	@Test
-	public void enumData() {
-		//默認使用enum.name()
-		assertEquals("\"One\"", mapper.toJson(TestEnum.One));
-		assertEquals(TestEnum.One, mapper.fromJson("\"One\"", TestEnum.class));
-
-		//使用enum.toString()
-		//注意，index會通過toString序列成字符串而不是int,否則又和順序號混淆.
-		//注意配置必須在所有讀寫動作之前調用.
-		JsonMapper newMapper = JsonMapper.buildNormalMapper();
-		newMapper.setEnumUseToString(true);
-		assertEquals("\"1\"", newMapper.toJson(TestEnum.One));
-		assertEquals(TestEnum.One, newMapper.fromJson("\"1\"", TestEnum.class));
-	}
-
-	/**
-	 * 枚舉類型的演示Bean.
-	 */
-	public static enum TestEnum {
-		One(1), Two(2), Three(3);
-
-		private int index;
-
-		TestEnum(int index) {
-			this.index = index;
-		}
-
-		@Override
-		public String toString() {
-			return String.valueOf(index);
-		}
-	}
-
-	/**
-	 * 测试对日期的序列化,日期默认以Timestamp方式存储.
-	 */
-	@Test
-	public void dateData() {
-		Date date = new Date();
-		String tsString = String.valueOf(date.getTime());
-
-		assertEquals(tsString, mapper.toJson(date));
-
-		assertEquals(date, mapper.fromJson(tsString, Date.class));
-	}
-
+	//// 高级应用 ////
 	/**
 	 * 測試父子POJO間的循環引用.
 	 */
@@ -302,22 +439,6 @@ public class JsonDemo {
 		public void setChildren(List<ParentChildBean> children) {
 			this.children = children;
 		}
-	}
-
-	/**
-	 * JSON字符串裡只含有Bean中部分的屬性時，更新一個已存在Bean，只覆蓋部分的屬性.
-	 */
-	@Test
-	public void updateBean() {
-		String jsonString = "{\"name\":\"A\"}";
-
-		TestBean bean = new TestBean();
-		bean.setDefaultValue("Foobar");
-		bean = mapper.update(bean, jsonString);
-		//name被赋值
-		assertEquals("A", bean.getName());
-		//DefaultValue不在Json串中，依然保留。
-		assertEquals("Foobar", bean.getDefaultValue());
 	}
 
 	/**
@@ -442,6 +563,8 @@ public class JsonDemo {
 
 	}
 
+	////批量定制行为////
+
 	/**
 	 * 测试 自定义转换器，整体感觉稍显复杂。目标是将Money和Long互转.
 	 */
@@ -449,20 +572,24 @@ public class JsonDemo {
 	public void customConverter() {
 
 		JsonMapper newMapper = JsonMapper.buildNonNullMapper();
-		SimpleModule testModule = new SimpleModule("MyModule", Version.unknownVersion());
-		testModule.addSerializer(new MoneySerializer());
-		testModule.addDeserializer(Money.class, new MoneyDeserializer());
-		newMapper.getMapper().registerModule(testModule);
 
-		Money money = new Money(1.2);
+		SimpleModule moneyModule = new SimpleModule("MoneyModule");
+		moneyModule.addSerializer(new MoneySerializer());
+		moneyModule.addDeserializer(Money.class, new MoneyDeserializer());
+		newMapper.getMapper().registerModule(moneyModule);
 
-		String jsonString = newMapper.toJson(money);
+		//tojson
+		User user = new User();
+		user.setName("foo");
+		user.setSalary(new Money(1.2));
 
-		assertEquals("\"1.2\"", jsonString);
+		String jsonString = newMapper.toJson(user);
 
-		Money resultMoney = newMapper.fromJson(jsonString, Money.class);
+		assertEquals("{\"name\":\"foo\",\"salary\":\"1.2\"}", jsonString);
 
-		assertEquals(new Double(1.2), resultMoney.value);
+		//from
+		User resultUser = newMapper.fromJson(jsonString, User.class);
+		assertEquals(new Double(1.2), resultUser.getSalary().value);
 
 	}
 
@@ -554,59 +681,4 @@ public class JsonDemo {
 		}
 	}
 
-	/**
-	 * 測試輸出jsonp格式內容.
-	 */
-	@Test
-	public void jsonp() {
-		TestBean bean = new TestBean("foo");
-		String jsonpString = mapper.toJsonP("callback", bean);
-		assertEquals("callback({\"name\":\"foo\"})", jsonpString);
-	}
-
-	/**
-	 * 演示Bean, 主要演示不同風格的Mapper對Null值，初始化後沒改變過的屬性值的處理.
-	 */
-	public static class TestBean {
-
-		private String name;
-		private String defaultValue = "hello"; //默认值没被修改过的属性，可能会不序列化
-		private String nullValue = null; //空值的据行，可能会不序列化
-
-		public TestBean() {
-		}
-
-		public TestBean(String name) {
-			this.name = name;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void setName(String name) {
-			this.name = name;
-		}
-
-		public String getDefaultValue() {
-			return defaultValue;
-		}
-
-		public void setDefaultValue(String defaultValue) {
-			this.defaultValue = defaultValue;
-		}
-
-		public String getNullValue() {
-			return nullValue;
-		}
-
-		public void setNullValue(String nullValue) {
-			this.nullValue = nullValue;
-		}
-
-		@Override
-		public String toString() {
-			return "TestBean [defaultValue=" + defaultValue + ", name=" + name + ", nullValue=" + nullValue + "]";
-		}
-	}
 }
