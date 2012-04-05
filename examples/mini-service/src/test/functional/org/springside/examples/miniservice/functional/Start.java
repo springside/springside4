@@ -22,9 +22,11 @@ public class Start {
 
 		System.out.println("Server running at " + BASE_URL);
 		System.out.println("Hit Enter in console to stop server");
-		if (System.in.read() != 0) {
-			server.stop();
-			System.out.println("Server stopped");
-		}
+
+		//wait for close
+		System.in.read();
+		server.stop();
+		server.join();
+		System.out.println("Server stopped");
 	}
 }
