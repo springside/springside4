@@ -59,6 +59,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	@Test
+	@Category(Smoke.class)
 	public void createUser() {
 		User user = AccountData.getRandomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);
