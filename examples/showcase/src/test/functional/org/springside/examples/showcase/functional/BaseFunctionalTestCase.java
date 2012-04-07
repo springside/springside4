@@ -1,13 +1,17 @@
 package org.springside.examples.showcase.functional;
 
-import javax.sql.DataSource;
+import java.net.URL;
+import java.sql.Driver;
 
 import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
-import org.springside.modules.test.spring.SpringContextHolder;
+import org.springside.modules.utils.PropertiesLoader;
 
 /**
  * 功能测试基类.
@@ -18,25 +22,41 @@ import org.springside.modules.test.spring.SpringContextHolder;
  */
 @Ignore
 public class BaseFunctionalTestCase {
+	protected static String baseUrl;
 
 	protected static Server jettyServer;
 
-	protected static DataSource dataSource;
+	protected static SimpleDriverDataSource dataSource;
+
+	protected static PropertiesLoader propertiesLoader = new PropertiesLoader(
+			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
+
+	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
-	public static void startAll() throws Exception {
-		startJetty();
+	public static void beforeClass() throws Exception {
+		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
+
+		Boolean isEmbedded = Boolean.valueOf(propertiesLoader.getProperty("embedded", "true"));
+
+		if (isEmbedded) {
+			startJettyOnce();
+		}
+
+		buildDataSourceOnce();
 		reloadSampleData();
 	}
 
 	/**
 	 * 启动Jetty服务器, 仅启动一次.
 	 */
-	protected static void startJetty() throws Exception {
+	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
-			jettyServer = JettyFactory.buildTestServer(Start.TEST_PORT, Start.CONTEXT);
+			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT,
+					"src/test/resources/web.xml");
 			jettyServer.start();
-			dataSource = SpringContextHolder.getBean("dataSource");
+
+			logger.info("Jetty Server started");
 		}
 	}
 
@@ -45,5 +65,17 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void reloadSampleData() throws Exception {
 		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
+	}
+
+	private static void buildDataSourceOnce() throws ClassNotFoundException {
+		if (dataSource == null) {
+			dataSource = new SimpleDriverDataSource();
+			dataSource.setDriverClass((Class<? extends Driver>) Class.forName(propertiesLoader
+					.getProperty("jdbc.driver")));
+			dataSource.setUrl(propertiesLoader.getProperty("jdbc.url"));
+			dataSource.setUsername(propertiesLoader.getProperty("jdbc.username"));
+			dataSource.setPassword(propertiesLoader.getProperty("jdbc.password"));
+
+		}
 	}
 }

@@ -90,12 +90,12 @@ public class Fixtures {
 	protected static IDatabaseConnection getConnection(DataSource dataSource) throws DatabaseUnitException,
 			SQLException {
 		Connection connection = dataSource.getConnection();
-		String driverName = connection.getMetaData().getDriverName();
-		if (StringUtils.contains(driverName, "h2")) {
+		String dbName = connection.getMetaData().getDatabaseProductName().toLowerCase();
+		if (StringUtils.contains(dbName, "h2")) {
 			return new H2Connection(connection, null);
-		} else if (StringUtils.contains(driverName, "mysql")) {
+		} else if (StringUtils.contains(dbName, "mysql")) {
 			return new MySqlConnection(connection, null);
-		} else if (StringUtils.contains(driverName, "oracle")) {
+		} else if (StringUtils.contains(dbName, "oracle")) {
 			return new OracleConnection(connection, null);
 		} else {
 			return new DatabaseConnection(connection);

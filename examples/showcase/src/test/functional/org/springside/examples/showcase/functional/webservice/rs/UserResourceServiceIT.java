@@ -8,7 +8,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
-import org.springside.examples.showcase.functional.Start;
 import org.springside.examples.showcase.functional.category.Smoke;
 import org.springside.examples.showcase.webservice.rs.client.UserResourceClient;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
@@ -22,7 +21,7 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	@BeforeClass
 	public static void setUpClient() {
 		client = new UserResourceClient();
-		client.setBaseUrl(Start.TEST_BASE_URL + "/rs");
+		client.setBaseUrl(baseUrl + "/rs");
 	}
 
 	/**

@@ -15,7 +15,7 @@ public class Start {
 	public static final String BASE_URL = "http://localhost:8080/mini-service";
 
 	public static void main(String[] args) throws Exception {
-		Server server = JettyFactory.buildNormalServer(PORT, CONTEXT);
+		Server server = JettyFactory.createServer(PORT, CONTEXT);
 		server.start();
 
 		System.out.println("Server running at " + BASE_URL);

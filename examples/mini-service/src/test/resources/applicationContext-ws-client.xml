@@ -6,6 +6,16 @@
 	default-lazy-init="true">
 	<description>Apache CXF Web Service Client端配置</description>
 
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="locations">
+			<list>
+				<value>classpath*:/application.functional.properties</value>
+				<value>classpath*:/application.functional-local.properties</value>
+			</list>
+		</property>
+	</bean>
+	
 	<jaxws:client id="accountWebServiceClient" serviceClass="org.springside.examples.miniservice.webservice.ws.AccountWebService"
-		address="http://localhost:8084/mini-service/ws/accountservice" />
+		address="${baseUrl}/ws/accountservice" />
 </beans>

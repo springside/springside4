@@ -24,19 +24,19 @@ import org.springside.modules.utils.PropertiesLoader;
 @Ignore
 public class BaseFunctionalTestCase {
 
+	protected static String baseUrl;
+
 	protected static Server jettyServer;
 
 	protected static SimpleDriverDataSource dataSource;
 
-	protected static String baseUrl;
+	protected static PropertiesLoader propertiesLoader = new PropertiesLoader(
+			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
 
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
-	private static PropertiesLoader propertiesLoader = new PropertiesLoader(
-			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
-
 	@BeforeClass
-	public static void startAll() throws Exception {
+	public static void beforeClass() throws Exception {
 		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
 
 		Boolean isEmbedded = Boolean.valueOf(propertiesLoader.getProperty("embedded", "true"));
@@ -54,8 +54,10 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
-			jettyServer = JettyFactory.buildTestServer(new URL(baseUrl).getPort(), Start.CONTEXT);
+			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT,
+					"src/test/resources/web.xml");
 			jettyServer.start();
+
 			logger.info("Jetty Server started");
 		}
 	}
@@ -68,7 +70,6 @@ public class BaseFunctionalTestCase {
 			dataSource.setUrl(propertiesLoader.getProperty("jdbc.url"));
 			dataSource.setUsername(propertiesLoader.getProperty("jdbc.username"));
 			dataSource.setPassword(propertiesLoader.getProperty("jdbc.password"));
-
 		}
 	}
 

@@ -116,7 +116,7 @@
 		<!-- 数据源配置,在测试环境使用JDBC直接连接 -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<!-- Connection Info -->
-			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />

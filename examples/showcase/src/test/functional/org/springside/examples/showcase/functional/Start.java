@@ -11,13 +11,11 @@ import org.springside.modules.test.functional.JettyFactory;
 public class Start {
 
 	public static final int PORT = 8080;
-	public static final int TEST_PORT = 8083;
 	public static final String CONTEXT = "/showcase";
 	public static final String BASE_URL = "http://localhost:8080/showcase";
-	public static final String TEST_BASE_URL = "http://localhost:8083/showcase";
 
 	public static void main(String[] args) throws Exception {
-		Server server = JettyFactory.buildNormalServer(PORT, CONTEXT);
+		Server server = JettyFactory.createServer(PORT, CONTEXT);
 		server.start();
 
 		System.out.println("Server running at " + BASE_URL);
