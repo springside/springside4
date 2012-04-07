@@ -58,13 +58,13 @@ public class BaseFunctionalTestCase {
 		buildDataSourceOnce();
 		reloadSampleData();
 
-		createSelenium();
+		createSeleniumOnce();
 		loginAsAdminIfNecessary();
 	}
 
 	@AfterClass
 	public static void afeterClass() throws Exception {
-		quitSelenium();
+		//quitSelenium();
 	}
 
 	/**
@@ -90,19 +90,24 @@ public class BaseFunctionalTestCase {
 	/**
 	 * 创建Selenium.
 	 */
-	protected static void createSelenium() throws Exception {
-		String driverName = propertiesLoader.getProperty("selenium.driver");
+	protected static void createSeleniumOnce() throws Exception {
 
-		WebDriver driver = WebDriverFactory.createDriver(driverName);
+		if (s == null) {
+			//根据配置创建Selenium driver.
+			String driverName = propertiesLoader.getProperty("selenium.driver");
 
-		s = new Selenium2(driver, baseUrl);
-	}
+			WebDriver driver = WebDriverFactory.createDriver(driverName);
 
-	/**
-	 * 退出Selenium.
-	 */
-	protected static void quitSelenium() {
-		s.quit();
+			s = new Selenium2(driver, baseUrl);
+
+			//注册在JVM退出时关闭Selenium的钩子.
+			Runtime.getRuntime().addShutdownHook(new Thread("Selenium Quit Hook") {
+				public void run() {
+					logger.info("Stoping Selenium");
+					s.quit();
+				}
+			});
+		}
 	}
 
 	/**
