@@ -32,21 +32,16 @@ public class JsonMapper {
 
 	private ObjectMapper mapper;
 
+	public JsonMapper() {
+		this(Include.ALWAYS);
+	}
+
 	public JsonMapper(Include include) {
 		mapper = new ObjectMapper();
 		//设置输出时包含属性的风格
 		mapper.setSerializationInclusion(include);
 		//设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		//禁止使用int代表Enum的order()來反序列化Enum,非常危險
-		mapper.enable(DeserializationFeature.FAIL_ON_NUMBERS_FOR_ENUMS);
-	}
-
-	/**
-	 * 创建输出全部属性到Json字符串的Mapper.
-	 */
-	public static JsonMapper buildNormalMapper() {
-		return new JsonMapper(Include.ALWAYS);
 	}
 
 	/**
@@ -71,6 +66,7 @@ public class JsonMapper {
 	}
 
 	/**
+	 * Object可以是POJO，也可以是Collection或数组。
 	 * 如果对象为Null, 返回"null".
 	 * 如果集合为空集合, 返回"[]".
 	 */
@@ -85,11 +81,13 @@ public class JsonMapper {
 	}
 
 	/**
+	 * 反序列化POJO或简单Collection如List<String>.
+	 * 
 	 * 如果JSON字符串为Null或"null"字符串, 返回Null.
 	 * 如果JSON字符串为"[]", 返回空集合.
 	 * 
-	 * 如需读取集合如List/Map, 且不是List<String>这种简单类型时,先使用函數constructParametricType构造类型.
-	 * @see #createCollectionType(Class, Class...)
+	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
+	 * @see #fromJson(String, JavaType)
 	 */
 	public <T> T fromJson(String jsonString, Class<T> clazz) {
 		if (StringUtils.isEmpty(jsonString)) {
@@ -105,10 +103,7 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 如果JSON字符串为Null或"null"字符串, 返回Null.
-	 * 如果JSON字符串为"[]", 返回空集合.
-	 * 
-	 * 如需读取集合如List/Map, 且不是List<String>这种简单类型时,先使用函數constructParametricType构造类型.
+	 * 反序列化复杂Collection如List<Bean>, 先使用函數createCollectionType构造类型,然后调用本函数.
 	 * @see #createCollectionType(Class, Class...)
 	 */
 	public <T> T fromJson(String jsonString, JavaType javaType) {
@@ -125,8 +120,9 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 構造泛型的Type如List<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
-	 *             Map<String,MyBean>则调用(HashMap.class,String.class, MyBean.class)
+	 * 構造泛型的Collection Type如:
+	 * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
+	 * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
 	 */
 	public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
 		return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
@@ -135,7 +131,7 @@ public class JsonMapper {
 	/**
 	 * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
 	 */
-	public <T> T update(T object, String jsonString) {
+	public <T> T update(String jsonString, T object) {
 		try {
 			return (T) mapper.readerForUpdating(object).readValue(jsonString);
 		} catch (JsonProcessingException e) {

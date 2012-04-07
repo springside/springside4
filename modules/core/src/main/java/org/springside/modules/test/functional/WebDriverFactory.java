@@ -61,6 +61,8 @@ public class WebDriverFactory {
 				cap = DesiredCapabilities.firefox();
 			} else if (BrowserType.ie.name().equals(driverType)) {
 				cap = DesiredCapabilities.internetExplorer();
+			} else if (BrowserType.chrome.name().equals(driverType)) {
+				cap = DesiredCapabilities.chrome();
 			}
 
 			try {

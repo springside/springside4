@@ -34,7 +34,7 @@ public class PropertiesLoader {
 
 	private Properties properties;
 
-	public PropertiesLoader(String... resourcesPaths) throws IOException {
+	public PropertiesLoader(String... resourcesPaths) {
 		properties = loadProperties(resourcesPaths);
 	}
 
@@ -53,10 +53,20 @@ public class PropertiesLoader {
 		return properties.getProperty(key);
 	}
 
+	public String getProperty(String key, String defaultValue) {
+		String result = getProperty(key);
+		if (result != null) {
+			return result;
+		} else {
+			return defaultValue;
+		}
+
+	}
+
 	/**
 	 * 载入多个文件, 文件路径使用Spring Resource格式.
 	 */
-	private Properties loadProperties(String... resourcesPaths) throws IOException {
+	private Properties loadProperties(String... resourcesPaths) {
 		Properties props = new Properties();
 
 		for (String location : resourcesPaths) {

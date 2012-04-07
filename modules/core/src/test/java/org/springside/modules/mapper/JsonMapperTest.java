@@ -140,7 +140,7 @@ public class JsonMapperTest {
 	@Test
 	public void threeTypeBinders() {
 		//打印全部属性
-		JsonMapper normalBinder = JsonMapper.buildNormalMapper();
+		JsonMapper normalBinder = new JsonMapper();
 		TestBean bean = new TestBean("A");
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalBinder.toJson(bean));
 

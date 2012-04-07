@@ -133,7 +133,7 @@ public class JsonDemo {
 		TestBean bean = new TestBean("A");
 
 		//打印全部属性
-		JsonMapper normalMapper = JsonMapper.buildNormalMapper();
+		JsonMapper normalMapper = new JsonMapper();
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalMapper.toJson(bean));
 
 		//不打印nullValue属性
@@ -198,7 +198,7 @@ public class JsonDemo {
 
 		TestBean bean = new TestBean();
 		bean.setDefaultValue("Foobar");
-		bean = mapper.update(bean, jsonString);
+		bean = mapper.update(jsonString, bean);
 		//name被赋值
 		assertEquals("A", bean.getName());
 		//DefaultValue不在Json串中，依然保留。
@@ -263,9 +263,9 @@ public class JsonDemo {
 		assertEquals(TestEnum.One, mapper.fromJson("\"One\"", TestEnum.class));
 
 		//使用enum.toString()
-		//注意，index會通過toString序列成字符串而不是int,否則又和順序號混淆.
+		//注意，index會通過toString序列成字符串而不是int,否則会和order()順序號混淆.
 		//注意配置必須在所有讀寫動作之前調用.
-		JsonMapper newMapper = JsonMapper.buildNormalMapper();
+		JsonMapper newMapper = new JsonMapper();
 		newMapper.enableEnumUseToString();
 		assertEquals("\"1\"", newMapper.toJson(TestEnum.One));
 		assertEquals(TestEnum.One, newMapper.fromJson("\"1\"", TestEnum.class));
