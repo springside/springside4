@@ -13,7 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.data.AccountData;
 import org.springside.examples.miniweb.entity.account.Group;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.modules.test.data.H2Fixtures;
+import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 /**
@@ -39,7 +39,7 @@ public class GroupDaoTest extends SpringTxTestCase {
 	 */
 	@Before
 	public void reloadSampleData() throws Exception {
-		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
 	}
 
 	/**

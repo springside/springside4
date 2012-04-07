@@ -12,7 +12,6 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
-import org.springside.examples.miniservice.functional.Start;
 import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
 import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
@@ -27,7 +26,7 @@ import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
 public class AccountWebServiceWithDynamicCreateClientIT extends BaseFunctionalTestCase {
 
 	public AccountWebService creatClient() {
-		String address = Start.TEST_BASE_URL + "/ws/accountservice";
+		String address = baseUrl + "/ws/accountservice";
 
 		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
 		proxyFactory.setAddress(address);

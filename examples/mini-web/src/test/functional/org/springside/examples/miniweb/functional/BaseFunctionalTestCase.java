@@ -10,9 +10,7 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springside.modules.test.data.H2Fixtures;
+import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
@@ -34,8 +32,6 @@ public class BaseFunctionalTestCase {
 	protected static DataSource dataSource;
 
 	protected static Selenium2 s;
-
-	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
 	public static void startAll() throws Exception {
@@ -66,7 +62,7 @@ public class BaseFunctionalTestCase {
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
+		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
 	}
 
 	/**

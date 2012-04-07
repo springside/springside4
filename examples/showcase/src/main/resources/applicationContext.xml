@@ -86,8 +86,8 @@
 		</bean>
 	
 		<!-- quartz使用的数据源配置 -->
-		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<property name="driverClassName" value="${quartz.jdbc.driver}" />
+		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${quartz.jdbc.driver}" />
 			<property name="url" value="${quartz.jdbc.url}" />
 			<property name="username" value="${quartz.jdbc.username}" />
 			<property name="password" value="${quartz.jdbc.password}" />
@@ -114,7 +114,7 @@
 		</bean>
 		
 		<!-- 数据源配置,在测试环境使用JDBC直接连接 -->
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -122,8 +122,8 @@
 			<property name="password" value="${jdbc.password}" />
 		</bean>
 	
-		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-			<property name="driverClassName" value="${quartz.jdbc.driver}" />
+		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${quartz.jdbc.driver}" />
 			<property name="url" value="${quartz.jdbc.url}" />
 			<property name="username" value="${quartz.jdbc.username}" />
 			<property name="password" value="${quartz.jdbc.password}" />
