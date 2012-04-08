@@ -37,8 +37,9 @@
 /support/maven-archetype/target/
 /support/maven-archetype/.settings/
 /support/maven-archetype/.project
-/support/sonar/target/
 /support/script
+/support/selenium-server/selenium-server-standalone-2.20.0.jar
+/support/sonar/target/
 /logs
 /target
 /TODO.txt

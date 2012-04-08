@@ -87,6 +87,9 @@ public class Fixtures {
 		}
 	}
 
+	/**
+	 * 从DataSource中取得新的Connection(不会参与原有事务)，并根据url转换为相应数据库的Connection.
+	 */
 	protected static IDatabaseConnection getConnection(DataSource dataSource) throws DatabaseUnitException,
 			SQLException {
 		Connection connection = dataSource.getConnection();
