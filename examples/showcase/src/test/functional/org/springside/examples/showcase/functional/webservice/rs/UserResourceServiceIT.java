@@ -28,6 +28,18 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	 * 演示与Shiro的结合.
 	 */
 	@Test
+	@Category(Smoke.class)
+	public void getAllUser() {
+		List<UserDTO> userList = client.getAllUser("admin", "admin");
+		assertTrue(userList.size() >= 6);
+		UserDTO admin = userList.iterator().next();
+		assertEquals("admin", admin.getLoginName());
+	}
+
+	/**
+	 * 演示与Shiro的结合.
+	 */
+	@Test
 	public void getAllUserWithWrongPassword() {
 		//wrong password
 		try {
@@ -39,6 +51,9 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 		fail("Exception should happen");
 	}
 
+	/**
+	 * 演示与Shiro的结合.
+	 */
 	@Test
 	public void getAllUserWithoutPermission() {
 		try {
@@ -48,15 +63,6 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 			return;
 		}
 		fail("Exception should happen");
-	}
-
-	@Test
-	@Category(Smoke.class)
-	public void getAllUser() {
-		List<UserDTO> userList = client.getAllUser("admin", "admin");
-		assertTrue(userList.size() >= 6);
-		UserDTO admin = userList.iterator().next();
-		assertEquals("admin", admin.getLoginName());
 	}
 
 	/**

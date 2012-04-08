@@ -23,9 +23,9 @@ import org.springside.modules.utils.PropertiesLoader;
 /**
  * 功能测试基类.
  * 
- * 在整个测试期间启动一次Jetty Server, 并在每个TestCase Class执行前重新载入默认数据.
- * 在每个TestCase Class执行前创建WebDriver，并在每个TestCase执行后关闭WebDriver.
- * 
+ * 在整个测试期间启动一次Jetty Server和 Selenium，在JVM退出时关闭两者。 
+ * 在每个TestCase Class执行前重新载入默认数据.
+ *  
  * @author calvin
  */
 @Ignore

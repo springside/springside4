@@ -23,6 +23,7 @@ public class UserManagerIT extends BaseSeleniumTestCase {
 		assertEquals("Showcase示例:综合演示用例", s.getTitle());
 	}
 
+	@Category(Smoke.class)
 	public void editUser() {
 		s.open("/");
 		s.click(By.linkText("综合演示"));
