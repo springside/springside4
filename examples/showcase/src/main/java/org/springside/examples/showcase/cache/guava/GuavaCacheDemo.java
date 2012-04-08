@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,8 +13,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
+import org.springside.examples.showcase.data.SampleDataRule;
 import org.springside.modules.log.MockLog4jAppender;
-import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -29,6 +30,9 @@ import com.google.common.cache.LoadingCache;
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class GuavaCacheDemo extends SpringTxTestCase {
+	@Rule
+	@Autowired
+	public SampleDataRule sampleDataRule;
 
 	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);
 
@@ -47,9 +51,6 @@ public class GuavaCacheDemo extends SpringTxTestCase {
 					}
 
 				});
-
-		//初始化数据
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
 
 		//插入appender用于assert。
 		MockLog4jAppender appender = new MockLog4jAppender();

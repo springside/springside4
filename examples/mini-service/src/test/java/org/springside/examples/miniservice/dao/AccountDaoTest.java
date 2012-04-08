@@ -5,14 +5,14 @@ import static org.junit.Assert.*;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniservice.data.AccountData;
+import org.springside.examples.miniservice.data.SampleDataRule;
 import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.entity.User;
-import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 import com.google.common.collect.Maps;
@@ -30,13 +30,9 @@ public class AccountDaoTest extends SpringTxTestCase {
 	@Autowired
 	private AccountDao accountDao;
 
-	/**
-	 * 载入测试数据, 数据在所有测试方法间共享.
-	 */
-	@Before
-	public void reloadSampleData() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
-	}
+	@Rule
+	@Autowired
+	public SampleDataRule sampleDataRule;
 
 	@Test
 	public void getDepartmentDetail() {

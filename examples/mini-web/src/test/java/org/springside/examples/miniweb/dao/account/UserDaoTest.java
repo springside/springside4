@@ -5,13 +5,13 @@ import static org.junit.Assert.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.data.AccountData;
+import org.springside.examples.miniweb.data.SampleDataRule;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 /**
@@ -29,10 +29,9 @@ public class UserDaoTest extends SpringTxTestCase {
 	@PersistenceContext
 	private EntityManager em;
 
-	@Before
-	public void reloadSampleData() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
-	}
+	@Rule
+	@Autowired
+	public SampleDataRule sampleDataRule;
 
 	@Test
 	//如果你需要真正插入数据库,将Rollback设为false
@@ -61,7 +60,6 @@ public class UserDaoTest extends SpringTxTestCase {
 
 		user = entityDao.findOne(user.getId());
 		assertNull(user);
-
 	}
 
 	//期望抛出ConstraintViolationException的异常.

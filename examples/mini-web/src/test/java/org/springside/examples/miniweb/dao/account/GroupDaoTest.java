@@ -5,15 +5,14 @@ import static org.junit.Assert.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.data.AccountData;
+import org.springside.examples.miniweb.data.SampleDataRule;
 import org.springside.examples.miniweb.entity.account.Group;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.modules.test.data.Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 /**
@@ -22,7 +21,6 @@ import org.springside.modules.test.spring.SpringTxTestCase;
  * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@ActiveProfiles("test")
 public class GroupDaoTest extends SpringTxTestCase {
 
 	@Autowired
@@ -34,19 +32,17 @@ public class GroupDaoTest extends SpringTxTestCase {
 	@PersistenceContext
 	private EntityManager em;
 
-	/**
-	 * 载入测试数据.
-	 */
-	@Before
-	public void reloadSampleData() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
-	}
+	@Rule
+	@Autowired
+	public SampleDataRule sampleDataRule;
 
 	/**
 	 * 测试删除权限组时删除用户-权限组的中间表.
+	 * @throws Exception 
 	 */
 	@Test
-	public void deleteGroup() {
+	public void deleteGroup() throws Exception {
+
 		//新增测试权限组并与admin用户绑定.
 		Group group = AccountData.getRandomGroup();
 		groupDao.save(group);

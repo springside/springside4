@@ -5,16 +5,16 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
 import javax.persistence.metamodel.Metamodel;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.examples.miniweb.data.SampleDataRule;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration()
 public class JpaMappingTest extends SpringTxTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(JpaMappingTest.class);
@@ -22,9 +22,12 @@ public class JpaMappingTest extends SpringTxTestCase {
 	@PersistenceContext
 	private EntityManager em;
 
+	@Rule
+	@Autowired
+	public SampleDataRule sampleDataRule;
+
 	@Test
 	public void allClassMapping() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();
