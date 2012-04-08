@@ -3,13 +3,10 @@ package org.springside.examples.showcase.schedule;
 import static org.junit.Assert.*;
 
 import org.junit.Ignore;
-import org.junit.Rule;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.examples.showcase.data.SampleDataRule;
 import org.springside.modules.log.MockLog4jAppender;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
@@ -19,10 +16,6 @@ import org.springside.modules.utils.Threads;
 @ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-jdk-timer.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class JdkTimerJobTest extends SpringTxTestCase {
-
-	@Rule
-	@Autowired
-	public SampleDataRule sampleDataRule;
 
 	@Test
 	public void scheduleJob() throws Exception {

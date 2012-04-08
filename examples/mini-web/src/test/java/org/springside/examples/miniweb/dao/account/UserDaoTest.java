@@ -5,12 +5,10 @@ import static org.junit.Assert.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.junit.Rule;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.data.AccountData;
-import org.springside.examples.miniweb.data.SampleDataRule;
 import org.springside.examples.miniweb.entity.account.User;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
@@ -28,10 +26,6 @@ public class UserDaoTest extends SpringTxTestCase {
 	private UserDao entityDao;
 	@PersistenceContext
 	private EntityManager em;
-
-	@Rule
-	@Autowired
-	public SampleDataRule sampleDataRule;
 
 	@Test
 	//如果你需要真正插入数据库,将Rollback设为false

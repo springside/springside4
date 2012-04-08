@@ -138,6 +138,11 @@
 		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/quartz.sql" />
 		</jdbc:initialize-database>
+
+		<bean class="org.springside.modules.test.data.DefaultDataInitializer" lazy-init="false">	
+			<property name="dataSource" ref="dataSource"/>
+			<property name="defaultDataFile" value="/data/sample-data.xml" />
+		</bean>
 	
 		<!-- SpringContextHolder定义 -->
 		<bean class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />	
