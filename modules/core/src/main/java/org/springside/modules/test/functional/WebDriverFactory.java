@@ -45,9 +45,7 @@ public class WebDriverFactory {
 		} else if (BrowserType.chrome.name().equals(driverName)) {
 			driver = new ChromeDriver();
 		} else if (BrowserType.htmlunit.name().equals(driverName)) {
-			driver = new HtmlUnitDriver();
-			//支持Javascript
-			((HtmlUnitDriver) driver).setJavascriptEnabled(true);
+			driver = new HtmlUnitDriver(true);
 		} else if (driverName.startsWith(BrowserType.remote.name())) {
 			String[] params = driverName.split(":");
 			Assert.isTrue(params.length == 4,
