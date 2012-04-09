@@ -79,10 +79,16 @@ public class PropertiesLoader {
 		return Integer.valueOf(getProperty(key, String.valueOf(defaultValue)));
 	}
 
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
 	public Boolean getBoolean(String key) {
 		return Boolean.valueOf(getProperty(key));
 	}
 
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
 		return Boolean.valueOf(getProperty(key, String.valueOf(defaultValue)));
 	}
