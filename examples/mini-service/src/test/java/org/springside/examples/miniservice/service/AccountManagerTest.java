@@ -19,6 +19,14 @@ public class AccountManagerTest extends SpringContextTestCase {
 	@Autowired
 	private AccountManager accountManager;
 
+	/*
+	* to avoid the non-English environment test failure on assertEquals.
+	*/
+    	@Before
+    	public void setUp() {
+        	LocaleContextHolder.setLocale(Locale.ENGLISH);
+    	}
+    
 	/**
 	 * 测试参数校验.
 	 */
