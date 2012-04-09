@@ -28,7 +28,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * 基于DBUnit初始化测试数据到数据库的工具类.
+ * 基于DBUnit初始化数据到数据库的工具类.
  */
 public class Fixtures {
 
