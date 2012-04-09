@@ -50,14 +50,14 @@ public class WebDriverFactoryTest {
 		driver = WebDriverFactory.createDriver("chrome");
 		assertTrue(driver instanceof ChromeDriver);
 
-		PowerMockito.whenNew(HtmlUnitDriver.class).withNoArguments().thenReturn(htmlUnitDriver);
+		PowerMockito.whenNew(HtmlUnitDriver.class).withArguments(true).thenReturn(htmlUnitDriver);
 		driver = WebDriverFactory.createDriver("htmlunit");
 		assertTrue(driver instanceof HtmlUnitDriver);
 
 		PowerMockito.whenNew(RemoteWebDriver.class)
-				.withArguments(new URL("http://localhost:3000/wd"), DesiredCapabilities.firefox())
+				.withArguments(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox())
 				.thenReturn(remoteWebDriver);
-		driver = WebDriverFactory.createDriver("remote:localhost:3000:firefox");
+		driver = WebDriverFactory.createDriver("remote:localhost:4444:firefox");
 		assertTrue(driver instanceof RemoteWebDriver);
 	}
 }

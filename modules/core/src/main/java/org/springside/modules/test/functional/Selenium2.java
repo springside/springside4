@@ -82,7 +82,11 @@ public class Selenium2 {
 	 * 退出Selenium.
 	 */
 	public void quit() {
-		driver.quit();
+		try {
+			driver.quit();
+		} catch (Exception e) {
+			System.err.println("Error happen while quit selenium :" + e.getMessage());
+		}
 	}
 
 	/**

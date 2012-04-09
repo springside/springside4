@@ -9,12 +9,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.modules.test.data.H2Fixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration()
 public class JpaMappingTest extends SpringTxTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(JpaMappingTest.class);
@@ -24,7 +21,6 @@ public class JpaMappingTest extends SpringTxTestCase {
 
 	@Test
 	public void allClassMapping() throws Exception {
-		H2Fixtures.reloadAllTable(dataSource, "/data/sample-data.xml");
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();

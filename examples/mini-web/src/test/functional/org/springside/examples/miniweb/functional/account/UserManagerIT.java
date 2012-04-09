@@ -40,6 +40,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	/**
 	 * 创建用户.
 	 */
+	@Category(Smoke.class)
 	@Test
 	public void createUser() {
 		//打开新增用户页面

@@ -21,7 +21,7 @@ public class JettyFactory {
 	/**
 	 * 创建用于开发运行调试的Jetty Server, 以src/main/webapp为Web应用目录.
 	 */
-	public static Server buildNormalServer(int port, String contextPath) {
+	public static Server createServer(int port, String contextPath) {
 		Server server = new Server(port);
 		server.setStopAtShutdown(true);
 
@@ -33,13 +33,11 @@ public class JettyFactory {
 	}
 
 	/**
-	 * 创建用于Functional Test的Jetty Server:
-	 * 1.以src/main/webapp为Web应用目录.
-	 * 2.以test/resources/web.xml指向applicationContext-test.xml创建测试环境.
+	 * 创建Jetty Server,以	以src/main/webapp为Web应用目录并重新制定web.xml路径。
 	 */
-	public static Server buildTestServer(int port, String contextPath) {
-		Server server = buildNormalServer(port, contextPath);
-		((WebAppContext) server.getHandler()).setDescriptor("src/test/resources/web.xml");
+	public static Server createServer(int port, String contextPath, String webxmlPath) {
+		Server server = createServer(port, contextPath);
+		((WebAppContext) server.getHandler()).setDescriptor(webxmlPath);
 		return server;
 	}
 }

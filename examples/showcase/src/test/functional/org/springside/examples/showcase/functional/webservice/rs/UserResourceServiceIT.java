@@ -8,7 +8,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
-import org.springside.examples.showcase.functional.Start;
 import org.springside.examples.showcase.functional.category.Smoke;
 import org.springside.examples.showcase.webservice.rs.client.UserResourceClient;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
@@ -22,7 +21,19 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	@BeforeClass
 	public static void setUpClient() {
 		client = new UserResourceClient();
-		client.setBaseUrl(Start.TEST_BASE_URL + "/rs");
+		client.setBaseUrl(baseUrl + "/rs");
+	}
+
+	/**
+	 * 演示与Shiro的结合.
+	 */
+	@Test
+	@Category(Smoke.class)
+	public void getAllUser() {
+		List<UserDTO> userList = client.getAllUser("admin", "admin");
+		assertTrue(userList.size() >= 6);
+		UserDTO admin = userList.iterator().next();
+		assertEquals("admin", admin.getLoginName());
 	}
 
 	/**
@@ -40,6 +51,9 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 		fail("Exception should happen");
 	}
 
+	/**
+	 * 演示与Shiro的结合.
+	 */
 	@Test
 	public void getAllUserWithoutPermission() {
 		try {
@@ -49,15 +63,6 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 			return;
 		}
 		fail("Exception should happen");
-	}
-
-	@Test
-	@Category(Smoke.class)
-	public void getAllUser() {
-		List<UserDTO> userList = client.getAllUser("admin", "admin");
-		assertTrue(userList.size() >= 6);
-		UserDTO admin = userList.iterator().next();
-		assertEquals("admin", admin.getLoginName());
 	}
 
 	/**

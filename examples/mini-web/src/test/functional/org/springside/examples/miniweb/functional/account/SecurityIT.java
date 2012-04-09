@@ -50,6 +50,7 @@ public class SecurityIT extends BaseFunctionalTestCase {
 		//强行访问无权限的url
 		s.open("/account/user/update/1");
 		assertTrue(s.getTitle().contains("403"));
-
+		//重新退出
+		s.open("/logout");
 	}
 }

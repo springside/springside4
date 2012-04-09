@@ -26,6 +26,9 @@ public class Collections3 {
 	private Collections3() {
 	}
 
+	/**
+	 * 返回a-b的集合.
+	 */
 	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
 		ArrayList<T> list = new ArrayList<T>(a);
 		for (Iterator it = b.iterator(); it.hasNext();) {
@@ -43,7 +46,7 @@ public class Collections3 {
 	 */
 	public static Map extractToMap(final Collection collection, final String keyPropertyName,
 			final String valuePropertyName) {
-		Map map = new HashMap();
+		Map map = new HashMap(collection.size());
 
 		try {
 			for (Object obj : collection) {
@@ -64,7 +67,7 @@ public class Collections3 {
 	 * @param propertyName 要提取的属性名.
 	 */
 	public static List extractToList(final Collection collection, final String propertyName) {
-		List list = new ArrayList();
+		List list = new ArrayList(collection.size());
 
 		try {
 			for (Object obj : collection) {

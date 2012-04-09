@@ -89,9 +89,9 @@
 			</property>
 		</bean>
 				
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<!-- Connection Info -->
-			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />
@@ -101,6 +101,11 @@
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
 		</jdbc:initialize-database>
 
+		<bean class="org.springside.modules.test.data.DefaultDataInitializer" lazy-init="false">	
+			<property name="dataSource" ref="dataSource"/>
+			<property name="defaultDataFile" value="/data/sample-data.xml" />
+		</bean>
+		
 		<!-- 以静态变量保存ApplicationContext -->
 		<bean class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />	 	
 	</beans>

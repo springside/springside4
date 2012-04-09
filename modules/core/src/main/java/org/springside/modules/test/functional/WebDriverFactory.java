@@ -32,7 +32,7 @@ public class WebDriverFactory {
 	 * 根据driverName创建各种WebDriver的简便方法.
 	 * 
 	 * 当持续集成服务器安装在非Windows机器上, 没有IE浏览器与XWindows时, 需要使用remote driver调用远程的Windows机器.
-	 * drivername如remote:192.168.0.2:3000:firefox, 此时要求远程服务器在http://192.168.0.2:3000/wd上启动selenium remote服务.
+	 * drivername如remote:192.168.0.2:4444:firefox, 此时要求远程服务器在http://192.168.0.2:4444/wd/hub上启动selenium remote服务.
 	 * @throws MalformedURLException 
 	 */
 	public static WebDriver createDriver(String driverName) {
@@ -45,11 +45,11 @@ public class WebDriverFactory {
 		} else if (BrowserType.chrome.name().equals(driverName)) {
 			driver = new ChromeDriver();
 		} else if (BrowserType.htmlunit.name().equals(driverName)) {
-			driver = new HtmlUnitDriver();
+			driver = new HtmlUnitDriver(true);
 		} else if (driverName.startsWith(BrowserType.remote.name())) {
 			String[] params = driverName.split(":");
 			Assert.isTrue(params.length == 4,
-					"Remote driver is not right, accept format is \"remote:localhost:3000:firefox\", but the input is\""
+					"Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
 							+ driverName + "\"");
 
 			String remoteHost = params[1];
@@ -61,10 +61,12 @@ public class WebDriverFactory {
 				cap = DesiredCapabilities.firefox();
 			} else if (BrowserType.ie.name().equals(driverType)) {
 				cap = DesiredCapabilities.internetExplorer();
+			} else if (BrowserType.chrome.name().equals(driverType)) {
+				cap = DesiredCapabilities.chrome();
 			}
 
 			try {
-				driver = new RemoteWebDriver(new URL("http://" + remoteHost + ":" + remotePort + "/wd"), cap);
+				driver = new RemoteWebDriver(new URL("http://" + remoteHost + ":" + remotePort + "/wd/hub"), cap);
 			} catch (MalformedURLException e) {
 				Exceptions.unchecked(e);
 			}
