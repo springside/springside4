@@ -2,9 +2,12 @@ package org.springside.examples.miniservice.service;
 
 import static org.junit.Assert.*;
 
+import java.util.Locale;
+
 import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,11 +25,11 @@ public class AccountManagerTest extends SpringContextTestCase {
 	/*
 	* to avoid the non-English environment test failure on assertEquals.
 	*/
-    	@Before
-    	public void setUp() {
-        	LocaleContextHolder.setLocale(Locale.ENGLISH);
-    	}
-    
+	@Before
+	public void setDefaultLocale() {
+		Locale.setDefault(Locale.ENGLISH);
+	}
+
 	/**
 	 * 测试参数校验.
 	 */
@@ -51,6 +54,5 @@ public class AccountManagerTest extends SpringContextTestCase {
 			assertEquals("email not a well-formed email address",
 					StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ","));
 		}
-
 	}
 }
