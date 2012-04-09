@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
-import org.springside.modules.utils.Reflections;
 
 public class ReflectionsTest {
 

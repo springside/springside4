@@ -8,7 +8,6 @@ import java.util.Map;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springside.modules.web.Servlets;
 
 public class ServletsTest {
 

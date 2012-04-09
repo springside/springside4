@@ -6,8 +6,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.log.Log4jMBean;
-import org.springside.modules.log.MockLog4jAppender;
 
 public class Log4jMBeanTest {
 

@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.service.ServiceException;
-import org.springside.examples.miniweb.service.account.AccountManager;
 import org.springside.modules.test.support.ShiroTestHelper;
 
 /**

@@ -13,9 +13,9 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.input.ReaderInputStream;
 import org.apache.commons.io.output.WriterOutputStream;
 import org.junit.Test;
+import org.springside.modules.utils.Exceptions;
 
 import com.google.common.base.Charsets;
-import org.springside.modules.utils.Exceptions;
 
 public class IODemo {
 

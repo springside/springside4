@@ -1,6 +1,6 @@
 package org.springside.examples.showcase.utilities.time;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.util.Locale;
 
