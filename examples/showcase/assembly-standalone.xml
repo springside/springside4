@@ -16,9 +16,9 @@
 			<scope>provided</scope>
 			<unpack>true</unpack>
 			<unpackOptions>
-			<excludes>
-				<exclude>META-INF/*</exclude>
-			</excludes>
+				<excludes>
+					<exclude>META-INF/*</exclude>
+				</excludes>
 			</unpackOptions>
 		</dependencySet>
 	</dependencySets>
@@ -37,6 +37,6 @@
 				<include>**/*/Main.class</include>
 			</includes>
 			<outputDirectory>/</outputDirectory>
-			</fileSet>
+		</fileSet>
 	</fileSets>
 </assembly>

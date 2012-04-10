@@ -14,6 +14,18 @@ public class Main {
 		String contextPath = "/showcase";
 		int port = Integer.getInteger("port", 8080);
 
+		Server server = createServer(contextPath, port);
+
+		try {
+			server.start();
+			server.join();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(100);
+		}
+	}
+
+	private static Server createServer(String contextPath, int port) {
 		//use Eclipse JDT compiler
 		System.setProperty("org.apache.jasper.compiler.disablejsr199", "true");
 
@@ -27,19 +39,13 @@ public class Main {
 		WebAppContext context = new WebAppContext(warFile, contextPath);
 		context.setServer(server);
 
+		//设置work dir,war包将解压到该目录，jsp编译后的文件也将放入其中。
 		String currentDir = new File(location.getPath()).getParent();
 		File workDir = new File(currentDir, "work");
 		context.setTempDirectory(workDir);
 
 		server.setHandler(context);
-
-		try {
-			server.start();
-			server.join();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(100);
-		}
+		return server;
 	}
 
 }

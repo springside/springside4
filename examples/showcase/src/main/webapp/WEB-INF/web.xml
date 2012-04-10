@@ -90,7 +90,7 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
-	<!-- Open Entity Manager in View filter-->
+	<!-- Open Entity Manager in View filter -->
 	<filter>
 		<filter-name>openEntityManagerInViewFilter</filter-name>
 		<filter-class>org.springframework.orm.jpa.support.OpenEntityManagerInViewFilter</filter-class>
