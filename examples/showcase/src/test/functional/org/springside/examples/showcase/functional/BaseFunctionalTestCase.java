@@ -28,8 +28,9 @@ public class BaseFunctionalTestCase {
 
 	protected static SimpleDriverDataSource dataSource;
 
-	protected static PropertiesLoader propertiesLoader = new PropertiesLoader(
-			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
+	protected static PropertiesLoader propertiesLoader = new PropertiesLoader("classpath:/application.properties",
+			"classpath:/application.local.properties", "classpath:/application.functional.properties",
+			"classpath:/application.functional-local.properties");
 
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
@@ -52,8 +53,10 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
-			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT,
-					"src/test/resources/web.xml");
+			//设定Spring的profile
+			System.setProperty("spring.profiles.active", "functional");
+
+			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT);
 			jettyServer.start();
 
 			logger.info("Jetty Server started");

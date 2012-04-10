@@ -31,13 +31,4 @@ public class JettyFactory {
 
 		return server;
 	}
-
-	/**
-	 * 创建Jetty Server,以	以src/main/webapp为Web应用目录并重新制定web.xml路径。
-	 */
-	public static Server createServer(int port, String contextPath, String webxmlPath) {
-		Server server = createServer(port, contextPath);
-		((WebAppContext) server.getHandler()).setDescriptor(webxmlPath);
-		return server;
-	}
 }

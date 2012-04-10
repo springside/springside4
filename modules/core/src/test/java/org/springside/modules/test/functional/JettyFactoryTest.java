@@ -19,7 +19,7 @@ public class JettyFactoryTest {
 
 	@Test
 	public void createTestServer() {
-		Server server = JettyFactory.createServer(1978, "core", "src/test/resources/web.xml");
+		Server server = JettyFactory.createServer(1978, "core");
 
 		assertEquals(1978, server.getConnectors()[0].getPort());
 		assertEquals("core", ((WebAppContext) server.getHandler()).getContextPath());

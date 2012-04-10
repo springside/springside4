@@ -319,11 +319,11 @@
 	</build>
 	
 	<profiles>
+		<!-- 仅执行smoke test-->
 		<profile>
 			<id>smoke-test</id>
 			<build>
 				<plugins>
-					<!-- 仅执行smoke test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -341,12 +341,12 @@
 				</plugins>
 			</build>
 		</profile>
-
+		
+		<!-- 执行所有functional test-->
 		<profile>
 			<id>integration-test</id>
 			<build>
 				<plugins>
-					<!-- 执行所有functional test-->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -363,7 +363,8 @@
 				</plugins>
 			</build>
 		</profile>
-			
+
+		<!-- 刷新开发环境数据库 -->			
 		<profile>
 			<id>refresh-db</id>
 			<build>
@@ -373,7 +374,8 @@
         				<artifactId>maven-antrun-plugin</artifactId>
         				<configuration>
               				<target>
-                				<property file="src/main/resources/application.properties" />
+                				<property file="src/main/resources/application.local.properties" />
+								<property file="src/main/resources/application.properties" />
 
 								<property name="sql.type" value="h2" />
 								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
