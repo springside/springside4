@@ -43,6 +43,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	/**
 	 * @see AccountWebService#getDepartmentDetail()
 	 */
+	@Override
 	public DepartmentResult getDepartmentDetail(Long id) {
 		try {
 			Department entity = accountManager.getDepartmentDetail(id);
@@ -64,6 +65,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	/**
 	 * @see AccountWebService#searchUser()
 	 */
+	@Override
 	public UserListResult searchUser(String loginName, String name) {
 		try {
 			List<User> entityList = accountManager.searchUser(loginName, name);
@@ -80,6 +82,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	/**
 	 * @see AccountWebService#createUser()
 	 */
+	@Override
 	public IdResult createUser(UserDTO user) {
 		try {
 			User userEntity = BeanMapper.map(user, User.class);

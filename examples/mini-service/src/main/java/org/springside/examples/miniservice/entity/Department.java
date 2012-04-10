@@ -2,7 +2,6 @@ package org.springside.examples.miniservice.entity;
 
 import java.util.List;
 
-
 import com.google.common.collect.Lists;
 
 /**

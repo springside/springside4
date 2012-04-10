@@ -28,6 +28,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	/**
 	 * 认证回调函数, 登录时调用.
 	 */
+	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
 		User user = accountManager.findUserByLoginName(token.getUsername());
@@ -42,6 +43,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	/**
 	 * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
 	 */
+	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
 		User user = accountManager.findUserByLoginName(shiroUser.getLoginName());

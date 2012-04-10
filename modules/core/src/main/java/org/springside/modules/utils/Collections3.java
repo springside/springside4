@@ -8,7 +8,6 @@ package org.springside.modules.utils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +30,8 @@ public class Collections3 {
 	 */
 	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
 		ArrayList<T> list = new ArrayList<T>(a);
-		for (Iterator it = b.iterator(); it.hasNext();) {
-			list.remove(it.next());
+		for (Object element : b) {
+			list.remove(element);
 		}
 		return list;
 	}

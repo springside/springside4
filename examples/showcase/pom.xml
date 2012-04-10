@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
@@ -74,7 +75,7 @@
 			<groupId>org.hibernate.javax.persistence</groupId>
 			<artifactId>hibernate-jpa-2.0-api</artifactId>
 		</dependency>
-			
+
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -85,11 +86,11 @@
 			<artifactId>mybatis-spring</artifactId>
 		</dependency>
 
-		<!-- spring data access-->
+		<!-- spring data access -->
 		<dependency>
-	            <groupId>org.springframework.data</groupId>
-	            <artifactId>spring-data-jpa</artifactId>
-        </dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
@@ -119,7 +120,7 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
@@ -172,7 +173,7 @@
 		<dependency>
 			<groupId>com.sun.jersey.contribs</groupId>
 			<artifactId>jersey-multipart</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-client</artifactId>
@@ -228,7 +229,7 @@
 			<!-- 为演示而改为runtime -->
 			<scope>runtime</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>net.sf.ehcache</groupId>
 			<artifactId>ehcache-core</artifactId>
@@ -244,7 +245,7 @@
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
 			<artifactId>jackson-jaxrs-json-provider</artifactId>
 		</dependency>
-		
+
 		<!-- XML begin -->
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -269,7 +270,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
@@ -277,7 +278,7 @@
 		<dependency>
 			<groupId>log4jdbc</groupId>
 			<artifactId>log4jdbc4</artifactId>
-		</dependency>	
+		</dependency>
 		<!-- LOGGING end -->
 
 		<!-- GENERAL UTILS begin -->
@@ -303,13 +304,13 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 		<!-- GENERAL UTILS end -->
-		
-		<!-- OTHER UTILS begin-->
+
+		<!-- OTHER UTILS begin -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
@@ -329,8 +330,8 @@
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 		</dependency>
-		<!-- OTHER UTILS end-->
-		
+		<!-- OTHER UTILS end -->
+
 		<!-- TEST begin -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -338,17 +339,17 @@
 			<!-- for xxxDemo class -->
 			<scope>compile</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
 		</dependency>
-			
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -389,10 +390,12 @@
 		<dependency>
 			<groupId>org.eclipse.jetty.aggregate</groupId>
 			<artifactId>jetty-webapp</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-jsp</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- TEST end -->
 
@@ -430,9 +433,9 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<argLine>-Xmx256M</argLine>
-					<useSystemClassLoader>false</useSystemClassLoader>
 				</configuration>
 			</plugin>
+
 			<!-- cobertura插件 ,取消不需要计算覆盖率的类 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
@@ -477,7 +480,7 @@
 			<id>smoke-test</id>
 			<build>
 				<plugins>
-					<!-- 仅执行smoke test-->
+					<!-- 仅执行smoke test -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -486,11 +489,12 @@
 							<includes>
 								<include>**/*IT.java</include>
 							</includes>
+							<useSystemClassLoader>false</useSystemClassLoader>
 							<systemPropertyVariables>
 								<selenium.driver>${selenium.driver}</selenium.driver>
 							</systemPropertyVariables>
 						</configuration>
-					</plugin>		
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
@@ -499,7 +503,7 @@
 			<id>integration-test</id>
 			<build>
 				<plugins>
-					<!-- 执行所有functional test-->
+					<!-- 执行所有functional test -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -507,42 +511,45 @@
 							<includes>
 								<include>**/*IT.java</include>
 							</includes>
+							<useSystemClassLoader>false</useSystemClassLoader>
 							<systemPropertyVariables>
 								<selenium.driver>${selenium.driver}</selenium.driver>
 							</systemPropertyVariables>
 						</configuration>
-					</plugin>	
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
-	
+
 		<profile>
 			<id>refresh-db</id>
 			<build>
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-        				<artifactId>maven-antrun-plugin</artifactId>
-        				<configuration>
-              				<target>
-                				<property file="src/main/resources/application.properties" />
+						<artifactId>maven-antrun-plugin</artifactId>
+						<configuration>
+							<target>
+								<property file="src/main/resources/application.properties" />
 
 								<property name="sql.type" value="h2" />
 								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
 
 								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-                				
-                				<echo>Waiting for the h2 server start...</echo>
-                				<waitfor maxwait="500" maxwaitunit="second">
-							        <and>
-							            <socket server="localhost" port="9092"/>
-							        </and>
+
+								<echo>Waiting for the h2 server start...</echo>
+								<waitfor maxwait="500" maxwaitunit="second">
+									<and>
+										<socket server="localhost" port="9092" />
+									</and>
 								</waitfor>
-                				<echo>The h2 server started.</echo>
-                				<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
+								<echo>The h2 server started.</echo>
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
+									src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
-                				<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}" src="src/main/resources/sql/${sql.type}/quartz.sql" onerror="continue">
+								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"
+									src="src/main/resources/sql/${sql.type}/quartz.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
 
@@ -551,13 +558,45 @@
 										<property name="datatypeFactory" value="${dbunit.datatype}" />
 									</dbconfig>
 									<classpath refid="maven.test.classpath" />
-									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat" transaction="true"/>
-								</dbunit>                				
-              				</target>
-            			</configuration>
+									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat" transaction="true" />
+								</dbunit>
+							</target>
+						</configuration>
 					</plugin>
 				</plugins>
 			</build>
-		</profile>	
+		</profile>
+
+		<profile>
+			<id>standalone</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<appendAssemblyId>true</appendAssemblyId>
+									<useProjectArtifact>false</useProjectArtifact>
+									<descriptors>
+										<descriptor>assembly-standalone.xml</descriptor>
+									</descriptors>
+									<archive>
+										<manifest>
+											<mainClass>org.springside.examples.showcase.Main</mainClass>
+										</manifest>
+									</archive>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>

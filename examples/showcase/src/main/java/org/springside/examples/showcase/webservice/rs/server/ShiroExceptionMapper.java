@@ -10,6 +10,7 @@ import org.springside.modules.rest.jersey.Jerseys;
 
 @Provider
 public class ShiroExceptionMapper implements ExceptionMapper<UnauthorizedException> {
+	@Override
 	public Response toResponse(UnauthorizedException ex) {
 		return Jerseys.buildTextResponse(Status.UNAUTHORIZED, ex.getMessage());
 	}

@@ -20,6 +20,7 @@ import org.springside.modules.utils.Collections3;
 public class GroupListEditor extends PropertyEditorSupport {
 	private AccountManager accountManager;
 
+	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		String[] ids = StringUtils.split(text, ",");
 		List<Group> groups = new ArrayList<Group>();

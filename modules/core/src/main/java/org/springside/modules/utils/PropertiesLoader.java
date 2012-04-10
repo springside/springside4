@@ -53,6 +53,9 @@ public class PropertiesLoader {
 		return properties.getProperty(key);
 	}
 
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
 	public String getProperty(String key, String defaultValue) {
 		String result = getProperty(key);
 		if (result != null) {
@@ -60,7 +63,34 @@ public class PropertiesLoader {
 		} else {
 			return defaultValue;
 		}
+	}
 
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
+	public Integer getInteger(String key) {
+		return Integer.valueOf(getProperty(key));
+	}
+
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
+	public Integer getInteger(String key, Integer defaultValue) {
+		return Integer.valueOf(getProperty(key, String.valueOf(defaultValue)));
+	}
+
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
+	public Boolean getBoolean(String key) {
+		return Boolean.valueOf(getProperty(key));
+	}
+
+	/**
+	 * 取出Property，但以System的Property优先.
+	 */
+	public Boolean getBoolean(String key, boolean defaultValue) {
+		return Boolean.valueOf(getProperty(key, String.valueOf(defaultValue)));
 	}
 
 	/**

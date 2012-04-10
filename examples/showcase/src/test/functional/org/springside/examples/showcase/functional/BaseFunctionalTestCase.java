@@ -37,7 +37,7 @@ public class BaseFunctionalTestCase {
 	public static void beforeClass() throws Exception {
 		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
 
-		Boolean isEmbedded = Boolean.valueOf(propertiesLoader.getProperty("embedded", "true"));
+		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
 
 		if (isEmbedded) {
 			startJettyOnce();

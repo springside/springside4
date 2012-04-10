@@ -49,7 +49,7 @@ public class BaseFunctionalTestCase {
 
 		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
 
-		Boolean isEmbedded = Boolean.valueOf(propertiesLoader.getProperty("embedded", "true"));
+		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
 
 		if (isEmbedded) {
 			startJettyOnce();
@@ -102,6 +102,7 @@ public class BaseFunctionalTestCase {
 
 			//注册在JVM退出时关闭Selenium的钩子.
 			Runtime.getRuntime().addShutdownHook(new Thread("Selenium Quit Hook") {
+				@Override
 				public void run() {
 					logger.info("Stoping Selenium");
 					s.quit();

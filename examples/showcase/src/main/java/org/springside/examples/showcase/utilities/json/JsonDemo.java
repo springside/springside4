@@ -598,6 +598,7 @@ public class JsonDemo {
 			super(Money.class);
 		}
 
+		@Override
 		public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider) throws IOException,
 				JsonProcessingException {
 
@@ -630,6 +631,7 @@ public class JsonDemo {
 			return new Money(srcValue);
 		}
 
+		@Override
 		public String toString() {
 			return value.toString();
 		}
