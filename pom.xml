@@ -2,9 +2,9 @@
 <project>
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
-	<artifactId>springside-project</artifactId>
+	<artifactId>springside-parent</artifactId>
 	<version>4.0.0.RELEASE-SNAPSHOT</version>
-	<name>Springside</name>
+	<name>Springside :: Project</name>
 	<packaging>pom</packaging>
 
 	<properties>

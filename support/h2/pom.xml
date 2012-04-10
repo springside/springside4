@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-project</artifactId>
+		<artifactId>springside-parent</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
 	</parent>
