@@ -321,6 +321,12 @@
 			<artifactId>poi</artifactId>
 		</dependency>
 
+		<!-- jolokia Restful JMX -->
+		<dependency>
+		    <groupId>org.jolokia</groupId>
+		    <artifactId>jolokia-core</artifactId>
+		</dependency>
+
 		<!-- email -->
 		<dependency>
 			<groupId>javax.mail</groupId>

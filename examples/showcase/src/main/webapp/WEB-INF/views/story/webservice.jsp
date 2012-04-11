@@ -7,7 +7,7 @@
 <body>
 		<h2>Restful Service 高级演示</h2>
 
-		<h4>技术说明:</h4>
+		<h3>技术说明:</h3>
 		<ul>
 			<li>HttpBasic认证, 与Shiro权限控制结合.</li>
 			<li>Multi-part演示.</li>

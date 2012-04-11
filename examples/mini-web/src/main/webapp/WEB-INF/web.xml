@@ -69,7 +69,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping> 
 
-	<!-- Sitemesh filter -->
+	<!-- SiteMesh Web-Page Layout filter-->
 	<filter>
 		<filter-name>sitemeshFilter</filter-name>
 		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>

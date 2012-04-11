@@ -417,6 +417,14 @@
 			</dependency>
 			<!-- CACHE end -->
 
+			<!-- jolokia Restful JMX begin -->
+			<dependency>
+				<groupId>org.jolokia</groupId>
+				<artifactId>jolokia-core</artifactId>
+				<version>1.0.2</version>
+			</dependency>
+			<!-- jolokia end-->
+			
 			<!-- LOGGING begin -->
 			<!-- slf4j -->
 			<dependency>

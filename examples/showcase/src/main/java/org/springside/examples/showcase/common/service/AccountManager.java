@@ -14,6 +14,7 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.dao.UserMyBatisDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
+import org.springside.examples.showcase.jmx.ApplicationStatistics;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.examples.showcase.security.ShiroDbRealm.HashPassword;
 import org.springside.modules.mapper.JsonMapper;
@@ -43,6 +44,8 @@ public class AccountManager {
 
 	private ShiroDbRealm shiroRealm;
 
+	private ApplicationStatistics applicationStatistics;
+
 	/**
 	 * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
 	 * 
@@ -70,10 +73,19 @@ public class AccountManager {
 			shiroRealm.clearCachedAuthorizationInfo(user.getLoginName());
 		}
 
+		if (applicationStatistics != null) {
+			applicationStatistics.incrUpdateUserTimes();
+		}
+
 		sendNotifyMessage(user);
+
 	}
 
 	public List<User> getAllUser() {
+
+		if (applicationStatistics != null) {
+			applicationStatistics.incrUpdateUserTimes();
+		}
 		return (List<User>) userJpaDao.findAll();
 	}
 
@@ -192,5 +204,10 @@ public class AccountManager {
 	@Autowired(required = false)
 	public void setShiroRealm(ShiroDbRealm shiroRealm) {
 		this.shiroRealm = shiroRealm;
+	}
+
+	@Autowired(required = false)
+	public void setApplicationStatistics(ApplicationStatistics applicationStatistics) {
+		this.applicationStatistics = applicationStatistics;
 	}
 }
