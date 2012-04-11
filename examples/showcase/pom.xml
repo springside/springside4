@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springside</groupId>
-		<artifactId>springside-project</artifactId>
+		<artifactId>springside-parent</artifactId>
 		<version>4.0.0.RELEASE-SNAPSHOT</version>
 		<relativePath>../../</relativePath>
 	</parent>
@@ -476,11 +476,11 @@
 	</build>
 
 	<profiles>
+		<!-- 仅执行smoke test -->
 		<profile>
 			<id>smoke-test</id>
 			<build>
 				<plugins>
-					<!-- 仅执行smoke test -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -499,11 +499,11 @@
 			</build>
 		</profile>
 
+		<!-- 执行所有functional test -->
 		<profile>
 			<id>integration-test</id>
 			<build>
 				<plugins>
-					<!-- 执行所有functional test -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
@@ -521,6 +521,7 @@
 			</build>
 		</profile>
 
+		<!-- 刷新开发环境数据库 -->	
 		<profile>
 			<id>refresh-db</id>
 			<build>
@@ -530,20 +531,14 @@
 						<artifactId>maven-antrun-plugin</artifactId>
 						<configuration>
 							<target>
+								<property file="src/main/resources/application.local.properties" />
 								<property file="src/main/resources/application.properties" />
 
 								<property name="sql.type" value="h2" />
 								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
 
 								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-
-								<echo>Waiting for the h2 server start...</echo>
-								<waitfor maxwait="500" maxwaitunit="second">
-									<and>
-										<socket server="localhost" port="9092" />
-									</and>
-								</waitfor>
-								<echo>The h2 server started.</echo>
+						
 								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
 									src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />

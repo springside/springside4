@@ -108,9 +108,7 @@ public class Digests {
 				read = input.read(buffer, 0, bufferLength);
 			}
 
-			byte[] result = messageDigest.digest();
-			return result;
-
+			return messageDigest.digest();
 		} catch (GeneralSecurityException e) {
 			throw Exceptions.unchecked(e);
 		}

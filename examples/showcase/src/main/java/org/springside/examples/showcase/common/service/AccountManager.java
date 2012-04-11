@@ -136,8 +136,9 @@ public class AccountManager {
 	 */
 	public User findUserByNameInitialized(String name) {
 		User user = userJpaDao.findByName(name);
-		Jpas.initLazyProperty(user.getRoleList());
-
+		if (user != null) {
+			Jpas.initLazyProperty(user.getRoleList());
+		}
 		return user;
 	}
 

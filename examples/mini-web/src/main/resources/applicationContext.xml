@@ -48,8 +48,9 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
-	<beans profile="production">
-		<!-- 定义受环境影响易变的变量 -->
+	<!-- production/local development环境 -->
+ 	<beans profile="production">
+ 		<!-- 定义易受环境影响的变量 -->
 		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 			<property name="ignoreResourceNotFound" value="true" />
@@ -60,32 +61,35 @@
 					<!-- 本地开发环境配置 -->
 					<value>classpath*:/application.local.properties</value>
 					<!-- 服务器生产环境配置 -->
-					<value>file:/var/mini-web/application.server.properties</value>
+					<!-- <value>file:/opt/mini-service/application.server.properties</value> -->
 				</list>
 			</property>
 		</bean>
-
-		<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" lazy-init="false">
+		
+		<!-- 数据源配置, 使用应用中的DBCP数据库连接池 -->
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
 			<property name="password" value="${jdbc.password}" />
-	
+		
 			<!-- Connection Pooling Info -->
-			<property name="maxIdle" value="${dbcp.maxIdle}" />
 			<property name="maxActive" value="${dbcp.maxActive}" />
+			<property name="maxIdle" value="${dbcp.maxIdle}" />
 			<property name="defaultAutoCommit" value="false" />
+			<!-- 连接Idle一个小时后超时 -->
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
 			<property name="minEvictableIdleTimeMillis" value="3600000" />
 		</bean>
-
+		
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 	</beans>
 	
+	<!-- unit test环境 -->
 	<beans profile="test">
+		<!-- 定义易受环境影响的变量 -->
 		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
 			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
 			<property name="ignoreResourceNotFound" value="true" />
@@ -93,18 +97,15 @@
 				<list>
 					<!-- 标准配置 -->
 					<value>classpath*:/application.properties</value>
-					<!-- 本地开发环境配置 -->
-					<value>classpath*:/application.local.properties</value>
 					<!-- 测试环境配置 -->
 					<value>classpath*:/application.test.properties</value>
-					<!-- 本地测试环境配置 -->
-					<value>classpath*:/application.test-local.properties</value>
 				</list>
 			</property>
-		</bean>
-		
+		</bean>				
+	
 		<!-- 非Pool的简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<!-- Connection Info -->
 			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
@@ -115,13 +116,45 @@
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
 		</jdbc:initialize-database>
-
+	
+		<!-- 初始化默认数据 -->
 		<bean class="org.springside.modules.test.data.DefaultDataInitializer" lazy-init="false">	
 			<property name="dataSource" ref="dataSource"/>
 			<property name="defaultDataFile" value="/data/sample-data.xml" />
 		</bean>
+	</beans>
+	
+	<!-- functional test环境 -->
+	<beans profile="functional">
+		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
+			<property name="ignoreResourceNotFound" value="true" />
+			<property name="locations">
+				<list>
+					<!-- 标准配置 -->
+					<value>classpath*:/application.properties</value>
+					<!-- 本地标准配置 -->
+					<value>classpath*:/application.local.properties</value>
+					<!-- 测试环境配置 -->
+					<value>classpath*:/application.functional.properties</value>
+					<!-- 本地测试环境配置 -->
+					<value>classpath*:/application.functional-local.properties</value>
+				</list>
+			</property>
+		</bean>
 
-		<!-- 以静态变量保存ApplicationContext -->
-		<bean class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />	 	
+		<!-- 非Pool的简单data source -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<!-- Connection Info -->
+			<property name="driverClass" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!-- 初始化数据结构 -->
+		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:sql/h2/schema.sql" />
+		</jdbc:initialize-database>
 	</beans>
 </beans>

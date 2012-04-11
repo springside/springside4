@@ -13,16 +13,11 @@ echo [Step 2] Generate Eclipse project files for all projects
 call %MVN% eclipse:clean eclipse:eclipse -Pall
 if errorlevel 1 goto error
 
-echo [Step 3] Start H2 Standalone database.
-cd support/h2
-start "H2 Database" %MVN% exec:java -PwithoutBrowser
-cd ..\..\
-
-echo [Step 4] Init schema and data for all example projects.
+echo [Step 3] Init schema and data for all example projects.
 call %MVN% antrun:run -Prefresh-db,examples
 if errorlevel 1 goto error
 
-echo [Step 5] Start all example projects.
+echo [Step 4] Start all example projects.
 cd examples\mini-service
 start "Mini-Service" %MVN% clean jetty:run -Djetty.port=8082
 if errorlevel 1 goto error
