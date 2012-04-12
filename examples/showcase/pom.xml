@@ -582,8 +582,6 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<appendAssemblyId>true</appendAssemblyId>
-									<useProjectArtifact>false</useProjectArtifact>
 									<descriptors>
 										<descriptor>assembly-standalone.xml</descriptor>
 									</descriptors>

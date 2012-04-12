@@ -6,7 +6,6 @@ import java.net.URL;
 import java.sql.Driver;
 
 import org.eclipse.jetty.server.Server;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openqa.selenium.By;
@@ -61,11 +60,6 @@ public class BaseFunctionalTestCase {
 
 		createSeleniumOnce();
 		loginAsAdminIfNecessary();
-	}
-
-	@AfterClass
-	public static void afeterClass() throws Exception {
-		//quitSelenium();
 	}
 
 	/**

@@ -31,6 +31,38 @@ public class Log4jManager {
 
 	private String projectLoggerName;
 
+	@ManagedAttribute(description = "Level of the root logger")
+	public String getRootLoggerLevel() {
+		Logger logger = Logger.getRootLogger();
+		return logger.getEffectiveLevel().toString();
+	}
+
+	@ManagedAttribute(description = "Level of the root logger")
+	public void setRootLoggerLevel(String newLevel) {
+		Logger logger = Logger.getRootLogger();
+		Level level = Level.toLevel(newLevel);
+		logger.setLevel(level);
+		managerLogger.info("设置Root Logger 级别为{}", newLevel);
+	}
+
+	/**
+	 * 获得项目默认logger的级别.
+	 * 项目默认logger名称通过#setProjectLoggerName(String)配置.
+	 */
+	@ManagedAttribute(description = "Project default logging level of the logger")
+	public String getProjectLoggerLevel() {
+		return getLoggerLevel(projectLoggerName);
+	}
+
+	/**
+	 * 设置项目默认logger的级别.
+	 * 项目默认logger名称通过#setProjectLoggerName(String)配置.
+	 */
+	@ManagedAttribute(description = "Project default logging level of the logger")
+	public void setProjectLoggerLevel(String newLevel) {
+		setLoggerLevel(projectLoggerName, newLevel);
+	}
+
 	/**
 	 * 获取Logger的日志级别.
 	 */
@@ -53,24 +85,6 @@ public class Log4jManager {
 		Level level = Level.toLevel(newLevel);
 		logger.setLevel(level);
 		managerLogger.info("设置{}级别为{}", loggerName, newLevel);
-	}
-
-	/**
-	 * 获得项目默认logger的级别.
-	 * 项目默认logger名称通过#setProjectLoggerName(String)配置.
-	 */
-	@ManagedAttribute(description = "Project default logging level of the logger")
-	public String getProjectLoggerLevel() {
-		return getLoggerLevel(projectLoggerName);
-	}
-
-	/**
-	 * 设置项目默认logger的级别.
-	 * 项目默认logger名称通过#setProjectLoggerName(String)配置.
-	 */
-	@ManagedAttribute(description = "Project default logging level of the logger")
-	public void setProjectLoggerLevel(String newLevel) {
-		setLoggerLevel(projectLoggerName, newLevel);
 	}
 
 	/**
