@@ -51,7 +51,11 @@ public class Log4jManager {
 	 */
 	@ManagedAttribute(description = "Project default logging level of the logger")
 	public String getProjectLoggerLevel() {
-		return getLoggerLevel(projectLoggerName);
+		if (projectLoggerName != null) {
+			return getLoggerLevel(projectLoggerName);
+		}
+
+		return null;
 	}
 
 	/**
@@ -60,7 +64,9 @@ public class Log4jManager {
 	 */
 	@ManagedAttribute(description = "Project default logging level of the logger")
 	public void setProjectLoggerLevel(String newLevel) {
-		setLoggerLevel(projectLoggerName, newLevel);
+		if (projectLoggerName != null) {
+			setLoggerLevel(projectLoggerName, newLevel);
+		}
 	}
 
 	/**

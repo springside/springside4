@@ -9,13 +9,15 @@
 
 	<h3>技术说明：</h3>
 	<ul>
-		<li>可运行war使用嵌入式的Jetty，在简便的容器外运行web应用</li>
+		<li>可运行war使用嵌入式的Jetty，简便地在容器外运行web应用.</li>
 	</ul>
 
 	<h3>用户故事：</h3>
 	<ul>
-		<li>在showcase中打包可运行war包的命令：mvn clean package -Pstandalone</li>
-		<li>运行war包的命令: java -jar showcase-4.x.x.standalone.war</li>
+		<li>在showcase中打包可运行war包的命令：<br/>
+		mvn clean package -Pstandalone</li>
+		
+		<li>运行war包的命令: <br/>java -jar showcase-4.x.x.standalone.war</li>
 	</ul>
 </body>
 </html>

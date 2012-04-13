@@ -11,9 +11,10 @@
 	<a href="${ctx}/story/security/">安全演示</a>
 	<a href="${ctx}/story/web/">Web演示</a>
 	<a href="${ctx}/story/webservice/">WebService演示</a>
+	<a href="${ctx}/log/console">日志控制演示</a>
 	<a href="${ctx}/story/jmx/">JMX演示</a>
 	<a href="${ctx}/story/executablewar/">可运行war包演示</a>
-	<a href="${ctx}/story/utilizes/">Utilizes演示</a>
+	<a href="${ctx}/story/utilizes/">工具类演示</a>
 	<shiro:guest>
     	<a href="${ctx}/login">登录</a>
 	</shiro:guest>
