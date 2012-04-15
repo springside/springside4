@@ -87,7 +87,7 @@ public class AccountManager {
 	public List<User> getAllUser() {
 
 		if (applicationStatistics != null) {
-			applicationStatistics.incrUpdateUserTimes();
+			applicationStatistics.incrListUserTimes();
 		}
 		return (List<User>) userJpaDao.findAll();
 	}

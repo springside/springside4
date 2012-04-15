@@ -44,6 +44,7 @@
 	<servlet>
 		<servlet-name>JerseyServlet</servlet-name>
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>JerseyServlet</servlet-name>
@@ -54,7 +55,7 @@
 	<servlet>
       <servlet-name>jolokia-agent</servlet-name>
       <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
-      <load-on-startup>2</load-on-startup>
+      <load-on-startup>3</load-on-startup>
     </servlet>
 
     <servlet-mapping>
