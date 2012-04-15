@@ -410,6 +410,10 @@
 			<groupId>org.perf4j</groupId>
 			<artifactId>perf4j</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>commons-jexl</groupId>
+			<artifactId>commons-jexl</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

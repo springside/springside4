@@ -764,12 +764,20 @@
 			</dependency>
 			<!-- TEST end -->
 
-			<!-- perf4j -->
+			<!-- perf4j begin-->
 			<dependency>
 				<groupId>org.perf4j</groupId>
 				<artifactId>perf4j</artifactId>
 				<version>0.9.16</version>
 			</dependency>
+			
+			<dependency>
+				<groupId>commons-jexl</groupId>
+				<artifactId>commons-jexl</artifactId>
+				<version>1.1</version>
+				<scope>runtime</scope>
+			</dependency>
+			<!-- perf4j end -->
 		</dependencies>
 	</dependencyManagement>
 

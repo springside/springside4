@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class AccountManager {
 	 * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
 	 * 
 	 */
+	@Profiled
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
@@ -81,6 +83,7 @@ public class AccountManager {
 
 	}
 
+	@Profiled
 	public List<User> getAllUser() {
 
 		if (applicationStatistics != null) {
@@ -104,6 +107,7 @@ public class AccountManager {
 		return (user.getId() != null && user.getId() == 1L);
 	}
 
+	@Profiled
 	public User getUser(Long id) {
 		return userJpaDao.findOne(id);
 	}
