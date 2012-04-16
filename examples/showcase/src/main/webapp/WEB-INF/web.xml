@@ -44,11 +44,24 @@
 	<servlet>
 		<servlet-name>JerseyServlet</servlet-name>
 		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>JerseyServlet</servlet-name>
 		<url-pattern>/rs/*</url-pattern>
 	</servlet-mapping>
+	
+	<!-- JMX JSON Agent servlet-->
+	<servlet>
+      <servlet-name>jolokia-agent</servlet-name>
+      <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
+      <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+      <servlet-name>jolokia-agent</servlet-name>
+      <url-pattern>/jolokia/*</url-pattern>
+    </servlet-mapping>
 
 	<!-- Content Servlet 配置 -->
 	<servlet>
@@ -100,7 +113,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-	<!-- Shiro filter -->
+	<!-- Shiro Security filter -->
 	<filter>
 		<filter-name>shiroFilter</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -112,7 +125,7 @@
 		<dispatcher>FORWARD</dispatcher>
 	</filter-mapping>
 
-	<!-- Cache Control Header Filter -->
+	<!-- Cache Control Header filter -->
 	<filter>
 		<filter-name>cacheControlHeaderFilter</filter-name>
 		<filter-class>org.springside.examples.showcase.web.CacheControlHeaderFilter</filter-class>
@@ -122,6 +135,7 @@
 		<url-pattern>/static/*</url-pattern>
 	</filter-mapping>
 
+	<!-- SiteMesh Web-Page Layout filter-->
 	<filter>
 		<filter-name>sitemeshFilter</filter-name>
 		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>

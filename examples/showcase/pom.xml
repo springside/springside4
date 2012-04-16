@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RELEASE-SNAPSHOT</version>
+		<version>4.0.0.RC3</version>
 		<relativePath>../../</relativePath>
 	</parent>
 
@@ -321,6 +321,12 @@
 			<artifactId>poi</artifactId>
 		</dependency>
 
+		<!-- jolokia Restful JMX -->
+		<dependency>
+		    <groupId>org.jolokia</groupId>
+		    <artifactId>jolokia-core</artifactId>
+		</dependency>
+
 		<!-- email -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -403,6 +409,10 @@
 		<dependency>
 			<groupId>org.perf4j</groupId>
 			<artifactId>perf4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-jexl</groupId>
+			<artifactId>commons-jexl</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -576,8 +586,6 @@
 									<goal>single</goal>
 								</goals>
 								<configuration>
-									<appendAssemblyId>true</appendAssemblyId>
-									<useProjectArtifact>false</useProjectArtifact>
 									<descriptors>
 										<descriptor>assembly-standalone.xml</descriptor>
 									</descriptors>

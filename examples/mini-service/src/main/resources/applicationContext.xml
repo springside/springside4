@@ -34,21 +34,9 @@
 
 	<!-- production/local development环境 -->
  	<beans profile="production">
- 		<!-- 定义易受环境影响的变量 -->
-		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-			<property name="ignoreResourceNotFound" value="true" />
-			<property name="locations">
-				<list>
-					<!-- 标准配置 -->
-					<value>classpath*:/application.properties</value>
-					<!-- 本地开发环境配置 -->
-					<value>classpath*:/application.local.properties</value>
-					<!-- 服务器生产环境配置 -->
-					<!-- <value>file:/opt/mini-service/application.server.properties</value> -->
-				</list>
-			</property>
-		</bean>
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.local.properties" />	
 		
 		<!-- 数据源配置, 使用应用中的DBCP数据库连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -73,19 +61,9 @@
 	
 	<!-- unit test环境 -->
 	<beans profile="test">
-		<!-- 定义易受环境影响的变量 -->
-		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-			<property name="ignoreResourceNotFound" value="true" />
-			<property name="locations">
-				<list>
-					<!-- 标准配置 -->
-					<value>classpath*:/application.properties</value>
-					<!-- 测试环境配置 -->
-					<value>classpath*:/application.test.properties</value>
-				</list>
-			</property>
-		</bean>				
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.test.properties" />			
 	
 		<!-- 非Pool的简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
@@ -110,22 +88,10 @@
 	
 	<!-- functional test环境 -->
 	<beans profile="functional">
-		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-			<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-			<property name="ignoreResourceNotFound" value="true" />
-			<property name="locations">
-				<list>
-					<!-- 标准配置 -->
-					<value>classpath*:/application.properties</value>
-					<!-- 本地标准配置 -->
-					<value>classpath*:/application.local.properties</value>
-					<!-- 测试环境配置 -->
-					<value>classpath*:/application.functional.properties</value>
-					<!-- 本地测试环境配置 -->
-					<value>classpath*:/application.functional-local.properties</value>
-				</list>
-			</property>
-		</bean>
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.functional.properties,
+          			  classpath*:/application.functional-local.properties" />
 
 		<!-- 非Pool的简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">

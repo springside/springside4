@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.perf4j.aop.Profiled;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.dao.UserMyBatisDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
+import org.springside.examples.showcase.jmx.ApplicationStatistics;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.examples.showcase.security.ShiroDbRealm.HashPassword;
 import org.springside.modules.mapper.JsonMapper;
@@ -43,12 +45,15 @@ public class AccountManager {
 
 	private ShiroDbRealm shiroRealm;
 
+	private ApplicationStatistics applicationStatistics;
+
 	/**
 	 * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
 	 * 
 	 * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
 	 * 
 	 */
+	@Profiled
 	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
@@ -70,10 +75,20 @@ public class AccountManager {
 			shiroRealm.clearCachedAuthorizationInfo(user.getLoginName());
 		}
 
+		if (applicationStatistics != null) {
+			applicationStatistics.incrUpdateUserTimes();
+		}
+
 		sendNotifyMessage(user);
+
 	}
 
+	@Profiled
 	public List<User> getAllUser() {
+
+		if (applicationStatistics != null) {
+			applicationStatistics.incrListUserTimes();
+		}
 		return (List<User>) userJpaDao.findAll();
 	}
 
@@ -92,6 +107,7 @@ public class AccountManager {
 		return (user.getId() != null && user.getId() == 1L);
 	}
 
+	@Profiled
 	public User getUser(Long id) {
 		return userJpaDao.findOne(id);
 	}
@@ -192,5 +208,10 @@ public class AccountManager {
 	@Autowired(required = false)
 	public void setShiroRealm(ShiroDbRealm shiroRealm) {
 		this.shiroRealm = shiroRealm;
+	}
+
+	@Autowired(required = false)
+	public void setApplicationStatistics(ApplicationStatistics applicationStatistics) {
+		this.applicationStatistics = applicationStatistics;
 	}
 }
