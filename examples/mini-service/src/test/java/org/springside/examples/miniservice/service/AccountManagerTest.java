@@ -45,6 +45,7 @@ public class AccountManagerTest extends SpringContextTestCase {
 			assertEquals("loginName may not be empty",
 					StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ','));
 		}
+
 		User userDTOWitWrongEmail = AccountData.getRandomUser();
 		userDTOWitWrongEmail.setEmail("abc");
 		try {

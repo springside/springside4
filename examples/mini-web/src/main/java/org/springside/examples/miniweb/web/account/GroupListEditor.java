@@ -20,6 +20,9 @@ import org.springside.modules.utils.Collections3;
 public class GroupListEditor extends PropertyEditorSupport {
 	private AccountManager accountManager;
 
+	/**
+	 * Back From Page
+	 */
 	@Override
 	public void setAsText(String text) throws IllegalArgumentException {
 		String[] ids = StringUtils.split(text, ",");
@@ -31,6 +34,9 @@ public class GroupListEditor extends PropertyEditorSupport {
 		setValue(groups);
 	}
 
+	/**
+	 * Set to page
+	 */
 	@Override
 	public String getAsText() {
 		return Collections3.extractToString((List) getValue(), "id", ",");
