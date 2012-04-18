@@ -93,32 +93,15 @@
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
 		
-		<!-- 非Pool的简单data source -->
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<!-- Connection Info -->
-			<property name="driverClass" value="${jdbc.driver}" />
-			<property name="url" value="${jdbc.url}" />
-			<property name="username" value="${jdbc.username}" />
-			<property name="password" value="${jdbc.password}" />
-		</bean>
-	
-		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<property name="driverClass" value="${quartz.jdbc.driver}" />
-			<property name="url" value="${quartz.jdbc.url}" />
-			<property name="username" value="${quartz.jdbc.username}" />
-			<property name="password" value="${quartz.jdbc.password}" />
-		</bean>
-				
-		<!-- 初始化数据结构 -->
-		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+		<!-- 嵌入式内存中数据库 -->
+		<jdbc:embedded-database id="dataSource" type="H2">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-		</jdbc:initialize-database>
+		</jdbc:embedded-database>
 
-		<!-- 初始化数据结构 -->
-		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
+		<jdbc:embedded-database id="quartzDataSource" type="H2">
 			<jdbc:script location="classpath:sql/h2/quartz.sql" />
-		</jdbc:initialize-database>
-
+		</jdbc:embedded-database>
+		
 		<!-- 初始化默认数据 -->
 		<bean class="org.springside.modules.test.data.DataInitializer" lazy-init="false">	
 			<property name="dataSource" ref="dataSource"/>
@@ -133,7 +116,7 @@
           			  classpath*:/application.functional.properties,
           			  classpath*:/application.functional-local.properties" />	
 		
-		<!-- 非Pool的简单data source -->
+		<!-- 简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<!-- Connection Info -->
 			<property name="driverClass" value="${jdbc.driver}" />
@@ -154,7 +137,6 @@
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
 		</jdbc:initialize-database>
 
-		<!-- 初始化数据结构 -->
 		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/quartz.sql" />
 		</jdbc:initialize-database>

@@ -40,7 +40,7 @@ public class BaseFunctionalTestCase {
 	public static void beforeClass() throws Exception {
 		baseUrl = propertiesLoader.getProperty("baseUrl", MiniServiceServer.BASE_URL);
 
-		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
+		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
 
 		if (isEmbedded) {
 			startJettyOnce();

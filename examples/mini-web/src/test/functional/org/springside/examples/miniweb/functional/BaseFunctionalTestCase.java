@@ -49,7 +49,7 @@ public class BaseFunctionalTestCase {
 
 		baseUrl = propertiesLoader.getProperty("baseUrl", MiniWebServer.BASE_URL);
 
-		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
+		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
 
 		if (isEmbedded) {
 			startJettyOnce();

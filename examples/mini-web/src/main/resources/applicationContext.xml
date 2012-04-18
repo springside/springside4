@@ -81,19 +81,10 @@
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
 	
-		<!-- 非Pool的简单data source -->
-		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<!-- Connection Info -->
-			<property name="driverClass" value="${jdbc.driver}" />
-			<property name="url" value="${jdbc.url}" />
-			<property name="username" value="${jdbc.username}" />
-			<property name="password" value="${jdbc.password}" />
-		</bean>
-		
-		<!-- 初始化数据结构 -->
-		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+		<!-- 嵌入式内存中数据库 -->
+		<jdbc:embedded-database id="dataSource" type="H2">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-		</jdbc:initialize-database>
+		</jdbc:embedded-database>
 	
 		<!-- 初始化默认数据 -->
 		<bean class="org.springside.modules.test.data.DataInitializer" lazy-init="false">	
@@ -109,9 +100,8 @@
           			  classpath*:/application.functional.properties,
           			  classpath*:/application.functional-local.properties" />	
 
-		<!-- 非Pool的简单data source -->
+		<!-- 简单data source -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<!-- Connection Info -->
 			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
