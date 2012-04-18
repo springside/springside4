@@ -258,7 +258,7 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>add-source</id>
+						<id>add-functional-source</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-test-source</goal>

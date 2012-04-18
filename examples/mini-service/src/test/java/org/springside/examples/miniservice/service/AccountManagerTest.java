@@ -7,7 +7,7 @@ import java.util.Locale;
 import javax.validation.ConstraintViolationException;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -22,11 +22,9 @@ public class AccountManagerTest extends SpringContextTestCase {
 	@Autowired
 	private AccountManager accountManager;
 
-	/*
-	* to avoid the non-English environment test failure on assertEquals.
-	*/
-	@Before
-	public void setDefaultLocale() {
+	@BeforeClass
+	public static void beforeClass() {
+		//To avoid the non-English environment test failure on message asserts.
 		Locale.setDefault(Locale.ENGLISH);
 	}
 

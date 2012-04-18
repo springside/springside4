@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.dbunit.DatabaseUnitException;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -30,9 +30,9 @@ import org.springframework.core.io.ResourceLoader;
 /**
  * 基于DBUnit初始化数据到数据库的工具类.
  */
-public class Fixtures {
+public class DataFixtures {
 
-	private static Logger logger = LoggerFactory.getLogger(Fixtures.class);
+	private static Logger logger = LoggerFactory.getLogger(DataFixtures.class);
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
 	/**

@@ -8,7 +8,7 @@ import org.springside.modules.test.functional.JettyFactory;
  * 
  * @author calvin
  */
-public class Start {
+public class ShowcaseServer {
 
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/showcase";

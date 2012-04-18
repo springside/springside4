@@ -80,9 +80,9 @@
 		</jdbc:initialize-database>
 	
 		<!-- 初始化默认数据 -->
-		<bean class="org.springside.modules.test.data.DefaultDataInitializer" lazy-init="false">	
+		<bean class="org.springside.modules.test.data.DataInitializer" lazy-init="false">	
 			<property name="dataSource" ref="dataSource"/>
-			<property name="defaultDataFile" value="/data/sample-data.xml" />
+			<property name="dataFile" value="/data/sample-data.xml" />
 		</bean>
 	</beans>
 	

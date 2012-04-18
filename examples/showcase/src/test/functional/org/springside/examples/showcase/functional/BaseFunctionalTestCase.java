@@ -9,7 +9,7 @@ import org.junit.Ignore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.utils.PropertiesLoader;
 
@@ -36,7 +36,7 @@ public class BaseFunctionalTestCase {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
+		baseUrl = propertiesLoader.getProperty("baseUrl", ShowcaseServer.BASE_URL);
 
 		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
 
@@ -56,7 +56,7 @@ public class BaseFunctionalTestCase {
 			//设定Spring的profile
 			System.setProperty("spring.profiles.active", "functional");
 
-			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT);
+			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), ShowcaseServer.CONTEXT);
 			jettyServer.start();
 
 			logger.info("Jetty Server started");
@@ -64,13 +64,9 @@ public class BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 载入默认数据.
+	 * 构造数据源，仅构造一次.
 	 */
-	protected static void reloadSampleData() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
-	}
-
-	private static void buildDataSourceOnce() throws ClassNotFoundException {
+	protected static void buildDataSourceOnce() throws ClassNotFoundException {
 		if (dataSource == null) {
 			dataSource = new SimpleDriverDataSource();
 			dataSource.setDriverClass((Class<? extends Driver>) Class.forName(propertiesLoader
@@ -81,4 +77,12 @@ public class BaseFunctionalTestCase {
 
 		}
 	}
+
+	/**
+	 * 载入默认数据.
+	 */
+	protected static void reloadSampleData() throws Exception {
+		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
+	}
+
 }
