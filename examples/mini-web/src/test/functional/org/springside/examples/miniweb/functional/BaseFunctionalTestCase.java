@@ -38,9 +38,8 @@ public class BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
 
-	protected static PropertiesLoader propertiesLoader = new PropertiesLoader("classpath:/application.properties",
-			"classpath:/application.local.properties", "classpath:/application.functional.properties",
-			"classpath:/application.functional-local.properties");
+	protected static PropertiesLoader propertiesLoader = new PropertiesLoader(
+			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
 
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
