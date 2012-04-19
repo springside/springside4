@@ -10,7 +10,6 @@
 	<import resource="jms/applicationContext-jms-simple.xml" />
 	<import resource="jms/applicationContext-jms-advanced.xml" />
 	<import resource="jmx/applicationContext-jmx.xml" />
-	<import resource="perf4j/applicationContext-perf4j.xml" />
 	<import resource="schedule/applicationContext-jdk-timer.xml" />
 	<import resource="schedule/applicationContext-spring-cron.xml" />
 	<import resource="schedule/applicationContext-quartz-cron-local.xml" />

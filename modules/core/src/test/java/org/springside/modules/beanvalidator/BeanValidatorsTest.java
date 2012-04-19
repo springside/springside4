@@ -2,6 +2,7 @@ package org.springside.modules.beanvalidator;
 
 import static org.junit.Assert.*;
 
+import java.util.Locale;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -12,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,8 +25,15 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 	@Autowired
 	Validator validator;
 
+	@BeforeClass
+	public static void beforeClass() {
+		//To avoid the non-English environment test failure on message asserts.
+		Locale.setDefault(Locale.ENGLISH);
+	}
+
 	@Test
 	public void validate() {
+
 		Customer customer = new Customer();
 		customer.setEmail("aaa");
 

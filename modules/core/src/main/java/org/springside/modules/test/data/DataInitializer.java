@@ -4,23 +4,23 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 
-public class DefaultDataInitializer implements InitializingBean {
+public class DataInitializer implements InitializingBean {
 
 	private DataSource dataSource;
 
-	private String defaultDataFile;
+	private String dataFile;
 
 	public void setDataSource(DataSource dataSource) {
 		this.dataSource = dataSource;
 	}
 
-	public void setDefaultDataFile(String defaultDataFile) {
-		this.defaultDataFile = defaultDataFile;
+	public void setDataFile(String dataFile) {
+		this.dataFile = dataFile;
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		Fixtures.reloadData(dataSource, defaultDataFile);
+		DataFixtures.reloadData(dataSource, dataFile);
 	}
 
 }

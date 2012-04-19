@@ -11,7 +11,7 @@
 	<!-- 数据源配置,在测试环境使用单连接 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 		<property name="driverClass" value="org.h2.Driver" />
-		<property name="url" value="jdbc:h2:mem:springside-core-test" />
+		<property name="url" value="jdbc:h2:mem:springside-core-test;DB_CLOSE_DELAY=-1" />
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 	</bean>
@@ -27,5 +27,4 @@
 
 	<!-- JSR303 Validator定义 -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
 </beans>

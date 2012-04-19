@@ -6,7 +6,7 @@
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
 		<version>4.0.0.RC3</version>
-		<relativePath>../../</relativePath>
+		<relativePath>../../modules/parent</relativePath>
 	</parent>
 
 	<groupId>org.springside.examples</groupId>
@@ -404,16 +404,6 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- TEST end -->
-
-		<!-- perf4j -->
-		<dependency>
-			<groupId>org.perf4j</groupId>
-			<artifactId>perf4j</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>commons-jexl</groupId>
-			<artifactId>commons-jexl</artifactId>
-		</dependency>
 	</dependencies>
 
 	<build>

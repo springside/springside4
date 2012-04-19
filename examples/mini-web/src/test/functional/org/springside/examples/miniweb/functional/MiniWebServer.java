@@ -8,7 +8,7 @@ import org.springside.modules.test.functional.JettyFactory;
  * 
  * @author calvin
  */
-public class Start {
+public class MiniWebServer {
 
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/mini-web";

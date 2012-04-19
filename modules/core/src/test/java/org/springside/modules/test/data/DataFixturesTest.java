@@ -8,7 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTxTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
-public class FixturesTest extends SpringTxTestCase {
+public class DataFixturesTest extends SpringTxTestCase {
 
 	@Test
 	public void normal() throws BeansException, Exception {
@@ -16,13 +16,13 @@ public class FixturesTest extends SpringTxTestCase {
 
 		executeSqlScript("classpath:/schema.sql", false);
 
-		Fixtures.loadData(dataSource, "classpath:/test-data.xml");
+		DataFixtures.loadData(dataSource, "classpath:/test-data.xml");
 		assertEquals(6, countRowsInTable("SS_USER"));
 
-		Fixtures.reloadData(dataSource, "classpath:/test-data.xml");
+		DataFixtures.reloadData(dataSource, "classpath:/test-data.xml");
 		assertEquals(6, countRowsInTable("SS_USER"));
 
-		Fixtures.deleteData(dataSource, "classpath:/test-data.xml");
+		DataFixtures.deleteData(dataSource, "classpath:/test-data.xml");
 		assertEquals(0, countRowsInTable("SS_USER"));
 
 	}

@@ -13,7 +13,7 @@ import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springside.modules.test.data.Fixtures;
+import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
@@ -38,18 +38,17 @@ public class BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
 
-	protected static PropertiesLoader propertiesLoader = new PropertiesLoader("classpath:/application.properties",
-			"classpath:/application.local.properties", "classpath:/application.functional.properties",
-			"classpath:/application.functional-local.properties");
+	protected static PropertiesLoader propertiesLoader = new PropertiesLoader(
+			"classpath:/application.functional.properties", "classpath:/application.functional-local.properties");
 
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
 
-		baseUrl = propertiesLoader.getProperty("baseUrl", Start.BASE_URL);
+		baseUrl = propertiesLoader.getProperty("baseUrl", MiniWebServer.BASE_URL);
 
-		Boolean isEmbedded = propertiesLoader.getBoolean("embedded", true);
+		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
 
 		if (isEmbedded) {
 			startJettyOnce();
@@ -70,7 +69,7 @@ public class BaseFunctionalTestCase {
 			//设定Spring的profile
 			System.setProperty("spring.profiles.active", "functional");
 
-			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), Start.CONTEXT);
+			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), MiniWebServer.CONTEXT);
 			jettyServer.start();
 
 			logger.info("Jetty Server started");
@@ -78,10 +77,25 @@ public class BaseFunctionalTestCase {
 	}
 
 	/**
+	 * 构造数据源，仅构造一次.
+	 */
+	protected static void buildDataSourceOnce() throws ClassNotFoundException {
+		if (dataSource == null) {
+			dataSource = new SimpleDriverDataSource();
+			dataSource.setDriverClass((Class<? extends Driver>) Class.forName(propertiesLoader
+					.getProperty("jdbc.driver")));
+			dataSource.setUrl(propertiesLoader.getProperty("jdbc.url"));
+			dataSource.setUsername(propertiesLoader.getProperty("jdbc.username"));
+			dataSource.setPassword(propertiesLoader.getProperty("jdbc.password"));
+
+		}
+	}
+
+	/**
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		Fixtures.reloadData(dataSource, "/data/sample-data.xml");
+		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
 	}
 
 	/**
@@ -133,15 +147,4 @@ public class BaseFunctionalTestCase {
 		s.click(By.id("submit"));
 	}
 
-	private static void buildDataSourceOnce() throws ClassNotFoundException {
-		if (dataSource == null) {
-			dataSource = new SimpleDriverDataSource();
-			dataSource.setDriverClass((Class<? extends Driver>) Class.forName(propertiesLoader
-					.getProperty("jdbc.driver")));
-			dataSource.setUrl(propertiesLoader.getProperty("jdbc.url"));
-			dataSource.setUsername(propertiesLoader.getProperty("jdbc.username"));
-			dataSource.setPassword(propertiesLoader.getProperty("jdbc.password"));
-
-		}
-	}
 }
