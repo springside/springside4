@@ -12,35 +12,13 @@
 		<version>4.0.0.RC3</version>
 		<relativePath>modules/parent</relativePath>
 	</parent>
-	<profiles>
-		<profile>
-			<id>all</id>
-			<modules>
-					<module>modules/parent</module>
-					<module>modules/core</module>
-					<module>modules/extension</module>
-					<module>examples/mini-service</module>
-					<module>examples/mini-web</module>
-					<module>examples/showcase</module>
-			</modules>
-		</profile>
-	  
-		<profile>
-			<id>modules</id>
-			<modules>
-					<module>modules/parent</module>
-					<module>modules/core</module>
-					<module>modules/extension</module>
-			</modules>
-		</profile>
-	  
-		<profile>
-			<id>examples</id>
-			<modules>
-				<module>examples/mini-service</module>
-				<module>examples/mini-web</module>
-				<module>examples/showcase</module>
-			</modules>
-		</profile>
-	</profiles>
+
+	<modules>
+		<module>modules/parent</module>
+		<module>modules/core</module>
+		<module>modules/extension</module>
+		<module>examples/mini-service</module>
+		<module>examples/mini-web</module>
+		<module>examples/showcase</module>
+	</modules>
 </project>

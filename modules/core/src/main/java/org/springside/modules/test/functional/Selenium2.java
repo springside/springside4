@@ -41,6 +41,18 @@ public class Selenium2 {
 		this(driver, "");
 	}
 
+	/**
+	 * 注册在JVM退出时关闭Selenium的钩子。
+	 */
+	public void setStopAtShutdown() {
+		Runtime.getRuntime().addShutdownHook(new Thread("Selenium Quit Hook") {
+			@Override
+			public void run() {
+				quit();
+			}
+		});
+	}
+
 	// Driver 函數  //
 	/**
 	 * 打开地址,如果url为相对地址, 自动添加baseUrl.
@@ -287,4 +299,5 @@ public class Selenium2 {
 	public String getTable(By by, int rowIndex, int columnIndex) {
 		return getTable(driver.findElement(by), rowIndex, columnIndex);
 	}
+
 }
