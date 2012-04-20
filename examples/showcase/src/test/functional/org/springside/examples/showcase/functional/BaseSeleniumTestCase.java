@@ -31,15 +31,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			WebDriver driver = WebDriverFactory.createDriver(driverName);
 
 			s = new Selenium2(driver, baseUrl);
-
-			//注册在JVM退出时关闭Selenium的钩子.
-			Runtime.getRuntime().addShutdownHook(new Thread("Selenium Quit Hook") {
-				@Override
-				public void run() {
-					logger.info("Stoping Selenium");
-					s.quit();
-				}
-			});
+			s.setStopAtShutdown();
 		}
 	}
 }

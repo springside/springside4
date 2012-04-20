@@ -15,6 +15,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
  */
 public class JettyFactory {
 
+	private static final String DEFAULT_WEBAPP_PATH = "src/main/webapp";
+
 	private JettyFactory() {
 	}
 
@@ -25,7 +27,7 @@ public class JettyFactory {
 		Server server = new Server(port);
 		server.setStopAtShutdown(true);
 
-		WebAppContext webContext = new WebAppContext("src/main/webapp", contextPath);
+		WebAppContext webContext = new WebAppContext(DEFAULT_WEBAPP_PATH, contextPath);
 		webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
 		server.setHandler(webContext);
 

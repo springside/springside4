@@ -277,5 +277,20 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>integration-test</id>
+			<build>
+				<plugins>
+					<!-- 屏蔽单元测试执行 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
