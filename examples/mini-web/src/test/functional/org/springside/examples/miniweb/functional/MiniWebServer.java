@@ -15,6 +15,10 @@ public class MiniWebServer {
 	public static final String BASE_URL = "http://localhost:8080/mini-web";
 
 	public static void main(String[] args) throws Exception {
+		//设定Spring的profile
+		System.setProperty("spring.profiles.active", "development");
+
+		//启动Jetty
 		Server server = JettyFactory.createServer(PORT, CONTEXT);
 		server.start();
 

@@ -3,8 +3,6 @@ package org.springside.examples.showcase.functional;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.openqa.selenium.WebDriver;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
 
@@ -19,8 +17,6 @@ import org.springside.modules.test.functional.WebDriverFactory;
 public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
-
-	private static Logger logger = LoggerFactory.getLogger(BaseSeleniumTestCase.class);
 
 	@BeforeClass
 	public static void createSeleniumOnce() throws Exception {

@@ -40,7 +40,7 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		 -->
-<!--
+
 		 <repository>
 			<id>offical</id>
 			<name>Maven Official Repository</name>
@@ -66,7 +66,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		-->
 	</repositories>
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
@@ -199,7 +198,7 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.1.0</version>
+				<version>1.1.1</version>
 			</dependency>
 
 			<!-- spring orm -->

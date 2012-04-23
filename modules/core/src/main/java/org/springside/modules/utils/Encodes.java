@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * 封装各种格式的编码解码工具类.
  * 
  * 1.Commons-Codec的 hex/base64 编码
+ * 2.自制的base62 编码
  * 3.Commons-Lang的xml/html/csv escape
  * 4.JDK提供的URLEncoder
  * 
@@ -26,8 +27,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 public class Encodes {
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
-	private static final char[] ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-			.toCharArray();
+	private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
 	private Encodes() {
 	}
@@ -77,7 +77,7 @@ public class Encodes {
 	public static String encodeBase62(byte[] input) {
 		char[] chars = new char[input.length];
 		for (int i = 0; i < input.length; i++) {
-			chars[i] = ALPHABET[((input[i] & 0xFF) % ALPHABET.length)];
+			chars[i] = BASE62[((input[i] & 0xFF) % BASE62.length)];
 		}
 		return new String(chars);
 	}
