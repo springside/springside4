@@ -26,7 +26,7 @@ import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.webservice.WsConstants;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.rest.jersey.Jerseys;
+import org.springside.modules.rest.RsResponse;
 
 import com.sun.jersey.multipart.MultiPart;
 
@@ -53,7 +53,7 @@ public class UserResourceService {
 			List<User> entityList = accountManager.getAllUserInitialized();
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
@@ -69,12 +69,12 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw Jerseys.buildException(Status.NOT_FOUND, message);
+				throw RsResponse.buildException(Status.NOT_FOUND, message);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
@@ -92,7 +92,7 @@ public class UserResourceService {
 
 			if (entity == null) {
 				String message = "用户不存在";
-				throw Jerseys.buildException(Status.NOT_FOUND, message);
+				throw RsResponse.buildException(Status.NOT_FOUND, message);
 			}
 
 			if ("html".equals(format)) {
@@ -105,7 +105,7 @@ public class UserResourceService {
 				return Response.ok(dto, MediaType.APPLICATION_JSON).build();
 			}
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
@@ -128,7 +128,7 @@ public class UserResourceService {
 
 		if (userName == null) {
 			//抛出自定义的异常450
-			throw Jerseys.buildException(450, "用戶名既不在Http Header也不在URL参数中");
+			throw RsResponse.buildException(450, "用戶名既不在Http Header也不在URL参数中");
 		}
 
 		return userName;

@@ -9,8 +9,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Required;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
-import org.springside.modules.rest.jersey.Jerseys;
 
+import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import com.sun.jersey.api.client.GenericType;
@@ -28,7 +28,7 @@ public class AccountResourceClient {
 
 	@Required
 	public void setBaseUrl(String baseUrl) {
-		client = Jerseys.createClient(baseUrl);
+		client = Client.create().resource(baseUrl);
 	}
 
 	/**

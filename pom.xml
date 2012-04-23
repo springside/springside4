@@ -40,7 +40,7 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		 -->
-
+<!--
 		 <repository>
 			<id>offical</id>
 			<name>Maven Official Repository</name>
@@ -66,6 +66,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		-->
 	</repositories>
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
