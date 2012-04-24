@@ -62,7 +62,7 @@ public class User {
 	}
 
 	//设置对List<Object>的映射, xml为<roles><role id="1" name="admin"/></roles>
-	@XmlElementWrapper(name = "roles")
+	@XmlElementWrapper
 	@XmlElement(name = "role")
 	public List<Role> getRoles() {
 		return roles;
@@ -73,7 +73,7 @@ public class User {
 	}
 
 	//设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
-	@XmlElementWrapper(name = "interests")
+	@XmlElementWrapper
 	@XmlElement(name = "interest")
 	public List<String> getInterests() {
 		return interests;

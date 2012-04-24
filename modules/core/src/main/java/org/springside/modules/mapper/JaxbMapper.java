@@ -64,14 +64,14 @@ public class JaxbMapper {
 	}
 
 	/**
-	 * Java Object->Xml without encoding, 特别支持Root Element是Collection的情形.
+	 * Java Collection->Xml without encoding, 特别支持Root Element是Collection的情形.
 	 */
 	public String toXml(Collection<?> root, String rootName) {
 		return toXml(root, rootName, null);
 	}
 
 	/**
-	 * Java Object->Xml with encoding, 特别支持Root Element是Collection的情形.
+	 * Java Collection->Xml with encoding, 特别支持Root Element是Collection的情形.
 	 */
 	public String toXml(Collection<?> root, String rootName, String encoding) {
 		try {
@@ -104,6 +104,7 @@ public class JaxbMapper {
 
 	/**
 	 * 创建Marshaller并设定encoding(可为null).
+	 * 线程不安全，需要每次创建或pooling。
 	 */
 	public Marshaller createMarshaller(String encoding) {
 		try {
@@ -123,6 +124,7 @@ public class JaxbMapper {
 
 	/**
 	 * 创建UnMarshaller.
+	 * 线程不安全，需要每次创建或pooling。
 	 */
 	public Unmarshaller createUnmarshaller() {
 		try {
