@@ -26,7 +26,7 @@ import com.google.common.collect.Lists;
 @Controller
 @RequestMapping(value = "/common/user/")
 public class UserDetailController {
-
+	@Autowired
 	private AccountManager accountManager;
 
 	@RequestMapping(value = "update/{id}")
@@ -51,10 +51,5 @@ public class UserDetailController {
 	@ModelAttribute("user")
 	public User getAccount(@PathVariable("id") Long id) {
 		return accountManager.getUser(id);
-	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
 	}
 }

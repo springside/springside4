@@ -18,6 +18,8 @@ import org.springside.modules.utils.Collections3;
  */
 @Component
 public class GroupListEditor extends PropertyEditorSupport {
+
+	@Autowired
 	private AccountManager accountManager;
 
 	/**
@@ -41,10 +43,4 @@ public class GroupListEditor extends PropertyEditorSupport {
 	public String getAsText() {
 		return Collections3.extractToString((List) getValue(), "id", ",");
 	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
-	}
-
 }

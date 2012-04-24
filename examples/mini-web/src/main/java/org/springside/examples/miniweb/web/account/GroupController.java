@@ -17,6 +17,7 @@ import org.springside.examples.miniweb.service.account.AccountManager;
 @RequestMapping(value = "/account/group")
 public class GroupController {
 
+	@Autowired
 	private AccountManager accountManager;
 
 	@RequiresPermissions("group:view")
@@ -49,10 +50,5 @@ public class GroupController {
 		accountManager.deleteGroup(id);
 		redirectAttributes.addFlashAttribute("message", "删除权限组成功");
 		return "redirect:/account/group/";
-	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
 	}
 }

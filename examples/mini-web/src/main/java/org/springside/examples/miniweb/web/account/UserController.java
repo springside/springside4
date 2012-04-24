@@ -33,8 +33,10 @@ import org.springside.examples.miniweb.service.account.AccountManager;
 @RequestMapping(value = "/account/user")
 public class UserController {
 
+	@Autowired
 	private AccountManager accountManager;
 
+	@Autowired
 	private GroupListEditor groupListEditor;
 
 	@InitBinder
@@ -87,15 +89,4 @@ public class UserController {
 
 		return "false";
 	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
-	}
-
-	@Autowired
-	public void setGroupListEditor(GroupListEditor groupListEditor) {
-		this.groupListEditor = groupListEditor;
-	}
-
 }
