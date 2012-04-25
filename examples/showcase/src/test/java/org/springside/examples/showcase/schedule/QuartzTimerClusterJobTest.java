@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.modules.log.MockLog4jAppender;
+import org.springside.modules.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -26,7 +26,7 @@ public class QuartzTimerClusterJobTest extends SpringTxTestCase {
 	public void scheduleJob() throws Exception {
 
 		//加载测试用logger appender
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(QuartzClusterableJob.class);
 
 		//等待任务启动

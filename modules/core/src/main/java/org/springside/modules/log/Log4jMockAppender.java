@@ -21,7 +21,7 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
-public class MockLog4jAppender extends AppenderSkeleton {
+public class Log4jMockAppender extends AppenderSkeleton {
 
 	private List<LoggingEvent> logs = Lists.newArrayList();
 

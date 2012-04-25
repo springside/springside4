@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
-import org.springside.modules.log.MockLog4jAppender;
+import org.springside.modules.log.Log4jMockAppender;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.spring.SpringTxTestCase;
 import org.springside.modules.utils.Threads;
@@ -52,7 +52,7 @@ public class GuavaCacheDemo extends SpringTxTestCase {
 		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
 
 		//插入appender用于assert。
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(GuavaCacheDemo.class);
 
 		//第一次加载会查数据库
