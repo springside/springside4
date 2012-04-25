@@ -26,7 +26,7 @@ import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.rest.jersey.Jerseys;
+import org.springside.modules.rest.RsResponse;
 
 /**
  * User资源的REST服务.
@@ -53,12 +53,12 @@ public class UserResouceService {
 
 			if (entity == null) {
 				String message = "用户不存在(id:" + id + ")";
-				throw Jerseys.buildException(Status.NOT_FOUND, message);
+				throw RsResponse.buildException(Status.NOT_FOUND, message);
 			}
 
 			return BeanMapper.map(entity, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class UserResouceService {
 
 			return BeanMapper.mapList(entityList, UserDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
@@ -94,12 +94,12 @@ public class UserResouceService {
 			return Response.created(createdUri).build();
 		} catch (ConstraintViolationException e) {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), "\n");
-			throw Jerseys.buildException(Status.BAD_REQUEST, message);
+			throw RsResponse.buildException(Status.BAD_REQUEST, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-			throw Jerseys.buildException(Status.BAD_REQUEST, message);
+			throw RsResponse.buildException(Status.BAD_REQUEST, message);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 

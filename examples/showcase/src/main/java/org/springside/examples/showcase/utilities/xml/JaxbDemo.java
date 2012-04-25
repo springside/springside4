@@ -41,11 +41,11 @@ import com.google.common.collect.Lists;
  */
 public class JaxbDemo {
 
-	private static JaxbMapper binder;
+	private static JaxbMapper mapper;
 
 	@BeforeClass
 	public static void setUp() {
-		binder = new JaxbMapper(User.class, CollectionWrapper.class);
+		mapper = new JaxbMapper(User.class, CollectionWrapper.class);
 	}
 
 	@Test
@@ -62,7 +62,7 @@ public class JaxbDemo {
 		user.getHouses().put("bj", "house1");
 		user.getHouses().put("gz", "house2");
 
-		String xml = binder.toXml(user, "UTF-8");
+		String xml = mapper.toXml(user, "UTF-8");
 		System.out.println("Jaxb Object to Xml result:\n" + xml);
 		assertXmlByDom4j(xml);
 	}
@@ -70,7 +70,7 @@ public class JaxbDemo {
 	@Test
 	public void xmlToObject() {
 		String xml = generateXmlByDom4j();
-		User user = binder.fromXml(xml);
+		User user = mapper.fromXml(xml);
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
@@ -100,7 +100,7 @@ public class JaxbDemo {
 
 		List<User> userList = Lists.newArrayList(user1, user2);
 
-		String xml = binder.toXml(userList, "userList", "UTF-8");
+		String xml = mapper.toXml(userList, "userList", "UTF-8");
 		System.out.println("Jaxb Object List to Xml result:\n" + xml);
 	}
 

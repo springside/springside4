@@ -13,6 +13,7 @@ import org.springside.examples.showcase.common.service.AccountManager;
 @RequestMapping(value = "/common/user")
 public class UserController {
 
+	@Autowired
 	private AccountManager accountManager;
 
 	@RequestMapping(value = { "list", "" })
@@ -21,10 +22,4 @@ public class UserController {
 		model.addAttribute("users", users);
 		return "common/userList";
 	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
-	}
-
 }

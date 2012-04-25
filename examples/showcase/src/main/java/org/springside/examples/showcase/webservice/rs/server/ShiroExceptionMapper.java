@@ -6,13 +6,13 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 import org.apache.shiro.authz.UnauthorizedException;
-import org.springside.modules.rest.jersey.Jerseys;
+import org.springside.modules.rest.RsResponse;
 
 @Provider
 public class ShiroExceptionMapper implements ExceptionMapper<UnauthorizedException> {
 	@Override
 	public Response toResponse(UnauthorizedException ex) {
-		return Jerseys.buildTextResponse(Status.UNAUTHORIZED, ex.getMessage());
+		return RsResponse.buildTextResponse(Status.UNAUTHORIZED, ex.getMessage());
 	}
 
 }

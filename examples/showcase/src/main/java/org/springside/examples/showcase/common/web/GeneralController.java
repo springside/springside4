@@ -21,5 +21,4 @@ public class GeneralController {
 	public String mashupClient() {
 		return "web/mashup-client";
 	}
-
 }

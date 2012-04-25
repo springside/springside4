@@ -16,6 +16,7 @@ import org.springside.examples.miniweb.service.account.AccountManager;
 @RequestMapping(value = "/account/group/")
 public class GroupDetailController {
 
+	@Autowired
 	private AccountManager accountManager;
 
 	@RequiresPermissions("group:edit")
@@ -36,10 +37,5 @@ public class GroupDetailController {
 	@ModelAttribute("group")
 	public Group getGroup(@PathVariable("id") Long id) {
 		return accountManager.getGroup(id);
-	}
-
-	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
 	}
 }

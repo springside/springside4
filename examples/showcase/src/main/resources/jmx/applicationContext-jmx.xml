@@ -17,12 +17,12 @@
 	<!-- 应用使用情况統計MBean -->
 	<bean class="org.springside.examples.showcase.jmx.ApplicationStatistics"/>
 
-	<!-- (可选)配置RMI注册服务器,可在命令行用-D定义实现 -->
+	<!-- (可选)配置用于JMX远程连接的RMI注册服务器,可在命令行用-D定义实现，见下。 -->
 	<bean id="rmiRegistry" class="org.springframework.remoting.rmi.RmiRegistryFactoryBean" lazy-init="false">
 		<property name="port" value="${jmx.rmi_port}" />
 	</bean>
 
-	<!-- (可选)配置JMX远程连接,可在命令行用-D定义实现 -->
+	<!-- (可选)配置JMX远程连接,可在命令行用-D定义实现, 如-Dcom.sun.management.jmxremote.port=3999 -->
 	<bean id="serverConnector" class="org.springframework.jmx.support.ConnectorServerFactoryBean" lazy-init="false"
 		depends-on="rmiRegistry">
 		<property name="serviceUrl" value="service:jmx:rmi:///jndi/rmi://${server.addr}:${jmx.rmi_port}/jmxrmi" />

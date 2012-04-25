@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.rest.jersey;
+package org.springside.modules.rest;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
@@ -13,22 +13,11 @@ import javax.ws.rs.core.Response.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
+public class RsResponse {
 
-public class Jerseys {
+	private static Logger logger = LoggerFactory.getLogger(RsResponse.class);
 
-	private static Logger logger = LoggerFactory.getLogger(Jerseys.class);
-
-	private Jerseys() {
-	}
-
-	/**
-	 * 创建JerseyClient.
-	 */
-	public static WebResource createClient(String baseUrl) {
-		Client client = Client.create();
-		return client.resource(baseUrl);
+	private RsResponse() {
 	}
 
 	/**

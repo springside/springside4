@@ -13,7 +13,7 @@ import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.rest.jersey.Jerseys;
+import org.springside.modules.rest.RsResponse;
 
 /**
  * Department资源的REST服务.
@@ -37,12 +37,12 @@ public class DepartmentResouceService {
 
 			if (entity == null) {
 				String message = "部门不存在(id:" + id + ")";
-				throw Jerseys.buildException(Status.NOT_FOUND, message);
+				throw RsResponse.buildException(Status.NOT_FOUND, message);
 			}
 
 			return BeanMapper.map(entity, DepartmentDTO.class);
 		} catch (RuntimeException e) {
-			throw Jerseys.buildDefaultException(e);
+			throw RsResponse.buildDefaultException(e);
 		}
 	}
 
