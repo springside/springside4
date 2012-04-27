@@ -45,24 +45,17 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 创建只输出非空属性到Json字符串的Mapper.
+	 * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper,建议在外部接口中使用.
 	 */
-	public static JsonMapper buildNonNullMapper() {
-		return new JsonMapper(Include.NON_NULL);
-	}
-
-	/**
-	 * 创建只输出初始值被改变的属性到Json字符串的Mapper.
-	 */
-	public static JsonMapper buildNonDefaultMapper() {
-		return new JsonMapper(Include.NON_DEFAULT);
-	}
-
-	/**
-	 * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
-	 */
-	public static JsonMapper buildNonEmptyMapper() {
+	public static JsonMapper nonEmptyMapper() {
 		return new JsonMapper(Include.NON_EMPTY);
+	}
+
+	/**
+	 * 创建只输出初始值被改变的属性到Json字符串的Mapper, 最节约的存储方式，建议在内部接口中使用。
+	 */
+	public static JsonMapper nonDefaultMapper() {
+		return new JsonMapper(Include.NON_DEFAULT);
 	}
 
 	/**
