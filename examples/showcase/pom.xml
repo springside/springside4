@@ -323,8 +323,8 @@
 
 		<!-- jolokia Restful JMX -->
 		<dependency>
-		    <groupId>org.jolokia</groupId>
-		    <artifactId>jolokia-core</artifactId>
+			<groupId>org.jolokia</groupId>
+			<artifactId>jolokia-core</artifactId>
 		</dependency>
 
 		<!-- email -->
@@ -376,7 +376,6 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>${selenium.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -521,7 +520,7 @@
 			</build>
 		</profile>
 
-		<!-- 刷新开发环境数据库 -->	
+		<!-- 刷新开发环境数据库 -->
 		<profile>
 			<id>refresh-db</id>
 			<build>
