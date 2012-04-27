@@ -7,7 +7,7 @@
 	<name>Springside :: Project</name>
 	<packaging>pom</packaging>
 
-		<properties>
+	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.0.0.RC3</springside.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
@@ -33,15 +33,11 @@
 
 	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
 	<repositories>
-		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.
-		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
-		</repository>
-		 -->
+		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. <repository> <id>nexus</id> <name>Team 
+			Nexus Repository</name> <url>http://localhost:8081/nexus/content/groups/public</url> 
+			</repository> -->
 
-		 <repository>
+		<repository>
 			<id>offical</id>
 			<name>Maven Official Repository</name>
 			<url>http://repo1.maven.org/maven2</url>
@@ -69,19 +65,10 @@
 -->
 		</repositories>
 
-	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
-	<pluginRepositories> 
-		<pluginRepository> 
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</pluginRepository>
-	</pluginRepositories>
-	-->
-	
+	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. <pluginRepositories> <pluginRepository> 
+		<id>nexus</id> <name>Team Nexus Repository</name> <url>http://localhost:8081/nexus/content/groups/public</url> 
+		<snapshots> <enabled>false</enabled> </snapshots> </pluginRepository> </pluginRepositories> -->
+
 	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
 	<dependencyManagement>
 		<dependencies>
@@ -182,14 +169,14 @@
 				<artifactId>hibernate-jpa-2.0-api</artifactId>
 				<version>1.0.1.Final</version>
 			</dependency>
-			
+
 			<!-- spring data jpa -->
 			<dependency>
-	            <groupId>org.springframework.data</groupId>
-	            <artifactId>spring-data-jpa</artifactId>
-	            <version>1.0.3.RELEASE</version>
-        	</dependency>
-			
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>1.0.3.RELEASE</version>
+			</dependency>
+
 			<!-- mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
@@ -417,7 +404,7 @@
 				<version>1.0.0</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- ehcache -->
 			<dependency>
 				<groupId>net.sf.ehcache</groupId>
@@ -432,8 +419,8 @@
 				<artifactId>jolokia-core</artifactId>
 				<version>1.0.3</version>
 			</dependency>
-			<!-- jolokia end-->
-			
+			<!-- jolokia end -->
+
 			<!-- LOGGING begin -->
 			<!-- slf4j -->
 			<dependency>
@@ -521,7 +508,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- jaxb -->
 			<dependency>
 				<groupId>javax.xml.bind</groupId>
@@ -547,9 +534,9 @@
 				<version>${jackson.version}</version>
 			</dependency>
 			<dependency>
-			 	<groupId>com.fasterxml.jackson.datatype</groupId>
-  				<artifactId>jackson-datatype-hibernate4</artifactId>
-  				<version>${jackson.version}</version>
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-hibernate4</artifactId>
+				<version>${jackson.version}</version>
 			</dependency>
 			<!-- JSON end -->
 
@@ -627,7 +614,7 @@
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate-validator.version}</version>
 			</dependency>
-			
+
 			<!-- httpclient -->
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -661,7 +648,7 @@
 				<version>4.8.1.1</version>
 			</dependency>
 			<!-- OTHER UTILS end -->
-	
+
 			<!-- TEST begin -->
 			<!-- junit -->
 			<dependency>
@@ -730,7 +717,7 @@
 				<version>${jetty.version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- selenium 2.0 -->
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
@@ -772,6 +759,13 @@
 				<groupId>com.h2database</groupId>
 				<artifactId>h2</artifactId>
 				<version>${h2.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<!-- GreenMail -->
+			<dependency>
+				<groupId>com.icegreen</groupId>
+				<artifactId>greenmail</artifactId>
+				<version>1.3.1b</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- TEST end -->
@@ -819,14 +813,14 @@
 						</dependency>
 					</dependencies>
 				</plugin>
-				
+
 				<!-- 增加更多的Source和Test Source目录插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>1.7</version>
 				</plugin>
-				
+
 				<!-- cobertura 测试覆盖率统计插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -894,7 +888,7 @@
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>${jetty.version}</version>
 				</plugin>
-				
+
 				<!-- assembly插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -920,23 +914,23 @@
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>1.7</version>
 				</plugin>
-				
+
 				<!-- exec java 插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.2.1</version>
 				</plugin>
-				
+
 				<!-- sonar插件 -->
-        		<plugin>
-        		 	<groupId>org.codehaus.mojo</groupId>
-        		 	<artifactId>sonar-maven-plugin</artifactId>
-        		 	<version>2.0</version>
-        		</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>sonar-maven-plugin</artifactId>
+					<version>2.0</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
-	</build>  
+	</build>
 
 	<modules>
 		<module>modules/core</module>

@@ -323,8 +323,8 @@
 
 		<!-- jolokia Restful JMX -->
 		<dependency>
-		    <groupId>org.jolokia</groupId>
-		    <artifactId>jolokia-core</artifactId>
+			<groupId>org.jolokia</groupId>
+			<artifactId>jolokia-core</artifactId>
 		</dependency>
 
 		<!-- email -->
@@ -376,7 +376,6 @@
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
-			<version>${selenium.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
@@ -391,6 +390,11 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
 		</dependency>
 
 		<dependency>
@@ -521,7 +525,7 @@
 			</build>
 		</profile>
 
-		<!-- 刷新开发环境数据库 -->	
+		<!-- 刷新开发环境数据库 -->
 		<profile>
 			<id>refresh-db</id>
 			<build>
@@ -537,23 +541,29 @@
 								<property name="sql.type" value="h2" />
 								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
 
-								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-						
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
-									src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
+								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask"
+									classpathref="maven.test.classpath" />
+
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}"
+									password="${jdbc.password}" src="src/main/resources/sql/${sql.type}/schema.sql"
+									onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
-								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"
+								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}"
+									userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"
 									src="src/main/resources/sql/${sql.type}/quartz.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
 
-								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}">
+								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}"
+									password="${jdbc.password}">
 									<dbconfig>
 										<property name="datatypeFactory" value="${dbunit.datatype}" />
 									</dbconfig>
 									<classpath refid="maven.test.classpath" />
-									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat" transaction="true" />
+									<operation type="CLEAN_INSERT"
+										src="src/test/resources/data/sample-data.xml" format="flat"
+										transaction="true" />
 								</dbunit>
 							</target>
 						</configuration>
