@@ -87,10 +87,6 @@
 			<param-name>contextConfigLocation</param-name>
 			<param-value>/WEB-INF/spring-mvc.xml</param-value>
 		</init-param>
-		<init-param>
-        	<param-name>spring.profiles.active</param-name>
-        	<param-value>production</param-value>
-    	</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 	<servlet-mapping>

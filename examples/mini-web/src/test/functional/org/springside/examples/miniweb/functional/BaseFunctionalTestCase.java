@@ -69,7 +69,7 @@ public class BaseFunctionalTestCase {
 			//设定Spring的profile
 			System.setProperty("spring.profiles.active", "functional");
 
-			jettyServer = JettyFactory.createServer(new URL(baseUrl).getPort(), MiniWebServer.CONTEXT);
+			jettyServer = JettyFactory.createServerInSource(new URL(baseUrl).getPort(), MiniWebServer.CONTEXT);
 			jettyServer.start();
 
 			logger.info("Jetty Server started");

@@ -5,7 +5,9 @@
  */
 package org.springside.modules.test.functional;
 
+import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
@@ -23,9 +25,15 @@ public class JettyFactory {
 	/**
 	 * 创建用于开发运行调试的Jetty Server, 以src/main/webapp为Web应用目录.
 	 */
-	public static Server createServer(int port, String contextPath) {
-		Server server = new Server(port);
+	public static Server createServerInSource(int port, String contextPath) {
+		Server server = new Server();
 		server.setStopAtShutdown(true);
+
+		SelectChannelConnector connector = new SelectChannelConnector();
+		connector.setPort(port);
+		//解决Windows下重复启动Jetty居然不报端口冲突的问题.
+		connector.setReuseAddress(false);
+		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext webContext = new WebAppContext(DEFAULT_WEBAPP_PATH, contextPath);
 		webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
