@@ -33,7 +33,7 @@ public class QuartzTimerClusterJobTest extends SpringTxTestCase {
 		Threads.sleep(3000);
 
 		//验证任务已执行
-		assertEquals(1, appender.getAllLogs().size());
+		assertEquals(1, appender.getLogsCount());
 
 		assertEquals("There are 6 user in database, printed by quartz cluster job on node default.",
 				appender.getFirstMessage());

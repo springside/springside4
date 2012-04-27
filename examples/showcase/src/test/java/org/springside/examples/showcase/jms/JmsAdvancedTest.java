@@ -47,7 +47,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendQueue(user);
 		Threads.sleep(1000);
-		assertNotNull(appender.getFirstLog());
 		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
 	}
 
@@ -63,7 +62,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendTopic(user);
 		Threads.sleep(2000);
-		assertNotNull(appender.getFirstLog());
 		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
 	}
 
@@ -84,6 +82,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		});
 
 		Threads.sleep(1000);
-		assertTrue(appender.getAllLogs().isEmpty());
+		assertTrue(appender.isEmpty());
 	}
 }

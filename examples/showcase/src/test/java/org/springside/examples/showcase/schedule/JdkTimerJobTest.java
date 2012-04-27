@@ -28,7 +28,7 @@ public class JdkTimerJobTest extends SpringTxTestCase {
 		Threads.sleep(3000);
 
 		//验证任务已执行
-		assertEquals(1, appender.getAllLogs().size());
+		assertEquals(1, appender.getLogsCount());
 		assertEquals("There are 6 user in database, print by jdk timer job.", appender.getFirstMessage());
 	}
 }

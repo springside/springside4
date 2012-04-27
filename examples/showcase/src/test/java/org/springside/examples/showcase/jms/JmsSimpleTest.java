@@ -34,7 +34,6 @@ public class JmsSimpleTest extends SpringContextTestCase {
 		logger.info("sended message");
 
 		Threads.sleep(1000);
-		assertNotNull(appender.getFirstLog());
 		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn", appender.getFirstMessage());
 	}
 
@@ -52,7 +51,6 @@ public class JmsSimpleTest extends SpringContextTestCase {
 		logger.info("sended message");
 
 		Threads.sleep(1000);
-		assertNotNull(appender.getFirstLog());
 		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn", appender.getFirstMessage());
 	}
 }

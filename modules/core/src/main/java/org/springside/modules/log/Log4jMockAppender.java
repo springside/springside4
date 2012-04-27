@@ -95,7 +95,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	/**
 	 * 返回Log的数量。
 	 */
-	public int getLogCount() {
+	public int getLogsCount() {
 		return logs.size();
 	}
 
@@ -149,7 +149,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	 * 设置输出格式.
 	 */
 	public void setLayout(String pattern) {
-		super.setLayout(new PatternLayout(pattern));
+		setLayout(new PatternLayout(pattern));
 	}
 
 	/**
