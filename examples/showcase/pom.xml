@@ -392,6 +392,13 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 
+		<!-- mail server simulator -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+		</dependency>
+		
+		<!-- jetty for functional test and executable war -->
 		<dependency>
 			<groupId>org.eclipse.jetty.aggregate</groupId>
 			<artifactId>jetty-webapp</artifactId>

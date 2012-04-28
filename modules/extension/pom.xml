@@ -42,6 +42,14 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- Mail -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>			
+		</dependency>
 
 		<!-- JSON -->
 		<dependency>
