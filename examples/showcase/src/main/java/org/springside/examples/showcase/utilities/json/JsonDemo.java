@@ -47,7 +47,7 @@ import com.google.common.collect.Maps;
  */
 public class JsonDemo {
 
-	private static JsonMapper mapper = JsonMapper.buildNonDefaultMapper();
+	private static JsonMapper mapper = JsonMapper.nonDefaultMapper();
 
 	//// 基本操作 演示 ////
 
@@ -126,10 +126,10 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试三种不同的Binder.
+	 * 测试三种不同的Inclusion风格.
 	 */
 	@Test
-	public void threeTypeBinders() {
+	public void threeTypeInclusion() {
 		TestBean bean = new TestBean("A");
 
 		//打印全部属性
@@ -137,11 +137,11 @@ public class JsonDemo {
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalMapper.toJson(bean));
 
 		//不打印nullValue属性
-		JsonMapper nonNullMapper = JsonMapper.buildNonNullMapper();
+		JsonMapper nonNullMapper = JsonMapper.nonEmptyMapper();
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonNullMapper.toJson(bean));
 
 		//不打印默认值未改变的nullValue与defaultValue属性
-		JsonMapper nonDefaultMaper = JsonMapper.buildNonDefaultMapper();
+		JsonMapper nonDefaultMaper = JsonMapper.nonDefaultMapper();
 		assertEquals("{\"name\":\"A\"}", nonDefaultMaper.toJson(bean));
 	}
 
@@ -180,17 +180,7 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 測試輸出jsonp格式內容.
-	 */
-	@Test
-	public void jsonp() {
-		TestBean bean = new TestBean("foo");
-		String jsonpString = mapper.toJsonP("callback", bean);
-		assertEquals("callback({\"name\":\"foo\"})", jsonpString);
-	}
-
-	/**
-	 * JSON字符串裡只含有Bean中部分的屬性時，更新一個已存在Bean，只覆蓋部分的屬性.
+	 * 更新一個已存在Bean，JSON字符串裡只含有Bean的部分屬性，只覆蓋这部分的屬性.
 	 */
 	@Test
 	public void updateBean() {
@@ -198,11 +188,23 @@ public class JsonDemo {
 
 		TestBean bean = new TestBean();
 		bean.setDefaultValue("Foobar");
+
 		bean = mapper.update(jsonString, bean);
+
 		//name被赋值
 		assertEquals("A", bean.getName());
 		//DefaultValue不在Json串中，依然保留。
 		assertEquals("Foobar", bean.getDefaultValue());
+	}
+
+	/**
+	 * 測試輸出jsonp格式內容.
+	 */
+	@Test
+	public void jsonp() {
+		TestBean bean = new TestBean("foo");
+		String jsonpString = mapper.toJsonP("callback", bean);
+		assertEquals("callback({\"name\":\"foo\"})", jsonpString);
 	}
 
 	/**
@@ -254,17 +256,18 @@ public class JsonDemo {
 	////特殊数据类型演示////
 
 	/**
-	 * 测试对枚举的序列化,可以選擇用一個int字段(但不是order)而不是以Name來序列化，以減少長度.
+	 * 测试对枚举的序列化.
 	 */
 	@Test
-	public void enumData() {
-		//默認使用enum.name()
+	public void enumType() {
+		//toJSon默認使用enum.name()
 		assertEquals("\"One\"", mapper.toJson(TestEnum.One));
+		//fromJson使用enum.name()或enum.order()
 		assertEquals(TestEnum.One, mapper.fromJson("\"One\"", TestEnum.class));
+		assertEquals(TestEnum.One, mapper.fromJson("0", TestEnum.class));
 
-		//使用enum.toString()
-		//注意，index會通過toString序列成字符串而不是int,否則会和order()順序號混淆.
-		//注意配置必須在所有讀寫動作之前調用.
+		//使用enum.toString(), 注意配置必須在所有讀寫動作之前調用.
+		//建议toString()使用index数字属性，比enum.name()节约了空间，比enum.order()则不会有顺序随时改变不确定的问题。
 		JsonMapper newMapper = new JsonMapper();
 		newMapper.enableEnumUseToString();
 		assertEquals("\"1\"", newMapper.toJson(TestEnum.One));
@@ -290,16 +293,17 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试对日期的序列化,日期默认以Timestamp方式存储，也可以用@JsonFormat格式化.
+	 * 测试对日期的序列化,日期默认以Timestamp方式存储，也可以用2.0后也可以用@JsonFormat在属性上格式化.
 	 */
 	@Test
-	public void dateData() {
-		DateBean dateBean = new DateBean();
+	public void dateType() {
+
 		Date date = new Date();
 		String timestampString = String.valueOf(date.getTime());
 		String format = "yyyy-MM-dd HH:mm:ss";
 		String formatedString = new DateTime(date).toString(format);
 
+		DateBean dateBean = new DateBean();
 		dateBean.startDate = date;
 		dateBean.endDate = date;
 
@@ -317,8 +321,9 @@ public class JsonDemo {
 	}
 
 	public static class DateBean {
-
+		//默认timestamp存储
 		public Date startDate;
+		//按annotation中的日期格式存储。
 		@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+08:00")
 		public Date endDate;
 
@@ -366,15 +371,15 @@ public class JsonDemo {
 	 * 測試父子POJO間的循環引用.
 	 */
 	@Test
-	public void parentChildBean() {
+	public void cycleReferenceBean() {
 		//初始化对象关系，parent的children里含有 child1,child2, child1/child2的parent均指向parent.
-		ParentChildBean parent = new ParentChildBean("parent");
+		CycleReferenceBean parent = new CycleReferenceBean("parent");
 
-		ParentChildBean child1 = new ParentChildBean("child1");
+		CycleReferenceBean child1 = new CycleReferenceBean("child1");
 		child1.setParent(parent);
 		parent.getChildren().add(child1);
 
-		ParentChildBean child2 = new ParentChildBean("child2");
+		CycleReferenceBean child2 = new CycleReferenceBean("child2");
 		child2.setParent(parent);
 		parent.getChildren().add(child2);
 
@@ -386,11 +391,11 @@ public class JsonDemo {
 		assertEquals("{\"name\":\"child1\"}", mapper.toJson(child1));
 
 		//反向序列化时，Json已很聪明的把parent填入child1/child2中.
-		ParentChildBean parentResult = mapper.fromJson(jsonString, ParentChildBean.class);
+		CycleReferenceBean parentResult = mapper.fromJson(jsonString, CycleReferenceBean.class);
 		assertEquals("parent", parentResult.getChildren().get(0).getParent().getName());
 
 		//单独反序列化child1，当然parent也是空
-		ParentChildBean child1Result = mapper.fromJson("{\"name\":\"child1\"}", ParentChildBean.class);
+		CycleReferenceBean child1Result = mapper.fromJson("{\"name\":\"child1\"}", CycleReferenceBean.class);
 		assertNull(child1Result.parent);
 		assertEquals("child1", child1Result.getName());
 	}
@@ -398,16 +403,16 @@ public class JsonDemo {
 	/**
 	 * 父子POJO間的循環引用的演示Bean,@JsonBackReference 与 @JsonManagedReference 是关键.
 	 */
-	public static class ParentChildBean {
+	public static class CycleReferenceBean {
 
 		private String name;
-		private ParentChildBean parent;
-		private List<ParentChildBean> children = Lists.newArrayList();
+		private CycleReferenceBean parent;
+		private List<CycleReferenceBean> children = Lists.newArrayList();
 
-		public ParentChildBean() {
+		public CycleReferenceBean() {
 		}
 
-		public ParentChildBean(String name) {
+		public CycleReferenceBean(String name) {
 			this.name = name;
 		}
 
@@ -421,28 +426,31 @@ public class JsonDemo {
 
 		//注意getter與setter都要添加annotation
 		@JsonBackReference
-		public ParentChildBean getParent() {
+		public CycleReferenceBean getParent() {
 			return parent;
 		}
 
 		@JsonBackReference
-		public void setParent(ParentChildBean parent) {
+		public void setParent(CycleReferenceBean parent) {
 			this.parent = parent;
 		}
 
 		@JsonManagedReference
-		public List<ParentChildBean> getChildren() {
+		public List<CycleReferenceBean> getChildren() {
 			return children;
 		}
 
 		@JsonManagedReference
-		public void setChildren(List<ParentChildBean> children) {
+		public void setChildren(List<CycleReferenceBean> children) {
 			this.children = children;
 		}
 	}
 
 	/**
-	 * 測試可擴展Bean,會自動的把確定的屬性放入固定的成員變量, 其他屬性放到一个类型为Map的成员变量裡,能很好的支持Bean版本升级时固定属性的变动.
+	 * 測試可擴展Bean.
+	 * 可扩展Bean的设计会混合一些的固定属性和用一个Map<String,object>存放的扩展属性。
+	 * 通常，哪那些是固定属性，哪些是扩展属性，在应用不断演进中是不断变化的。
+	 * Jackson支持将所有属性都序列化成平行的属性列表，没有固定属性与Map中属性的区别，然后智能的将不在固定列的属性都丢到被@JsonAnyGetter/Setter注释的Map里面去。
 	 */
 	@Test
 	public void extensibleBean() {
@@ -489,23 +497,22 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 測試序列化Bean时使用不同的View序列化不同的属性组, 及@JsonIgnore標註的屬性.
+	 * 同一种POJO，在不同场景下可能需要序列化不同的属性组，Jackson支持使用View来定义.
 	 */
 	@Test
-	public void viewBean() throws IOException {
-		ViewBean viewBean = new ViewBean();
-		viewBean.setName("Foo");
-		viewBean.setAge(16);
-		viewBean.setOtherValue("others");
-		viewBean.setIgnoreValue("ignored");
+	public void multiViewBean() throws IOException {
+		MultiViewBean multiViewBean = new MultiViewBean();
+		multiViewBean.setName("Foo");
+		multiViewBean.setAge(16);
+		multiViewBean.setOtherValue("others");
 
 		//public view
 		ObjectWriter publicWriter = mapper.getMapper().writerWithView(Views.Public.class);
-		assertEquals("{\"name\":\"Foo\",\"otherValue\":\"others\"}", publicWriter.writeValueAsString(viewBean));
+		assertEquals("{\"name\":\"Foo\",\"otherValue\":\"others\"}", publicWriter.writeValueAsString(multiViewBean));
 
 		//internal view
 		ObjectWriter internalWriter = mapper.getMapper().writerWithView(Views.Internal.class);
-		assertEquals("{\"age\":16,\"otherValue\":\"others\"}", internalWriter.writeValueAsString(viewBean));
+		assertEquals("{\"age\":16,\"otherValue\":\"others\"}", internalWriter.writeValueAsString(multiViewBean));
 
 	}
 
@@ -520,11 +527,10 @@ public class JsonDemo {
 	/**
 	 * 演示序列化不同View不同属性的Bean.
 	 */
-	public static class ViewBean {
+	public static class MultiViewBean {
 		private String name;
 		private int age;
 		private String otherValue;
-		private String ignoreValue;
 
 		@JsonView(Views.Public.class)
 		public String getName() {
@@ -551,27 +557,17 @@ public class JsonDemo {
 		public void setOtherValue(String otherValue) {
 			this.otherValue = otherValue;
 		}
-
-		@JsonIgnore
-		public String getIgnoreValue() {
-			return ignoreValue;
-		}
-
-		public void setIgnoreValue(String ignoreValue) {
-			this.ignoreValue = ignoreValue;
-		}
-
 	}
 
-	////批量定制行为////
+	////自定制行为////
 
 	/**
-	 * 测试 自定义转换器，整体感觉稍显复杂。目标是将Money和Long互转.
+	 * 测试自定义转换器，整体感觉稍显复杂。这里是将Money和Long互转.
 	 */
 	@Test
 	public void customConverter() {
 
-		JsonMapper newMapper = JsonMapper.buildNonNullMapper();
+		JsonMapper newMapper = JsonMapper.nonEmptyMapper();
 
 		SimpleModule moneyModule = new SimpleModule("MoneyModule");
 		moneyModule.addSerializer(new MoneySerializer());
@@ -663,14 +659,14 @@ public class JsonDemo {
 	}
 
 	/**
-	 * 测试修改 属性名策略
+	 * 测试修改 属性名策略。
 	 */
 	@Test
 	public void customPropertyNaming() throws JsonMappingException {
 
 		TestBean bean = new TestBean("foo");
 		bean.setDefaultValue("bar");
-		JsonMapper newMapper = JsonMapper.buildNonNullMapper();
+		JsonMapper newMapper = JsonMapper.nonEmptyMapper();
 		newMapper.getMapper().setPropertyNamingStrategy(new LowerCaseNaming());
 		String jsonpString = newMapper.toJson(bean);
 		assertEquals("{\"name\":\"foo\",\"defaultvalue\":\"bar\"}", jsonpString);
@@ -682,5 +678,4 @@ public class JsonDemo {
 			return defaultName.toLowerCase();
 		}
 	}
-
 }

@@ -38,7 +38,7 @@ public class AccountManager {
 
 	private SpyMemcachedClient memcachedClient;
 
-	private JsonMapper jsonBinder = JsonMapper.buildNonDefaultMapper();
+	private JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
 
 	private NotifyMessageProducer notifyProducer; //JMS消息发送
 
@@ -134,11 +134,11 @@ public class AccountManager {
 			//因为hibernate的proxy在序列化时问题多多,此处使用jdbc
 			user = userMyBatisDao.getUser(id);
 			if (user != null) {
-				jsonString = jsonBinder.toJson(user);
+				jsonString = jsonMapper.toJson(user);
 				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
 			}
 		} else {
-			user = jsonBinder.fromJson(jsonString, User.class);
+			user = jsonMapper.fromJson(jsonString, User.class);
 		}
 		return user;
 	}

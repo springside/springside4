@@ -21,7 +21,7 @@ import com.google.common.collect.Maps;
  */
 public class JsonMapperTest {
 
-	private static JsonMapper binder = JsonMapper.buildNonDefaultMapper();
+	private static JsonMapper binder = JsonMapper.nonDefaultMapper();
 
 	/**
 	 * 序列化对象/集合到Json字符串.
@@ -145,11 +145,11 @@ public class JsonMapperTest {
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalBinder.toJson(bean));
 
 		//不打印nullValue属性
-		JsonMapper nonNullBinder = JsonMapper.buildNonNullMapper();
+		JsonMapper nonNullBinder = JsonMapper.nonEmptyMapper();
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonNullBinder.toJson(bean));
 
 		//不打印默认值未改变的nullValue与defaultValue属性
-		JsonMapper nonDefaultBinder = JsonMapper.buildNonDefaultMapper();
+		JsonMapper nonDefaultBinder = JsonMapper.nonDefaultMapper();
 		assertEquals("{\"name\":\"A\"}", nonDefaultBinder.toJson(bean));
 	}
 

@@ -18,7 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageListener;
 import org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageProducer;
-import org.springside.modules.log.MockLog4jAppender;
+import org.springside.modules.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -38,7 +38,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 	@Test
 	public void queueMessage() {
 		Threads.sleep(1000);
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -47,15 +47,13 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendQueue(user);
 		Threads.sleep(1000);
-		assertNotNull(appender.getFirstLog());
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstLog()
-				.getMessage());
+		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
 	}
 
 	@Test
 	public void topicMessage() {
 		Threads.sleep(1000);
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -64,15 +62,13 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendTopic(user);
 		Threads.sleep(2000);
-		assertNotNull(appender.getFirstLog());
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstLog()
-				.getMessage());
+		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
 	}
 
 	@Test
 	public void topicMessageWithWrongType() {
 		Threads.sleep(1000);
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		advancedJmsTemplate.send(advancedNotifyTopic, new MessageCreator() {
@@ -86,6 +82,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		});
 
 		Threads.sleep(1000);
-		assertTrue(appender.getAllLogs().isEmpty());
+		assertTrue(appender.isEmpty());
 	}
 }

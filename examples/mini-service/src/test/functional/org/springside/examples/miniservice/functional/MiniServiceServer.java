@@ -20,7 +20,7 @@ public class MiniServiceServer {
 		System.setProperty("spring.profiles.active", "development");
 
 		//启动Jetty
-		Server server = JettyFactory.createServer(PORT, CONTEXT);
+		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
 		server.start();
 
 		System.out.println("Server running at " + BASE_URL);

@@ -17,7 +17,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.log.MockLog4jAppender;
+import org.springside.modules.log.Log4jMockAppender;
 
 @Ignore("Unstable on Jenkins")
 public class ThreadsTest {
@@ -26,7 +26,7 @@ public class ThreadsTest {
 	public void gracefulShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger("test");
 
 		//time enough to shutdown
@@ -73,7 +73,7 @@ public class ThreadsTest {
 	public void normalShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		MockLog4jAppender appender = new MockLog4jAppender();
+		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger("test");
 
 		//time not enough to shutdown,write error log.
