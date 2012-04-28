@@ -27,6 +27,7 @@ public class JettyFactory {
 	 */
 	public static Server createServerInSource(int port, String contextPath) {
 		Server server = new Server();
+		//设置在JVM退出时关闭Jetty的钩子。
 		server.setStopAtShutdown(true);
 
 		SelectChannelConnector connector = new SelectChannelConnector();
@@ -36,6 +37,7 @@ public class JettyFactory {
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext webContext = new WebAppContext(DEFAULT_WEBAPP_PATH, contextPath);
+		//设置使用当前线程的ClassLoder以解决JSP不能正确扫描taglib的tld文件的问题。
 		webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
 		server.setHandler(webContext);
 

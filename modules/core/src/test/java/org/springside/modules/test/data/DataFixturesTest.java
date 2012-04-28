@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.springframework.beans.BeansException;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
-public class DataFixturesTest extends SpringTxTestCase {
+public class DataFixturesTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void normal() throws BeansException, Exception {
