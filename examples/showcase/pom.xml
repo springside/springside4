@@ -468,11 +468,18 @@
 				</configuration>
 			</plugin>
 
-			<!-- jetty插件, 设定端口与context path -->
+			<!-- jetty插件, 设定context path与spring profile -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
 				<configuration>
+					<systemProperties>
+						<systemProperty>
+							<name>spring.profiles.active</name>
+							<value>development</value>
+						</systemProperty>
+					</systemProperties>
+					<useTestClasspath>true</useTestClasspath>
 					<webAppConfig>
 						<contextPath>/${project.artifactId}</contextPath>
 					</webAppConfig>

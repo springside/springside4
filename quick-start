@@ -6,7 +6,7 @@ echo "[Pre-Requirement] Makesure install Maven 3.0.4+ and set the PATH."
 set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
 
 echo "[Step 1] Install all springside modules to local maven repository, and generate eclipse files to all projects."
-mvn clean install -Dmaven.test.skip=true -pl org.springside:springside-parent,org.springside:springside-core,org.springside:springside-extension
+mvn clean install -Dmaven.test.skip=true
 
 echo "[Step 2] Generate Eclipse project files for all projects"	
 mvn eclipse:clean eclipse:eclipse 
