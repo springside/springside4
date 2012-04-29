@@ -10,6 +10,7 @@ import com.icegreen.greenmail.util.ServerSetupTest;
 /**
  * 基于GreenMail的MailServer模拟器，用于开发/测试环境。
  * 默认在localhost的3025端口启动SMTP服务, 用户名密码是greenmail@localhost.com/greemail
+ * FactoryBean已将greenMail对象注入到Context中，可在测试中取用.
  * 
  * @author calvin
  */
