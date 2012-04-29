@@ -26,7 +26,7 @@ public class SimpleMailService {
 		SimpleMailMessage msg = new SimpleMailMessage();
 		msg.setFrom("springside3.demo@gmail.com");
 		msg.setTo("springside3.demo@gmail.com");
-		msg.setSubject("用户修改通知");
+		msg.setSubject("User Changed");
 
 		//将用户名与当期日期格式化到邮件内容的字符串模板
 		String content = String.format(textTemplate, userName, new Date());

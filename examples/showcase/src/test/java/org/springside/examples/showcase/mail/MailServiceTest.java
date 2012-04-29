@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.Part;
@@ -41,10 +40,11 @@ public class MailServiceTest extends SpringContextTestCase {
 
 		greenMail.waitForIncomingEmail(2000, 1);
 
-		Message message = greenMail.getReceivedMessages()[0];
+		MimeMessage[] messages = greenMail.getReceivedMessages();
+		MimeMessage message = messages[messages.length - 1];
 
 		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("用户修改通知", message.getSubject());
+		assertEquals("User Changed", message.getSubject());
 		//text格式内容
 		System.out.println(message.getContent());
 		assertTrue(((String) message.getContent()).contains("被修改"));
@@ -56,11 +56,11 @@ public class MailServiceTest extends SpringContextTestCase {
 		mimeMailService.sendNotificationMail("calvin");
 
 		greenMail.waitForIncomingEmail(2000, 1);
-
-		MimeMessage message = greenMail.getReceivedMessages()[0];
+		MimeMessage[] messages = greenMail.getReceivedMessages();
+		MimeMessage message = messages[messages.length - 1];
 
 		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("用户修改通知", message.getSubject());
+		assertEquals("User Changed", message.getSubject());
 
 		MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
 
