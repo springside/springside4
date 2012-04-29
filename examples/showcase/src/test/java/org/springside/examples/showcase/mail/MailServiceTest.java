@@ -44,7 +44,7 @@ public class MailServiceTest extends SpringContextTestCase {
 		MimeMessage message = messages[messages.length - 1];
 
 		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("User Changed", message.getSubject());
+		assertEquals("用户修改通知", message.getSubject());
 		//text格式内容
 		System.out.println(message.getContent());
 		assertTrue(((String) message.getContent()).contains("被修改"));
@@ -60,7 +60,7 @@ public class MailServiceTest extends SpringContextTestCase {
 		MimeMessage message = messages[messages.length - 1];
 
 		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("User Changed", message.getSubject());
+		assertEquals("用户修改通知", message.getSubject());
 
 		MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
 

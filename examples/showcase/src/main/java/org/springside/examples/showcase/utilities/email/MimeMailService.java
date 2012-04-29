@@ -48,7 +48,7 @@ public class MimeMailService {
 
 			helper.setTo("springside3.demo@gmail.com");
 			helper.setFrom("springside3.demo@gmail.com");
-			helper.setSubject("User Changed");
+			helper.setSubject("用户修改通知");
 
 			String content = generateContent(userName);
 			helper.setText(content, true);

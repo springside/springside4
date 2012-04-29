@@ -33,6 +33,7 @@
 			<property name="host" value="smtp.gmail.com" />
 			<property name="username" value="springside3.demo@gmail.com" />
 			<property name="password" value="demoforyou" />
+			<property name="defaultEncoding" value="UTF-8"/>
 			<property name="javaMailProperties">
 				<props>
 					<prop key="mail.smtp.auth">true</prop>
@@ -51,6 +52,7 @@
 			<property name="port" value="3025" />
 			<property name="username" value="greenmail@localhost。com" />
 			<property name="password" value="greenmail" />
+			<property name="defaultEncoding" value="UTF-8"/>
 			<property name="javaMailProperties">
 				<props>
 					<prop key="mail.smtp.auth">true</prop>
