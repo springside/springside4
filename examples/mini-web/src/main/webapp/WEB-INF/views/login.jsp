@@ -21,27 +21,35 @@
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
 	%>
-		<div class="error prepend-top">登录失败，请重试.</div>
+		<div class="error">登录失败，请重试.</div>
 	<%
 	}
 	%>
-	<form:form id="loginForm"  action="${ctx}/login" method="post">
-		<fieldset class="prepend-top">
-			<legend>登录</legend>
-			<div>
-				<label for="username" class="field">名称:</label>
+	<form:form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
+		<fieldset>
+			<legend><small>登录</small></legend>
+			<div class="control-group">
+				<label for="username" class="control-label">名称:</label>
+				<div class="controls">
 				<input type="text" id="username" name="username" size="25" value="${username}" class="required"/>
+				</div>
 			</div>
-			<div>
-				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="25"  class="required"/>
+			<div class="control-group">
+				<label for="password" class="control-label">密码:</label>
+				<div class="controls">
+					<input type="password" id="password" name="password" size="25"  class="required"/>
+				</div>
 			</div>
 		</fieldset>
-		<div>
-			<input type="checkbox" id="rememberMe" name="rememberMe"/> <label for="rememberMe">记住我</label>
-			<span style="padding-left:10px;"><input id="submit" class="button" type="submit" value="登录"/></span>
+		<div class="control-group">
+			<div class="controls">
+				<div class="input-append">
+				<label class="checkbox inline" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
+				<input id="submit" class="btn" type="submit" value="登录"/>
+				<p class="help-block">(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</p>
+				</div>
+			</div>
 		</div>
-			<div>(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</div>
 	</form:form>
 </body>
 </html>

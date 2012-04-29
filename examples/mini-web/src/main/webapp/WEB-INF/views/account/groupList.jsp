@@ -13,12 +13,12 @@
 </head>
 
 <body>
-	<h4 class="prepend-top">权限组列表</h4>
+	<h4>权限组列表</h4>
 	<c:if test="${not empty message}">
 		<div id="message" class="success">${message}</div>	
 	</c:if>
 	
-	<table id="contentTable">
+	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<tr><th>名称</th><th>授权</th><th>操作</th></tr>
 		<c:forEach items="${groups}" var="group">
 			<tr>
@@ -34,7 +34,7 @@
 	</table>
 
 	<shiro:hasPermission name="group:edit">
-		<a href="create">创建权限组</a>
+		<a class="btn" href="create">创建权限组</a>
 	</shiro:hasPermission>
 </body>
 </html>

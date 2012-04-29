@@ -2,13 +2,13 @@
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<div id="header" class="span-24 last">
+<div id="header" class="span12">
 	<div id="title">
 		<div class="title">Mini-Web示例</div>
 		<div>
 		<span class="subtitle">--CRUD管理界面演示</span>
 		<shiro:user>
-			<span class="right">Hello, <shiro:principal property="name"/>!!</span>
+			<span class="pull-right">Hello, <shiro:principal property="name"/>!!</span>
 		</shiro:user>
 		</div>
 	</div>

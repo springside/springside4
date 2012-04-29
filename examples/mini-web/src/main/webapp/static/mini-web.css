@@ -1,12 +1,4 @@
 /* general */
-table {
-    border: 1px solid #CCCCCC;
-}
-
-label.field {
-	width:98px;
-	display:inline-block;
-}
 
 /* header */
 #title div.title {

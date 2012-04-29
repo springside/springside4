@@ -13,13 +13,14 @@
 </head>
 
 <body>
-	<h4 class="prepend-top">用户列表</h4>
+	<h4>用户列表</h4>
 	<c:if test="${not empty message}">
 		<div id="message" class="success">${message}</div>	
 	</c:if>
 	
-	<table id="contentTable">
-		<tr><th>登录名</th><th>用户名</th><th>邮箱</th><th>权限组<th>操作</th></tr>
+	<table id="contentTable" class="table table-striped table-bordered table-condensed">
+		<thead><tr><th>登录名</th><th>用户名</th><th>邮箱</th><th>权限组<th>操作</th></tr></thead>
+		<tbody>
 		<c:forEach items="${users}" var="user">
 			<tr>
 				<td>${user.loginName}</td>
@@ -33,9 +34,10 @@
 				</td>
 			</tr>
 		</c:forEach>
+		</tbody>
 	</table>
 	<shiro:hasPermission name="user:edit">
-		<a href="create">创建用户</a>
+		<a class="btn" href="create">创建用户</a>
 	</shiro:hasPermission>
 </body>
 </html>
