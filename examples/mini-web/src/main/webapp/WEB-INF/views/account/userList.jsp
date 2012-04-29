@@ -6,16 +6,17 @@
 <head>
 	<title>帐号管理</title>
 	<script>
-	 $(document).ready(function() {
-		$("#message").fadeOut(3000);
-	});
+		$(document).ready(function() {
+			//聚焦第一个输入框
+			$("#user-tab").addClass("active");
+		});
 	</script>
 </head>
 
 <body>
 	<h4>用户列表</h4>
 	<c:if test="${not empty message}">
-		<div id="message" class="success">${message}</div>	
+		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
 	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">

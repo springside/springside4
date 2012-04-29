@@ -17,17 +17,23 @@
 </head>
 
 <body>
+	<form:form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
 	%>
-		<div class="error">登录失败，请重试.</div>
+		<div class="control-group">
+		<div class="controls ">
+		<div class="alert alert-error">
+		<button class="close" data-dismiss="alert">×</button>
+		登录失败，请重试.</div>
+		</div>
+		</div>
+		
 	<%
 	}
 	%>
-	<form:form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
-		<fieldset>
-			<legend><small>登录</small></legend>
+
 			<div class="control-group">
 				<label for="username" class="control-label">名称:</label>
 				<div class="controls">
@@ -40,7 +46,6 @@
 					<input type="password" id="password" name="password" size="25"  class="required"/>
 				</div>
 			</div>
-		</fieldset>
 		<div class="control-group">
 			<div class="controls">
 				<div class="input-append">

@@ -11,6 +11,7 @@
 		$(document).ready(function() {
 			//聚焦第一个输入框
 			$("#loginName").focus();
+			$("#user-tab").addClass("active");
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
 				rules: {
@@ -44,7 +45,7 @@
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>
 			<legend><small>管理用户</small></legend>
-			<div id="messageBox" class="error" style="display:none">输入有误，请先更正。</div>
+			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
 	
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>

@@ -8,6 +8,7 @@
 	<title>帐号管理</title>
 	<script>
 		$(document).ready(function() {
+			$("#group-tab").addClass("active");
 			$("#inputForm").validate();
 		});
 	</script>
