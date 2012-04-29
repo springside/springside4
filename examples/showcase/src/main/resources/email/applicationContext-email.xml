@@ -46,8 +46,10 @@
 	<beans profile="development,functional,test">
 		<!-- 发送至greenmail的邮件发送器 -->
 		<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+			<!-- 配置greenmail simulatore中的默认值 -->
 			<property name="host" value="localhost" />
-			<property name="username" value="greenmail@localhost" />
+			<property name="port" value="3025" />
+			<property name="username" value="greenmail@localhost。com" />
 			<property name="password" value="greenmail" />
 			<property name="javaMailProperties">
 				<props>
@@ -56,7 +58,7 @@
 			</property>
 		</bean>
 		
-		<!-- greenmail邮件服务器模拟器  -->
+		<!-- greenmail smtp邮件服务器模拟器  -->
 		<bean id="greenmail" class="org.springside.modules.mail.MailServerSimulator"/>
 	</beans>
 </beans>

@@ -5,16 +5,17 @@ import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.icegreen.greenmail.util.GreenMail;
-import com.icegreen.greenmail.util.ServerSetup;
+import com.icegreen.greenmail.util.ServerSetupTest;
 
 /**
  * 基于GreenMail的MailServer模拟器，用于开发/测试环境。
+ * 默认在localhost的3025端口启动SMTP服务, 用户名密码是greenmail@localhost.com/greemail
  * 
  * @author calvin
  */
 public class MailServerSimulator implements InitializingBean, DisposableBean, FactoryBean<GreenMail> {
 
-	public static final String DEFAULT_MAIL = "greenmail@localhost";
+	public static final String DEFAULT_MAIL = "greenmail@localhost.com";
 	public static final String DEFAULT_PASSWORD = "greenmail";
 
 	private GreenMail greenMail;
@@ -25,7 +26,7 @@ public class MailServerSimulator implements InitializingBean, DisposableBean, Fa
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		greenMail = new GreenMail(ServerSetup.SMTP);
+		greenMail = new GreenMail(ServerSetupTest.SMTP);
 		greenMail.setUser(mail, password);
 		greenMail.start();
 	}
