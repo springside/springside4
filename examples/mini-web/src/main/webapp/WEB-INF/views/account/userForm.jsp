@@ -51,31 +51,31 @@
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}" class="required"/>
+					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" size="40" value="${user.name}" class="required"/>
+					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="password" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="password" name="password" size="40" value="${user.password}" class="required" minlength="3"/>
+					<input type="password" id="password" name="password" size="50" value="${user.password}" class="required" minlength="3"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="passwordConfirm" class="control-label">确认密码:</label>
 				<div class="controls">
-					<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}" equalTo="#password"/>
+					<input type="password" id="passwordConfirm" name="passwordConfirm" size="50" value="${user.password}" equalTo="#password"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="email" class="control-label">邮箱:</label>
 				<div class="controls">
-					<input type="text" id="email" name="email" size="40" value="${user.email}" class="email"/>
+					<input type="text" id="email" name="email" size="50" value="${user.email}" class="email"/>
 				</div>
 			</div>
 			<div class="control-group">

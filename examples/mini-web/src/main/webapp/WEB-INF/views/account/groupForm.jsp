@@ -22,7 +22,7 @@
 			<div class="control-group">
 				<label for="name" class="control-label">名称:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" size="40" class="required" value="${group.name}"/>
+					<input type="text" id="name" name="name" size="50" class="required" value="${group.name}"/>
 				</div>
 			</div>
 			<div class="control-group">

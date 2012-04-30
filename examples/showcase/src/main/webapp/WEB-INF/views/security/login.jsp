@@ -39,13 +39,13 @@
 			<div class="control-group">
 				<label for="username" class="control-label">名称:</label>
 				<div class="controls">
-					<input type="text" id="username" name="username" size="40" value="${username}" class="required"/>
+					<input type="text" id="username" name="username" size="50" value="${username}" class="required span2"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="password" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="password" name="password" size="40" class="required"/>
+					<input type="password" id="password" name="password" size="50" class="required span2"/>
 				</div>
 			</div>
 		<div class="control-group">

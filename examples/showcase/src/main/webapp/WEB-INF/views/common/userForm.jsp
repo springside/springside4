@@ -24,21 +24,21 @@
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}"/>
+					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}"/>
 					<form:errors path="loginName" cssClass="error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" size="40" value="${user.name}"/>
+					<input type="text" id="name" name="name" size="50" value="${user.name}"/>
 					<form:errors path="name" cssClass="error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="plainPassword" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="plainPassword" name="plainPassword" size="40"/>
+					<input type="password" id="plainPassword" name="plainPassword" size="50"/>
 				</div>
 			</div>
 			<div class="control-group">
