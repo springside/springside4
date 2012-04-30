@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
-<title>定时任务演示</title>
+	<title>定时任务演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#schedule-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>

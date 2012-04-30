@@ -1,3 +1,15 @@
+/* general */
+.prepend-top {margin-top:1.5em;}
+
+/* header */
+#header h1 {
+	color: #658A16;
+}
+
+#header h1 small {
+	color: #BACE87;
+}
+
 /* footer */
 #footer {
 	margin-top: 15px;

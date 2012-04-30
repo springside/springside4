@@ -11,6 +11,7 @@
 		$(document).ready(function() {
 			//聚焦第一个输入框
 			$("#loginName").focus();
+			//active tab
 			$("#user-tab").addClass("active");
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
@@ -83,13 +84,12 @@
 					<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
 				</div>
 			</div>	
-		</fieldset>
-		<div class="control-group">
-			<div class="controls">
+			<div class="form-actions">
 				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
-		</div>
+		</fieldset>
+
 	</form:form>
 </body>
 </html>

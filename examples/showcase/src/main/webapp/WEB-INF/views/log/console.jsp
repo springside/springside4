@@ -5,35 +5,50 @@
 
 <html>
 <head>
-<title>邮件演示</title>
+	<title>日志演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#log-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>
 	<h2>Log4j控制頁面</h2>
-	
-	<form:form id="defaultLoggerForm" action="${ctx}/log/defaultsetting" method="post">
-		<div>
-			<label for="rootLoggerLevel">Root Logger Level:</label>	<form:select path="rootLoggerLevel" items="${levels}"/> 
+	<h3>管理基本级别</h3>
+	<form:form id="defaultLoggerForm" action="${ctx}/log/defaultsetting" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label for="rootLoggerLevel" class="control-label">Root Logger Level:</label>
+			<div class="controls">
+				<form:select path="rootLoggerLevel" items="${levels}" class="span2"/>
+			</div> 
 		</div>
-		<div>
-				<label for="rootLoggerLevel">Project Logger Level:</label>	<form:select path="projectLoggerLevel" items="${levels}"/>
+		<div class="control-group">
+			<label for="rootLoggerLevel" class="control-label">Project Logger Level:</label>
+			<div class="controls">
+				<form:select path="projectLoggerLevel" items="${levels}" class="span2"/>
+			</div>
 		</div>		 
-		<div>
-			<input type="submit" value="save"/>
+		<div class="form-actions">
+			<input type="submit" value="save" class="btn btn-primary"/>
 		</div>
 	</form:form>
-	
-	<form:form id="anyLoggerForm" action="${ctx}/log/loggersetting" method="post">
-		<div>
-			<label for="loggerName">Logger Name:</label><input name="loggerName" value="${command.loggerName}"/> <form:select path="loggerLevel" items="${levels}"/>
+	<h3>管理任意Logger级别</h3>
+	<form:form id="anyLoggerForm" action="${ctx}/log/loggersetting" method="post" class="form-horizontal">
+		<div class="control-group">
+			<label for="loggerName" class="control-label">Logger Name:</label>
+			<div class="controls">
+				<input type="text" name="loggerName" value="${command.loggerName}" class="span3"/>
+				<form:select path="loggerLevel" items="${levels}" class="span2"/>
+			</div>
 		</div>
-		<div>
+		<div class="form-actions">
 		<c:if test="${command.loggerName ==null}">
-			<input type="submit" value="query"/> 
+			<input type="submit" value="query" class="btn btn-primary"/> 
 		</c:if>
 		
 		<c:if test="${command.loggerName !=null}">
-			<input type="submit" value="save"/>
+			<input type="submit" value="save" class="btn btn-primary"/>
 		</c:if>
 		</div>
 	</form:form>

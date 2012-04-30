@@ -31,13 +31,11 @@
 					<form:checkboxes path="permissionList" items="${allPermissions}" itemLabel="displayName" itemValue="value" />
 				</div>
 			</div>	
-		</fieldset>
-		<div class="control-group">
-			<div class="controls">
-				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
-				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
+			<div class="form-actions">
+					<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+					<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
-		</div>
+		</fieldset>
 	</form:form>
 </body>
 </html>

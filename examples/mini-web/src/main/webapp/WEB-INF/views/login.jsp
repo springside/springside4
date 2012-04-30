@@ -37,7 +37,7 @@
 			<div class="control-group">
 				<label for="username" class="control-label">名称:</label>
 				<div class="controls">
-				<input type="text" id="username" name="username" size="25" value="${username}" class="required"/>
+					<input type="text" id="username" name="username" size="25" value="${username}" class="required"/>
 				</div>
 			</div>
 			<div class="control-group">
@@ -46,9 +46,8 @@
 					<input type="password" id="password" name="password" size="25"  class="required"/>
 				</div>
 			</div>
-		<div class="control-group">
-			<div class="controls">
-				<div class="input-append">
+			<div class="control-group">
+				<div class="controls">
 				<label class="checkbox inline" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
 				<input id="submit" class="btn" type="submit" value="登录"/>
 				<p class="help-block">(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</p>

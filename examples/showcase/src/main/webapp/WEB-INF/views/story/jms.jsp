@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
-<title>JMS演示</title>
+	<title>JMS演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#jms-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>

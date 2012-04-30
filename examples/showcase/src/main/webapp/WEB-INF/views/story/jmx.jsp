@@ -5,6 +5,11 @@
 <html>
 <head>
 	<title>JMX演示用例</title>
+	<script>
+		$(document).ready(function() {
+			$("#jmx-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>
@@ -28,6 +33,7 @@
 	<li>否则远程进程URL为 localhost:2099 或完整版的service:jmx:rmi:///jndi/rmi://localhost:2099/jmxrmi</li>
 	</ul>
 	
+	<hr/>
 	<h3>与国际接轨的Resultful API:</h3>
 	<ul>
 		<li>获取showcase域下的所有MBean的属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=*">${baseUrl}/jolokia/read/showcase:name=*</a></li>
