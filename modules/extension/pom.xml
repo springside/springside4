@@ -139,7 +139,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>integration-test</id>
+			<id>functional-test</id>
 			<build>
 				<plugins>
 					<!-- 屏蔽单元测试执行 -->

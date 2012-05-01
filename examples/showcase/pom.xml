@@ -521,7 +521,7 @@
 
 		<!-- 执行所有functional test -->
 		<profile>
-			<id>integration-test</id>
+			<id>functional-test</id>
 			<build>
 				<plugins>
 					<plugin>
