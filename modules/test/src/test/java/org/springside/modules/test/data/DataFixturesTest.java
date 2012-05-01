@@ -7,7 +7,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
-@ContextConfiguration(locations = { "/applicationContext-core-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext-test.xml" })
 public class DataFixturesTest extends SpringTransactionalTestCase {
 
 	@Test

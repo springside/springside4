@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.modules.log.Log4jMockAppender;
+import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 import org.springside.modules.utils.Threads;
 

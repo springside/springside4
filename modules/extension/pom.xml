@@ -21,11 +21,6 @@
 		<!-- SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -36,28 +31,7 @@
 			<artifactId>spymemcached</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.thimbleware.jmemcached</groupId>
-			<artifactId>jmemcached-core</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
 		
-		<!-- Mail -->
-		<dependency>
-			<groupId>com.icegreen</groupId>
-			<artifactId>greenmail</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>			
-		</dependency>
-
-		<!-- JSON -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- UTILS -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -80,18 +54,17 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<optional>true</optional>
-		</dependency>
-			
-		<dependency>
 			<groupId>log4j</groupId>
 			<artifactId>log4j</artifactId>
 			<optional>true</optional>
 		</dependency>
 
 		<!-- TEST -->
+		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-test</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -119,6 +92,10 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.thimbleware.jmemcached</groupId>
+			<artifactId>jmemcached-core</artifactId>
+		</dependency>		
 	</dependencies>
 
 	<build>

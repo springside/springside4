@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.memcached;
+package org.springside.modules.test.cache.memcached;
 
 import net.spy.memcached.AddrUtil;
 

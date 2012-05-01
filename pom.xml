@@ -96,6 +96,13 @@
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-test</artifactId>
+				<version>${springside.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- SPRINGSIDE MODULES end -->
 
 			<!-- SPRING begin -->
@@ -948,6 +955,7 @@
 	<modules>
 		<module>modules/core</module>
 		<module>modules/extension</module>
+		<module>modules/test</module>
 		<module>examples/mini-service</module>
 		<module>examples/mini-web</module>
 		<module>examples/showcase</module>

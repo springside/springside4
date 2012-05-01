@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.log;
+package org.springside.modules.test.log;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package org.springside.modules.log;
+package org.springside.modules.test.log;
 
 import static org.junit.Assert.*;
 
@@ -51,12 +51,12 @@ public class Log4jMockAppenderTest {
 
 		//name
 		appender.clearLogs();
-		appender.addToLogger("org.springside.modules.log");
+		appender.addToLogger("org.springside.modules.test.log");
 		logger.warn(testString);
 		assertNotNull(appender.getFirstLog());
 
 		appender.clearLogs();
-		appender.removeFromLogger("org.springside.modules.log");
+		appender.removeFromLogger("org.springside.modules.test.log");
 		logger.warn(testString);
 		assertNull(appender.getFirstLog());
 

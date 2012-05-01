@@ -8,19 +8,31 @@
 		<version>4.0.0.RC3</version>
 		<relativePath>../../</relativePath>
 	</parent>
-	<artifactId>springside-core</artifactId>
+	<artifactId>springside-test</artifactId>
 	<packaging>jar</packaging>
-	<name>Springside :: Module :: Core</name>
+	<name>Springside :: Module :: Test</name>
 
 	<dependencies>
-
-		<!-- PERSISTENCE begin -->
+		<!-- SPRING begin -->
 		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- PERSISTENCE end -->
+		<!-- SPRING end -->
+
+		<!-- CACHE -->
+		<dependency>
+			<groupId>spy</groupId>
+			<artifactId>spymemcached</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>com.thimbleware.jmemcached</groupId>
+			<artifactId>jmemcached-core</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- WEB begin -->
 		<dependency>
@@ -35,54 +47,31 @@
 		</dependency>
 		<!-- WEB end -->
 
-		<!-- REST begin -->
+		<!-- SECURITY begin -->
 		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-core</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- REST end -->
+		<!-- SECURITY end -->
+
+		<!-- Mail -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- UTILS begin -->
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<optional>true</optional>
-		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.dozer</groupId>
-			<artifactId>dozer</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.freemarker</groupId>
-			<artifactId>freemarker</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<!-- UTILS end -->
@@ -95,12 +84,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -111,15 +94,49 @@
 		</dependency>
 		<!-- LOGGING end -->
 
-		<!-- TEST begin -->
-		<dependency>
-			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
-		</dependency>
+		<!-- TEST MODULE begin -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty.aggregate</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<scope>compile</scope>
+			<optional>true</optional>
+		</dependency>
+		<!-- TEST MODULE end -->
+
+		<!-- TEST begin -->
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-library</artifactId>
@@ -129,6 +146,7 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -139,20 +157,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>jaxen</groupId>
-			<artifactId>jaxen</artifactId>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>asm</groupId>
+			<artifactId>asm</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!-- TEST end -->
 	</dependencies>
 

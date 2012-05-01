@@ -190,6 +190,11 @@
 
 		<!-- TEST begin -->
 		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-test</artifactId>
+		</dependency>
+		
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>

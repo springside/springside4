@@ -13,7 +13,7 @@ public class SpringWebTestUtilsTest {
 	@Test
 	public void initByPaths() {
 		MockServletContext servletContext = new MockServletContext();
-		SpringWebTestHelper.initWebApplicationContext(servletContext, "classpath:/applicationContext-core-test.xml");
+		SpringWebTestHelper.initWebApplicationContext(servletContext, "classpath:/applicationContext-test.xml");
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		assertNotNull(context);
 		assertNotNull(context.getBean("springContextHolder"));
@@ -21,8 +21,7 @@ public class SpringWebTestUtilsTest {
 
 	@Test
 	public void initByApplicationConetxt() {
-		ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
-				"classpath:/applicationContext-core-test.xml");
+		ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext("classpath:/applicationContext-test.xml");
 		MockServletContext servletContext = new MockServletContext();
 		SpringWebTestHelper.initWebApplicationContext(servletContext, ac);
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);
@@ -33,7 +32,7 @@ public class SpringWebTestUtilsTest {
 	@Test
 	public void closeApplicationContext() {
 		MockServletContext servletContext = new MockServletContext();
-		SpringWebTestHelper.initWebApplicationContext(servletContext, "classpath:/applicationContext-core-test.xml");
+		SpringWebTestHelper.initWebApplicationContext(servletContext, "classpath:/applicationContext-test.xml");
 
 		SpringWebTestHelper.closeWebApplicationContext(servletContext);
 		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(servletContext);

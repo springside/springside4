@@ -17,8 +17,8 @@ import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.jmx.ApplicationStatistics;
 import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.examples.showcase.security.ShiroDbRealm.HashPassword;
+import org.springside.modules.cache.memcached.SpyMemcachedClient;
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.memcached.SpyMemcachedClient;
 import org.springside.modules.orm.jpa.Jpas;
 
 /**

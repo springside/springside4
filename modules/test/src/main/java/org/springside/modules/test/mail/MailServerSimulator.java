@@ -1,4 +1,4 @@
-package org.springside.modules.mail;
+package org.springside.modules.test.mail;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.FactoryBean;
