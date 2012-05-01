@@ -221,7 +221,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>functional-test-test</id>
+			<id>functional-test</id>
 			<build>
 				<plugins>
 					<!-- 屏蔽单元测试执行 -->
