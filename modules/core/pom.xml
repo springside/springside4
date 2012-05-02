@@ -13,7 +13,6 @@
 	<name>Springside :: Module :: Core</name>
 
 	<dependencies>
-
 		<!-- PERSISTENCE begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -70,6 +69,10 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+		  <groupId>com.fasterxml.jackson.module</groupId>
+		  <artifactId>jackson-module-jaxb-annotations</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
 			<optional>true</optional>
@@ -98,7 +101,6 @@
 			<artifactId>jcl-over-slf4j</artifactId>
 			<optional>true</optional>
 		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>

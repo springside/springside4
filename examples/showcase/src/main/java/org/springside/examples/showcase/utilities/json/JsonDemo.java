@@ -9,6 +9,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.junit.Test;
@@ -137,8 +141,8 @@ public class JsonDemo {
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalMapper.toJson(bean));
 
 		//不打印nullValue属性
-		JsonMapper nonNullMapper = JsonMapper.nonEmptyMapper();
-		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonNullMapper.toJson(bean));
+		JsonMapper nonEmptyMapper = JsonMapper.nonEmptyMapper();
+		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonEmptyMapper.toJson(bean));
 
 		//不打印默认值未改变的nullValue与defaultValue属性
 		JsonMapper nonDefaultMaper = JsonMapper.nonDefaultMapper();
@@ -149,10 +153,22 @@ public class JsonDemo {
 	 * 测试类似Jaxb的常用annotaion，如properName，ignore，propertyOrder
 	 */
 	@Test
-	public void jaxbStyleAnnoation() {
+	public void jacksonAnnoation() {
 		TestBean2 testBean = new TestBean2(1, "foo", 18);
 		//结果name属性输出在前，且被改名为productName，且age属性被ignore
 		assertEquals("{\"productName\":\"foo\",\"id\":1}", mapper.toJson(testBean));
+	}
+
+	/*
+	 * 测试直接使用Jaxb的annotaion
+	 */
+	@Test
+	public void jaxbAnnoation() {
+		JsonMapper newMapper = new JsonMapper();
+		newMapper.enableJaxbAnnotation();
+		TestBean3 testBean = new TestBean3(1, "foo", 18);
+		//结果name属性输出在前，且被改名为productName，且age属性被ignore
+		assertEquals("{\"productName\":\"foo\",\"id\":1}", newMapper.toJson(testBean));
 	}
 
 	//调转顺序
@@ -172,6 +188,30 @@ public class JsonDemo {
 		}
 
 		public TestBean2(long id, String name, int age) {
+			this.id = id;
+			this.name = name;
+			this.age = age;
+		}
+
+	}
+
+	//调转顺序
+	@XmlType(propOrder = { "name", "id" })
+	public static class TestBean3 {
+
+		public long id;
+
+		@XmlElement(name = "productName")
+		public String name;
+
+		@XmlTransient
+		public int age;
+
+		public TestBean3() {
+
+		}
+
+		public TestBean3(long id, String name, int age) {
 			this.id = id;
 			this.name = name;
 			this.age = age;
