@@ -5,10 +5,9 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC3</version>
-		<relativePath>../../</relativePath>
+		<version>4.0.0.RC4-SNAPSHOT</version>
+		<relativePath>../../modules/parent/</relativePath>
 	</parent>
-
 	<groupId>org.springside.examples</groupId>
 	<artifactId>showcase</artifactId>
 	<packaging>war</packaging>
