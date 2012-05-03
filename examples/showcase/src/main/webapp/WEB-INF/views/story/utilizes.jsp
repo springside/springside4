@@ -38,7 +38,7 @@
 	<h3>日志演示</h3>
 	<ul>
 		<li>Log4JManager: 通过JMX动态查询与改变Logger的日志等级与Appender, 详见JMX页面.</li>
-		<li>MockLog4jAppender: 在测试用例中验证日志的输出, 在Schedule测试用例使用MockAppender校验日志输出.</li>
+		<li>Log4MockjAppender: 在测试用例中验证日志的输出, 在Schedule测试用例使用MockAppender校验日志输出.</li>
 	</ul>
 	<hr/>
 	<h3>其他常用工具</h3>

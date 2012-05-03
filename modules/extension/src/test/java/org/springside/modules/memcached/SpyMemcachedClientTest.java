@@ -22,12 +22,12 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 		String value = "admin";
 
 		spyMemcachedClient.set(key, 60 * 60 * 1, value);
-		Threads.sleep(1000);
+		Threads.sleep(2000);
 		String result = spyMemcachedClient.get(key);
 		assertEquals(value, result);
 
 		spyMemcachedClient.delete(key);
-		Threads.sleep(1000);
+		Threads.sleep(2000);
 		result = spyMemcachedClient.get(key);
 		assertNull(result);
 	}
