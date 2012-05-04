@@ -6,7 +6,7 @@
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
 		<version>4.0.0.RC4-SNAPSHOT</version>
-		<relativePath>../../modues/parent/</relativePath>
+		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<artifactId>springside-extension</artifactId>
 	<packaging>jar</packaging>
