@@ -34,14 +34,23 @@
 	</ul>
 	
 	<hr/>
-	<h3>与国际接轨的Resultful API:</h3>
+	<h3>与国际接轨的JMX Resultful API:</h3>
+	<p>以下种种，成本就是在web.xml里添加一个jolokia的servlet而已。</p>
+	查询:
 	<ul>
+		<li>列出showcase域下的所有MBean及其描述: <br/><a href="${baseUrl}/jolokia/list/showcase">${baseUrl}/jolokia/list/showcase</a></li>
 		<li>获取showcase域下的所有MBean的属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=*">${baseUrl}/jolokia/read/showcase:name=*</a></li>
-		<li>获取应用统计MBean下的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics</a></li>
-		<li>只获取应用统计MBean下的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
+		<li>获取应用统计MBean的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics</a></li>
+		<li>只获取应用统计MBean的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
+	</ul>
+	设置:
+	<ul>
+		<li>设置Root Logger Level的命令: <br/><a href="${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO">${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO</a></li>
+	</ul>
+	执行：
+	<ul>
 		<li>执行重置清零统计信息的命令: <br/><a href="${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics">${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics</a></li>
 		<li>执行获取特定Logger的Level的命令: <br/><a href="${baseUrl}/jolokia/exec/log4j:name=Log4j/getLoggerLevel/org.springframework">${baseUrl}/jolokia/exec/log4j:name=Log4j/getLoggerLevel/org.springframework</a></li>
-		<li>列出showcase域下的所有MBean及其描述: <br/><a href="${baseUrl}/jolokia/list/showcase">${baseUrl}/jolokia/list/showcase</a></li>
 	</ul>
 </body>
 </html>
