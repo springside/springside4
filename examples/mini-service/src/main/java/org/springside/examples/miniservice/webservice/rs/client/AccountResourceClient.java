@@ -26,6 +26,9 @@ public class AccountResourceClient {
 
 	private WebResource client;
 
+	private GenericType<List<UserDTO>> userListType = new GenericType<List<UserDTO>>() {
+	};
+
 	@Required
 	public void setBaseUrl(String baseUrl) {
 		client = Client.create().resource(baseUrl);
@@ -57,8 +60,7 @@ public class AccountResourceClient {
 			wr = wr.queryParam("name", name);
 		}
 
-		return wr.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<UserDTO>>() {
-		});
+		return wr.accept(MediaType.APPLICATION_JSON).get(userListType);
 	}
 
 	/**

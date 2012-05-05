@@ -25,6 +25,9 @@ public class UserResourceClient {
 
 	private WebResource client;
 
+	private GenericType<List<UserDTO>> userListType = new GenericType<List<UserDTO>>() {
+	};
+
 	@Required
 	public void setBaseUrl(String baseUrl) {
 		client = Client.create().resource(baseUrl);
@@ -36,8 +39,7 @@ public class UserResourceClient {
 	public List<UserDTO> getAllUser(String userName, String password) {
 		String authentication = Servlets.encodeHttpBasic(userName, password);
 		return client.path("/users").header(Servlets.AUTHENTICATION_HEADER, authentication)
-				.accept(MediaType.APPLICATION_JSON).get(new GenericType<List<UserDTO>>() {
-				});
+				.accept(MediaType.APPLICATION_JSON).get(userListType);
 	}
 
 	public UserDTO getUser(Long id) {

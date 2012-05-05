@@ -452,6 +452,7 @@
 						<excludes>
 							<exclude>**/entity/**/*.class</exclude>
 							<exclude>**/*Controller.class</exclude>
+							<exclude>**/*Demo.class</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>

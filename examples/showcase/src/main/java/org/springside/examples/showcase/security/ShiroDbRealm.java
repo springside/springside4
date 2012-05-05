@@ -154,11 +154,17 @@ public class ShiroDbRealm extends AuthorizingRealm {
 			return loginName;
 		}
 
+		/**
+		 * 重载equals,只计算loginName;
+		 */
 		@Override
 		public int hashCode() {
 			return HashCodeBuilder.reflectionHashCode(this, "loginName");
 		}
 
+		/**
+		 * 重载equals,只比较loginName
+		 */
 		@Override
 		public boolean equals(Object obj) {
 			return EqualsBuilder.reflectionEquals(this, obj, "loginName");
