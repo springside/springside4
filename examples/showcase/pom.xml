@@ -99,10 +99,10 @@
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
 
-		<!-- dbcp -->
+		<!-- druid connection pool -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
 		</dependency>
 
 		<!-- jdbc driver -->
