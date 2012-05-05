@@ -1,4 +1,4 @@
-package org.springside.examples.miniservice.webservice.ws.result.base;
+package org.springside.examples.miniservice.webservice.ws.response.base;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -9,8 +9,8 @@ import org.springside.examples.miniservice.webservice.WsConstants;
  * 
  * @author calvin
  */
-@XmlType(name = "WSResult", namespace = WsConstants.NS)
-public class WSResult {
+@XmlType(name = "WSResponse", namespace = WsConstants.NS)
+public class WSResponse {
 
 	//-- 返回代码定义 --//
 	// 按项目的规则进行定义, 比如4xx代表客户端参数错误，5xx代表服务端业务错误等.
@@ -27,7 +27,7 @@ public class WSResult {
 	/**
 	* 创建结果.
 	*/
-	public <T extends WSResult> T setError(String resultCode, String resultMessage) {
+	public <T extends WSResponse> T setError(String resultCode, String resultMessage) {
 		code = resultCode;
 		message = resultMessage;
 		return (T) this;
@@ -36,7 +36,7 @@ public class WSResult {
 	/**
 	 * 创建默认异常结果.
 	 */
-	public <T extends WSResult> T setDefaultError() {
+	public <T extends WSResponse> T setDefaultError() {
 		return (T) setError(SYSTEM_ERROR, SYSTEM_ERROR_MESSAGE);
 	}
 

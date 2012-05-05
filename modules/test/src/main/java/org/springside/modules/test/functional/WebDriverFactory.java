@@ -24,9 +24,6 @@ import org.springframework.util.Assert;
  */
 public class WebDriverFactory {
 
-	private WebDriverFactory() {
-	}
-
 	/**
 	 * 根据driverName创建各种WebDriver的简便方法.
 	 * 

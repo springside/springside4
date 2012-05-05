@@ -15,15 +15,25 @@ public class Log4jMockAppenderTest {
 		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(Log4jMockAppenderTest.class);
 
+		//null
+		assertNull(appender.getFirstLog());
+		assertNull(appender.getLastLog());
+		assertNull(appender.getFirstMessage());
+		assertNull(appender.getFirstMessage());
+
 		Logger logger = LoggerFactory.getLogger(Log4jMockAppenderTest.class);
 		logger.warn(testString1);
 		logger.warn(testString2);
 
 		//getFirstLog/getLastLog
+		assertEquals(testString1, appender.getFirstLog().getMessage());
+		assertEquals(testString2, appender.getLastLog().getMessage());
+
 		assertEquals(testString1, appender.getFirstMessage());
 		assertEquals(testString2, appender.getLastMessage());
 
 		//getAllLogs
+		assertEquals(2, appender.getLogsCount());
 		assertEquals(2, appender.getAllLogs().size());
 		assertEquals(testString2, appender.getAllLogs().get(1).getMessage());
 
@@ -31,7 +41,6 @@ public class Log4jMockAppenderTest {
 		appender.clearLogs();
 		assertNull(appender.getFirstLog());
 		assertNull(appender.getLastLog());
-
 	}
 
 	@Test

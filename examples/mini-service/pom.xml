@@ -254,6 +254,7 @@
 						<excludes>
 							<exclude>**/entity/**/*.class</exclude>
 							<exclude>**/dto/**/*.class</exclude>
+							<exclude>**/response/**/*.class</exclude>
 						</excludes>
 					</instrumentation>
 				</configuration>

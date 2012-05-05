@@ -1,26 +1,26 @@
-package org.springside.examples.miniservice.webservice.ws.result;
+package org.springside.examples.miniservice.webservice.ws.response;
 
 import javax.xml.bind.annotation.XmlType;
 
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
-import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
+import org.springside.examples.miniservice.webservice.ws.response.base.WSResponse;
 
 /**
- * GetDepartment方法的返回结果.
+ * 包含Department的返回结果.
  * 
  * @author calvin
  * @author badqiu
  */
-@XmlType(name = "DepartmentResult", namespace = WsConstants.NS)
-public class DepartmentResult extends WSResult {
+@XmlType(name = "DepartmentResponse", namespace = WsConstants.NS)
+public class DepartmentResponse extends WSResponse {
 
 	private DepartmentDTO department;
 
-	public DepartmentResult() {
+	public DepartmentResponse() {
 	}
 
-	public DepartmentResult(DepartmentDTO department) {
+	public DepartmentResponse(DepartmentDTO department) {
 		this.department = department;
 	}
 

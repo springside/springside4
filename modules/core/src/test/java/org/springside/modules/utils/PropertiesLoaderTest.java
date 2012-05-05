@@ -24,6 +24,21 @@ public class PropertiesLoaderTest {
 	public void notExistProperty() throws IOException {
 		Properties p = new PropertiesLoader("classpath:/notexist.properties").getProperties();
 		assertNull(p.getProperty("notexist"));
+
+		assertEquals("defaultValue", p.getProperty("notexist", "defaultValue"));
+	}
+
+	@Test
+	public void integerAndBooleanProperty() {
+		PropertiesLoader p = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties");
+
+		assertEquals(new Integer(1), p.getInteger("p1"));
+		assertEquals(new Integer(0), p.getInteger("notExist"));
+		assertEquals(new Integer(100), p.getInteger("notExist", 100));
+
+		assertEquals(new Boolean(true), p.getBoolean("p4"));
+		assertEquals(new Boolean(false), p.getBoolean("notExist"));
+		assertEquals(new Boolean(true), p.getBoolean("notExist", true));
 	}
 
 	@Test
@@ -31,5 +46,6 @@ public class PropertiesLoaderTest {
 		System.setProperty("p1", "sys");
 		PropertiesLoader pl = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties");
 		assertEquals("sys", pl.getProperty("p1"));
+		System.clearProperty("p1");
 	}
 }

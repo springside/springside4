@@ -29,9 +29,6 @@ public class Reflections {
 
 	private static Logger logger = LoggerFactory.getLogger(Reflections.class);
 
-	private Reflections() {
-	}
-
 	/**
 	 * 调用Getter方法.
 	 */
@@ -41,7 +38,9 @@ public class Reflections {
 	}
 
 	/**
-	 * 调用Setter方法.使用value的Class来查找Setter方法.
+	 * 调用Setter方法,如果屬性是原始類型，需要使用帶propertyType的版本.
+	 * 
+	 * @see #invokeSetter(Object, String, Object, Class)
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
 		invokeSetter(obj, propertyName, value, null);
@@ -50,10 +49,11 @@ public class Reflections {
 	/**
 	 * 调用Setter方法.
 	 * 
-	 * @param propertyType 用于查找Setter方法,为空时使用value的Class替代.
+	 * @param propertyType 作为setter方法的输入参数类型查找Setter方法,为Null时使用value的Class替代.
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value, Class<?> propertyType) {
 		Class<?> type = propertyType != null ? propertyType : value.getClass();
+
 		String setterMethodName = "set" + StringUtils.capitalize(propertyName);
 		invokeMethod(obj, setterMethodName, new Class[] { type }, new Object[] { value });
 	}

@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
-import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
+import org.springside.examples.miniservice.webservice.ws.response.UserListResponse;
 import org.springside.modules.test.category.Smoke;
 
 /**
@@ -54,7 +54,7 @@ public class AccountWebServiceWithDynamicCreateClientIT extends BaseFunctionalTe
 	public void searchUser() {
 		AccountWebService accountWebService = creatClient();
 
-		UserListResult result = accountWebService.searchUser(null, null);
+		UserListResponse result = accountWebService.searchUser(null, null);
 
 		assertTrue(result.getUserList().size() >= 4);
 		assertEquals("Jack", result.getUserList().get(0).getName());

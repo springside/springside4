@@ -19,6 +19,11 @@
 	
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-
-	<bean id="springContextHolder" class="org.springside.modules.test.spring.SpringContextHolder" lazy-init="false" />
+	
+	<bean id="greenmail" class="org.springside.modules.test.mail.MailServerSimulator"/>
+	
+	<bean id="memcachedSimulator" class="org.springside.modules.test.cache.memcached.MemcachedSimulator" lazy-init="false">
+		<property name="serverUrl" value="localhost:11511" />
+	</bean>
+	
 </beans>

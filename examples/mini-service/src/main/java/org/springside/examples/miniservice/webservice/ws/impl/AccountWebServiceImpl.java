@@ -18,10 +18,10 @@ import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
-import org.springside.examples.miniservice.webservice.ws.result.DepartmentResult;
-import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
-import org.springside.examples.miniservice.webservice.ws.result.base.IdResult;
-import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
+import org.springside.examples.miniservice.webservice.ws.response.DepartmentResponse;
+import org.springside.examples.miniservice.webservice.ws.response.UserListResponse;
+import org.springside.examples.miniservice.webservice.ws.response.base.IdResponse;
+import org.springside.examples.miniservice.webservice.ws.response.base.WSResponse;
 import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.mapper.BeanMapper;
 
@@ -44,7 +44,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#getDepartmentDetail()
 	 */
 	@Override
-	public DepartmentResult getDepartmentDetail(Long id) {
+	public DepartmentResponse getDepartmentDetail(Long id) {
 		try {
 			Department entity = accountManager.getDepartmentDetail(id);
 
@@ -52,13 +52,13 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			DepartmentDTO dto = BeanMapper.map(entity, DepartmentDTO.class);
 
-			return new DepartmentResult(dto);
+			return new DepartmentResponse(dto);
 		} catch (IllegalArgumentException e) {
 			logger.error(e.getMessage());
-			return new DepartmentResult().setError(WSResult.PARAMETER_ERROR, e.getMessage());
+			return new DepartmentResponse().setError(WSResponse.PARAMETER_ERROR, e.getMessage());
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage(), e);
-			return new DepartmentResult().setDefaultError();
+			return new DepartmentResponse().setDefaultError();
 		}
 	}
 
@@ -66,16 +66,16 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#searchUser()
 	 */
 	@Override
-	public UserListResult searchUser(String loginName, String name) {
+	public UserListResponse searchUser(String loginName, String name) {
 		try {
 			List<User> entityList = accountManager.searchUser(loginName, name);
 
 			List<UserDTO> dtoList = BeanMapper.mapList(entityList, UserDTO.class);
 
-			return new UserListResult(dtoList);
+			return new UserListResponse(dtoList);
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage(), e);
-			return new UserListResult().setDefaultError();
+			return new UserListResponse().setDefaultError();
 		}
 	}
 
@@ -83,23 +83,23 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#createUser()
 	 */
 	@Override
-	public IdResult createUser(UserDTO user) {
+	public IdResponse createUser(UserDTO user) {
 		try {
 			User userEntity = BeanMapper.map(user, User.class);
 
 			Long userId = accountManager.saveUser(userEntity);
 
-			return new IdResult(userId);
+			return new IdResponse(userId);
 		} catch (ConstraintViolationException e) {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), "\n");
-			return new IdResult().setError(WSResult.PARAMETER_ERROR, message);
+			return new IdResponse().setError(WSResponse.PARAMETER_ERROR, message);
 		} catch (DataIntegrityViolationException e) {
 			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
 			logger.error(message, e);
-			return new IdResult().setError(WSResult.PARAMETER_ERROR, message);
+			return new IdResponse().setError(WSResponse.PARAMETER_ERROR, message);
 		} catch (RuntimeException e) {
 			logger.error(e.getMessage(), e);
-			return new IdResult().setDefaultError();
+			return new IdResponse().setDefaultError();
 		}
 	}
 

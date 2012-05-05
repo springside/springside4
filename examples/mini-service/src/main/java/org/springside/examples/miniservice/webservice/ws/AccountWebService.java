@@ -5,9 +5,9 @@ import javax.jws.WebService;
 
 import org.springside.examples.miniservice.webservice.WsConstants;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
-import org.springside.examples.miniservice.webservice.ws.result.DepartmentResult;
-import org.springside.examples.miniservice.webservice.ws.result.UserListResult;
-import org.springside.examples.miniservice.webservice.ws.result.base.IdResult;
+import org.springside.examples.miniservice.webservice.ws.response.DepartmentResponse;
+import org.springside.examples.miniservice.webservice.ws.response.UserListResponse;
+import org.springside.examples.miniservice.webservice.ws.response.base.IdResponse;
 
 /**
  * JAX-WS2.0的WebService接口定义类.
@@ -23,16 +23,16 @@ public interface AccountWebService {
 	/**
 	 * 获取部门的详细信息.
 	 */
-	DepartmentResult getDepartmentDetail(@WebParam(name = "id") Long id);
+	DepartmentResponse getDepartmentDetail(@WebParam(name = "id") Long id);
 
 	/**
 	 * 搜索用户信息.
 	 */
-	UserListResult searchUser(@WebParam(name = "loginName") String loginName, @WebParam(name = "name") String name);
+	UserListResponse searchUser(@WebParam(name = "loginName") String loginName, @WebParam(name = "name") String name);
 
 	/**
 	 * 新建用户.
 	 */
-	IdResult createUser(@WebParam(name = "user") UserDTO user);
+	IdResponse createUser(@WebParam(name = "user") UserDTO user);
 
 }

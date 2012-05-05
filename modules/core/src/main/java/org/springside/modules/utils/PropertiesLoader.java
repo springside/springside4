@@ -63,14 +63,19 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回0.
 	 */
 	public Integer getInteger(String key) {
-		return Integer.valueOf(getProperty(key));
+		String strResult = getProperty(key);
+		if (strResult != null) {
+			return Integer.valueOf(strResult);
+		} else {
+			return 0;
+		}
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回Default值.
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
 		String strResult = getProperty(key);
@@ -82,14 +87,14 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.
+	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回false.
 	 */
 	public Boolean getBoolean(String key) {
 		return Boolean.valueOf(getProperty(key));
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.
+	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回Default值.
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
 		String strResult = getProperty(key);
@@ -98,7 +103,6 @@ public class PropertiesLoader {
 		} else {
 			return defaultValue;
 		}
-
 	}
 
 	/**

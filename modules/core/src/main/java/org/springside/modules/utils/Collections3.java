@@ -22,9 +22,6 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class Collections3 {
 
-	private Collections3() {
-	}
-
 	/**
 	 * 返回a-b的集合.
 	 */

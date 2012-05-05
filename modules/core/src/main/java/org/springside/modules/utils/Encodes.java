@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * 
  * 1.Commons-Codec的 hex/base64 编码
  * 2.自制的base62 编码
- * 3.Commons-Lang的xml/html/csv escape
+ * 3.Commons-Lang的xml/html escape
  * 4.JDK提供的URLEncoder
  * 
  * @author calvin
@@ -28,9 +28,6 @@ public class Encodes {
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
 	private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
-
-	private Encodes() {
-	}
 
 	/**
 	 * Hex编码.
@@ -46,7 +43,7 @@ public class Encodes {
 		try {
 			return Hex.decodeHex(input.toCharArray());
 		} catch (DecoderException e) {
-			throw new IllegalStateException("Hex Decoder exception", e);
+			throw Exceptions.unchecked(e);
 		}
 	}
 
@@ -108,20 +105,6 @@ public class Encodes {
 	 */
 	public static String unescapeXml(String xmlEscaped) {
 		return StringEscapeUtils.unescapeXml(xmlEscaped);
-	}
-
-	/**
-	 * Csv 转码.
-	 */
-	public static String escapeCsv(String csv) {
-		return StringEscapeUtils.escapeCsv(csv);
-	}
-
-	/**
-	 * Csv 解码.
-	 */
-	public static String unescapeCsv(String csvEscaped) {
-		return StringEscapeUtils.unescapeCsv(csvEscaped);
 	}
 
 	/**

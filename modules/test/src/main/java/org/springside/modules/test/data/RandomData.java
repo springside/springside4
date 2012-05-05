@@ -18,9 +18,6 @@ public class RandomData {
 
 	private static Random random = new Random();
 
-	private RandomData() {
-	}
-
 	/**
 	 * 返回随机ID.
 	 */
@@ -39,7 +36,8 @@ public class RandomData {
 	 * 从输入list中随机返回一个对象.
 	 */
 	public static <T> T randomOne(List<T> list) {
-		return randomSome(list, 1).get(0);
+		Collections.shuffle(list);
+		return list.get(0);
 	}
 
 	/**

@@ -42,6 +42,10 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 		String result = StringUtils.join(BeanValidators.extractPropertyAndMessage(violations, " "), ",");
 		assertTrue(StringUtils.contains(result, "email not a well-formed email address"));
 		assertTrue(StringUtils.contains(result, "name may not be empty"));
+
+		result = StringUtils.join(BeanValidators.extractMessage(violations), ",");
+		assertTrue(StringUtils.contains(result, "not a well-formed email address"));
+		assertTrue(StringUtils.contains(result, "may not be empty"));
 	}
 
 	@Test
@@ -62,9 +66,9 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 	private static class Customer {
 
-		String name;
+		private String name;
 
-		String email;
+		private String email;
 
 		@NotBlank
 		public String getName() {

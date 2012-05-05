@@ -19,9 +19,6 @@ public class JettyFactory {
 
 	private static final String DEFAULT_WEBAPP_PATH = "src/main/webapp";
 
-	private JettyFactory() {
-	}
-
 	/**
 	 * 创建用于开发运行调试的Jetty Server, 以src/main/webapp为Web应用目录.
 	 */

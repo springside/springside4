@@ -46,16 +46,6 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	}
 
 	/**
-	 * 返回之前append的第一个log的按layout pattern格式化的信息.
-	 */
-	public String getFirstRenderedMessage() {
-		if (logs.isEmpty()) {
-			return null;
-		}
-		return getLayout().format(getFirstLog());
-	}
-
-	/**
 	 * 返回之前append的最后一个log.
 	 */
 	public LoggingEvent getLastLog() {
@@ -69,20 +59,10 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	 * 返回之前append的最后一个log的信息.
 	 */
 	public String getLastMessage() {
-		if (getLastLog() == null) {
-			return null;
-		}
-		return getLastLog().getMessage().toString();
-	}
-
-	/**
-	 * 返回之前append的最后一个log的按layout pattern格式化的信息.
-	 */
-	public String getLastRenderedMessage() {
 		if (logs.isEmpty()) {
 			return null;
 		}
-		return getLayout().format(getLastLog());
+		return getLastLog().getMessage().toString();
 	}
 
 	/**

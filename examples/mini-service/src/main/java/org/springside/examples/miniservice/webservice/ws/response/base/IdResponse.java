@@ -1,4 +1,4 @@
-package org.springside.examples.miniservice.webservice.ws.result.base;
+package org.springside.examples.miniservice.webservice.ws.response.base;
 
 import javax.xml.bind.annotation.XmlType;
 
@@ -10,14 +10,14 @@ import org.springside.examples.miniservice.webservice.WsConstants;
  * @author badqiu
  *
  */
-@XmlType(name = "IdResult", namespace = WsConstants.NS)
-public class IdResult extends WSResult {
+@XmlType(name = "IdResponse", namespace = WsConstants.NS)
+public class IdResponse extends WSResponse {
 	private Long id;
 
-	public IdResult() {
+	public IdResponse() {
 	}
 
-	public IdResult(Long id) {
+	public IdResponse(Long id) {
 		super();
 		this.id = id;
 	}

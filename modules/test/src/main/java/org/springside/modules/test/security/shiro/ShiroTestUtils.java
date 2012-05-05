@@ -10,21 +10,14 @@ import org.apache.shiro.subject.support.SubjectThreadState;
 import org.apache.shiro.util.ThreadState;
 import org.mockito.Mockito;
 
-public class ShiroTestHelper {
+/**
+ * 在单元测试中的Shiro工具类，
+ * 
+ * @author calvin
+ */
+public class ShiroTestUtils {
 
 	private static ThreadState threadState;
-
-	private ShiroTestHelper() {
-	}
-
-	/**
-	 * 綁定Subject到當前線程.
-	 */
-	public static void bindSubject(Subject subject) {
-		clearSubject();
-		threadState = new SubjectThreadState(subject);
-		threadState.bind();
-	}
 
 	/**
 	 * 用Mockito快速創建一個已認證的用户.
@@ -35,6 +28,15 @@ public class ShiroTestHelper {
 		Mockito.when(subject.getPrincipal()).thenReturn(principal);
 
 		bindSubject(subject);
+	}
+
+	/**
+	 * 綁定Subject到當前線程.
+	 */
+	protected static void bindSubject(Subject subject) {
+		clearSubject();
+		threadState = new SubjectThreadState(subject);
+		threadState.bind();
 	}
 
 	/**

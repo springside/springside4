@@ -4,6 +4,11 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.InitializingBean;
 
+/**
+ * 在Spring Context启动时，使用DBUnit一次性初始化数据。
+ * 
+ * @author calvin
+ */
 public class DataInitializer implements InitializingBean {
 
 	private DataSource dataSource;

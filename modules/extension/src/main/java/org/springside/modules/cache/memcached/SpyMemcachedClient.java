@@ -66,9 +66,9 @@ public class SpyMemcachedClient implements DisposableBean {
 	}
 
 	/**
-	 * 安全的Set方法,在updateTimeout秒内返回结果, 否则返回false并取消操作.
+	 * 安全的Set方法, 保证在updateTimeout秒内返回执行结果, 否则返回false并取消操作.
 	 */
-	public boolean safeSet(String key, Object value, int expiration) {
+	public boolean safeSet(String key, int expiration, Object value) {
 		Future<Boolean> future = memcachedClient.set(key, expiration, value);
 		try {
 			return future.get(updateTimeout, TimeUnit.MILLISECONDS);
@@ -86,7 +86,7 @@ public class SpyMemcachedClient implements DisposableBean {
 	}
 
 	/**
-	 * 安全的Delete方法,在updateTimeout秒内返回结果, 否则返回false并取消操作.
+	 * 安全的Delete方法, 保证在updateTimeout秒内返回执行结果, 否则返回false并取消操作.
 	 */
 	public boolean safeDelete(String key) {
 		Future<Boolean> future = memcachedClient.delete(key);

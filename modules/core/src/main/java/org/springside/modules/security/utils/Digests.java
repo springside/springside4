@@ -11,6 +11,7 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 
+import org.apache.commons.lang.Validate;
 import org.springside.modules.utils.Exceptions;
 
 /**
@@ -26,9 +27,6 @@ public class Digests {
 	private static final String MD5 = "MD5";
 
 	private static SecureRandom random = new SecureRandom();
-
-	private Digests() {
-	}
 
 	/**
 	 * 对输入字符串进行sha1散列.
@@ -74,9 +72,8 @@ public class Digests {
 	 * @param numBytes byte数组的大小
 	 */
 	public static byte[] generateSalt(int numBytes) {
-		if (numBytes <= 0) {
-			throw new IllegalArgumentException("numBytes argument must be a positive integer (1 or larger)");
-		}
+		Validate.isTrue(numBytes > 0, "numBytes argument must be a positive integer (1 or larger)", numBytes);
+
 		byte[] bytes = new byte[numBytes];
 		random.nextBytes(bytes);
 		return bytes;

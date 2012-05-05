@@ -34,6 +34,10 @@ public class ReflectionsTest {
 		bean = new TestBean();
 		Reflections.invokeSetter(bean, "publicField", 10, int.class);
 		assertEquals(10 + 1, bean.inspectPublicField());
+
+		//非原始類型，可省略類型參數
+		Reflections.invokeSetter(bean, "name", "foo");
+		assertEquals("foo", bean.name);
 	}
 
 	@Test
@@ -88,12 +92,20 @@ public class ReflectionsTest {
 		/** 有getter/setter的field */
 		private int publicField = 1;
 
+		private String name;
+
+		//通過getter函數會比屬性值+1
 		public int getPublicField() {
 			return publicField + 1;
 		}
 
+		//通過setter函數會被比輸入值加1
 		public void setPublicField(int publicField) {
 			this.publicField = publicField + 1;
+		}
+
+		public void setName(String name) {
+			this.name = name;
 		}
 
 		public int inspectPrivateField() {

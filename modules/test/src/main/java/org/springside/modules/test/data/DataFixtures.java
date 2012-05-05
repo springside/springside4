@@ -93,12 +93,12 @@ public class DataFixtures {
 	protected static IDatabaseConnection getConnection(DataSource dataSource) throws DatabaseUnitException,
 			SQLException {
 		Connection connection = dataSource.getConnection();
-		String dbName = connection.getMetaData().getURL();
-		if (StringUtils.contains(dbName, ":h2:")) {
+		String jdbcUrl = connection.getMetaData().getURL();
+		if (StringUtils.contains(jdbcUrl, ":h2:")) {
 			return new H2Connection(connection, null);
-		} else if (StringUtils.contains(dbName, ":mysql:")) {
+		} else if (StringUtils.contains(jdbcUrl, ":mysql:")) {
 			return new MySqlConnection(connection, null);
-		} else if (StringUtils.contains(dbName, ":oracle:")) {
+		} else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
 			return new OracleConnection(connection, null);
 		} else {
 			return new DatabaseConnection(connection);

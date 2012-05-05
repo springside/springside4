@@ -37,9 +37,6 @@ public class Cryptos {
 
 	private static SecureRandom random = new SecureRandom();
 
-	private Cryptos() {
-	}
-
 	//-- HMAC-SHA1 funciton --//
 	/**
 	 * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度为20字节.
