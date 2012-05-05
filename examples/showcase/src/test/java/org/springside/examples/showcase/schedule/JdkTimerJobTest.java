@@ -26,7 +26,7 @@ public class JdkTimerJobTest extends SpringTransactionalTestCase {
 		appender.addToLogger(JdkExecutorJob.class);
 
 		//等待任务启动
-		Threads.sleep(3000);
+		Threads.sleep(2000);
 
 		//验证任务已执行
 		assertEquals(1, appender.getLogsCount());

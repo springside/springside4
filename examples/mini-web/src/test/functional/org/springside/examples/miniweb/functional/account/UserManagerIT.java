@@ -30,11 +30,11 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void viewUserList() {
-		s.click(By.linkText(Gui.MENU_USER));
+		s.click(Gui.MENU_USER);
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("admin", s.getTable(table, 1, UserColumn.LOGIN_NAME.ordinal()));
-		assertEquals("Admin", s.getTable(table, 1, UserColumn.NAME.ordinal()));
-		assertEquals("管理员, 用户", s.getTable(table, 1, UserColumn.GROUPS.ordinal()));
+		assertEquals("admin", s.getTable(table, 0, UserColumn.LOGIN_NAME.ordinal()));
+		assertEquals("Admin", s.getTable(table, 0, UserColumn.NAME.ordinal()));
+		assertEquals("管理员, 用户", s.getTable(table, 0, UserColumn.GROUPS.ordinal()));
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	@Test
 	public void createUser() {
 		//打开新增用户页面
-		s.click(By.linkText(Gui.MENU_USER));
+		s.click(Gui.MENU_USER);
 		s.click(By.linkText("创建用户"));
 
 		//生成待输入的测试用户数据
@@ -106,7 +106,7 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void inputInValidateUser() {
-		s.click(By.linkText(Gui.MENU_USER));
+		s.click(Gui.MENU_USER);
 		s.click(By.linkText("创建用户"));
 
 		s.type(By.id("loginName"), "admin");
@@ -116,12 +116,11 @@ public class UserManagerIT extends BaseFunctionalTestCase {
 		s.type(By.id("email"), "abc");
 
 		s.click(By.id("submit"));
-
-		assertEquals("用户登录名已存在", s.getText(By.xpath("//fieldset/div[2]/label[2]")));
-		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div[3]/label[2]")));
-		assertEquals("请输入一个长度最少是 3 的字符串", s.getText(By.xpath("//fieldset/div[4]/label[2]")));
-		assertEquals("输入与上面相同的密码", s.getText(By.xpath("//fieldset/div[5]/label[2]")));
-		assertEquals("请输入正确格式的电子邮件", s.getText(By.xpath("//fieldset/div[6]/label[2]")));
+		assertEquals("用户登录名已存在", s.getText(By.xpath("//fieldset/div[2]/div/label")));
+		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div[3]/div/label")));
+		assertEquals("请输入一个长度最少是 3 的字符串", s.getText(By.xpath("//fieldset/div[4]/div/label")));
+		assertEquals("输入与上面相同的密码", s.getText(By.xpath("//fieldset/div[5]/div/label")));
+		assertEquals("请输入正确格式的电子邮件", s.getText(By.xpath("//fieldset/div[6]/div/label")));
 	}
 
 }
