@@ -7,7 +7,6 @@ import java.sql.Driver;
 
 import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
@@ -27,7 +26,6 @@ import org.springside.modules.utils.PropertiesLoader;
  *  
  * @author calvin
  */
-@Ignore
 public class BaseFunctionalTestCase {
 
 	protected static String baseUrl;

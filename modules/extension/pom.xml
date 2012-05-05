@@ -154,5 +154,21 @@
 				</plugins>
 			</build>
 		</profile>
+		
+		<profile>
+			<id>skip-unstable</id>
+			<build>
+				<plugins>
+					<!-- test plugin, exclude unstable case -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
+						</configuration>
+					</plugin>				
+				</plugins>
+			</build>
+		</profile>		
 	</profiles>	
 </project>

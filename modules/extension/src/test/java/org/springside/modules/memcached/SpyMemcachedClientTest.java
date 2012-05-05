@@ -3,12 +3,15 @@ package org.springside.modules.memcached;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.cache.memcached.SpyMemcachedClient;
+import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
+@Category(UnStable.class)
 @ContextConfiguration(locations = { "/applicationContext-memcached.xml" })
 public class SpyMemcachedClientTest extends SpringContextTestCase {
 

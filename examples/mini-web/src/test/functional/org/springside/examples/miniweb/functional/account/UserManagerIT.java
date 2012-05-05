@@ -14,7 +14,7 @@ import org.springside.examples.miniweb.entity.account.User;
 import org.springside.examples.miniweb.functional.BaseFunctionalTestCase;
 import org.springside.examples.miniweb.functional.Gui;
 import org.springside.examples.miniweb.functional.Gui.UserColumn;
-import org.springside.examples.miniweb.functional.category.Smoke;
+import org.springside.modules.test.category.Smoke;
 import org.springside.modules.utils.Collections3;
 
 /**

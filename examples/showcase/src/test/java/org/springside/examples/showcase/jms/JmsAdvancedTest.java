@@ -10,6 +10,7 @@ import javax.jms.Message;
 import javax.jms.Session;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
@@ -18,10 +19,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageListener;
 import org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageProducer;
+import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
+@Category(UnStable.class)
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml", "/jms/applicationContext-jms-advanced.xml" })
 public class JmsAdvancedTest extends SpringContextTestCase {
@@ -61,7 +64,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		user.setEmail("calvin@sringside.org.cn");
 
 		notifyMessageProducer.sendTopic(user);
-		Threads.sleep(2000);
+		Threads.sleep(1000);
 		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
 	}
 

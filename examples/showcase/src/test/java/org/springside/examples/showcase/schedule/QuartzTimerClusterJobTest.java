@@ -2,11 +2,12 @@ package org.springside.examples.showcase.schedule;
 
 import static org.junit.Assert.*;
 
-import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 import org.springside.modules.utils.Threads;
@@ -16,7 +17,7 @@ import org.springside.modules.utils.Threads;
  * 
  * @author calvin
  */
-@Ignore("Unstable on Slow Jenkins")
+@Category(UnStable.class)
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-quartz-timer-cluster.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
