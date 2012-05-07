@@ -5,27 +5,14 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC3</version>
-		<relativePath>../../</relativePath>
+		<version>4.0.0.RC4-SNAPSHOT</version>
+		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<artifactId>springside-core</artifactId>
 	<packaging>jar</packaging>
 	<name>Springside :: Module :: Core</name>
 
 	<dependencies>
-		<!-- SPRING begin -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- SPRING end -->
-
 		<!-- PERSISTENCE begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -53,35 +40,12 @@
 			<artifactId>jersey-server</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<optional>true</optional>
-		</dependency>
 		<!-- REST end -->
-
-		<!-- SECURITY begin -->
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-core</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-spring</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.shiro</groupId>
-			<artifactId>shiro-web</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- SECURITY end -->
 
 		<!-- UTILS begin -->
 		<dependency>
-			<groupId>net.sf.dozer</groupId>
-			<artifactId>dozer</artifactId>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -95,8 +59,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>joda-time</groupId>
-			<artifactId>joda-time</artifactId>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -105,10 +69,15 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
+		  <groupId>com.fasterxml.jackson.module</groupId>
+		  <artifactId>jackson-module-jaxb-annotations</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
 			<optional>true</optional>
 		</dependency>
+
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
@@ -129,6 +98,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -139,60 +113,20 @@
 		</dependency>
 		<!-- LOGGING end -->
 
-		<!-- TEST MODULE begin -->
+		<!-- TEST begin -->
+		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-test</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
 		</dependency>
+	
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty.aggregate</groupId>
-			<artifactId>jetty-webapp</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-remote-driver</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
-		<!-- TEST MODULE end -->
-
-		<!-- TEST begin -->
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-		</dependency>
-		
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
@@ -201,27 +135,10 @@
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-api-mockito</artifactId>
 		</dependency>
-		
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<scope>test</scope>
-		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-			<scope>test</scope>
+			<artifactId>spring-test</artifactId>
 		</dependency>
 
 		<dependency>
@@ -260,7 +177,7 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>smoke-test</id>
@@ -278,7 +195,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>integration-test</id>
+			<id>functional-test</id>
 			<build>
 				<plugins>
 					<!-- 屏蔽单元测试执行 -->
@@ -289,6 +206,22 @@
 							<skip>true</skip>
 						</configuration>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>skip-unstable</id>
+			<build>
+				<plugins>
+					<!-- test plugin, exclude unstable case -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
+						</configuration>
+					</plugin>				
 				</plugins>
 			</build>
 		</profile>

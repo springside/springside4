@@ -11,6 +11,8 @@
 		$(document).ready(function() {
 			//聚焦第一个输入框
 			$("#loginName").focus();
+			//active tab
+			$("#user-tab").addClass("active");
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
 				rules: {
@@ -40,43 +42,54 @@
 </head>
 
 <body>
-	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post">
+	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post" class="form-horizontal">
 		<input type="hidden" name="id" value="${user.id}"/>
-		<fieldset class="prepend-top">
-			
-			<legend>管理用户</legend>
-			
-			<div id="messageBox" class="error" style="display:none">输入有误，请先更正。</div>
+		<fieldset>
+			<legend><small>管理用户</small></legend>
+			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
 	
-			<div>
-				<label for="loginName" class="field">登录名:</label>
-				<input type="text" id="loginName" name="loginName" size="40" value="${user.loginName}" class="required"/>
+			<div class="control-group">
+				<label for="loginName" class="control-label">登录名:</label>
+				<div class="controls">
+					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
+				</div>
 			</div>
-			<div>
-				<label for="name" class="field">用户名:</label>
-				<input type="text" id="name" name="name" size="40" value="${user.name}" class="required"/>
+			<div class="control-group">
+				<label for="name" class="control-label">用户名:</label>
+				<div class="controls">
+					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
+				</div>
 			</div>
-			<div>
-				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40" value="${user.password}" class="required" minlength="3"/>
+			<div class="control-group">
+				<label for="password" class="control-label">密码:</label>
+				<div class="controls">
+					<input type="password" id="password" name="password" size="50" value="${user.password}" class="required" minlength="3"/>
+				</div>
 			</div>
-			<div>
-				<label for="passwordConfirm" class="field">确认密码:</label>
-				<input type="password" id="passwordConfirm" name="passwordConfirm" size="40" value="${user.password}" equalTo="#password"/>
+			<div class="control-group">
+				<label for="passwordConfirm" class="control-label">确认密码:</label>
+				<div class="controls">
+					<input type="password" id="passwordConfirm" name="passwordConfirm" size="50" value="${user.password}" equalTo="#password"/>
+				</div>
 			</div>
-			<div>
-				<label for="email" class="field">邮箱:</label>
-				<input type="text" id="email" name="email" size="40" value="${user.email}" class="email"/>
+			<div class="control-group">
+				<label for="email" class="control-label">邮箱:</label>
+				<div class="controls">
+					<input type="text" id="email" name="email" size="50" value="${user.email}" class="email"/>
+				</div>
 			</div>
-			<div>
-				<label for="groupList" class="field">权限组:</label>
-				<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
+			<div class="control-group">
+				<label for="groupList" class="control-label">权限组:</label>
+				<div class="controls">
+					<form:checkboxes path="groupList" items="${allGroups}" itemLabel="name" itemValue="id" />
+				</div>
 			</div>	
+			<div class="form-actions">
+				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
+			</div>
 		</fieldset>
-		<div>
-			<input id="submit" class="button" type="submit" value="提交"/>&nbsp;	
-			<input id="cancel" class="button" type="button" value="返回" onclick="history.back()"/>
-		</div>
+
 	</form:form>
 </body>
 </html>

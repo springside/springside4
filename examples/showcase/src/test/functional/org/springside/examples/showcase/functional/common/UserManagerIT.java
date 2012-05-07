@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
-import org.springside.examples.showcase.functional.category.Smoke;
+import org.springside.modules.test.category.Smoke;
 
 /**
  * 用户管理的功能测试.

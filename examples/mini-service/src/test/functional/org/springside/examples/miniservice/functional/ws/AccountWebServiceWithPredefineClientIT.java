@@ -15,8 +15,8 @@ import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.ws.AccountWebService;
-import org.springside.examples.miniservice.webservice.ws.result.base.IdResult;
-import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
+import org.springside.examples.miniservice.webservice.ws.response.base.IdResponse;
+import org.springside.examples.miniservice.webservice.ws.response.base.WSResponse;
 
 /**
  * UserService Web服务的功能测试, 测试主要的接口调用.
@@ -45,7 +45,7 @@ public class AccountWebServiceWithPredefineClientIT extends BaseFunctionalTestCa
 		userDTO.setName(user.getName());
 		userDTO.setEmail(user.getEmail());
 
-		IdResult result = accountWebServiceClient.createUser(userDTO);
+		IdResponse result = accountWebServiceClient.createUser(userDTO);
 		assertNotNull(result.getId());
 	}
 
@@ -59,12 +59,12 @@ public class AccountWebServiceWithPredefineClientIT extends BaseFunctionalTestCa
 
 		//登录名为空
 		userDTO.setLoginName(null);
-		IdResult result = accountWebServiceClient.createUser(userDTO);
-		assertEquals(result.getCode(), WSResult.PARAMETER_ERROR);
+		IdResponse result = accountWebServiceClient.createUser(userDTO);
+		assertEquals(result.getCode(), WSResponse.PARAMETER_ERROR);
 
 		//登录名重复
 		userDTO.setLoginName("user1");
 		result = accountWebServiceClient.createUser(userDTO);
-		assertEquals(result.getCode(), WSResult.PARAMETER_ERROR);
+		assertEquals(result.getCode(), WSResponse.PARAMETER_ERROR);
 	}
 }

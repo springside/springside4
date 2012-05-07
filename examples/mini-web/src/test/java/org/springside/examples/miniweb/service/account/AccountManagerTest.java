@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springside.examples.miniweb.dao.account.UserDao;
 import org.springside.examples.miniweb.service.ServiceException;
-import org.springside.modules.test.support.ShiroTestHelper;
+import org.springside.modules.test.security.shiro.ShiroTestUtils;
 
 /**
  * SecurityEntityManager的测试用例, 测试Service层的业务逻辑.
@@ -25,7 +25,7 @@ public class AccountManagerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		ShiroTestHelper.mockSubject("foo");
+		ShiroTestUtils.mockSubject("foo");
 
 		accountManager = new AccountManager();
 		accountManager.setUserDao(mockUserDao);
@@ -33,7 +33,7 @@ public class AccountManagerTest {
 
 	@After
 	public void tearDown() {
-		ShiroTestHelper.clearSubject();
+		ShiroTestUtils.clearSubject();
 	}
 
 	@Test

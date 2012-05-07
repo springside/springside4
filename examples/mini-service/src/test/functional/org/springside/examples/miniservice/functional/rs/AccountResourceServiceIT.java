@@ -12,10 +12,10 @@ import org.junit.experimental.categories.Category;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.User;
 import org.springside.examples.miniservice.functional.BaseFunctionalTestCase;
-import org.springside.examples.miniservice.functional.category.Smoke;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.dto.UserDTO;
 import org.springside.examples.miniservice.webservice.rs.client.AccountResourceClient;
+import org.springside.modules.test.category.Smoke;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 

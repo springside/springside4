@@ -5,9 +5,9 @@
 <head>
 	<title>综合演示用例</title>
 	<script>
-	$(document).ready(function() {
-		$("#message").fadeOut(3000);
-	});
+		$(document).ready(function() {
+			$("#common-tab").addClass("active");
+		});
 	</script>
 </head>
 
@@ -17,16 +17,16 @@
 		<div id="message" class="success">${message}</div>	
 	</c:if>
 			
-	<div>
-		<table>
-			<tr>
+		<table class="table table-striped table-bordered table-condensed">
+			<thead><tr>
 				<th>登录名</th>
 				<th>姓名</th>
 				<th>电邮</th>
 				<th>角色</th>
 				<th>状态</th>
 				<th>操作</th>
-			</tr>
+			</tr></thead>
+			<tbody>
 			<c:forEach items="${users}" var="user">
 				<tr>
 					<td>${user.loginName}&nbsp;</td>
@@ -37,8 +37,7 @@
 					<td><a href="${ctx}/common/user/update/${user.id}" id="editLink-${user.loginName}">修改</a></td>
 				</tr>
 			</c:forEach>
-					
+			</tbody>		
 		</table>
-	</div>
 </body>
 </html>

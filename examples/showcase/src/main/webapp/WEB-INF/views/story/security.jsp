@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
-<title>安全高级演示</title>
+	<title>安全高级演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#security-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>
@@ -12,7 +17,7 @@
 		<li>Shiro使用Ehcache RMI集群作为认证与权限数据的缓存</li>
 		<li>根据用户状态抛出用户已被冻结的异常</li>
 	</ul>
-
+	<hr/>
 	<h2>安全高级演示</h2>
 	<ul>
 		<li>SHA-1与MD5消息摘要演示，支持Salt与迭代Hash(见Digests及其测试用例)</li>

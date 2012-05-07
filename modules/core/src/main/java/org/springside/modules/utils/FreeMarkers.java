@@ -10,12 +10,8 @@ import org.springframework.core.io.Resource;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public class FreeMarkers {
-
-	private FreeMarkers() {
-	}
 
 	public static String rendereString(String templateString, Map<String, ?> model) {
 		try {
@@ -23,10 +19,8 @@ public class FreeMarkers {
 			Template t = new Template("name", new StringReader(templateString), new Configuration());
 			t.process(model, result);
 			return result.toString();
-		} catch (IOException e) {
-			throw new RuntimeException("Freemarker template error", e);
-		} catch (TemplateException e) {
-			throw new RuntimeException("Freemarker template error", e);
+		} catch (Exception e) {
+			throw Exceptions.unchecked(e);
 		}
 	}
 
@@ -35,19 +29,15 @@ public class FreeMarkers {
 			StringWriter result = new StringWriter();
 			template.process(model, result);
 			return result.toString();
-		} catch (IOException e) {
-			throw new RuntimeException("Freemarker template not exist", e);
-		} catch (TemplateException e) {
-			throw new RuntimeException("Freemarker template error", e);
+		} catch (Exception e) {
+			throw Exceptions.unchecked(e);
 		}
 	}
 
 	public static Configuration buildConfiguration(String directory) throws IOException {
-
 		Configuration cfg = new Configuration();
 		Resource path = new DefaultResourceLoader().getResource(directory);
 		cfg.setDirectoryForTemplateLoading(path.getFile());
 		return cfg;
-
 	}
 }

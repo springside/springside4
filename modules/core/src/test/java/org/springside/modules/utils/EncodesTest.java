@@ -51,17 +51,4 @@ public class EncodesTest {
 		assertEquals("1&gt;2", result);
 		assertEquals(input, Encodes.unescapeHtml(result));
 	}
-
-	@Test
-	public void csv() {
-		String input = "haha,kaka";
-		String result = Encodes.escapeCsv(input);
-		System.out.println(result);
-		assertEquals(input, Encodes.unescapeCsv(result));
-		//
-		input = "\"ha\"ka";
-		result = Encodes.escapeCsv(input);
-		System.out.println(result);
-		assertEquals(input, Encodes.unescapeCsv(result));
-	}
 }

@@ -8,9 +8,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
-import org.springside.examples.showcase.functional.category.Smoke;
 import org.springside.examples.showcase.webservice.rs.client.UserResourceClient;
 import org.springside.examples.showcase.webservice.rs.dto.UserDTO;
+import org.springside.modules.test.category.Smoke;
 
 import com.sun.jersey.api.client.UniformInterfaceException;
 

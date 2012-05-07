@@ -11,7 +11,7 @@ import org.springside.examples.showcase.common.dao.UserJpaDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.common.service.ServiceException;
-import org.springside.modules.test.support.ShiroTestHelper;
+import org.springside.modules.test.security.shiro.ShiroTestUtils;
 
 public class AccountManagerTest {
 
@@ -22,7 +22,7 @@ public class AccountManagerTest {
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-		ShiroTestHelper.mockSubject("foo");
+		ShiroTestUtils.mockSubject("foo");
 
 		accountManager = new AccountManager();
 		accountManager.setUserJpaDao(mockUserDao);
@@ -30,7 +30,7 @@ public class AccountManagerTest {
 
 	@After
 	public void tearDown() {
-		ShiroTestHelper.clearSubject();
+		ShiroTestUtils.clearSubject();
 	}
 
 	@Test

@@ -12,9 +12,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
-import org.springside.modules.log.Log4jMockAppender;
 import org.springside.modules.test.data.DataFixtures;
-import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.spring.SpringTransactionalTestCase;
 import org.springside.modules.utils.Threads;
 
 import com.google.common.cache.CacheBuilder;
@@ -28,7 +28,7 @@ import com.google.common.cache.LoadingCache;
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
-public class GuavaCacheDemo extends SpringTxTestCase {
+public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);
 

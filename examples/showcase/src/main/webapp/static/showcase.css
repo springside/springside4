@@ -1,11 +1,10 @@
 /* general */
-table {
-    border: 1px solid #CCCCCC;
+.prepend-top {
+	margin-top:1.5em;
 }
 
-label.field {
-	width:98px;
-	display:inline-block;
+#main h2,h3 {
+	margin-bottom: 9px;
 }
 
 /* header */
@@ -13,29 +12,21 @@ label.field {
 	border-bottom: 2px solid #658A16;
 }
 
-#header div.title {
-	font-size:2em;
-	letter-spacing: .1em;
+#header h1 {
 	color: #658A16;
 }
 
-#header span.subtitle {
-	font-size:1.5em;
-	letter-spacing: .1em;
+#header h1 small {
 	color: #BACE87;
 }
 
-/* leftbar */
-#leftbar a {
-	display: block;
-	padding: 0.3em;
-	padding-right: 0;
-	border-bottom: 1px dashed #eeeeee;
-	font-weight: bold;
-	text-decoration: none;
+/* footer */
+#footer {
+	margin-top: 15px;
+	padding: 15px 0px 0px 0px;
+	font-size: 95%;
+	text-align: center;
+	border-top: 2px solid #658A16;
 }
 
-#leftbar a:hover {
-	color: #2a65ad;
-	background-color: #eeeeee;
-}
+#footer a {color: #999;}

@@ -13,7 +13,6 @@ import org.springside.modules.test.functional.WebDriverFactory;
  * 
  * @author calvin
  */
-@Ignore
 public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;

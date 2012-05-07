@@ -12,8 +12,8 @@ import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.service.AccountManager;
 import org.springside.examples.miniservice.webservice.dto.DepartmentDTO;
 import org.springside.examples.miniservice.webservice.ws.impl.AccountWebServiceImpl;
-import org.springside.examples.miniservice.webservice.ws.result.DepartmentResult;
-import org.springside.examples.miniservice.webservice.ws.result.base.WSResult;
+import org.springside.examples.miniservice.webservice.ws.response.DepartmentResponse;
+import org.springside.examples.miniservice.webservice.ws.response.base.WSResponse;
 
 /**
  * Account WebService的单元测试用例.
@@ -45,9 +45,9 @@ public class AccountWebServiceTest {
 		Department department = AccountData.getRandomDepartment();
 		Mockito.when(mockAccountManager.getDepartmentDetail(1L)).thenReturn(department);
 
-		DepartmentResult result = accountWebService.getDepartmentDetail(1L);
+		DepartmentResponse result = accountWebService.getDepartmentDetail(1L);
 
-		assertEquals(WSResult.SUCCESS, result.getCode());
+		assertEquals(WSResponse.SUCCESS, result.getCode());
 
 		DepartmentDTO dto = result.getDepartment();
 
@@ -62,9 +62,9 @@ public class AccountWebServiceTest {
 	public void handleException() {
 		Mockito.when(mockAccountManager.getDepartmentDetail(1L)).thenThrow(new RuntimeException("Expected exception."));
 
-		DepartmentResult result = accountWebService.getDepartmentDetail(1L);
+		DepartmentResponse result = accountWebService.getDepartmentDetail(1L);
 
-		assertEquals(WSResult.SYSTEM_ERROR, result.getCode());
-		assertEquals(WSResult.SYSTEM_ERROR_MESSAGE, result.getMessage());
+		assertEquals(WSResponse.SYSTEM_ERROR, result.getCode());
+		assertEquals(WSResponse.SYSTEM_ERROR_MESSAGE, result.getMessage());
 	}
 }

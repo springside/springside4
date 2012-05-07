@@ -20,7 +20,6 @@ import org.springside.modules.utils.PropertiesLoader;
  * 
  * @author calvin
  */
-@Ignore
 public class BaseFunctionalTestCase {
 	protected static String baseUrl;
 

@@ -6,7 +6,7 @@ set MVN=mvn
 set MAVEN_OPTS=%MAVEN_OPTS% -XX:MaxPermSize=128m
 
 echo [Step 1] Install all springside modules to local maven repository.
-call %MVN% clean install -pl org.springside:springside-parent,org.springside:springside-core,org.springside:springside-extension -Dmaven.test.skip=true
+call %MVN% clean install -Dmaven.test.skip=true
 if errorlevel 1 goto error
 
 echo [Step 2] Generate Eclipse project files for all projects

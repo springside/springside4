@@ -2,6 +2,11 @@
 <html>
 <head>
 	<title>Restful Service高级演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#webservice-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>

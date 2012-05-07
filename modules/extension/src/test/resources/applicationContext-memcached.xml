@@ -4,7 +4,7 @@
 	default-lazy-init="true">
 
 	<!-- SpyMemcached客户端 -->
-	<bean id="spyMemcachedClient" class="org.springside.modules.memcached.SpyMemcachedClient">
+	<bean id="spyMemcachedClient" class="org.springside.modules.cache.memcached.SpyMemcachedClient">
 		<property name="memcachedClient">
 			<bean class="net.spy.memcached.spring.MemcachedClientFactoryBean">
 				<property name="servers" value="localhost:11511" />
@@ -19,7 +19,7 @@
 	</bean>
 
 	<!-- 演示用的JMemcached, 模拟Memcached服务器 -->
-	<bean id="memcachedSimulator" class="org.springside.modules.memcached.MemcachedSimulator" lazy-init="false">
+	<bean id="memcachedSimulator" class="org.springside.modules.test.cache.memcached.MemcachedSimulator" lazy-init="false">
 		<property name="serverUrl" value="localhost:11511" />
 	</bean>
 </beans>

@@ -20,38 +20,43 @@
 </head>
 
 <body>
-	<h2>登录页面</h2>
-	<%
-	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
-	if(error != null){
-		if(error.contains("DisabledAccountException")){
-	%>		
-		<div class="error prepend-top" >用户已被屏蔽,请登录其他用户.</div>
-	<% 
-		}else{
-	%>
-		<div class="error prepend-top" >登录失败，请重试.</div>
-	<%
-		}
-	}
-	%>
+	<h3><small>登录页</small></h3>
 	<form:form id="loginForm"  action="${ctx}/login" method="post">
-		<fieldset class="prepend-top">
-			<legend>登录</legend>
-			<div>
-				<label for="username" class="field">名称:</label>
-				<input type="text" id="username" name="username" size="40" value="${username}" class="required"/>
+			<%
+			String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
+			if(error != null){
+				if(error.contains("DisabledAccountException")){
+			%>		
+				<div class="error prepend-top" >用户已被屏蔽,请登录其他用户.</div>
+			<% 
+				}else{
+			%>
+				<div class="error prepend-top" >登录失败，请重试.</div>
+			<%
+				}
+			}
+			%>
+			<div class="control-group">
+				<label for="username" class="control-label">名称:</label>
+				<div class="controls">
+					<input type="text" id="username" name="username" size="50" value="${username}" class="required span2"/>
+				</div>
 			</div>
-			<div>
-				<label for="password" class="field">密码:</label>
-				<input type="password" id="password" name="password" size="40" class="required"/>
+			<div class="control-group">
+				<label for="password" class="control-label">密码:</label>
+				<div class="controls">
+					<input type="password" id="password" name="password" size="50" class="required span2"/>
+				</div>
 			</div>
-		</fieldset>
-		<div>
-			<input type="checkbox" id="rememberMe" name="rememberMe"/> <label for="rememberMe">记住我</label>
-			<span style="padding-left:10px;"><input id="submit" class="button" type="submit" value="登录"/></span>
+		<div class="control-group">
+			<div class="controls">
+				<label class="checkbox" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
+				<p class="help-block">(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</p>
+			</div>
 		</div>
-			<div>(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</div>
+		<div class="form-actions">
+			<input id="submit" class="btn btn-primary" type="submit" value="登录"/>			
+		</div>
 	</form:form>
 </body>
 </html>

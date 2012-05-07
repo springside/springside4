@@ -1,7 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <html>
 <head>
-<title>可执行War演示</title>
+	<title>可执行War演示</title>
+	<script>
+		$(document).ready(function() {
+			$("#executablewar-tab").addClass("active");
+		});
+	</script>
 </head>
 
 <body>

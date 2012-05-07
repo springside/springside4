@@ -15,9 +15,6 @@ import java.util.concurrent.TimeUnit;
  */
 public class Threads {
 
-	private Threads() {
-	}
-
 	/**
 	 * sleep等待,单位为毫秒,忽略InterruptedException.
 	 */

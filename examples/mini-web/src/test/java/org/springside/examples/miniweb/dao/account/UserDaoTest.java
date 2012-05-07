@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniweb.data.AccountData;
 import org.springside.examples.miniweb.entity.account.User;
-import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 /**
  * UserDao的测试用例, 测试ORM映射及特殊的DAO操作.
@@ -20,7 +20,7 @@ import org.springside.modules.test.spring.SpringTxTestCase;
  * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-public class UserDaoTest extends SpringTxTestCase {
+public class UserDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired
 	private UserDao entityDao;

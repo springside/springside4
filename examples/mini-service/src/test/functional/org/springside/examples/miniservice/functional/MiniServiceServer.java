@@ -21,15 +21,19 @@ public class MiniServiceServer {
 
 		//启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
-		server.start();
+		try {
+			server.start();
 
-		System.out.println("Server running at " + BASE_URL);
-		System.out.println("Hit Enter in console to stop server");
+			System.out.println("Server running at " + BASE_URL);
+			System.out.println("Hit Enter in console to stop server");
 
-		//wait for close
-		System.in.read();
-		server.stop();
-		server.join();
-		System.out.println("Server stopped");
+			//wait for close
+			System.in.read();
+			server.stop();
+			server.join();
+			System.out.println("Server stopped");
+		} catch (Exception e) {
+			System.exit(-1);
+		}
 	}
 }

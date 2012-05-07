@@ -11,7 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.miniservice.data.AccountData;
 import org.springside.examples.miniservice.entity.Department;
 import org.springside.examples.miniservice.entity.User;
-import org.springside.modules.test.spring.SpringTxTestCase;
+import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import com.google.common.collect.Maps;
 
@@ -23,7 +23,7 @@ import com.google.common.collect.Maps;
  * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-public class AccountDaoTest extends SpringTxTestCase {
+public class AccountDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired
 	private AccountDao accountDao;

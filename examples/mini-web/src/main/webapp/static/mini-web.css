@@ -1,47 +1,14 @@
 /* general */
-table {
-    border: 1px solid #CCCCCC;
-}
-
-label.field {
-	width:98px;
-	display:inline-block;
-}
+.prepend-top {margin-top:1.5em;}
 
 /* header */
-#title div.title {
-	font-size:2em;
-	color:#111;
-	letter-spacing: .1em;
-	
+#header h1 {
+	color: #658A16;
 }
 
-#title span.subtitle {
-	font-size:1.5em;
-	color: #999;
-	letter-spacing: .1em;
-	margin-bottom:0.75em;
-
+#header h1 small {
+	color: #BACE87;
 }
-
-#menu ul {
-	margin:0 0 0 0;
-	padding: 0.5em;
-	font-weight: bold;
-	background: #BACE87;
-	border-top: 2px solid #658A16;
-	border-bottom: 2px solid #658A16;
-}
-
-#menu li {display: inline;}
-
-#menu ul a {
-	padding: 0.5em;
-	text-decoration: none;
-	color: #fff;
-}
-
-#menu a:hover {background: #658A16;}
 
 /* footer */
 #footer {

@@ -39,9 +39,6 @@ public class Servlets {
 	//-- 常用数值定义 --//
 	public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
-	private Servlets() {
-	}
-
 	/**
 	 * 设置客户端缓存过期时间 的Header.
 	 */

@@ -26,7 +26,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void viewGroupList() {
-		s.click(By.linkText(Gui.MENU_GROUP));
+		s.click(Gui.MENU_GROUP);
 		WebElement table = s.findElement(By.xpath("//table[@id='contentTable']"));
 		assertEquals("管理员", s.getTable(table, 1, GroupColumn.NAME.ordinal()));
 		assertEquals("查看用戶,修改用户,查看权限组,修改权限组", s.getTable(table, 1, GroupColumn.PERMISSIONS.ordinal()));
@@ -37,7 +37,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void createGroup() {
-		s.click(By.linkText(Gui.MENU_GROUP));
+		s.click(Gui.MENU_GROUP);
 		s.click(By.linkText("创建权限组"));
 
 		//生成测试数据
@@ -63,7 +63,7 @@ public class GroupManagerIT extends BaseFunctionalTestCase {
 	}
 
 	private void verifyGroup(Group group) {
-		s.click(By.linkText(Gui.MENU_GROUP));
+		s.click(Gui.MENU_GROUP);
 		s.click(By.id("editLink-" + group.getName()));
 		assertEquals(group.getName(), s.getValue(By.id("name")));
 
