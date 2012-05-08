@@ -25,7 +25,9 @@ public class StringDemo {
 
 	/**
 	 * Apache提供的最常用的Null Safe的函数。
-	 * 另有一些与String一样，但Null Safe的函数如indexOf()，没有一一演示。
+	 * 
+	 * 另有一些与String一样，但Null Safe的函数，没有一一演示。
+	 * 
 	 */
 	@Test
 	public void utilsByApache() {
@@ -34,9 +36,11 @@ public class StringDemo {
 		assertFalse(StringUtils.isNotBlank(""));
 		assertFalse(StringUtils.isNotBlank(" "));
 
-		//default值
+		//null的default值
+		assertEquals("", StringUtils.defaultString(null));
+		assertEquals("defaultStr", StringUtils.defaultString(null, "defaultStr"));
 		assertEquals("defaultStr", StringUtils.defaultIfBlank(null, "defaultStr"));
-		assertEquals("defaultStr", StringUtils.defaultIfBlank("", "defaultStr"));
+		assertEquals("defaultStr", StringUtils.defaultIfBlank(" ", "defaultStr"));
 
 		//截取字符串
 		String input = "hahakaka";
@@ -46,10 +50,17 @@ public class StringDemo {
 		result = StringUtils.substringAfterLast(input, "ha");
 		assertEquals("kaka", result);
 
+		assertEquals("haha", StringUtils.substringBetween("'haha'", "'"));
+		assertEquals("haha", StringUtils.substringBetween("{haha}", "{", "}"));
+
 		//join
 		List<String> inputList = Lists.newArrayList("a", "b", "c");
 		result = StringUtils.join(inputList, ",");
 		assertEquals("a,b,c", result);
+
+		//ignoreCase的比较函数:contains/startWith/EndWith/indexOf/lastIndexOf
+		assertTrue(StringUtils.containsIgnoreCase("Aaabbb", "aaa"));
+		assertEquals(0, StringUtils.indexOfIgnoreCase("Aaabbb", "aaa"));
 
 		///split
 		input = "a,b,c";
@@ -63,15 +74,16 @@ public class StringDemo {
 		//超长部分变省略号
 		assertEquals("abcdefg", StringUtils.abbreviate("abcdefg", 7));
 		assertEquals("abc...", StringUtils.abbreviate("abcdefg", 6));
-		assertEquals("ab...", StringUtils.abbreviate("abcdefg", 5));
 
 		//首字母大写
-		result = StringUtils.capitalize("abc");
-		assertEquals("Abc", result);
+		assertEquals("Abc", StringUtils.capitalize("abc"));
+		assertEquals("abc", StringUtils.uncapitalize("Abc"));
 	}
 
 	/**
-	 * Guava的高级版Joiner，Splitter的函数与Joiner类似而相反，不再演示。
+	 * Guava的高级版Joiner，
+	 * 
+	 * Splitter的函数与Joiner功能类似，不再演示。
 	 */
 	@Test
 	public void joinerByGuava() {
@@ -101,7 +113,7 @@ public class StringDemo {
 	}
 
 	/**
-	 * 好玩的CaseFormat转换，在spaceSize->space_size之间转换，比如数据库列名与Java属性。
+	 * 好玩的CaseFormat转换，在spaceSize->space_size之间转换，比如数据库表名与Java类名，变量名之间的转换。
 	 */
 	@Test
 	public void caseFormatByGuava() {

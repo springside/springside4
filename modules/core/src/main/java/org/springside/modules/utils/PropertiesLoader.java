@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,38 +64,30 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回0.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误則返回0.
 	 */
 	public Integer getInteger(String key) {
 		String strResult = getProperty(key);
-		if (strResult != null) {
-			return Integer.valueOf(strResult);
-		} else {
-			return 0;
-		}
+		return NumberUtils.toInt(strResult);
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回Default值.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误則返回Default值.
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
 		String strResult = getProperty(key);
-		if (strResult != null) {
-			return Integer.valueOf(strResult);
-		} else {
-			return defaultValue;
-		}
+		return NumberUtils.toInt(strResult, defaultValue);
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回false.
+	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null或内容不为true/false則返回false.
 	 */
 	public Boolean getBoolean(String key) {
 		return Boolean.valueOf(getProperty(key));
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回Default值.
+	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回Default值,如果内容不为true/false则返回false.
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
 		String strResult = getProperty(key);

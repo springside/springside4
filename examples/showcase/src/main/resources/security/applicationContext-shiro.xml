@@ -6,13 +6,13 @@
 	<description>Shiro安全配置</description>
 
 	<!-- Shiro's main business-tier object for web-enabled applications -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="userJpaDao">
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroDbRealm" />
 		<property name="cacheManager" ref="shiroCacheManager" />
 	</bean>
 
 	<!-- 項目自定义的Realm -->
-	<bean id="shiroDbRealm" class="org.springside.examples.showcase.security.ShiroDbRealm">
+	<bean id="shiroDbRealm" class="org.springside.examples.showcase.security.ShiroDbRealm" depends-on="userJpaDao">
 		<property name="accountManager" ref="accountManager"/>
 		<!-- 可配置cache token<->认证信息的cache，用于REST等需要频繁认证的场景 -->
 		<property name="authorizationCachingEnabled" value="true"/>

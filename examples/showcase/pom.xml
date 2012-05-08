@@ -522,7 +522,9 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<!-- 在parent的profile的基础上进一步定义 -->
+							<!-- 支持taglib tld文件查找的必要设置 -->
 							<useSystemClassLoader>false</useSystemClassLoader>
+							<!-- 将由mvn命令行-Dselenium.driver传到surefire的JVM中 -->
 							<systemPropertyVariables>
 								<selenium.driver>${selenium.driver}</selenium.driver>
 							</systemPropertyVariables>

@@ -23,7 +23,23 @@ public class ReflectionsTest {
 
 		//绕过将publicField+1的setter函数,直接设置publicField的原始值
 		Reflections.setFieldValue(bean, "publicField", 2);
+
 		assertEquals(2, bean.inspectPublicField());
+
+		try {
+			Reflections.getFieldValue(bean, "notExist");
+			fail("should throw exception here");
+		} catch (IllegalArgumentException e) {
+
+		}
+
+		try {
+			Reflections.setFieldValue(bean, "notExist", 2);
+			fail("should throw exception here");
+		} catch (IllegalArgumentException e) {
+
+		}
+
 	}
 
 	@Test
@@ -32,19 +48,45 @@ public class ReflectionsTest {
 		assertEquals(bean.inspectPublicField() + 1, Reflections.invokeGetter(bean, "publicField"));
 
 		bean = new TestBean();
-		Reflections.invokeSetter(bean, "publicField", 10, int.class);
+		//通过setter的函数将+1
+		Reflections.invokeSetter(bean, "publicField", 10);
 		assertEquals(10 + 1, bean.inspectPublicField());
-
-		//非原始類型，可省略類型參數
-		Reflections.invokeSetter(bean, "name", "foo");
-		assertEquals("foo", bean.name);
 	}
 
 	@Test
 	public void invokeMethod() {
 		TestBean bean = new TestBean();
+		//使用函数名+参数类型的匹配
 		assertEquals("hello calvin", Reflections.invokeMethod(bean, "privateMethod", new Class[] { String.class },
 				new Object[] { "calvin" }));
+
+		//仅匹配函数名
+		assertEquals("hello calvin", Reflections.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" }));
+
+		//函数名错
+		try {
+			Reflections.invokeMethod(bean, "notExistMethod", new Class[] { String.class }, new Object[] { "calvin" });
+			fail("should throw exception here");
+		} catch (IllegalArgumentException e) {
+
+		}
+
+		//参数类型错
+		try {
+			Reflections.invokeMethod(bean, "privateMethod", new Class[] { Integer.class }, new Object[] { "calvin" });
+			fail("should throw exception here");
+		} catch (RuntimeException e) {
+
+		}
+
+		//函数名错
+		try {
+			Reflections.invokeMethodByName(bean, "notExistMethod", new Object[] { "calvin" });
+			fail("should throw exception here");
+		} catch (IllegalArgumentException e) {
+
+		}
+
 	}
 
 	@Test
@@ -92,8 +134,6 @@ public class ReflectionsTest {
 		/** 有getter/setter的field */
 		private int publicField = 1;
 
-		private String name;
-
 		//通過getter函數會比屬性值+1
 		public int getPublicField() {
 			return publicField + 1;
@@ -102,10 +142,6 @@ public class ReflectionsTest {
 		//通過setter函數會被比輸入值加1
 		public void setPublicField(int publicField) {
 			this.publicField = publicField + 1;
-		}
-
-		public void setName(String name) {
-			this.name = name;
 		}
 
 		public int inspectPrivateField() {
