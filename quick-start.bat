@@ -6,16 +6,20 @@ set MVN=mvn
 set MAVEN_OPTS=%MAVEN_OPTS% -XX:MaxPermSize=128m
 
 echo [Step 1] Install all springside modules to local maven repository.
+cd modules
 call %MVN% clean install -Dmaven.test.skip=true
 if errorlevel 1 goto error
+cd ..\
 
 echo [Step 2] Generate Eclipse project files for all projects
 call %MVN% eclipse:clean eclipse:eclipse
 if errorlevel 1 goto error
 
 echo [Step 3] Init schema and data for all example projects.
-call %MVN% antrun:run -Prefresh-db -pl org.springside.examples:mini-service,org.springside.examples:mini-web,org.springside.examples:showcase
+cd examples
+call %MVN% antrun:run -Prefresh-db
 if errorlevel 1 goto error
+cd ..\
 
 echo [Step 4] Start all example projects.
 cd examples\mini-service
