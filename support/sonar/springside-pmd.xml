@@ -270,11 +270,11 @@
   <rule ref="rulesets/basic.xml/AvoidMultipleUnaryOperators">
     <priority>3</priority>
   </rule>
-  <rule ref="rulesets/naming.xml/BooleanGetMethodName">
-    <priority>3</priority>
-  </rule>
   <rule ref="rulesets/naming.xml/PackageCase">
     <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/basic.xml/UnnecessaryReturn">
+    <priority>4</priority>
   </rule>
 </ruleset>
 
