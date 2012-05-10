@@ -25,7 +25,7 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- 支持 Shiro对Controller的AOP安全控制 begin-->
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制 begin-->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true" />
 	</bean>

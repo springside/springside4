@@ -6,13 +6,13 @@
 	<description>Shiro Configuration</description>
 
 	<!-- Shiro's main business-tier object for web-enabled applications -->
-	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager" depends-on="userDao,groupDao">
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroDbRealm" />
 		<property name="cacheManager" ref="cacheManager" />
 	</bean>
 
 	<!-- 項目自定义的Realm -->
-	<bean id="shiroDbRealm" class="org.springside.examples.miniweb.service.account.ShiroDbRealm">
+	<bean id="shiroDbRealm" class="org.springside.examples.miniweb.service.account.ShiroDbRealm"  depends-on="userDao,groupDao">
 		<property name="accountManager" ref="accountManager"/>
 	</bean>
 

@@ -54,8 +54,9 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		-->
+		  
 		<repository>
-			<id>springside-google</id>
+			<id>springside-googlecode</id>
 			<name>SpringSide Additional Repository at google</name>
 			<url>http://springside.googlecode.com/svn/springside4-repository/</url>
 			<snapshots>
@@ -943,7 +944,7 @@
 				<!-- sonar插件 -->
         		<plugin>
         			<groupId>org.codehaus.sonar</groupId>
-        			<artifactId>sonar-maven-plugin</artifactId>
+        			<artifactId>sonar-maven3-plugin</artifactId>
         			<version>3.0</version>
         		</plugin>
 			</plugins>
