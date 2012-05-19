@@ -25,9 +25,6 @@ import org.slf4j.LoggerFactory;
  * @author calvin
  */
 public class Reflections {
-
-	private static final String CGLIB_CLASS_SEPARATOR = "$$";
-
 	private static final String SETTER_PREFIX = "set";
 
 	private static final String GETTER_PREFIX = "get";
@@ -212,7 +209,7 @@ public class Reflections {
 	}
 
 	/**
-	 * 通过反射, 获得Class定义中声明的父类的泛型参数的类型.
+	 * 通过反射, 获得Class定义中声明的泛型参数的类型, 注意泛型必须定义在父类处
 	 * 如无法找到, 返回Object.class.
 	 * eg.
 	 * public UserDao extends HibernateDao<User>
@@ -220,8 +217,8 @@ public class Reflections {
 	 * @param clazz The class to introspect
 	 * @return the first generic declaration, or Object.class if cannot be determined
 	 */
-	public static <T> Class<T> getSuperClassGenricType(final Class clazz) {
-		return getSuperClassGenricType(clazz, 0);
+	public static <T> Class<T> getClassGenricType(final Class clazz) {
+		return getClassGenricType(clazz, 0);
 	}
 
 	/**
@@ -234,7 +231,7 @@ public class Reflections {
 	 * @param index the Index of the generic ddeclaration,start from 0.
 	 * @return the index generic declaration, or Object.class if cannot be determined
 	 */
-	public static Class getSuperClassGenricType(final Class clazz, final int index) {
+	public static Class getClassGenricType(final Class clazz, final int index) {
 
 		Type genType = clazz.getGenericSuperclass();
 
@@ -256,19 +253,6 @@ public class Reflections {
 		}
 
 		return (Class) params[index];
-	}
-
-	/**
-	 * 对于被cglib AOP过的对象, 取得真实的Class类型.
-	 */
-	public static Class<?> getUnproxyClass(Class<?> clazz) {
-		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
-			Class<?> superClass = clazz.getSuperclass();
-			if (superClass != null && !Object.class.equals(superClass)) {
-				return superClass;
-			}
-		}
-		return clazz;
 	}
 
 	/**

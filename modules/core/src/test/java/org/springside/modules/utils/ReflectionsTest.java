@@ -92,14 +92,14 @@ public class ReflectionsTest {
 	@Test
 	public void getSuperClassGenricType() {
 		//获取第1，2个泛型类型
-		assertEquals(String.class, Reflections.getSuperClassGenricType(TestBean.class));
-		assertEquals(Long.class, Reflections.getSuperClassGenricType(TestBean.class, 1));
+		assertEquals(String.class, Reflections.getClassGenricType(TestBean.class));
+		assertEquals(Long.class, Reflections.getClassGenricType(TestBean.class, 1));
 
 		//定义父类时无泛型定义
-		assertEquals(Object.class, Reflections.getSuperClassGenricType(TestBean2.class));
+		assertEquals(Object.class, Reflections.getClassGenricType(TestBean2.class));
 
 		//无父类定义
-		assertEquals(Object.class, Reflections.getSuperClassGenricType(TestBean3.class));
+		assertEquals(Object.class, Reflections.getClassGenricType(TestBean3.class));
 	}
 
 	@Test
