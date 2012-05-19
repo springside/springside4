@@ -25,9 +25,7 @@ public class ValidateDemo {
 		try {
 			String parameter = "abc";
 
-			//not null后返回值到等式左边
-			String result = Validate.notNull(parameter);
-			assertEquals("abc", result);
+			Validate.notNull(parameter);
 
 			//检验not null，用默认出错信息.
 			Validate.notNull(null);
@@ -39,6 +37,7 @@ public class ValidateDemo {
 		//notBlank String
 		try {
 			String parameter = "abc";
+			//可选择将输入参数赋值到新变量
 			String result = Validate.notBlank(parameter);
 			assertEquals("abc", result);
 
@@ -52,8 +51,8 @@ public class ValidateDemo {
 
 		//notEmpty Collection
 		try {
-			List parameter = Lists.newArrayList();
-			List result = Validate.notEmpty(parameter);
+			List<String> parameter = Lists.newArrayList();
+			Validate.notEmpty(parameter);
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
 			assertEquals("The validated collection is empty", e.getMessage());
