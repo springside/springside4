@@ -12,17 +12,17 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.0.0.RC4-SNAPSHOT</springside.version>
 		<spring.version>3.1.1.RELEASE</spring.version>
-		<hibernate.version>4.1.2</hibernate.version>
+		<hibernate.version>4.1.3.Final</hibernate.version>
 		<mybatis.version>3.1.1</mybatis.version>
-		<spring-data-jpa.version>1.0.3.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
 		<cxf.version>2.6.0</cxf.version>
 		<jersey.version>1.12</jersey.version>
 		<shiro.version>1.2.0</shiro.version>
 		<activemq.version>5.5.1</activemq.version>
-		<quartz.version>2.1.4</quartz.version>
+		<quartz.version>2.1.5</quartz.version>
 		<ehcache.version>2.5.2</ehcache.version>
-		<hibernate-validator.version>4.2.0.Final</hibernate-validator.version>
-		<jackson.version>2.0.1</jackson.version>
+		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
+		<jackson.version>2.0.2</jackson.version>
 		<spymemcached.version>2.8.1</spymemcached.version>
 		<jolokia.version>1.0.3</jolokia.version>
 		<guava.version>12.0</guava.version>
@@ -54,7 +54,7 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		-->
-		  
+		
 		<repository>
 			<id>springside-googlecode</id>
 			<name>SpringSide Additional Repository at google</name>
