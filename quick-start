@@ -6,13 +6,17 @@ echo "[Pre-Requirement] Makesure install Maven 3.0.4+ and set the PATH."
 set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
 
 echo "[Step 1] Install all springside modules to local maven repository, and generate eclipse files to all projects."
+cd modules
 mvn clean install -Dmaven.test.skip=true
+cd ..
 
 echo "[Step 2] Generate Eclipse project files for all projects"	
 mvn eclipse:clean eclipse:eclipse 
 
 echo "[Step 3] Init schema and data for all example projects."
-mvn antrun:run -Prefresh-db -pl org.springside.examples:mini-service,org.springside.examples:mini-web,org.springside.examples:showcase
+cd examples
+mvn antrun:run -Prefresh-db
+cd ..
 
 echo "[Step 4] Start all example projects."
 cd  examples/mini-service
