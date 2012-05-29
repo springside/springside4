@@ -21,29 +21,20 @@ public class Hibernates {
 	public static void initLazyProperty(Object proxyedPropertyValue) {
 		Hibernate.initialize(proxyedPropertyValue);
 	}
-	
+
 	/**
-	 * 根据DataSoure里的url判断Dialect类型.
+	 * 从DataSoure中取出connection, 根据connection的metadata中的jdbcUrl判断Dialect类型.
 	 */
 	public static String getDialect(DataSource dataSource) {
+		//从DataSource中取出jdbcUrl.
+		String jdbcUrl = null;
 		Connection connection = null;
 		try {
 			connection = dataSource.getConnection();
 			if (connection == null) {
 				throw new IllegalStateException("Connection returned by DataSource [" + dataSource + "] was null");
 			}
-
-			String url = connection.getMetaData().getURL();
-
-			if (StringUtils.contains(url, ":h2:")) {
-				return H2Dialect.class.getName();
-			} else if (StringUtils.contains(url, ":mysql:")) {
-				return MySQL5InnoDBDialect.class.getName();
-			} else if (StringUtils.contains(url, ":oracle:")) {
-				return Oracle10gDialect.class.getName();
-			} else {
-				throw new IllegalArgumentException("Unknown Database");
-			}
+			jdbcUrl = connection.getMetaData().getURL();
 		} catch (SQLException e) {
 			throw new RuntimeException("Could not get database url", e);
 		} finally {
@@ -51,10 +42,19 @@ public class Hibernates {
 				try {
 					connection.close();
 				} catch (SQLException e) {
-
-					e.printStackTrace();
 				}
 			}
+		}
+
+		//根据jdbc url判断dialect
+		if (StringUtils.contains(jdbcUrl, ":h2:")) {
+			return H2Dialect.class.getName();
+		} else if (StringUtils.contains(jdbcUrl, ":mysql:")) {
+			return MySQL5InnoDBDialect.class.getName();
+		} else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
+			return Oracle10gDialect.class.getName();
+		} else {
+			throw new IllegalArgumentException("Unknown Database");
 		}
 	}
 }
