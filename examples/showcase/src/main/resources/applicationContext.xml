@@ -26,13 +26,18 @@
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 			</props>
 		</property>
 	</bean>
 	
-	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+		<property name="databasePlatform">
+			<bean factory-method="getDialect" class="org.springside.modules.orm.Hibernates">
+				<constructor-arg ref="dataSource"/>
+			</bean>
+		</property>
+	</bean>
 
 	<!-- Spring Data Jpa配置 -->
  	<jpa:repositories base-package="org.springside.examples.showcase" transaction-manager-ref="defaultTransactionManager" entity-manager-factory-ref="entityManagerFactory"/>
