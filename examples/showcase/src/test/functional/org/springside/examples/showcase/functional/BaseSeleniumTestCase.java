@@ -1,7 +1,6 @@
 package org.springside.examples.showcase.functional;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.openqa.selenium.WebDriver;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
