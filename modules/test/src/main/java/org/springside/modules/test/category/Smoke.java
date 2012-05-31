@@ -5,5 +5,5 @@ package org.springside.modules.test.category;
  * 
  * @author calvin
  */
-public class Smoke {
+public interface Smoke {
 }

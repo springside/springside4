@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.spi.LoggingEvent;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -52,7 +53,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 		if (logs.isEmpty()) {
 			return null;
 		}
-		return logs.get(logs.size() - 1);
+		return Iterables.getLast(logs);
 	}
 
 	/**

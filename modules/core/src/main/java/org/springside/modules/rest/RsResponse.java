@@ -60,14 +60,14 @@ public class RsResponse {
 	}
 
 	/**
-	 * 创建类型为"application/plain"的Response。
+	 * 创建类型为"application/json"的Response。
 	 */
 	public static Response buildJsonResponse(Status status, Object content) {
 		return buildJsonResponse(status.getStatusCode(), content);
 	}
 
 	/**
-	 * 创建类型为"application/plain"的Response。
+	 * 创建类型为"application/json"的Response。
 	 */
 	public static Response buildJsonResponse(int status, Object content) {
 		return Response.status(status).entity(content).type(MediaType.APPLICATION_JSON).build();

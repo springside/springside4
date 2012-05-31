@@ -54,26 +54,24 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		-->
-		
 		<repository>
-			<id>springside-googlecode</id>
-			<name>SpringSide Additional Repository at google</name>
-			<url>http://springside.googlecode.com/svn/springside4-repository/</url>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>	
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
 		
-		<!-- backup additional repository at github
-		<repository>
-			<id>springside-github</id>
-			<name>SpringSide Additional Repository at github</name>
-			<url>http://github.com/springside/springside4-repository/raw/master/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
- 		-->
+	    <repository>
+	      <id>spy</id>
+	      <name>Spy Repository</name>
+	      <layout>default</layout>
+	      <url>http://files.couchbase.com/maven2/</url>
+	      <snapshots>
+	        <enabled>false</enabled>
+	      </snapshots>
+	    </repository>
 	</repositories>
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
@@ -109,7 +107,6 @@
 				<version>${springside.version}</version>
 				<scope>test</scope>
 			</dependency>
-
 			<!-- SPRINGSIDE MODULES end -->
 
 			<!-- SPRING begin -->
@@ -478,11 +475,10 @@
 			</dependency>
 
 			<!-- log4jdbc -->
-			<!-- log4jdbc is provided by springside repository -->
 			<dependency>
-				<groupId>log4jdbc</groupId>
-				<artifactId>log4jdbc4</artifactId>
-				<version>1.2</version>
+				<groupId>org.lazyluke</groupId>
+				<artifactId>log4jdbc-remix</artifactId>
+				<version>0.2.7</version>
 			</dependency>
 			<!-- LOGGING end -->
 

@@ -275,8 +275,8 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4jdbc</groupId>
-			<artifactId>log4jdbc4</artifactId>
+			<groupId>org.lazyluke</groupId>
+			<artifactId>log4jdbc-remix</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 

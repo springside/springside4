@@ -19,7 +19,7 @@ import org.springside.examples.showcase.security.ShiroDbRealm;
 import org.springside.examples.showcase.security.ShiroDbRealm.HashPassword;
 import org.springside.modules.cache.memcached.SpyMemcachedClient;
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.orm.jpa.Jpas;
+import org.springside.modules.orm.Hibernates;
 
 /**
  * 用户管理类.
@@ -92,7 +92,7 @@ public class AccountManager {
 	public List<User> getAllUserInitialized() {
 		List<User> result = (List<User>) userJpaDao.findAll();
 		for (User user : result) {
-			Jpas.initLazyProperty(user.getRoleList());
+			Hibernates.initLazyProperty(user.getRoleList());
 		}
 		return result;
 	}
@@ -149,7 +149,7 @@ public class AccountManager {
 	public User findUserByNameInitialized(String name) {
 		User user = userJpaDao.findByName(name);
 		if (user != null) {
-			Jpas.initLazyProperty(user.getRoleList());
+			Hibernates.initLazyProperty(user.getRoleList());
 		}
 		return user;
 	}
