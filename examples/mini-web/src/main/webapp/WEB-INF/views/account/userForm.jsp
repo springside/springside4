@@ -6,13 +6,14 @@
 <html>
 <head>
 	<title>帐号管理</title>
-	
 	<script>
 		$(document).ready(function() {
 			//聚焦第一个输入框
 			$("#loginName").focus();
-			//active tab
-			$("#user-tab").addClass("active");
+			
+	 		//active tab
+	 		$("#user-tab").addClass("active");
+			
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
 				rules: {
@@ -89,7 +90,6 @@
 				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
-
 	</form:form>
 </body>
 </html>

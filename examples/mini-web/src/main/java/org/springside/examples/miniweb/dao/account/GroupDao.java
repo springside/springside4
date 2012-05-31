@@ -10,4 +10,5 @@ import org.springside.examples.miniweb.entity.account.Group;
  */
 
 public interface GroupDao extends PagingAndSortingRepository<Group, Long>, GroupDaoCustom {
+	Group findByName(String name);
 }

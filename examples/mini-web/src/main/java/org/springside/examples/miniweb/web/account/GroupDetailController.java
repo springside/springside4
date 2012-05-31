@@ -30,7 +30,7 @@ public class GroupDetailController {
 	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("group") Group group, RedirectAttributes redirectAttributes) {
 		accountManager.saveGroup(group);
-		redirectAttributes.addFlashAttribute("message", "修改权限组" + group.getName() + "成功");
+		redirectAttributes.addFlashAttribute("message", "修改权限组 " + group.getName() + " 成功");
 		return "redirect:/account/group/";
 	}
 

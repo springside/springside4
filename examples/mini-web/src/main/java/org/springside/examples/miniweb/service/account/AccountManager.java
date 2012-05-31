@@ -6,6 +6,9 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
@@ -21,9 +24,9 @@ import org.springside.examples.miniweb.service.ServiceException;
  * 
  * @author calvin
  */
-//Spring Bean的标识.
+// Spring Bean的标识.
 @Component
-//默认将类中的所有public函数纳入事务管理.
+// 默认将类中的所有public函数纳入事务管理.
 @Transactional(readOnly = true)
 public class AccountManager {
 
@@ -33,7 +36,7 @@ public class AccountManager {
 	private GroupDao groupDao;
 	private ShiroDbRealm shiroRealm;
 
-	//-- User Manager --//
+	// -- User Manager --//
 	public User getUser(Long id) {
 		return userDao.findOne(id);
 	}
@@ -50,7 +53,8 @@ public class AccountManager {
 	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
 		if (isSupervisor(id)) {
-			logger.warn("操作员{}尝试删除超级管理员用户", SecurityUtils.getSubject().getPrincipal());
+			logger.warn("操作员{}尝试删除超级管理员用户", SecurityUtils.getSubject()
+					.getPrincipal());
 			throw new ServiceException("不能删除超级管理员用户");
 		}
 		userDao.delete(id);
@@ -63,21 +67,34 @@ public class AccountManager {
 		return id == 1;
 	}
 
-	public List<User> getAllUser() {
-		return (List<User>) userDao.findAll(new Sort(Direction.ASC, "id"));
+	public Page<User> getAllUser(int page, int size) {
+		Pageable pageable = new PageRequest(page, size, new Sort(Direction.ASC,
+				"id"));
+		return userDao.findAll(pageable);
 	}
 
 	public User findUserByLoginName(String loginName) {
 		return userDao.findByLoginName(loginName);
 	}
+	
+	public Group findGroupByName(String name){
+		return groupDao.findByName(name);
+		
+	}
 
-	//-- Group Manager --//
+	// -- Group Manager --//
 	public Group getGroup(Long id) {
 		return groupDao.findOne(id);
 	}
 
 	public List<Group> getAllGroup() {
 		return (List<Group>) groupDao.findAll((new Sort(Direction.ASC, "id")));
+	}
+	
+	public Page<Group> getAllGroup(int page, int size) {
+		Pageable pageable = new PageRequest(page, size, new Sort(Direction.ASC,
+				"id"));
+		return groupDao.findAll(pageable);
 	}
 
 	@Transactional(readOnly = false)
