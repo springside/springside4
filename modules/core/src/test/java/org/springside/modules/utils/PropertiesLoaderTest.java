@@ -3,6 +3,7 @@ package org.springside.modules.utils;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import org.junit.Test;
@@ -23,22 +24,33 @@ public class PropertiesLoaderTest {
 	@Test
 	public void notExistProperty() throws IOException {
 		PropertiesLoader pl = new PropertiesLoader("classpath:/notexist.properties");
-		assertNull(pl.getProperty("notexist"));
-
+		try {
+			assertNull(pl.getProperty("notexist"));
+			fail("should fail here");
+		} catch (NoSuchElementException e) {
+		}
 		assertEquals("defaultValue", pl.getProperty("notexist", "defaultValue"));
 	}
 
 	@Test
-	public void integerAndBooleanProperty() {
+	public void integerDoubleAndBooleanProperty() {
 		PropertiesLoader pl = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties");
 
 		assertEquals(new Integer(1), pl.getInteger("p1"));
-		assertEquals(new Integer(0), pl.getInteger("notExist"));
+		try {
+			pl.getInteger("notExist");
+			fail("should fail here");
+		} catch (NoSuchElementException e) {
+		}
 		assertEquals(new Integer(100), pl.getInteger("notExist", 100));
 
 		assertEquals(new Boolean(true), pl.getBoolean("p4"));
 		assertEquals(new Boolean(true), pl.getBoolean("p4", true));
-		assertEquals(new Boolean(false), pl.getBoolean("notExist"));
+		try {
+			pl.getBoolean("notExist");
+			fail("should fail here");
+		} catch (NoSuchElementException e) {
+		}
 		assertEquals(new Boolean(true), pl.getBoolean("notExist", true));
 	}
 
