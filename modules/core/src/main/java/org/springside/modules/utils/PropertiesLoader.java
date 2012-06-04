@@ -9,11 +9,10 @@ package org.springside.modules.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.math.NumberUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -34,7 +33,7 @@ public class PropertiesLoader {
 
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-	private Properties properties;
+	private final Properties properties;
 
 	public PropertiesLoader(String... resourcesPaths) {
 		properties = loadProperties(resourcesPaths);
@@ -47,55 +46,88 @@ public class PropertiesLoader {
 	/**
 	 * 取出Property，但以System的Property优先.
 	 */
-	public String getProperty(String key) {
-		String result = System.getProperty(key);
-		if (result != null) {
-			return result;
+	private String getValue(String key) {
+		String systemProperty = System.getProperty(key);
+		if (systemProperty != null) {
+			return systemProperty;
 		}
 		return properties.getProperty(key);
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.如果都為Null則返回Default值.
+	 * 取出String类型的Property，但以System的Property优先,如果都為Null则抛出异常.
+	 */
+	public String getProperty(String key) {
+		String value = getValue(key);
+		if (value == null) {
+			throw new NoSuchElementException();
+		}
+		return value;
+	}
+
+	/**
+	 * 取出String类型的Property，但以System的Property优先.如果都為Null則返回Default值.
 	 */
 	public String getProperty(String key, String defaultValue) {
-		String result = getProperty(key);
-		return StringUtils.defaultString(result, defaultValue);
+		String value = getValue(key);
+		return value != null ? value : defaultValue;
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误則返回0.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误则抛出异常.
 	 */
 	public Integer getInteger(String key) {
-		String strResult = getProperty(key);
-		return NumberUtils.toInt(strResult);
+		String value = getValue(key);
+		if (value == null) {
+			throw new NoSuchElementException();
+		}
+		return Integer.valueOf(value);
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误則返回Default值.
+	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回Default值，如果内容错误则抛出异常
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
-		String strResult = getProperty(key);
-		return NumberUtils.toInt(strResult, defaultValue);
+		String value = getValue(key);
+		return value != null ? Integer.valueOf(value) : defaultValue;
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null或内容不为true/false則返回false.
+	 * 取出Double类型的Property，但以System的Property优先.如果都為Null或内容错误则抛出异常.
+	 */
+	public Double getDouble(String key) {
+		String value = getValue(key);
+		if (value == null) {
+			throw new NoSuchElementException();
+		}
+		return Double.valueOf(value);
+	}
+
+	/**
+	 * 取出Double类型的Property，但以System的Property优先.如果都為Null則返回Default值，如果内容错误则抛出异常
+	 */
+	public Double getDouble(String key, Integer defaultValue) {
+		String value = getValue(key);
+		return value != null ? Double.valueOf(value) : defaultValue;
+	}
+
+	/**
+	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null抛出异常,如果内容不是true/false则返回false.
 	 */
 	public Boolean getBoolean(String key) {
-		return Boolean.valueOf(getProperty(key));
+		String value = getValue(key);
+		if (value == null) {
+			throw new NoSuchElementException();
+		}
+		return Boolean.valueOf(value);
 	}
 
 	/**
 	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回Default值,如果内容不为true/false则返回false.
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
-		String strResult = getProperty(key);
-		if (strResult != null) {
-			return Boolean.valueOf(strResult);
-		} else {
-			return defaultValue;
-		}
+		String value = getValue(key);
+		return value != null ? Boolean.valueOf(value) : defaultValue;
 	}
 
 	/**
