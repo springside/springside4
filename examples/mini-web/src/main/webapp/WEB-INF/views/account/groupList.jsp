@@ -21,7 +21,7 @@
 	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<tr><th>名称</th><th>授权</th><th>操作</th></tr>
-		<c:forEach items="${groups}" var="group">
+		<c:forEach items="${page.content}" var="group">
 			<tr>
 				<td>${group.name}</td>
 				<td>${group.permissionNames}</td>
@@ -33,6 +33,8 @@
 			</tr>
 		</c:forEach>
 	</table>
+
+	<%@ include file="/WEB-INF/layouts/pageable.jsp"%>
 
 	<shiro:hasPermission name="group:edit">
 		<a class="btn" href="create">创建权限组</a>

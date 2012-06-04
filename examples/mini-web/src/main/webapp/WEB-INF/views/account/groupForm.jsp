@@ -5,11 +5,27 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>帐号管理</title>
+	<title>权限组管理</title>
 	<script>
 		$(document).ready(function() {
+			//聚焦第一个输入框
+			$("#name").focus();
+			
+			//active tab
 			$("#group-tab").addClass("active");
-			$("#inputForm").validate();
+			
+			//为inputForm注册validate函数
+			$("#inputForm").validate({
+				rules:{
+					name:{
+						remote: "${ctx}/account/group/checkGroupName?oldName="+encodeURIComponent('${group.name}')
+					}
+				},
+				messages:{
+					name:{remote:"权限名已存在"}
+				},
+				errorContainer: "#messageBox"
+			});
 		});
 	</script>
 </head>
@@ -19,6 +35,8 @@
 		<input type="hidden" name="id" value="${group.id}"/>
 		<fieldset>
 			<legend><small>管理权限组</small></legend>
+			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
+			
 			<div class="control-group">
 				<label for="name" class="control-label">名称:</label>
 				<div class="controls">
@@ -32,8 +50,8 @@
 				</div>
 			</div>	
 			<div class="form-actions">
-					<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
-					<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
+				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
 			</div>
 		</fieldset>
 	</form:form>

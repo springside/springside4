@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -27,11 +28,14 @@ import org.springside.examples.miniweb.service.account.AccountManager;
  * CheckLoginName ajax: GET  /account/user/checkLoginName?oldLoginName=a&loginName=b
  * 
  * @author calvin
- *
+ * 
  */
 @Controller
 @RequestMapping(value = "/account/user")
 public class UserController {
+
+	private static final int DEFAULT_PAGE_NUM = 0;
+	private static final int DEFAULT_PAGE_SIZE = 5;
 
 	@Autowired
 	private AccountManager accountManager;
@@ -46,9 +50,11 @@ public class UserController {
 
 	@RequiresPermissions("user:view")
 	@RequestMapping(value = { "list", "" })
-	public String list(Model model) {
-		List<User> users = accountManager.getAllUser();
-		model.addAttribute("users", users);
+	public String list(	@RequestParam(value = "page", required = false) Integer page,
+			Model model) {
+		int pageNum = page != null ? page : DEFAULT_PAGE_NUM;
+		Page<User> users = accountManager.getAllUser(pageNum, DEFAULT_PAGE_SIZE);
+		model.addAttribute("page", users);
 		return "account/userList";
 	}
 
@@ -64,13 +70,14 @@ public class UserController {
 	@RequestMapping(value = "save")
 	public String save(User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
-		redirectAttributes.addFlashAttribute("message", "创建用户" + user.getLoginName() + "成功");
+		redirectAttributes.addFlashAttribute("message","创建用户 " + user.getLoginName() + " 成功");
 		return "redirect:/account/user/";
 	}
 
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "delete/{id}")
-	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+	public String delete(@PathVariable("id") Long id,
+			RedirectAttributes redirectAttributes) {
 		accountManager.deleteUser(id);
 		redirectAttributes.addFlashAttribute("message", "删除用户成功");
 		return "redirect:/account/user/";
@@ -79,14 +86,13 @@ public class UserController {
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "checkLoginName")
 	@ResponseBody
-	public String checkLoginName(@RequestParam("oldLoginName") String oldLoginName,
+	public String checkLoginName(
+			@RequestParam("oldLoginName") String oldLoginName,
 			@RequestParam("loginName") String loginName) {
-		if (loginName.equals(oldLoginName)) {
-			return "true";
-		} else if (accountManager.findUserByLoginName(loginName) == null) {
+		if (loginName.equals(oldLoginName)
+				|| accountManager.findUserByLoginName(loginName) == null) {
 			return "true";
 		}
-
 		return "false";
 	}
 }

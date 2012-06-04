@@ -46,7 +46,7 @@ public class UserDetailController {
 	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountManager.saveUser(user);
-		redirectAttributes.addFlashAttribute("message", "修改用户" + user.getLoginName() + "成功");
+		redirectAttributes.addFlashAttribute("message", "修改用户 " + user.getLoginName() + " 成功");
 		return "redirect:/account/user/";
 	}
 
