@@ -19,15 +19,12 @@ mvn antrun:run -Prefresh-db
 cd ..
 
 echo "[Step 4] Start all example projects."
-cd  examples/mini-service
-mvn clean jetty:run -Djetty.port=8082 &
-cd  ../mini-web
-mvn clean jetty:run -Djetty.port=8081 &
-cd  ../showcase
+cd  examples/quickstart
 mvn clean jetty:run &
+cd  ../showcase
+mvn clean jetty:run  -Djetty.port=8081 &
 
 echo "[INFO] Please wait a moment then access below demo sites:"
-echo "[INFO] http://localhost:8082/mini-service"
-echo "[INFO] http://localhost:8081/mini-web"
-echo "[INFO] http://localhost:8080/showcase"
+echo "[INFO] http://localhost:8080/quickstart"
+echo "[INFO] http://localhost:8081/showcase"
 

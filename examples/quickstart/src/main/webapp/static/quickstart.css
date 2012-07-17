@@ -1,0 +1,17 @@
+/* header */
+#header {margin-bottom:15px;}
+
+#header h1 {color: #658A16;}
+
+#header h1 small {color: #BACE87;}
+
+/* footer */
+#footer {
+	margin-top: 15px;
+	padding: 15px 0px 0px 0px;
+	font-size: 95%;
+	text-align: center;
+	border-top: 2px solid #658A16;
+}
+
+#footer a {color: #999;}

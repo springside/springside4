@@ -54,7 +54,7 @@ public class Hibernates {
 		} else if (StringUtils.contains(jdbcUrl, ":oracle:")) {
 			return Oracle10gDialect.class.getName();
 		} else {
-			throw new IllegalArgumentException("Unknown Database");
+			throw new IllegalArgumentException("Unknown Database of " + jdbcUrl);
 		}
 	}
 }

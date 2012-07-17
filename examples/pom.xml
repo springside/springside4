@@ -14,8 +14,8 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>mini-service</module>
-		<module>mini-web</module>
+		<module>quickstart</module>
 		<module>showcase</module>
+		<module>oldstuff</module>
 	</modules>
 </project>

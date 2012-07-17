@@ -16,8 +16,7 @@
 	<ul>
 		<li>演示基于Guava的单JVM内的，简单Cache</li>
 		<li>演示基于Ehcache的JVM内的，可集群共享的，功能丰富的Cache</li>
-		<li>演示基于Memcached的中央式cache，使用Spymemcached客户端</li>
-		
+		<li>演示基于Memcached的中央式cache，使用Spymemcached客户端</li>	
 	</ul>
 
 	<h3>用户故事：</h3>

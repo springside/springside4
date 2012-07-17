@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * 在Spring Context启动时，使用DBUnit一次性初始化数据。
+ * åœ¨Spring Contextå�¯åŠ¨æ—¶ï¼Œä½¿ç”¨DBUnitä¸€æ¬¡æ€§åˆ�å§‹åŒ–æ•°æ�®ã€‚
  * 
  * @author calvin
  */
@@ -27,5 +27,4 @@ public class DataInitializer implements InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		DataFixtures.reloadData(dataSource, dataFile);
 	}
-
 }

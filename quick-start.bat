@@ -22,22 +22,18 @@ if errorlevel 1 goto error
 cd ..\
 
 echo [Step 4] Start all example projects.
-cd examples\mini-service
-start "Mini-Service" %MVN% clean jetty:run -Djetty.port=8082
-if errorlevel 1 goto error
-cd ..\mini-web
-start "Mini-Web" %MVN% clean jetty:run -Djetty.port=8081
+cd examples\quickstart
+start "Quickstart" %MVN% clean jetty:run 
 if errorlevel 1 goto error
 cd ..\showcase
-start "Showcase" %MVN% clean jetty:run
+start "Showcase" %MVN% clean jetty:run -Djetty.port=8081
 if errorlevel 1 goto error
 
 cd ..\..\
 
 echo [INFO] Please wait a moment then access below demo sites:
-echo [INFO] http://localhost:8082/mini-service
-echo [INFO] http://localhost:8081/mini-web
-echo [INFO] http://localhost:8080/showcase
+echo [INFO] http://localhost:8080/quickstart
+echo [INFO] http://localhost:8081/showcase
 
 goto end
 :error
