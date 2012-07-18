@@ -16,6 +16,5 @@
 	<modules>
 		<module>quickstart</module>
 		<module>showcase</module>
-		<module>oldstuff</module>
 	</modules>
 </project>
