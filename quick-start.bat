@@ -15,25 +15,29 @@ echo [Step 2] Generate Eclipse project files for all projects
 call %MVN% eclipse:clean eclipse:eclipse
 if errorlevel 1 goto error
 
-echo [Step 3] Init schema and data for all example projects.
+echo [Step 3] Initialize schema and data for all example projects.
 cd examples
 call %MVN% antrun:run -Prefresh-db
 if errorlevel 1 goto error
 cd ..\
 
 echo [Step 4] Start all example projects.
-cd examples\quickstart
-start "Quickstart" %MVN% clean jetty:run 
+cd examples\mini-web
+start "Mini-Web" %MVN% clean jetty:run 
+if errorlevel 1 goto error
+cd ..\mini-service
+start "Mini-Service" %MVN% clean jetty:run -Djetty.port=8081
 if errorlevel 1 goto error
 cd ..\showcase
-start "Showcase" %MVN% clean jetty:run -Djetty.port=8081
+start "Showcase" %MVN% clean jetty:run -Djetty.port=8082
 if errorlevel 1 goto error
 
 cd ..\..\
 
 echo [INFO] Please wait a moment then access below demo sites:
-echo [INFO] http://localhost:8080/quickstart
-echo [INFO] http://localhost:8081/showcase
+echo [INFO] http://localhost:8080/mini-web
+echo [INFO] http://localhost:8081/mini-service
+echo [INFO] http://localhost:8082/showcase
 
 goto end
 :error

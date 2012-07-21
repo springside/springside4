@@ -26,8 +26,6 @@
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
 		<property name="jpaProperties">
 			<props>
-				<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
-				<prop key="net.sf.ehcache.configurationResourceName">ehcache/ehcache-hibernate-local.xml</prop>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 			</props>
 		</property>
@@ -52,11 +50,10 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
-	<!-- production/local development环境 -->
- 	<beans profile="production,development">
+	<!-- production环境 -->
+ 	<beans profile="production">
  		<context:property-placeholder ignore-unresolvable="true"
-			location="classpath*:/application.properties,
-          			  classpath*:/application.local.properties" />	
+			location="classpath*:/application.properties" />	
 		
 		<!-- 数据源配置, 使用DBCP数据库连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -79,7 +76,23 @@
 		<!--<jee:jndi-lookup id="dataSource" jndi-name="java:comp/env/jdbc/ExampleDB" />-->
 	</beans>
 	
-	<!-- functional test环境 -->
+	<!-- local development环境 -->
+	<beans profile="development">
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.development.properties,
+          			  classpath*:/application.development-local.properties" />	
+
+		<!-- DBCP连接池 -->
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="defaultAutoCommit" value="false" />
+		</bean>
+	</beans>
+	
 	<beans profile="functional">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
@@ -95,10 +108,10 @@
 			<property name="defaultAutoCommit" value="false" />
 		</bean>
 
-		<!-- 初始化数据结构 -->
+		<!-- 初始化数据表结构 -->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-		</jdbc:initialize-database>
+		</jdbc:initialize-database>	
 	</beans>
 	
 	<!-- unit test环境 -->

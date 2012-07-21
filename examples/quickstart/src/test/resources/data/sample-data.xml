@@ -1,8 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-	<TASK ID="1" TITLE="Study PlayFramework 2.0" />
-	<TASK ID="2" TITLE="Study Grails2.0" />
-	<TASK ID="3" TITLE="Try SpringFuse" />
-	<TASK ID="4" TITLE="Try Spring Roo" />
-	<TASK ID="5" TITLE="Release SprignSide 4.0" />
-</dataset>

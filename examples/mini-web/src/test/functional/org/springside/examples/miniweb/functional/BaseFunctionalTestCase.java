@@ -1,13 +1,10 @@
 package org.springside.examples.miniweb.functional;
 
-import static org.junit.Assert.*;
-
 import java.net.URL;
 import java.sql.Driver;
 
 import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +43,7 @@ public class BaseFunctionalTestCase {
 
 		baseUrl = propertiesLoader.getProperty("baseUrl", MiniWebServer.BASE_URL);
 
+		//如果是目标地址是localhost，则启动嵌入式jetty。如果指向远程地址，则不需要启动Jetty.
 		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
 
 		if (isEmbedded) {
@@ -56,7 +54,6 @@ public class BaseFunctionalTestCase {
 		reloadSampleData();
 
 		createSeleniumOnce();
-		loginAsAdminIfNecessary();
 	}
 
 	/**
@@ -76,6 +73,7 @@ public class BaseFunctionalTestCase {
 
 	/**
 	 * 构造数据源，仅构造一次.
+	 * 连接参数从配置文件中读取，可指向本地的开发环境，也可以指向远程的测试服务器。
 	 */
 	protected static void buildDataSourceOnce() throws ClassNotFoundException {
 		if (dataSource == null) {
@@ -85,7 +83,6 @@ public class BaseFunctionalTestCase {
 			dataSource.setUrl(propertiesLoader.getProperty("jdbc.url"));
 			dataSource.setUsername(propertiesLoader.getProperty("jdbc.username"));
 			dataSource.setPassword(propertiesLoader.getProperty("jdbc.password"));
-
 		}
 	}
 
@@ -97,10 +94,9 @@ public class BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 创建Selenium.
+	 * 创建Selenium,，仅构造一次.
 	 */
 	protected static void createSeleniumOnce() throws Exception {
-
 		if (s == null) {
 			//根据配置创建Selenium driver.
 			String driverName = propertiesLoader.getProperty("selenium.driver");
@@ -111,30 +107,4 @@ public class BaseFunctionalTestCase {
 			s.setStopAtShutdown();
 		}
 	}
-
-	/**
-	 * 登录管理员, 如果用户还没有登录.
-	 */
-	protected static void loginAsAdminIfNecessary() {
-		s.open("/account/user");
-
-		if ("Mini-Web示例:登录页".equals(s.getTitle())) {
-			s.type(By.name("username"), "admin");
-			s.type(By.name("password"), "admin");
-			s.check(By.name("rememberMe"));
-			s.click(By.id("submit"));
-			assertEquals("Mini-Web示例:帐号管理", s.getTitle());
-		}
-	}
-
-	/**
-	 * 登录特定用户.
-	 */
-	protected static void login(String user, String password) {
-		s.open("/logout");
-		s.type(By.name("username"), user);
-		s.type(By.name("password"), password);
-		s.click(By.id("submit"));
-	}
-
 }
