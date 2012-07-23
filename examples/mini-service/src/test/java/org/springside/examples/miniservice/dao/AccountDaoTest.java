@@ -82,7 +82,7 @@ public class AccountDaoTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void saveUser() {
-		User user = AccountData.getRandomUser();
+		User user = AccountData.randomUser();
 		Long id = accountDao.saveUser(user);
 		assertEquals(new Long(5L), id);
 

@@ -61,7 +61,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void createUser() {
-		User user = AccountData.getRandomUser();
+		User user = AccountData.randomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);
 
 		URI uri = client.createUser(dto);
@@ -72,7 +72,7 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 	@Test
 	public void createUserWithInvalidLoginName() {
 		//必须值为空
-		User user = AccountData.getRandomUser();
+		User user = AccountData.randomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);
 		dto.setLoginName(null);
 

@@ -11,9 +11,9 @@ import org.springside.modules.test.data.RandomData;
  */
 public class AccountData {
 
-	public static Department getRandomDepartment() {
+	public static Department randomDepartment() {
 		String departmentName = RandomData.randomName("Department");
-		User manager = getRandomUser();
+		User manager = randomUser();
 
 		Department department = new Department();
 		department.setName(departmentName);
@@ -24,9 +24,9 @@ public class AccountData {
 		return department;
 	}
 
-	public static User getRandomUser() {
+	public static User randomUser() {
 		String userName = RandomData.randomName("User");
-		Department department = getDefaultDepartment();
+		Department department = defaultDepartment();
 
 		User user = new User();
 		user.setLoginName(userName);
@@ -38,7 +38,7 @@ public class AccountData {
 		return user;
 	}
 
-	public static Department getDefaultDepartment() {
+	public static Department defaultDepartment() {
 		Department department = new Department();
 		department.setId(1L);
 		return department;

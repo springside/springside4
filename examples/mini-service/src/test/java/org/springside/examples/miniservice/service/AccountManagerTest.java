@@ -34,7 +34,7 @@ public class AccountManagerTest extends SpringContextTestCase {
 	@Test
 	public void validateParamter() {
 
-		User userDTOWithoutLoginName = AccountData.getRandomUser();
+		User userDTOWithoutLoginName = AccountData.randomUser();
 		userDTOWithoutLoginName.setLoginName(null);
 		try {
 			accountManager.saveUser(userDTOWithoutLoginName);
@@ -44,7 +44,7 @@ public class AccountManagerTest extends SpringContextTestCase {
 					StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ','));
 		}
 
-		User userDTOWitWrongEmail = AccountData.getRandomUser();
+		User userDTOWitWrongEmail = AccountData.randomUser();
 		userDTOWitWrongEmail.setEmail("abc");
 		try {
 			accountManager.saveUser(userDTOWitWrongEmail);

@@ -38,7 +38,7 @@ public class AccountWebServiceWithPredefineClientIT extends BaseFunctionalTestCa
 	 */
 	@Test
 	public void createUser() {
-		User user = AccountData.getRandomUser();
+		User user = AccountData.randomUser();
 
 		UserDTO userDTO = new UserDTO();
 		userDTO.setLoginName(user.getLoginName());
@@ -54,7 +54,7 @@ public class AccountWebServiceWithPredefineClientIT extends BaseFunctionalTestCa
 	 */
 	@Test
 	public void createUserWithInvalidLoginName() {
-		User user = AccountData.getRandomUser();
+		User user = AccountData.randomUser();
 		UserDTO userDTO = new DozerBeanMapper().map(user, UserDTO.class);
 
 		//登录名为空

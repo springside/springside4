@@ -42,7 +42,7 @@ public class AccountWebServiceTest {
 	 */
 	@Test
 	public void dozerBinding() {
-		Department department = AccountData.getRandomDepartment();
+		Department department = AccountData.randomDepartment();
 		Mockito.when(mockAccountManager.getDepartmentDetail(1L)).thenReturn(department);
 
 		DepartmentResponse result = accountWebService.getDepartmentDetail(1L);
