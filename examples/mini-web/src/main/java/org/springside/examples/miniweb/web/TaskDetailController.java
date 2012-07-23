@@ -31,7 +31,7 @@ public class TaskDetailController {
 	@RequestMapping(value = "save/{id}")
 	public String save(@ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
 		taskManager.saveTask(task);
-		redirectAttributes.addFlashAttribute("message", "修改任务" + task.getTitle() + "成功");
+		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";
 	}
 

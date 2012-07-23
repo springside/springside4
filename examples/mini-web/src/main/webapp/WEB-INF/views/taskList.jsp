@@ -12,15 +12,12 @@
 	</c:if>
 	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead><tr><th>任务编号</th><th>任务标题</th><th>操作</th></tr></thead>
+		<thead><tr><th>任务标题</th><th>管理</th></tr></thead>
 		<tbody>
 		<c:forEach items="${tasks}" var="task">
 			<tr>
-				<td>${task.id}</td>
-				<td>${task.title}</td>
-				<td>
-					<a href="update/${task.id}" id="update-${task.id}-btn">修改</a> <a href="delete/${task.id}">删除</a>
-				</td>
+				<td><a href="update/${task.id}">${task.title}</a></td>
+				<td><a href="delete/${task.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>

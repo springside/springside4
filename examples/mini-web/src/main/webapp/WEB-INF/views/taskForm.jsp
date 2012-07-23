@@ -21,12 +21,10 @@
 		<input type="hidden" name="id" value="${task.id}"/>
 		<fieldset>
 			<legend><small>管理任务</small></legend>
-			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
-	
 			<div class="control-group">
 				<label for="title" class="control-label">任务名称:</label>
 				<div class="controls">
-					<input type="text" id="title" name="title" size="50" value="${task.title}" class="required"/>
+					<input type="text" id="task.title" name="title" size="50" value="${task.title}" class="required"/>
 				</div>
 			</div>	
 			<div class="form-actions">

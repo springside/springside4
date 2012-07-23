@@ -10,11 +10,14 @@ import org.springside.modules.test.data.RandomData;
  */
 public class TaskData {
 
-	public static Task getRandomTask() {
+	public static Task randomTask() {
 		Task task = new Task();
-		task.setTitle(RandomData.randomName("Task"));
-
+		task.setTitle(randomTitle());
 		return task;
+	}
+
+	public static String randomTitle() {
+		return RandomData.randomName("Task");
 	}
 
 }

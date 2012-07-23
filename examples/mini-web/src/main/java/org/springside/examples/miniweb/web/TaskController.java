@@ -20,8 +20,9 @@ import org.springside.examples.miniweb.service.TaskManager;
  * Update action      : POST /task/save/{id}
  * Delete action      : POST /task/delete/{id}
  * 
+ * 其中Update page/action在TaskDetailController,其余在本Controller。
+ * 
  * @author calvin
- *
  */
 @Controller
 @RequestMapping(value = "/task")
@@ -46,7 +47,7 @@ public class TaskController {
 	@RequestMapping(value = "save")
 	public String save(Task task, RedirectAttributes redirectAttributes) {
 		taskManager.saveTask(task);
-		redirectAttributes.addFlashAttribute("message", "创建任务" + task.getTitle() + "成功");
+		redirectAttributes.addFlashAttribute("message", "创建任务成功");
 		return "redirect:/task/";
 	}
 
@@ -56,5 +57,4 @@ public class TaskController {
 		redirectAttributes.addFlashAttribute("message", "删除任务成功");
 		return "redirect:/task/";
 	}
-
 }
