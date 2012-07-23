@@ -12,7 +12,8 @@ import org.springside.examples.miniweb.entity.Task;
 import org.springside.examples.miniweb.service.TaskManager;
 
 /**
- * Urls:
+ * Task管理的Controller, 使用Restful风格的Urls:
+ * 
  * List   page        : GET  /task/
  * Create page        : GET  /task/create
  * Create action      : POST /task/save
@@ -20,7 +21,7 @@ import org.springside.examples.miniweb.service.TaskManager;
  * Update action      : POST /task/save/{id}
  * Delete action      : POST /task/delete/{id}
  * 
- * 其中Update page/action在TaskDetailController,其余在本Controller。
+ * 其中Update page/Update action在TaskDetailController, 其余在本Controller。
  * 
  * @author calvin
  */

@@ -11,7 +11,7 @@ import org.springside.examples.miniweb.entity.Task;
 import org.springside.examples.miniweb.service.TaskManager;
 
 /**
- * 使用@ModelAttribute, 实现Struts2 Preparable二次绑定的效果。 
+ * 使用@ModelAttribute, 实现Struts2 Preparable二次绑定的效果,先根据url中的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
  * 因为@ModelAttribute被默认执行, 而其他的action url中并没有${id}，所以需要独立出一个Controller.
  * 
  * @author calvin

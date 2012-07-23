@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.examples.miniweb.entity.Task;
 import org.springside.examples.miniweb.service.TaskManager;
 
+/**
+ * Task的Restful API的Controller.
+ * 
+ * @author calvin
+ *
+ */
 @Controller
 @RequestMapping(value = "/api/task")
 public class TaskRestController {
