@@ -12,9 +12,10 @@ public class IndexController {
 		return "redirect:/task";
 	}
 
-	@RequestMapping(value = "/healthcheck", produces = "plain/text")
+	@RequestMapping(value = "/healthcheck", produces = "text/plain")
 	public @ResponseBody
 	String healthCheck() {
-		return "ok";
+
+		return "ok222222";
 	}
 }
