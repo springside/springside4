@@ -10,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.showcase.cache.memcached.MemcachedObjectType;
-import org.springside.examples.showcase.common.dao.UserJpaDao;
-import org.springside.examples.showcase.common.dao.UserMyBatisDao;
+import org.springside.examples.showcase.common.dao.UserDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.jmx.ApplicationStatistics;
@@ -32,13 +31,11 @@ import org.springside.modules.orm.Hibernates;
 public class AccountManager {
 	private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
 
-	private UserJpaDao userJpaDao;
-
-	private UserMyBatisDao userMyBatisDao;
+	private UserDao userDao;
 
 	private SpyMemcachedClient memcachedClient;
 
-	private JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
+	private final JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
 
 	private NotifyMessageProducer notifyProducer; //JMS消息发送
 
@@ -67,7 +64,7 @@ public class AccountManager {
 			user.setPassword(hashPassword.password);
 		}
 
-		userJpaDao.save(user);
+		userDao.save(user);
 
 		if (shiroRealm != null) {
 			shiroRealm.clearCachedAuthorizationInfo(user.getLoginName());
@@ -86,11 +83,11 @@ public class AccountManager {
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
 		}
-		return (List<User>) userJpaDao.findAll();
+		return (List<User>) userDao.findAll();
 	}
 
 	public List<User> getAllUserInitialized() {
-		List<User> result = (List<User>) userJpaDao.findAll();
+		List<User> result = (List<User>) userDao.findAll();
 		for (User user : result) {
 			Hibernates.initLazyProperty(user.getRoleList());
 		}
@@ -105,17 +102,17 @@ public class AccountManager {
 	}
 
 	public User getUser(Long id) {
-		return userJpaDao.findOne(id);
+		return userDao.findOne(id);
 	}
 
 	/**
-	 * 取得用户，先尝试从缓存获取，然后用Mybatis查询.
+	 * 取得用户，先尝试从缓存获取，然后去数据库查询.
 	 */
 	public User getUserEffective(Long id) {
 		if (memcachedClient != null) {
 			return getUserFromMemcached(id);
 		} else {
-			return userMyBatisDao.getUser(id);
+			return userDao.findOne(id);
 		}
 	}
 
@@ -130,9 +127,7 @@ public class AccountManager {
 		String jsonString = memcachedClient.get(key);
 
 		if (jsonString == null) {
-			//用户不在 memcached中,从数据库中取出并放入memcached.
-			//因为hibernate的proxy在序列化时问题多多,此处使用jdbc
-			user = userMyBatisDao.getUser(id);
+			user = userDao.findOne(id);
 			if (user != null) {
 				jsonString = jsonMapper.toJson(user);
 				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
@@ -147,7 +142,7 @@ public class AccountManager {
 	 * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
 	 */
 	public User findUserByNameInitialized(String name) {
-		User user = userJpaDao.findByName(name);
+		User user = userDao.findByName(name);
 		if (user != null) {
 			Hibernates.initLazyProperty(user.getRoleList());
 		}
@@ -158,11 +153,11 @@ public class AccountManager {
 	 * 获取当前用户数量.
 	 */
 	public Long getUserCount() {
-		return userJpaDao.count();
+		return userDao.count();
 	}
 
 	public User findUserByLoginName(String loginName) {
-		return userJpaDao.findByLoginName(loginName);
+		return userDao.findByLoginName(loginName);
 	}
 
 	/**
@@ -182,13 +177,8 @@ public class AccountManager {
 	}
 
 	@Autowired
-	public void setUserJpaDao(UserJpaDao userJpaDao) {
-		this.userJpaDao = userJpaDao;
-	}
-
-	@Autowired
-	public void setUserMyBatisDao(UserMyBatisDao userMyBatisDao) {
-		this.userMyBatisDao = userMyBatisDao;
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
 	}
 
 	@Autowired(required = false)

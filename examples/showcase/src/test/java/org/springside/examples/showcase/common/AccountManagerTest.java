@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springside.examples.showcase.common.dao.UserJpaDao;
+import org.springside.examples.showcase.common.dao.UserDao;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
 import org.springside.examples.showcase.common.service.ServiceException;
@@ -17,7 +17,7 @@ public class AccountManagerTest {
 
 	private AccountManager accountManager;
 	@Mock
-	private UserJpaDao mockUserDao;
+	private UserDao mockUserDao;
 
 	@Before
 	public void setUp() {
@@ -25,7 +25,7 @@ public class AccountManagerTest {
 		ShiroTestUtils.mockSubject("foo");
 
 		accountManager = new AccountManager();
-		accountManager.setUserJpaDao(mockUserDao);
+		accountManager.setUserDao(mockUserDao);
 	}
 
 	@After

@@ -66,7 +66,8 @@
 	<insert id="saveUser" parameterType="User" useGeneratedKeys="true" keyProperty="id">
 		insert into acct_user (
 		login_name, name, password, email, department_id)
-		values (#{loginName}, #{name}, #{password}, #{email},
+		values (
+		#{loginName}, #{name}, #{password}, #{email},
 		#{department.id})
 	</insert>
 </mapper> 

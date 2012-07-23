@@ -25,6 +25,20 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 	}
 
 	/**
+	 * 演示从Memcached中取得用户
+	 */
+	@Test
+	@Category(Smoke.class)
+	public void getUser() {
+		UserDTO user = client.getUser(1L);
+		assertEquals("admin", user.getLoginName());
+
+		//再次调用，在memcached中获取.
+		user = client.getUser(1L);
+		assertEquals("admin", user.getLoginName());
+	}
+
+	/**
 	 * 演示与Shiro的结合.
 	 */
 	@Test
@@ -76,7 +90,6 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 
 	/**
 	 * 演示QueryParam与不同格式不同返回内容的Response.
-	 * @throws Exception
 	 */
 	@Test
 	public void searchUserJson() throws Exception {
@@ -84,6 +97,9 @@ public class UserResourceServiceIT extends BaseFunctionalTestCase {
 		assertEquals("admin", admin.getLoginName());
 	}
 
+	/**
+	 * 演示MultiPart的RstfulSerice.
+	 */
 	@Test
 	public void multiPart() {
 		String result = client.multipart("foo", "a good guy");

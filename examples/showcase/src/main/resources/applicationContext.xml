@@ -42,13 +42,6 @@
 	<!-- Spring Data Jpa配置 -->
  	<jpa:repositories base-package="org.springside.examples.showcase" transaction-manager-ref="defaultTransactionManager" entity-manager-factory-ref="entityManagerFactory"/>
 	
-	<!-- MyBatis配置 -->
-	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="configLocation" value="classpath:/mapper/Configuration.xml" />
-		<property name="mapperLocations" value="classpath:/mapper/*Mapper.xml" />
-	</bean>
-
 	<!-- 事务管理器配置, Jpa单数据源事务 -->
 	<bean id="defaultTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
