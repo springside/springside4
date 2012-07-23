@@ -16,8 +16,10 @@
 	
 	<mvc:default-servlet-handler/>
 	
-	<!-- 定义首页 -->
-	<mvc:view-controller path="/" view-name="forward:/index"/>
+	<!-- 定义直接显示的JSP -->
+	<mvc:view-controller path="/" view-name="index"/>
+	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>
+	
 	
 	<!-- 定义JSP -->  
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

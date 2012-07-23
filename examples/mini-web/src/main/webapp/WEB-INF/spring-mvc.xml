@@ -16,9 +16,6 @@
 		
 	<mvc:default-servlet-handler/>
 	
-	<!-- 定义首页转向Task页面 -->
-	<mvc:view-controller path="/" view-name="redirect:/task/"/>
-
 	<!-- 定义JSP --> 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/views/"/>
