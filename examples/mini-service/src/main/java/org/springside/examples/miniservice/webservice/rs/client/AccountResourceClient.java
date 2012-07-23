@@ -26,7 +26,7 @@ public class AccountResourceClient {
 
 	private WebResource client;
 
-	private GenericType<List<UserDTO>> userListType = new GenericType<List<UserDTO>>() {
+	private final GenericType<List<UserDTO>> userListType = new GenericType<List<UserDTO>>() {
 	};
 
 	@Required
@@ -38,7 +38,7 @@ public class AccountResourceClient {
 	 * 获取部门.
 	 */
 	public DepartmentDTO getDepartmentDetail(Long id) {
-		return client.path("/departments/" + id).accept(MediaType.APPLICATION_JSON).get(DepartmentDTO.class);
+		return client.path("/departments/" + id).accept(MediaType.APPLICATION_XML).get(DepartmentDTO.class);
 	}
 
 	/**

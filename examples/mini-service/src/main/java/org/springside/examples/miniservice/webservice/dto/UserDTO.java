@@ -1,5 +1,6 @@
 package org.springside.examples.miniservice.webservice.dto;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -12,6 +13,7 @@ import org.springside.examples.miniservice.webservice.WsConstants;
  * 
  * @author calvin
  */
+@XmlRootElement
 @XmlType(name = "User", namespace = WsConstants.NS)
 public class UserDTO {
 

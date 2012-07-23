@@ -30,7 +30,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 		Log4jMockAppender appender = new Log4jMockAppender();
 		appender.addToLogger(QuartzClusterableJob.class);
 
-		//等待任务延时2秒启动
+		//等待任务延时启动
 		Threads.sleep(3000);
 
 		//验证任务已执行
