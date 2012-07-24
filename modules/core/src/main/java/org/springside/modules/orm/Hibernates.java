@@ -14,8 +14,9 @@ import org.hibernate.dialect.Oracle10gDialect;
 public class Hibernates {
 
 	/**
-	 * Initialize the lazy property value, eg.
+	 * Initialize the lazy property value.
 	 * 
+	 * eg.
 	 * Hibernates.initLazyProperty(user.getGroups()); 
 	 */
 	public static void initLazyProperty(Object proxyedPropertyValue) {

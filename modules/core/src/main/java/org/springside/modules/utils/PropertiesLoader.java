@@ -20,10 +20,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 /**
- * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的值.
- * 
- * 本类有两种使用方法:
- * 1. 
+ * Properties文件载入工具类. 可载入多个properties文件, 相同的属性在最后载入的文件中的值将会覆盖之前的值，但以System的Property优先.
  * 
  * @author calvin
  */
@@ -44,7 +41,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.
+	 * 取出Property。
 	 */
 	private String getValue(String key) {
 		String systemProperty = System.getProperty(key);
@@ -55,7 +52,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出String类型的Property，但以System的Property优先,如果都為Null则抛出异常.
+	 * 取出String类型的Property,如果都為Null则抛出异常.
 	 */
 	public String getProperty(String key) {
 		String value = getValue(key);
@@ -66,7 +63,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出String类型的Property，但以System的Property优先.如果都為Null則返回Default值.
+	 * 取出String类型的Property.如果都為Null則返回Default值.
 	 */
 	public String getProperty(String key, String defaultValue) {
 		String value = getValue(key);
@@ -74,7 +71,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null或内容错误则抛出异常.
+	 * 取出Integer类型的Property.如果都為Null或内容错误则抛出异常.
 	 */
 	public Integer getInteger(String key) {
 		String value = getValue(key);
@@ -85,7 +82,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Integer类型的Property，但以System的Property优先.如果都為Null則返回Default值，如果内容错误则抛出异常
+	 * 取出Integer类型的Property.如果都為Null則返回Default值，如果内容错误则抛出异常
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
 		String value = getValue(key);
@@ -93,7 +90,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Double类型的Property，但以System的Property优先.如果都為Null或内容错误则抛出异常.
+	 * 取出Double类型的Property.如果都為Null或内容错误则抛出异常.
 	 */
 	public Double getDouble(String key) {
 		String value = getValue(key);
@@ -104,7 +101,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Double类型的Property，但以System的Property优先.如果都為Null則返回Default值，如果内容错误则抛出异常
+	 * 取出Double类型的Property.如果都為Null則返回Default值，如果内容错误则抛出异常
 	 */
 	public Double getDouble(String key, Integer defaultValue) {
 		String value = getValue(key);
@@ -112,7 +109,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null抛出异常,如果内容不是true/false则返回false.
+	 * 取出Boolean类型的Property.如果都為Null抛出异常,如果内容不是true/false则返回false.
 	 */
 	public Boolean getBoolean(String key) {
 		String value = getValue(key);
@@ -123,7 +120,7 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Boolean类型的Property，但以System的Property优先.如果都為Null則返回Default值,如果内容不为true/false则返回false.
+	 * 取出Boolean类型的Propert.如果都為Null則返回Default值,如果内容不为true/false则返回false.
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
 		String value = getValue(key);

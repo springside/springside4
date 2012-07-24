@@ -99,5 +99,4 @@ public class Log4jManager {
 	public void setProjectLoggerName(String projectLoggerName) {
 		this.projectLoggerName = projectLoggerName;
 	}
-
 }
