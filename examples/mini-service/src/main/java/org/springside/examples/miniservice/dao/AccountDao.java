@@ -24,6 +24,11 @@ public class AccountDao extends SqlSessionDaoSupport {
 		return user.getId();
 	}
 
+	public void deleteUser(Long id) {
+		getSqlSession().delete("Account.deleteUser", id);
+
+	}
+
 	public List<User> searchUser(Map<String, Object> parameters) {
 		return getSqlSession().selectList("Account.searchUser", parameters);
 	}

@@ -77,4 +77,14 @@ public class AccountResourceClient {
 			throw new UniformInterfaceException(response);
 		}
 	}
+
+	/**
+	 * 删除用户.
+	 */
+	public void deleteUser(Long id) {
+		ClientResponse response = client.path("/users/" + id).delete(ClientResponse.class);
+		if (Status.NO_CONTENT.getStatusCode() != response.getStatus()) {
+			throw new UniformInterfaceException(response);
+		}
+	}
 }

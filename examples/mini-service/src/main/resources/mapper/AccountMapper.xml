@@ -70,4 +70,9 @@
 		#{loginName}, #{name}, #{password}, #{email},
 		#{department.id})
 	</insert>
+	
+	<!-- 删除用户 -->
+	<delete id="deleteUser" parameterType="int">
+	     delete from acct_user where id=#{id}
+	</delete>
 </mapper> 

@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.net.URI;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.dozer.DozerBeanMapper;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -60,13 +61,16 @@ public class AccountResourceServiceIT extends BaseFunctionalTestCase {
 
 	@Test
 	@Category(Smoke.class)
-	public void createUser() {
+	public void createAndDeleteUser() {
 		User user = AccountData.randomUser();
 		UserDTO dto = new DozerBeanMapper().map(user, UserDTO.class);
 
 		URI uri = client.createUser(dto);
 		assertNotNull(uri);
 		System.out.println("Created user uri:" + uri);
+
+		String id = StringUtils.substringAfterLast(uri.toString(), "/");
+		client.deleteUser(new Long(id));
 	}
 
 	@Test

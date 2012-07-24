@@ -81,13 +81,16 @@ public class AccountDaoTest extends SpringTransactionalTestCase {
 	}
 
 	@Test
-	public void saveUser() {
+	public void saveAndDeleteUser() {
 		User user = AccountData.randomUser();
 		Long id = accountDao.saveUser(user);
 		assertEquals(new Long(5L), id);
 
 		assertEquals(4 + 1, this.countRowsInTable("acct_user"));
 		assertEquals(2 + 1, accountDao.getDepartmentDetail(1L).getUserList().size());
+
+		accountDao.deleteUser(id);
+		assertEquals(4, this.countRowsInTable("acct_user"));
 	}
 
 }

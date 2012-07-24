@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -79,7 +80,7 @@ public class UserResouceService {
 	}
 
 	/**
-	 * 创建用户, 请求数据为POST过来的JSON/XML格式编码的DTO, 返回表示所创建用户的URI.
+	 * 创建用户, 请求数据为POST过来的JSON/XML格式编码的DTO, 返回 状态码201("Created")及 表示所创建用户的URI.
 	 */
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML + WsConstants.CHARSET })
@@ -101,6 +102,16 @@ public class UserResouceService {
 		} catch (RuntimeException e) {
 			throw RsResponse.buildDefaultException(e);
 		}
+	}
+
+	/**
+	 * 刪除用户,返回状态码204("No Content").
+	 */
+	@DELETE
+	@Path("{id}")
+	public Response deleteUser(@PathParam("id") Long id) {
+		accountManager.deleteUser(id);
+		return Response.noContent().build();
 	}
 
 	@Autowired

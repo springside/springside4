@@ -61,6 +61,11 @@ public class AccountManager {
 		return accountDao.saveUser(user);
 	}
 
+	@Transactional(readOnly = false)
+	public void deleteUser(Long id) {
+		accountDao.deleteUser(id);
+	}
+
 	@Autowired
 	public void setAccountDao(AccountDao accountDao) {
 		this.accountDao = accountDao;
