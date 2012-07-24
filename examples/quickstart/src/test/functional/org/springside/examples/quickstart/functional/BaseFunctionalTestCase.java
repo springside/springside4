@@ -5,14 +5,12 @@ import java.sql.Driver;
 
 import org.eclipse.jetty.server.Server;
 import org.junit.BeforeClass;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.functional.JettyFactory;
 import org.springside.modules.test.functional.Selenium2;
-import org.springside.modules.test.functional.WebDriverFactory;
 import org.springside.modules.utils.PropertiesLoader;
 
 /**
@@ -52,8 +50,6 @@ public class BaseFunctionalTestCase {
 
 		buildDataSourceOnce();
 		reloadSampleData();
-
-		createSeleniumOnce();
 	}
 
 	/**
@@ -92,20 +88,5 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void reloadSampleData() throws Exception {
 		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
-	}
-
-	/**
-	 * 创建Selenium,，仅构造一次.
-	 */
-	protected static void createSeleniumOnce() throws Exception {
-		if (s == null) {
-			//根据配置创建Selenium driver.
-			String driverName = propertiesLoader.getProperty("selenium.driver");
-
-			WebDriver driver = WebDriverFactory.createDriver(driverName);
-
-			s = new Selenium2(driver, baseUrl);
-			s.setStopAtShutdown();
-		}
 	}
 }

@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springside.examples.quickstart.data.TaskData;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.examples.quickstart.functional.BaseFunctionalTestCase;
 import org.springside.modules.test.category.Smoke;
 
 /**
@@ -16,7 +15,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
-public class TaskGuiIT extends BaseFunctionalTestCase {
+public class TaskGuiIT extends BaseSeleniumTestCase {
 
 	/**
 	 * 浏览用户列表.

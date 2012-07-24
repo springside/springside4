@@ -1,14 +1,15 @@
-package org.springside.examples.showcase.functional;
+package org.springside.examples.quickstart.functional.gui;
 
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
+import org.springside.examples.quickstart.functional.BaseFunctionalTestCase;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
 
 /**
  * 使用Selenium的功能测试基类.
  * 
- * 在BaseFunctionalTestCase的基础上，在整个测试期间启动一次Selenium.
+ * 在BaseFunctionalTestCase的基础上，在整个测试期间仅启动一次Selenium.
  * 
  * @author calvin
  */
@@ -28,4 +29,5 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			s.setStopAtShutdown();
 		}
 	}
+
 }

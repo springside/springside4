@@ -18,7 +18,6 @@
 		<jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
 		<jdbc.driver.version>${h2.version}</jdbc.driver.version>
-		<jersey.version>1.13</jersey.version>
 	</properties>
 
 	<!-- 依赖项定义 -->
@@ -140,49 +139,6 @@
 			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
 		<!-- SECURITY end -->
-
-
-		<!-- REST begin -->
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-server</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-servlet</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-client</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey.contribs</groupId>
-				<artifactId>jersey-spring</artifactId>
-				<version>${jersey.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.sun.jersey</groupId>
-						<artifactId>jersey-grizzly2</artifactId>
-					</exclusion>
-					<exclusion>
-						<groupId>com.sun.jersey</groupId>
-						<artifactId>jersey-servlet</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey.contribs</groupId>
-				<artifactId>jersey-multipart</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-		<!-- REST end -->
 
 		<!-- JMS begin -->
 		<dependency>

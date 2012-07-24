@@ -2,20 +2,18 @@ package org.springside.examples.quickstart.functional.rest;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
+import java.net.URI;
+import java.util.ArrayList;
 
-import javax.ws.rs.core.MediaType;
-
-import org.junit.Before;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.web.client.RestTemplate;
+import org.springside.examples.quickstart.data.TaskData;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.functional.BaseFunctionalTestCase;
 import org.springside.modules.test.category.Smoke;
-
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.GenericType;
-import com.sun.jersey.api.client.WebResource;
 
 /**
  * 任务管理的功能测试, 测试页面JavaScript及主要用户故事流程.
@@ -24,14 +22,16 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class TaskRestIT extends BaseFunctionalTestCase {
 
-	private WebResource client;
+	private final RestTemplate restTemplate = new RestTemplate();
 
-	private final GenericType<List<Task>> taskListType = new GenericType<List<Task>>() {
+	private static class TaskList extends ArrayList<Task> {
 	};
 
-	@Before
-	public void setupClient() {
-		client = Client.create().resource(baseUrl);
+	private static String resoureUrl;
+
+	@BeforeClass
+	public static void initUrl() {
+		resoureUrl = baseUrl + "/api/task";
 	}
 
 	/**
@@ -40,9 +40,7 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void listTasks() {
-		WebResource wr = client.path("/api/task");
-		List<Task> tasks = wr.get(taskListType);
-
+		TaskList tasks = restTemplate.getForObject(resoureUrl, TaskList.class);
 		assertEquals(5, tasks.size());
 		assertEquals("Study PlayFramework 2.0", tasks.get(0).getTitle());
 	}
@@ -54,7 +52,39 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 	@Category(Smoke.class)
 	public void getTask() {
 		Long id = 1L;
-		Task task = client.path("/api/task/" + id).accept(MediaType.APPLICATION_JSON).get(Task.class);
+		Task task = restTemplate.getForObject(resoureUrl + "/{id}", Task.class, id);
 		assertEquals("Study PlayFramework 2.0", task.getTitle());
+	}
+
+	/**
+	 * 创建/更新/删除任务.
+	 */
+	@Test
+	@Category(Smoke.class)
+	public void createUpdateAndDeleteTask() {
+
+		//create
+		Task task = TaskData.randomTask();
+
+		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
+
+		assertEquals(resoureUrl + "/6", taskUri.toString());
+
+		//update
+		String id = StringUtils.substringAfterLast(taskUri.toString(), "/");
+		String newTitle = TaskData.randomTitle();
+		task.setId(new Long(id));
+		task.setTitle(newTitle);
+
+		restTemplate.put(taskUri, task);
+
+		Task updatedTask = restTemplate.getForObject(taskUri, Task.class);
+		assertEquals(newTitle, updatedTask.getTitle());
+
+		//delete
+		restTemplate.delete(taskUri);
+
+		Task deletedTask = restTemplate.getForObject(taskUri, Task.class);
+		assertNull(deletedTask);
 	}
 }

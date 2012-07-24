@@ -39,17 +39,6 @@
 		<servlet-name>springServlet</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-
-	<!-- Jersey Servlet 配置 -->
-	<servlet>
-		<servlet-name>JerseyServlet</servlet-name>
-		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
-		<load-on-startup>2</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>JerseyServlet</servlet-name>
-		<url-pattern>/rs/*</url-pattern>
-	</servlet-mapping>
 	
 	<!-- JMX JSON Agent servlet-->
 	<servlet>

@@ -3,7 +3,9 @@ package org.springside.examples.quickstart.rest;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.service.TaskManager;
 
@@ -39,17 +42,20 @@ public class TaskRestController {
 		return taskManager.getTask(id);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(method = RequestMethod.POST, consumes = "application/json")
 	@ResponseBody
-	@ResponseStatus(HttpStatus.CREATED)
-	public Long create(@RequestBody final Task task) {
+	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
 		taskManager.saveTask(task);
-		return task.getId();
+		Long id = task.getId();
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(uriBuilder.path("/api/task/" + id).build().toUri());
+		ResponseEntity responseEntity = new ResponseEntity(headers, HttpStatus.CREATED);
+		return responseEntity;
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@RequestBody final Task task) {
+	public void update(@RequestBody Task task) {
 		taskManager.saveTask(task);
 	}
 
