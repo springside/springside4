@@ -4,7 +4,7 @@ import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.functional.JettyFactory;
 
 /**
- * 使用Jetty运行调试Web应用, 在Console输入回车停止服务器.
+ * 使用Jetty运行调试Web应用, 在Console快速重载应用.
  * 
  * @author calvin
  */
@@ -20,18 +20,23 @@ public class ShowcaseServer {
 
 		//启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
+		JettyFactory.setTldJars(server, "sitemesh", "shiro-web", "spring-webmvc");
+
 		try {
 			server.start();
 
 			System.out.println("Server running at " + BASE_URL);
-			System.out.println("Hit Enter in console to stop server");
+			System.out.println("Hit Enter to reload the application");
 
-			//wait for close
-			System.in.read();
-			server.stop();
-			server.join();
-			System.out.println("Server stopped");
+			//等待用户输入回车重载应用.
+			while (true) {
+				char c = (char) System.in.read();
+				if (c == '\n') {
+					JettyFactory.reloadContext(server);
+				}
+			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			System.exit(-1);
 		}
 	}
