@@ -33,6 +33,21 @@
 			<optional>true</optional>
 		</dependency>
 		
+		<!-- WEB begin -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- WEB end -->
+		
+		<!-- freemarker -->
+		<dependency>
+			<groupId>org.freemarker</groupId>
+			<artifactId>freemarker</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
 		<!-- UTILS -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>

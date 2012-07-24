@@ -16,11 +16,11 @@
 		<spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
-		<guava.version>12.0</guava.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
-		<jackson.version>2.0.4</jackson.version>
 		<slf4j.version>1.6.6</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
+		<jackson.version>2.0.4</jackson.version>
+		<commons-lang3.version>3.1</commons-lang3.version>
+		<guava.version>12.0</guava.version>
 		<jetty.version>7.6.4.v20120524</jetty.version>
 		<h2.version>1.3.167</h2.version>
 		<junit.version>4.10</junit.version>
@@ -102,11 +102,6 @@
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>${hibernate.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate.javax.persistence</groupId>
-			<artifactId>hibernate-jpa-2.0-api</artifactId>
-			<version>1.0.1.Final</version>
-		</dependency>
 
 		<!-- spring data access -->
 		<dependency>
@@ -173,20 +168,14 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- WEB end -->
-
-		<!-- GENERAL UTILS begin -->
+		
+		<!-- JSR303  BeanValidator -->
 		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>${commons-lang3.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
-		</dependency>
-		<!-- GENERAL UTILS end -->
-
+		
 		<!-- JSON begin -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -222,6 +211,19 @@
 			<version>0.2.7</version>
 		</dependency>
 		<!-- LOGGING end -->
+
+		<!-- GENERAL UTILS begin -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons-lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${guava.version}</version>
+		</dependency>
+		<!-- GENERAL UTILS end -->
 
 		<!-- TEST begin -->
 		<dependency>
@@ -463,32 +465,7 @@
 	</build>
 
 	<profiles>
-		<!-- 仅执行smoke test -->
-		<profile>
-			<id>smoke-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<groups>org.springside.modules.test.category.Smoke</groups>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
-							<!-- 支持taglib tld文件查找的必要设置 -->
-							<useSystemClassLoader>false</useSystemClassLoader>
-							<!-- 将mvn命令行传入的selenium driver参数传入surefire的JVM -->
-							<systemPropertyVariables>
-								<selenium.driver>${selenium.driver}</selenium.driver>
-							</systemPropertyVariables>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-
-		<!-- 执行所有functional test -->
+		<!-- 执行functional test -->
 		<profile>
 			<id>functional-test</id>
 			<build>
@@ -508,6 +485,54 @@
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<!-- 执行@Category(Smoke.class)的TestCase -->
+		<profile>
+			<id>run-smoke</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
+						</configuration>
+					</plugin>				
+				</plugins>
+			</build>
+		</profile>
+		
+		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
+		<profile>
+			<id>skip-unstable</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
+						</configuration>
+					</plugin>				
+				</plugins>
+			</build>
+		</profile>
+		
+		<!-- 执行@Category(UnStable.class)的TestCase -->
+		<profile>
+			<id>run-unstable</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<includedGroups>org.springside.modules.test.category.UnStable</includedGroups>
+						</configuration>
+					</plugin>				
 				</plugins>
 			</build>
 		</profile>
