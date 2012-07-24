@@ -767,7 +767,13 @@
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>1.7</version>
 				</plugin>
-				
+					
+        		<!-- cobertura 测试覆盖率统计插件 -->
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>cobertura-maven-plugin</artifactId>
+					<version>2.5.1</version>
+				</plugin>
 
 				<!-- war打包插件, 设定war包名称不带版本号 -->
 				<plugin>
@@ -862,19 +868,7 @@
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.2.1</version>
 				</plugin>
-				
-				<!-- sonar插件 -->
-        		<plugin>
-        			<groupId>org.codehaus.sonar</groupId>
-        			<artifactId>sonar-maven3-plugin</artifactId>
-        			<version>3.0</version>
-        		</plugin>
-        		<!-- cobertura 测试覆盖率统计插件 -->
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>cobertura-maven-plugin</artifactId>
-					<version>2.5.1</version>
-				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
