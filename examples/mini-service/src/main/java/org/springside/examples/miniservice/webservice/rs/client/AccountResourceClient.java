@@ -20,6 +20,8 @@ import com.sun.jersey.api.client.WebResource;
 /**
  * 使用Jersey Client的AccountResourceService REST客户端.
  * 
+ * Department相关的使用XML格式，User 相关的使用JSON格式 。
+ * 
  * @author calvin
  */
 public class AccountResourceClient {
