@@ -5,12 +5,12 @@ echo "[Pre-Requirement] Makesure install Maven 3.0.4+ and set the PATH."
 	
 set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
 
-echo "[Step 1] Install all springside modules to local maven repository, and generate eclipse files to all projects."
+echo "[Step 1] Install all springside modules to local maven repository."
 cd modules
 mvn clean install -Dmaven.test.skip=true
 cd ..
 
-echo "[Step 2] Generate Eclipse project files for all projects"	
+echo "[Step 2] Generate Eclipse project files for all projects."	
 mvn eclipse:clean eclipse:eclipse 
 
 echo "[Step 3] Initialize schema and data for all example projects."
@@ -19,15 +19,12 @@ mvn antrun:run -Prefresh-db
 cd ..
 
 echo "[Step 4] Start all example projects."
-cd  examples/mini-web
+cd  examples/quickstart
 mvn clean jetty:run &
-cd  ../mini-service
-mvn clean jetty:run  -Djetty.port=8081 &
 cd  ../showcase
-mvn clean jetty:run  -Djetty.port=8082 &
+mvn clean jetty:run  -Djetty.port=8081 &
 
 echo "[INFO] Please wait a moment then access below demo sites:"
-echo "[INFO] http://localhost:8080/mini-web"
-echo "[INFO] http://localhost:8081/mini-service"
-echo "[INFO] http://localhost:8082/showcase"
+echo "[INFO] http://localhost:8080/quickstart"
+echo "[INFO] http://localhost:8081/showcase"
 
