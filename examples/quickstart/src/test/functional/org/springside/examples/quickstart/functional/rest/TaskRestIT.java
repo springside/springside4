@@ -68,18 +68,18 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 
 		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
 
-		assertEquals(resoureUrl + "/6", taskUri.toString());
+		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
+		assertEquals(task.getTitle(), createdTask.getTitle());
 
 		//update
 		String id = StringUtils.substringAfterLast(taskUri.toString(), "/");
-		String newTitle = TaskData.randomTitle();
 		task.setId(new Long(id));
-		task.setTitle(newTitle);
+		task.setTitle(TaskData.randomTitle());
 
 		restTemplate.put(taskUri, task);
 
 		Task updatedTask = restTemplate.getForObject(taskUri, Task.class);
-		assertEquals(newTitle, updatedTask.getTitle());
+		assertEquals(task.getTitle(), updatedTask.getTitle());
 
 		//delete
 		restTemplate.delete(taskUri);

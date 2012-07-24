@@ -22,21 +22,20 @@ if errorlevel 1 goto error
 cd ..\
 
 echo [Step 4] Start all example projects.
-cd examples\mini-web
+cd examples\quickstart
 start "QuickStart" %MVN% clean jetty:run 
 if errorlevel 1 goto error
 cd ..\showcase
 start "Showcase" %MVN% clean jetty:run -Djetty.port=8081
 if errorlevel 1 goto error
-
 cd ..\..\
 
-echo [INFO] Please wait a moment then access below demo sites:
+echo [INFO] Please wait a moment. When you see "[INFO] Started Jetty Server" in both 2 popup consoles, you can access below demo sites:
 echo [INFO] http://localhost:8080/quickstart
 echo [INFO] http://localhost:8081/showcase
 
 goto end
 :error
-echo Error Happen!!!
+echo Error Happen!!
 :end
 pause

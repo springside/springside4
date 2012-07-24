@@ -22,7 +22,7 @@ echo "[Step 4] Start all example projects."
 cd  examples/quickstart
 mvn clean jetty:run &
 cd  ../showcase
-mvn clean jetty:run  -Djetty.port=8081 &
+mvn clean jetty:run -Djetty.port=8081 &
 
 echo "[INFO] Please wait a moment then access below demo sites:"
 echo "[INFO] http://localhost:8080/quickstart"
