@@ -34,4 +34,20 @@ public class Exceptions {
 		e.printStackTrace(new PrintWriter(stringWriter));
 		return stringWriter.toString();
 	}
+
+	/**
+	 * 判断异常是否由某些底层的异常引起.
+	 */
+	public static boolean isCausedBy(Exception ex, Class... causeExceptionClasses) {
+		Throwable cause = ex.getCause();
+		while (cause != null) {
+			for (Class causeClass : causeExceptionClasses) {
+				if (causeClass.isInstance(cause)) {
+					return true;
+				}
+			}
+			cause = cause.getCause();
+		}
+		return false;
+	}
 }
