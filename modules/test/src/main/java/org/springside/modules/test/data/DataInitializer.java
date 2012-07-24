@@ -5,7 +5,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.InitializingBean;
 
 /**
- * åœ¨Spring Contextå�¯åŠ¨æ—¶ï¼Œä½¿ç”¨DBUnitä¸€æ¬¡æ€§åˆ�å§‹åŒ–æ•°æ�®ã€‚
+ * 在Spring Context启动时，使用DBUnit一次性初始化数据。
  * 
  * @author calvin
  */
