@@ -18,23 +18,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.Encodes;
 
+import com.google.common.net.HttpHeaders;
+
 /**
  * Http与Servlet工具类.
  * 
  * @author calvin
  */
 public class Servlets {
-
-	//-- Content Type 定义 --//
-	public static final String EXCEL_TYPE = "application/vnd.ms-excel";
-	public static final String HTML_TYPE = "text/html";
-	public static final String JS_TYPE = "text/javascript";
-	public static final String JSON_TYPE = "application/json";
-	public static final String XML_TYPE = "text/xml";
-	public static final String TEXT_TYPE = "text/plain";
-
-	//-- Header 定义 --//
-	public static final String AUTHENTICATION_HEADER = "Authorization";
 
 	//-- 常用数值定义 --//
 	public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
@@ -44,9 +35,9 @@ public class Servlets {
 	 */
 	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
 		//Http 1.0 header, set a fix expires date.
-		response.setDateHeader("Expires", System.currentTimeMillis() + expiresSeconds * 1000);
+		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + expiresSeconds * 1000);
 		//Http 1.1 header, set a time after now.
-		response.setHeader("Cache-Control", "private, max-age=" + expiresSeconds);
+		response.setHeader(HttpHeaders.CACHE_CONTROL, "private, max-age=" + expiresSeconds);
 	}
 
 	/**
@@ -54,24 +45,24 @@ public class Servlets {
 	 */
 	public static void setNoCacheHeader(HttpServletResponse response) {
 		//Http 1.0 header
-		response.setDateHeader("Expires", 1L);
-		response.addHeader("Pragma", "no-cache");
+		response.setDateHeader(HttpHeaders.EXPIRES, 1L);
+		response.addHeader(HttpHeaders.PRAGMA, "no-cache");
 		//Http 1.1 header
-		response.setHeader("Cache-Control", "no-cache, no-store, max-age=0");
+		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, max-age=0");
 	}
 
 	/**
 	 * 设置LastModified Header.
 	 */
 	public static void setLastModifiedHeader(HttpServletResponse response, long lastModifiedDate) {
-		response.setDateHeader("Last-Modified", lastModifiedDate);
+		response.setDateHeader(HttpHeaders.LAST_MODIFIED, lastModifiedDate);
 	}
 
 	/**
 	 * 设置Etag Header.
 	 */
 	public static void setEtag(HttpServletResponse response, String etag) {
-		response.setHeader("ETag", etag);
+		response.setHeader(HttpHeaders.ETAG, etag);
 	}
 
 	/**
@@ -83,7 +74,7 @@ public class Servlets {
 	 */
 	public static boolean checkIfModifiedSince(HttpServletRequest request, HttpServletResponse response,
 			long lastModified) {
-		long ifModifiedSince = request.getDateHeader("If-Modified-Since");
+		long ifModifiedSince = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
 		if ((ifModifiedSince != -1) && (lastModified < ifModifiedSince + 1000)) {
 			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return false;
@@ -99,7 +90,7 @@ public class Servlets {
 	 * @param etag 内容的ETag.
 	 */
 	public static boolean checkIfNoneMatchEtag(HttpServletRequest request, HttpServletResponse response, String etag) {
-		String headerValue = request.getHeader("If-None-Match");
+		String headerValue = request.getHeader(HttpHeaders.IF_NONE_MATCH);
 		if (headerValue != null) {
 			boolean conditionSatisfied = false;
 			if (!"*".equals(headerValue)) {
@@ -117,7 +108,7 @@ public class Servlets {
 
 			if (conditionSatisfied) {
 				response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-				response.setHeader("ETag", etag);
+				response.setHeader(HttpHeaders.ETAG, etag);
 				return false;
 			}
 		}
@@ -133,7 +124,7 @@ public class Servlets {
 		try {
 			//中文文件名支持
 			String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
-			response.setHeader("Content-Disposition", "attachment; filename=\"" + encodedfileName + "\"");
+			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
 		} catch (UnsupportedEncodingException e) {
 		}
 	}

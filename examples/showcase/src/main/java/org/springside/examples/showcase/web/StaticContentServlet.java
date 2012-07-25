@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springside.modules.web.Servlets;
 
@@ -35,8 +36,8 @@ public class StaticContentServlet extends HttpServlet {
 	private static final long serialVersionUID = -1855617048198368534L;
 
 	/** 需要被Gzip压缩的Mime类型. */
-	private static final String[] GZIP_MIME_TYPES = { "text/html", "text/xml", "text/plain", "text/css",
-			"text/javascript", "application/xml", "application/xhtml+xml", "application/x-javascript" };
+	private static final String[] GZIP_MIME_TYPES = { MediaType.TEXT_HTML_VALUE, MediaType.APPLICATION_XHTML_XML_VALUE,
+			MediaType.TEXT_PLAIN_VALUE, "text/css", "text/javascript", "application/x-javascript" };
 
 	/** 需要被Gzip压缩的最小文件大小. */
 	private static final int GZIP_MINI_LENGTH = 512;
