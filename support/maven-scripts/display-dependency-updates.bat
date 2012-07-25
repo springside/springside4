@@ -1,5 +1,5 @@
 @echo off
 
-cd ../../modules/parent
-call mvn versions:display-property-updates
+cd ../../
+call mvn versions:display-dependency-updates
 pause
