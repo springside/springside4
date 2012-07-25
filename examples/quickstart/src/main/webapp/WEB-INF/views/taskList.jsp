@@ -23,6 +23,6 @@
 		</tbody>
 	</table>
 	
-	<a class="btn" href="create">创建任务</a>
+	<a class="btn" href="${ctx}/task/create">创建任务</a>
 </body>
 </html>
