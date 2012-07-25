@@ -16,8 +16,8 @@
 		<tbody>
 		<c:forEach items="${tasks}" var="task">
 			<tr>
-				<td><a href="update/${task.id}">${task.title}</a></td>
-				<td><a href="delete/${task.id}">删除</a></td>
+				<td><a href="${ctx}/task/update/${task.id}">${task.title}</a></td>
+				<td><a href="${ctx}/task/delete/${task.id}">删除</a></td>
 			</tr>
 		</c:forEach>
 		</tbody>
