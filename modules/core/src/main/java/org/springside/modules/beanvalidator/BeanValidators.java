@@ -6,6 +6,7 @@
 package org.springside.modules.beanvalidator;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -13,14 +14,16 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 /**
  * JSR303 Validator(Hibernate Validator)工具类.
  * 
  * ConstraintViolation中包含propertyPath, message 和invalidValue等信息.
  * 提供了各种convert方法，适合不同的i18n需求:
- * 1. message
- * 2. propertyPath + separator + message
+ * 1. List<message>
+ * 2. List<propertyPath + separator + message>
+ * 3. Map<propertyPath, message>
  * 
  * 详情见wiki: https://github.com/springside/springside4/wiki/HibernateValidator
  * @author calvin
@@ -57,23 +60,48 @@ public class BeanValidators {
 	}
 
 	/**
-	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>中为List<propertyPath message>.
+	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为Map<property, message>.
 	 */
-	public static List<String> extractPropertyAndMessage(ConstraintViolationException e) {
-		return extractPropertyAndMessage(e.getConstraintViolations(), " ");
+	public static Map<String, String> extractPropertyAndMessage(ConstraintViolationException e) {
+		return extractPropertyAndMessage(e.getConstraintViolations());
 	}
 
 	/**
-	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>中为List<propertyPath +separator+ message>.
+	 * 辅助方法, 转换Set<ConstraintViolation>为Map<property, message>.
 	 */
-	public static List<String> extractPropertyAndMessage(ConstraintViolationException e, String separator) {
-		return extractPropertyAndMessage(e.getConstraintViolations(), separator);
+	public static Map<String, String> extractPropertyAndMessage(Set<? extends ConstraintViolation> constraintViolations) {
+		Map<String, String> errorMessages = Maps.newHashMap();
+		for (ConstraintViolation violation : constraintViolations) {
+			errorMessages.put(violation.getPropertyPath().toString(), violation.getMessage());
+		}
+		return errorMessages;
+	}
+
+	/**
+	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath message>.
+	 */
+	public static List<String> extractPropertyAndMessageAsList(ConstraintViolationException e) {
+		return extractPropertyAndMessageAsList(e.getConstraintViolations(), " ");
+	}
+
+	/**
+	 * 辅助方法, 转换Set<ConstraintViolations>为List<propertyPath message>.
+	 */
+	public static List<String> extractPropertyAndMessageAsList(Set<? extends ConstraintViolation> constraintViolations) {
+		return extractPropertyAndMessageAsList(constraintViolations, " ");
+	}
+
+	/**
+	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath +separator+ message>.
+	 */
+	public static List<String> extractPropertyAndMessageAsList(ConstraintViolationException e, String separator) {
+		return extractPropertyAndMessageAsList(e.getConstraintViolations(), separator);
 	}
 
 	/**
 	 * 辅助方法, 转换Set<ConstraintViolation>为List<propertyPath +separator+ message>.
 	 */
-	public static List<String> extractPropertyAndMessage(Set<? extends ConstraintViolation> constraintViolations,
+	public static List<String> extractPropertyAndMessageAsList(Set<? extends ConstraintViolation> constraintViolations,
 			String separator) {
 		List<String> errorMessages = Lists.newArrayList();
 		for (ConstraintViolation violation : constraintViolations) {

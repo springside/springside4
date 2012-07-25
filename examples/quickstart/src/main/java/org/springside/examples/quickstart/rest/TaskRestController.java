@@ -1,6 +1,11 @@
 package org.springside.examples.quickstart.rest;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.service.TaskManager;
+import org.springside.modules.beanvalidator.BeanValidators;
 
 /**
  * Task的Restful API的Controller.
@@ -25,11 +31,14 @@ import org.springside.examples.quickstart.service.TaskManager;
  *
  */
 @Controller
-@RequestMapping(value = "/api/task")
+@RequestMapping(value = "/api/v1/task")
 public class TaskRestController {
 
 	@Autowired
 	private TaskManager taskManager;
+
+	@Autowired
+	private Validator validator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -39,25 +48,49 @@ public class TaskRestController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Task get(@PathVariable("id") Long id) {
-		return taskManager.getTask(id);
+	public ResponseEntity<?> get(@PathVariable("id") Long id) {
+		Task task = taskManager.getTask(id);
+		if (task == null) {
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity(task, HttpStatus.OK);
+
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
+		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
+		Set<ConstraintViolation<Task>> failures = validator.validate(task);
+		if (!failures.isEmpty()) {
+			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
+		}
+
+		//保存任务
 		taskManager.saveTask(task);
+
+		//按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
 		Long id = task.getId();
+		URI uri = uriBuilder.path("/api/v1/task/" + id).build().toUri();
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(uriBuilder.path("/api/task/" + id).build().toUri());
-		ResponseEntity responseEntity = new ResponseEntity(headers, HttpStatus.CREATED);
-		return responseEntity;
+		headers.setLocation(uri);
+
+		return new ResponseEntity(headers, HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void update(@RequestBody Task task) {
+	public ResponseEntity<?> update(@RequestBody Task task) {
+		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
+		Set<ConstraintViolation<Task>> failures = validator.validate(task);
+		if (!failures.isEmpty()) {
+			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
+		}
+
+		//保存
 		taskManager.saveTask(task);
+
+		//按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
+		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

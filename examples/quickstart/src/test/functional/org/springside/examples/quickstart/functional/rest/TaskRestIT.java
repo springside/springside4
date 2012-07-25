@@ -4,15 +4,19 @@ import static org.junit.Assert.*;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.quickstart.data.TaskData;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.functional.BaseFunctionalTestCase;
+import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.category.Smoke;
 
 /**
@@ -24,6 +28,8 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 
 	private final RestTemplate restTemplate = new RestTemplate();
 
+	private final JsonMapper jsonMapper = new JsonMapper();
+
 	private static class TaskList extends ArrayList<Task> {
 	};
 
@@ -31,7 +37,7 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 
 	@BeforeClass
 	public static void initUrl() {
-		resoureUrl = baseUrl + "/api/task";
+		resoureUrl = baseUrl + "/api/v1/task";
 	}
 
 	/**
@@ -67,7 +73,7 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 		Task task = TaskData.randomTask();
 
 		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
-
+		System.out.println(taskUri.toString());
 		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
 		assertEquals(task.getTitle(), createdTask.getTitle());
 
@@ -84,7 +90,39 @@ public class TaskRestIT extends BaseFunctionalTestCase {
 		//delete
 		restTemplate.delete(taskUri);
 
-		Task deletedTask = restTemplate.getForObject(taskUri, Task.class);
-		assertNull(deletedTask);
+		try {
+			restTemplate.getForObject(taskUri, Task.class);
+			fail("Get should fail while feth a deleted task");
+		} catch (HttpClientErrorException e) {
+			assertEquals(HttpStatus.NOT_FOUND, e.getStatusCode());
+		}
+	}
+
+	@Test
+	public void invalidInput() {
+
+		//create
+		Task titleBlankTask = new Task();
+		try {
+			restTemplate.postForLocation(resoureUrl, titleBlankTask);
+			fail("Create should fail while title is blank");
+		} catch (HttpClientErrorException e) {
+			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
+			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
+			assertEquals(1, messages.size());
+			assertEquals("may not be empty", messages.get("title"));
+		}
+
+		//update
+		titleBlankTask.setId(1L);
+		try {
+			restTemplate.put(resoureUrl + "/1", titleBlankTask);
+			fail("Update should fail while title is blank");
+		} catch (HttpClientErrorException e) {
+			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
+			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
+			assertEquals(1, messages.size());
+			assertEquals("may not be empty", messages.get("title"));
+		}
 	}
 }

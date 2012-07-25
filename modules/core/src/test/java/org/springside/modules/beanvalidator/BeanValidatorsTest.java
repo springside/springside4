@@ -2,14 +2,15 @@ package org.springside.modules.beanvalidator;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.junit.Assert;
@@ -39,13 +40,21 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		assertEquals(2, violations.size());
-		String result = StringUtils.join(BeanValidators.extractPropertyAndMessage(violations, " "), ",");
-		assertTrue(StringUtils.contains(result, "email not a well-formed email address"));
-		assertTrue(StringUtils.contains(result, "name may not be empty"));
 
-		result = StringUtils.join(BeanValidators.extractMessage(violations), ",");
-		assertTrue(StringUtils.contains(result, "not a well-formed email address"));
-		assertTrue(StringUtils.contains(result, "may not be empty"));
+		//extract message as list
+		List<String> result = BeanValidators.extractMessage(violations);
+		assertTrue(result.contains("not a well-formed email address"));
+		assertTrue(result.contains("may not be empty"));
+
+		//extract propertyPath and message as map;
+		Map mapResult = BeanValidators.extractPropertyAndMessage(violations);
+		assertEquals("not a well-formed email address", mapResult.get("email"));
+		assertEquals("may not be empty", mapResult.get("name"));
+
+		//extract propertyPath and message as map;
+		result = BeanValidators.extractPropertyAndMessageAsList(violations);
+		assertTrue(result.contains("email not a well-formed email address"));
+		assertTrue(result.contains("name may not be empty"));
 	}
 
 	@Test
@@ -57,11 +66,10 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 			BeanValidators.validateWithException(validator, customer);
 			Assert.fail("should throw excepion");
 		} catch (ConstraintViolationException e) {
-			String result = StringUtils.join(BeanValidators.extractPropertyAndMessage(e), ",");
-			assertTrue(StringUtils.contains(result, "email not a well-formed email address"));
-			assertTrue(StringUtils.contains(result, "name may not be empty"));
+			Map mapResult = BeanValidators.extractPropertyAndMessage(e);
+			assertEquals("not a well-formed email address", mapResult.get("email"));
+			assertEquals("may not be empty", mapResult.get("name"));
 		}
-
 	}
 
 	private static class Customer {
