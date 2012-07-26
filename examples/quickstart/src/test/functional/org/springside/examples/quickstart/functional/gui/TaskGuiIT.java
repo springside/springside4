@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.springside.examples.quickstart.data.TaskData;
 import org.springside.examples.quickstart.entity.Task;
+import org.springside.examples.quickstart.functional.BaseSeleniumTestCase;
 import org.springside.modules.test.category.Smoke;
 
 /**

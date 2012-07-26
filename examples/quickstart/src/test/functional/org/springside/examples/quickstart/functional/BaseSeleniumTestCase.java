@@ -1,8 +1,7 @@
-package org.springside.examples.quickstart.functional.gui;
+package org.springside.examples.quickstart.functional;
 
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
-import org.springside.examples.quickstart.functional.BaseFunctionalTestCase;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
 

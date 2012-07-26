@@ -12,7 +12,12 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<mvc:annotation-driven />
+	<!-- 在spring mvc 标准annotation基础上，增加了@OptionalPathVariable -->
+	<mvc:annotation-driven>
+		<mvc:argument-resolvers>
+	        <bean class=" org.springside.modules.web.springmvc.OptionalPathVariableMethodArgumentResolver"/>
+	    </mvc:argument-resolvers>
+	</mvc:annotation-driven>
 	
 	<mvc:default-servlet-handler/>
 	
@@ -22,7 +27,7 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- 定义无Controller的的path<->view映射 -->
+	<!-- 定义无Controller的path<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="index"/>
 	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>	
 </beans>

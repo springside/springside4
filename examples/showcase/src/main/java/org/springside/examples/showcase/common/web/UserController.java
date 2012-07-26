@@ -10,11 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
-import org.springside.modules.web.SpringWebs;
+import org.springside.modules.web.springmvc.OptionalPathVariable;
 
 import com.google.common.collect.Lists;
 
@@ -40,7 +39,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "save/{id}")
-	public String update(@Valid @ModelAttribute("updateUser") User user, BindingResult bindingResult, Model model,
+	public String update(@Valid @ModelAttribute("user") User user, BindingResult bindingResult, Model model,
 			RedirectAttributes redirectAttributes) {
 		if (bindingResult.hasErrors()) {
 			return updateForm(model);
@@ -51,11 +50,10 @@ public class UserController {
 		return "redirect:/common/user/";
 	}
 
-	@ModelAttribute("updateUser")
-	public User getAccount(NativeWebRequest request) {
-		String id = SpringWebs.getPathVariable(request, "id");
+	@ModelAttribute("user")
+	public User getAccount(@OptionalPathVariable("id") Long id) {
 		if (id != null) {
-			return accountManager.getUser(Long.valueOf(id));
+			return accountManager.getUser(id);
 		}
 		return null;
 
