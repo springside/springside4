@@ -13,7 +13,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
-public class UserManagerIT extends BaseSeleniumTestCase {
+public class UserManagerFT extends BaseSeleniumTestCase {
 
 	@Test
 	@Category(Smoke.class)

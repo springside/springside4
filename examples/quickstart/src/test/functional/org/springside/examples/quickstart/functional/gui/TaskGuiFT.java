@@ -16,7 +16,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
-public class TaskGuiIT extends BaseSeleniumTestCase {
+public class TaskGuiFT extends BaseSeleniumTestCase {
 
 	/**
 	 * 浏览用户列表.

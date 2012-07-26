@@ -24,7 +24,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
-public class TaskRestIT extends BaseFunctionalTestCase {
+public class TaskRestFT extends BaseFunctionalTestCase {
 
 	private final RestTemplate restTemplate = new RestTemplate();
 

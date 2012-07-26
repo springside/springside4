@@ -451,7 +451,7 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<includes>
-								<include>**/*IT.java</include>
+								<include>**/*FT.java</include>
 							</includes>
 							<!-- 支持taglib tld文件查找的必要设置 -->
 							<useSystemClassLoader>false</useSystemClassLoader>

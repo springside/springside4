@@ -11,7 +11,7 @@ import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
  * 
  * @calvin
  */
-public class AjaxIT extends BaseSeleniumTestCase {
+public class AjaxFT extends BaseSeleniumTestCase {
 
 	@Test
 	public void mashup() {
