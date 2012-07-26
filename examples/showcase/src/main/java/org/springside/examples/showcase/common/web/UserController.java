@@ -8,12 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.common.entity.User;
 import org.springside.examples.showcase.common.service.AccountManager;
-import org.springside.modules.web.springmvc.OptionalPathVariable;
 
 import com.google.common.collect.Lists;
 
@@ -50,12 +52,23 @@ public class UserController {
 		return "redirect:/common/user/";
 	}
 
+	/**
+	 * 使用@ModelAttribute, 实现Struts2 Preparable二次绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
+	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
+	 */
 	@ModelAttribute("user")
-	public User getAccount(@OptionalPathVariable("id") Long id) {
+	private User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
 			return accountManager.getUser(id);
 		}
 		return null;
+	}
 
+	/**
+	 * 不要绑定对象中的id属性.
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setDisallowedFields("id");
 	}
 }

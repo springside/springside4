@@ -12,12 +12,7 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<!-- 在spring mvc 标准annotation基础上，增加了@OptionalPathVariable -->
-	<mvc:annotation-driven>
-		<mvc:argument-resolvers>
-	        <bean class=" org.springside.modules.web.springmvc.OptionalPathVariableMethodArgumentResolver"/>
-	    </mvc:argument-resolvers>
-	</mvc:annotation-driven>
+	<mvc:annotation-driven/>
 	
 	<mvc:default-servlet-handler/>
 	
