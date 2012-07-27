@@ -15,7 +15,7 @@
 	
 	<h1>What is new?</h1>
 	<ul style="padding: 15px;">
-		<li>大装修完毕，CXF的SOAP WebService 与 MyBais从Mini-Service搬了过来.</li>
+		<li>大装修完毕，CXF的SOAP WebService 与 MyBais从Mini-Service搬了过来。</li>
 	</ul>
 </body>
 </html>
