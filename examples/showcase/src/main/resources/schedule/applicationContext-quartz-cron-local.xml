@@ -39,5 +39,5 @@
 	</bean>
 
 	<!-- 被Cron执行的普通Spring Bean -->
-	<bean id="cronJob" class="org.springside.examples.showcase.schedule.QuartzJob" />
+	<bean id="cronJob" class="org.springside.examples.showcase.modules.schedule.QuartzJob" />
 </beans>

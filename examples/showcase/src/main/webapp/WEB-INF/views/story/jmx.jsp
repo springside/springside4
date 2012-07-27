@@ -13,37 +13,37 @@
 </head>
 
 <body>
-	<h2>JMX演示用例</h2>
+	<h1>JMX演示用例</h1>
 
-	<h3>技术说明：</h3>
+	<h2>技术说明：</h2>
 	<ul>
 		<li>演示使用Spring annotation将POJO定义为MBean</li>
 		<li>演示使用jolokia将JMX输出为Restul JSON Monitor API</li>
 	</ul>
 
-	<h3>MBean介绍:</h3>
+	<h2>MBean介绍:</h2>
 	<ul>
 		<li>Log4j Mbean，控制Log4j的Logger Level, name为log4j:name=Log4j</li>
 		<li>Application Statistics Mbean, 当用户在综合演示里查看/更新用户时，计数器将会递增, name为showcase:name=ApplicationStatistics</li>
 	</ul>
 	
-	<h3>使用Jconsole或其他JMX客户端:</h3>
+	<h2>使用Jconsole或其他JMX客户端:</h2>
 	<ul>
 	<li>如果JConsole与应用在同一台机器，直接选择该进程。</li>
 	<li>否则远程进程URL为 localhost:2099 或完整版的service:jmx:rmi:///jndi/rmi://localhost:2099/jmxrmi</li>
 	</ul>
 	
 	<hr/>
-	<h3>与国际接轨的JMX Resultful API:</h3>
+	<h2>与国际接轨的JMX Resultful API:</h2>
 	<p>以下种种，成本就是在web.xml里添加一个jolokia的servlet而已。</p>
-	查询:
+	查询：
 	<ul>
 		<li>列出showcase域下的所有MBean及其描述: <br/><a href="${baseUrl}/jolokia/list/showcase">${baseUrl}/jolokia/list/showcase</a></li>
 		<li>获取showcase域下的所有MBean的属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=*">${baseUrl}/jolokia/read/showcase:name=*</a></li>
 		<li>获取应用统计MBean的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics</a></li>
 		<li>只获取应用统计MBean的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
 	</ul>
-	设置:
+	设置：
 	<ul>
 		<li>设置Root Logger Level的命令: <br/><a href="${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO">${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO</a></li>
 	</ul>

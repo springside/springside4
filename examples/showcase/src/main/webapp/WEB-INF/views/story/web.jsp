@@ -17,9 +17,9 @@
 	</script>	
 </head>
 <body>
-		<h2>Web演示</h2>
+		<h1>Web演示</h1>
 
-		<h3>高性能Web2.0网站</h3>
+		<h2>高性能Web2.0网站</h2>
 		<p>
 			    1. 静态内容Servlet, 演示高效读取静态内容, 控制客户端缓存, 压缩传输, 弹出下载对话框, 见StaticContentServlet.<br/>
 			       <img src="${ctx}/static-content?contentPath=static/img/logo.jpg"/> <a href="${ctx}/static-content?contentPath=img/logo.jpg&download=true">图片下载链接</a><br/>
@@ -30,7 +30,7 @@
 			    4. YUI Compressor 压缩js/css,见bin/yuicompressor.bat命令及webapp中两个版本的js/css文件<br/>
 		</p>
 		<hr/>
-		<h3>Ajax演示</h3>
+		<h2>Ajax演示</h2>
 		<p>
 			<a href="${ctx}/web/mashup-client">跨域名Mashup演示</a> 演示基于JSONP Mashup 跨域名网站的内容.
 		</p>

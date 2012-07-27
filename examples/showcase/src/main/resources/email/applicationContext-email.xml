@@ -6,7 +6,7 @@
 	<description>Email配置</description>
 
 	<!-- 文本邮件服务类 -->
-	<bean id="simpleMailService" class="org.springside.examples.showcase.utilities.email.SimpleMailService">
+	<bean id="simpleMailService" class="org.springside.examples.showcase.modules.utilities.email.SimpleMailService">
 		<property name="mailSender" ref="mailSender" />
 		<property name="textTemplate">
 			<value><![CDATA[
@@ -17,7 +17,7 @@
 	</bean>
 
 	<!-- MIME邮件服务类 -->
-	<bean id="mimeMailService" class="org.springside.examples.showcase.utilities.email.MimeMailService">
+	<bean id="mimeMailService" class="org.springside.examples.showcase.modules.utilities.email.MimeMailService">
 		<property name="mailSender" ref="mailSender" />
 		<property name="freemarkerConfiguration" ref="freemarkerConfiguration" />
 	</bean>
@@ -61,6 +61,6 @@
 		</bean>
 		
 		<!-- greenmail smtp邮件服务器模拟器  -->
-		<bean id="greenmail" class="org.springside.modules.test.mail.MailServerSimulator"/>
+		<bean id="greenmail" class="org.springside.modules.test.mail.MailServerSimulator" lazy-init="false"/>
 	</beans>
 </beans>

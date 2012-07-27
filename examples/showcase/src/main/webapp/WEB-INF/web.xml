@@ -55,7 +55,7 @@
 	<!-- Content Servlet 配置 -->
 	<servlet>
 		<servlet-name>StaticContentServlet</servlet-name>
-		<servlet-class>org.springside.examples.showcase.web.StaticContentServlet</servlet-class>
+		<servlet-class>org.springside.examples.showcase.modules.web.StaticContentServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>StaticContentServlet</servlet-name>
@@ -64,7 +64,7 @@
 
 	<servlet>
 		<servlet-name>RemoteContentServlet</servlet-name>
-		<servlet-class>org.springside.examples.showcase.web.RemoteContentServlet</servlet-class>
+		<servlet-class>org.springside.examples.showcase.modules.web.RemoteContentServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>RemoteContentServlet</servlet-name>
@@ -117,7 +117,7 @@
 	<!-- Cache Control Header filter -->
 	<filter>
 		<filter-name>cacheControlHeaderFilter</filter-name>
-		<filter-class>org.springside.examples.showcase.web.CacheControlHeaderFilter</filter-class>
+		<filter-class>org.springside.examples.showcase.modules.web.CacheControlHeaderFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>cacheControlHeaderFilter</filter-name>

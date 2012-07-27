@@ -34,7 +34,7 @@
 
 	<!-- Timer JobDetail, 基于JobDetailBean实例化Job Class,可持久化到数据库实现集群 -->
 	<bean id="timerJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<property name="jobClass" value="org.springside.examples.showcase.schedule.QuartzClusterableJob" />
+		<property name="jobClass" value="org.springside.examples.showcase.modules.schedule.QuartzClusterableJob" />
 	</bean>
 
 	<!-- Timer Job的可配置属性,在job中通过applicationContext动态获取 -->

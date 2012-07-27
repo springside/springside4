@@ -6,7 +6,7 @@
 	<description>使用Spring的 Scheduled的定时任务配置</description>
 	
 	<!-- 根据Cron表达式执行的业务类  -->
-	<bean id="springCronJob" class="org.springside.examples.showcase.schedule.SpringCronJob" lazy-init="false">
+	<bean id="springCronJob" class="org.springside.examples.showcase.modules.schedule.SpringCronJob" lazy-init="false">
 		<!-- cron表达式 -->
 		<property name="cronExpression" value="* 15 9-17 * * MON-FRI"/>
 		<!-- shutdown时等待任务完成, 最多等待20秒 -->

@@ -46,7 +46,7 @@
 	</bean>
 
 	<!-- 使用Spring JmsTemplate的消息生产者 -->
-	<bean id="advancedNotifyMessageProducer" class="org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageProducer">
+	<bean id="advancedNotifyMessageProducer" class="org.springside.examples.showcase.modules.jms.advanced.AdvancedNotifyMessageProducer">
 		<property name="jmsTemplate" ref="advancedJmsTemplate" />
 		<property name="notifyQueue" ref="advancedNotifyQueue" />
 		<property name="notifyTopic" ref="advancedNotifyTopic" />
@@ -76,5 +76,5 @@
 	</bean>
 
 	<!-- 异步接收消息处理类 -->
-	<bean id="advancedNotifyMessageListener" class="org.springside.examples.showcase.jms.advanced.AdvancedNotifyMessageListener" />
+	<bean id="advancedNotifyMessageListener" class="org.springside.examples.showcase.modules.jms.advanced.AdvancedNotifyMessageListener" />
 </beans>

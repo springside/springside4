@@ -31,7 +31,7 @@
 	</bean>
 
 	<!-- 使用Spring JmsTemplate的消息生产者 -->
-	<bean id="notifyMessageProducer" class="org.springside.examples.showcase.jms.simple.NotifyMessageProducer">
+	<bean id="notifyMessageProducer" class="org.springside.examples.showcase.modules.jms.simple.NotifyMessageProducer">
 		<property name="jmsTemplate" ref="jmsTemplate" />
 		<property name="notifyQueue" ref="notifyQueue" />
 		<property name="notifyTopic" ref="notifyTopic" />
@@ -53,5 +53,5 @@
 	</bean>
 
 	<!-- 异步接收消息处理类 -->
-	<bean id="notifyMessageListener" class="org.springside.examples.showcase.jms.simple.NotifyMessageListener" />
+	<bean id="notifyMessageListener" class="org.springside.examples.showcase.modules.jms.simple.NotifyMessageListener" />
 </beans>

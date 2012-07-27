@@ -10,8 +10,8 @@
 </head>
 
 <body>
-	<h2>工具类演示</h2>
-	<h3>XML/JSON操作演示</h3>
+	<h1>工具类演示</h1>
+	<h2>XML/JSON操作演示</h2>
 	<ul>
 		<li>基于JAXB2.0的Java-XML绑定, 演示根元素是List, 属性是List与Map等特殊情况.</li>
 		<li>万能老倌Dom4j.</li>
@@ -22,7 +22,7 @@
 	
 	<hr/>
 	
-	<h3>Email演示</h3>
+	<h2>Email演示</h2>
 	<ul>
 		<li>简单文本邮件演示.</li>
 		<li>带附件的MIME邮件演示, 使用Freemarker模板创建HTML内容.</li>
@@ -31,7 +31,7 @@
 	
 	<hr/>
 	
-	<h3>日志演示</h3>
+	<h2>日志演示</h2>
 	<ul>
 		<li>Log4JManager: 通过JMX动态查询与改变Logger的日志等级与Appender, 详见JMX页面.</li>
 		<li>Log4MockjAppender: 在测试用例中验证日志的输出, 在Schedule测试用例使用MockAppender校验日志输出.</li>
@@ -39,7 +39,7 @@
 	
 	<hr/>
 	
-	<h3>其他常用工具</h3>
+	<h2>其他常用工具</h2>
 	<p>全部演示在org.springside.examples.showcase.utilities目录</p>
 	<ul>
 		<li>JodaTime: 日期操作.</li>

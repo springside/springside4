@@ -1,5 +1,7 @@
 .classpath
 .project
+.springBeans
+org.springframework.ide.eclipse.*.prefs
 target/
 logs/
 eclipse-local.bat

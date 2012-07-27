@@ -2,6 +2,8 @@ package org.springside.examples.quickstart.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,7 +50,7 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "save")
-	public String create(@ModelAttribute("newTask") Task newTask, RedirectAttributes redirectAttributes) {
+	public String create(@Valid @ModelAttribute("newTask") Task newTask, RedirectAttributes redirectAttributes) {
 		taskManager.saveTask(newTask);
 		redirectAttributes.addFlashAttribute("message", "创建任务成功");
 		return "redirect:/task/";
@@ -61,7 +63,7 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "save/{id}")
-	public String update(@ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
 		taskManager.saveTask(task);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";

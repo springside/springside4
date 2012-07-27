@@ -15,4 +15,5 @@
 	<import resource="schedule/applicationContext-quartz-cron-local.xml" />
 	<import resource="schedule/applicationContext-quartz-timer-cluster.xml" />
 	<import resource="security/applicationContext-shiro.xml" />
+
 </beans>

@@ -10,11 +10,11 @@
 </head>
 
 <body>
-		<h2>Restful Service 高级演示</h2>
+		<h1>Web Service 演示</h2>
 
-		<h3>技术说明:</h3>
+		<h2>传统SOAP Web Service演示</h2>
 		<ul>
-			<li>HttpBasic认证, 与Shiro权限控制结合.</li>
+			<li>基于JAX-WS.</li>
 		</ul>
 </body>
 </html>

@@ -10,6 +10,7 @@
 </head>
 
 <body>
+	<h1>安全演示</h1>
 	<h2>Shiro高级演示</h2>
 	<ul>
 		<li>常用密码存储方式演示:salt + 1024次hash的sha1</li>
