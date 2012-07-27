@@ -53,7 +53,7 @@ public class UserController {
 	}
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
+	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
 	@ModelAttribute("user")

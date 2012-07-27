@@ -881,7 +881,7 @@
 	<profiles>
 		<!-- 执行@Category(Smoke.class)的TestCase -->
 		<profile>
-			<id>run-smoke-test</id>
+			<id>run-smoke</id>
 			<build>
 				<plugins>
 					<plugin>
