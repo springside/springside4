@@ -55,9 +55,10 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
 	
+	<!-- 定义aspectj -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
 
-	<!-- hibernat validator -->
+	<!-- hibernate validator -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
 	<!-- production/local development环境 -->

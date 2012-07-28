@@ -14,7 +14,7 @@
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<aspectj.version>1.7.0</aspectj.version>
 		<hibernate.version>4.1.5.SP1</hibernate.version>
-		<spring-data-jpa.version>1.1.1.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
