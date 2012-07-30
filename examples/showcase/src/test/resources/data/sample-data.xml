@@ -15,5 +15,5 @@
   <SS_USER_ROLE USER_ID="4" ROLE_ID="2"/>
   <SS_USER_ROLE USER_ID="5" ROLE_ID="2"/>
   <SS_USER_ROLE USER_ID="6" ROLE_ID="2"/>
-  <SS_TEAM ID="1" NAME="Dolphin" MASTER="1"/>
+  <SS_TEAM ID="1" NAME="Dolphin" MASTER_ID="1"/>
 </dataset>

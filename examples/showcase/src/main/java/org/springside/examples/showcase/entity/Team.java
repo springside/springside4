@@ -2,13 +2,20 @@ package org.springside.examples.showcase.entity;
 
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 import com.google.common.collect.Lists;
 
 /**
- * 项目.
+ * 团队.
  * 
  * @author calvin
  */
+@Entity
+@Table(name = "SS_TEAM")
 public class Team extends IdEntity {
 
 	private String name;
@@ -23,6 +30,7 @@ public class Team extends IdEntity {
 		this.name = name;
 	}
 
+	@OneToOne
 	public User getMaster() {
 		return master;
 	}
@@ -31,6 +39,7 @@ public class Team extends IdEntity {
 		this.master = master;
 	}
 
+	@OneToMany
 	public List<User> getUserList() {
 		return userList;
 	}

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -35,6 +36,8 @@ public class User extends IdEntity {
 	private String name;
 	private String email;
 	private String status;
+
+	private Team team;
 
 	private List<Role> roleList = Lists.newArrayList(); //有序的关联对象集合
 
@@ -111,6 +114,15 @@ public class User extends IdEntity {
 
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
+	}
+
+	@ManyToOne
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 
 	@Transient

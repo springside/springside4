@@ -14,7 +14,7 @@ public interface AccountDao {
 
 	public List<User> searchUser(Map<String, Object> parameters);
 
-	public Long saveUser(User user);
+	public void saveUser(User user);
 
 	public void deleteUser(Long id);
 

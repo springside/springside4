@@ -9,6 +9,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
+import org.springside.examples.showcase.data.UserData;
+import org.springside.examples.showcase.entity.Team;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
@@ -16,14 +18,14 @@ import com.google.common.collect.Maps;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
-public class MyBatisTest extends SpringTransactionalTestCase {
+public class AccountDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired
-	private AccountDao accountMapper;
+	private AccountDao accountDao;
 
 	@Test
 	public void getUser() throws Exception {
-		User user = accountMapper.getUser(1L);
+		User user = accountDao.getUser(1L);
 		assertEquals("admin", user.getLoginName());
 	}
 
@@ -31,8 +33,34 @@ public class MyBatisTest extends SpringTransactionalTestCase {
 	public void searchUser() throws Exception {
 		Map<String, Object> parameter = Maps.newHashMap();
 		parameter.put("name", "Admin");
-		List<User> result = accountMapper.searchUser(parameter);
+		List<User> result = accountDao.searchUser(parameter);
 		assertEquals(1, result.size());
 		assertEquals("admin", result.get(0).getLoginName());
 	}
+
+	@Test
+	public void getTeamWithDetail() throws Exception {
+		Team team = accountDao.getTeamWithDetail(1L);
+		assertEquals("Dolphin", team.getName());
+		assertEquals("Admin", team.getMaster().getName());
+	}
+
+	@Test
+	public void createAndDeleteUser() throws Exception {
+		//create
+		int count = countRowsInTable("ss_user");
+		User user = UserData.randomUser();
+		accountDao.saveUser(user);
+		Long id = user.getId();
+
+		assertEquals(count + 1, countRowsInTable("ss_user"));
+		User result = accountDao.getUser(id);
+		assertEquals(user.getLoginName(), result.getLoginName());
+
+		//delete
+		accountDao.deleteUser(id);
+		assertEquals(count, countRowsInTable("ss_user"));
+		assertNull(accountDao.getUser(id));
+	}
+
 }

@@ -103,9 +103,9 @@ public class AccountWebServiceImpl implements AccountWebService {
 			User userEntity = BeanMapper.map(user, User.class);
 			BeanValidators.validateWithException(validator, userEntity);
 
-			Long userId = accountDao.saveUser(userEntity);
+			accountDao.saveUser(userEntity);
 
-			return new IdResponse(userId);
+			return new IdResponse(userEntity.getId());
 		} catch (ConstraintViolationException e) {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessageAsList(e, " "), "\n");
 			return handleParameterError(response, e, message);

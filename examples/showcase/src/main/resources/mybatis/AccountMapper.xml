@@ -20,7 +20,7 @@
 
 	<!-- 获取部门详细信息, 输出用resultMap关联嵌套对象 -->
 	<select id="getTeamWithDetail" parameterType="int" resultMap="teamDetailMap">
-		select d.id as team_id,
+		select t.id as team_id,
 		t.name as team_name,
 		m.id as master_id,
 		m.name as master_name,
@@ -28,7 +28,7 @@
 		u.id as user_id,
 		u.name as user_name,
 		u.email as user_email
-		from acct_team t, ss_user m, ss_user u
+		from ss_team t, ss_user m, ss_user u
 		where t.master_id=m.id and t.id=u.team_id
 		and t.id=#{id}
 	</select>
