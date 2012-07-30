@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springside.examples.showcase.entity.Team;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.repository.AccountMybatisDao;
+import org.springside.examples.showcase.repository.mybatis.AccountDao;
 import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
 import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
@@ -40,7 +40,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountWebServiceImpl.class);
 	@Autowired
-	private AccountMybatisDao accountDao;
+	private AccountDao accountDao;
 	@Autowired
 	private Validator validator;
 
@@ -54,7 +54,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			Validate.notNull(id, "id参数为空");
 
-			Team team = accountDao.getTeamDetail(id);
+			Team team = accountDao.getTeamWithDetail(id);
 
 			Validate.notNull(team, "项目不存在(id:" + id + ")");
 

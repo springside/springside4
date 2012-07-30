@@ -3,6 +3,8 @@
     drop table if exists ss_role;
 
     drop table if exists ss_user;
+    
+    drop table if exists ss_team;
 
     create table ss_role (
         id varchar(16),
@@ -18,6 +20,7 @@
         salt varchar(64),
         email varchar(128),
         status varchar(32),
+        team_id varchar(16),
         primary key (id)
     );
 
@@ -27,13 +30,11 @@
         primary key (user_id, role_id)
     );
     
+   	create table ss_team (
+        id varchar(16),
+    	name varchar(255) not null unique,
+    	master varchar(16),
+        primary key (id)
+    );
 
-    alter table ss_user_role 
-        add constraint FK1306854BF125651E 
-        foreign key (user_id) 
-        references ss_user;
-
-    alter table ss_user_role 
-        add constraint FK1306854B4BFAA13E 
-        foreign key (role_id) 
-        references ss_role;
+  

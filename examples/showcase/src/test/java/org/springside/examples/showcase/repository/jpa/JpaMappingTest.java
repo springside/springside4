@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.repository;
+package org.springside.examples.showcase.repository.jpa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

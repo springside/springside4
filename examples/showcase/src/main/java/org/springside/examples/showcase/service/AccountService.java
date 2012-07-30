@@ -13,7 +13,7 @@ import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.modules.cache.memcached.MemcachedObjectType;
 import org.springside.examples.showcase.modules.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.modules.jmx.ApplicationStatistics;
-import org.springside.examples.showcase.repository.UserDao;
+import org.springside.examples.showcase.repository.jpa.UserDao;
 import org.springside.examples.showcase.service.ShiroDbRealm.HashPassword;
 import org.springside.modules.cache.memcached.SpyMemcachedClient;
 import org.springside.modules.mapper.JsonMapper;

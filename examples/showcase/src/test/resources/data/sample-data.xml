@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <SS_USER ID="1" EMAIL="admin@springside.org.cn" LOGIN_NAME="admin" NAME="Admin" PASSWORD="691b14d79bf0fa2215f155235df5e670b64394cc" SALT="7efbd59d9741d34f" STATUS="enabled"/>
-  <SS_USER ID="2" EMAIL="user@springside.org.cn" LOGIN_NAME="user" NAME="Calvin" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled"/>
-  <SS_USER ID="3" EMAIL="jack@springside.org.cn" LOGIN_NAME="user2" NAME="Jack" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled"/>
-  <SS_USER ID="4" EMAIL="kate@springside.org.cn" LOGIN_NAME="user3" NAME="Kate" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled"/>
-  <SS_USER ID="5" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user4" NAME="Sawyer" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled"/>
-  <SS_USER ID="6" EMAIL="ben@springside.org.cn" LOGIN_NAME="user5" NAME="Ben" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled"/>
+  <SS_USER ID="1" EMAIL="admin@springside.org.cn" LOGIN_NAME="admin" NAME="Admin" PASSWORD="691b14d79bf0fa2215f155235df5e670b64394cc" SALT="7efbd59d9741d34f" STATUS="enabled" TEAM_ID="1"/>
+  <SS_USER ID="2" EMAIL="user@springside.org.cn" LOGIN_NAME="user" NAME="Calvin" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
+  <SS_USER ID="3" EMAIL="jack@springside.org.cn" LOGIN_NAME="user2" NAME="Jack" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
+  <SS_USER ID="4" EMAIL="kate@springside.org.cn" LOGIN_NAME="user3" NAME="Kate" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
+  <SS_USER ID="5" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user4" NAME="Sawyer" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
+  <SS_USER ID="6" EMAIL="ben@springside.org.cn" LOGIN_NAME="user5" NAME="Ben" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
   <SS_ROLE ID="1" NAME="Admin"/>
   <SS_ROLE ID="2" NAME="User"/>
   <SS_USER_ROLE USER_ID="1" ROLE_ID="1"/>
@@ -15,4 +15,5 @@
   <SS_USER_ROLE USER_ID="4" ROLE_ID="2"/>
   <SS_USER_ROLE USER_ID="5" ROLE_ID="2"/>
   <SS_USER_ROLE USER_ID="6" ROLE_ID="2"/>
+  <SS_TEAM ID="1" NAME="Dolphin" MASTER="1"/>
 </dataset>

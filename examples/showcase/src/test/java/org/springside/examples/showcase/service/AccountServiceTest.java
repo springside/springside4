@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.repository.UserDao;
+import org.springside.examples.showcase.repository.jpa.UserDao;
 import org.springside.examples.showcase.service.AccountService;
 import org.springside.examples.showcase.service.ServiceException;
 import org.springside.modules.test.security.shiro.ShiroTestUtils;
