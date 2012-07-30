@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.examples.quickstart.service.TaskManager;
+import org.springside.examples.quickstart.service.TaskService;
 import org.springside.modules.beanvalidator.BeanValidators;
 
 /**
@@ -35,7 +35,7 @@ import org.springside.modules.beanvalidator.BeanValidators;
 public class TaskRestController {
 
 	@Autowired
-	private TaskManager taskManager;
+	private TaskService taskService;
 
 	@Autowired
 	private Validator validator;
@@ -43,13 +43,13 @@ public class TaskRestController {
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Task> list() {
-		return taskManager.getAllTask();
+		return taskService.getAllTask();
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
-		Task task = taskManager.getTask(id);
+		Task task = taskService.getTask(id);
 		if (task == null) {
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
@@ -67,7 +67,7 @@ public class TaskRestController {
 		}
 
 		//保存任务
-		taskManager.saveTask(task);
+		taskService.saveTask(task);
 
 		//按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
 		Long id = task.getId();
@@ -87,7 +87,7 @@ public class TaskRestController {
 		}
 
 		//保存
-		taskManager.saveTask(task);
+		taskService.saveTask(task);
 
 		//按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -96,6 +96,6 @@ public class TaskRestController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") Long id) {
-		taskManager.deleteTask(id);
+		taskService.deleteTask(id);
 	}
 }

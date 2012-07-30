@@ -20,7 +20,7 @@ public class ShowcaseServer {
 
 		//启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
-		JettyFactory.setTldJars(server, "sitemesh", "shiro-web", "spring-webmvc");
+		JettyFactory.setTldJarNames(server, "sitemesh", "shiro-web", "spring-webmvc");
 
 		try {
 			server.start();

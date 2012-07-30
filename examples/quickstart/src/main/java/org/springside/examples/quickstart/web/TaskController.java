@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.examples.quickstart.service.TaskManager;
+import org.springside.examples.quickstart.service.TaskService;
 
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
@@ -34,11 +34,11 @@ import org.springside.examples.quickstart.service.TaskManager;
 public class TaskController {
 
 	@Autowired
-	private TaskManager taskManager;
+	private TaskService taskService;
 
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
-		List<Task> tasks = taskManager.getAllTask();
+		List<Task> tasks = taskService.getAllTask();
 		model.addAttribute("tasks", tasks);
 		return "taskList";
 	}
@@ -51,27 +51,27 @@ public class TaskController {
 
 	@RequestMapping(value = "save")
 	public String create(@Valid @ModelAttribute("newTask") Task newTask, RedirectAttributes redirectAttributes) {
-		taskManager.saveTask(newTask);
+		taskService.saveTask(newTask);
 		redirectAttributes.addFlashAttribute("message", "创建任务成功");
 		return "redirect:/task/";
 	}
 
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("task", taskManager.getTask(id));
+		model.addAttribute("task", taskService.getTask(id));
 		return "taskForm";
 	}
 
 	@RequestMapping(value = "save/{id}")
 	public String update(@Valid @ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
-		taskManager.saveTask(task);
+		taskService.saveTask(task);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";
 	}
 
 	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
-		taskManager.deleteTask(id);
+		taskService.deleteTask(id);
 		redirectAttributes.addFlashAttribute("message", "删除任务成功");
 		return "redirect:/task/";
 	}
@@ -83,7 +83,7 @@ public class TaskController {
 	@ModelAttribute("task")
 	private Task getTask(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
-			return taskManager.getTask(id);
+			return taskService.getTask(id);
 		}
 		return null;
 	}

@@ -13,7 +13,7 @@
 
 	<!-- 項目自定义的Realm -->
 	<bean id="shiroDbRealm" class="org.springside.examples.showcase.service.ShiroDbRealm" depends-on="userDao">
-		<property name="accountManager" ref="accountManager"/>
+		<property name="accountService" ref="accountService"/>
 		<!-- 可配置cache token<->认证信息的cache，用于REST等需要频繁认证的场景 -->
 		<property name="authorizationCachingEnabled" value="true"/>
 	</bean>

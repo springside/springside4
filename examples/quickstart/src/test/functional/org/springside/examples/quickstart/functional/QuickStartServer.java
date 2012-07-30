@@ -20,7 +20,7 @@ public class QuickStartServer {
 
 		//启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
-		JettyFactory.setTldJars(server, "sitemesh", "spring-webmvc");
+		JettyFactory.setTldJarNames(server, "sitemesh", "spring-webmvc");
 
 		try {
 			server.start();

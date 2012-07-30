@@ -1,4 +1,4 @@
-package org.springside.modules.orm;
+package org.springside.modules.persistence;
 
 import java.sql.Connection;
 import java.sql.SQLException;

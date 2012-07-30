@@ -9,10 +9,10 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
-public class Project extends IdEntity {
+public class Team extends IdEntity {
 
 	private String name;
-	private User manager;
+	private User master;
 	private List<User> userList = Lists.newArrayList();
 
 	public String getName() {
@@ -23,12 +23,12 @@ public class Project extends IdEntity {
 		this.name = name;
 	}
 
-	public User getManager() {
-		return manager;
+	public User getMaster() {
+		return master;
 	}
 
-	public void setManager(User manager) {
-		this.manager = manager;
+	public void setMaster(User master) {
+		this.master = master;
 	}
 
 	public List<User> getUserList() {

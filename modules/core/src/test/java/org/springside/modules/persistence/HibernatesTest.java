@@ -1,4 +1,4 @@
-package org.springside.modules.orm;
+package org.springside.modules.persistence;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import org.hibernate.dialect.MySQL5InnoDBDialect;
 import org.hibernate.dialect.Oracle10gDialect;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springside.modules.persistence.Hibernates;
 
 public class HibernatesTest {
 	

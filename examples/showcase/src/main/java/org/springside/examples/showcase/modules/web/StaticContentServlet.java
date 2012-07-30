@@ -25,8 +25,8 @@ import org.springside.modules.web.Servlets;
  * 可使用org.springside.examples.showcase.cache包下的Ehcache或本地Map缓存静态内容基本信息(未演示).
  *  
  * 演示访问地址为：
- * static-content?contentPath=static/img/logo.jpg
- * static-content?contentPath=static/img/logo.jpg&download=true
+ * static-content?contentPath=static/images/logo.jpg
+ * static-content?contentPath=static/images/logo.jpg&download=true
  * 
  * @author calvin
  */

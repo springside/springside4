@@ -3,7 +3,7 @@ package org.springside.examples.showcase.webservice.soap;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.springside.examples.showcase.webservice.soap.response.GetProjectDetailResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
 import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
@@ -20,9 +20,9 @@ import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 @WebService(name = "AccountService", targetNamespace = WsConstants.NS)
 public interface AccountWebService {
 	/**
-	 * 获取部门的详细信息.
+	 * 获取团队的详细信息.
 	 */
-	GetProjectDetailResponse getDepartmentDetail(@WebParam(name = "id") Long id);
+	GetTeamDetailResponse getTeamDetail(@WebParam(name = "id") Long id);
 
 	/**
 	 * 搜索用户信息.

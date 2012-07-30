@@ -21,7 +21,7 @@ public class UserDTO {
 	private String loginName;
 	private String name;
 	private String email;
-	private ProjectDTO department;
+	private TeamDTO team;
 
 	public Long getId() {
 		return id;
@@ -55,12 +55,12 @@ public class UserDTO {
 		email = value;
 	}
 
-	public ProjectDTO getDepartment() {
-		return department;
+	public TeamDTO getTeam() {
+		return team;
 	}
 
-	public void setDepartment(ProjectDTO department) {
-		this.department = department;
+	public void setTeam(TeamDTO team) {
+		this.team = team;
 	}
 
 	/**

@@ -26,7 +26,7 @@
     text-transform: uppercase;
 }
 .submenu a {
-    background-image: url("img/background/submenua.gif");
+    background-image: url("../images/background/submenua.gif");
     background-position: right center;
     background-repeat: no-repeat;
     border-bottom: 1px dashed #EEEEEE;
@@ -37,7 +37,7 @@
 }
 .submenu a:hover {
     background-color: #EEEEEE;
-    background-image: url("img/background/submenua_hover.jpg");
+    background-image: url("../images/background/submenua_hover.jpg");
     background-repeat: repeat-y;
 }
 

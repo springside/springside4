@@ -27,14 +27,6 @@
 		</dependency>
 		<!-- PERSISTENCE end -->
 
-		<!-- WEB begin -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- WEB end -->
-
 		<!-- UTILS begin -->
 		<dependency>
 			<groupId>com.google.guava</groupId>

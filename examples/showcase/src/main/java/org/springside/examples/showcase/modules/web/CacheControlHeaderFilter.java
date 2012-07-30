@@ -26,7 +26,7 @@ import org.springside.modules.web.Servlets;
  * 	</filter>
  * 	<filter-mapping>
  * 		<filter-name>cacheControlHeaderFilter</filter-name>
- * 		<url-pattern>/img/*</url-pattern>
+ * 		<url-pattern>/images/*</url-pattern>
  * 	</filter-mapping>
  * 
  * @author calvin

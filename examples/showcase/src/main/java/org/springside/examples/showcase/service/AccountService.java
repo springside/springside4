@@ -9,15 +9,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.examples.showcase.dao.UserDao;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.modules.cache.memcached.MemcachedObjectType;
 import org.springside.examples.showcase.modules.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.modules.jmx.ApplicationStatistics;
+import org.springside.examples.showcase.repository.UserDao;
 import org.springside.examples.showcase.service.ShiroDbRealm.HashPassword;
 import org.springside.modules.cache.memcached.SpyMemcachedClient;
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.orm.Hibernates;
+import org.springside.modules.persistence.Hibernates;
 
 /**
  * 用户管理类.
@@ -27,8 +27,8 @@ import org.springside.modules.orm.Hibernates;
 //Spring Service Bean的标识.
 @Component
 @Transactional(readOnly = true)
-public class AccountManager {
-	private static Logger logger = LoggerFactory.getLogger(AccountManager.class);
+public class AccountService {
+	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
 

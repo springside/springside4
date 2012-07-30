@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.dao;
+package org.springside.examples.showcase.repository;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springside.examples.showcase.entity.User;

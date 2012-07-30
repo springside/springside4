@@ -13,11 +13,11 @@ import org.springside.examples.showcase.webservice.soap.WsConstants;
 import com.google.common.collect.Lists;
 
 @XmlRootElement
-@XmlType(name = "Project", namespace = WsConstants.NS)
-public class ProjectDTO {
+@XmlType(name = "Team", namespace = WsConstants.NS)
+public class TeamDTO {
 
 	private String name;
-	private UserDTO manager;
+	private UserDTO master;
 	private List<UserDTO> userList = Lists.newArrayList();
 
 	public String getName() {
@@ -28,12 +28,12 @@ public class ProjectDTO {
 		this.name = name;
 	}
 
-	public UserDTO getManager() {
-		return manager;
+	public UserDTO getMaster() {
+		return master;
 	}
 
-	public void setManager(UserDTO manager) {
-		this.manager = manager;
+	public void setMaster(UserDTO master) {
+		this.master = master;
 	}
 
 	//配置输出xml为<userList><User><id>1</id></User></userList>

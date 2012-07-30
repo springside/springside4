@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.service.AccountManager;
+import org.springside.examples.showcase.service.AccountService;
 
 import com.google.common.collect.Lists;
 
@@ -24,18 +24,18 @@ import com.google.common.collect.Lists;
 public class UserController {
 
 	@Autowired
-	private AccountManager accountManager;
+	private AccountService accountService;
 
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
-		List<User> users = accountManager.getAllUser();
+		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
 		return "account/userList";
 	}
 
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(@PathVariable("id") Long id, Model model) {
-		model.addAttribute("user", accountManager.getUser(id));
+		model.addAttribute("user", accountService.getUser(id));
 
 		List<String> allStatus = Lists.newArrayList("enabled", "disabled");
 		model.addAttribute("allStatus", allStatus);
@@ -44,7 +44,7 @@ public class UserController {
 
 	@RequestMapping(value = "save/{id}")
 	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
-		accountManager.saveUser(user);
+		accountService.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
 		return "redirect:/account/user/";
 	}
@@ -56,7 +56,7 @@ public class UserController {
 	@ModelAttribute("user")
 	private User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
-			return accountManager.getUser(id);
+			return accountService.getUser(id);
 		}
 		return null;
 	}

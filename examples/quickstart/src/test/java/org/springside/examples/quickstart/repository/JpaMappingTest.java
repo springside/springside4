@@ -1,4 +1,4 @@
-package org.springside.examples.quickstart.dao;
+package org.springside.examples.quickstart.repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

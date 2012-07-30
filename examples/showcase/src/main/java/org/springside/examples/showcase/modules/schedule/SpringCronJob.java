@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springside.examples.showcase.service.AccountManager;
+import org.springside.examples.showcase.service.AccountService;
 import org.springside.modules.utils.Threads;
 
 /**
@@ -28,7 +28,7 @@ public class SpringCronJob implements Runnable {
 
 	private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-	private AccountManager accountManager;
+	private AccountService accountService;
 
 	@PostConstruct
 	public void start() {
@@ -54,7 +54,7 @@ public class SpringCronJob implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long userCount = accountManager.getUserCount();
+		long userCount = accountService.getUserCount();
 		logger.info("There are {} user in database, printed by spring cron job.", userCount);
 	}
 
@@ -70,7 +70,7 @@ public class SpringCronJob implements Runnable {
 	}
 
 	@Autowired
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
+	public void setAccountService(AccountService accountService) {
+		this.accountService = accountService;
 	}
 }

@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.service.AccountManager;
+import org.springside.examples.showcase.service.AccountService;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -33,7 +33,7 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);
 
 	@Autowired
-	private AccountManager accountManager;
+	private AccountService accountService;
 
 	@Test
 	public void demo() throws Exception {
@@ -43,7 +43,7 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 					@Override
 					public User load(Long key) throws Exception {
 						logger.info("fetch from database");
-						return accountManager.getUser(key);
+						return accountService.getUser(key);
 					}
 
 				});

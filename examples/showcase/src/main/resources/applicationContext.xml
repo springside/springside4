@@ -33,7 +33,7 @@
 	
 	<bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="databasePlatform">
-			<bean factory-method="getDialect" class="org.springside.modules.orm.Hibernates">
+			<bean factory-method="getDialect" class="org.springside.modules.persistence.Hibernates">
 				<constructor-arg ref="dataSource"/>
 			</bean>
 		</property>
@@ -61,8 +61,8 @@
 	<!-- hibernate validator -->
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean"/>
 
-	<!-- production/local development环境 -->
-	<beans profile="production,development">
+	<!-- production环境 -->
+	<beans profile="production">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.local.properties" />	
@@ -77,6 +77,31 @@
 			<property name="defaultAutoCommit" value="false" />
 		</bean>
 	
+		<!-- quartz使用的数据源配置 -->
+		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${quartz.jdbc.driver}" />
+			<property name="url" value="${quartz.jdbc.url}" />
+			<property name="username" value="${quartz.jdbc.username}" />
+			<property name="password" value="${quartz.jdbc.password}" />
+		</bean>
+	</beans>
+	
+	<!-- local development环境 -->
+	<beans profile="development">
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.development.properties,
+          			  classpath*:/application.development-local.properties" />	
+
+		<!-- DBCP连接池 -->
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+			<property name="defaultAutoCommit" value="false" />
+		</bean>
+		
 		<!-- quartz使用的数据源配置 -->
 		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<property name="driverClass" value="${quartz.jdbc.driver}" />

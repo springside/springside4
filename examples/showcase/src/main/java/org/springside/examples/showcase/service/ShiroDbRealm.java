@@ -49,7 +49,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	private static final int SALT_SIZE = 8;
 	private static final String ALGORITHM = "SHA-1";
 
-	protected AccountManager accountManager;
+	protected AccountService accountService;
 
 	protected PasswordService passwordService;
 
@@ -59,7 +59,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Override
 	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
-		User user = accountManager.findUserByLoginName(token.getUsername());
+		User user = accountService.findUserByLoginName(token.getUsername());
 		if (user != null) {
 			if (user.getStatus().equals("disabled")) {
 				throw new DisabledAccountException();
@@ -79,7 +79,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
-		User user = accountManager.findUserByLoginName(shiroUser.loginName);
+		User user = accountService.findUserByLoginName(shiroUser.loginName);
 		if (user != null) {
 			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 			for (Role role : user.getRoleList()) {
@@ -119,8 +119,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		setCredentialsMatcher(matcher);
 	}
 
-	public void setAccountManager(AccountManager accountManager) {
-		this.accountManager = accountManager;
+	public void setAccountService(AccountService accountService) {
+		this.accountService = accountService;
 	}
 
 	public static class HashPassword {
