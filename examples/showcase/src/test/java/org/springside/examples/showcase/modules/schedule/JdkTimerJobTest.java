@@ -7,7 +7,6 @@ import org.junit.experimental.categories.Category;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.examples.showcase.modules.schedule.JdkExecutorJob;
 import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -27,7 +26,7 @@ public class JdkTimerJobTest extends SpringTransactionalTestCase {
 		appender.addToLogger(JdkExecutorJob.class);
 
 		//等待任务启动
-		Threads.sleep(2000);
+		Threads.sleep(3000);
 
 		//验证任务已执行
 		assertEquals(1, appender.getLogsCount());

@@ -2,8 +2,8 @@ package org.springside.examples.showcase.functional.soap;
 
 import static org.junit.Assert.*;
 
-import org.dozer.DozerBeanMapper;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -14,14 +14,20 @@ import org.springside.examples.showcase.data.UserData;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.soap.AccountWebService;
+import org.springside.examples.showcase.webservice.soap.response.GetUserResponse;
+import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
+import org.springside.modules.mapper.BeanMapper;
+import org.springside.modules.test.category.Smoke;
 
 /**
- * UserService Web服务的功能测试, 测试主要的接口调用.
+ * AccountService Web服务的功能测试, 测试主要的接口调用.
  * 
  * 使用在Spring applicaitonContext.xml中用<jaxws:client/>，根据AccountWebService接口创建的Client.
+ * 
+ * 集中在User相关接口.
  * 
  * @author calvin
  */
@@ -34,37 +40,57 @@ public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCa
 	private AccountWebService accountWebServiceClient;
 
 	/**
-	 * 测试创建用户,在Spring applicaitonContext.xml中用<jaxws:client/>创建Client.
+	 * 测试获取用户.
+	 */
+	@Test
+	@Category(Smoke.class)
+	public void getUser() {
+		GetUserResponse response = accountWebServiceClient.getUser(1L);
+		assertEquals("admin", response.getUser().getLoginName());
+	}
+
+	/**
+	 * 测试搜索用户
+	 */
+	@Test
+	public void searchUser() {
+
+		SearchUserResponse response = accountWebServiceClient.searchUser(null, null);
+
+		assertTrue(response.getUserList().size() >= 4);
+		assertEquals("Admin", response.getUserList().get(0).getName());
+	}
+
+	/**
+	 * 测试创建用户.
 	 */
 	@Test
 	public void createUser() {
 		User user = UserData.randomUser();
+		UserDTO userDTO = BeanMapper.map(user, UserDTO.class);
 
-		UserDTO userDTO = new UserDTO();
-		userDTO.setLoginName(user.getLoginName());
-		userDTO.setName(user.getName());
-		userDTO.setEmail(user.getEmail());
-
-		IdResponse result = accountWebServiceClient.createUser(userDTO);
-		assertNotNull(result.getId());
+		IdResponse response = accountWebServiceClient.createUser(userDTO);
+		assertNotNull(response.getId());
+		GetUserResponse response2 = accountWebServiceClient.getUser(response.getId());
+		assertEquals(user.getLoginName(), response2.getUser().getLoginName());
 	}
 
 	/**
-	 * 测试创建用户,使用错误的登录名, 在Spring applicaitonContext.xml中用<jaxws:client/>创建Client.
+	 * 测试创建用户,使用错误的登录名.
 	 */
 	@Test
 	public void createUserWithInvalidLoginName() {
 		User user = UserData.randomUser();
-		UserDTO userDTO = new DozerBeanMapper().map(user, UserDTO.class);
+		UserDTO userDTO = BeanMapper.map(user, UserDTO.class);
 
 		//登录名为空
 		userDTO.setLoginName(null);
-		IdResponse result = accountWebServiceClient.createUser(userDTO);
-		assertEquals(result.getCode(), WSResponse.PARAMETER_ERROR);
+		IdResponse response = accountWebServiceClient.createUser(userDTO);
+		assertEquals(WSResponse.PARAMETER_ERROR, response.getCode());
 
 		//登录名重复
-		userDTO.setLoginName("user1");
-		result = accountWebServiceClient.createUser(userDTO);
-		assertEquals(result.getCode(), WSResponse.PARAMETER_ERROR);
+		userDTO.setLoginName("user");
+		response = accountWebServiceClient.createUser(userDTO);
+		assertEquals(WSResponse.PARAMETER_ERROR, response.getCode());
 	}
 }

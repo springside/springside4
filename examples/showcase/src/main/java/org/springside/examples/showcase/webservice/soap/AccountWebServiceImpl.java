@@ -1,7 +1,6 @@
 package org.springside.examples.showcase.webservice.soap;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.jws.WebService;
 import javax.validation.ConstraintViolationException;
@@ -12,11 +11,11 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springside.examples.showcase.entity.Team;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.repository.mybatis.AccountDao;
+import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetUserResponse;
 import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
 import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
@@ -24,8 +23,7 @@ import org.springside.examples.showcase.webservice.soap.response.dto.TeamDTO;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 import org.springside.modules.beanvalidator.BeanValidators;
 import org.springside.modules.mapper.BeanMapper;
-
-import com.google.common.collect.Maps;
+import org.springside.modules.utils.Exceptions;
 
 /**
  * WebService服务端实现类.
@@ -39,8 +37,10 @@ import com.google.common.collect.Maps;
 public class AccountWebServiceImpl implements AccountWebService {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountWebServiceImpl.class);
+
 	@Autowired
-	private AccountDao accountDao;
+	private AccountEffectiveService accountService;
+
 	@Autowired
 	private Validator validator;
 
@@ -54,13 +54,38 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			Validate.notNull(id, "id参数为空");
 
-			Team team = accountDao.getTeamWithDetail(id);
+			Team team = accountService.getTeamWithDetail(id);
 
 			Validate.notNull(team, "项目不存在(id:" + id + ")");
 
 			TeamDTO dto = BeanMapper.map(team, TeamDTO.class);
-
 			response.setTeam(dto);
+
+			return response;
+		} catch (IllegalArgumentException e) {
+			return handleParameterError(response, e);
+		} catch (RuntimeException e) {
+			return handleGeneralError(response, e);
+		}
+	}
+
+	/**
+	 * @see AccountWebService#getUser()
+	 */
+	@Override
+	public GetUserResponse getUser(Long id) {
+		GetUserResponse response = new GetUserResponse();
+		try {
+
+			Validate.notNull(id, "id参数为空");
+
+			User user = accountService.getUser(id);
+
+			Validate.notNull(user, "用户不存在(id:" + id + ")");
+
+			UserDTO dto = BeanMapper.map(user, UserDTO.class);
+			response.setUser(dto);
+
 			return response;
 
 		} catch (IllegalArgumentException e) {
@@ -77,11 +102,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	public SearchUserResponse searchUser(String loginName, String name) {
 		SearchUserResponse response = new SearchUserResponse();
 		try {
-
-			Map<String, Object> parameters = Maps.newHashMap();
-			parameters.put("loginName", loginName);
-			parameters.put("name", name);
-			List<User> userList = accountDao.searchUser(parameters);
+			List<User> userList = accountService.searchUser(loginName, name);
 
 			List<UserDTO> dtoList = BeanMapper.mapList(userList, UserDTO.class);
 			response.setUserList(dtoList);
@@ -103,17 +124,19 @@ public class AccountWebServiceImpl implements AccountWebService {
 			User userEntity = BeanMapper.map(user, User.class);
 			BeanValidators.validateWithException(validator, userEntity);
 
-			accountDao.saveUser(userEntity);
+			accountService.saveUser(userEntity);
 
 			return new IdResponse(userEntity.getId());
 		} catch (ConstraintViolationException e) {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessageAsList(e, " "), "\n");
 			return handleParameterError(response, e, message);
-		} catch (DataIntegrityViolationException e) {
-			String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-			return handleParameterError(response, e, message);
 		} catch (RuntimeException e) {
-			return handleGeneralError(response, e);
+			if (Exceptions.isCausedBy(e, org.hibernate.exception.ConstraintViolationException.class)) {
+				String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
+				return handleParameterError(response, e, message);
+			} else {
+				return handleGeneralError(response, e);
+			}
 		}
 	}
 

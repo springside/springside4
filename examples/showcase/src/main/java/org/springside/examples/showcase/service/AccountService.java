@@ -10,13 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.showcase.entity.User;
-import org.springside.examples.showcase.modules.cache.memcached.MemcachedObjectType;
 import org.springside.examples.showcase.modules.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.modules.jmx.ApplicationStatistics;
 import org.springside.examples.showcase.repository.jpa.UserDao;
 import org.springside.examples.showcase.service.ShiroDbRealm.HashPassword;
-import org.springside.modules.cache.memcached.SpyMemcachedClient;
-import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.persistence.Hibernates;
 
 /**
@@ -31,10 +28,6 @@ public class AccountService {
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
-
-	private SpyMemcachedClient memcachedClient;
-
-	private final JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
 
 	private NotifyMessageProducer notifyProducer; //JMS消息发送
 
@@ -105,39 +98,6 @@ public class AccountService {
 	}
 
 	/**
-	 * 取得用户，先尝试从缓存获取，然后去数据库查询.
-	 */
-	public User getUserEffective(Long id) {
-		if (memcachedClient != null) {
-			return getUserFromMemcached(id);
-		} else {
-			return userDao.findOne(id);
-		}
-	}
-
-	/**
-	 * 访问Memcached, 使用JSON字符串存放对象以节约空间.
-	 */
-	private User getUserFromMemcached(Long id) {
-
-		String key = MemcachedObjectType.USER.getPrefix() + id;
-
-		User user = null;
-		String jsonString = memcachedClient.get(key);
-
-		if (jsonString == null) {
-			user = userDao.findOne(id);
-			if (user != null) {
-				jsonString = jsonMapper.toJson(user);
-				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
-			}
-		} else {
-			user = jsonMapper.fromJson(jsonString, User.class);
-		}
-		return user;
-	}
-
-	/**
 	 * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
 	 */
 	public User findUserByNameInitialized(String name) {
@@ -183,11 +143,6 @@ public class AccountService {
 	@Autowired(required = false)
 	public void setNotifyProducer(NotifyMessageProducer notifyProducer) {
 		this.notifyProducer = notifyProducer;
-	}
-
-	@Autowired(required = false)
-	public void setMemcachedClient(SpyMemcachedClient memcachedClient) {
-		this.memcachedClient = memcachedClient;
 	}
 
 	@Autowired(required = false)

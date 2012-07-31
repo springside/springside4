@@ -7,7 +7,6 @@ import org.junit.experimental.categories.Category;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
-import org.springside.examples.showcase.modules.schedule.QuartzClusterableJob;
 import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -32,7 +31,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 		appender.addToLogger(QuartzClusterableJob.class);
 
 		//等待任务延时启动
-		Threads.sleep(3000);
+		Threads.sleep(4000);
 
 		//验证任务已执行
 		assertEquals(1, appender.getLogsCount());

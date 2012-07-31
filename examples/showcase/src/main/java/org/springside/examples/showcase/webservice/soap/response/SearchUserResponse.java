@@ -10,7 +10,7 @@ import org.springside.examples.showcase.webservice.soap.WsConstants;
 import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 
-@XmlType(name = "UserListResponse", namespace = WsConstants.NS)
+@XmlType(name = "SearchUserResponse", namespace = WsConstants.NS)
 public class SearchUserResponse extends WSResponse {
 
 	private List<UserDTO> userList;

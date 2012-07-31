@@ -36,5 +36,3 @@
     	master_id bigint,
         primary key (id)
     );
-
-  

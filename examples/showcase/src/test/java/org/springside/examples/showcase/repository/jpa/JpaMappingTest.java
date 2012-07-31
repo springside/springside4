@@ -8,11 +8,13 @@ import javax.persistence.metamodel.Metamodel;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
+@DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class JpaMappingTest extends SpringTransactionalTestCase {

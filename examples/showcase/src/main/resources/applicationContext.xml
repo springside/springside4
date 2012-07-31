@@ -45,12 +45,12 @@
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
-		<!-- 自动扫描目录,省掉Configuration.xml里的手工配置, 用','分隔多个package -->
+		<!-- 自动扫描目录,省掉Configuration.xml里的手工配置Class名与缩写 -->
 		<property name="typeAliasesPackage" value="org.springside.examples.showcase.entity" />
-		<!-- 没有把mapper文件放到与dao相同的深目录 -->
+		<!-- 没有把mapper文件放到与dao相同的深层目录，显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath:/mybatis/*Mapper.xml" />
 	</bean>
-	<!-- 扫描MyBatis Dao-->
+	<!-- 在指定扫描所有接口, 动态生成MyBatis Dao接口实现-->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="org.springside.examples.showcase.repository.mybatis" />
 	</bean>

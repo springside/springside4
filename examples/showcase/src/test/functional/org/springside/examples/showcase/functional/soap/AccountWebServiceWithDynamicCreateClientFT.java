@@ -13,13 +13,15 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.soap.AccountWebService;
-import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
 import org.springside.modules.test.category.Smoke;
 
 /**
- * UserService Web服务的功能测试, 测试主要的接口调用.
+ * AccountService Web服务的功能测试, 测试主要的接口调用.
  * 
  * 以用JAXWS的API, 根据AccountWebService接口自行创建.
+ * 
+ * 集中在Team相关接口.
  * 
  * @author calvin
  */
@@ -51,13 +53,12 @@ public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTe
 	 */
 	@Test
 	@Category(Smoke.class)
-	public void searchUser() {
+	public void getTeamDetail() {
 		AccountWebService accountWebService = creatClient();
 
-		SearchUserResponse result = accountWebService.searchUser(null, null);
-
-		assertTrue(result.getUserList().size() >= 4);
-		assertEquals("Jack", result.getUserList().get(0).getName());
+		GetTeamDetailResponse response = accountWebService.getTeamDetail(1L);
+		assertEquals("Dolphin", response.getTeam().getName());
+		assertEquals("Admin", response.getTeam().getMaster().getName());
 	}
 
 }
