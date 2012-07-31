@@ -27,17 +27,16 @@ public class WSResponse {
 	/**
 	* 创建结果.
 	*/
-	public <T extends WSResponse> T setError(String resultCode, String resultMessage) {
+	public void setError(String resultCode, String resultMessage) {
 		code = resultCode;
 		message = resultMessage;
-		return (T) this;
 	}
 
 	/**
 	 * 创建默认异常结果.
 	 */
-	public <T extends WSResponse> T setDefaultError() {
-		return (T) setError(SYSTEM_ERROR, SYSTEM_ERROR_MESSAGE);
+	public void setDefaultError() {
+		setError(SYSTEM_ERROR, SYSTEM_ERROR_MESSAGE);
 	}
 
 	public String getCode() {

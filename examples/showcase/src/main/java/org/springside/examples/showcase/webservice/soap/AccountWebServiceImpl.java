@@ -119,16 +119,19 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 	private <T extends WSResponse> T handleParameterError(T response, Exception e, String message) {
 		logger.error(message, e.getMessage());
-		return response.setError(WSResponse.PARAMETER_ERROR, message);
+		response.setError(WSResponse.PARAMETER_ERROR, message);
+		return response;
 	}
 
 	private <T extends WSResponse> T handleParameterError(T response, Exception e) {
 		logger.error(e.getMessage());
-		return response.setError(WSResponse.PARAMETER_ERROR, e.getMessage());
+		response.setError(WSResponse.PARAMETER_ERROR, e.getMessage());
+		return response;
 	}
 
 	private <T extends WSResponse> T handleGeneralError(T response, Exception e) {
 		logger.error(e.getMessage());
-		return response.setDefaultError();
+		response.setDefaultError();
+		return response;
 	}
 }
