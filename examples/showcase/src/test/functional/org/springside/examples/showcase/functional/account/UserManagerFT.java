@@ -19,7 +19,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 	@Category(Smoke.class)
 	public void list() {
 		s.open("/");
-		s.click(By.linkText("综合演示"));
+		s.click(By.linkText("帐号管理"));
 		assertEquals("Showcase示例:综合演示用例", s.getTitle());
 	}
 

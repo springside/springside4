@@ -404,7 +404,8 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- test插件,设定內存/ClassLoader -->
+			
+			<!-- test插件,设定內存 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -471,6 +472,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
+							<argLine>-Xmx256M -XX:MaxPermSize=128m</argLine>
 							<includes>
 								<include>**/*FT.java</include>
 							</includes>
