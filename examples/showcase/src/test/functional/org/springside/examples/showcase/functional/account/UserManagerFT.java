@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.functional.common;
+package org.springside.examples.showcase.functional.account;
 
 import static org.junit.Assert.*;
 

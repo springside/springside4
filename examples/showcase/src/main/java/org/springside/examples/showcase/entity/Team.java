@@ -3,6 +3,7 @@ package org.springside.examples.showcase.entity;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -31,6 +32,7 @@ public class Team extends IdEntity {
 	}
 
 	@OneToOne
+	@JoinColumn(name = "MASTER_ID")
 	public User getMaster() {
 		return master;
 	}
@@ -39,7 +41,7 @@ public class Team extends IdEntity {
 		this.master = master;
 	}
 
-	@OneToMany
+	@OneToMany(mappedBy = "team")
 	public List<User> getUserList() {
 		return userList;
 	}

@@ -117,6 +117,7 @@ public class User extends IdEntity {
 	}
 
 	@ManyToOne
+	@JoinColumn(name = "TEAM_ID")
 	public Team getTeam() {
 		return team;
 	}
