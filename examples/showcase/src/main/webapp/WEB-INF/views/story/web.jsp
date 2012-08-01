@@ -4,7 +4,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <%
-   String remoteImageUrl = "http://"+request.getServerName()+":"+request.getServerPort()+"/showcase/static/img/logo.jpg";
+   String remoteImageUrl = "http://"+request.getServerName()+":"+request.getServerPort()+"/showcase/static/images/logo.jpg";
    String encodedImageUrl = Encodes.urlEncode(remoteImageUrl);
 %>
 <html>
@@ -22,7 +22,7 @@
 		<h2>高性能Web2.0网站</h2>
 		<p>
 			    1. 静态内容Servlet, 演示高效读取静态内容, 控制客户端缓存, 压缩传输, 弹出下载对话框, 见StaticContentServlet.<br/>
-			       <img src="${ctx}/static-content?contentPath=static/img/logo.jpg"/> <a href="${ctx}/static-content?contentPath=img/logo.jpg&download=true">图片下载链接</a><br/>
+			       <img src="${ctx}/static-content?contentPath=static/images/logo.jpg"/> <a href="${ctx}/static-content?contentPath=static/images/logo.jpg&download=true">图片下载链接</a><br/>
 			 	2. 远程内容Servlet, 演示使用两种http client多线程高效获取远程网站内容, 见RemoteContentServlet.<br/>
 			 	   <img src="${ctx}/remote-content?client=apache&contentUrl=<%=encodedImageUrl%>"/> Apache HttpClient.<br/>
 			 	   <img src="${ctx}/remote-content?client=jdk&contentUrl=<%=encodedImageUrl%>"/> JDK HttpUrlConnection.<br/>
