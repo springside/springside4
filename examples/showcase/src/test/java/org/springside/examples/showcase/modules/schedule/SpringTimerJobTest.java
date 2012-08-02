@@ -14,9 +14,9 @@ import org.springside.modules.utils.Threads;
 
 @Category(UnStable.class)
 @DirtiesContext
-@ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-jdk-timer.xml" })
+@ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-spring-scheduler.xml" })
 @TransactionConfiguration(transactionManager = "defaultTransactionManager")
-public class JdkTimerJobTest extends SpringTransactionalTestCase {
+public class SpringTimerJobTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void scheduleJob() throws Exception {
@@ -26,12 +26,11 @@ public class JdkTimerJobTest extends SpringTransactionalTestCase {
 		appender.addToLogger(UserCountScanner.class);
 
 		//等待任务启动
-		Threads.sleep(3000);
+		Threads.sleep(1000);
 
 		//验证任务已执行
 		assertEquals(1, appender.getLogsCount());
-		assertEquals("There are 6 user in database, printed by jdk timer job.", appender.getFirstMessage());
-
+		assertEquals("There are 6 user in database, printed by spring timer job by xml.", appender.getFirstMessage());
 		appender.removeFromLogger(UserCountScanner.class);
 	}
 }

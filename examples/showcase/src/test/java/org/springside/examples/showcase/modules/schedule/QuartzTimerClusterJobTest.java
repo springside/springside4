@@ -38,5 +38,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 
 		assertEquals("There are 6 user in database, printed by quartz cluster job on node default.",
 				appender.getFirstMessage());
+
+		appender.removeFromLogger(QuartzClusterableJob.class);
 	}
 }

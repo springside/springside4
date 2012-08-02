@@ -13,7 +13,7 @@
 				<ref bean="cronTrigger" />
 			</list>
 		</property>
-		<!-- Quartz配置 -->
+		<!-- Quartz配置, 本地运行无需单独的quartz.properties文件，在此简单配置即可 -->
 		<property name="quartzProperties">
 			<props>
 				<prop key="org.quartz.threadPool.threadCount">5</prop>
@@ -30,14 +30,12 @@
 		<property name="cronExpression" value="0 0/30 9-17 ? * MON-FRI" />
 	</bean>
 
-	<!-- Cron JobDetajil, 基于MethodInvokingJobDetailFactoryBean调用普通Spring Bean -->
+	<!-- JobDetajil, 基于MethodInvokingJobDetailFactoryBean调用普通Spring Bean -->
 	<bean id="cronJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-		<property name="targetObject" ref="cronJob" />
-		<property name="targetMethod" value="execute" />
+		<property name="targetObject" ref="userCountScanner" />
+		<property name="targetMethod" value="executeByQuartzLocalJob" />
 		<!-- 同一任务在前一次执行未完成而Trigger时间又到时是否并发开始新的执行, 默认为true. -->
 		<property name="concurrent" value="true" />
 	</bean>
 
-	<!-- 被Cron执行的普通Spring Bean -->
-	<bean id="cronJob" class="org.springside.examples.showcase.modules.schedule.QuartzJob" />
 </beans>

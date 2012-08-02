@@ -8,22 +8,17 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.support.DelegatingErrorHandlingRunnable;
 import org.springframework.scheduling.support.TaskUtils;
-import org.springside.examples.showcase.service.AccountService;
 import org.springside.modules.utils.Threads;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
- * 被ScheduledThreadPoolExecutor定时执行的任务类, 并强化了退出控制.
+ * 用JDKScheduledThreadPoolExecutor定时执行的任务。
+ * 相比Spring的NameSpace, 不需要反射調用，并强化了退出控制.
  */
-public class JdkExecutorJob implements Runnable {
-
-	private static Logger logger = LoggerFactory.getLogger(JdkExecutorJob.class);
+public class JdkTimerJob implements Runnable {
 
 	private int initialDelay = 0;
 
@@ -33,17 +28,19 @@ public class JdkExecutorJob implements Runnable {
 
 	private ScheduledExecutorService scheduledExecutorService;
 
-	private AccountService accountService;
+	@Autowired
+	private UserCountScanner userCountScanner;
 
 	@PostConstruct
 	public void start() throws Exception {
 		Validate.isTrue(period > 0);
 
-		//任何异常不会中断schedule执行
-		Runnable task = new DelegatingErrorHandlingRunnable(this, TaskUtils.LOG_AND_SUPPRESS_ERROR_HANDLER);
+		//任何异常不会中断schedule执行, 由Spring TaskUtils的LOG_AND_SUPPRESS_ERROR_HANDLER進行处理
+		Runnable task = TaskUtils.decorateTaskWithErrorHandler(this, null, true);
 
+		//创建单线程的SechdulerExecutor,并用guava的ThreadFactoryBuilder设定生成线程的名称
 		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat(
-				"JdkExecutorJob-%1$d").build());
+				"JdkTimerJob-%1$d").build());
 
 		//scheduleAtFixedRatefixRate() 固定任务两次启动之间的时间间隔.
 		//scheduleAtFixedDelay()      固定任务结束后到下一次启动间的时间间隔.
@@ -60,8 +57,7 @@ public class JdkExecutorJob implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long userCount = accountService.getUserCount();
-		logger.info("There are {} user in database, printed by jdk timer job.", userCount);
+		userCountScanner.executeByJdk();
 	}
 
 	/**
@@ -79,14 +75,9 @@ public class JdkExecutorJob implements Runnable {
 	}
 
 	/**
-	 * 设置gracefulShutdown的等待时间,单位秒.
+	 * 设置normalShutdown的等待时间, 单位秒.
 	 */
 	public void setShutdownTimeout(int shutdownTimeout) {
 		this.shutdownTimeout = shutdownTimeout;
-	}
-
-	@Autowired
-	public void setAccountService(AccountService accountService) {
-		this.accountService = accountService;
 	}
 }

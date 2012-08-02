@@ -7,20 +7,16 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.apache.commons.lang3.Validate;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
-import org.springside.examples.showcase.service.AccountService;
 import org.springside.modules.utils.Threads;
 
 /**
- * 使用Spring的ThreadPoolTaskScheduler执行Cron式任务的类, 并强化了退出控制.
+ * 使用Spring的ThreadPoolTaskScheduler执行Cron式任务的类.
+ * 相比Spring的NameSpace, 不需要反射調用，并强化了退出控制.
  */
 public class SpringCronJob implements Runnable {
-
-	private static Logger logger = LoggerFactory.getLogger(SpringCronJob.class);
 
 	private String cronExpression;
 
@@ -28,7 +24,8 @@ public class SpringCronJob implements Runnable {
 
 	private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
-	private AccountService accountService;
+	@Autowired
+	private UserCountScanner userCountScanner;
 
 	@PostConstruct
 	public void start() {
@@ -44,9 +41,7 @@ public class SpringCronJob implements Runnable {
 	@PreDestroy
 	public void stop() {
 		ScheduledExecutorService scheduledExecutorService = threadPoolTaskScheduler.getScheduledExecutor();
-
 		Threads.normalShutdown(scheduledExecutorService, shutdownTimeout, TimeUnit.SECONDS);
-
 	}
 
 	/**
@@ -54,8 +49,7 @@ public class SpringCronJob implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long userCount = accountService.getUserCount();
-		logger.info("There are {} user in database, printed by spring cron job.", userCount);
+		userCountScanner.executeBySpringCronByJava();
 	}
 
 	public void setCronExpression(String cronExpression) {
@@ -63,14 +57,9 @@ public class SpringCronJob implements Runnable {
 	}
 
 	/**
-	 * 设置gracefulShutdown的等待时间,单位秒.
+	 * 设置normalShutdown的等待时间,单位秒.
 	 */
 	public void setShutdownTimeout(int shutdownTimeout) {
 		this.shutdownTimeout = shutdownTimeout;
-	}
-
-	@Autowired
-	public void setAccountService(AccountService accountService) {
-		this.accountService = accountService;
 	}
 }
