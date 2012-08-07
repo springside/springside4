@@ -8,7 +8,8 @@ import org.springside.examples.showcase.entity.Team;
  * 
  * @author calvin
  */
+@MyBatisRepository
 public interface TeamMybatisDao {
 
-	public Team getTeamWithDetail(Long id);
+	public Team getWithDetail(Long id);
 }

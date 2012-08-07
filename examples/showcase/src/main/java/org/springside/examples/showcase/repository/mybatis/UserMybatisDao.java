@@ -11,14 +11,15 @@ import org.springside.examples.showcase.entity.User;
  * 
  * @author calvin
  */
+@MyBatisRepository
 public interface UserMybatisDao {
 
-	public User getUser(Long id);
+	public User get(Long id);
 
-	public List<User> searchUser(Map<String, Object> parameters);
+	public List<User> search(Map<String, Object> parameters);
 
-	public void saveUser(User user);
+	public void save(User user);
 
-	public void deleteUser(Long id);
+	public void delete(Long id);
 
 }

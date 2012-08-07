@@ -36,7 +36,7 @@ public class AccountEffectiveService {
 	private final JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
 
 	public Team getTeamWithDetail(Long id) {
-		return teamDao.getTeamWithDetail(id);
+		return teamDao.getWithDetail(id);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class AccountEffectiveService {
 		String jsonString = memcachedClient.get(key);
 
 		if (jsonString == null) {
-			user = userDao.getUser(id);
+			user = userDao.get(id);
 			if (user != null) {
 				jsonString = jsonMapper.toJson(user);
 				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
@@ -64,16 +64,16 @@ public class AccountEffectiveService {
 		Map<String, Object> parameters = Maps.newHashMap();
 		parameters.put("loginName", loginName);
 		parameters.put("name", name);
-		return userDao.searchUser(parameters);
+		return userDao.search(parameters);
 	}
 
 	@Transactional
 	public void saveUser(User user) {
-		userDao.saveUser(user);
+		userDao.save(user);
 	}
 
 	@Transactional
 	public void deleteUser(Long id) {
-		userDao.deleteUser(id);
+		userDao.delete(id);
 	}
 }
