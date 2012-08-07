@@ -361,6 +361,10 @@
 						<groupId>org.osgi</groupId>
 						<artifactId>org.osgi.core</artifactId>
 					</exclusion>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
 				</exclusions>
 			</dependency>
 			<!-- JMS end -->
@@ -571,6 +575,12 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>${httpclient.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 
 			<!-- template engine -->
@@ -829,7 +839,7 @@
 					<version>2.3.1</version>
 				</plugin>
 				
-				<!-- enforcer插件, 设定环境与依赖的规则 -->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
@@ -844,18 +854,13 @@
 								<rules>
 									<bannedDependencies>
 										<searchTransitive>true</searchTransitive>
-										<!-- 避免引入过期的jar包 -->
 										<excludes>
 											<exclude>commons-logging</exclude>
-											<exclude>javassist:javassist</exclude>
 											<exclude>aspectj:aspectj*</exclude>
 											<exclude>org.springframework:2.*</exclude>
 											<exclude>org.springframework:3.0.*</exclude>
 										</excludes>
 									</bannedDependencies>
-									<requireJavaVersion>
-										<version>${jdk.version}</version>
-									</requireJavaVersion>
 								</rules>
 								<fail>true</fail>
 							</configuration>
