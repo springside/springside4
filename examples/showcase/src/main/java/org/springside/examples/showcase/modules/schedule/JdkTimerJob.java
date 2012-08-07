@@ -16,7 +16,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * 用JDKScheduledThreadPoolExecutor定时执行的任务。
- * 相比Spring的NameSpace, 不需要反射調用，并强化了退出控制.
+ * 相比Spring的Task NameSpace配置方, 不需要反射調用，并强化了退出超时控制.
  */
 public class JdkTimerJob implements Runnable {
 
