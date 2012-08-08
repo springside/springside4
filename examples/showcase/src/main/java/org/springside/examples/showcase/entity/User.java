@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
@@ -28,6 +30,8 @@ import com.google.common.collect.Lists;
  */
 @Entity
 @Table(name = "SS_USER")
+//默认的缓存策略.
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends IdEntity {
 	private String loginName;
 	private String plainPassword;
@@ -108,6 +112,7 @@ public class User extends IdEntity {
 	@Fetch(FetchMode.SUBSELECT)
 	//集合按id排序
 	@OrderBy("id ASC")
+	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Role> getRoleList() {
 		return roleList;
 	}

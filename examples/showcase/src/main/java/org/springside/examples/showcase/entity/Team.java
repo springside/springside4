@@ -8,6 +8,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.google.common.collect.Lists;
 
 /**
@@ -17,6 +20,7 @@ import com.google.common.collect.Lists;
  */
 @Entity
 @Table(name = "SS_TEAM")
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Team extends IdEntity {
 
 	private String name;
