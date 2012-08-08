@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountService;
 import org.springside.modules.test.data.DataFixtures;
@@ -27,7 +26,6 @@ import com.google.common.cache.LoadingCache;
  * @author hzl7652
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);

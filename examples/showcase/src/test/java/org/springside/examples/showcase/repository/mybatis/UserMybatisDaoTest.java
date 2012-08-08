@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springside.examples.showcase.data.UserData;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -18,7 +17,6 @@ import com.google.common.collect.Maps;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration(transactionManager = "defaultTransactionManager")
 public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired

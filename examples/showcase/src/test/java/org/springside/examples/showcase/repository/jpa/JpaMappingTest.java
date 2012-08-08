@@ -16,7 +16,8 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 @DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-@TransactionConfiguration(transactionManager = "defaultTransactionManager")
+//如果存在多个transactionManager，可以需显式指定
+@TransactionConfiguration(transactionManager = "transactionManager")
 public class JpaMappingTest extends SpringTransactionalTestCase {
 
 	private static Logger logger = LoggerFactory.getLogger(JpaMappingTest.class);

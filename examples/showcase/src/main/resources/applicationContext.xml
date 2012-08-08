@@ -40,7 +40,7 @@
 	</bean>
 
 	<!-- Spring Data Jpa配置, 扫描base-package下所有继承于Repository<T,ID>的接口, 动态生成实现类 -->
- 	<jpa:repositories base-package="org.springside.examples.showcase" transaction-manager-ref="defaultTransactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+ 	<jpa:repositories base-package="org.springside.examples.showcase" transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
 	
 	<!-- MyBatis配置 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -57,7 +57,7 @@
 	</bean>
 	
 	<!-- 事务管理器配置, Jpa单数据源事务 -->
-	<bean id="defaultTransactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory"/>
 	</bean>
 
@@ -67,7 +67,7 @@
 	</bean>
 
 	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="defaultTransactionManager" proxy-target-class="true" />
+	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	
 	<!-- 定义aspectj -->
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
