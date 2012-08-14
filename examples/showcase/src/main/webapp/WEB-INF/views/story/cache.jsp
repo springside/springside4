@@ -23,7 +23,7 @@
 	<ul>
 		<li>GuavaCacheDemo.java演示了Guava Cache的使用</li>
 		<li>EhcacheDemo.java演示了Ehcache与Spring的集成</li>
-		<li>在AccountManager.java中演示了对Memcached的使用</li>
+		<li>在AccountEffectiveService.java中演示了对Memcached的使用</li>
 	</ul>
 </body>
 </html>

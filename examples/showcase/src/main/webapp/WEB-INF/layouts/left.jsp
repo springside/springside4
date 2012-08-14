@@ -26,6 +26,7 @@
 	<h1>演示说明</h1>
 	<div class="submenu">
 	<ul>
+		<li id="persistence-tab"><a href="${ctx}/story/persistence">Persistence高级演示</a></li>
 		<li id="webservice-tab"><a href="${ctx}/story/webservice">WebService演示</a></li>
 		<li id="jms-tab"><a href="${ctx}/story/jms">JMS演示</a></li>
 		<li id="cache-tab"><a href="${ctx}/story/cache">Cache演示</a></li>
