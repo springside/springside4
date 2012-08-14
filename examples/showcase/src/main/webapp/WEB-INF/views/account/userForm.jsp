@@ -5,11 +5,27 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>综合演示用例</title>	
+	<title>综合演示用例</title>
+	<script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
 	<link href="${ctx}/static/jquery-validation/1.9.0/validate.css" type="text/css" rel="stylesheet" />
 	<script>
 		$(document).ready(function() {
 			$("#account-tab").addClass("active");
+			
+			//为inputForm注册validate函数
+			$("#inputForm").validate({
+				rules: {
+					loginName: {
+						remote: "${ctx}/account/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')
+					}
+				},
+				messages: {
+					loginName: {
+						remote: "用户登录名已存在"
+					}
+				},
+				errorContainer: "#messageBox"
+			});
 		});
 	</script>
 </head>

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountService;
@@ -47,6 +48,19 @@ public class UserController {
 		accountService.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
 		return "redirect:/account/user/";
+	}
+
+	@RequestMapping(value = "checkLoginName")
+	@ResponseBody
+	public String checkLoginName(@RequestParam("oldLoginName") String oldLoginName,
+			@RequestParam("loginName") String loginName) {
+		if (loginName.equals(oldLoginName)) {
+			return "true";
+		} else if (accountService.findUserByLoginName(loginName) == null) {
+			return "true";
+		}
+
+		return "false";
 	}
 
 	/**

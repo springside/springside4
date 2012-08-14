@@ -24,7 +24,7 @@
 			<div class="control-group">
 				<label for="title" class="control-label">任务名称:</label>
 				<div class="controls">
-					<input type="text" id="task.title" name="title" size="50" value="${task.title}" class="required"/>
+					<input type="text" id="task.title" name="title" size="50" value="${task.title}" class="required" minlength="3"/>
 				</div>
 			</div>	
 			<div class="form-actions">
