@@ -13,8 +13,9 @@ import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.modules.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.modules.jmx.ApplicationStatistics;
 import org.springside.examples.showcase.repository.jpa.UserDao;
-import org.springside.examples.showcase.service.ShiroDbRealm.HashPassword;
 import org.springside.modules.persistence.Hibernates;
+import org.springside.modules.security.utils.Digests;
+import org.springside.modules.utils.Encodes;
 
 /**
  * 用户管理类.
@@ -25,13 +26,15 @@ import org.springside.modules.persistence.Hibernates;
 @Component
 @Transactional(readOnly = true)
 public class AccountService {
+	public static final String HASH_ALGORITHM = "SHA-1";
+	public static final int HASH_INTERATIONS = 1024;
+	private static final int SALT_SIZE = 8;
+
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
 
 	private NotifyMessageProducer notifyProducer; //JMS消息发送
-
-	private ShiroDbRealm shiroRealm;
 
 	private ApplicationStatistics applicationStatistics;
 
@@ -49,25 +52,29 @@ public class AccountService {
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
-		//设定安全的密码，使用passwordService提供的salt并经过1024次 sha-1 hash
-		if (StringUtils.isNotBlank(user.getPlainPassword()) && shiroRealm != null) {
-			HashPassword hashPassword = shiroRealm.encrypt(user.getPlainPassword());
-			user.setSalt(hashPassword.salt);
-			user.setPassword(hashPassword.password);
+		//设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+		if (StringUtils.isNotBlank(user.getPlainPassword())) {
+			entryptPassword(user);
 		}
 
 		userDao.save(user);
-
-		if (shiroRealm != null) {
-			shiroRealm.clearCachedAuthorizationInfo(user.getLoginName());
-		}
 
 		if (applicationStatistics != null) {
 			applicationStatistics.incrUpdateUserTimes();
 		}
 
 		sendNotifyMessage(user);
+	}
 
+	/**
+	 * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+	 */
+	private void entryptPassword(User user) {
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		user.setSalt(Encodes.encodeHex(salt));
+
+		byte[] hashPassword = Digests.sha1(user.getPlainPassword().getBytes(), salt, HASH_INTERATIONS);
+		user.setPassword(Encodes.encodeHex(hashPassword));
 	}
 
 	public List<User> getAllUser() {
@@ -143,11 +150,6 @@ public class AccountService {
 	@Autowired(required = false)
 	public void setNotifyProducer(NotifyMessageProducer notifyProducer) {
 		this.notifyProducer = notifyProducer;
-	}
-
-	@Autowired(required = false)
-	public void setShiroRealm(ShiroDbRealm shiroRealm) {
-		this.shiroRealm = shiroRealm;
 	}
 
 	@Autowired(required = false)

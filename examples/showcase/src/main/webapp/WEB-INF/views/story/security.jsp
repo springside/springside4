@@ -13,9 +13,6 @@
 	<h1>安全演示</h1>
 	<h2>Shiro高级演示</h2>
 	<ul>
-		<li>常用密码存储方式演示:salt + 1024次hash的sha1</li>
-		<li>Shiro与REST接口的HttpBasic认证(并缓存认证数据)与权限控制演示</li>
-		<li>Shiro使用Ehcache RMI集群作为认证与权限数据的缓存</li>
 		<li>根据用户状态抛出用户已被冻结的异常</li>
 	</ul>
 	<hr/>

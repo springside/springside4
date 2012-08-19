@@ -8,14 +8,12 @@
 	<!-- Shiro's main business-tier object for web-enabled applications -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroDbRealm" />
-		<property name="cacheManager" ref="shiroCacheManager" />
+		<property name="cacheManager" ref="shiroEhcacheManager" />
 	</bean>
 
 	<!-- 項目自定义的Realm -->
 	<bean id="shiroDbRealm" class="org.springside.examples.showcase.service.ShiroDbRealm" depends-on="userDao">
 		<property name="accountService" ref="accountService"/>
-		<!-- 可配置cache token<->认证信息的cache，用于REST等需要频繁认证的场景 -->
-		<property name="authorizationCachingEnabled" value="true"/>
 	</bean>
 	
 	<!-- Shiro Filter -->
@@ -28,18 +26,15 @@
 				/login = authc
 				/logout = logout
 				/account/user/update/* = user
-				/rs/users = authcBasic
+				/rest/users = authcBasic
 			</value>
 		</property>
 	</bean>
 
-	<!-- 用户授权/认证信息Cache, 采用EhCache RMI集群 -->
-	<bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManager" ref="shiroEhcacheManager"/>
+	<!-- 用户授权/认证信息Cache, 采用EhCache -->
+	<bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:security/ehcache-shiro.xml"/>
 	</bean>
-	<bean id="shiroEhcacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-		<property name="configLocation" value="classpath:/security/ehcache-shiro-rmi.xml" />
-	</bean>	
 	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
 	<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>

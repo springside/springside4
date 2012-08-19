@@ -31,27 +31,19 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
-import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
-import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
-	private static final int INTERATIONS = 1024;
-	private static final int SALT_SIZE = 8;
-	private static final String ALGORITHM = "SHA-1";
-
 	protected AccountService accountService;
-
-	protected PasswordService passwordService;
 
 	/**
 	 * 认证回调函数,登录时调用.
@@ -93,39 +85,19 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	}
 
 	/**
-	 * 更新用户授权信息缓存.
+	 * 设定Password校验的Hash算法与迭代次数.
 	 */
-	public void clearCachedAuthorizationInfo(String principal) {
-		SimplePrincipalCollection principals = new SimplePrincipalCollection(new ShiroUser(principal, null), getName());
-		clearCachedAuthorizationInfo(principals);
-	}
-
-	public HashPassword encrypt(String plainText) {
-		HashPassword result = new HashPassword();
-		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		result.salt = Encodes.encodeHex(salt);
-
-		byte[] hashPassword = Digests.sha1(plainText.getBytes(), salt, INTERATIONS);
-		result.password = Encodes.encodeHex(hashPassword);
-		return result;
-
-	}
-
 	@PostConstruct
 	public void initCredentialsMatcher() {
-		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(ALGORITHM);
-		matcher.setHashIterations(INTERATIONS);
+		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(AccountService.HASH_ALGORITHM);
+		matcher.setHashIterations(AccountService.HASH_INTERATIONS);
 
 		setCredentialsMatcher(matcher);
 	}
 
+	@Autowired
 	public void setAccountService(AccountService accountService) {
 		this.accountService = accountService;
-	}
-
-	public static class HashPassword {
-		public String salt;
-		public String password;
 	}
 
 	/**
@@ -168,6 +140,5 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		public boolean equals(Object obj) {
 			return EqualsBuilder.reflectionEquals(this, obj, "loginName");
 		}
-
 	}
 }
