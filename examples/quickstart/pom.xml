@@ -13,16 +13,17 @@
 		<springside.version>4.0.0.RC4-SNAPSHOT</springside.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<aspectj.version>1.7.0</aspectj.version>
-		<hibernate.version>4.1.5.SP1</hibernate.version>
+		<hibernate.version>4.1.6.Final</hibernate.version>
 		<spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
+		<shiro.version>1.2.1</shiro.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
 		<jackson.version>2.0.5</jackson.version>
 		<slf4j.version>1.6.6</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
-		<guava.version>12.0</guava.version>
+		<guava.version>13.0</guava.version>
 		<junit.version>4.10</junit.version>
 		<mockito.version>1.9.0</mockito.version>
 		<selenium.version>2.25.0</selenium.version>
@@ -208,6 +209,19 @@
 			<scope>provided</scope>
 		</dependency>
 		<!-- WEB end -->
+		
+		<!-- SECURITY begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>${shiro.version}</version>
+		</dependency>
+		<!-- SECURITY end -->
 		
 		<!-- JSR303  BeanValidator -->
 		<dependency>
