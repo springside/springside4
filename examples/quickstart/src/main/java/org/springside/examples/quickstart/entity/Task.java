@@ -1,10 +1,12 @@
 package org.springside.examples.quickstart.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
+@Table(name = "SS_TASK")
 public class Task extends IdEntity {
 
 	private String title;
@@ -18,5 +20,4 @@ public class Task extends IdEntity {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 }

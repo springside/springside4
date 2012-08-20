@@ -28,7 +28,6 @@ import org.springside.modules.beanvalidator.BeanValidators;
  * Task的Restful API的Controller.
  * 
  * @author calvin
- *
  */
 @Controller
 @RequestMapping(value = "/api/v1/task")
