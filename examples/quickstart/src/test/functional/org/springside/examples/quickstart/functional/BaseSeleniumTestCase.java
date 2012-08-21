@@ -1,6 +1,9 @@
 package org.springside.examples.quickstart.functional;
 
+import static org.junit.Assert.*;
+
 import org.junit.BeforeClass;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springside.modules.test.functional.Selenium2;
 import org.springside.modules.test.functional.WebDriverFactory;
@@ -17,7 +20,15 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 	protected static Selenium2 s;
 
 	@BeforeClass
-	public static void createSeleniumOnce() throws Exception {
+	public static void init() throws Exception {
+		createSeleniumOnce();
+		loginAsUserIfNecessary();
+	}
+
+	/**
+	 * 创建Selenium，仅创建一次.
+	 */
+	protected static void createSeleniumOnce() throws Exception {
 		if (s == null) {
 			//根据配置创建Selenium driver.
 			String driverName = propertiesLoader.getProperty("selenium.driver");
@@ -26,6 +37,21 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 			s = new Selenium2(driver, baseUrl);
 			s.setStopAtShutdown();
+		}
+	}
+
+	/**
+	 * 登录管理员, 如果用户还没有登录.
+	 */
+	protected static void loginAsUserIfNecessary() {
+		s.open("/task");
+
+		if ("QuickStart示例:登录页".equals(s.getTitle())) {
+			s.type(By.name("username"), "user");
+			s.type(By.name("password"), "user");
+			s.check(By.name("rememberMe"));
+			s.click(By.id("submit"));
+			assertEquals("QuickStart示例:任务管理", s.getTitle());
 		}
 	}
 

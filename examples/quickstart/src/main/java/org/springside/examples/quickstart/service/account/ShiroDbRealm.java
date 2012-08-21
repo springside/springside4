@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.springside.examples.quickstart.service;
+package org.springside.examples.quickstart.service.account;
 
 import java.io.Serializable;
 
@@ -51,8 +51,8 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		User user = accountService.findUserByLoginName(token.getUsername());
 		if (user != null) {
 			byte[] salt = Encodes.decodeHex(user.getSalt());
-			return new SimpleAuthenticationInfo(new ShiroUser(user.getLoginName(), user.getName()), user.getPassword(),
-					ByteSource.Util.bytes(salt), getName());
+			return new SimpleAuthenticationInfo(new ShiroUser(user.getId(), user.getLoginName(), user.getName()),
+					user.getPassword(), ByteSource.Util.bytes(salt), getName());
 		} else {
 			return null;
 		}
@@ -60,6 +60,7 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 	/**
 	 * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
+	 * 本用例不演示授权校验，因此直接返回Null.
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -87,10 +88,12 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	public static class ShiroUser implements Serializable {
 		private static final long serialVersionUID = -1373760761780840081L;
+		public Long id;
 		public String loginName;
 		public String name;
 
-		public ShiroUser(String loginName, String name) {
+		public ShiroUser(Long id, String loginName, String name) {
+			this.id = id;
 			this.loginName = loginName;
 			this.name = name;
 		}

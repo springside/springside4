@@ -54,7 +54,7 @@ public class BaseFunctionalTestCase {
 			System.setProperty("spring.profiles.active", "functional");
 
 			jettyServer = JettyFactory.createServerInSource(new URL(baseUrl).getPort(), ShowcaseServer.CONTEXT);
-			JettyFactory.setTldJarNames(jettyServer, "sitemesh", "shiro-web", "spring-webmvc");
+			JettyFactory.setTldJarNames(jettyServer, ShowcaseServer.TLD_JAR_NAMES);
 			jettyServer.start();
 
 			logger.info("Jetty Server started");

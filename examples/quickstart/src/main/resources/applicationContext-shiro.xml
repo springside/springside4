@@ -8,11 +8,10 @@
 	<!-- Shiro's main business-tier object for web-enabled applications -->
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 		<property name="realm" ref="shiroDbRealm" />
-		<property name="cacheManager" ref="shiroEhcacheManager" />
 	</bean>
 
 	<!-- 項目自定义的Realm -->
-	<bean id="shiroDbRealm" class="org.springside.examples.quickstart.service.ShiroDbRealm" depends-on="userDao">
+	<bean id="shiroDbRealm" class="org.springside.examples.quickstart.service.account.ShiroDbRealm" depends-on="userDao">
 		<property name="accountService" ref="accountService"/>
 	</bean>
 	
@@ -28,11 +27,6 @@
 				/task* = user
 			</value>
 		</property>
-	</bean>
-
-	<!-- 用户授权/认证信息Cache, 采用EhCache -->
-	<bean id="shiroEhcacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-		<property name="cacheManagerConfigFile" value="classpath:ehcache/ehcache-shiro.xml"/>
 	</bean>
 	
 	<!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->

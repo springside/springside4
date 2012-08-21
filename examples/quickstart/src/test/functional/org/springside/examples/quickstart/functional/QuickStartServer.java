@@ -13,6 +13,7 @@ public class QuickStartServer {
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/quickstart";
 	public static final String BASE_URL = "http://localhost:8080/quickstart";
+	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web" };
 
 	public static void main(String[] args) throws Exception {
 		//设定Spring的profile
@@ -20,7 +21,7 @@ public class QuickStartServer {
 
 		//启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
-		JettyFactory.setTldJarNames(server, "sitemesh", "spring-webmvc", "shiro-web");
+		JettyFactory.setTldJarNames(server, TLD_JAR_NAMES);
 
 		try {
 			server.start();
@@ -40,5 +41,4 @@ public class QuickStartServer {
 			System.exit(-1);
 		}
 	}
-
 }

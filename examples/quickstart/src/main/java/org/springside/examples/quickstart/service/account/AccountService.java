@@ -1,4 +1,4 @@
-package org.springside.examples.quickstart.service;
+package org.springside.examples.quickstart.service.account;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,8 +23,6 @@ public class AccountService {
 	private static final int SALT_SIZE = 8;
 
 	private UserDao userDao;
-
-	private ShiroDbRealm shiroRealm;
 
 	public User findUserByLoginName(String loginName) {
 		return userDao.findByLoginName(loginName);

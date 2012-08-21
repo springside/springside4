@@ -1,10 +1,9 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-	<SS_TASK ID="1" TITLE="Study PlayFramework 2.0" />
-	<SS_TASK ID="2" TITLE="Study Grails 2.0" />
-	<SS_TASK ID="3" TITLE="Try SpringFuse" />
-	<SS_TASK ID="4" TITLE="Try Spring Roo" />
-	<SS_TASK ID="5" TITLE="Release SprignSide 4.0" />
-	<SS_USER ID="1" LOGIN_NAME="admin" NAME="Administrator" PASSWORD="e3104c038a369512cf1bda048cf3898a4c4f6383" SALT="2ba26b24b138cdc1"/>
-	<SS_USER ID="2" LOGIN_NAME="user" NAME="Calvin" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500"/>
+	<SS_TASK ID="1" TITLE="Study PlayFramework 2.0" USER_ID="1"/>
+	<SS_TASK ID="2" TITLE="Study Grails 2.0" USER_ID="1"/>
+	<SS_TASK ID="3" TITLE="Try SpringFuse" USER_ID="1"/>
+	<SS_TASK ID="4" TITLE="Try Spring Roo" USER_ID="1"/>
+	<SS_TASK ID="5" TITLE="Release SprignSide 4.0" USER_ID="1"/>
+	<SS_USER ID="1" LOGIN_NAME="user" NAME="Calvin" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500"/>
 </dataset>

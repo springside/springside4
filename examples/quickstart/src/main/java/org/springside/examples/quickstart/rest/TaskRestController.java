@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.examples.quickstart.service.TaskService;
+import org.springside.examples.quickstart.service.task.TaskService;
 import org.springside.modules.beanvalidator.BeanValidators;
 
 /**

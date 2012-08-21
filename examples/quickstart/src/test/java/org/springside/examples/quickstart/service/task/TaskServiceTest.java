@@ -1,10 +1,10 @@
-package org.springside.examples.quickstart.service;
+package org.springside.examples.quickstart.service.task;
 
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springside.examples.quickstart.repository.TaskDao;
-import org.springside.examples.quickstart.service.TaskService;
+import org.springside.examples.quickstart.service.task.TaskService;
 
 /**
  * TaskService的测试用例, 测试Service层的业务逻辑.

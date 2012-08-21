@@ -1,0 +1,44 @@
+package org.springside.examples.quickstart.functional.gui;
+
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.springside.examples.quickstart.functional.BaseSeleniumTestCase;
+
+/**
+ * 系统安全控制的功能测试, 测试主要用户故事.
+ * 
+ * @author calvin
+ */
+public class SecurityFT extends BaseSeleniumTestCase {
+
+	/**
+	 * 测试匿名用户访问系统时的行为.
+	 */
+	@Test
+	public void checkAnonymous() {
+		//访问退出登录页面,退出之前的登录
+		s.open("/logout");
+		assertEquals("QuickStart示例:登录页", s.getTitle());
+
+		//访问任意页面会跳转到登录界面
+		s.open("/task");
+		assertEquals("QuickStart示例:登录页", s.getTitle());
+	}
+
+	/**
+	 * 登录错误的用户名密码.
+	 */
+	@Test
+	public void loginWithWrongPassword() {
+		s.open("/logout");
+		s.type(By.name("username"), "wrongUser");
+		s.type(By.name("password"), "WrongPassword");
+		s.check(By.name("rememberMe"));
+		s.click(By.id("submit"));
+
+		assertEquals("QuickStart示例:登录页", s.getTitle());
+		assertTrue(s.isTextPresent("登录失败，请重试."));
+	}
+}

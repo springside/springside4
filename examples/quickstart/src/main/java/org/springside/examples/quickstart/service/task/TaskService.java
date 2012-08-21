@@ -1,4 +1,4 @@
-package org.springside.examples.quickstart.service;
+package org.springside.examples.quickstart.service.task;
 
 import java.util.List;
 
@@ -34,6 +34,10 @@ public class TaskService {
 
 	public List<Task> getAllTask() {
 		return (List<Task>) taskDao.findAll(new Sort(Direction.ASC, "id"));
+	}
+
+	public List<Task> getUserTask(Long userId) {
+		return taskDao.findByUserId(userId, new Sort(Direction.ASC, "id"));
 	}
 
 	@Autowired

@@ -16,6 +16,13 @@ public class User extends IdEntity {
 	private String password;
 	private String salt;
 
+	public User() {
+	}
+
+	public User(Long id) {
+		this.id = id;
+	}
+
 	@NotBlank
 	public String getLoginName() {
 		return loginName;
