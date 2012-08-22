@@ -7,12 +7,6 @@
 	<div class="submenu">
     <ul>
    		<li id="account-tab"><a href="${ctx}/account/user/">帐号管理</a></li>
-   		<shiro:guest>
-			<li><a href="${ctx}/login">登录</a></li>
-		</shiro:guest>
-		<shiro:user>
-			<li><a href="${ctx}/logout">退出登录</a></li>
-		</shiro:user>
 	</ul>
 	</div>
 	<h1>独立演示</h1>

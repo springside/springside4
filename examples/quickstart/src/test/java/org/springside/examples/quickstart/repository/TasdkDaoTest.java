@@ -4,9 +4,6 @@ import static org.junit.Assert.*;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -21,13 +18,13 @@ public class TasdkDaoTest extends SpringTransactionalTestCase {
 	@Autowired
 	private TaskDao taskDao;
 
-	@PersistenceContext
-	private EntityManager em;
-
 	@Test
 	public void findTasksByUserId() throws Exception {
 		List<Task> tasks = taskDao.findByUserId(1L, new Sort(Direction.ASC, "id"));
 		assertEquals(5, tasks.size());
 		assertEquals(new Long(1), tasks.get(0).getId());
+
+		tasks = taskDao.findByUserId(99999L, new Sort(Direction.ASC, "id"));
+		assertEquals(0, tasks.size());
 	}
 }

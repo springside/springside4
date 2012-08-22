@@ -57,7 +57,7 @@ public class BaseFunctionalTestCase {
 			JettyFactory.setTldJarNames(jettyServer, ShowcaseServer.TLD_JAR_NAMES);
 			jettyServer.start();
 
-			logger.info("Jetty Server started");
+			logger.info("Jetty Server started at " + baseUrl);
 		}
 	}
 

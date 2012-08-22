@@ -25,7 +25,7 @@
 			<value>
 				/login = authc
 				/logout = logout
-				/account/user/update/* = user
+				/account/** = user
 				/rest/users = authcBasic
 			</value>
 		</property>

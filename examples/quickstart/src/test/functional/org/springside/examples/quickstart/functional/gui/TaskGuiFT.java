@@ -64,5 +64,4 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 
 		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/label")));
 	}
-
 }

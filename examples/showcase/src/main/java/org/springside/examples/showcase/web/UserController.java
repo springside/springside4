@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.apache.shiro.authz.annotation.Logical;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +30,8 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
+	//特别设定多个ReuiresRole之间为Or关系，而不是默认的And.
+	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
 		List<User> users = accountService.getAllUser();
@@ -34,20 +39,21 @@ public class UserController {
 		return "account/userList";
 	}
 
+	@RequiresRoles("Admin")
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", accountService.getUser(id));
-
 		List<String> allStatus = Lists.newArrayList("enabled", "disabled");
 		model.addAttribute("allStatus", allStatus);
 		return "account/userForm";
 	}
 
+	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "save/{id}")
 	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountService.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
-		return "redirect:/account/user/";
+		return "redirect:/account/user";
 	}
 
 	@RequestMapping(value = "checkLoginName")
@@ -68,7 +74,7 @@ public class UserController {
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
 	@ModelAttribute("user")
-	private User getUser(@RequestParam(value = "id", required = false) Long id) {
+	public User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
 			return accountService.getUser(id);
 		}

@@ -6,8 +6,8 @@
   <SS_USER ID="4" EMAIL="kate@springside.org.cn" LOGIN_NAME="user3" NAME="Kate" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
   <SS_USER ID="5" EMAIL="sawyer@springside.org.cn" LOGIN_NAME="user4" NAME="Sawyer" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
   <SS_USER ID="6" EMAIL="ben@springside.org.cn" LOGIN_NAME="user5" NAME="Ben" PASSWORD="2488aa0c31c624687bd9928e0a5d29e7d1ed520b" SALT="6d65d24122c30500" STATUS="enabled" TEAM_ID="1"/>
-  <SS_ROLE ID="1" NAME="Admin"/>
-  <SS_ROLE ID="2" NAME="User"/>
+  <SS_ROLE ID="1" NAME="Admin" PERMISSIONS="user:view,user:edit"/>
+  <SS_ROLE ID="2" NAME="User" PERMISSIONS="user:view"/>
   <SS_USER_ROLE USER_ID="1" ROLE_ID="1"/>
   <SS_USER_ROLE USER_ID="1" ROLE_ID="2"/>
   <SS_USER_ROLE USER_ID="2" ROLE_ID="2"/>

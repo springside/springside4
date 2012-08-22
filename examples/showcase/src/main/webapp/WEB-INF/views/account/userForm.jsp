@@ -40,14 +40,14 @@
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}"/>
+					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
 					<form:errors path="loginName" cssClass="error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" size="50" value="${user.name}"/>
+					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
 					<form:errors path="name" cssClass="error"/>
 				</div>
 			</div>

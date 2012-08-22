@@ -20,19 +20,18 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 	public void list() {
 		s.open("/");
 		s.click(By.linkText("帐号管理"));
+		loginAsAdminIfNecessary();
 		assertEquals("Showcase示例:综合演示用例", s.getTitle());
 	}
 
+	@Test
 	@Category(Smoke.class)
 	public void editUser() {
 		s.open("/");
-		s.click(By.linkText("综合演示"));
-		s.click(By.id("editLink-user"));
+		s.click(By.linkText("帐号管理"));
+		loginAsAdminIfNecessary();
 
-		//修改用户需要登录管理员权限
-		s.type(By.name("username"), "admin");
-		s.type(By.name("password"), "admin");
-		s.click(By.id("submit"));
+		s.click(By.id("editLink-user"));
 
 		//点击提交按钮
 		s.type(By.name("name"), "user_foo");
@@ -48,5 +47,14 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		s.type(By.name("name"), "user");
 		s.getSelect(By.name("status")).selectByValue("enabled");
 		s.click(By.id("submit"));
+	}
+
+	private void loginAsAdminIfNecessary() {
+		//修改用户需要登录管理员权限
+		if ("Showcase示例:登录页".equals(s.getTitle())) {
+			s.type(By.name("username"), "admin");
+			s.type(By.name("password"), "admin");
+			s.click(By.id("submit"));
+		}
 	}
 }

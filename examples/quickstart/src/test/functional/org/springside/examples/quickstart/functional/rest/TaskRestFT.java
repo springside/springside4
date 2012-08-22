@@ -57,8 +57,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void getTask() {
-		Long id = 1L;
-		Task task = restTemplate.getForObject(resoureUrl + "/{id}", Task.class, id);
+		Task task = restTemplate.getForObject(resoureUrl + "/{id}", Task.class, 1L);
 		assertEquals("Study PlayFramework 2.0", task.getTitle());
 	}
 

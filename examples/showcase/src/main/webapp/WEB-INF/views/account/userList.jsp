@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -34,7 +35,11 @@
 					<td>${user.email}&nbsp;</td>
 					<td>${user.roleNames}&nbsp;</td>
 					<td>${user.status}&nbsp;</td>
-					<td><a href="${ctx}/account/user/update/${user.id}" id="editLink-${user.loginName}">修改</a></td>
+					<td>
+						<shiro:hasPermission name="user:edit">
+							<a href="${ctx}/account/user/update/${user.id}" id="editLink-${user.loginName}">修改</a>
+						</shiro:hasPermission>
+					</td>
 				</tr>
 			</c:forEach>
 			</tbody>		
