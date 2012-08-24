@@ -41,14 +41,12 @@
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
 					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
-					<form:errors path="loginName" cssClass="error"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
 					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
-					<form:errors path="name" cssClass="error"/>
 				</div>
 			</div>
 			<div class="control-group">
@@ -64,8 +62,8 @@
 				</div>
 			</div>
 			<div class="form-actions">
-				<input id="submit" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
-				<input id="cancel" class="btn" type="button" value="返回" onclick="history.back()"/>
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="提交"/>&nbsp;	
+				<input id="cancel_btn" class="btn" type="button" value="返回" onclick="history.back()"/>
 				<p class="help-block">(保存后将发送JMS消息通知改动，而消息接收者将发送提醒邮件)</p>			
 			</div>
 		</fieldset>

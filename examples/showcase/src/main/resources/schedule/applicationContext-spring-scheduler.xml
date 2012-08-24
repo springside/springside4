@@ -12,7 +12,7 @@
 	
 	<task:scheduled-tasks scheduler="springScheduler">
 		<!-- timer -->
-	    <task:scheduled ref="userCountScanner" method="executeBySpringTimerByXml" fixed-rate="60000"/>
+	    <task:scheduled ref="userCountScanner" method="executeBySpringTimerByXml" fixed-rate="180000"/>
 	    <!-- cron -->
 	    <task:scheduled ref="userCountScanner" method="executeBySpringCronByXml" cron="* 15 9-17 * * MON-FRI"/>
 	</task:scheduled-tasks>

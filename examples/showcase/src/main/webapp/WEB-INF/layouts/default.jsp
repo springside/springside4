@@ -14,7 +14,7 @@
 
 <link href="${ctx}/static/bootstrap/2.0.4/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <link href="${ctx}/static/styles/showcase.min.css" type="text/css" rel="stylesheet" />
-<script src="${ctx}/static/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script src="${ctx}/static/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 
 <sitemesh:head />
 
