@@ -49,7 +49,7 @@
 		<div class="control-group">
 			<div class="controls">
 				<label class="checkbox inline" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
-				<input id="submit" class="btn" type="submit" value="登录"/>
+				<input id="submit_btn" class="btn" type="submit" value="登录"/>
 				<p class="help-block">(登录帐号:<b>user/user</b>)</p>
 			</div>
 		</div>

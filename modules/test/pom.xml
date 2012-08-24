@@ -120,13 +120,6 @@
 			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
-
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<scope>compile</scope>
-			<optional>true</optional>
-		</dependency>
 		<!-- TEST MODULE end -->
 
 		<!-- TEST begin -->

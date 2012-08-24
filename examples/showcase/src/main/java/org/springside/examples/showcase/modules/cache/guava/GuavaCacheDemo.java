@@ -47,7 +47,7 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 				});
 
 		//初始化数据
-		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
+		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
 
 		//插入appender用于assert。
 		Log4jMockAppender appender = new Log4jMockAppender();

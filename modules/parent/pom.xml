@@ -690,14 +690,6 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-
-			<!-- dbunit -->
-			<dependency>
-				<groupId>org.dbunit</groupId>
-				<artifactId>dbunit</artifactId>
-				<version>2.4.8</version>
-				<scope>test</scope>
-			</dependency>
 			
 			<!-- jetty -->
 			<dependency>

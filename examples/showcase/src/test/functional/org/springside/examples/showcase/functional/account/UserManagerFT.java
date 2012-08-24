@@ -36,7 +36,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		//点击提交按钮
 		s.type(By.name("name"), "user_foo");
 		s.getSelect(By.name("status")).selectByValue("disabled");
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 
 		//重新进入用户修改页面, 检查最后修改者
 		s.click(By.id("editLink-user"));
@@ -46,7 +46,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		//恢复原有值
 		s.type(By.name("name"), "user");
 		s.getSelect(By.name("status")).selectByValue("enabled");
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 	}
 
 	private void loginAsAdminIfNecessary() {
@@ -54,7 +54,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		if ("Showcase示例:登录页".equals(s.getTitle())) {
 			s.type(By.name("username"), "admin");
 			s.type(By.name("password"), "admin");
-			s.click(By.id("submit"));
+			s.click(By.id("submit_btn"));
 		}
 	}
 }

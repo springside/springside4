@@ -27,7 +27,8 @@ public class JpaMappingTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void allClassMapping() throws Exception {
-		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
+		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
+
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();

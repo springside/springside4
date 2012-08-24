@@ -36,7 +36,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 		s.type(By.name("username"), "wrongUser");
 		s.type(By.name("password"), "WrongPassword");
 		s.check(By.name("rememberMe"));
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 
 		assertEquals("QuickStart示例:登录页", s.getTitle());
 		assertTrue(s.isTextPresent("登录失败，请重试."));

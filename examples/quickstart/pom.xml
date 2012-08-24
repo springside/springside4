@@ -364,13 +364,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>2.4.8</version>
-			<scope>test</scope>
-		</dependency>
-
 		<!-- jetty -->
 		<dependency>
 			<groupId>org.eclipse.jetty.aggregate</groupId>
@@ -646,25 +639,14 @@
 								<property file="src/main/resources/application.development-local.properties" />
 								<property file="src/main/resources/application.development.properties" />
 								<property file="src/main/resources/application.properties" />
-
+								
 								<property name="sql.type" value="h2" />
-								<property name="dbunit.datatype" value="org.dbunit.ext.h2.H2DataTypeFactory" />
-
-								<taskdef name="dbunit" classname="org.dbunit.ant.DbUnitTask" classpathref="maven.test.classpath" />
-
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
-									src="src/main/resources/sql/${sql.type}/schema.sql" onerror="continue">
+								
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue">
 									<classpath refid="maven.test.classpath" />
+									<transaction src="src/main/resources/sql/${sql.type}/schema.sql"/>
+									<transaction src="src/test/resources/data/import-data.sql"/>
 								</sql>
-
-								<dbunit driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}">
-									<dbconfig>
-										<property name="datatypeFactory" value="${dbunit.datatype}" />
-									</dbconfig>
-									<classpath refid="maven.test.classpath" />
-									<operation type="CLEAN_INSERT" src="src/test/resources/data/sample-data.xml" format="flat"
-										transaction="true" />
-								</dbunit>
 							</target>
 						</configuration>
 					</plugin>

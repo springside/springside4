@@ -42,7 +42,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 
 		Task task = TaskData.randomTask();
 		s.type(By.id("task.title"), task.getTitle());
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 
 		assertTrue(s.isTextPresent("创建任务成功"));
 
@@ -52,7 +52,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 
 		String newTitle = TaskData.randomTitle();
 		s.type(By.id("task.title"), newTitle);
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 		assertTrue(s.isTextPresent("更新任务成功"));
 	}
 
@@ -60,7 +60,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 	public void inputInValidateValue() {
 		s.open("/task/");
 		s.click(By.linkText("创建任务"));
-		s.click(By.id("submit"));
+		s.click(By.id("submit_btn"));
 
 		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/label")));
 	}

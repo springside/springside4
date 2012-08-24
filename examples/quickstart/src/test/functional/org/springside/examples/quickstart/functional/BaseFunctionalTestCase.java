@@ -87,6 +87,6 @@ public class BaseFunctionalTestCase {
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		DataFixtures.reloadData(dataSource, "/data/sample-data.xml");
+		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
 	}
 }

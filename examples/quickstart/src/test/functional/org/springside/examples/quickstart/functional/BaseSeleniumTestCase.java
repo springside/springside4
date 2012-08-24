@@ -50,7 +50,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			s.type(By.name("username"), "user");
 			s.type(By.name("password"), "user");
 			s.check(By.name("rememberMe"));
-			s.click(By.id("submit"));
+			s.click(By.id("submit_btn"));
 			assertEquals("QuickStart示例:任务管理", s.getTitle());
 		}
 	}
