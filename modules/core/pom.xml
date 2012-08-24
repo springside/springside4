@@ -37,6 +37,7 @@
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-jsp</artifactId>
+			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<!-- Security end -->
