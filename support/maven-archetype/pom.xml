@@ -5,13 +5,13 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC4-SNAPSHOT</version>
+		<version>4.0.0.RC4</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<groupId>org.springside</groupId>
-	<artifactId>springside-mini-web-archetype</artifactId>
+	<artifactId>springside-quickstart-archetype</artifactId>
 	<packaging>maven-archetype</packaging>
-	<name>SpringSide :: Archetype :: Mini-Web</name>
+	<name>SpringSide :: Archetype :: QuickStart</name>
 	
 	<build>
 		<extensions>

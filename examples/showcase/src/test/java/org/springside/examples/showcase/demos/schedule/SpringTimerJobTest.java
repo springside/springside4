@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springside.examples.showcase.demos.schedule.UserCountScanner;
 import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.Log4jMockAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -25,7 +24,7 @@ public class SpringTimerJobTest extends SpringTransactionalTestCase {
 		appender.addToLogger(UserCountScanner.class);
 
 		//等待任务启动
-		Threads.sleep(1000);
+		Threads.sleep(2000);
 
 		//验证任务已执行
 		assertEquals(1, appender.getLogsCount());
