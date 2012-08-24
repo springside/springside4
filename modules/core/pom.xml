@@ -26,6 +26,20 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- PERSISTENCE end -->
+		
+		<!-- Security begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jsp</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- Security end -->
 
 		<!-- UTILS begin -->
 		<dependency>
