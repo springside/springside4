@@ -2,8 +2,8 @@ package org.springside.examples.showcase.functional;
 
 import org.junit.BeforeClass;
 import org.openqa.selenium.WebDriver;
-import org.springside.modules.test.functional.Selenium2;
-import org.springside.modules.test.functional.WebDriverFactory;
+import org.springside.modules.test.selenium.Selenium2;
+import org.springside.modules.test.selenium.WebDriverFactory;
 
 /**
  * 使用Selenium的功能测试基类.

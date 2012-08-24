@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.test.functional;
+package org.springside.modules.test.selenium;
 
 import java.net.MalformedURLException;
 import java.net.URL;

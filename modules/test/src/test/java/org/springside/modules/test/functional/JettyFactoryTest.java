@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.Test;
+import org.springside.modules.test.jetty.JettyFactory;
 
 public class JettyFactoryTest {
 

@@ -1,7 +1,7 @@
 package org.springside.examples.showcase.functional;
 
 import org.eclipse.jetty.server.Server;
-import org.springside.modules.test.functional.JettyFactory;
+import org.springside.modules.test.jetty.JettyFactory;
 
 /**
  * 使用Jetty运行调试Web应用, 在Console快速重载应用.

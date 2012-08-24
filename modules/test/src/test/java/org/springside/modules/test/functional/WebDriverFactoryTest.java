@@ -18,6 +18,7 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.springside.modules.test.selenium.WebDriverFactory;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ WebDriverFactory.class, FirefoxDriver.class, InternetExplorerDriver.class, ChromeDriver.class,

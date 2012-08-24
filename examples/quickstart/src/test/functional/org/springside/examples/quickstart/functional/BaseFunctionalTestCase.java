@@ -9,8 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springside.modules.test.data.DataFixtures;
-import org.springside.modules.test.functional.JettyFactory;
-import org.springside.modules.test.functional.Selenium2;
+import org.springside.modules.test.jetty.JettyFactory;
+import org.springside.modules.test.selenium.Selenium2;
 import org.springside.modules.utils.PropertiesLoader;
 
 /**

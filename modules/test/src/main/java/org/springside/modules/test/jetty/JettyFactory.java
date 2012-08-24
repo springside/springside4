@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  */
-package org.springside.modules.test.functional;
+package org.springside.modules.test.jetty;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import com.google.common.collect.Lists;
 public class JettyFactory {
 
 	private static final String DEFAULT_WEBAPP_PATH = "src/main/webapp";
+	private static final String WINDOWS_WEBDEFAULT_PATH = "jetty/webdefault-windows.xml";
 
 	/**
 	 * 创建用于开发运行调试的Jetty Server, 以src/main/webapp为Web应用目录.
@@ -35,13 +36,13 @@ public class JettyFactory {
 
 		SelectChannelConnector connector = new SelectChannelConnector();
 		connector.setPort(port);
-		//解决Windows下重复启动Jetty居然不报端口冲突的问题.
+		//解决Windows下重复启动Jetty居然不报告端口冲突的问题.
 		connector.setReuseAddress(false);
 		server.setConnectors(new Connector[] { connector });
 
 		WebAppContext webContext = new WebAppContext(DEFAULT_WEBAPP_PATH, contextPath);
-		//设置使用当前线程的ClassLoder以解决JSP不能正确扫描taglib的tld文件的问题。
-		//	webContext.setClassLoader(Thread.currentThread().getContextClassLoader());
+		//修改webdefault.xml，解决Windows下Jetty Lock住静态文件的问题.
+		webContext.setDefaultsDescriptor(WINDOWS_WEBDEFAULT_PATH);
 		server.setHandler(webContext);
 
 		return server;
