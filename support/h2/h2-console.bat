@@ -1,3 +1,3 @@
 @echo off
-call mvn exec:java -Ph2console
+call mvn exec:java
 pause

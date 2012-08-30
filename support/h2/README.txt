@@ -1,1 +1,1 @@
-Command to open a H2 web console or run a standalone H2 Database server.
+Command to open a H2 web console.
