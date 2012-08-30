@@ -5,11 +5,11 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC4</version>
+		<version>4.0.0.RC5-SNAPSHOT</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<groupId>org.springside</groupId>
-	<artifactId>h2-start</artifactId>
+	<artifactId>h2-console</artifactId>
 	<name>H2 Console</name>
 	<packaging>pom</packaging>
 
@@ -22,59 +22,28 @@
 		</dependency>
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>h2server</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<goals>
-									<goal>java</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<mainClass>org.h2.tools.Server</mainClass>
-							<arguments>
-								<argument>-tcp</argument>
-								<arguments>-tcpAllowOthers</arguments>
-							</arguments>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		
-		<profile>
-			<id>h2console</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
-						<executions>
-							<execution>
-								<goals>
-									<goal>java</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<mainClass>org.h2.tools.Server</mainClass>
-							<arguments>
-								<argument>-web</argument>
-								<argument>-webPort</argument>
-								<argument>8090</argument>
-								<argument>-browser</argument>
-							</arguments>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>java</goal>
+							</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<mainClass>org.h2.tools.Server</mainClass>
+					<arguments>
+						<argument>-web</argument>
+						<argument>-webPort</argument>
+						<argument>8090</argument>
+						<argument>-browser</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
