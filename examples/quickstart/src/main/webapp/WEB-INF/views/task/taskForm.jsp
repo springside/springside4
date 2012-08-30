@@ -22,9 +22,15 @@
 		<fieldset>
 			<legend><small>管理任务</small></legend>
 			<div class="control-group">
-				<label for="title" class="control-label">任务名称:</label>
+				<label for="task.title" class="control-label">任务名称:</label>
 				<div class="controls">
 					<input type="text" id="task.title" name="title" size="50" value="${task.title}" class="required" minlength="3"/>
+				</div>
+			</div>	
+			<div class="control-group">
+				<label for="task.description" class="control-label">任务描述:</label>
+				<div class="controls">
+					<textarea id="task.description" name="description">${task.description}</textarea>
 				</div>
 			</div>	
 			<div class="form-actions">

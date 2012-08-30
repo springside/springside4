@@ -1,4 +1,4 @@
-package org.springside.examples.quickstart.web;
+package org.springside.examples.quickstart.web.task;
 
 import java.util.List;
 
@@ -45,13 +45,13 @@ public class TaskController {
 		List<Task> tasks = taskService.getUserTask(userId);
 
 		model.addAttribute("tasks", tasks);
-		return "taskList";
+		return "task/taskList";
 	}
 
 	@RequestMapping(value = "create")
 	public String createForm(Model model) {
 		model.addAttribute("task", new Task());
-		return "taskForm";
+		return "task/taskForm";
 	}
 
 	@RequestMapping(value = "save")
@@ -67,7 +67,7 @@ public class TaskController {
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("task", taskService.getTask(id));
-		return "taskForm";
+		return "task/taskForm";
 	}
 
 	@RequestMapping(value = "save/{id}")

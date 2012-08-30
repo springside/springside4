@@ -12,7 +12,7 @@
 	</c:if>
 	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
-		<thead><tr><th>任务标题</th><th>管理</th></tr></thead>
+		<thead><tr><th>任务</th><th>管理</th></tr></thead>
 		<tbody>
 		<c:forEach items="${tasks}" var="task">
 			<tr>

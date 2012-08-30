@@ -84,8 +84,7 @@
 	<beans profile="development">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
-          			  classpath*:/application.development.properties,
-          			  classpath*:/application.development-local.properties" />	
+          			  classpath*:/application.development.properties" />	
 
 		<!-- DBCP连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
