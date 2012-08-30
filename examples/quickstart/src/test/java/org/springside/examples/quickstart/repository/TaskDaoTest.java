@@ -13,7 +13,7 @@ import org.springside.examples.quickstart.entity.Task;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
-public class TasdkDaoTest extends SpringTransactionalTestCase {
+public class TaskDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired
 	private TaskDao taskDao;

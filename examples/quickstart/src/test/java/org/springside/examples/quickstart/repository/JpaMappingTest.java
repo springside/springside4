@@ -24,7 +24,7 @@ public class JpaMappingTest extends SpringTransactionalTestCase {
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();
-			em.createQuery("select o from " + entityName + " o").getFirstResult();
+			em.createQuery("select o from " + entityName + " o").getResultList();
 			logger.info("ok: " + entityName);
 		}
 	}

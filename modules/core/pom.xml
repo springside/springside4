@@ -17,6 +17,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<!-- SPRING end -->
 		<!-- PERSISTENCE begin -->

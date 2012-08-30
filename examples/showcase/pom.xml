@@ -33,15 +33,15 @@
 		</dependency>
 		<!-- SPRINGSIDE end -->
 
-		<!-- SPRING begin -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-		</dependency>
+		<!-- SPRING basic begin -->
+		<!-- email/scheduler/freemarker -->
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
+		<!-- SPRING basic end -->
+		
+		<!-- AOP -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
