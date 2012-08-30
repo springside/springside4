@@ -40,19 +40,19 @@
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" size="50" value="${user.loginName}" class="required"/>
+					<input type="text" id="loginName" name="loginName" value="${user.loginName}" class="input-medium required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" size="50" value="${user.name}" class="required"/>
+					<input type="text" id="name" name="name"  value="${user.name}" class="input-medium required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="plainPassword" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="plainPassword" name="plainPassword" size="50"/>
+					<input type="password" id="plainPassword" name="plainPassword" class="input-medium"/>
 				</div>
 			</div>
 			<div class="control-group">

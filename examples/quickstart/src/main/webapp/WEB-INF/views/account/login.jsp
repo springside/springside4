@@ -4,7 +4,6 @@
 <%@ page import="org.apache.shiro.authc.IncorrectCredentialsException"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -17,7 +16,7 @@
 </head>
 
 <body>
-	<form:form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
+	<form id="loginForm" action="${ctx}/login" method="post" class="form-horizontal">
 	<%
 	String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 	if(error != null){
@@ -36,23 +35,23 @@
 		<div class="control-group">
 			<label for="username" class="control-label">名称:</label>
 			<div class="controls">
-				<input type="text" id="username" name="username" size="50" value="${username}" class="required span2"/>
+				<input type="text" id="username" name="username"  value="${username}" class="input-medium required"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label for="password" class="control-label">密码:</label>
 			<div class="controls">
-				<input type="password" id="password" name="password" size="50"  class="required span2"/>
+				<input type="password" id="password" name="password" class="input-medium required"/>
 			</div>
 		</div>
-		
+				
 		<div class="control-group">
 			<div class="controls">
-				<label class="checkbox inline" for="rememberMe"> <input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
-				<input id="submit_btn" class="btn" type="submit" value="登录"/>
-				<p class="help-block">(登录帐号:<b>user/user</b>)</p>
+				<label class="checkbox" for="rememberMe"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
+				<input id="submit_btn" class="btn btn-primary" type="submit" value="登录"/> <a class="btn" href="${ctx}/register">注册</a>
+			 	<span class="help-block">(默认登录帐号:<b>user/user</b>)</span>
 			</div>
 		</div>
-	</form:form>
+	</form>
 </body>
 </html>

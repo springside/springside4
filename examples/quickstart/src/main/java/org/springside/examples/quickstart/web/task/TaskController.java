@@ -39,7 +39,7 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(value = { "list", "" })
+	@RequestMapping(value = "")
 	public String list(Model model) {
 		Long userId = getCurrentUserId();
 		List<Task> tasks = taskService.getUserTask(userId);

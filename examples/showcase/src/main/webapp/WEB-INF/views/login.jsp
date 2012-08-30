@@ -3,7 +3,6 @@
 <%@ page import="org.apache.shiro.authc.LockedAccountException "%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
@@ -21,7 +20,7 @@
 
 <body>
 	<h1>登录页</h1>
-	<form:form id="loginForm"  action="${ctx}/login" method="post">
+	<form id="loginForm" action="${ctx}/login" method="post">
 		<%
 			String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 			if(error != null){
@@ -49,13 +48,13 @@
 		<div class="control-group">
 			<label for="username" class="control-label">名称:</label>
 			<div class="controls">
-				<input type="text" id="username" name="username" size="50" value="${username}" class="required span2"/>
+				<input type="text" id="username" name="username" value="${username}" class="input-medium required"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<label for="password" class="control-label">密码:</label>
 			<div class="controls">
-				<input type="password" id="password" name="password" size="50" class="required span2"/>
+				<input type="password" id="password" name="password" class="input-medium required"/>
 			</div>
 		</div>
 		<div class="control-group">
@@ -65,6 +64,6 @@
 				<p class="help-block">(管理员<b>admin/admin</b>, 普通用户<b>user/user</b>)</p>
 			</div>
 		</div>
-	</form:form>
+	</form>
 </body>
 </html>
