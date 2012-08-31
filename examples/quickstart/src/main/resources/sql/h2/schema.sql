@@ -16,5 +16,6 @@ create table ss_user (
 	name varchar(64),
 	password varchar(255),
 	salt varchar(64),
+	roles varchar(255),
 	primary key (id)
 );

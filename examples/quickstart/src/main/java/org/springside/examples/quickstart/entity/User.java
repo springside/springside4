@@ -1,9 +1,13 @@
 package org.springside.examples.quickstart.entity;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -18,6 +22,7 @@ public class User extends IdEntity {
 	private String plainPassword;
 	private String password;
 	private String salt;
+	private String roles;
 
 	public User() {
 	}
@@ -69,6 +74,20 @@ public class User extends IdEntity {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public String getRoles() {
+		return roles;
+	}
+
+	public void setRoles(String roles) {
+		this.roles = roles;
+	}
+
+	@Transient
+	@JsonIgnore
+	public List<String> getRoleList() {
+		return Arrays.asList(StringUtils.split(roles, ","));
 	}
 
 	@Override

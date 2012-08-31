@@ -31,6 +31,7 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
@@ -60,11 +61,18 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 	/**
 	 * 授权查询回调函数, 进行鉴权但缓存中无用户的授权信息时调用.
-	 * 本用例不演示授权校验，因此直接返回Null.
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		return null;
+		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
+		User user = accountService.findUserByLoginName(shiroUser.loginName);
+		if (user != null) {
+			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+			info.addRoles(user.getRoleList());
+			return info;
+		} else {
+			return null;
+		}
 	}
 
 	/**

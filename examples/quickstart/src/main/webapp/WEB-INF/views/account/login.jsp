@@ -49,7 +49,7 @@
 			<div class="controls">
 				<label class="checkbox" for="rememberMe"><input type="checkbox" id="rememberMe" name="rememberMe"/> 记住我</label>
 				<input id="submit_btn" class="btn btn-primary" type="submit" value="登录"/> <a class="btn" href="${ctx}/register">注册</a>
-			 	<span class="help-block">(默认登录帐号:<b>user/user</b>)</span>
+			 	<span class="help-block">(登录帐号:<b>admin/admin</b>,<b>user/user</b>)</span>
 			</div>
 		</div>
 	</form>
