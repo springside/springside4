@@ -20,7 +20,7 @@ public class TaskDaoTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void findTasksByUserId() throws Exception {
-		List<Task> tasks = taskDao.findByUserId(1L, new Sort(Direction.ASC, "id"));
+		List<Task> tasks = taskDao.findByUserId(2L, new Sort(Direction.ASC, "id"));
 		assertEquals(5, tasks.size());
 		assertEquals(new Long(1), tasks.get(0).getId());
 

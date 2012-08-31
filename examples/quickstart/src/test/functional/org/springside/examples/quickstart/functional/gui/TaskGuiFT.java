@@ -62,6 +62,6 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 		s.click(By.linkText("创建任务"));
 		s.click(By.id("submit_btn"));
 
-		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/label")));
+		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/span")));
 	}
 }
