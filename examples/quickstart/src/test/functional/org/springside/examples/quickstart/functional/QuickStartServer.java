@@ -13,7 +13,8 @@ public class QuickStartServer {
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/quickstart";
 	public static final String BASE_URL = "http://localhost:8080/quickstart";
-	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web" };
+	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web",
+			"springside-core" };
 
 	public static void main(String[] args) throws Exception {
 		//设定Spring的profile

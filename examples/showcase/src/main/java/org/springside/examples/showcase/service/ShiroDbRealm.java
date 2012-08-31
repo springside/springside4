@@ -70,20 +70,25 @@ public class ShiroDbRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		ShiroUser shiroUser = (ShiroUser) principals.fromRealm(getName()).iterator().next();
-		User user = accountService.findUserByLoginName(shiroUser.loginName);
-		if (user != null) {
-			SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-			for (Role role : user.getRoleList()) {
-				//基于Role的权限信息
-				info.addRole(role.getName());
-				//基于Permission的权限信息
-				info.addStringPermissions(role.getPermissionList());
-			}
-			return info;
-		} else {
+		Object principal = principals.getPrimaryPrincipal();
+		if (principal == null) {
 			return null;
 		}
+
+		ShiroUser shiroUser = (ShiroUser) principal;
+		User user = accountService.findUserByLoginName(shiroUser.loginName);
+		if (user == null) {
+			return null;
+		}
+
+		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+		for (Role role : user.getRoleList()) {
+			//基于Role的权限信息
+			info.addRole(role.getName());
+			//基于Permission的权限信息
+			info.addStringPermissions(role.getPermissionList());
+		}
+		return info;
 	}
 
 	/**

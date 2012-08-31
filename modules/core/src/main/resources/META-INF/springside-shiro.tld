@@ -30,7 +30,7 @@
 
   <uri>http://www.springside.org.cn/tags/shiro</uri>
 
-  <description>Apache Shiro JSP Tag Library.</description>
+  <description>Apache Shiro JSP Tag Library extends the hasAnyPermissions tag.</description>
 
   <tag>
     <name>hasPermission</name>

@@ -1,6 +1,7 @@
 package org.springside.examples.showcase.web;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -19,7 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountService;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 @Controller
 @RequestMapping(value = "/account/user")
@@ -28,9 +29,16 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
+	private static Map<String, String> allStatus = Maps.newHashMap();
+
+	static {
+		allStatus.put("enabled", "Enabled");
+		allStatus.put("disabled", "Disabled");
+	}
+
 	//特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
-	@RequestMapping(value = { "list", "" })
+	@RequestMapping(value = "")
 	public String list(Model model) {
 		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
@@ -41,7 +49,6 @@ public class UserController {
 	@RequestMapping(value = "update/{id}")
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", accountService.getUser(id));
-		List<String> allStatus = Lists.newArrayList("enabled", "disabled");
 		model.addAttribute("allStatus", allStatus);
 		return "account/userForm";
 	}

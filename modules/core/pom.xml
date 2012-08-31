@@ -43,6 +43,15 @@
 		</dependency>
 		<!-- Security end -->
 
+		<!-- Web begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!-- Wed end -->
+		
+		
 		<!-- UTILS begin -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
