@@ -6,8 +6,6 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +14,11 @@ import org.springside.examples.quickstart.entity.User;
 import org.springside.examples.quickstart.service.account.AccountService;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 
+/**
+ * 用户修改自己资料的Controller.
+ * 
+ * @author calvin
+ */
 @Controller
 @RequestMapping(value = "/profile")
 public class ProfileController {
@@ -42,19 +45,11 @@ public class ProfileController {
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
 	@ModelAttribute("user")
-	private User getUser(@RequestParam(value = "id", required = false) Long id) {
+	public User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
 			return accountService.getUser(id);
 		}
 		return null;
-	}
-
-	/**
-	 * 不要绑定对象中的id属性.
-	 */
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		binder.setDisallowedFields("id");
 	}
 
 	/**

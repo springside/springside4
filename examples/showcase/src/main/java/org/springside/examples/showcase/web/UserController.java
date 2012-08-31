@@ -10,8 +10,6 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,7 +28,7 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
-	//特别设定多个ReuiresRole之间为Or关系，而不是默认的And.
+	//特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
 	@RequestMapping(value = { "list", "" })
 	public String list(Model model) {
@@ -49,7 +47,7 @@ public class UserController {
 	}
 
 	@RequiresPermissions("user:edit")
-	@RequestMapping(value = "save/{id}")
+	@RequestMapping(value = "save/{userId}")
 	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountService.saveUser(user);
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
@@ -79,13 +77,5 @@ public class UserController {
 			return accountService.getUser(id);
 		}
 		return null;
-	}
-
-	/**
-	 * 不要绑定对象中的id属性.
-	 */
-	@InitBinder
-	protected void initBinder(WebDataBinder binder) {
-		binder.setDisallowedFields("id");
 	}
 }

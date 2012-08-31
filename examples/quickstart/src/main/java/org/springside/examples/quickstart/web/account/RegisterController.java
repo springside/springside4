@@ -12,6 +12,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.quickstart.entity.User;
 import org.springside.examples.quickstart.service.account.AccountService;
 
+/**
+ * 用户注册的Controller.
+ * 
+ * @author calvin
+ */
 @Controller
 @RequestMapping(value = "/register")
 public class RegisterController {
