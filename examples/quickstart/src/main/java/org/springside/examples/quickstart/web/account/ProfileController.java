@@ -30,7 +30,7 @@ public class ProfileController {
 	public String updateForm(Model model) {
 		Long id = getCurrentUserId();
 		model.addAttribute("user", accountService.getUser(id));
-		return "account/profileForm";
+		return "account/profile";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)

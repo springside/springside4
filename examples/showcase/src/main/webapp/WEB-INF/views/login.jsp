@@ -25,24 +25,18 @@
 			String error = (String) request.getAttribute(FormAuthenticationFilter.DEFAULT_ERROR_KEY_ATTRIBUTE_NAME);
 			if(error != null){
 		%>
-				<div class="control-group">
-				<div class="controls ">
-					<div class="alert alert-error">
-						<button class="close" data-dismiss="alert">×</button>
-					
+				<div class="alert alert-error controls input-large">
+					<button class="close" data-dismiss="alert">×</button>
 		<%
-			if(error.contains("DisabledAccountException")){
-				out.print("用户已被屏蔽,请登录其他用户.");
-			}
-			else{
-				out.print("登录失败，请重试.");
-			}
+				if(error.contains("DisabledAccountException")){
+					out.print("用户已被屏蔽,请登录其他用户.");
+				}
+				else{
+					out.print("登录失败，请重试.");
+				}
 		%>		
-					</div>
 				</div>
-			</div>	
 		<%
-				
 			}
 		%>
 		<div class="control-group">

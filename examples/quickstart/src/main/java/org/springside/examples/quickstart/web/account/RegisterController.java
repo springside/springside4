@@ -26,7 +26,7 @@ public class RegisterController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String registerForm() {
-		return "account/registerForm";
+		return "account/register";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
