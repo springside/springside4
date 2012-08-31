@@ -9,9 +9,11 @@
 	<script>
 		$(document).ready(function() {
 			//聚焦第一个输入框
-			$("#title").focus();
+			$("#task_title").focus();
 			//为inputForm注册validate函数
-			$("#inputForm").validate();
+			$("#inputForm").validate({
+				errorElement: "span"
+			});
 		});
 	</script>
 </head>
@@ -22,15 +24,15 @@
 		<fieldset>
 			<legend><small>管理任务</small></legend>
 			<div class="control-group">
-				<label for="task.title" class="control-label">任务名称:</label>
+				<label for="task_title" class="control-label">任务名称:</label>
 				<div class="controls">
-					<input type="text" id="task.title" name="title"  value="${task.title}" class="input-large required" minlength="3"/>
+					<input type="text" id="task_title" name="title"  value="${task.title}" class="input-large required" minlength="3"/>
 				</div>
 			</div>	
 			<div class="control-group">
-				<label for="task.description" class="control-label">任务描述:</label>
+				<label for="description" class="control-label">任务描述:</label>
 				<div class="controls">
-					<textarea id="task.description" name="description" class="input-large">${task.description}</textarea>
+					<textarea id="description" name="description" class="input-large">${task.description}</textarea>
 				</div>
 			</div>	
 			<div class="form-actions">

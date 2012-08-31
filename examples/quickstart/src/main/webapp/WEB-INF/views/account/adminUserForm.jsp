@@ -3,7 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>用户注册</title>
+	<title>用户管理</title>
 	
 	<script>
 		$(document).ready(function() {
@@ -11,7 +11,7 @@
 			$("#name").focus();
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
-			
+				errorElement: "span"
 			});
 		});
 	</script>

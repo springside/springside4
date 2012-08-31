@@ -14,6 +14,7 @@
 			
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
+				errorElement: "span",
 				rules: {
 					loginName: {
 						remote: "${ctx}/account/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')
@@ -40,19 +41,19 @@
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" value="${user.loginName}" class="input-medium required"/>
+					<input type="text" id="loginName" name="loginName" value="${user.loginName}" class="input-large required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name"  value="${user.name}" class="input-medium required"/>
+					<input type="text" id="name" name="name"  value="${user.name}" class="input-large required"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="plainPassword" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="plainPassword" name="plainPassword" class="input-medium"/>
+					<input type="password" id="plainPassword" name="plainPassword" class="input-large" placeholder="...Leave it blank if no change"/>
 				</div>
 			</div>
 			<div class="control-group">

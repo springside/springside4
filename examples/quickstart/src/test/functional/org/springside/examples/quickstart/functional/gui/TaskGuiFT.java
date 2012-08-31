@@ -41,17 +41,17 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 		s.click(By.linkText("创建任务"));
 
 		Task task = TaskData.randomTask();
-		s.type(By.id("task.title"), task.getTitle());
+		s.type(By.id("task_title"), task.getTitle());
 		s.click(By.id("submit_btn"));
 
 		assertTrue(s.isTextPresent("创建任务成功"));
 
 		//update
 		s.click(By.linkText(task.getTitle()));
-		assertEquals(task.getTitle(), s.getValue(By.id("task.title")));
+		assertEquals(task.getTitle(), s.getValue(By.id("task_title")));
 
 		String newTitle = TaskData.randomTitle();
-		s.type(By.id("task.title"), newTitle);
+		s.type(By.id("task_title"), newTitle);
 		s.click(By.id("submit_btn"));
 		assertTrue(s.isTextPresent("更新任务成功"));
 	}

@@ -11,6 +11,7 @@
 			$("#loginName").focus();
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
+				errorElement: "span",
 				rules: {
 					loginName: {
 						remote: "${ctx}/register/checkLoginName"

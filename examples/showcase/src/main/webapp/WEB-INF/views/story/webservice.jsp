@@ -12,7 +12,7 @@
 </head>
 
 <body>
-		<h1>Web Service 演示</h2>
+		<h1>Web Service 演示</h1>
 
 		<h2>传统SOAP Web Service演示</h2>
 		<ul>
