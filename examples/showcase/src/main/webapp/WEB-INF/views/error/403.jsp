@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<div><h1>用户权限不足.</h1></div>
-	<div><a href="<c:url value="/"/>">返回首页</a></div>
+	<h2>403 - 用户权限不足.</h2>
+	<p><a href="<c:url value="/"/>">返回首页</a></p>
 </body>
 </html>

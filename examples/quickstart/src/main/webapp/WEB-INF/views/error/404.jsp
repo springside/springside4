@@ -10,9 +10,7 @@
 </head>
 
 <body>
-<div>
-	<div><h1>页面不存在.</h1></div>
-	<div><a href="<c:url value="/"/>">返回首页</a></div>
-</div>
+	<h2>404 - 页面不存在.</h2>
+	<p><a href="<c:url value="/"/>">返回首页</a></p>
 </body>
 </html>
