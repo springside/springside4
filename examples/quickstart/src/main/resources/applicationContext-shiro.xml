@@ -25,9 +25,10 @@
 			<value>
 				/login = authc
 				/logout = logout
-				/static/* = anon
-				/admin/* = roles[admin]
-				/* = user
+				/static/** = anon
+				/api/** = anon
+				/admin/** = roles[admin]
+				/** = user
 			</value>
 		</property>
 	</bean>
