@@ -21,9 +21,10 @@
 
 	<!-- Jpa Entity Manager 配置 -->
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
-		<property name="dataSource" ref="dataSource"/> 
+		<property name="dataSource" ref="dataSource"/>
 		<property name="persistenceUnitName" value="defaultPU"/>
-		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/> 
+		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+		<property name="persistenceXmlLocation" value="classpath*:META-INF/jpa_persistence.xml" />
 		<property name="jpaProperties">
 			<props>
 				<!-- 命名规则 My_NAME->MyName -->
