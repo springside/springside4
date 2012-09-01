@@ -60,6 +60,9 @@ public class ProfileController {
 		return user.id;
 	}
 
+	/**
+	 * 更新Shiro中当前用户的用户名.
+	 */
 	private void updateCurrentUserName(String userName) {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
 		user.name = userName;

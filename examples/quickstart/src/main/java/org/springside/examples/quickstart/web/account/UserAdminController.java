@@ -32,6 +32,7 @@ public class UserAdminController {
 	public String list(Model model) {
 		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
+
 		return "account/adminUserList";
 	}
 

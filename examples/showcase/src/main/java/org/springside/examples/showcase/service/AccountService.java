@@ -81,7 +81,7 @@ public class AccountService {
 		user.setPassword(Encodes.encodeHex(hashPassword));
 	}
 
-	public List<User> getAllUsers() {
+	public List<User> getAllUser() {
 
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
@@ -150,7 +150,7 @@ public class AccountService {
 	//   Role Management  //
 	//--------------------//
 
-	public List<Role> getAllRoles() {
+	public List<Role> getAllRole() {
 		return (List<Role>) roleDao.findAll();
 	}
 

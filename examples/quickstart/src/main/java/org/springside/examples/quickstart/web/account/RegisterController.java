@@ -36,6 +36,9 @@ public class RegisterController {
 		return "redirect:/login";
 	}
 
+	/**
+	 * Ajax请求校验loginName是否唯一。
+	 */
 	@RequestMapping(value = "checkLoginName")
 	@ResponseBody
 	public String checkLoginName(@RequestParam("loginName") String loginName) {

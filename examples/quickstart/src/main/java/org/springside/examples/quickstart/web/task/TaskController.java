@@ -1,20 +1,24 @@
 package org.springside.examples.quickstart.web.task;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.entity.User;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.examples.quickstart.service.task.TaskService;
+
+import com.google.common.collect.Maps;
 
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
@@ -35,12 +39,22 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(value = "")
-	public String list(Model model) {
-		Long userId = getCurrentUserId();
-		List<Task> tasks = taskService.getUserTask(userId);
+	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
+	static {
+		sortTypes.put("auto", "自动");
+		sortTypes.put("title", "标题");
+	}
 
+	@RequestMapping(value = "")
+	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
+			@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+		Long userId = getCurrentUserId();
+		Page<Task> tasks = taskService.getUserTask(userId, page, sortType);
 		model.addAttribute("tasks", tasks);
+
+		model.addAttribute("sortType", sortType);
+		model.addAttribute("sortTypes", sortTypes);
+
 		return "task/taskList";
 	}
 

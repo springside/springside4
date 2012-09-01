@@ -43,7 +43,7 @@ public class UserController {
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
 	@RequestMapping(value = "")
 	public String list(Model model) {
-		List<User> users = accountService.getAllUsers();
+		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
 		model.addAttribute("allStatus", allStatus);
 		return "account/userList";
@@ -54,7 +54,7 @@ public class UserController {
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", accountService.getUser(id));
 		model.addAttribute("allStatus", allStatus);
-		model.addAttribute("allRoles", accountService.getAllRoles());
+		model.addAttribute("allRoles", accountService.getAllRole());
 		return "account/userForm";
 	}
 

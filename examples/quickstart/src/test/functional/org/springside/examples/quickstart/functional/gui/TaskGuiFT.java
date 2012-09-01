@@ -26,7 +26,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 	public void viewTaskList() {
 		s.open("/task/");
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("Study PlayFramework 2.0", s.getTable(table, 0, 0));
+		assertEquals("Release SpringSide 4.0", s.getTable(table, 0, 0));
 	}
 
 	/**

@@ -2,11 +2,10 @@ package org.springside.examples.quickstart.repository;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.quickstart.entity.Task;
@@ -20,11 +19,11 @@ public class TaskDaoTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void findTasksByUserId() throws Exception {
-		List<Task> tasks = taskDao.findByUserId(2L, new Sort(Direction.ASC, "id"));
-		assertEquals(5, tasks.size());
-		assertEquals(new Long(1), tasks.get(0).getId());
+		Page<Task> tasks = taskDao.findByUserId(2L, new PageRequest(0, 100, Direction.ASC, "id"));
+		assertEquals(5, tasks.getContent().size());
+		assertEquals(new Long(1), tasks.getContent().get(0).getId());
 
-		tasks = taskDao.findByUserId(99999L, new Sort(Direction.ASC, "id"));
-		assertEquals(0, tasks.size());
+		tasks = taskDao.findByUserId(99999L, new PageRequest(0, 100, Direction.ASC, "id"));
+		assertEquals(0, tasks.getContent().size());
 	}
 }

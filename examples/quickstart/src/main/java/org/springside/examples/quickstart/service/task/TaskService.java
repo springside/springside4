@@ -3,6 +3,8 @@ package org.springside.examples.quickstart.service.task;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,8 @@ import org.springside.examples.quickstart.repository.TaskDao;
 //默认将类中的所有public函数纳入事务管理.
 @Transactional(readOnly = true)
 public class TaskService {
+
+	private static final int PAGE_SIZE = 3;
 
 	private TaskDao taskDao;
 
@@ -33,15 +37,31 @@ public class TaskService {
 	}
 
 	public List<Task> getAllTask() {
-		return (List<Task>) taskDao.findAll(new Sort(Direction.ASC, "id"));
+		return (List<Task>) taskDao.findAll();
 	}
 
-	public List<Task> getUserTask(Long userId) {
-		return taskDao.findByUserId(userId, new Sort(Direction.ASC, "id"));
+	public Page<Task> getUserTask(Long userId, int page, String sortType) {
+		PageRequest pageRequest = buildPageRequest(page, sortType);
+		return taskDao.findByUserId(userId, pageRequest);
 	}
 
 	@Autowired
 	public void setTaskDao(TaskDao taskDao) {
 		this.taskDao = taskDao;
+	}
+
+	/**
+	 * 创建分页请求.
+	 */
+	private PageRequest buildPageRequest(int page, String sortType) {
+
+		Sort sort = null;
+		if ("auto".equals(sortType)) {
+			sort = new Sort(Direction.DESC, "id");
+		} else if ("title".equals(sortType)) {
+			sort = new Sort(Direction.ASC, "title");
+		}
+
+		return new PageRequest(page - 1, PAGE_SIZE, sort);
 	}
 }
