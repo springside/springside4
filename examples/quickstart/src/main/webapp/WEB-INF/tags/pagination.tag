@@ -6,24 +6,8 @@
 
 <%
 int current =  page.getNumber() + 1;
-
-int totalPages = page.getTotalPages();
 int begin = Math.max(1, current - paginationSize/2);
-
-/* if ((current - paginationSize/2)<1){
-	begin=1;
-}else{
-	//if(totalPages> (current +paginationSize/2 ))
-		begin =;
-	//else
-		//begin = current - paginationSize/2 +(totalPages-(current+paginationSize/2)); 
-//current =4
-// total=5
-// pageSize=4
-// /2=2
-} */
-int end = Math.min(begin + paginationSize - 1,totalPages);
-
+int end = Math.min(begin + paginationSize/2 - 1, page.getTotalPages());
 
 request.setAttribute("current", current);
 request.setAttribute("begin", begin);
