@@ -35,17 +35,17 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 
 		//点击提交按钮
 		s.type(By.name("name"), "user_foo");
-		s.getSelect(By.name("status")).selectByValue("disabled");
+		s.check(By.id("status2"));
 		s.click(By.id("submit_btn"));
 
 		//重新进入用户修改页面, 检查最后修改者
 		s.click(By.id("editLink-user"));
 		assertEquals("user_foo", s.getValue(By.name("name")));
-		assertEquals("disabled", s.getSelect(By.name("status")).getFirstSelectedOption().getText());
+		assertTrue(s.isChecked(By.id("status2")));
 
 		//恢复原有值
 		s.type(By.name("name"), "user");
-		s.getSelect(By.name("status")).selectByValue("enabled");
+		s.check(By.id("status1"));
 		s.click(By.id("submit_btn"));
 	}
 

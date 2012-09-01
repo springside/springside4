@@ -27,6 +27,13 @@ public class Role extends IdEntity {
 
 	private String permissions;
 
+	public Role() {
+	}
+
+	public Role(Long id) {
+		this.id = id;
+	}
+
 	@Column(nullable = false, unique = true)
 	public String getName() {
 		return name;

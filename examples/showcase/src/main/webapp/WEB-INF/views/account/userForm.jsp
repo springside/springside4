@@ -57,6 +57,12 @@
 				</div>
 			</div>
 			<div class="control-group">
+				<label for="groupList" class="control-label">角色:</label>
+				<div class="controls">
+					<form:bscheckboxes path="roleList" items="${allRoles}" itemLabel="name" itemValue="id" />
+				</div>
+			</div>	
+			<div class="control-group">
 				<label for="status" class="control-label">状态:</label>
 				<div class="controls">
 					<form:bsradiobuttons path="status" items="${allStatus}" labelCssClass="inline"/>

@@ -11,12 +11,15 @@ import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountService;
 
@@ -40,7 +43,7 @@ public class UserController {
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
 	@RequestMapping(value = "")
 	public String list(Model model) {
-		List<User> users = accountService.getAllUser();
+		List<User> users = accountService.getAllUsers();
 		model.addAttribute("users", users);
 		model.addAttribute("allStatus", allStatus);
 		return "account/userList";
@@ -51,13 +54,24 @@ public class UserController {
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", accountService.getUser(id));
 		model.addAttribute("allStatus", allStatus);
+		model.addAttribute("allRoles", accountService.getAllRoles());
 		return "account/userForm";
 	}
 
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "save/{userId}")
-	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("user") User user,
+			@RequestParam(value = "roleList") List<Long> checkedRoleList, RedirectAttributes redirectAttributes) {
+
+		//bind roleList
+		user.getRoleList().clear();
+		for (Long roleId : checkedRoleList) {
+			Role role = new Role(roleId);
+			user.getRoleList().add(role);
+		}
+
 		accountService.saveUser(user);
+
 		redirectAttributes.addFlashAttribute("message", "保存用户成功");
 		return "redirect:/account/user";
 	}
@@ -85,5 +99,13 @@ public class UserController {
 			return accountService.getUser(id);
 		}
 		return null;
+	}
+
+	/**
+	 * 不自动绑定对象中的roleList属性，另行处理
+	 */
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+		binder.setDisallowedFields("roleList");
 	}
 }

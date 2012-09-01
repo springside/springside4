@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.showcase.demos.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.demos.jmx.ApplicationStatistics;
+import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
+import org.springside.examples.showcase.repository.jpa.RoleDao;
 import org.springside.examples.showcase.repository.jpa.UserDao;
 import org.springside.modules.persistence.Hibernates;
 import org.springside.modules.security.utils.Digests;
@@ -33,6 +35,8 @@ public class AccountService {
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
+
+	private RoleDao roleDao;
 
 	private NotifyMessageProducer notifyProducer; //JMS消息发送
 
@@ -77,7 +81,7 @@ public class AccountService {
 		user.setPassword(Encodes.encodeHex(hashPassword));
 	}
 
-	public List<User> getAllUser() {
+	public List<User> getAllUsers() {
 
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
@@ -142,9 +146,26 @@ public class AccountService {
 		}
 	}
 
+	//--------------------//
+	//   Role Management  //
+	//--------------------//
+
+	public List<Role> getAllRoles() {
+		return (List<Role>) roleDao.findAll();
+	}
+
+	//-----------------//
+	// Setter methods  //
+	//-----------------//
+
 	@Autowired
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+
+	@Autowired
+	public void setRoleDao(RoleDao roleDao) {
+		this.roleDao = roleDao;
 	}
 
 	@Autowired(required = false)
