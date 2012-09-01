@@ -34,7 +34,7 @@
 					<td>${user.name}&nbsp;</td>
 					<td>${user.email}&nbsp;</td>
 					<td>${user.roleNames}&nbsp;</td>
-					<td>${user.status}&nbsp;</td>
+					<td>${allStatus[user.status]}&nbsp;</td>
 					<td>
 						<shiro:hasPermission name="user:edit">
 							<a href="${ctx}/account/user/update/${user.id}" id="editLink-${user.loginName}">修改</a>

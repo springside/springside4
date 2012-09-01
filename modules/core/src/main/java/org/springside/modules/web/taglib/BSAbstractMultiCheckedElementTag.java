@@ -12,12 +12,21 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.web.servlet.tags.form.AbstractMultiCheckedElementTag;
 import org.springframework.web.servlet.tags.form.TagWriter;
 
+/**
+ * 重载实现Twitter Bootstrap的格式.
+ * 
+ * @author calvin
+ */
 public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiCheckedElementTag {
 
+	private String labelCssClass;
+
+	public void setLabelCssClass(String labelCssClass) {
+		this.labelCssClass = labelCssClass;
+	}
+
 	/**
-	 * Renders the '<code>input type="radio"</code>' element with the configured
-	 * {@link #setItems(Object)} values. Marks the element as checked if the
-	 * value matches the bound value.
+	 * Copy & Paste, 无修正.
 	 */
 	@Override
 	protected int writeTagContent(TagWriter tagWriter) throws JspException {
@@ -68,6 +77,9 @@ public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiChec
 		return SKIP_BODY;
 	}
 
+	/**
+	 * Copy & Paste, 无修正.
+	 */
 	private void writeObjectEntry(TagWriter tagWriter, String valueProperty, String labelProperty, Object item,
 			int itemIndex) throws JspException {
 
@@ -84,6 +96,9 @@ public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiChec
 		writeElementTag(tagWriter, item, renderValue, renderLabel, itemIndex);
 	}
 
+	/**
+	 * Copy & Paste, 无修正.
+	 */
 	private void writeMapEntry(TagWriter tagWriter, String valueProperty, String labelProperty, Map.Entry entry,
 			int itemIndex) throws JspException {
 
@@ -97,12 +112,22 @@ public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiChec
 		writeElementTag(tagWriter, mapKey, renderValue, renderLabel, itemIndex);
 	}
 
+	/**
+	 * 重载方法，调整元素的输出顺序。
+	 */
 	private void writeElementTag(TagWriter tagWriter, Object item, Object value, Object label, int itemIndex)
 			throws JspException {
 		String id = resolveId();
+
+		String resolvedLabelClass = getInputType();
+		if (labelCssClass != null) {
+			resolvedLabelClass += " " + labelCssClass;
+		}
+
 		tagWriter.startTag("label");
 		tagWriter.writeAttribute("for", id);
-		tagWriter.writeAttribute("class", getInputType());
+
+		tagWriter.writeAttribute("class", resolvedLabelClass);
 
 		if (itemIndex > 0) {
 			Object resolvedDelimiter = evaluate("delimiter", getDelimiter());

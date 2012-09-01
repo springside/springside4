@@ -2414,6 +2414,12 @@
 		<tag-class>org.springside.modules.web.taglib.BSRadioButtonsTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
+			<description>Equivalent to "class" for label emelement. - HTML Optional Attribute</description>
+			<name>labelCssClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<description>Path to property for data binding</description>
 			<name>path</name>
 			<required>true</required>
@@ -2601,6 +2607,12 @@
 		<name>bscheckboxes</name>
 		<tag-class>org.springside.modules.web.taglib.BSCheckboxesTag</tag-class>
 		<body-content>empty</body-content>
+		<attribute>
+			<description>Equivalent to "class" for label emelement. - HTML Optional Attribute</description>
+			<name>labelCssClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 		<attribute>
 			<description>Path to property for data binding</description>
 			<name>path</name>

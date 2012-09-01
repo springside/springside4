@@ -59,7 +59,7 @@
 			<div class="control-group">
 				<label for="status" class="control-label">状态:</label>
 				<div class="controls">
-					<form:bsradiobuttons path="status" items="${allStatus}" />
+					<form:bsradiobuttons path="status" items="${allStatus}" labelCssClass="inline"/>
 				</div>
 			</div>
 			<div class="form-actions">

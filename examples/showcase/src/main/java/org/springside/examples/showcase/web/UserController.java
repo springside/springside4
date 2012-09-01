@@ -32,8 +32,8 @@ public class UserController {
 	private static Map<String, String> allStatus = Maps.newHashMap();
 
 	static {
-		allStatus.put("enabled", "Enabled");
-		allStatus.put("disabled", "Disabled");
+		allStatus.put("enabled", "有效");
+		allStatus.put("disabled", "无效");
 	}
 
 	//特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
@@ -42,6 +42,7 @@ public class UserController {
 	public String list(Model model) {
 		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
+		model.addAttribute("allStatus", allStatus);
 		return "account/userList";
 	}
 
