@@ -39,6 +39,8 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
+	private static final int PAGE_SIZE = 3;
+
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {
 		sortTypes.put("auto", "自动");
@@ -47,9 +49,9 @@ public class TaskController {
 
 	@RequestMapping(value = "")
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
-			@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model) {
 		Long userId = getCurrentUserId();
-		Page<Task> tasks = taskService.getUserTask(userId, page, sortType);
+		Page<Task> tasks = taskService.getUserTask(userId, pageNumber, PAGE_SIZE, sortType);
 		model.addAttribute("tasks", tasks);
 
 		model.addAttribute("sortType", sortType);

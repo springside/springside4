@@ -18,8 +18,6 @@ import org.springside.examples.quickstart.repository.TaskDao;
 @Transactional(readOnly = true)
 public class TaskService {
 
-	private static final int PAGE_SIZE = 3;
-
 	private TaskDao taskDao;
 
 	public Task getTask(Long id) {
@@ -40,21 +38,15 @@ public class TaskService {
 		return (List<Task>) taskDao.findAll();
 	}
 
-	public Page<Task> getUserTask(Long userId, int page, String sortType) {
-		PageRequest pageRequest = buildPageRequest(page, sortType);
+	public Page<Task> getUserTask(Long userId, int pageNumber, int pageSize, String sortType) {
+		PageRequest pageRequest = buildPageRequest(pageNumber, pageSize, sortType);
 		return taskDao.findByUserId(userId, pageRequest);
-	}
-
-	@Autowired
-	public void setTaskDao(TaskDao taskDao) {
-		this.taskDao = taskDao;
 	}
 
 	/**
 	 * 创建分页请求.
 	 */
-	private PageRequest buildPageRequest(int page, String sortType) {
-
+	private PageRequest buildPageRequest(int pageNumber, int pagzSize, String sortType) {
 		Sort sort = null;
 		if ("auto".equals(sortType)) {
 			sort = new Sort(Direction.DESC, "id");
@@ -62,6 +54,11 @@ public class TaskService {
 			sort = new Sort(Direction.ASC, "title");
 		}
 
-		return new PageRequest(page - 1, PAGE_SIZE, sort);
+		return new PageRequest(pageNumber - 1, pagzSize, sort);
+	}
+
+	@Autowired
+	public void setTaskDao(TaskDao taskDao) {
+		this.taskDao = taskDao;
 	}
 }
