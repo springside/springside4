@@ -6,6 +6,8 @@
 /* header */
 #header {
 	border-bottom: 2px solid #658A16;
+	margin: 20px 0 0px;
+    padding-bottom: 5px;
 }
 
 #header h1 {
@@ -20,7 +22,7 @@
 #leftbar h1 {
     border-bottom: 1px solid #EEEEEE;
     color: #4A8C04;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-align: right;
     text-transform: uppercase;
@@ -35,7 +37,7 @@
     padding: 5px 0 5px 5px;
     width: 100%;
 }
-.submenu a:hover {
+.submenu a:hover,.submenu .active  {
     background-color: #EEEEEE;
     background-image: url("../images/background/submenua_hover.jpg");
     background-repeat: repeat-y;
