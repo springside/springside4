@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside.examples</groupId>
 	<artifactId>quickstart</artifactId>
-	<version>4.0.0.RC5-SNAPSHOT</version>
+	<version>4.0.0.RC5</version>
 	<packaging>war</packaging>
 	<name>Springside :: Example :: QuickStart</name>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.0.0.RC5-SNAPSHOT</springside.version>
+		<springside.version>4.0.0.RC5</springside.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<aspectj.version>1.7.0</aspectj.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
