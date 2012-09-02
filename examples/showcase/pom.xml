@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC5</version>
+		<version>4.0.0.GA-SNAPSHOT</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<groupId>org.springside.examples</groupId>
@@ -455,6 +455,21 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
+			</plugin>
+			
+			<!-- cxf wsdl2java 插件 -->
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>${cxf.version}</version>
+				<configuration>
+					<sourceRoot>${basedir}/target/generated-sources/cxf</sourceRoot>
+					<wsdlOptions>
+						<wsdlOption>
+							<wsdl>${basedir}/src/resoures/wsdl/account-service.wsdl</wsdl>
+						</wsdlOption>
+					</wsdlOptions>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
