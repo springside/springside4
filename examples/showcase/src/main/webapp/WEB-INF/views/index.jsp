@@ -17,7 +17,7 @@
 	<ul style="padding: 15px;">
 		<li>CSS 大装修完毕。</li>
 		<li>CXF的SOAP WebService 与 MyBais从Mini-Service搬了过来</li>
-		<li>Shiro的基于角色与权限的授权，与Jquery-Validate的高级使用搬了过来</li>
+		<li>Shiro的授权演示搬了过来</li>
 	</ul>
 </body>
 </html>

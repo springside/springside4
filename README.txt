@@ -2,10 +2,9 @@
   
   It shows the mainstream technologies and pragmatic practice in JavaEE world.  
   
-  It has 3 major examples:
+  It has 2 major examples:
   
-  1. Mini-web focus on the minimal CRUD web application
-  2. Mini-service focus on the SOAP and REST web service.
+  1. Quickstart a minimal CRUD Todo-List web application.
   3. Showcase demonstrate many other interesting technologies.
  
 -------------------------------

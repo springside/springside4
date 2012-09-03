@@ -58,6 +58,9 @@ public class UserController {
 		return "account/userForm";
 	}
 
+	/**
+	 * 演示自行绑定表单中的checkBox roleList到对象中.
+	 */
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "save/{userId}")
 	public String update(@Valid @ModelAttribute("user") User user,
@@ -102,7 +105,7 @@ public class UserController {
 	}
 
 	/**
-	 * 不自动绑定对象中的roleList属性，另行处理
+	 * 不自动绑定对象中的roleList属性，另行处理。
 	 */
 	@InitBinder
 	protected void initBinder(WebDataBinder binder) {

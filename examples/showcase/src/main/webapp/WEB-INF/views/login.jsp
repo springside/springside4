@@ -13,7 +13,9 @@
 	
 	<script>
 		$(document).ready(function() {
-			$("#loginForm").validate();
+			$("#loginForm").validate({
+				errorElement: "span"
+			});
 		});
 	</script>
 </head>
