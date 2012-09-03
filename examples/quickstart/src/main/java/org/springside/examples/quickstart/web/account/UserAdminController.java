@@ -28,7 +28,7 @@ public class UserAdminController {
 	@Autowired
 	private AccountService accountService;
 
-	@RequestMapping(value = "")
+	@RequestMapping(method = RequestMethod.GET)
 	public String list(Model model) {
 		List<User> users = accountService.getAllUser();
 		model.addAttribute("users", users);
@@ -42,25 +42,26 @@ public class UserAdminController {
 		return "account/adminUserForm";
 	}
 
-	@RequestMapping(value = "update/{userId}", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute("preloadUser") User user, RedirectAttributes redirectAttributes) {
 		accountService.updateUser(user);
-		redirectAttributes.addFlashAttribute("message", "更新用户成功");
+		redirectAttributes.addFlashAttribute("message", "更新用户" + user.getLoginName() + "成功");
 		return "redirect:/admin/user";
 	}
 
 	@RequestMapping(value = "delete/{id}")
 	public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+		User user = accountService.getUser(id);
 		accountService.deleteUser(id);
-		redirectAttributes.addFlashAttribute("message", "删除用户成功");
+		redirectAttributes.addFlashAttribute("message", "删除用户" + user.getLoginName() + "成功");
 		return "redirect:/admin/user";
 	}
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
+	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
-	@ModelAttribute("user")
+	@ModelAttribute("preloadUser")
 	public User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
 			return accountService.getUser(id);

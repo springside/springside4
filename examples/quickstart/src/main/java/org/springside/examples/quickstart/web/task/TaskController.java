@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.quickstart.entity.Task;
@@ -23,12 +25,12 @@ import com.google.common.collect.Maps;
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
  * 
- * List   page        : GET  /task/
- * Create page        : GET  /task/create
- * Create action      : POST /task/save
- * Update page        : GET  /task/update/{id}
- * Update action      : POST /task/save/{id}
- * Delete action      : POST /task/delete/{id}
+ * List   page    : GET  /task/
+ * Create page    : GET  /task/create
+ * Create action  : POST /task/create
+ * Update page    : GET  /task/update/{id}
+ * Update action  : POST /task/update
+ * Delete action  : GET /task/delete/{id}
  * 
  * @author calvin
  */
@@ -47,7 +49,7 @@ public class TaskController {
 		sortTypes.put("title", "标题");
 	}
 
-	@RequestMapping(value = "")
+	@RequestMapping(method = RequestMethod.GET)
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
 			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model) {
 		Long userId = getCurrentUserId();
@@ -60,13 +62,14 @@ public class TaskController {
 		return "task/taskList";
 	}
 
-	@RequestMapping(value = "create")
+	@RequestMapping(value = "create", method = RequestMethod.GET)
 	public String createForm(Model model) {
 		model.addAttribute("task", new Task());
+		model.addAttribute("action", "create");
 		return "task/taskForm";
 	}
 
-	@RequestMapping(value = "save")
+	@RequestMapping(value = "create", method = RequestMethod.POST)
 	public String create(@Valid Task newTask, RedirectAttributes redirectAttributes) {
 		User user = new User(getCurrentUserId());
 		newTask.setUser(user);
@@ -76,14 +79,15 @@ public class TaskController {
 		return "redirect:/task/";
 	}
 
-	@RequestMapping(value = "update/{id}")
+	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("task", taskService.getTask(id));
+		model.addAttribute("action", "update");
 		return "task/taskForm";
 	}
 
-	@RequestMapping(value = "save/{id}")
-	public String update(@Valid Task task, RedirectAttributes redirectAttributes) {
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute("preloadTask") Task task, RedirectAttributes redirectAttributes) {
 		taskService.saveTask(task);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";
@@ -94,6 +98,18 @@ public class TaskController {
 		taskService.deleteTask(id);
 		redirectAttributes.addFlashAttribute("message", "删除任务成功");
 		return "redirect:/task/";
+	}
+
+	/**
+	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
+	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
+	 */
+	@ModelAttribute("preloadTask")
+	public Task getTask(@RequestParam(value = "id", required = false) Long id) {
+		if (id != null) {
+			return taskService.getTask(id);
+		}
+		return null;
 	}
 
 	/**

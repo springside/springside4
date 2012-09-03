@@ -33,7 +33,7 @@
 
 <body>
 	<h1>综合演示用例</h1>
-	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/save/${user.id}" method="post" class="form-horizontal">
+	<form:form id="inputForm" modelAttribute="user" action="${ctx}/account/user/update" method="post" class="form-horizontal">
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>
 			<legend><small>管理用户</small></legend>

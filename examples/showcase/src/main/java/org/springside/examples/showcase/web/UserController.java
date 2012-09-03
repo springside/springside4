@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -50,7 +51,7 @@ public class UserController {
 	}
 
 	@RequiresRoles("Admin")
-	@RequestMapping(value = "update/{id}")
+	@RequestMapping(value = "update/{id}", method = RequestMethod.GET)
 	public String updateForm(@PathVariable("id") Long id, Model model) {
 		model.addAttribute("user", accountService.getUser(id));
 		model.addAttribute("allStatus", allStatus);
@@ -62,8 +63,8 @@ public class UserController {
 	 * 演示自行绑定表单中的checkBox roleList到对象中.
 	 */
 	@RequiresPermissions("user:edit")
-	@RequestMapping(value = "save/{userId}")
-	public String update(@Valid @ModelAttribute("user") User user,
+	@RequestMapping(value = "update", method = RequestMethod.POST)
+	public String update(@Valid @ModelAttribute("preloadUser") User user,
 			@RequestParam(value = "roleList") List<Long> checkedRoleList, RedirectAttributes redirectAttributes) {
 
 		//bind roleList
@@ -96,7 +97,7 @@ public class UserController {
 	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
 	 */
-	@ModelAttribute("user")
+	@ModelAttribute("preloadUser")
 	public User getUser(@RequestParam(value = "id", required = false) Long id) {
 		if (id != null) {
 			return accountService.getUser(id);

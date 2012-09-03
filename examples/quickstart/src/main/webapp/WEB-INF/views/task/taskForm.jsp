@@ -19,7 +19,7 @@
 </head>
 
 <body>
-	<form id="inputForm" action="${ctx}/task/save/${task.id}" method="post" class="form-horizontal">
+	<form id="inputForm" action="${ctx}/task/${action}" method="post" class="form-horizontal">
 		<input type="hidden" name="id" value="${task.id}"/>
 		<fieldset>
 			<legend><small>管理任务</small></legend>
