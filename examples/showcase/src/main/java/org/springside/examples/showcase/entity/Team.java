@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -14,7 +15,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import com.google.common.collect.Lists;
 
 /**
- * 团队.
+ * 开发团队.
  * 
  * @author calvin
  */
@@ -35,6 +36,7 @@ public class Team extends IdEntity {
 		this.name = name;
 	}
 
+	@NotNull
 	@OneToOne
 	@JoinColumn(name = "MASTER_ID")
 	public User getMaster() {

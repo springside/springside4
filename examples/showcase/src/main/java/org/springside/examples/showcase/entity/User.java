@@ -106,6 +106,8 @@ public class User extends IdEntity {
 		this.status = status;
 	}
 
+	//JSR303规则
+	@NotEmpty
 	//多对多定义
 	@ManyToMany
 	@JoinTable(name = "SS_USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
@@ -115,8 +117,6 @@ public class User extends IdEntity {
 	@OrderBy("id ASC")
 	//缓存策略
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-	//JSR303规则
-	@NotEmpty
 	public List<Role> getRoleList() {
 		return roleList;
 	}

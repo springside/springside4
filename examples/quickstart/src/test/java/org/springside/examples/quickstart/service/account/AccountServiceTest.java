@@ -30,7 +30,7 @@ public class AccountServiceTest {
 		accountService = new AccountService();
 		accountService.setUserDao(mockUserDao);
 
-		ShiroTestUtils.mockSubject(new ShiroUser(1L, "foo", "Foo"));
+		ShiroTestUtils.mockSubject(new ShiroUser(3L, "foo", "Foo"));
 	}
 
 	@Test
