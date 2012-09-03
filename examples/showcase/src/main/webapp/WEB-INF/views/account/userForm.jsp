@@ -18,14 +18,21 @@
 				rules: {
 					loginName: {
 						remote: "${ctx}/account/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')
-					}
+					},
+					roleList:"required"
 				},
 				messages: {
 					loginName: {
 						remote: "用户登录名已存在"
 					}
 				},
-				errorContainer: "#messageBox"
+				errorContainer: "#messageBox",
+				errorPlacement: function(error, element) {
+					if ( element.is(":checkbox") )
+						error.appendTo ( element.parent().next() );
+					else
+						error.insertAfter( element );
+				}
 			});
 		});
 	</script>
@@ -37,7 +44,7 @@
 		<input type="hidden" name="id" value="${user.id}"/>
 		<fieldset>
 			<legend><small>管理用户</small></legend>
-			<div id="messageBox" class="alert alert-error" style="display:none">输入有误，请先更正。</div>
+			<div id="messageBox" class="alert alert-error input-large controls" style="display:none">输入有误，请先更正。</div>
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
