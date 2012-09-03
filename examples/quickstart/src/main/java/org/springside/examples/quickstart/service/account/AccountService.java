@@ -3,11 +3,16 @@ package org.springside.examples.quickstart.service.account;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.User;
 import org.springside.examples.quickstart.repository.UserDao;
+import org.springside.examples.quickstart.service.ServiceException;
+import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
@@ -24,6 +29,8 @@ public class AccountService {
 	public static final String HASH_ALGORITHM = "SHA-1";
 	public static final int HASH_INTERATIONS = 1024;
 	private static final int SALT_SIZE = 8;
+
+	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
 
@@ -55,7 +62,26 @@ public class AccountService {
 
 	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
+		if (isSupervisor(id)) {
+			logger.warn("操作员{}尝试删除超级管理员用户", getCurrentUserName());
+			throw new ServiceException("不能删除超级管理员用户");
+		}
 		userDao.delete(id);
+	}
+
+	/**
+	 * 判断是否超级管理员.
+	 */
+	private boolean isSupervisor(Long id) {
+		return id == 1;
+	}
+
+	/**
+	 * 取出Shiro中的当前用户Name.
+	 */
+	private String getCurrentUserName() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user.loginName;
 	}
 
 	/**
