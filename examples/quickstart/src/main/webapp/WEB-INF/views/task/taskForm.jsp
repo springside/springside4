@@ -11,9 +11,7 @@
 			//聚焦第一个输入框
 			$("#task_title").focus();
 			//为inputForm注册validate函数
-			$("#inputForm").validate({
-				errorElement: "span"
-			});
+			$("#inputForm").validate();
 		});
 	</script>
 </head>

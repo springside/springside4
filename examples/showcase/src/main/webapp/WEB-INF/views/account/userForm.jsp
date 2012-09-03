@@ -7,6 +7,7 @@
 <head>
 	<title>综合演示用例</title>
 	<script src="${ctx}/static/jquery-validation/1.9.0/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="${ctx}/static/jquery-validation/1.9.0/messages_bs_cn.js" type="text/javascript"></script>
 	<link href="${ctx}/static/jquery-validation/1.9.0/validate.css" type="text/css" rel="stylesheet" />
 	<script>
 		$(document).ready(function() {
@@ -14,7 +15,6 @@
 			
 			//为inputForm注册validate函数
 			$("#inputForm").validate({
-				errorElement: "span",
 				rules: {
 					loginName: {
 						remote: "${ctx}/account/user/checkLoginName?oldLoginName=" + encodeURIComponent('${user.loginName}')
@@ -29,9 +29,9 @@
 				errorContainer: "#messageBox",
 				errorPlacement: function(error, element) {
 					if ( element.is(":checkbox") )
-						error.appendTo ( element.parent().next() );
+						error.appendTo(element.parent().next());
 					else
-						error.insertAfter( element );
+						error.insertAfter(element);
 				}
 			});
 		});

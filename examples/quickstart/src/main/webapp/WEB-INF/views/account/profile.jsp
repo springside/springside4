@@ -10,9 +10,7 @@
 			//聚焦第一个输入框
 			$("#name").focus();
 			//为inputForm注册validate函数
-			$("#inputForm").validate({
-				errorElement: "span"
-			});
+			$("#inputForm").validate();
 		});
 	</script>
 </head>

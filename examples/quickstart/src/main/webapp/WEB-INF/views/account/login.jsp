@@ -10,9 +10,7 @@
 	<title>登录页</title>
 	<script>
 		$(document).ready(function() {
-			$("#loginForm").validate({
-				errorElement: "span"
-			});
+			$("#loginForm").validate();
 		});
 	</script>
 </head>

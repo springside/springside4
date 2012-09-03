@@ -21,3 +21,7 @@ jQuery.extend(jQuery.validator.messages, {
 		max: jQuery.validator.format("请输入一个最大为 {0} 的值"),
 		min: jQuery.validator.format("请输入一个最小为 {0} 的值")
 });
+
+jQuery.extend(jQuery.validator.defaults, {
+    errorElement: "span"
+});    
