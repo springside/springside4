@@ -11,7 +11,7 @@ public class UserDTO {
 	private String loginName;
 	private String name;
 	private String email;
-	private SimpleTeamDTO team;
+	private Long teamId;
 
 	public Long getId() {
 		return id;
@@ -45,12 +45,12 @@ public class UserDTO {
 		email = value;
 	}
 
-	public SimpleTeamDTO getTeam() {
-		return team;
+	public Long getTeamId() {
+		return teamId;
 	}
 
-	public void setTeam(SimpleTeamDTO team) {
-		this.team = team;
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
 	}
 
 	/**

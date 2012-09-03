@@ -26,7 +26,7 @@
 				/login = authc
 				/logout = logout
 				/account/** = user
-				/rest/users = authcBasic
+				/api/** = authcBasic
 			</value>
 		</property>
 	</bean>

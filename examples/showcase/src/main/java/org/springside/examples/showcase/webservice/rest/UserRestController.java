@@ -19,16 +19,22 @@ public class UserRestController {
 
 	@RequestMapping(value = "/{id}.xml", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
 	@ResponseBody
-	public UserDTO getAs(@PathVariable("id") Long id) {
+	public UserDTO getAsXml(@PathVariable("id") Long id) {
 		User user = accountService.getUser(id);
-		return BeanMapper.map(user, UserDTO.class);
-
+		return bindDTO(user);
 	}
 
 	@RequestMapping(value = "/{id}.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public UserDTO listasJson(@PathVariable("id") Long id) {
+	public UserDTO getAsJson(@PathVariable("id") Long id) {
 		User user = accountService.getUser(id);
-		return BeanMapper.map(user, UserDTO.class);
+		return bindDTO(user);
+	}
+
+	private UserDTO bindDTO(User user) {
+		UserDTO dto = BeanMapper.map(user, UserDTO.class);
+		//补充Dozer不能自动绑定的属性
+		dto.setTeamId(user.getTeam().getId());
+		return dto;
 	}
 }
