@@ -1,6 +1,5 @@
 package org.springside.examples.quickstart.entity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,6 +11,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.validator.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.ImmutableList;
 
 //JPA标识
 @Entity
@@ -87,7 +87,8 @@ public class User extends IdEntity {
 	@Transient
 	@JsonIgnore
 	public List<String> getRoleList() {
-		return Arrays.asList(StringUtils.split(roles, ","));
+		//角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
+		return ImmutableList.copyOf(StringUtils.split(roles, ","));
 	}
 
 	@Override

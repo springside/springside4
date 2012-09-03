@@ -1,9 +1,7 @@
 package org.springside.examples.showcase.entity;
 
-import java.util.Arrays;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -12,6 +10,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * 角色.
@@ -34,7 +34,6 @@ public class Role extends IdEntity {
 		this.id = id;
 	}
 
-	@Column(nullable = false, unique = true)
 	public String getName() {
 		return name;
 	}
@@ -53,7 +52,7 @@ public class Role extends IdEntity {
 
 	@Transient
 	public List<String> getPermissionList() {
-		return Arrays.asList(StringUtils.split(permissions, ","));
+		return ImmutableList.copyOf(StringUtils.split(permissions, ","));
 	}
 
 	@Override
