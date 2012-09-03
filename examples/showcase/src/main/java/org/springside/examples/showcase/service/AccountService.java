@@ -15,12 +15,13 @@ import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.repository.jpa.RoleDao;
 import org.springside.examples.showcase.repository.jpa.UserDao;
+import org.springside.examples.showcase.service.ShiroDbRealm.ShiroUser;
 import org.springside.modules.persistence.Hibernates;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
 /**
- * 用户管理类.
+ * 用户管理业务类.
  * 
  * @author calvin
  */
@@ -52,7 +53,7 @@ public class AccountService {
 	public void saveUser(User user) {
 
 		if (isSupervisor(user)) {
-			logger.warn("操作员{}尝试修改超级管理员用户", SecurityUtils.getSubject().getPrincipal());
+			logger.warn("操作员{}尝试修改超级管理员用户", getCurrentUserName());
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
@@ -144,6 +145,14 @@ public class AccountService {
 				logger.error("消息发送失败", e);
 			}
 		}
+	}
+
+	/**
+	 * 取出Shiro中的当前用户LoginName.
+	 */
+	private String getCurrentUserName() {
+		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
+		return user.loginName;
 	}
 
 	//--------------------//

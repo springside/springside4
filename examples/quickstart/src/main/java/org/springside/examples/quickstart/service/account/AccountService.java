@@ -77,7 +77,7 @@ public class AccountService {
 	}
 
 	/**
-	 * 取出Shiro中的当前用户Name.
+	 * 取出Shiro中的当前用户LoginName.
 	 */
 	private String getCurrentUserName() {
 		ShiroUser user = (ShiroUser) SecurityUtils.getSubject().getPrincipal();
