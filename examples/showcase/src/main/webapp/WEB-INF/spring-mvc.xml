@@ -37,11 +37,12 @@
 	</bean>
 	
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
-        <property name="exceptionMappings">  
-            <props>  
-                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  
+		<property name="exceptionMappings">  
+			<props>  
+				<prop key="org.springframework.validation.BindException">error/400</prop>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  
             </props>  
-        </property>  
-    </bean>  
+		</property>  
+    </bean> 
 	<!-- end -->
 </beans>
