@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 /**
  * 反射工具类.
@@ -28,6 +29,9 @@ public class Reflections {
 	private static final String SETTER_PREFIX = "set";
 
 	private static final String GETTER_PREFIX = "get";
+
+	/** The CGLIB class separator character "$$" */
+	public static final String CGLIB_CLASS_SEPARATOR = "$$";
 
 	private static Logger logger = LoggerFactory.getLogger(Reflections.class);
 
@@ -253,6 +257,19 @@ public class Reflections {
 		}
 
 		return (Class) params[index];
+	}
+
+	public static Class<?> getUserClass(Object instance) {
+		Assert.notNull(instance, "Instance must not be null");
+		Class clazz = instance.getClass();
+		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+			Class<?> superClass = clazz.getSuperclass();
+			if (superClass != null && !Object.class.equals(superClass)) {
+				return superClass;
+			}
+		}
+		return clazz;
+
 	}
 
 	/**

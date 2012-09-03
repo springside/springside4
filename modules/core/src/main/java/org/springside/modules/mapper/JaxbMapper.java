@@ -8,6 +8,8 @@ package org.springside.modules.mapper;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -18,7 +20,10 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.util.Assert;
 import org.springside.modules.utils.Exceptions;
+import org.springside.modules.utils.Reflections;
 
 /**
  * 使用Jaxb2.0实现XML<->Java Object的Mapper.
@@ -29,34 +34,32 @@ import org.springside.modules.utils.Exceptions;
  * @author calvin
  */
 public class JaxbMapper {
-	//多线程安全的Context.
-	private JAXBContext jaxbContext;
 
-	/**
-	 * @param rootTypes 所有需要序列化的Root对象的Class.
-	 */
-	public JaxbMapper(Class<?>... rootTypes) {
-		try {
-			jaxbContext = JAXBContext.newInstance(rootTypes);
-		} catch (JAXBException e) {
-			Exceptions.unchecked(e);
-		}
-	}
+	private static final ConcurrentMap<Class, JAXBContext> jaxbContexts = new ConcurrentHashMap<Class, JAXBContext>();
 
 	/**
 	 * Java Object->Xml without encoding.
 	 */
-	public String toXml(Object root) {
-		return toXml(root, null);
+	public static String toXml(Object root) {
+		Class clazz = Reflections.getUserClass(root);
+		return toXml(root, clazz, null);
 	}
 
 	/**
 	 * Java Object->Xml with encoding.
 	 */
-	public String toXml(Object root, String encoding) {
+	public static String toXml(Object root, String encoding) {
+		Class clazz = Reflections.getUserClass(root);
+		return toXml(root, clazz, encoding);
+	}
+
+	/**
+	 * Java Object->Xml with encoding.
+	 */
+	public static String toXml(Object root, Class clazz, String encoding) {
 		try {
 			StringWriter writer = new StringWriter();
-			createMarshaller(encoding).marshal(root, writer);
+			createMarshaller(clazz, encoding).marshal(root, writer);
 			return writer.toString();
 		} catch (JAXBException e) {
 			throw Exceptions.unchecked(e);
@@ -66,14 +69,14 @@ public class JaxbMapper {
 	/**
 	 * Java Collection->Xml without encoding, 特别支持Root Element是Collection的情形.
 	 */
-	public String toXml(Collection<?> root, String rootName) {
-		return toXml(root, rootName, null);
+	public static String toXml(Collection<?> root, String rootName, Class clazz) {
+		return toXml(root, rootName, clazz, null);
 	}
 
 	/**
 	 * Java Collection->Xml with encoding, 特别支持Root Element是Collection的情形.
 	 */
-	public String toXml(Collection<?> root, String rootName, String encoding) {
+	public static String toXml(Collection<?> root, String rootName, Class clazz, String encoding) {
 		try {
 			CollectionWrapper wrapper = new CollectionWrapper();
 			wrapper.collection = root;
@@ -82,7 +85,7 @@ public class JaxbMapper {
 					CollectionWrapper.class, wrapper);
 
 			StringWriter writer = new StringWriter();
-			createMarshaller(encoding).marshal(wrapperElement, writer);
+			createMarshaller(clazz, encoding).marshal(wrapperElement, writer);
 
 			return writer.toString();
 		} catch (JAXBException e) {
@@ -93,10 +96,10 @@ public class JaxbMapper {
 	/**
 	 * Xml->Java Object.
 	 */
-	public <T> T fromXml(String xml) {
+	public static <T> T fromXml(String xml, Class<T> clazz) {
 		try {
 			StringReader reader = new StringReader(xml);
-			return (T) createUnmarshaller().unmarshal(reader);
+			return (T) createUnmarshaller(clazz).unmarshal(reader);
 		} catch (JAXBException e) {
 			throw Exceptions.unchecked(e);
 		}
@@ -106,8 +109,10 @@ public class JaxbMapper {
 	 * 创建Marshaller并设定encoding(可为null).
 	 * 线程不安全，需要每次创建或pooling。
 	 */
-	public Marshaller createMarshaller(String encoding) {
+	public static Marshaller createMarshaller(Class clazz, String encoding) {
 		try {
+			JAXBContext jaxbContext = getJaxbContext(clazz);
+
 			Marshaller marshaller = jaxbContext.createMarshaller();
 
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
@@ -126,12 +131,28 @@ public class JaxbMapper {
 	 * 创建UnMarshaller.
 	 * 线程不安全，需要每次创建或pooling。
 	 */
-	public Unmarshaller createUnmarshaller() {
+	public static Unmarshaller createUnmarshaller(Class clazz) {
 		try {
+			JAXBContext jaxbContext = getJaxbContext(clazz);
 			return jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
 			throw Exceptions.unchecked(e);
 		}
+	}
+
+	protected static JAXBContext getJaxbContext(Class clazz) {
+		Assert.notNull(clazz, "'clazz' must not be null");
+		JAXBContext jaxbContext = jaxbContexts.get(clazz);
+		if (jaxbContext == null) {
+			try {
+				jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
+				jaxbContexts.putIfAbsent(clazz, jaxbContext);
+			} catch (JAXBException ex) {
+				throw new HttpMessageConversionException("Could not instantiate JAXBContext for class [" + clazz
+						+ "]: " + ex.getMessage(), ex);
+			}
+		}
+		return jaxbContext;
 	}
 
 	/**

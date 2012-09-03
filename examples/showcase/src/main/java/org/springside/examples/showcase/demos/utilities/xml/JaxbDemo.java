@@ -8,10 +8,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springside.modules.mapper.JaxbMapper;
-import org.springside.modules.mapper.JaxbMapper.CollectionWrapper;
 
 import com.google.common.collect.Lists;
 
@@ -41,13 +39,6 @@ import com.google.common.collect.Lists;
  */
 public class JaxbDemo {
 
-	private static JaxbMapper mapper;
-
-	@BeforeClass
-	public static void setUp() {
-		mapper = new JaxbMapper(User.class, CollectionWrapper.class);
-	}
-
 	@Test
 	public void objectToXml() {
 		User user = new User();
@@ -62,7 +53,7 @@ public class JaxbDemo {
 		user.getHouses().put("bj", "house1");
 		user.getHouses().put("gz", "house2");
 
-		String xml = mapper.toXml(user, "UTF-8");
+		String xml = JaxbMapper.toXml(user, "UTF-8");
 		System.out.println("Jaxb Object to Xml result:\n" + xml);
 		assertXmlByDom4j(xml);
 	}
@@ -70,7 +61,7 @@ public class JaxbDemo {
 	@Test
 	public void xmlToObject() {
 		String xml = generateXmlByDom4j();
-		User user = mapper.fromXml(xml);
+		User user = JaxbMapper.fromXml(xml, User.class);
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
@@ -100,7 +91,7 @@ public class JaxbDemo {
 
 		List<User> userList = Lists.newArrayList(user1, user2);
 
-		String xml = mapper.toXml(userList, "userList", "UTF-8");
+		String xml = JaxbMapper.toXml(userList, "userList", User.class, "UTF-8");
 		System.out.println("Jaxb Object List to Xml result:\n" + xml);
 	}
 
