@@ -9,15 +9,13 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.hibernate.dialect.H2Dialect;
-import org.hibernate.dialect.MySQL5Dialect;
 import org.hibernate.dialect.MySQL5InnoDBDialect;
 import org.hibernate.dialect.Oracle10gDialect;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.springside.modules.persistence.Hibernates;
 
 public class HibernatesTest {
-	
+
 	@Test
 	public void testGetDialect() throws SQLException {
 		DataSource mockDataSource = Mockito.mock(DataSource.class);

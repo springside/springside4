@@ -18,7 +18,6 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springside.modules.utils.Collections3;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -106,8 +105,6 @@ public class User extends IdEntity {
 		this.status = status;
 	}
 
-	//JSR303规则
-	@NotEmpty
 	//多对多定义
 	@ManyToMany
 	@JoinTable(name = "SS_USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })

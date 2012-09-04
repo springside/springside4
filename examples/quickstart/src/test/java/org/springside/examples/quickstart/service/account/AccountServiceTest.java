@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
@@ -19,17 +20,15 @@ import org.springside.modules.test.security.shiro.ShiroTestUtils;
  */
 public class AccountServiceTest {
 
+	@InjectMocks
 	private AccountService accountService;
+
 	@Mock
 	private UserDao mockUserDao;
 
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
-
-		accountService = new AccountService();
-		accountService.setUserDao(mockUserDao);
-
 		ShiroTestUtils.mockSubject(new ShiroUser(3L, "foo", "Foo"));
 	}
 

@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -35,7 +34,6 @@ public class Task extends IdEntity {
 		this.description = description;
 	}
 
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	public User getUser() {
