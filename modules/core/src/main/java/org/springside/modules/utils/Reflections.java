@@ -30,8 +30,7 @@ public class Reflections {
 
 	private static final String GETTER_PREFIX = "get";
 
-	/** The CGLIB class separator character "$$" */
-	public static final String CGLIB_CLASS_SEPARATOR = "$$";
+	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
 	private static Logger logger = LoggerFactory.getLogger(Reflections.class);
 
@@ -45,7 +44,6 @@ public class Reflections {
 
 	/**
 	 * 调用Setter方法, 仅匹配方法名。
-	 * 
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
 		String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(propertyName);

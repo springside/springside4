@@ -10,6 +10,7 @@ import org.apache.shiro.web.tags.PermissionTag;
  */
 public class HasAnyPermissionsTag extends PermissionTag {
 
+	private static final long serialVersionUID = -4786931833148680306L;
 	private static final String PERMISSION_NAMES_DELIMETER = ",";
 
 	@Override

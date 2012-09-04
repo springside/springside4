@@ -7,6 +7,8 @@ import org.springframework.web.servlet.tags.form.TagWriter;
 
 public class BSCheckboxesTag extends BSAbstractMultiCheckedElementTag {
 
+	private static final long serialVersionUID = 4310358928301706621L;
+
 	@Override
 	protected int writeTagContent(TagWriter tagWriter) throws JspException {
 		super.writeTagContent(tagWriter);

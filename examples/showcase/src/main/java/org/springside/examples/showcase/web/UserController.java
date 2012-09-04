@@ -30,15 +30,15 @@ import com.google.common.collect.Maps;
 @RequestMapping(value = "/account/user")
 public class UserController {
 
-	@Autowired
-	private AccountService accountService;
-
 	private static Map<String, String> allStatus = Maps.newHashMap();
 
 	static {
 		allStatus.put("enabled", "有效");
 		allStatus.put("disabled", "无效");
 	}
+
+	@Autowired
+	private AccountService accountService;
 
 	//特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)

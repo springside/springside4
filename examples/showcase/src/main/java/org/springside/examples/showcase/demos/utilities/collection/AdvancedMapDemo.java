@@ -43,13 +43,13 @@ public class AdvancedMapDemo {
 	 * Guava的BiMap，可随时调转Key与Value.
 	 */
 	@Test
-	public void BiMap() {
+	public void biMap() {
 		BiMap<Integer, String> bimap = HashBiMap.create();
 		bimap.put(1, "a");
 		bimap.put(2, "b");
 
 		BiMap<String, Integer> bimap2 = bimap.inverse();
-		assertEquals(new Integer(2), bimap2.get("b"));
+		assertEquals(Integer.valueOf(2), bimap2.get("b"));
 	}
 
 	/*

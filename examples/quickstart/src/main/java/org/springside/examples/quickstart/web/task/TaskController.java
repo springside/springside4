@@ -38,9 +38,6 @@ import com.google.common.collect.Maps;
 @RequestMapping(value = "/task")
 public class TaskController {
 
-	@Autowired
-	private TaskService taskService;
-
 	private static final int PAGE_SIZE = 3;
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
@@ -48,6 +45,9 @@ public class TaskController {
 		sortTypes.put("auto", "自动");
 		sortTypes.put("title", "标题");
 	}
+
+	@Autowired
+	private TaskService taskService;
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,

@@ -11,5 +11,5 @@ import org.springside.examples.showcase.entity.Team;
 @MyBatisRepository
 public interface TeamMybatisDao {
 
-	public Team getWithDetail(Long id);
+	Team getWithDetail(Long id);
 }

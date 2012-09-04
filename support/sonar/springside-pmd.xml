@@ -255,12 +255,6 @@
   <rule ref="rulesets/strings.xml/AvoidDuplicateLiterals">
     <priority>3</priority>
   </rule>
-  <rule ref="rulesets/j2ee.xml/UseProperClassLoader">
-    <priority>2</priority>
-  </rule>
-  <rule ref="rulesets/basic.xml/MisplacedNullCheck">
-    <priority>2</priority>
-  </rule>
   <rule ref="rulesets/optimizations.xml/AddEmptyString">
     <priority>3</priority>
   </rule>
@@ -270,8 +264,14 @@
   <rule ref="rulesets/basic.xml/AvoidMultipleUnaryOperators">
     <priority>3</priority>
   </rule>
+  <rule ref="rulesets/basic.xml/MisplacedNullCheck">
+    <priority>2</priority>
+  </rule>
   <rule ref="rulesets/naming.xml/PackageCase">
     <priority>3</priority>
+  </rule>
+  <rule ref="rulesets/j2ee.xml/UseProperClassLoader">
+    <priority>2</priority>
   </rule>
   <rule ref="rulesets/basic.xml/UnnecessaryReturn">
     <priority>4</priority>

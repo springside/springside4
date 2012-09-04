@@ -35,7 +35,7 @@ public class DozerDemo {
 
 		assertEquals("car", product.getProductName());
 		//原来的字符串被Map成Double。
-		assertEquals(new Double(200), product.getPrice());
+		assertEquals(Double.valueOf(200), product.getPrice());
 		//原来的PartDTO同样被Map成Part ,Array被Map成List
 		assertEquals("door", product.getParts().get(0).getName());
 		//Part中循环依赖的Product同样被赋值。
@@ -73,9 +73,9 @@ public class DozerDemo {
 		//原来的horse，被替换成car
 		assertEquals("car", product.getProductName());
 		//原来的20的属性被覆盖成200，同样被从字符串被专为Double。
-		assertEquals(new Double(200), product.getPrice());
+		assertEquals(Double.valueOf(200), product.getPrice());
 		//DTO中没有的属性值,在Product中被保留
-		assertEquals(new Double(20), product.getWeight());
+		assertEquals(Double.valueOf(20), product.getWeight());
 		//Part中循环依赖的Product同样被赋值。
 		assertEquals("car", product.getParts().get(0).getProduct().getProductName());
 	}

@@ -29,7 +29,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -320,7 +319,7 @@ public class JsonDemo {
 	public static enum TestEnum {
 		One(1), Two(2), Three(3);
 
-		private int index;
+		private final int index;
 
 		TestEnum(int index) {
 			this.index = index;
@@ -512,7 +511,7 @@ public class JsonDemo {
 		// 固定属性
 		private String name;
 		// 扩展属性
-		private Map<String, String> properties = Maps.newHashMap();
+		private final Map<String, String> properties = Maps.newHashMap();
 
 		public ExtensibleBean() {
 		}
@@ -625,7 +624,7 @@ public class JsonDemo {
 
 		//from
 		User resultUser = newMapper.fromJson(jsonString, User.class);
-		assertEquals(new Double(1.2), resultUser.getSalary().value);
+		assertEquals(Double.valueOf(1.2), resultUser.getSalary().value);
 
 	}
 
@@ -635,8 +634,7 @@ public class JsonDemo {
 		}
 
 		@Override
-		public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider) throws IOException,
-				JsonProcessingException {
+		public void serialize(Money value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
 
 			jgen.writeString(value.toString());
 		}
@@ -648,15 +646,14 @@ public class JsonDemo {
 		}
 
 		@Override
-		public Money deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException,
-				JsonProcessingException {
+		public Money deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException {
 			return Money.valueOf(jp.getText());
 		}
 
 	}
 
 	public static class Money {
-		private Double value;
+		private final Double value;
 
 		public Money(Double value) {
 			this.value = value;
