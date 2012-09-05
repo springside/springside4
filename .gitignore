@@ -10,3 +10,4 @@ org.eclipse.wst.common.project.facet.core.xml
 org.springframework.ide.eclipse.*.prefs
 /examples/showcase/bin/yuicompressor-2.4.7.jar
 /support/local-script/
+.settings/
