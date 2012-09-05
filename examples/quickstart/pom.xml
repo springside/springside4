@@ -188,6 +188,11 @@
 			<artifactId>shiro-ehcache</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.6</version>
+		</dependency>
 		<!-- SECURITY end -->
 		
 		<!-- JSR303  BeanValidator -->
