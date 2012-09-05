@@ -110,10 +110,10 @@ public class JodaDemo {
 		return dateTime.toString(formatter);
 	}
 
-	@Test
 	/**
 	 * 演示日期的加钱以及计算日期间的间隔，可使用任意时间单位进行加减和计算间隔.
 	 */
+	@Test
 	public void daysPlusAndMinusBetweenAndBetweenx() {
 		DateTime now = new DateTime();
 		DateTime birthDate = now.minusYears(10);
@@ -122,12 +122,12 @@ public class JodaDemo {
 		assertEquals(9, Years.yearsBetween(birthDate, new DateTime()).getYears());
 	}
 
-	@Test
 	/**
 	 * 取得月份的头一天和最后一天.
 	 * 取得一天的0:00和23:59:59
 	 * 其他如年，星期的头一天，最后一天同理可证
 	 */
+	@Test
 	public void beginAndEndOfDates() {
 		String dateString = "1978-06-10T12:10:08";
 		DateTime dt = new DateTime(dateString);
