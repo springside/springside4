@@ -4,8 +4,9 @@
   
   It has 2 major examples:
   
-  1. Quickstart a minimal CRUD Todo-List web application.
-  3. Showcase demonstrate many other interesting technologies.
+  1. Quickstart -- a minimal CRUD Todo-List web application.
+  3. Showcase -- demonstrate many other interesting technologies.
  
 -------------------------------
 Offical Site: http://www.springside.org.cn
+Document: https://github.com/springside/springside4/wiki
