@@ -49,6 +49,7 @@ public class AccountService {
 	@Transactional(readOnly = false)
 	public void registerUser(User user) {
 		entryptPassword(user);
+		user.setRoles("user");
 		userDao.save(user);
 	}
 
