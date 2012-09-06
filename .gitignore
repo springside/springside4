@@ -1,13 +1,9 @@
 .classpath
 .project
 .springBeans
+.settings/
 target/
 logs/
 eclipse-local.bat
-org.eclipse.jdt.core.prefs
-org.eclipse.wst.common.component
-org.eclipse.wst.common.project.facet.core.xml
-org.springframework.ide.eclipse.*.prefs
 /examples/showcase/bin/yuicompressor-2.4.7.jar
 /support/local-script/
-.settings/
