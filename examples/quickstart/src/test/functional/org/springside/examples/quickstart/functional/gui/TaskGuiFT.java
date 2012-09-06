@@ -57,6 +57,12 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 	}
 
 	@Test
+	public void deleteTask() {
+		s.open("/task/delete/2");
+		assertTrue("没有成功消息", s.isTextPresent("删除任务成功"));
+	}
+
+	@Test
 	public void inputInValidateValue() {
 		s.open("/task/");
 		s.click(By.linkText("创建任务"));

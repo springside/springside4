@@ -2,6 +2,7 @@ package org.springside.examples.quickstart.functional.gui;
 
 import static org.junit.Assert.*;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -20,6 +21,11 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 		s.click(By.id("submit_btn"));
 	}
 
+	@AfterClass
+	public static void logout() {
+		s.open("/logout");
+	}
+
 	/**
 	 * 浏览用户列表.
 	 */
@@ -32,4 +38,22 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 		assertEquals("user", s.getTable(table, 1, 0));
 	}
 
+	@Test
+	public void editUser() {
+		s.open("/admin/user/update/2");
+		s.type(By.id("name"), "Kevin");
+		s.type(By.id("plainPassword"), "user2");
+		s.type(By.id("confirmPassword"), "user2");
+		s.click(By.id("submit_btn"));
+
+		assertTrue("没有成功消息", s.isTextPresent("更新用户user成功"));
+		WebElement table = s.findElement(By.id("contentTable"));
+		assertEquals("Kevin", s.getTable(table, 1, 1));
+	}
+
+	@Test
+	public void deleteUser() {
+		s.open("/admin/user/delete/2");
+		assertTrue("没有成功消息", s.isTextPresent("删除用户user成功"));
+	}
 }
