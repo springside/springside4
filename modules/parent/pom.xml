@@ -47,10 +47,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
-	
-	<prerequisites>
-   		<maven>3.0</maven>
- 	</prerequisites>
 
 	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找. -->
 	<repositories>
@@ -815,6 +811,12 @@
 							</goals>
 							<configuration>
 								<rules>
+									<requireMavenVersion>
+                  						<version>3.0.4</version>
+                					</requireMavenVersion>
+                					<requireJavaVersion>
+                  						<version>1.6</version>
+                					</requireJavaVersion>
 									<bannedDependencies>
 										<searchTransitive>true</searchTransitive>
 										<excludes>

@@ -38,9 +38,10 @@
 		<jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
 		<jdbc.driver.version>${h2.version}</jdbc.driver.version>
-		<!--
+		<!-- 需要从Oracle网站手工下载 : 
+			 http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html
 			<jdbc.driver.groupId>com.oracle</jdbc.driver.groupId>
-			<jdbc.driver.artifactId>ojdbc14</jdbc.driver.artifactId>
+			<jdbc.driver.artifactId>ojdbc6</jdbc.driver.artifactId>
 			<jdbc.driver.version>11.2.0.3</jdbc.driver.version>
 		-->
 		<!--
@@ -49,10 +50,6 @@
 			<jdbc.driver.version>5.1.21</jdbc.driver.version>
 		-->	
 	</properties>
-	
-	<prerequisites>
-   		<maven>3.0</maven>
- 	</prerequisites>
 	
 	<!-- 设定仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<repositories>
@@ -518,6 +515,12 @@
 						</goals>
 						<configuration>
 							<rules>
+								<requireMavenVersion>
+                  					<version>3.0.4</version>
+                				</requireMavenVersion>
+                				<requireJavaVersion>
+                  					<version>1.6</version>
+                				</requireJavaVersion>
 								<bannedDependencies>
 									<searchTransitive>true</searchTransitive>
 									<!-- 避免引入过期的jar包 -->
