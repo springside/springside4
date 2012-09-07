@@ -13,7 +13,6 @@ import org.hibernate.validator.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
 
-//JPA标识
 @Entity
 @Table(name = "SS_USER")
 public class User extends IdEntity {

@@ -34,6 +34,7 @@ public class Task extends IdEntity {
 		this.description = description;
 	}
 
+	//基于USER_ID列的多对一关系定义
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
 	public User getUser() {
