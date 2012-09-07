@@ -8,8 +8,52 @@
 	<name>Springside :: Project</name>
 	<packaging>pom</packaging>
 
+	<description>SpringSide is a Spring Framework based JavaEE application reference architecture. </description>
+	<url>http://www.github.com/springside/springside4</url>
+	<inceptionYear>2006-2012</inceptionYear>
+	<organization>
+		<name>SpringSide</name>
+		<url>http://www.springside.org.cn</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<id>calvin</id>
+			<name>Calvin Xiao</name>
+			<email>calvinxiu at gmail.com</email>
+			<organization>Ericsson</organization>
+			<roles>
+				<role>Project lead</role>
+			</roles>
+			<timezone>+8</timezone>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
+		</license>
+	</license>
+
 	<modules>
 		<module>modules</module>
 		<module>examples</module>
 	</modules>
+
+	<ciManagement>
+        <system>Jenkins</system>
+        <url>http://ec2-107-22-29-7.compute-1.amazonaws.com/hudson/</url>
+    </ciManagement>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/springside/springside4/issues</url>
+    </issueManagement>
+
+    <scm>
+        <url>https://github.com/springside/springside4</url>
+        <connection>scm:git:git://github.com/springside/springside4.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:springside/springside4.git</developerConnection>
+    </scm>
 </project>
