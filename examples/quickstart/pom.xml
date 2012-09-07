@@ -14,7 +14,7 @@
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<aspectj.version>1.7.0</aspectj.version>
 		<hibernate.version>4.1.6.Final</hibernate.version>
-		<spring-data-jpa.version>1.1.0.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>1.2.0.RC1</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.1</shiro.version>
@@ -38,12 +38,6 @@
 		<jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
 		<jdbc.driver.version>${h2.version}</jdbc.driver.version>
-		<!-- 需要从Oracle网站手工下载 : 
-			 http://www.oracle.com/technetwork/database/features/jdbc/index-091264.html
-			<jdbc.driver.groupId>com.oracle</jdbc.driver.groupId>
-			<jdbc.driver.artifactId>ojdbc6</jdbc.driver.artifactId>
-			<jdbc.driver.version>11.2.0.3</jdbc.driver.version>
-		-->
 		<!--
 			<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
 			<jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
@@ -51,15 +45,32 @@
 		-->	
 	</properties>
 	
-	<!-- 设定仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<repositories>
+		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.
 		<repository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
+		-->
+		<repository>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>	
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		
+		<repository>
+			<id>repo.springsource.org</id>
+			<name>repo.springsource.org-releases</name>
+			<url>http://repo.springsource.org/libs-milestone-local</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+	    </repository>
 	</repositories>
-	-->
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<pluginRepositories> 
