@@ -5,17 +5,18 @@ create table ss_task (
 	id number(19,0),
 	title varchar2(128) not null,
 	description varchar2(255),
-	user_id bigint,
+	user_id bigint not null,
     primary key (id)
 );
 
 create table ss_user (
 	id number(19,0),
 	login_name varchar2(64) not null unique,
-	name varchar2(64),
-	password varchar2(255),
-	salt varchar2(64),
-	roles varchar2(255),
+	name varchar2(64) not null,
+	password varchar2(255) not null,
+	salt varchar2(64) not null,
+	roles varchar2(255) not null,
+	regiser_date date not null,
 	primary key (id)
 );
 

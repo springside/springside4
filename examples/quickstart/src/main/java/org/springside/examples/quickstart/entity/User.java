@@ -8,7 +8,10 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotBlank;
+import org.joda.time.DateTime;
+import org.springside.modules.persistence.Hibernates;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.collect.ImmutableList;
@@ -22,6 +25,7 @@ public class User extends IdEntity {
 	private String password;
 	private String salt;
 	private String roles;
+	private DateTime registerDate;
 
 	public User() {
 	}
@@ -88,6 +92,15 @@ public class User extends IdEntity {
 	public List<String> getRoleList() {
 		//角色列表在数据库中实际以逗号分隔字符串存储，因此返回不能修改的List.
 		return ImmutableList.copyOf(StringUtils.split(roles, ","));
+	}
+
+	@Type(type = Hibernates.DATETIME_TYPE)
+	public DateTime getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(DateTime registerDate) {
+		this.registerDate = registerDate;
 	}
 
 	@Override

@@ -7,6 +7,8 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.support.CurrentDateTimeProvider;
+import org.springframework.data.jpa.domain.support.DateTimeProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.User;
@@ -33,6 +35,7 @@ public class AccountService {
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
+	private DateTimeProvider dateTimeprovider = CurrentDateTimeProvider.INSTANCE;
 
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll();
@@ -50,6 +53,8 @@ public class AccountService {
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
+		user.setRegisterDate(dateTimeprovider.getDateTime());
+
 		userDao.save(user);
 	}
 
@@ -99,5 +104,9 @@ public class AccountService {
 	@Autowired
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+
+	public void setDateTimeProvider(DateTimeProvider dateTimeProvider) {
+		this.dateTimeprovider = dateTimeProvider;
 	}
 }

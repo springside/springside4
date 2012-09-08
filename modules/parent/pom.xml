@@ -535,6 +535,16 @@
 				<artifactId>joda-time</artifactId>
 				<version>${joda-time.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time-jsptags</artifactId>
+				<version>1.1.1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jadira.usertype</groupId>
+				<artifactId>usertype.core</artifactId>
+				<version>3.0.0.CR3</version>
+			</dependency>	
 			<!-- GENERAL UTILS end -->
 
 			<!-- OTHER TOOLS begin -->

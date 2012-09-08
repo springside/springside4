@@ -24,6 +24,7 @@
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<guava.version>13.0.1</guava.version>
+		<joda-time.version>2.1</joda-time.version>
 		<junit.version>4.10</junit.version>
 		<mockito.version>1.9.0</mockito.version>
 		<selenium.version>2.25.0</selenium.version>
@@ -229,7 +230,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
-			<version>${jackson.version}</version>
+			<version>2.0.5</version>
 		</dependency>
 		<!-- JSON end -->
 		
@@ -283,6 +284,23 @@
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
 		</dependency>
+		
+		<!-- joda-time -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+			<version>${joda-time.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time-jsptags</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jadira.usertype</groupId>
+			<artifactId>usertype.core</artifactId>
+			<version>3.0.0.CR3</version>
+		</dependency>		
 		<!-- GENERAL UTILS end -->
 
 		<!-- TEST begin -->
