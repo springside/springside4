@@ -32,7 +32,7 @@ public class NotifyMessageListener implements MessageListener {
 		try {
 			MapMessage mapMessage = (MapMessage) message;
 			//打印消息详情
-			logger.info("UserName:" + mapMessage.getString("userName") + ", Email:" + mapMessage.getString("email"));
+			logger.info("UserName:{}, Email:{}", mapMessage.getString("userName"), mapMessage.getString("email"));
 
 			//发送邮件
 			if (simpleMailService != null) {

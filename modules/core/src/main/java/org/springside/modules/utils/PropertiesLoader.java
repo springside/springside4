@@ -135,7 +135,7 @@ public class PropertiesLoader {
 
 		for (String location : resourcesPaths) {
 
-			logger.debug("Loading properties file from:" + location);
+			logger.debug("Loading properties file from path:{}", location);
 
 			InputStream is = null;
 			try {
@@ -143,7 +143,7 @@ public class PropertiesLoader {
 				is = resource.getInputStream();
 				props.load(is);
 			} catch (IOException ex) {
-				logger.info("Could not load properties from path:" + location + ", " + ex.getMessage());
+				logger.info("Could not load properties from path:{}, {} ", location, ex.getMessage());
 			} finally {
 				IOUtils.closeQuietly(is);
 			}

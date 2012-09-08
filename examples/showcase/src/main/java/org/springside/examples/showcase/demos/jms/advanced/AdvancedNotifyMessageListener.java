@@ -28,8 +28,8 @@ public class AdvancedNotifyMessageListener implements MessageListener {
 			MapMessage mapMessage = (MapMessage) message;
 
 			//打印消息详情
-			logger.info("UserName:" + mapMessage.getString("userName") + ", Email:" + mapMessage.getString("email")
-					+ ", ObjectType:" + mapMessage.getStringProperty("objectType"));
+			logger.info("UserName:{}, Email:{}, ObjectType:{}", mapMessage.getString("userName"),
+					mapMessage.getString("email"), mapMessage.getStringProperty("objectType"));
 		} catch (Exception e) {
 			logger.error("处理消息时发生异常.", e);
 		}
