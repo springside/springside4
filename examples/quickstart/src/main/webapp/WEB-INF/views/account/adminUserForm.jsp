@@ -49,7 +49,7 @@
 			<div class="control-group">
 				<label class="control-label">注册日期:</label>
 				<div class="controls">
-					<span class="help-inline"><joda:format value="${user.registerDate}" pattern="yyyy-MM-dd HH:mm:ss"/></span>
+					<span class="help-inline" style="padding:5px 0px"><joda:format value="${user.registerDate}" style="LL" locale="zh"/></span>
 				</div>
 			</div>
 			<div class="form-actions">
