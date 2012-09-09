@@ -50,19 +50,20 @@ public class UserRestFT extends BaseFunctionalTestCase {
 
 	@Before
 	public void initRestTemplate() {
-		//默认使用JDK Connction
+		//默认使用JDK Connection
 		jdkTemplate = new RestTemplate();
-		//设置20秒超时
+		//(optional)设置20秒超时
 		((SimpleClientHttpRequestFactory) jdkTemplate.getRequestFactory()).setConnectTimeout(20000);
 
 		//设置使用HttpClient4.0
 		httpClientRestTemplate = new RestTemplate();
 		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		//设置20秒超时
+		//(optional)设置20秒超时
 		((HttpComponentsClientHttpRequestFactory) requestFactory).setConnectTimeout(20000);
+
 		httpClientRestTemplate.setRequestFactory(requestFactory);
 
-		//设置使用HttpBasic的Interceptor
+		//设置处理HttpBasic Header的Interceptor
 		ClientHttpRequestInterceptor interceptor = new HttpBasicInterceptor("admin", "admin");
 		httpClientRestTemplate.setInterceptors(Lists.newArrayList(interceptor));
 	}
