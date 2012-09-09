@@ -25,8 +25,9 @@
 		<li>集成Shiro进行HttpBasic的认证</li>
 		<li>XML与JSON两种格式</li>
 		<li>RestTemplate设置HttpHeaders的写法，用原始的exchange()方法及用ClientHttpRequestInterceptor两种方法</li>
-		<li>RestTemplate默认使用JDK HttpConnection，设置使用Apache HttpClient4作为底层</li>
-		<li>客户端同样见Functional Test用例</li>
+		<li>RestTemplate默认使用JDK HttpConnection，设置使用Apache HttpClient4作为Http Connection底层</li>
+		<li>RestTemplate设置超时控制</li>
+		<li>客户端同样见Functional Test用例UserRestFt.java</li>
 	</ul>
 </body>
 </html>

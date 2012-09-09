@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
@@ -50,15 +52,25 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	public void initRestTemplate() {
 		//默认使用JDK Connction
 		jdkTemplate = new RestTemplate();
+		//设置20秒超时
+		((SimpleClientHttpRequestFactory) jdkTemplate.getRequestFactory()).setConnectTimeout(20000);
 
 		//设置使用HttpClient4.0
 		httpClientRestTemplate = new RestTemplate();
 		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		//设置20秒超时
+		((HttpComponentsClientHttpRequestFactory) requestFactory).setConnectTimeout(20000);
 		httpClientRestTemplate.setRequestFactory(requestFactory);
 
 		//设置使用HttpBasic的Interceptor
 		ClientHttpRequestInterceptor interceptor = new HttpBasicInterceptor("admin", "admin");
 		httpClientRestTemplate.setInterceptors(Lists.newArrayList(interceptor));
+	}
+
+	@After
+	public void destoryClient() {
+		//退出时关闭HttpClient4连接池中的连接
+		((HttpComponentsClientHttpRequestFactory) httpClientRestTemplate.getRequestFactory()).destroy();
 	}
 
 	/**
