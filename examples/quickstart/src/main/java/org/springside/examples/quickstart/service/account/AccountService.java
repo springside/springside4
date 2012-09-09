@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.DateTimeProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.User;
+import org.springside.examples.quickstart.repository.TaskDao;
 import org.springside.examples.quickstart.repository.UserDao;
 import org.springside.examples.quickstart.service.ServiceException;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
@@ -35,6 +36,7 @@ public class AccountService {
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
 	private UserDao userDao;
+	private TaskDao taskDao;
 	private DateTimeProvider dateTimeprovider = CurrentDateTimeProvider.INSTANCE;
 
 	public List<User> getAllUser() {
@@ -73,6 +75,8 @@ public class AccountService {
 			throw new ServiceException("不能删除超级管理员用户");
 		}
 		userDao.delete(id);
+		taskDao.deleteByUserId(id);
+
 	}
 
 	/**
@@ -104,6 +108,11 @@ public class AccountService {
 	@Autowired
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
+	}
+
+	@Autowired
+	public void setTaskDao(TaskDao taskDao) {
+		this.taskDao = taskDao;
 	}
 
 	public void setDateTimeProvider(DateTimeProvider dateTimeProvider) {
