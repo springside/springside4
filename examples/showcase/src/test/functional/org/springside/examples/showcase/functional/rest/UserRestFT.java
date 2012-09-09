@@ -2,21 +2,42 @@ package org.springside.examples.showcase.functional.rest;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
+
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
 import org.springside.modules.web.Servlets;
 
+import com.google.common.collect.Lists;
+
+/**
+ * 演示Rest Service的客户端，包含：
+ * 1. 使用exchange()函数与使用对Header操作的两种方式
+ * 2. JDK HttpConnection与Apache HttpClient4两种底层
+ * 3. 验证JSON与XML两种编码
+ * 4. 验证与Shiro结合的HttpBasic验证
+ * 
+ * @author calvin
+ */
 public class UserRestFT extends BaseFunctionalTestCase {
 
-	private final RestTemplate restTemplate = new RestTemplate();
+	private RestTemplate jdkTemplate;
+	private RestTemplate httpClientRestTemplate;
 
 	private static String resoureUrl;
 
@@ -25,32 +46,53 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		resoureUrl = baseUrl + "/api/v1/user";
 	}
 
+	@Before
+	public void initRestTemplate() {
+		//默认使用JDK Connction
+		jdkTemplate = new RestTemplate();
+
+		//设置使用HttpClient4.0
+		httpClientRestTemplate = new RestTemplate();
+		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
+		httpClientRestTemplate.setRequestFactory(requestFactory);
+
+		//设置使用HttpBasic的Interceptor
+		ClientHttpRequestInterceptor interceptor = new HttpBasicInterceptor("admin", "admin");
+		httpClientRestTemplate.setInterceptors(Lists.newArrayList(interceptor));
+	}
+
 	/**
-	 * 演示restTemplate中如何设置Headers.
-	 * 演示json与xml格式数据.
+	 * 演示使用原始的exchange()方法来设置Headers.
+	 * 演示xml格式数据.
+	 * 演示jdk connection.
 	 */
 	@Test
-	public void getUser() {
+	public void getUserAsXML() {
 		//设置Http Basic参数
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.set(com.google.common.net.HttpHeaders.AUTHORIZATION, Servlets.encodeHttpBasic("admin", "admin"));
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
 
-		//as xml
-		HttpEntity<UserDTO> response = restTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
+		HttpEntity<UserDTO> response = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
 				UserDTO.class, 1L);
-		assertEquals("admin", response.getBody().getLoginName());
-		assertEquals(new Long(1), response.getBody().getTeamId());
-
-		//as json
-		response = restTemplate.exchange(resoureUrl + "/{id}.json", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
 		assertEquals("admin", response.getBody().getLoginName());
 		assertEquals(new Long(1), response.getBody().getTeamId());
 	}
 
 	/**
-	 * 演示restTemplate中如何设置Headers.
-	 * 演示json与xml格式数据.
+	 * 演示使用ClientHttpRequestInterceptor设置header
+	 * 演示json格式数据.
+	 * 演示使用Apache Http client4.
+	 */
+	@Test
+	public void getUserAsJson() {
+		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
+		assertEquals("admin", user.getLoginName());
+		assertEquals(new Long(1), user.getTeamId());
+	}
+
+	/**
+	 * 验证与Shiro的HttpBasic的结合
 	 */
 	@Test
 	public void authWithHttpBasic() {
@@ -61,10 +103,33 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
 
 		try {
-			restTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
+			jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
 			fail("Get should fail with error username/password");
 		} catch (HttpClientErrorException e) {
 			assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
 		}
+	}
+
+	/**
+	 * 处理HttpBasicHeader的Interceptor
+	 */
+	public static class HttpBasicInterceptor implements ClientHttpRequestInterceptor {
+
+		private final String user;
+		private final String password;
+
+		public HttpBasicInterceptor(String user, String password) {
+			this.user = user;
+			this.password = password;
+		}
+
+		@Override
+		public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution)
+				throws IOException {
+			request.getHeaders().set(com.google.common.net.HttpHeaders.AUTHORIZATION,
+					Servlets.encodeHttpBasic(user, password));
+			return execution.execute(request, body);
+		}
+
 	}
 }
