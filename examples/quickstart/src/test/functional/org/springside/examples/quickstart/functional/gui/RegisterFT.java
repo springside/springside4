@@ -29,6 +29,9 @@ public class RegisterFT extends BaseSeleniumTestCase {
 
 		//登陆成功
 		assertEquals("QuickStart示例:任务管理", s.getTitle());
+
+		//退出用户
+		s.open("/logout");
 	}
 
 	@Test

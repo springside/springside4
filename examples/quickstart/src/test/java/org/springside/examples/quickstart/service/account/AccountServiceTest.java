@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springside.examples.quickstart.data.UserData;
 import org.springside.examples.quickstart.entity.User;
+import org.springside.examples.quickstart.repository.TaskDao;
 import org.springside.examples.quickstart.repository.UserDao;
 import org.springside.examples.quickstart.service.ServiceException;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
@@ -29,6 +30,9 @@ public class AccountServiceTest {
 
 	@Mock
 	private UserDao mockUserDao;
+
+	@Mock
+	private TaskDao mockTaskDao;
 
 	@Before
 	public void setUp() {
