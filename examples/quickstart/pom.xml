@@ -431,7 +431,6 @@
 	</dependencyManagement>
 
 	<build>
-			 <sourceDirectory>${project.basedir}/src/main/java2</sourceDirectory>
 		<plugins>
 			<!-- compiler插件, 设定JDK版本 -->
 			<plugin>
