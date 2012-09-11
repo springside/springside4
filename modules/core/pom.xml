@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC6</version>
+		<version>4.0.0.GA-SNAPSHOT</version>
 		<relativePath>../parent/</relativePath>
 	</parent>
 	<artifactId>springside-core</artifactId>
@@ -25,6 +25,10 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
 		<!-- PERSISTENCE end -->
 		
