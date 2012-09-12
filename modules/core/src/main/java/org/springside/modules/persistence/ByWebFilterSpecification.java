@@ -35,20 +35,20 @@ public class ByWebFilterSpecification {
 						predicates.add(builder.like((Expression<String>) root.get(attr), "%" + filter.value + "%"));
 						break;
 					case GT:
-						Class gtc = attr.getJavaType();
-						predicates.add(createGreaterPredicate(root, builder, attr, filter.value, gtc));
+						predicates.add(builder.greaterThan((Expression<Comparable>) root.get(attr),
+								(Comparable) filter.value));
 						break;
 					case LT:
-						Class ltc = attr.getJavaType();
-						predicates.add(createLessPredicate(root, builder, attr, filter.value, ltc));
+						predicates.add(builder.lessThan((Expression<Comparable>) root.get(attr),
+								(Comparable) filter.value));
 						break;
 					case GTE:
-						Class gtec = attr.getJavaType();
-						predicates.add(createGreaterOrEqualPredicate(root, builder, attr, filter.value, gtec));
+						predicates.add(builder.greaterThanOrEqualTo((Expression<Comparable>) root.get(attr),
+								(Comparable) filter.value));
 						break;
 					case LTE:
-						Class ltec = attr.getJavaType();
-						predicates.add(createLessOrEqualPredicate(root, builder, attr, filter.value, ltec));
+						predicates.add(builder.lessThanOrEqualTo((Expression<Comparable>) root.get(attr),
+								(Comparable) filter.value));
 						break;
 					}
 				}
@@ -58,26 +58,6 @@ public class ByWebFilterSpecification {
 				}
 
 				return builder.conjunction();
-			}
-
-			public <Y extends Comparable<? super Y>> Predicate createGreaterPredicate(Root<T> root,
-					CriteriaBuilder builder, SingularAttribute<? super T, ?> attr, Object value, Class<Y> clazz) {
-				return builder.greaterThan((Expression<Y>) root.get(attr), (Y) value);
-			}
-
-			public <Y extends Comparable<? super Y>> Predicate createGreaterOrEqualPredicate(Root<T> root,
-					CriteriaBuilder builder, SingularAttribute<? super T, ?> attr, Object value, Class<Y> clazz) {
-				return builder.greaterThanOrEqualTo((Expression<Y>) root.get(attr), (Y) value);
-			}
-
-			public <Y extends Comparable<? super Y>> Predicate createLessPredicate(Root<T> root,
-					CriteriaBuilder builder, SingularAttribute<? super T, ?> attr, Object value, Class<Y> clazz) {
-				return builder.lessThan((Expression<Y>) root.get(attr), (Y) value);
-			}
-
-			public <Y extends Comparable<? super Y>> Predicate createLessOrEqualPredicate(Root<T> root,
-					CriteriaBuilder builder, SingularAttribute<? super T, ?> attr, Object value, Class<Y> clazz) {
-				return builder.lessThanOrEqualTo((Expression<Y>) root.get(attr), (Y) value);
 			}
 		};
 	}
