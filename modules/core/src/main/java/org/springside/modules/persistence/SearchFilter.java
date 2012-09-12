@@ -3,7 +3,7 @@ package org.springside.modules.persistence;
 public class SearchFilter {
 
 	public enum Operator {
-		EQ, LIKE
+		EQ, LIKE, GT, LT, GTE, LTE
 	}
 
 	public String fieldName;
