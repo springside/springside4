@@ -14,11 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.entity.Team;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
-import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
-import org.springside.examples.showcase.webservice.soap.response.GetUserResponse;
-import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
-import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
-import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResult;
+import org.springside.examples.showcase.webservice.soap.response.GetUserResult;
+import org.springside.examples.showcase.webservice.soap.response.SearchUserResult;
+import org.springside.examples.showcase.webservice.soap.response.base.IdResult;
+import org.springside.examples.showcase.webservice.soap.response.base.WSResult;
 import org.springside.examples.showcase.webservice.soap.response.dto.TeamDTO;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 import org.springside.modules.beanvalidator.BeanValidators;
@@ -48,8 +48,8 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#getTeamDetail()
 	 */
 	@Override
-	public GetTeamDetailResponse getTeamDetail(Long id) {
-		GetTeamDetailResponse response = new GetTeamDetailResponse();
+	public GetTeamDetailResult getTeamDetail(Long id) {
+		GetTeamDetailResult result = new GetTeamDetailResult();
 		try {
 
 			Validate.notNull(id, "id参数为空");
@@ -59,13 +59,13 @@ public class AccountWebServiceImpl implements AccountWebService {
 			Validate.notNull(team, "项目不存在(id:" + id + ")");
 
 			TeamDTO dto = BeanMapper.map(team, TeamDTO.class);
-			response.setTeam(dto);
+			result.setTeam(dto);
 
-			return response;
+			return result;
 		} catch (IllegalArgumentException e) {
-			return handleParameterError(response, e);
+			return handleParameterError(result, e);
 		} catch (RuntimeException e) {
-			return handleGeneralError(response, e);
+			return handleGeneralError(result, e);
 		}
 	}
 
@@ -73,8 +73,8 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#getUser()
 	 */
 	@Override
-	public GetUserResponse getUser(Long id) {
-		GetUserResponse response = new GetUserResponse();
+	public GetUserResult getUser(Long id) {
+		GetUserResult result = new GetUserResult();
 		try {
 
 			Validate.notNull(id, "id参数为空");
@@ -84,14 +84,14 @@ public class AccountWebServiceImpl implements AccountWebService {
 			Validate.notNull(user, "用户不存在(id:" + id + ")");
 
 			UserDTO dto = BeanMapper.map(user, UserDTO.class);
-			response.setUser(dto);
+			result.setUser(dto);
 
-			return response;
+			return result;
 
 		} catch (IllegalArgumentException e) {
-			return handleParameterError(response, e);
+			return handleParameterError(result, e);
 		} catch (RuntimeException e) {
-			return handleGeneralError(response, e);
+			return handleGeneralError(result, e);
 		}
 	}
 
@@ -99,16 +99,16 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#searchUser()
 	 */
 	@Override
-	public SearchUserResponse searchUser(String loginName, String name) {
-		SearchUserResponse response = new SearchUserResponse();
+	public SearchUserResult searchUser(String loginName, String name) {
+		SearchUserResult result = new SearchUserResult();
 		try {
 			List<User> userList = accountService.searchUser(loginName, name);
 
 			List<UserDTO> dtoList = BeanMapper.mapList(userList, UserDTO.class);
-			response.setUserList(dtoList);
-			return response;
+			result.setUserList(dtoList);
+			return result;
 		} catch (RuntimeException e) {
-			return handleGeneralError(response, e);
+			return handleGeneralError(result, e);
 		}
 	}
 
@@ -116,8 +116,8 @@ public class AccountWebServiceImpl implements AccountWebService {
 	 * @see AccountWebService#createUser()
 	 */
 	@Override
-	public IdResponse createUser(UserDTO user) {
-		IdResponse response = new IdResponse();
+	public IdResult createUser(UserDTO user) {
+		IdResult result = new IdResult();
 		try {
 			Validate.notNull(user, "用户参数为空");
 
@@ -126,35 +126,35 @@ public class AccountWebServiceImpl implements AccountWebService {
 
 			accountService.saveUser(userEntity);
 
-			return new IdResponse(userEntity.getId());
+			return new IdResult(userEntity.getId());
 		} catch (ConstraintViolationException e) {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessageAsList(e, " "), "\n");
-			return handleParameterError(response, e, message);
+			return handleParameterError(result, e, message);
 		} catch (RuntimeException e) {
 			if (Exceptions.isCausedBy(e, org.hibernate.exception.ConstraintViolationException.class)) {
 				String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
-				return handleParameterError(response, e, message);
+				return handleParameterError(result, e, message);
 			} else {
-				return handleGeneralError(response, e);
+				return handleGeneralError(result, e);
 			}
 		}
 	}
 
-	private <T extends WSResponse> T handleParameterError(T response, Exception e, String message) {
+	private <T extends WSResult> T handleParameterError(T result, Exception e, String message) {
 		logger.error(message, e.getMessage());
-		response.setError(WSResponse.PARAMETER_ERROR, message);
-		return response;
+		result.setError(WSResult.PARAMETER_ERROR, message);
+		return result;
 	}
 
-	private <T extends WSResponse> T handleParameterError(T response, Exception e) {
+	private <T extends WSResult> T handleParameterError(T result, Exception e) {
 		logger.error(e.getMessage());
-		response.setError(WSResponse.PARAMETER_ERROR, e.getMessage());
-		return response;
+		result.setError(WSResult.PARAMETER_ERROR, e.getMessage());
+		return result;
 	}
 
-	private <T extends WSResponse> T handleGeneralError(T response, Exception e) {
+	private <T extends WSResult> T handleGeneralError(T result, Exception e) {
 		logger.error(e.getMessage());
-		response.setDefaultError();
-		return response;
+		result.setDefaultError();
+		return result;
 	}
 }

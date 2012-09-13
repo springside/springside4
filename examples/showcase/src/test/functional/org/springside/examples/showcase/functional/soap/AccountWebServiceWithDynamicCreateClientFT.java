@@ -13,7 +13,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.soap.AccountWebService;
-import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResult;
 import org.springside.modules.test.category.Smoke;
 
 /**
@@ -56,9 +56,8 @@ public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTe
 	public void getTeamDetail() {
 		AccountWebService accountWebService = creatClient();
 
-		GetTeamDetailResponse response = accountWebService.getTeamDetail(1L);
-		assertEquals("Dolphin", response.getTeam().getName());
-		assertEquals("Admin", response.getTeam().getMaster().getName());
+		GetTeamDetailResult result = accountWebService.getTeamDetail(1L);
+		assertEquals("Dolphin", result.getTeam().getName());
+		assertEquals("Admin", result.getTeam().getMaster().getName());
 	}
-
 }

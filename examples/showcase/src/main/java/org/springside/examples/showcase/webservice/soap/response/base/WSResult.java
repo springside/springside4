@@ -9,8 +9,8 @@ import org.springside.examples.showcase.webservice.soap.WsConstants;
  * 
  * @author calvin
  */
-@XmlType(name = "WSResponse", namespace = WsConstants.NS)
-public class WSResponse {
+@XmlType(name = "WSResult", namespace = WsConstants.NS)
+public class WSResult {
 
 	//-- 返回代码定义 --//
 	// 按项目的规则进行定义, 比如4xx代表客户端参数错误，5xx代表服务端业务错误等.

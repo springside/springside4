@@ -3,11 +3,11 @@ package org.springside.examples.showcase.webservice.soap.response;
 import javax.xml.bind.annotation.XmlType;
 
 import org.springside.examples.showcase.webservice.soap.WsConstants;
-import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
+import org.springside.examples.showcase.webservice.soap.response.base.WSResult;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 
-@XmlType(name = "GetUserResponse", namespace = WsConstants.NS)
-public class GetUserResponse extends WSResponse {
+@XmlType(name = "GetUserResult", namespace = WsConstants.NS)
+public class GetUserResult extends WSResult {
 	private UserDTO user;
 
 	public UserDTO getUser() {

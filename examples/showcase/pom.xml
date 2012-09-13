@@ -466,7 +466,7 @@
 					<sourceRoot>${basedir}/target/generated-sources/cxf</sourceRoot>
 					<wsdlOptions>
 						<wsdlOption>
-							<wsdl>${basedir}/src/resoures/wsdl/account-service.wsdl</wsdl>
+							<wsdl>${basedir}/target/wsdl/accountservice.wsdl</wsdl>
 						</wsdlOption>
 					</wsdlOptions>
 				</configuration>

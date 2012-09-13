@@ -3,18 +3,18 @@ package org.springside.examples.showcase.webservice.soap.response;
 import javax.xml.bind.annotation.XmlType;
 
 import org.springside.examples.showcase.webservice.soap.WsConstants;
-import org.springside.examples.showcase.webservice.soap.response.base.WSResponse;
+import org.springside.examples.showcase.webservice.soap.response.base.WSResult;
 import org.springside.examples.showcase.webservice.soap.response.dto.TeamDTO;
 
-@XmlType(name = "GetTeamDetailResponse", namespace = WsConstants.NS)
-public class GetTeamDetailResponse extends WSResponse {
+@XmlType(name = "GetTeamDetailResult", namespace = WsConstants.NS)
+public class GetTeamDetailResult extends WSResult {
 
 	private TeamDTO team;
 
-	public GetTeamDetailResponse() {
+	public GetTeamDetailResult() {
 	}
 
-	public GetTeamDetailResponse(TeamDTO team) {
+	public GetTeamDetailResult(TeamDTO team) {
 		this.team = team;
 	}
 

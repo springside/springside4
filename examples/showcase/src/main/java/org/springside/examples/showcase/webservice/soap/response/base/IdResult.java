@@ -10,14 +10,14 @@ import org.springside.examples.showcase.webservice.soap.WsConstants;
  * @author badqiu
  *
  */
-@XmlType(name = "IdResponse", namespace = WsConstants.NS)
-public class IdResponse extends WSResponse {
+@XmlType(name = "IdResult", namespace = WsConstants.NS)
+public class IdResult extends WSResult {
 	private Long id;
 
-	public IdResponse() {
+	public IdResult() {
 	}
 
-	public IdResponse(Long id) {
+	public IdResult(Long id) {
 		super();
 		this.id = id;
 	}

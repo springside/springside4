@@ -3,10 +3,10 @@ package org.springside.examples.showcase.webservice.soap;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
-import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResponse;
-import org.springside.examples.showcase.webservice.soap.response.GetUserResponse;
-import org.springside.examples.showcase.webservice.soap.response.SearchUserResponse;
-import org.springside.examples.showcase.webservice.soap.response.base.IdResponse;
+import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResult;
+import org.springside.examples.showcase.webservice.soap.response.GetUserResult;
+import org.springside.examples.showcase.webservice.soap.response.SearchUserResult;
+import org.springside.examples.showcase.webservice.soap.response.base.IdResult;
 import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
 
 /**
@@ -23,21 +23,21 @@ public interface AccountWebService {
 	/**
 	 * 获取团队的详细信息.
 	 */
-	GetTeamDetailResponse getTeamDetail(@WebParam(name = "id") Long id);
+	GetTeamDetailResult getTeamDetail(@WebParam(name = "id") Long id);
 
 	/**
 	 * 获取用户信息.
 	 */
-	GetUserResponse getUser(@WebParam(name = "id") Long id);
+	GetUserResult getUser(@WebParam(name = "id") Long id);
 
 	/**
 	 * 搜索用户信息.
 	 */
-	SearchUserResponse searchUser(@WebParam(name = "loginName") String loginName, @WebParam(name = "name") String name);
+	SearchUserResult searchUser(@WebParam(name = "loginName") String loginName, @WebParam(name = "name") String name);
 
 	/**
 	 * 新建用户.
 	 */
-	IdResponse createUser(@WebParam(name = "user") UserDTO user);
+	IdResult createUser(@WebParam(name = "user") UserDTO user);
 
 }
