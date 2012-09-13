@@ -13,7 +13,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springside.examples.showcase.data.UserData;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
-import org.springside.examples.showcase.webservice.soap.AccountWebService;
+import org.springside.examples.showcase.webservice.soap.AccountSoapService;
 import org.springside.examples.showcase.webservice.soap.response.GetUserResult;
 import org.springside.examples.showcase.webservice.soap.response.SearchUserResult;
 import org.springside.examples.showcase.webservice.soap.response.base.IdResult;
@@ -37,7 +37,7 @@ import org.springside.modules.test.category.Smoke;
 public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCase {
 
 	@Autowired
-	private AccountWebService accountWebServiceClient;
+	private AccountSoapService accountWebServiceClient;
 
 	/**
 	 * 测试获取用户.

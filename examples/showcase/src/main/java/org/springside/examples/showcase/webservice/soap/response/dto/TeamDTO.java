@@ -36,9 +36,9 @@ public class TeamDTO {
 		this.master = master;
 	}
 
-	//配置输出xml为<userList><User><id>1</id></User></userList>
+	//配置输出xml为<userList><user><id>1</id></user></userList>
 	@XmlElementWrapper(name = "userList")
-	@XmlElement(name = "User")
+	@XmlElement(name = "user")
 	public List<UserDTO> getUserList() {
 		return userList;
 	}

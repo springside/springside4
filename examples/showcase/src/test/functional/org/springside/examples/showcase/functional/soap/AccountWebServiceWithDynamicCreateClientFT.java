@@ -12,7 +12,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
-import org.springside.examples.showcase.webservice.soap.AccountWebService;
+import org.springside.examples.showcase.webservice.soap.AccountSoapService;
 import org.springside.examples.showcase.webservice.soap.response.GetTeamDetailResult;
 import org.springside.modules.test.category.Smoke;
 
@@ -27,13 +27,13 @@ import org.springside.modules.test.category.Smoke;
  */
 public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTestCase {
 
-	public AccountWebService creatClient() {
-		String address = baseUrl + "/soap/accountservice";
+	public AccountSoapService creatClient() {
+		String address = baseUrl + "/cxf/soap/accountservice";
 
 		JaxWsProxyFactoryBean proxyFactory = new JaxWsProxyFactoryBean();
 		proxyFactory.setAddress(address);
-		proxyFactory.setServiceClass(AccountWebService.class);
-		AccountWebService accountWebServiceProxy = (AccountWebService) proxyFactory.create();
+		proxyFactory.setServiceClass(AccountSoapService.class);
+		AccountSoapService accountWebServiceProxy = (AccountSoapService) proxyFactory.create();
 
 		//(可选)演示重新设定endpoint address.
 		((BindingProvider) accountWebServiceProxy).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
@@ -54,7 +54,7 @@ public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTe
 	@Test
 	@Category(Smoke.class)
 	public void getTeamDetail() {
-		AccountWebService accountWebService = creatClient();
+		AccountSoapService accountWebService = creatClient();
 
 		GetTeamDetailResult result = accountWebService.getTeamDetail(1L);
 		assertEquals("Dolphin", result.getTeam().getName());

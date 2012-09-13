@@ -156,6 +156,17 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 		</dependency>
 		<!-- SOAP end -->
+		
+		<!-- JAX-RS begin -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+	    	<groupId>com.fasterxml.jackson.jaxrs</groupId>
+	        <artifactId>jackson-jaxrs-json-provider</artifactId>
+	    </dependency>	
+		<!-- JAX-RS end -->
 
 		<!-- JMS begin -->
 		<dependency>

@@ -12,5 +12,5 @@
           			  classpath*:/application.functional-local.properties" />	
 	
 	<jaxws:client id="accountWebServiceClient" serviceClass="org.springside.examples.showcase.webservice.soap.AccountWebService"
-		address="${baseUrl}/soap/accountservice" />
+		address="${baseUrl}/cxf/soap/accountservice" />
 </beans>

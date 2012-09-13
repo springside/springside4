@@ -32,11 +32,11 @@ import org.springside.modules.utils.Exceptions;
  * 
  * @author calvin
  */
-//serviceName指明WSDL中的名称, endpointInterface属性指向Interface定义类.
-@WebService(serviceName = "AccountService", endpointInterface = "org.springside.examples.showcase.webservice.soap.AccountWebService", targetNamespace = WsConstants.NS)
-public class AccountWebServiceImpl implements AccountWebService {
+//serviceName指明WSDL中<wsdl:service>与<wsdl:binding>元素的名称, endpointInterface属性指向Interface类全称.
+@WebService(serviceName = "AccountService", endpointInterface = "org.springside.examples.showcase.webservice.soap.AccountSoapService", targetNamespace = WsConstants.NS)
+public class AccountSoapServiceImpl implements AccountSoapService {
 
-	private static Logger logger = LoggerFactory.getLogger(AccountWebServiceImpl.class);
+	private static Logger logger = LoggerFactory.getLogger(AccountSoapServiceImpl.class);
 
 	@Autowired
 	private AccountEffectiveService accountService;
@@ -45,7 +45,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	private Validator validator;
 
 	/**
-	 * @see AccountWebService#getTeamDetail()
+	 * @see AccountSoapService#getTeamDetail()
 	 */
 	@Override
 	public GetTeamDetailResult getTeamDetail(Long id) {
@@ -70,7 +70,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	/**
-	 * @see AccountWebService#getUser()
+	 * @see AccountSoapService#getUser()
 	 */
 	@Override
 	public GetUserResult getUser(Long id) {
@@ -96,7 +96,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	/**
-	 * @see AccountWebService#searchUser()
+	 * @see AccountSoapService#searchUser()
 	 */
 	@Override
 	public SearchUserResult searchUser(String loginName, String name) {
@@ -113,7 +113,7 @@ public class AccountWebServiceImpl implements AccountWebService {
 	}
 
 	/**
-	 * @see AccountWebService#createUser()
+	 * @see AccountSoapService#createUser()
 	 */
 	@Override
 	public IdResult createUser(UserDTO user) {
