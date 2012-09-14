@@ -7,9 +7,9 @@
 	<description>Apache CXF的Restful Web Service配置</description>
 	
 	<!-- jax-rs endpoint定义  -->
-	<jaxrs:server id="serviceContainer" address="/rest">
+	<jaxrs:server id="serviceContainer" address="/jaxrs">
 		<jaxrs:serviceBeans>
-			<ref bean="accountRestService" />
+			<ref bean="accountJaxRsService" />
 		</jaxrs:serviceBeans>
 		<jaxrs:providers>
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />
@@ -17,5 +17,5 @@
 	</jaxrs:server>
 
 	<!-- WebService的实现Bean定义 -->
-	<bean id="accountRestService" class="org.springside.examples.showcase.webservice.jaxrs.AccountRestService" />
+	<bean id="accountJaxRsService" class="org.springside.examples.showcase.webservice.jaxrs.AccountJaxRsService" />
 </beans>

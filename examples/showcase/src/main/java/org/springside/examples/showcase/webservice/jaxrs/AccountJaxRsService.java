@@ -13,7 +13,7 @@ import org.springside.examples.showcase.webservice.rest.UserDTO;
 import org.springside.modules.mapper.BeanMapper;
 
 @Path("/user")
-public class AccountRestService {
+public class AccountJaxRsService {
 
 	@Autowired
 	private AccountEffectiveService accountService;
