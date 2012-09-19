@@ -42,7 +42,7 @@
 
 	<!-- Spring Data Jpa配置 -->
  	<jpa:repositories base-package="org.springside.examples.quickstart"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
-	<bean class="org.springside.modules.persistence.ByWebFilterSpecification"/>
+	<bean class="org.springside.modules.persistence.BySearchFilterSpecification"/>
    
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
