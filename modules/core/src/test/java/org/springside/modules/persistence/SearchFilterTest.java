@@ -15,7 +15,7 @@ public class SearchFilterTest {
 	@Test
 	public void normal() {
 		// linkedHashMap保证顺序
-		Map<String, String> params = Maps.newLinkedHashMap();
+		Map<String, Object> params = Maps.newLinkedHashMap();
 		params.put("EQ_name", "foo");
 		params.put("LT_age", "1");
 
@@ -36,7 +36,7 @@ public class SearchFilterTest {
 	public void wrongName() {
 
 		try {
-			Map<String, String> params = Maps.newLinkedHashMap();
+			Map<String, Object> params = Maps.newLinkedHashMap();
 			params.put("EQ", "foo");
 
 			SearchFilter.parse(params);
@@ -45,7 +45,7 @@ public class SearchFilterTest {
 		}
 
 		try {
-			Map<String, String> params = Maps.newLinkedHashMap();
+			Map<String, Object> params = Maps.newLinkedHashMap();
 			params.put("EQ_", "foo");
 
 			SearchFilter.parse(params);
@@ -54,7 +54,7 @@ public class SearchFilterTest {
 		}
 
 		try {
-			Map<String, String> params = Maps.newLinkedHashMap();
+			Map<String, Object> params = Maps.newLinkedHashMap();
 			params.put("ABC_name", "foo");
 
 			SearchFilter.parse(params);

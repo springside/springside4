@@ -24,14 +24,14 @@ public class SearchFilter {
 		this.operator = operator;
 	}
 
-	public static List<SearchFilter> parse(Map<String, String> filterParams) {
+	public static List<SearchFilter> parse(Map<String, Object> filterParams) {
 		List<SearchFilter> filters = Lists.newArrayList();
-		for (Entry<String, String> entry : filterParams.entrySet()) {
+
+		for (Entry<String, Object> entry : filterParams.entrySet()) {
 			String[] names = StringUtils.split(entry.getKey(), "_");
 			if (names.length != 2) {
 				throw new IllegalArgumentException(entry.getKey() + " is not a valid search filter name");
 			}
-
 			SearchFilter filter = new SearchFilter(names[1], Operator.valueOf(names[0]), entry.getValue());
 			filters.add(filter);
 		}
