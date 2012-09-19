@@ -29,7 +29,7 @@ public class SearchFilterTest {
 		SearchFilter ageFilter = filters.get(1);
 		assertEquals(Operator.LT, ageFilter.operator);
 		assertEquals("age", ageFilter.fieldName);
-		assertEquals(1, ageFilter.value);
+		assertEquals("1", ageFilter.value);
 	}
 
 	@Test
