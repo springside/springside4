@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.repository.TaskDao;
-import org.springside.modules.persistence.BySearchFilterSpecification;
+import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
@@ -24,9 +24,6 @@ import org.springside.modules.persistence.SearchFilter.Operator;
 public class TaskService {
 
 	private TaskDao taskDao;
-
-	@Autowired
-	private BySearchFilterSpecification specBuilder;
 
 	public Task getTask(Long id) {
 		return taskDao.findOne(id);
@@ -74,7 +71,7 @@ public class TaskService {
 	private Specification<Task> buildSpecification(Long userId, Map<String, Object> filterParams) {
 		List<SearchFilter> filters = SearchFilter.parse(filterParams);
 		filters.add(new SearchFilter("user.id", Operator.EQ, userId));
-		Specification<Task> spec = specBuilder.byWebFilter(filters, Task.class);
+		Specification<Task> spec = DynamicSpecifications.bySearchFilter(filters, Task.class);
 		return spec;
 	}
 
