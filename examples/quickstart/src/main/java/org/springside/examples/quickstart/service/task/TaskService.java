@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.repository.TaskDao;
-import org.springside.modules.persistence.ByWebFilterSpecification;
+import org.springside.modules.persistence.BySearchFilterSpecification;
 import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
@@ -26,7 +26,7 @@ public class TaskService {
 	private TaskDao taskDao;
 
 	@Autowired
-	private ByWebFilterSpecification specBuilder;
+	private BySearchFilterSpecification specBuilder;
 
 	public Task getTask(Long id) {
 		return taskDao.findOne(id);

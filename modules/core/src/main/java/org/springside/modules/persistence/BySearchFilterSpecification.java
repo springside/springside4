@@ -17,7 +17,7 @@ import org.springside.modules.utils.Collections3;
 
 import com.google.common.collect.Lists;
 
-public class ByWebFilterSpecification {
+public class BySearchFilterSpecification {
 	private final ConversionService conversionService = new DefaultConversionService();
 
 	public <T> Specification<T> byWebFilter(final Collection<SearchFilter> filters, final Class<T> clazz) {

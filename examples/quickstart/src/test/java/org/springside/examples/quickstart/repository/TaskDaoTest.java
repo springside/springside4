@@ -12,7 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.modules.persistence.ByWebFilterSpecification;
+import org.springside.modules.persistence.BySearchFilterSpecification;
 import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
@@ -26,7 +26,7 @@ public class TaskDaoTest extends SpringTransactionalTestCase {
 	private TaskDao taskDao;
 
 	@Autowired
-	private ByWebFilterSpecification specBuilder;
+	private BySearchFilterSpecification specBuilder;
 
 	@Test
 	public void findTasksByUserId() throws Exception {
