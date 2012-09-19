@@ -1,5 +1,7 @@
 package org.springside.examples.quickstart.repository;
 
+import static org.junit.Assert.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.metamodel.EntityType;
@@ -22,10 +24,14 @@ public class JpaMappingTest extends SpringTransactionalTestCase {
 	@Test
 	public void allClassMapping() throws Exception {
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
+		
+		assertTrue("No entity mapping found", model.getEntities().size() > 0);
+
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();
 			em.createQuery("select o from " + entityName + " o").getResultList();
 			logger.info("ok: " + entityName);
+
 		}
 	}
 }

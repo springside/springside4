@@ -17,10 +17,10 @@ public class JodaDemo {
 	public void convertToString() {
 		String format = "yyyy-MM-dd HH:mm:ss";
 		DateTime fooDate = new DateTime(1978, 6, 1, 12, 10, 8, 0);
-		//第一种方法  直接使用DateTime的toString方法 
+		// 第一种方法 直接使用DateTime的toString方法
 		System.out.println(fooDate.toString(format));
 
-		//第二种方法,使用Formatter
+		// 第二种方法,使用Formatter
 		DateTimeFormatter fmt = DateTimeFormat.forPattern(format);
 		System.out.println(fmt.print(fooDate));
 	}
@@ -29,13 +29,13 @@ public class JodaDemo {
 	public void convertFromString() {
 		String dateString = "1978-06-01 12:10:08";
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-		//第一种方法，直接构造函数,注意日期和时间之间用T分割
+		// 第一种方法，直接构造函数,注意日期和时间之间用T分割
 		DateTime dt1 = new DateTime("1978-06-01");
 		assertEquals(1978, dt1.getYear());
 		DateTime dt2 = new DateTime("1978-06-01T12:10:08");
 		assertEquals(1978, dt2.getYear());
 
-		//第二种方法，使用Formatter
+		// 第二种方法，使用Formatter
 		DateTime dt3 = fmt.parseDateTime(dateString);
 		assertEquals(1978, dt3.getYear());
 
@@ -48,18 +48,19 @@ public class JodaDemo {
 
 		String format = "yyyy-MM-dd HH:mm:ss zZZ";
 
-		//DateTime的毫秒即System的毫秒,即1970到现在的UTC的毫秒数.
+		// DateTime的毫秒即System的毫秒,即1970到现在的UTC的毫秒数.
 		System.out.println(new DateTime().getMillis() + " " + System.currentTimeMillis());
 
-		//将日期按默认时区打印
+		// 将日期按默认时区打印
 		DateTime fooDate = new DateTime(1978, 6, 1, 12, 10, 8, 0);
-		System.out.println(fooDate.toString(format) + " " + fooDate.getMillis()); //"1978-06-01 12:10:08" 
+		System.out.println(fooDate.toString(format) + " " + fooDate.getMillis()); // "1978-06-01 12:10:08"
 
-		//将日期按UTC时区打印
+		// 将日期按UTC时区打印
 		DateTime zoneWithUTC = fooDate.withZone(DateTimeZone.UTC);
-		System.out.println(zoneWithUTC.toString(format) + " " + zoneWithUTC.getMillis());//"1978-06-01 04:10:08", sameMills
+		System.out.println(zoneWithUTC.toString(format) + " " + zoneWithUTC.getMillis());// "1978-06-01 04:10:08",
+																							// sameMills
 
-		//按不同的时区分析字符串,得到不同的时间
+		// 按不同的时区分析字符串,得到不同的时间
 		String dateString = "1978-06-01 12:10:08";
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -80,7 +81,7 @@ public class JodaDemo {
 
 		DateTime dateTime = new DateTime().withZone(DateTimeZone.UTC);
 
-		//打印中文与英文下不同长度的日期格式串
+		// 打印中文与英文下不同长度的日期格式串
 		System.out.println("S:  " + formatDateTime(dateTime, "SS", "zh"));
 		System.out.println("M:  " + formatDateTime(dateTime, "MM", "zh"));
 		System.out.println("L:  " + formatDateTime(dateTime, "LL", "zh"));
@@ -94,13 +95,13 @@ public class JodaDemo {
 		System.out.println("");
 		System.out.println("");
 
-		//直接打印TimeStamp, 日期是M,时间是L
+		// 直接打印TimeStamp, 日期是M,时间是L
 		DateTimeFormatter formatter = DateTimeFormat.forStyle("ML").withLocale(new Locale("zh"))
 				.withZone(DateTimeZone.UTC);
 
 		System.out.println("ML Mix: " + formatter.print(dateTime.getMillis()));
 
-		//只打印日期不打印时间
+		// 只打印日期不打印时间
 		System.out.println("Date only :" + formatDateTime(dateTime, "M-", "zh"));
 
 	}
@@ -111,7 +112,7 @@ public class JodaDemo {
 	}
 
 	/**
-	 * 演示日期的加钱以及计算日期间的间隔，可使用任意时间单位进行加减和计算间隔.
+	 * 演示日期的加减以及计算日期间的间隔，可使用任意时间单位进行加减和计算间隔.
 	 */
 	@Test
 	public void daysPlusAndMinusBetweenAndBetweenx() {
@@ -123,9 +124,7 @@ public class JodaDemo {
 	}
 
 	/**
-	 * 取得月份的头一天和最后一天.
-	 * 取得一天的0:00和23:59:59
-	 * 其他如年，星期的头一天，最后一天同理可证
+	 * 取得月份的头一天和最后一天. 取得一天的0:00和23:59:59 其他如年，星期的头一天，最后一天同理可证
 	 */
 	@Test
 	public void beginAndEndOfDates() {
