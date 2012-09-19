@@ -69,9 +69,9 @@ public class TaskService {
 	 * 创建动态查询条件组合.
 	 */
 	private Specification<Task> buildSpecification(Long userId, Map<String, Object> filterParams) {
-		List<SearchFilter> filters = SearchFilter.parse(filterParams);
-		filters.add(new SearchFilter("user.id", Operator.EQ, userId));
-		Specification<Task> spec = DynamicSpecifications.bySearchFilter(filters, Task.class);
+		Map<String, SearchFilter> filters = SearchFilter.parse(filterParams);
+		filters.put("user.id", new SearchFilter("user.id", Operator.EQ, userId));
+		Specification<Task> spec = DynamicSpecifications.bySearchFilter(filters.values(), Task.class);
 		return spec;
 	}
 

@@ -2,7 +2,6 @@ package org.springside.modules.persistence;
 
 import static org.junit.Assert.*;
 
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -19,14 +18,14 @@ public class SearchFilterTest {
 		params.put("EQ_name", "foo");
 		params.put("LT_age", "1");
 
-		List<SearchFilter> filters = SearchFilter.parse(params);
+		Map<String, SearchFilter> filters = SearchFilter.parse(params);
 
-		SearchFilter nameFilter = filters.get(0);
+		SearchFilter nameFilter = filters.get("name");
 		assertEquals(Operator.EQ, nameFilter.operator);
 		assertEquals("name", nameFilter.fieldName);
 		assertEquals("foo", nameFilter.value);
 
-		SearchFilter ageFilter = filters.get(1);
+		SearchFilter ageFilter = filters.get("age");
 		assertEquals(Operator.LT, ageFilter.operator);
 		assertEquals("age", ageFilter.fieldName);
 		assertEquals("1", ageFilter.value);

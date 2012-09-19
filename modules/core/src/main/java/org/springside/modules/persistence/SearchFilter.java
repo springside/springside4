@@ -1,12 +1,11 @@
 package org.springside.modules.persistence;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
 public class SearchFilter {
 
@@ -24,8 +23,8 @@ public class SearchFilter {
 		this.operator = operator;
 	}
 
-	public static List<SearchFilter> parse(Map<String, Object> filterParams) {
-		List<SearchFilter> filters = Lists.newArrayList();
+	public static Map<String, SearchFilter> parse(Map<String, Object> filterParams) {
+		Map<String, SearchFilter> filters = Maps.newHashMap();
 
 		for (Entry<String, Object> entry : filterParams.entrySet()) {
 			String[] names = StringUtils.split(entry.getKey(), "_");
@@ -33,7 +32,7 @@ public class SearchFilter {
 				throw new IllegalArgumentException(entry.getKey() + " is not a valid search filter name");
 			}
 			SearchFilter filter = new SearchFilter(names[1], Operator.valueOf(names[0]), entry.getValue());
-			filters.add(filter);
+			filters.put(filter.fieldName, filter);
 		}
 
 		return filters;
