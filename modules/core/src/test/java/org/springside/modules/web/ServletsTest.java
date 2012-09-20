@@ -9,20 +9,22 @@ import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 
+import com.google.common.collect.Maps;
+
 public class ServletsTest {
 
 	@Test
 	public void checkIfModified() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		//未设Header,返回true,需要传输内容
+		// 未设Header,返回true,需要传输内容
 		assertEquals(true, Servlets.checkIfModifiedSince(request, response, (new Date().getTime() - 2000)));
 
-		//设置If-Modified-Since Header
+		// 设置If-Modified-Since Header
 		request.addHeader("If-Modified-Since", new Date().getTime());
-		//文件修改时间比Header时间小,文件未修改, 返回false.
+		// 文件修改时间比Header时间小,文件未修改, 返回false.
 		assertEquals(false, Servlets.checkIfModifiedSince(request, response, (new Date().getTime() - 2000)));
-		//文件修改时间比Header时间大,文件已修改, 返回true,需要传输内容.
+		// 文件修改时间比Header时间大,文件已修改, 返回true,需要传输内容.
 		assertEquals(true, Servlets.checkIfModifiedSince(request, response, (new Date().getTime() + 2000)));
 	}
 
@@ -30,14 +32,14 @@ public class ServletsTest {
 	public void checkIfNoneMatch() {
 		MockHttpServletRequest request = new MockHttpServletRequest();
 		MockHttpServletResponse response = new MockHttpServletResponse();
-		//未设Header,返回true,需要传输内容
+		// 未设Header,返回true,需要传输内容
 		assertEquals(true, Servlets.checkIfNoneMatchEtag(request, response, "V1.0"));
 
-		//设置If-None-Match Header
+		// 设置If-None-Match Header
 		request.addHeader("If-None-Match", "V1.0,V1.1");
-		//存在Etag
+		// 存在Etag
 		assertEquals(false, Servlets.checkIfNoneMatchEtag(request, response, "V1.0"));
-		//不存在Etag
+		// 不存在Etag
 		assertEquals(true, Servlets.checkIfNoneMatchEtag(request, response, "V2.0"));
 	}
 
@@ -59,7 +61,30 @@ public class ServletsTest {
 
 		result = Servlets.getParametersStartingWith(request, null);
 		assertEquals(3, result.size());
-
 	}
 
+	@Test
+	public void encodeParameterStringWithPrefix() {
+		Map<String, Object> params = Maps.newLinkedHashMap();
+		params.put("name", "foo");
+		params.put("age", "1");
+
+		String queryString = Servlets.encodeParameterStringWithPrefix(params, "search_");
+		assertEquals("search_name=foo&search_age=1", queryString);
+
+		// data type is not String
+		params.clear();
+		params.put("name", "foo");
+		params.put("age", 1);
+		queryString = Servlets.encodeParameterStringWithPrefix(params, "search_");
+		assertEquals("search_name=foo&search_age=1", queryString);
+
+		// prefix is null
+		queryString = Servlets.encodeParameterStringWithPrefix(params, null);
+		assertEquals("name=foo&age=1", queryString);
+
+		queryString = Servlets.encodeParameterStringWithPrefix(params, "");
+		assertEquals("name=foo&age=1", queryString);
+
+	}
 }

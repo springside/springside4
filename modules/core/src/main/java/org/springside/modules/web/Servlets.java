@@ -167,6 +167,9 @@ public class Servlets {
 	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
 		StringBuilder queryStringBuilder = new StringBuilder();
 
+		if (prefix == null) {
+			prefix = "";
+		}
 		Iterator<Entry<String, Object>> it = params.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, Object> entry = it.next();
