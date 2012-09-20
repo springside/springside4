@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.quickstart.entity.Task;
-import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })
@@ -17,9 +16,6 @@ public class TaskDaoTest extends SpringTransactionalTestCase {
 
 	@Autowired
 	private TaskDao taskDao;
-
-	@Autowired
-	private DynamicSpecifications specBuilder;
 
 	@Test
 	public void findTasksByUserId() throws Exception {

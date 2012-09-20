@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="joda" uri="http://www.joda.org/joda/time/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 
 <html>
@@ -21,7 +21,7 @@
 				<td><a href="${ctx}/admin/user/update/${user.id}">${user.loginName}</a></td>
 				<td>${user.name}</td>
 				<td>
-					<joda:format value="${user.registerDate}" style="LL" locale="zh"/>
+					<fmt:formatDate value="${user.registerDate}" pattern="yyyy年MM月dd日  HH时mm分ss秒" />
 				</td>
 				<td><a href="${ctx}/admin/user/delete/${user.id}">删除</a></td>
 			</tr>

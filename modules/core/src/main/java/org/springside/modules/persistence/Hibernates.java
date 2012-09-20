@@ -29,7 +29,7 @@ public class Hibernates {
 	 * 从DataSoure中取出connection, 根据connection的metadata中的jdbcUrl判断Dialect类型.
 	 */
 	public static String getDialect(DataSource dataSource) {
-		//从DataSource中取出jdbcUrl.
+		// 从DataSource中取出jdbcUrl.
 		String jdbcUrl = null;
 		Connection connection = null;
 		try {
@@ -49,7 +49,7 @@ public class Hibernates {
 			}
 		}
 
-		//根据jdbc url判断dialect
+		// 根据jdbc url判断dialect
 		if (StringUtils.contains(jdbcUrl, ":h2:")) {
 			return H2Dialect.class.getName();
 		} else if (StringUtils.contains(jdbcUrl, ":mysql:")) {

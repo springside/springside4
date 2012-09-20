@@ -552,11 +552,18 @@
 				<artifactId>joda-time-jsptags</artifactId>
 				<version>1.1.1</version>
 			</dependency>
+			<!-- joda for hibernate -->
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.core</artifactId>
 				<version>3.0.0.CR3</version>
-			</dependency>	
+			</dependency>
+			<!-- joda for jackson -->
+			<dependency>
+	            <groupId>com.fasterxml.jackson.datatype</groupId>
+	            <artifactId>jackson-datatype-joda</artifactId>
+	            <version>2.0.4</version>
+        	</dependency>	
 			<!-- GENERAL UTILS end -->
 
 			<!-- OTHER TOOLS begin -->
