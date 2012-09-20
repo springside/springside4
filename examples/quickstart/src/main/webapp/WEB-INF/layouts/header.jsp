@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
-<div id="header" class="span12">
+<div id="header">
 	<div id="title">
 	    <h1>QuickStart示例<small>--TodoList应用演示</small>
 	    <shiro:user>

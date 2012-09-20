@@ -51,19 +51,18 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "")
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
 			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request) {
 
-		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search");
-
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Long userId = getCurrentUserId();
 
 		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, PAGE_SIZE, sortType);
 		model.addAttribute("tasks", tasks);
-
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
+		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
 		return "task/taskList";
 	}

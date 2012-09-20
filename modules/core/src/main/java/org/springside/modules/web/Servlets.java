@@ -7,7 +7,9 @@ package org.springside.modules.web;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -27,16 +29,16 @@ import com.google.common.net.HttpHeaders;
  */
 public class Servlets {
 
-	//-- 常用数值定义 --//
+	// -- 常用数值定义 --//
 	public static final long ONE_YEAR_SECONDS = 60 * 60 * 24 * 365;
 
 	/**
 	 * 设置客户端缓存过期时间 的Header.
 	 */
 	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
-		//Http 1.0 header, set a fix expires date.
+		// Http 1.0 header, set a fix expires date.
 		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + expiresSeconds * 1000);
-		//Http 1.1 header, set a time after now.
+		// Http 1.1 header, set a time after now.
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "private, max-age=" + expiresSeconds);
 	}
 
@@ -44,10 +46,10 @@ public class Servlets {
 	 * 设置禁止客户端缓存的Header.
 	 */
 	public static void setNoCacheHeader(HttpServletResponse response) {
-		//Http 1.0 header
+		// Http 1.0 header
 		response.setDateHeader(HttpHeaders.EXPIRES, 1L);
 		response.addHeader(HttpHeaders.PRAGMA, "no-cache");
-		//Http 1.1 header
+		// Http 1.1 header
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "no-cache, no-store, max-age=0");
 	}
 
@@ -122,7 +124,7 @@ public class Servlets {
 	 */
 	public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
 		try {
-			//中文文件名支持
+			// 中文文件名支持
 			String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
 			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
 		} catch (UnsupportedEncodingException e) {
@@ -130,11 +132,9 @@ public class Servlets {
 	}
 
 	/**
-	 * 取得带相同前缀的Request Parameters, copy from spring.
+	 * 取得带相同前缀的Request Parameters, copy from spring WebUtils.
 	 * 
 	 * 返回的结果的Parameter名已去除前缀.
-	 * 
-	 * 比如有m2
 	 */
 	public static Map<String, Object> getParametersStartingWith(ServletRequest request, String prefix) {
 		Validate.notNull(request, "Request must not be null");
@@ -158,6 +158,24 @@ public class Servlets {
 			}
 		}
 		return params;
+	}
+
+	/**
+	 * 组合Parameters生成Query String的Parameter部分,并在paramter name上加上prefix.
+	 * 
+	 */
+	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
+		StringBuilder queryStringBuilder = new StringBuilder();
+
+		Iterator<Entry<String, Object>> it = params.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, Object> entry = it.next();
+			queryStringBuilder.append(prefix).append(entry.getKey()).append("=").append(entry.getValue());
+			if (it.hasNext()) {
+				queryStringBuilder.append("&");
+			}
+		}
+		return queryStringBuilder.toString();
 	}
 
 	/**
