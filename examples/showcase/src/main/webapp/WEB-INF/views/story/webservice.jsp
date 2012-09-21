@@ -16,8 +16,8 @@
 
 	<h2>1. 传统SOAP Web Service演示</h2>
 	<ul>
-		<li>服务端是基于CXF的JAX-WS演示, 见CXF自动生成的<a href="${ctx}/cxf/">wsdl文件列表</a>.</li>
-		<li>客户端见Functional Test用例.</li>
+		<li>服务端是基于CXF的JAX-WS演示, 见CXF自动生成的<a href="${ctx}/cxf/">wsdl文件列表</a></li>
+		<li>客户端见Functional Test用例, 或SoapUI工具.</li>
 	</ul>
 		
 	<h2>2. 基于JAX-RS实现的Restful演示</h2>
@@ -36,7 +36,7 @@
 	客户端:
 	<ul>
 		<li>RestTemplate设置HttpHeaders的写法，用原始的exchange()方法及用ClientHttpRequestInterceptor两种方法</li>
-		<li>RestTemplate底层使用用默认的JDK HttpConnection，和Apache HttpClient4</li>
+		<li>RestTemplate底层使用用默认的JDK HttpConnection，也可设置为Apache HttpClient4</li>
 		<li>RestTemplate设置超时控制</li>
 		<li>客户端同样见Functional Test用例UserRestFt.java</li>
 	</ul>

@@ -79,12 +79,19 @@ public class ServletsTest {
 		queryString = Servlets.encodeParameterStringWithPrefix(params, "search_");
 		assertEquals("search_name=foo&search_age=1", queryString);
 
-		// prefix is null
+		// prefix is blank or null
 		queryString = Servlets.encodeParameterStringWithPrefix(params, null);
 		assertEquals("name=foo&age=1", queryString);
 
 		queryString = Servlets.encodeParameterStringWithPrefix(params, "");
 		assertEquals("name=foo&age=1", queryString);
 
+		// map is empty or null
+		queryString = Servlets.encodeParameterStringWithPrefix(null, "search_");
+		assertEquals("", queryString);
+
+		params.clear();
+		queryString = Servlets.encodeParameterStringWithPrefix(params, "search_");
+		assertEquals("", queryString);
 	}
 }

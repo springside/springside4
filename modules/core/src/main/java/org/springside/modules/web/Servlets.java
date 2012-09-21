@@ -163,19 +163,24 @@ public class Servlets {
 	/**
 	 * 组合Parameters生成Query String的Parameter部分,并在paramter name上加上prefix.
 	 * 
+	 * @see #getParametersStartingWith
 	 */
 	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
-		StringBuilder queryStringBuilder = new StringBuilder();
+		if (params == null || params.size() == 0) {
+			return "";
+		}
 
 		if (prefix == null) {
 			prefix = "";
 		}
+
+		StringBuilder queryStringBuilder = new StringBuilder();
 		Iterator<Entry<String, Object>> it = params.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, Object> entry = it.next();
-			queryStringBuilder.append(prefix).append(entry.getKey()).append("=").append(entry.getValue());
+			queryStringBuilder.append(prefix).append(entry.getKey()).append('=').append(entry.getValue());
 			if (it.hasNext()) {
-				queryStringBuilder.append("&");
+				queryStringBuilder.append('&');
 			}
 		}
 		return queryStringBuilder.toString();

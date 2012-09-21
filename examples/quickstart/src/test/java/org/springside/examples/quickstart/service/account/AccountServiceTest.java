@@ -49,10 +49,25 @@ public class AccountServiceTest {
 
 		accountService.registerUser(user);
 
+		// 验证user的角色，注册日期和加密后的密码都被自动更新了。
 		assertEquals("user", user.getRoles());
 		assertEquals(currentTime, user.getRegisterDate());
 		assertNotNull(user.getPassword());
 		assertNotNull(user.getSalt());
+	}
+
+	@Test
+	public void updateUser() {
+		// 如果明文密码不为空，加密密码会被更新.
+		User user = UserData.randomNewUser();
+		accountService.updateUser(user);
+		assertNotNull(user.getSalt());
+
+		// 如果明文密码为空，加密密码无变化。
+		User user2 = UserData.randomNewUser();
+		user2.setPlainPassword(null);
+		accountService.updateUser(user2);
+		assertNull(user2.getSalt());
 	}
 
 	@Test
@@ -61,7 +76,7 @@ public class AccountServiceTest {
 		accountService.deleteUser(2L);
 		Mockito.verify(mockUserDao).delete(2L);
 
-		// 删除超级管理用户抛出异常.
+		// 删除超级管理用户抛出异常, userDao没有被执行
 		try {
 			accountService.deleteUser(1L);
 			fail("expected ServicExcepton not be thrown");
