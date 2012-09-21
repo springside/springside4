@@ -12,6 +12,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
+<link type="image/x-icon" href="${ctx}/static/images/favicon.ico" rel="shortcut icon">
 <link href="${ctx}/static/bootstrap/2.1.1/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
 <link href="${ctx}/static/styles/showcase.min.css" type="text/css" rel="stylesheet" />
 <script src="${ctx}/static/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
