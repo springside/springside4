@@ -2,6 +2,7 @@
 
 a. create a archetype.properties, the content is 
 
+package=org.springside.examples.quickstart
 projectName=QuickStart
 tablePrefix=ss_
 
