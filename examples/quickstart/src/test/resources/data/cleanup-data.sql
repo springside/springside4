@@ -1,2 +1,2 @@
-delete from SS_TASK;
-delete from SS_USER;
+delete from ss_task;
+delete from ss_user;

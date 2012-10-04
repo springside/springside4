@@ -20,7 +20,7 @@ import com.google.common.collect.Lists;
  * @author calvin
  */
 @Entity
-@Table(name = "SS_TEAM")
+@Table(name = "ss_team")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Team extends IdEntity {
 
@@ -38,7 +38,7 @@ public class Team extends IdEntity {
 
 	@NotNull
 	@OneToOne
-	@JoinColumn(name = "MASTER_ID")
+	@JoinColumn(name = "master_id")
 	public User getMaster() {
 		return master;
 	}
