@@ -5,10 +5,13 @@ echo "[Pre-Requirement] Makesure install Maven 3.0.3+ and set the PATH."
 	
 set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
 
-echo "[Step 1] Install all springside modules to local maven repository."
+echo "[Step 1] Install all springside modules and archetype to local maven repository."
 cd modules
 mvn clean install -Dmaven.test.skip=true
-cd ..
+
+cd ../support/maven-archetype
+mvn clean install
+cd ../../
 
 echo "[Step 2] Generate Eclipse project files for all projects."	
 mvn eclipse:clean eclipse:eclipse 
