@@ -12,5 +12,6 @@ mvn archetype:create-from-project -Darchetype.properties=./archetype.properties 
 
 
 c. modify files
-  1.archetype-metadata.xml，remove the default value of the require properties
+  1.archetype-metadata.xml，remove the default value of the require properties,change functional to package=true
   2.pom.xml, the <name> node change to ${projectName}
+  c.move functional packages
