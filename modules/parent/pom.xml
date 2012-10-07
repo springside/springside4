@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
 	<artifactId>springside-parent</artifactId>
-	<version>4.0.0.GA</version>
+	<version>4.0.1.GA-SNAPSHOT</version>
 	<name>Springside :: Module :: Parent</name>
 	<packaging>pom</packaging>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.0.0.GA</springside.version>
+		<springside.version>4.0.1.GA-SNAPSHOT</springside.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<hibernate.version>4.1.7.Final</hibernate.version>
 		<mybatis.version>3.1.1</mybatis.version>
@@ -22,7 +22,7 @@
 		<activemq.version>5.5.1</activemq.version>
 		<quartz.version>2.1.6</quartz.version>
 		<ehcache.version>2.6.0</ehcache.version>
-		<spymemcached.version>2.8.1</spymemcached.version>
+		<spymemcached.version>2.8.7</spymemcached.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
 		<jolokia.version>1.0.5</jolokia.version>
 		<jackson.version>2.0.6</jackson.version>
