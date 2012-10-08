@@ -4,15 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
 	<artifactId>springside-parent</artifactId>
-	<version>4.0.0.RC6</version>
-	<name>Springside :: Modules :: Parent</name>
+	<version>4.0.0.GA</version>
+	<name>Springside :: Module :: Parent</name>
 	<packaging>pom</packaging>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.0.0.RC6</springside.version>
+		<springside.version>4.0.0.GA</springside.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
-		<aspectj.version>1.7.0</aspectj.version>
 		<hibernate.version>4.1.7.Final</hibernate.version>
 		<mybatis.version>3.1.1</mybatis.version>
 		<spring-data-jpa.version>1.2.0.RC1</spring-data-jpa.version>
@@ -27,7 +26,7 @@
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
 		<jolokia.version>1.0.5</jolokia.version>
 		<jackson.version>2.0.6</jackson.version>
-		<slf4j.version>1.7.0</slf4j.version>
+		<slf4j.version>1.7.1</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
@@ -40,7 +39,7 @@
 		<mockito.version>1.9.0</mockito.version>
 		<powermock.version>1.4.12</powermock.version>
 		<selenium.version>2.25.0</selenium.version>
-		<jetty.version>7.6.5.v20120716</jetty.version>
+		<jetty.version>7.6.7.v20120910</jetty.version>
 		<h2.version>1.3.168</h2.version>
 
 		<!-- Plugin的属性定义 -->
@@ -158,12 +157,12 @@
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjrt</artifactId>
-				<version>${aspectj.version}</version>
+				<version>1.7.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjweaver</artifactId>
-				<version>${aspectj.version}</version>
+				<version>1.7.0</version>
 			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
@@ -342,6 +341,19 @@
 			</dependency>
 			<!-- SOAP end -->
 
+			<!-- JAX-RS begin -->
+			<dependency>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+				<version>${cxf.version}</version>
+			</dependency>
+			<dependency>
+	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+	            <artifactId>jackson-jaxrs-json-provider</artifactId>
+	            <version>2.0.5</version>
+        	</dependency>
+			<!-- JAX-RS end -->
+			
 			<!-- JMS begin -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -421,7 +433,7 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.module</groupId>
 				<artifactId>jackson-module-jaxb-annotations</artifactId>
-				<version>2.0.5</version>
+				<version>${jackson.version}</version>
 			</dependency>
 			<!-- JSON end -->
 
@@ -508,7 +520,7 @@
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
-				<version>1.6</version>
+				<version>1.7</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
@@ -540,11 +552,18 @@
 				<artifactId>joda-time-jsptags</artifactId>
 				<version>1.1.1</version>
 			</dependency>
+			<!-- joda for hibernate -->
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.core</artifactId>
-				<version>3.0.0.CR3</version>
-			</dependency>	
+				<version>3.0.0.CR4</version>
+			</dependency>
+			<!-- joda for jackson -->
+			<dependency>
+	            <groupId>com.fasterxml.jackson.datatype</groupId>
+	            <artifactId>jackson-datatype-joda</artifactId>
+	            <version>2.0.4</version>
+        	</dependency>	
 			<!-- GENERAL UTILS end -->
 
 			<!-- OTHER TOOLS begin -->
@@ -737,14 +756,14 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-resources-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.6</version>
 				</plugin>
 
 				<!-- test插件, 仅测试名称为*Test的类, 使用支持分组测试的surefire-junit47 driver -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.12</version>
+					<version>2.12.4</version>
 					<configuration>
 						<includes>
 							<include>**/*Test.java</include>
@@ -754,7 +773,7 @@
 						<dependency>
 							<groupId>org.apache.maven.surefire</groupId>
 							<artifactId>surefire-junit47</artifactId>
-							<version>2.12</version>
+							<version>2.12.4</version>
 						</dependency>
 					</dependencies>
 				</plugin>
@@ -777,7 +796,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-war-plugin</artifactId>
-					<version>2.2</version>
+					<version>2.3</version>
 					<configuration>
 						<warName>${project.artifactId}</warName>
 					</configuration>
@@ -799,7 +818,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-source-plugin</artifactId>
-					<version>2.1.2</version>
+					<version>2.2</version>
 				</plugin>
 
 				<!-- clean插件 -->
@@ -813,7 +832,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-					<version>2.3.1</version>
+					<version>2.4</version>
 				</plugin>
 				
 				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
@@ -889,7 +908,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.4</version>
+					<version>2.5.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>

@@ -2,7 +2,7 @@
 <decorators defaultdir="/WEB-INF/layouts/">
 	<excludes>
 		<pattern>/static/*</pattern>
-		<pattern>/soap/*</pattern>
+		<pattern>/cxf/*</pattern>
 		<pattern>/api/*</pattern>
 	</excludes>
 	

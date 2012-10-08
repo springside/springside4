@@ -12,9 +12,15 @@
 	<c:if test="${not empty message}">
 		<div id="message" class="alert alert-success"><button data-dismiss="alert" class="close">×</button>${message}</div>
 	</c:if>
-	
-	<tags:sort/>
-	
+	<div class="row">
+		<div class="span4 offset7">
+			<form class="form-search" action="#">
+			 	<label>名称：</label> <input type="text" name="search_LIKE_title" class="input-medium" value="${param.search_LIKE_title}"> 
+			    <button type="submit" class="btn">Search</button>
+		    </form>
+	    </div>
+	    <tags:sort/>
+	</div>
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead><tr><th>任务</th><th>管理</th></tr></thead>
 		<tbody>

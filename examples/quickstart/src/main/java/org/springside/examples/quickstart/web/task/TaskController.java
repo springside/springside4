@@ -2,6 +2,7 @@ package org.springside.examples.quickstart.web.task;
 
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 
 import org.apache.shiro.SecurityUtils;
@@ -19,18 +20,19 @@ import org.springside.examples.quickstart.entity.Task;
 import org.springside.examples.quickstart.entity.User;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.examples.quickstart.service.task.TaskService;
+import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
 
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
  * 
- * List   page    : GET  /task/
- * Create page    : GET  /task/create
- * Create action  : POST /task/create
- * Update page    : GET  /task/update/{id}
- * Update action  : POST /task/update
- * Delete action  : GET /task/delete/{id}
+ * List page     : GET /task/
+ * Create page   : GET /task/create
+ * Create action : POST /task/create
+ * Update page   : GET /task/update/{id}
+ * Update action : POST /task/update
+ * Delete action : GET /task/delete/{id}
  * 
  * @author calvin
  */
@@ -49,15 +51,18 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value = "")
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
-			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model) {
-		Long userId = getCurrentUserId();
-		Page<Task> tasks = taskService.getUserTask(userId, pageNumber, PAGE_SIZE, sortType);
-		model.addAttribute("tasks", tasks);
+			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request) {
 
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+		Long userId = getCurrentUserId();
+
+		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, PAGE_SIZE, sortType);
+		model.addAttribute("tasks", tasks);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
+		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
 		return "task/taskList";
 	}

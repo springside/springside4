@@ -1,4 +1,4 @@
-delete from SS_TEAM;
-delete from SS_USER_ROLE;
-delete from SS_ROLE;
-delete from SS_USER;
+delete from ss_team;
+delete from ss_user_role;
+delete from ss_role;
+delete from ss_user;

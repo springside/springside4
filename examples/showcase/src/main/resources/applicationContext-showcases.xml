@@ -16,5 +16,5 @@
 	<import resource="schedule/applicationContext-quartz-timer-cluster.xml" />
 	<import resource="security/applicationContext-shiro.xml" />
 	<import resource="webservice/applicationContext-soap-server.xml" />
-
+	<import resource="webservice/applicationContext-jaxrs-server.xml" />
 </beans>

@@ -14,13 +14,13 @@ public class QuickStartServer {
 	public static final String CONTEXT = "/quickstart";
 	public static final String BASE_URL = "http://localhost:8080/quickstart";
 	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web",
-			"joda-time-jsptags", "springside-core" };
+			"springside-core" };
 
 	public static void main(String[] args) throws Exception {
-		//设定Spring的profile
+		// 设定Spring的profile
 		System.setProperty("spring.profiles.active", "development");
 
-		//启动Jetty
+		// 启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
 		JettyFactory.setTldJarNames(server, TLD_JAR_NAMES);
 
@@ -30,7 +30,7 @@ public class QuickStartServer {
 			System.out.println("Server running at " + BASE_URL);
 			System.out.println("Hit Enter to reload the application");
 
-			//等待用户输入回车重载应用.
+			// 等待用户输入回车重载应用.
 			while (true) {
 				char c = (char) System.in.read();
 				if (c == '\n') {

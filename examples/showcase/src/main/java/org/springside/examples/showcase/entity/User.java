@@ -29,8 +29,8 @@ import com.google.common.collect.Lists;
  * @author calvin
  */
 @Entity
-@Table(name = "SS_USER")
-//默认的缓存策略.
+@Table(name = "ss_user")
+// 默认的缓存策略.
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User extends IdEntity {
 	private String loginName;
@@ -43,7 +43,7 @@ public class User extends IdEntity {
 
 	private Team team;
 
-	private List<Role> roleList = Lists.newArrayList(); //有序的关联对象集合
+	private List<Role> roleList = Lists.newArrayList(); // 有序的关联对象集合
 
 	@NotBlank
 	public String getLoginName() {
@@ -105,14 +105,14 @@ public class User extends IdEntity {
 		this.status = status;
 	}
 
-	//多对多定义
+	// 多对多定义
 	@ManyToMany
-	@JoinTable(name = "SS_USER_ROLE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
-	//Fecth策略定义
+	@JoinTable(name = "ss_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	// Fecth策略定义
 	@Fetch(FetchMode.SUBSELECT)
-	//集合按id排序
+	// 集合按id排序
 	@OrderBy("id ASC")
-	//缓存策略
+	// 缓存策略
 	@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 	public List<Role> getRoleList() {
 		return roleList;
@@ -123,7 +123,7 @@ public class User extends IdEntity {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "TEAM_ID")
+	@JoinColumn(name = "team_id")
 	public Team getTeam() {
 		return team;
 	}

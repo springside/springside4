@@ -14,7 +14,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -40,6 +39,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 
 	private RestTemplate jdkTemplate;
 	private RestTemplate httpClientRestTemplate;
+	private HttpComponentsClientHttpRequestFactory httpClientRequestFactory;
 
 	private static String resoureUrl;
 
@@ -50,28 +50,28 @@ public class UserRestFT extends BaseFunctionalTestCase {
 
 	@Before
 	public void initRestTemplate() {
-		//默认使用JDK Connection
+		// 默认使用JDK Connection
 		jdkTemplate = new RestTemplate();
-		//(optional)设置20秒超时
+		// (optional)设置20秒超时
 		((SimpleClientHttpRequestFactory) jdkTemplate.getRequestFactory()).setConnectTimeout(20000);
 
-		//设置使用HttpClient4.0
+		// 设置使用HttpClient4.0
 		httpClientRestTemplate = new RestTemplate();
-		ClientHttpRequestFactory requestFactory = new HttpComponentsClientHttpRequestFactory();
-		//(optional)设置20秒超时
-		((HttpComponentsClientHttpRequestFactory) requestFactory).setConnectTimeout(20000);
+		httpClientRequestFactory = new HttpComponentsClientHttpRequestFactory();
+		// (optional)设置20秒超时
+		httpClientRequestFactory.setConnectTimeout(20000);
 
-		httpClientRestTemplate.setRequestFactory(requestFactory);
+		httpClientRestTemplate.setRequestFactory(httpClientRequestFactory);
 
-		//设置处理HttpBasic Header的Interceptor
+		// 设置处理HttpBasic Header的Interceptor
 		ClientHttpRequestInterceptor interceptor = new HttpBasicInterceptor("admin", "admin");
 		httpClientRestTemplate.setInterceptors(Lists.newArrayList(interceptor));
 	}
 
 	@After
 	public void destoryClient() {
-		//退出时关闭HttpClient4连接池中的连接
-		((HttpComponentsClientHttpRequestFactory) httpClientRestTemplate.getRequestFactory()).destroy();
+		// 退出时关闭HttpClient4连接池中的连接
+		httpClientRequestFactory.destroy();
 	}
 
 	/**
@@ -81,7 +81,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void getUserAsXML() {
-		//设置Http Basic参数
+		// 设置Http Basic参数
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.set(com.google.common.net.HttpHeaders.AUTHORIZATION, Servlets.encodeHttpBasic("admin", "admin"));
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
@@ -109,7 +109,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	 */
 	@Test
 	public void authWithHttpBasic() {
-		//设置Http Basic参数
+		// 设置Http Basic参数
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.set(com.google.common.net.HttpHeaders.AUTHORIZATION,
 				Servlets.encodeHttpBasic("admin", "wrongpassword"));

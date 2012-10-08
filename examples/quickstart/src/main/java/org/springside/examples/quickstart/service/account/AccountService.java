@@ -7,8 +7,6 @@ import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.support.CurrentDateTimeProvider;
-import org.springframework.data.jpa.domain.support.DateTimeProvider;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.quickstart.entity.User;
@@ -17,6 +15,7 @@ import org.springside.examples.quickstart.repository.UserDao;
 import org.springside.examples.quickstart.service.ServiceException;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
+import org.springside.modules.utils.DateProvider;
 import org.springside.modules.utils.Encodes;
 
 /**
@@ -24,7 +23,7 @@ import org.springside.modules.utils.Encodes;
  * 
  * @author calvin
  */
-//Spring Service Bean的标识.
+// Spring Service Bean的标识.
 @Component
 @Transactional(readOnly = true)
 public class AccountService {
@@ -37,7 +36,7 @@ public class AccountService {
 
 	private UserDao userDao;
 	private TaskDao taskDao;
-	private DateTimeProvider dateTimeprovider = CurrentDateTimeProvider.INSTANCE;
+	private DateProvider dateProvider = DateProvider.DEFAULT;
 
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll();
@@ -55,7 +54,7 @@ public class AccountService {
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
-		user.setRegisterDate(dateTimeprovider.getDateTime());
+		user.setRegisterDate(dateProvider.getDate());
 
 		userDao.save(user);
 	}
@@ -115,7 +114,7 @@ public class AccountService {
 		this.taskDao = taskDao;
 	}
 
-	public void setDateTimeProvider(DateTimeProvider dateTimeProvider) {
-		this.dateTimeprovider = dateTimeProvider;
+	public void setDateProvider(DateProvider dateProvider) {
+		this.dateProvider = dateProvider;
 	}
 }

@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springside</groupId>
-		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC6</version>
-		<relativePath>../../modules/parent/</relativePath>
-	</parent>
-	<groupId>org.springside</groupId>
-	<artifactId>springside-quickstart-archetype</artifactId>
-	<packaging>maven-archetype</packaging>
-	<name>SpringSide :: Archetype :: QuickStart</name>
-	
-	<build>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.archetype</groupId>
-				<artifactId>archetype-packaging</artifactId>
-				<version>2.2</version>
-			</extension>
-		</extensions>
-		<plugins>
-			<plugin>
-				<artifactId>maven-archetype-plugin</artifactId>
-				<version>2.2</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.springside.examples</groupId>
+  <artifactId>quickstart-archetype</artifactId>
+  <version>4.0.0.GA</version>
+  <packaging>maven-archetype</packaging>
+
+  <name>SpringSide :: Archetype :: QuickStart</name>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.archetype</groupId>
+        <artifactId>archetype-packaging</artifactId>
+        <version>2.2</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-archetype-plugin</artifactId>
+          <version>2.2</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
 </project>

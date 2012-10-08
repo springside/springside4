@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.0.RC6</version>
+		<version>4.0.0.GA</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<groupId>org.springside.examples</groupId>
@@ -156,6 +156,17 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 		</dependency>
 		<!-- SOAP end -->
+		
+		<!-- JAX-RS begin -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+	    	<groupId>com.fasterxml.jackson.jaxrs</groupId>
+	        <artifactId>jackson-jaxrs-json-provider</artifactId>
+	    </dependency>	
+		<!-- JAX-RS end -->
 
 		<!-- JMS begin -->
 		<dependency>
@@ -215,6 +226,10 @@
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
+		<dependency>
+	    	<groupId>com.fasterxml.jackson.datatype</groupId>
+	        <artifactId>jackson-datatype-joda</artifactId>
+       	</dependency>
 		
 		<!-- XML begin -->
 		<dependency>
@@ -466,7 +481,7 @@
 					<sourceRoot>${basedir}/target/generated-sources/cxf</sourceRoot>
 					<wsdlOptions>
 						<wsdlOption>
-							<wsdl>${basedir}/src/resoures/wsdl/account-service.wsdl</wsdl>
+							<wsdl>${basedir}/target/wsdl/accountservice.wsdl</wsdl>
 						</wsdlOption>
 					</wsdlOptions>
 				</configuration>
