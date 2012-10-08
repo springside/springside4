@@ -29,20 +29,21 @@ public class DynamicSpecifications {
 					List<Predicate> predicates = Lists.newArrayList();
 					for (SearchFilter filter : filters) {
 
-						// nested path translate
+						// nested path translate, 如Task的名为"user.name"的filedName, 转换为Task.user.name属性
 						String[] names = StringUtils.split(filter.fieldName, ".");
 						Path expression = root.get(names[0]);
 						for (int i = 1; i < names.length; i++) {
 							expression = expression.get(names[i]);
 						}
 
-						// convert value
+						// convert value from string to target type
 						Class attributeClass = expression.getJavaType();
 						if (!attributeClass.equals(String.class) && filter.value instanceof String
 								&& conversionService.canConvert(String.class, attributeClass)) {
 							filter.value = conversionService.convert(filter.value, attributeClass);
 						}
 
+						// logic operator
 						switch (filter.operator) {
 						case EQ:
 							predicates.add(builder.equal(expression, filter.value));
@@ -65,6 +66,7 @@ public class DynamicSpecifications {
 						}
 					}
 
+					// 将所有条件用 and 联合起来
 					if (predicates.size() > 0) {
 						return builder.and(predicates.toArray(new Predicate[predicates.size()]));
 					}
