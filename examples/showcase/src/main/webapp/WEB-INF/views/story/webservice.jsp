@@ -23,7 +23,7 @@
 	<h2>2. 基于JAX-RS实现的Restful演示</h2>
 	<ul>
 		<li>服务端是基于CXF的JAX-WS演示, CXF自动生成的<a href="${ctx}/cxf/">wadl文件列表</a></li>	
-		<li>演示地址：<a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.xml</a> 与 <a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.json</a></li>
+		<li>演示地址：<a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.xml</a> 与 <a href="${ctx}/cxf/rest/user/1.json">/cxf/rest/user/1.json</a></li>
 	</ul>	
 
 	<h2>3. SpringMVC Restful Service高级演示</h2>
@@ -31,7 +31,7 @@
 	<ul>
 		<li>集成Shiro进行HttpBasic的认证 </li>
 		<li>XML与JSON两种格式的序列化</li>
-		<li>演示地址：<a href="${ctx}/api/v1/user/1.xml">/api/v1/user/1.xml</a> 与 <a href="${ctx}/api/v1/user/1.xml">/api/v1/user/1.json</a> (用浏览器访问时需要认证admin/admin)</li>
+		<li>演示地址：<a href="${ctx}/api/v1/user/1.xml">/api/v1/user/1.xml</a> 与 <a href="${ctx}/api/v1/user/1.json">/api/v1/user/1.json</a> (用浏览器访问时需要认证admin/admin)</li>
 	</ul>
 	客户端:
 	<ul>
