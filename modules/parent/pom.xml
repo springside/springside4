@@ -25,7 +25,7 @@
 		<spymemcached.version>2.8.7</spymemcached.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
 		<jolokia.version>1.0.5</jolokia.version>
-		<jackson.version>2.0.6</jackson.version>
+		<jackson.version>2.1.0</jackson.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
@@ -151,6 +151,11 @@
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 			<!-- SPRING basic end -->			
 			
 			<!-- AOP begin-->
@@ -350,7 +355,7 @@
 			<dependency>
 	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
 	            <artifactId>jackson-jaxrs-json-provider</artifactId>
-	            <version>2.0.5</version>
+	            <version>${jackson.version}</version>
         	</dependency>
 			<!-- JAX-RS end -->
 			
@@ -547,11 +552,11 @@
 				<artifactId>joda-time</artifactId>
 				<version>${joda-time.version}</version>
 			</dependency>
-			<dependency>
-				<groupId>joda-time</groupId>
-				<artifactId>joda-time-jsptags</artifactId>
-				<version>1.1.1</version>
-			</dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time-jsptags</artifactId>
+                <version>1.1.1</version>
+            </dependency>
 			<!-- joda for hibernate -->
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
@@ -562,7 +567,7 @@
 			<dependency>
 	            <groupId>com.fasterxml.jackson.datatype</groupId>
 	            <artifactId>jackson-datatype-joda</artifactId>
-	            <version>2.0.4</version>
+	            <version>${jackson.version}</version>
         	</dependency>	
 			<!-- GENERAL UTILS end -->
 

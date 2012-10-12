@@ -16,10 +16,48 @@
 	
 	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->
 	<mvc:default-servlet-handler/>
-	
-	<!-- 定义JSP文件的位置 -->  
+
+    <!-- 新浪微博、淘宝开放平台API风格 xxx.json xxx.xml -->
+    <!-- SpringMVC3.1 协商视图解析器(即自动根据请求头信息中的contentType选择视图解析器)-->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="1" />
+        <!-- 忽略客户端请求的AcceptHeader，根据请求URL后缀来动态设置AcceptHeader -->
+        <property name="ignoreAcceptHeader" value="true"/>
+        <!-- 用于开启 /api/v1/user/1?format=json 的支持，默认关闭 -->
+        <property name="favorParameter" value="true"/>
+        <!-- 将没有添加后缀的请求默认设置为 text/html -->
+        <property name="defaultContentType" value="text/html"/>
+        <!-- 扩展名至mimeType的映射,即 api/v1/user/1.json => application/json -->
+        <property name="mediaTypes">
+            <map>
+                <entry key="json" value="application/json" />
+                <entry key="xml" value="application/xml" />
+            </map>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!-- for application/json -->
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+                <!-- for application/xml -->
+                <bean class="org.springframework.web.servlet.view.xml.MarshallingView" >
+                    <property name="marshaller">
+                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+                            <property name="classesToBeBound">
+                                <list>
+                                    <value>org.springside.examples.showcase.webservice.rest.UserDTO</value>
+                                </list>
+                            </property>
+                        </bean>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+	<!-- 定义JSP文件的位置 -->
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/WEB-INF/views/"/>
+        <property name="order" value="2" />
+        <property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	

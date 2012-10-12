@@ -8,7 +8,9 @@
 	
 	<!-- jax-ws endpoint定义  -->
 	<jaxws:endpoint address="/soap/accountservice">
-		<jaxws:implementor ref="accountSoapService" />
+        <jaxws:implementor>
+            <ref bean="accountSoapService"/>
+        </jaxws:implementor>
 	</jaxws:endpoint>
 
 	<!-- WebService的实现Bean定义 -->
