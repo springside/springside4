@@ -13,13 +13,13 @@
 		<springside.version>4.0.1.GA-SNAPSHOT</springside.version>
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<hibernate.version>4.1.7.Final</hibernate.version>
-		<spring-data-jpa.version>1.2.0.RC1</spring-data-jpa.version>
+		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.1</shiro.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
-		<jackson.version>2.0.6</jackson.version>
-		<slf4j.version>1.7.1</slf4j.version>
+		<jackson.version>2.1.0</jackson.version>
+		<slf4j.version>1.7.2</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<guava.version>13.0.1</guava.version>
@@ -61,15 +61,6 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		
-		<repository>
-			<id>repo.springsource.org</id>
-			<name>repo.springsource.org-releases</name>
-			<url>http://repo.springsource.org/libs-milestone-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-	    </repository>
 	</repositories>
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
@@ -98,12 +89,12 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.7.0</version>
+			<version>1.7.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.0</version>
+			<version>1.7.1</version>
 		</dependency>		
 		<dependency>
 			<groupId>cglib</groupId>

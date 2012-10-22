@@ -11,10 +11,10 @@ public class JettyFactoryTest {
 
 	@Test
 	public void createServer() {
-		Server server = JettyFactory.createServerInSource(1978, "/core");
+		Server server = JettyFactory.createServerInSource(1978, "/test");
 
 		assertEquals(1978, server.getConnectors()[0].getPort());
-		assertEquals("/core", ((WebAppContext) server.getHandler()).getContextPath());
+		assertEquals("/test", ((WebAppContext) server.getHandler()).getContextPath());
 		assertEquals("src/main/webapp", ((WebAppContext) server.getHandler()).getWar());
 	}
 }

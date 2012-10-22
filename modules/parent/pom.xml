@@ -14,19 +14,19 @@
 		<spring.version>3.1.2.RELEASE</spring.version>
 		<hibernate.version>4.1.7.Final</hibernate.version>
 		<mybatis.version>3.1.1</mybatis.version>
-		<spring-data-jpa.version>1.2.0.RC1</spring-data-jpa.version>
+		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.1</shiro.version>
-		<cxf.version>2.6.2</cxf.version>
-		<activemq.version>5.5.1</activemq.version>
+		<cxf.version>2.7.0</cxf.version>
+		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.1.6</quartz.version>
 		<ehcache.version>2.6.0</ehcache.version>
 		<spymemcached.version>2.8.7</spymemcached.version>
 		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
 		<jolokia.version>1.0.5</jolokia.version>
-		<jackson.version>2.0.6</jackson.version>
-		<slf4j.version>1.7.1</slf4j.version>
+		<jackson.version>2.1.0</jackson.version>
+		<slf4j.version>1.7.2</slf4j.version>
 		<log4j.version>1.2.17</log4j.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
@@ -64,16 +64,7 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
-		
-		<repository>
-			<id>repo.springsource.org</id>
-			<name>repo.springsource.org-releases</name>
-			<url>http://repo.springsource.org/libs-milestone-local</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-	    </repository>
-		
+			
 		<repository>
 			<id>spy</id>
 			<name>Spy Repository</name>
@@ -157,12 +148,12 @@
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjrt</artifactId>
-				<version>1.7.0</version>
+				<version>1.7.1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjweaver</artifactId>
-				<version>1.7.0</version>
+				<version>1.7.1</version>
 			</dependency>
 			<dependency>
 				<groupId>cglib</groupId>
@@ -350,7 +341,7 @@
 			<dependency>
 	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
 	            <artifactId>jackson-jaxrs-json-provider</artifactId>
-	            <version>2.0.5</version>
+	            <version>${jackson.version}</version>
         	</dependency>
 			<!-- JAX-RS end -->
 			
@@ -556,13 +547,13 @@
 			<dependency>
 				<groupId>org.jadira.usertype</groupId>
 				<artifactId>usertype.core</artifactId>
-				<version>3.0.0.CR4</version>
+				<version>3.0.0.GA</version>
 			</dependency>
 			<!-- joda for jackson -->
 			<dependency>
 	            <groupId>com.fasterxml.jackson.datatype</groupId>
 	            <artifactId>jackson-datatype-joda</artifactId>
-	            <version>2.0.4</version>
+	            <version>${jackson.version}</version>
         	</dependency>	
 			<!-- GENERAL UTILS end -->
 
