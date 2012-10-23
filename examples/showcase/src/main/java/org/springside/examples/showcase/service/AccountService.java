@@ -1,12 +1,14 @@
 package org.springside.examples.showcase.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.showcase.demos.jms.simple.NotifyMessageProducer;
@@ -16,7 +18,9 @@ import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.repository.jpa.RoleDao;
 import org.springside.examples.showcase.repository.jpa.UserDao;
 import org.springside.examples.showcase.service.ShiroDbRealm.ShiroUser;
+import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.Hibernates;
+import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
@@ -25,7 +29,7 @@ import org.springside.modules.utils.Encodes;
  * 
  * @author calvin
  */
-//Spring Service Bean的标识.
+// Spring Service Bean的标识.
 @Component
 @Transactional(readOnly = true)
 public class AccountService {
@@ -39,7 +43,7 @@ public class AccountService {
 
 	private RoleDao roleDao;
 
-	private NotifyMessageProducer notifyProducer; //JMS消息发送
+	private NotifyMessageProducer notifyProducer; // JMS消息发送
 
 	private ApplicationStatistics applicationStatistics;
 
@@ -57,7 +61,7 @@ public class AccountService {
 			throw new ServiceException("不能修改超级管理员用户");
 		}
 
-		//设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+		// 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {
 			entryptPassword(user);
 		}
@@ -82,14 +86,20 @@ public class AccountService {
 		user.setPassword(Encodes.encodeHex(hashPassword));
 	}
 
-	public List<User> getAllUser() {
+	public List<User> searchUser(Map<String, Object> searchParams) {
 
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
 		}
-		return (List<User>) userDao.findAll();
+
+		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
+		return userDao.findAll(spec);
 	}
 
+	/**
+	 * 获取全部用户对象，并在返回前完成LazyLoad属性的初始化。
+	 */
 	public List<User> getAllUserInitialized() {
 		List<User> result = (List<User>) userDao.findAll();
 		for (User user : result) {
@@ -155,17 +165,17 @@ public class AccountService {
 		return user.loginName;
 	}
 
-	//--------------------//
-	//   Role Management  //
-	//--------------------//
+	// --------------------//
+	// Role Management //
+	// --------------------//
 
 	public List<Role> getAllRole() {
 		return (List<Role>) roleDao.findAll();
 	}
 
-	//-----------------//
-	// Setter methods  //
-	//-----------------//
+	// -----------------//
+	// Setter methods //
+	// -----------------//
 
 	@Autowired
 	public void setUserDao(UserDao userDao) {

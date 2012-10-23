@@ -3,6 +3,7 @@ package org.springside.examples.showcase.web;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletRequest;
 import javax.validation.Valid;
 
 import org.apache.shiro.authz.annotation.Logical;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountService;
+import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
 
@@ -40,11 +42,14 @@ public class UserController {
 	@Autowired
 	private AccountService accountService;
 
-	//特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
+	// 特别设定多个ReuireRoles之间为Or关系，而不是默认的And.
 	@RequiresRoles(value = { "Admin", "User" }, logical = Logical.OR)
 	@RequestMapping(value = "")
-	public String list(Model model) {
-		List<User> users = accountService.getAllUser();
+	public String list(Model model, ServletRequest request) {
+
+		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
+
+		List<User> users = accountService.searchUser(searchParams);
 		model.addAttribute("users", users);
 		model.addAttribute("allStatus", allStatus);
 		return "account/userList";
@@ -67,7 +72,7 @@ public class UserController {
 	public String update(@Valid @ModelAttribute("preloadUser") User user,
 			@RequestParam(value = "roleList") List<Long> checkedRoleList, RedirectAttributes redirectAttributes) {
 
-		//bind roleList
+		// bind roleList
 		user.getRoleList().clear();
 		for (Long roleId : checkedRoleList) {
 			Role role = new Role(roleId);

@@ -23,15 +23,20 @@ public class SearchFilter {
 		this.operator = operator;
 	}
 
-	public static Map<String, SearchFilter> parse(Map<String, Object> filterParams) {
+	public static Map<String, SearchFilter> parse(Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = Maps.newHashMap();
 
-		for (Entry<String, Object> entry : filterParams.entrySet()) {
+		for (Entry<String, Object> entry : searchParams.entrySet()) {
+			// 过滤掉空值
+			Object value = entry.getValue();
+			if (StringUtils.isBlank((String) value)) {
+				continue;
+			}
 			String[] names = StringUtils.split(entry.getKey(), "_");
 			if (names.length != 2) {
 				throw new IllegalArgumentException(entry.getKey() + " is not a valid search filter name");
 			}
-			SearchFilter filter = new SearchFilter(names[1], Operator.valueOf(names[0]), entry.getValue());
+			SearchFilter filter = new SearchFilter(names[1], Operator.valueOf(names[0]), value);
 			filters.put(filter.fieldName, filter);
 		}
 
