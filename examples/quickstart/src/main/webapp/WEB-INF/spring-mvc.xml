@@ -11,7 +11,33 @@
 	<context:component-scan base-package="org.springside.examples.quickstart" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
-	
+
+	<!-- 解决@ResponseBody中文乱码 -->
+	<bean 
+	 class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+	  <property name="messageConverters"> 
+	  <list> 
+	   <bean 
+	    class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+	    <bean 
+	    class="org.springframework.http.converter.StringHttpMessageConverter"> 
+	    <property name="supportedMediaTypes"> 
+	     <list> 
+	      <value>text/plain;charset=UTF-8</value> 
+	     </list> 
+	    </property> 
+	   </bean> 
+	   <bean 
+	    class="org.springframework.http.converter.ResourceHttpMessageConverter" /> 
+	   <bean 
+	    class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+	    <bean 
+	    class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />
+	    <bean 
+	    class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+	   </list> 
+	 </property> 
+	</bean>		
 	<mvc:annotation-driven/>
 		
 	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->		
