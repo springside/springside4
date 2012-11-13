@@ -28,7 +28,6 @@ public class DynamicSpecifications {
 
 					List<Predicate> predicates = Lists.newArrayList();
 					for (SearchFilter filter : filters) {
-
 						// nested path translate, 如Task的名为"user.name"的filedName, 转换为Task.user.name属性
 						String[] names = StringUtils.split(filter.fieldName, ".");
 						Path expression = root.get(names[0]);

@@ -30,14 +30,14 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 	}
 
 	/**
-	 * 创建并更新任务.
+	 * 创建/更新/搜索/删除任务.
 	 */
 	@Test
 	@Category(Smoke.class)
-	public void createAndUpdateTask() {
+	public void crudTask() {
 		s.open("/task/");
 
-		//create
+		// create
 		s.click(By.linkText("创建任务"));
 
 		Task task = TaskData.randomTask();
@@ -46,7 +46,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 
 		assertTrue(s.isTextPresent("创建任务成功"));
 
-		//update
+		// update
 		s.click(By.linkText(task.getTitle()));
 		assertEquals(task.getTitle(), s.getValue(By.id("task_title")));
 
@@ -54,11 +54,14 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 		s.type(By.id("task_title"), newTitle);
 		s.click(By.id("submit_btn"));
 		assertTrue(s.isTextPresent("更新任务成功"));
-	}
 
-	@Test
-	public void deleteTask() {
-		s.open("/task/delete/2");
+		// search
+		s.type(By.name("search_LIKE_title"), newTitle);
+		s.click(By.id("search_btn"));
+		assertEquals(newTitle, s.getTable(By.id("contentTable"), 0, 0));
+
+		// delete
+		s.click(By.linkText("删除"));
 		assertTrue("没有成功消息", s.isTextPresent("删除任务成功"));
 	}
 

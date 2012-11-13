@@ -29,25 +29,7 @@ public class Hibernates {
 	 * 从DataSoure中取出connection, 根据connection的metadata中的jdbcUrl判断Dialect类型.
 	 */
 	public static String getDialect(DataSource dataSource) {
-		// 从DataSource中取出jdbcUrl.
-		String jdbcUrl = null;
-		Connection connection = null;
-		try {
-			connection = dataSource.getConnection();
-			if (connection == null) {
-				throw new IllegalStateException("Connection returned by DataSource [" + dataSource + "] was null");
-			}
-			jdbcUrl = connection.getMetaData().getURL();
-		} catch (SQLException e) {
-			throw new RuntimeException("Could not get database url", e);
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException e) {
-				}
-			}
-		}
+		String jdbcUrl = getJdbcUrlFromDataSource(dataSource);
 
 		// 根据jdbc url判断dialect
 		if (StringUtils.contains(jdbcUrl, ":h2:")) {
@@ -58,6 +40,26 @@ public class Hibernates {
 			return Oracle10gDialect.class.getName();
 		} else {
 			throw new IllegalArgumentException("Unknown Database of " + jdbcUrl);
+		}
+	}
+
+	private static String getJdbcUrlFromDataSource(DataSource dataSource) {
+		Connection connection = null;
+		try {
+			connection = dataSource.getConnection();
+			if (connection == null) {
+				throw new IllegalStateException("Connection returned by DataSource [" + dataSource + "] was null");
+			}
+			return connection.getMetaData().getURL();
+		} catch (SQLException e) {
+			throw new RuntimeException("Could not get database url", e);
+		} finally {
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+				}
+			}
 		}
 	}
 }

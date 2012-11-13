@@ -32,6 +32,18 @@ public class SearchFilterTest {
 	}
 
 	@Test
+	public void emptyValue() {
+		// linkedHashMap保证顺序
+		Map<String, Object> params = Maps.newLinkedHashMap();
+		params.put("EQ_name", "foo");
+		params.put("LT_age", null);
+		params.put("LT_mail", "");
+
+		Map<String, SearchFilter> filters = SearchFilter.parse(params);
+		assertEquals(1, filters.size());
+	}
+
+	@Test
 	public void wrongName() {
 
 		try {
