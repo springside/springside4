@@ -29,7 +29,7 @@
 		演示基于JQuery的JSONP实现，绕过浏览器对Ajax不能访问跨域名网站内容的限制实现Mashup.<br /> 请先将本页另存为本地html文件，打开本地文件访问本地应用服务器中的内容即为跨域访问的场景.
 	</p>
 	<p>
-		<input type="button" class="btn" value="获取内容" onclick="fetchMashupContent();" />
+		<input type="button" value="获取内容" onclick="fetchMashupContent();" />
 	</p>
 	<p>跨域页面内容:</p>
 	<div id="mashupContent" style="display: none" />

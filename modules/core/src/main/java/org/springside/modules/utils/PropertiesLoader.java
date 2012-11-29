@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -55,11 +54,15 @@ public class PropertiesLoader {
 	}
 
 	/**
-	 * 取出Property，但以System的Property优先.如果都為Null則返回Default值.
+	 * 取出Property，但以System的Property优先.
 	 */
 	public String getProperty(String key, String defaultValue) {
 		String result = getProperty(key);
-		return StringUtils.defaultString(result, defaultValue);
+		if (result != null) {
+			return result;
+		} else {
+			return defaultValue;
+		}
 	}
 
 	/**
@@ -73,12 +76,7 @@ public class PropertiesLoader {
 	 * 取出Property，但以System的Property优先.
 	 */
 	public Integer getInteger(String key, Integer defaultValue) {
-		String strResult = getProperty(key);
-		if (strResult != null) {
-			return Integer.valueOf(strResult);
-		} else {
-			return defaultValue;
-		}
+		return Integer.valueOf(getProperty(key, String.valueOf(defaultValue)));
 	}
 
 	/**
@@ -92,13 +90,7 @@ public class PropertiesLoader {
 	 * 取出Property，但以System的Property优先.
 	 */
 	public Boolean getBoolean(String key, boolean defaultValue) {
-		String strResult = getProperty(key);
-		if (strResult != null) {
-			return Boolean.valueOf(strResult);
-		} else {
-			return defaultValue;
-		}
-
+		return Boolean.valueOf(getProperty(key, String.valueOf(defaultValue)));
 	}
 
 	/**
