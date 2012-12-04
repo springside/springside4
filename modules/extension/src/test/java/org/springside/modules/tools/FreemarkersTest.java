@@ -22,7 +22,7 @@ public class FreemarkersTest {
 	public void renderString() {
 		Map<String, String> model = Maps.newHashMap();
 		model.put("userName", "calvin");
-		String result = FreeMarkers.rendereString(TEMPLATE, model);
+		String result = FreeMarkers.renderString(TEMPLATE, model);
 		assertEquals("hello calvin", result);
 	}
 
@@ -33,7 +33,7 @@ public class FreemarkersTest {
 		List<String> friends = Lists.newArrayList("a", "b", "c");
 
 		model.put("friends", friends);
-		String result = FreeMarkers.rendereString("hello ${friends[0]}", model);
+		String result = FreeMarkers.renderString("hello ${friends[0]}", model);
 		assertEquals("hello a", result);
 	}
 
@@ -41,7 +41,7 @@ public class FreemarkersTest {
 	public void renderStringWithErrorTemplate() {
 		Map<String, String> model = Maps.newHashMap();
 		model.put("userName", "calvin");
-		FreeMarkers.rendereString(ERROR_TEMPLATE, model);
+		FreeMarkers.renderString(ERROR_TEMPLATE, model);
 	}
 
 	@Test
