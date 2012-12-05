@@ -37,7 +37,7 @@ public class SearchFilter {
 				throw new IllegalArgumentException(entry.getKey() + " is not a valid search filter name");
 			}
 			SearchFilter filter = new SearchFilter(names[1], Operator.valueOf(names[0]), value);
-			filters.put(filter.fieldName, filter);
+			filters.put(entry.getKey(), filter);
 		}
 
 		return filters;

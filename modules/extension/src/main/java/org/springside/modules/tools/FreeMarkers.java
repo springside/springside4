@@ -17,10 +17,10 @@ public class FreeMarkers {
 	/**
 	 * 渲染模板字符串。
 	 */
-	public static String rendereString(String templateString, Map<String, ?> model) {
+	public static String renderString(String templateString, Map<String, ?> model) {
 		try {
 			StringWriter result = new StringWriter();
-			Template t = new Template("name", new StringReader(templateString), new Configuration());
+			Template t = new Template("default", new StringReader(templateString), new Configuration());
 			t.process(model, result);
 			return result.toString();
 		} catch (Exception e) {

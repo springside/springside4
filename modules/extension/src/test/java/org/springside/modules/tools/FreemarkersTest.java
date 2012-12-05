@@ -3,32 +3,45 @@ package org.springside.modules.tools;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
 public class FreemarkersTest {
-	private String TEMPLATE = "hello ${userName}";
-	private String ERROR_TEMPLATE = "hello ${";
+	private final String TEMPLATE = "hello ${userName}";
+	private final String ERROR_TEMPLATE = "hello ${";
 
 	@Test
 	public void renderString() {
 		Map<String, String> model = Maps.newHashMap();
 		model.put("userName", "calvin");
-		String result = FreeMarkers.rendereString(TEMPLATE, model);
+		String result = FreeMarkers.renderString(TEMPLATE, model);
 		assertEquals("hello calvin", result);
+	}
+
+	@Test
+	public void renderString2() {
+		Map<String, Object> model = Maps.newHashMap();
+
+		List<String> friends = Lists.newArrayList("a", "b", "c");
+
+		model.put("friends", friends);
+		String result = FreeMarkers.renderString("hello ${friends[0]}", model);
+		assertEquals("hello a", result);
 	}
 
 	@Test(expected = RuntimeException.class)
 	public void renderStringWithErrorTemplate() {
 		Map<String, String> model = Maps.newHashMap();
 		model.put("userName", "calvin");
-		FreeMarkers.rendereString(ERROR_TEMPLATE, model);
+		FreeMarkers.renderString(ERROR_TEMPLATE, model);
 	}
 
 	@Test

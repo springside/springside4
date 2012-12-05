@@ -125,8 +125,8 @@
 	
 		<!-- 嵌入式内存中数据库 -->
 		<jdbc:embedded-database id="dataSource" type="H2">
-			<jdbc:script location="classpath:sql/h2/schema.sql" />
-			<jdbc:script location="classpath:data/import-data.sql" />
+			<jdbc:script location="classpath:sql/h2/schema.sql"  />
+			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8"/>
 		</jdbc:embedded-database>
 	</beans>
 </beans>
