@@ -45,7 +45,7 @@ public class AccountSoapServiceImpl implements AccountSoapService {
 	private Validator validator;
 
 	/**
-	 * @see AccountSoapService#getTeamDetail()
+	 * @see AccountSoapService#getTeamDetail(Long)
 	 */
 	@Override
 	public GetTeamDetailResult getTeamDetail(Long id) {
@@ -70,7 +70,7 @@ public class AccountSoapServiceImpl implements AccountSoapService {
 	}
 
 	/**
-	 * @see AccountSoapService#getUser()
+	 * @see AccountSoapService#getUser(Long)
 	 */
 	@Override
 	public GetUserResult getUser(Long id) {
@@ -96,7 +96,7 @@ public class AccountSoapServiceImpl implements AccountSoapService {
 	}
 
 	/**
-	 * @see AccountSoapService#searchUser()
+	 * @see AccountSoapService#searchUser(String, String)
 	 */
 	@Override
 	public SearchUserResult searchUser(String loginName, String name) {
@@ -113,7 +113,7 @@ public class AccountSoapServiceImpl implements AccountSoapService {
 	}
 
 	/**
-	 * @see AccountSoapService#createUser()
+	 * @see AccountSoapService#createUser(UserDTO)
 	 */
 	@Override
 	public IdResult createUser(UserDTO user) {

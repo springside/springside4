@@ -80,8 +80,7 @@
 	<!-- production环境 -->
 	<beans profile="production">
 		<context:property-placeholder ignore-resource-not-found="true"
-			location="classpath*:/application.properties,
-          			  classpath*:/application.local.properties" />	
+			location="classpath*:/application.properties" />	
 
 		<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -129,7 +128,8 @@
 	<!-- unit test环境 -->
 	<beans profile="test">
 		<context:property-placeholder ignore-resource-not-found="true"
-			location="classpath*:/application.properties" />	
+			location="classpath*:/application.properties,
+          			  classpath*:/application.test.properties" />	
 		
 		<!-- 嵌入式内存中数据库 -->
 		<jdbc:embedded-database id="dataSource" type="H2">
