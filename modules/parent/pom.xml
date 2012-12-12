@@ -18,7 +18,7 @@
 		<commons-dbcp.version>1.4</commons-dbcp.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.1</shiro.version>
-		<cxf.version>2.7.0</cxf.version>
+		<cxf.version>2.7.1</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.1.6</quartz.version>
 		<ehcache.version>2.6.2</ehcache.version>
@@ -38,7 +38,7 @@
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5</powermock.version>
-		<selenium.version>2.26.0</selenium.version>
+		<selenium.version>2.28.0</selenium.version>
 		<jetty.version>7.6.8.v20121106</jetty.version>
 		<h2.version>1.3.170</h2.version>
 
@@ -341,7 +341,7 @@
 			<dependency>
 	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
 	            <artifactId>jackson-jaxrs-json-provider</artifactId>
-	            <version>2.1.1</version>
+	            <version>${jackson.version}</version>
         	</dependency>
 			<!-- JAX-RS end -->
 			
@@ -553,7 +553,7 @@
 			<dependency>
 	            <groupId>com.fasterxml.jackson.datatype</groupId>
 	            <artifactId>jackson-datatype-joda</artifactId>
-	            <version>2.1.1</version>
+	            <version>${jackson.version}</version>
         	</dependency>	
 			<!-- GENERAL UTILS end -->
 
