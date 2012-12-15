@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.web.task;
+package ${package}.web.task;
 
 import java.util.Map;
 
@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ${groupId}.${artifactId}.entity.Task;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.service.account.ShiroDbRealm.ShiroUser;
-import ${groupId}.${artifactId}.service.task.TaskService;
+import ${package}.entity.Task;
+import ${package}.entity.User;
+import ${package}.service.account.ShiroDbRealm.ShiroUser;
+import ${package}.service.task.TaskService;
 import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Maps;
@@ -57,14 +57,15 @@ public class TaskController {
 	@RequestMapping(value = "")
 	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
 			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request) {
-
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Long userId = getCurrentUserId();
 
 		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, PAGE_SIZE, sortType);
+
 		model.addAttribute("tasks", tasks);
 		model.addAttribute("sortType", sortType);
 		model.addAttribute("sortTypes", sortTypes);
+		// 将搜索条件编码成字符串，用于排序，分页的URL
 		model.addAttribute("searchParams", Servlets.encodeParameterStringWithPrefix(searchParams, "search_"));
 
 		return "task/taskList";

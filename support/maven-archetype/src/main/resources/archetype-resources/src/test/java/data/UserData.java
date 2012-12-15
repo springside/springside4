@@ -1,9 +1,9 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.data;
+package ${package}.data;
 
-import ${groupId}.${artifactId}.entity.User;
+import ${package}.entity.User;
 import org.springside.modules.test.data.RandomData;
 
 public class UserData {

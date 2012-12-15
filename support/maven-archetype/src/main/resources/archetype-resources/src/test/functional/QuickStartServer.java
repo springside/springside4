@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional;
+package ${package}.functional;
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.jetty.JettyFactory;

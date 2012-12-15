@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.rest;
+package ${package}.functional.rest;
 
 import static org.junit.Assert.*;
 
@@ -16,9 +16,9 @@ import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import ${groupId}.${artifactId}.data.TaskData;
-import ${groupId}.${artifactId}.entity.Task;
-import ${groupId}.${artifactId}.functional.BaseFunctionalTestCase;
+import ${package}.data.TaskData;
+import ${package}.entity.Task;
+import ${package}.functional.BaseFunctionalTestCase;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.category.Smoke;
 

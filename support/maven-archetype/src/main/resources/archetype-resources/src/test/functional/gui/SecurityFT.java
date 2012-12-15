@@ -1,13 +1,13 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+package ${package}.functional.gui;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 
 /**
  * 系统安全控制的功能测试, 测试主要用户故事.
@@ -23,11 +23,11 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	public void anonymousUserAccessSystem() {
 		//访问退出登录页面,退出之前的登录
 		s.open("/logout");
-		assertEquals("${projectName}示例:登录页", s.getTitle());
+		assertEquals("QuickStart示例:登录页", s.getTitle());
 
 		//访问任意页面会跳转到登录界面
 		s.open("/task");
-		assertEquals("${projectName}示例:登录页", s.getTitle());
+		assertEquals("QuickStart示例:登录页", s.getTitle());
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 		s.check(By.name("rememberMe"));
 		s.click(By.id("submit_btn"));
 
-		assertEquals("${projectName}示例:登录页", s.getTitle());
+		assertEquals("QuickStart示例:登录页", s.getTitle());
 		assertTrue(s.isTextPresent("登录失败，请重试."));
 	}
 }
