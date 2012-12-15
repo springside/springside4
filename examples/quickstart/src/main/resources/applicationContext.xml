@@ -96,6 +96,7 @@
 		</bean>
 	</beans>
 	
+	<!-- functional test 环境 -->
 	<beans profile="functional">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
@@ -122,11 +123,19 @@
 	 	<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
-	
-		<!-- 嵌入式内存中数据库 -->
-		<jdbc:embedded-database id="dataSource" type="H2">
+		
+		<!-- Simple连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />
+		</bean>
+
+		<!-- 初始化数据表结构 与默认数据-->
+		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-			<jdbc:script location="classpath:data/import-data.sql" />
-		</jdbc:embedded-database>
+			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8"/>
+		</jdbc:initialize-database>
 	</beans>
 </beans>

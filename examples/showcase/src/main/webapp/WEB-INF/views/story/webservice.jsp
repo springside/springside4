@@ -3,7 +3,7 @@
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
 <head>
-	<title>Restful Service高级演示</title>
+	<title>Web Service高级演示</title>
 	<script>
 		$(document).ready(function() {
 			$("#webservice-tab").addClass("active");
@@ -23,7 +23,7 @@
 	<h2>2. 基于JAX-RS实现的Restful演示</h2>
 	<ul>
 		<li>服务端是基于CXF的JAX-WS演示, CXF自动生成的<a href="${ctx}/cxf/">wadl文件列表</a></li>	
-		<li>演示地址：<a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.xml</a> 与 <a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.json</a></li>
+		<li>演示地址：<a href="${ctx}/cxf/rest/user/1.xml">/cxf/rest/user/1.xml</a> 与 <a href="${ctx}/cxf/rest/user/1.json">/cxf/rest/user/1.json</a></li>
 	</ul>	
 
 	<h2>3. SpringMVC Restful Service高级演示</h2>

@@ -26,7 +26,6 @@ public class AccountServiceTest {
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		ShiroTestUtils.mockSubject(new ShiroUser("foo", "Foo"));
-
 	}
 
 	@After

@@ -161,7 +161,7 @@ public class Servlets {
 	}
 
 	/**
-	 * 组合Parameters生成Query String的Parameter部分,并在paramter name上加上prefix.
+	 * 组合Parameters生成Query String的Parameter部分, 并在paramter name上加上prefix.
 	 * 
 	 * @see #getParametersStartingWith
 	 */

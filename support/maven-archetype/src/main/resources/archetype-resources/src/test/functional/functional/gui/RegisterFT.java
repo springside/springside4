@@ -24,14 +24,14 @@ public class RegisterFT extends BaseSeleniumTestCase {
 		s.click(By.id("submit_btn"));
 
 		//跳转到登录页
-		assertEquals("QuickStart示例:登录页", s.getTitle());
+		assertEquals("${projectName}示例:登录页", s.getTitle());
 		assertEquals("user2", s.getValue(By.name("username")));
 
 		s.type(By.name("password"), "user2");
 		s.click(By.id("submit_btn"));
 
 		//登陆成功
-		assertEquals("QuickStart示例:任务管理", s.getTitle());
+		assertEquals("${projectName}示例:任务管理", s.getTitle());
 
 		//退出用户
 		s.open("/logout");

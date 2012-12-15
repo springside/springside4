@@ -20,7 +20,7 @@ public class TeamMybatisDaoTest extends SpringTransactionalTestCase {
 	public void getTeamWithDetail() throws Exception {
 		Team team = teamDao.getWithDetail(1L);
 		assertEquals("Dolphin", team.getName());
-		assertEquals("Admin", team.getMaster().getName());
+		assertEquals("管理员", team.getMaster().getName());
 	}
 
 }
