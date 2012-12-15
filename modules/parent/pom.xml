@@ -11,8 +11,8 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.0-SNAPSHOT</springside.version>
-		<spring.version>3.1.3.RELEASE</spring.version>
-		<hibernate.version>4.1.8.Final</hibernate.version>
+		<spring.version>3.2.0.RELEASE</spring.version>
+		<hibernate.version>4.1.9.Final</hibernate.version>
 		<mybatis.version>3.1.1</mybatis.version>
 		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
@@ -154,17 +154,6 @@
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjweaver</artifactId>
 				<version>1.7.1</version>
-			</dependency>
-			<dependency>
-				<groupId>cglib</groupId>
-				<artifactId>cglib</artifactId>
-				<version>2.2.2</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>asm</groupId>
-				<artifactId>asm</artifactId>
-				<version>3.3.1</version>
 				<scope>runtime</scope>
 			</dependency>
 			<!-- AOP end -->
@@ -416,6 +405,11 @@
 			</dependency>
 
 			<!-- JSON begin -->
+			<dependency>
+				<groupId>com.fasterxml.jackson.core</groupId>
+				<artifactId>jackson-core</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>			
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
