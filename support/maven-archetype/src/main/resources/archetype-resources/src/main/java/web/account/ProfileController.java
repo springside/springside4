@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.web.account;
+package ${package}.web.account;
 
 import javax.validation.Valid;
 
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.service.account.AccountService;
-import ${groupId}.${artifactId}.service.account.ShiroDbRealm.ShiroUser;
+import ${package}.entity.User;
+import ${package}.service.account.AccountService;
+import ${package}.service.account.ShiroDbRealm.ShiroUser;
 
 /**
  * 用户修改自己资料的Controller.

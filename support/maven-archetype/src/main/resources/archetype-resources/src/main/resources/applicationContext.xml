@@ -18,7 +18,7 @@
 	<description>Spring公共配置 </description>
 
 	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
-	<context:component-scan base-package="${groupId}.${artifactId}">
+	<context:component-scan base-package="${package}">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
@@ -26,7 +26,7 @@
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"> 
 		<property name="dataSource" ref="dataSource"/>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
-		<property name="packagesToScan" value="${groupId}.${artifactId}"/>
+		<property name="packagesToScan" value="${package}"/>
 		<property name="jpaProperties">
 			<props>
 				<!-- 命名规则 My_NAME->MyName -->
@@ -44,7 +44,7 @@
 	</bean>
 
 	<!-- Spring Data Jpa配置 -->
- 	<jpa:repositories base-package="${groupId}.${artifactId}"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
+ 	<jpa:repositories base-package="${package}"  transaction-manager-ref="transactionManager" entity-manager-factory-ref="entityManagerFactory"/>
    
 	<!-- Jpa 事务配置 -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
@@ -99,6 +99,7 @@
 		</bean>
 	</beans>
 	
+	<!-- functional test 环境 -->
 	<beans profile="functional">
 		<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
@@ -125,11 +126,19 @@
 	 	<context:property-placeholder ignore-resource-not-found="true"
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
-	
-		<!-- 嵌入式内存中数据库 -->
-		<jdbc:embedded-database id="dataSource" type="H2">
+		
+		<!-- Simple连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${symbol_dollar}{jdbc.driver}" />
+			<property name="url" value="${symbol_dollar}{jdbc.url}" />
+			<property name="username" value="${symbol_dollar}{jdbc.username}" />
+			<property name="password" value="${symbol_dollar}{jdbc.password}" />
+		</bean>
+
+		<!-- 初始化数据表结构 与默认数据-->
+		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-			<jdbc:script location="classpath:data/import-data.sql" />
-		</jdbc:embedded-database>
+			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8"/>
+		</jdbc:initialize-database>
 	</beans>
 </beans>

@@ -89,6 +89,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		HttpEntity<UserDTO> response = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
 				UserDTO.class, 1L);
 		assertEquals("admin", response.getBody().getLoginName());
+		assertEquals("管理员", response.getBody().getName());
 		assertEquals(new Long(1), response.getBody().getTeamId());
 	}
 
@@ -101,6 +102,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	public void getUserAsJson() {
 		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
 		assertEquals("admin", user.getLoginName());
+		assertEquals("管理员", user.getName());
 		assertEquals(new Long(1), user.getTeamId());
 	}
 
@@ -143,6 +145,5 @@ public class UserRestFT extends BaseFunctionalTestCase {
 					Servlets.encodeHttpBasic(user, password));
 			return execution.execute(request, body);
 		}
-
 	}
 }

@@ -20,12 +20,12 @@ public class SearchFilterTest {
 
 		Map<String, SearchFilter> filters = SearchFilter.parse(params);
 
-		SearchFilter nameFilter = filters.get("name");
+		SearchFilter nameFilter = filters.get("EQ_name");
 		assertEquals(Operator.EQ, nameFilter.operator);
 		assertEquals("name", nameFilter.fieldName);
 		assertEquals("foo", nameFilter.value);
 
-		SearchFilter ageFilter = filters.get("age");
+		SearchFilter ageFilter = filters.get("LT_age");
 		assertEquals(Operator.LT, ageFilter.operator);
 		assertEquals("age", ageFilter.fieldName);
 		assertEquals("1", ageFilter.value);

@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.service.account;
+package ${package}.service.account;
 
 import java.util.List;
 
@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.repository.TaskDao;
-import ${groupId}.${artifactId}.repository.UserDao;
-import ${groupId}.${artifactId}.service.ServiceException;
-import ${groupId}.${artifactId}.service.account.ShiroDbRealm.ShiroUser;
+import ${package}.entity.User;
+import ${package}.repository.TaskDao;
+import ${package}.repository.UserDao;
+import ${package}.service.ServiceException;
+import ${package}.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.DateProvider;
 import org.springside.modules.utils.Encodes;

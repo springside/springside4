@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.web.account;
+package ${package}.web.account;
 
 import javax.validation.Valid;
 
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.service.account.AccountService;
+import ${package}.entity.User;
+import ${package}.service.account.AccountService;
 
 /**
  * 用户注册的Controller.
