@@ -12,7 +12,14 @@
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 	
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageCOnverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+  		</mvc:message-converters>
+	</mvc:annotation-driven>
 		
 	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->		
 	<mvc:default-servlet-handler/>
