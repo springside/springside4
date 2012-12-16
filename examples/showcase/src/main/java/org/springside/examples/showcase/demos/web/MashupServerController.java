@@ -21,7 +21,7 @@ public class MashupServerController {
 
 	private final JsonMapper mapper = new JsonMapper();
 
-	@RequestMapping(value = "/web/mashup")
+	@RequestMapping(value = "/web/mashup", produces = "applicaiton/javascript")
 	@ResponseBody
 	public String execute(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
