@@ -17,16 +17,10 @@ public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
 
-	@RequestMapping(value = "/{id}.xml", method = RequestMethod.GET, produces = MediaType.APPLICATION_XML_VALUE)
-	@ResponseBody
-	public UserDTO getAsXml(@PathVariable("id") Long id) {
-		User user = accountService.getUser(id);
-		return bindDTO(user);
-	}
-
-	@RequestMapping(value = "/{id}.json", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public UserDTO getAsJson(@PathVariable("id") Long id) {
+    // /api/v1/user/1.json /api/v1/user/1.xml rest api风格
+    // 注意：不用再加@ResponseBody注解
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public UserDTO getAsXxx(@PathVariable("id") Long id) {
 		User user = accountService.getUser(id);
 		return bindDTO(user);
 	}
