@@ -20,9 +20,6 @@
 			</bean>
   		</mvc:message-converters>
 	</mvc:annotation-driven>
-		
-	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->		
-	<mvc:default-servlet-handler/>
 	
 	<!-- 定义JSP文件的位置 --> 
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -30,6 +27,10 @@
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- 定义无Controller的path<->view直接映射 -->
+			
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->	
+	<mvc:default-servlet-handler/>
+	
+	<!-- 定义无需Controller的url<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="redirect:/task"/>
 </beans>
