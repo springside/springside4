@@ -5,11 +5,14 @@
  */
 package org.springside.modules.test.selenium;
 
+import java.io.File;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -25,8 +28,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class Selenium2 {
 
 	public static final int DEFAULT_WAIT_TIME = 20;
-	private WebDriver driver;
-	private String baseUrl;
+	private final WebDriver driver;
+	private final String baseUrl;
 
 	public Selenium2(WebDriver driver, String baseUrl) {
 		this.driver = driver;
@@ -244,7 +247,49 @@ public class Selenium2 {
 		return element.getAttribute("value");
 	}
 
+	/**
+	 * 截屏成png文件，存放于临时目录，在JVM退出时自动删除.
+	 */
+	public File snapshot() {
+		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	}
+
 	// WaitFor 函數 //
+	/**
+	 * 等待页面title的值为title, 使用默认timeout时间.
+	 */
+	public void waitForTitleIs(String title) {
+		waitForCondition(ExpectedConditions.titleIs(title), DEFAULT_WAIT_TIME);
+	}
+
+	/**
+	 * 等待页面title的值为title, timeout单位为秒.
+	 */
+	public void waitForTitleIs(String title, int timeout) {
+		waitForCondition(ExpectedConditions.titleIs(title), timeout);
+	}
+
+	/**
+	 * 等待页面title,使用默认timeout时间.
+	 */
+	public void waitForTitleContains(String title) {
+		waitForCondition(ExpectedConditions.titleContains(title), DEFAULT_WAIT_TIME);
+	}
+
+	/**
+	 * 等待页面title, timeout单位为秒.
+	 */
+	public void waitForTitleContains(String title, int timeout) {
+		waitForCondition(ExpectedConditions.titleContains(title), timeout);
+	}
+
+	/**
+	 * 等待Element的内容可见, 使用默认timeout时间.
+	 */
+	public void waitForVisible(By by) {
+		waitForCondition(ExpectedConditions.visibilityOfElementLocated(by), DEFAULT_WAIT_TIME);
+	}
+
 	/**
 	 * 等待Element的内容可见, timeout单位为秒.
 	 */
@@ -253,10 +298,24 @@ public class Selenium2 {
 	}
 
 	/**
+	 * 等待Element的内容为text, 使用默认timeout时间.
+	 */
+	public void waitForTextPresent(By by, String text) {
+		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), DEFAULT_WAIT_TIME);
+	}
+
+	/**
 	 * 等待Element的内容为text, timeout单位为秒.
 	 */
 	public void waitForTextPresent(By by, String text, int timeout) {
 		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), timeout);
+	}
+
+	/**
+	 * 等待Element的value值为value, 使用默认timeout时间.
+	 */
+	public void waitForValuePresent(By by, String value) {
+		waitForCondition(ExpectedConditions.textToBePresentInElementValue(by, value), DEFAULT_WAIT_TIME);
 	}
 
 	/**

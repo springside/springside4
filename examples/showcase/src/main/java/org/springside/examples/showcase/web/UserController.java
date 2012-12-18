@@ -69,7 +69,7 @@ public class UserController {
 	 */
 	@RequiresPermissions("user:edit")
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadUser") User user,
+	public String update(@Valid @ModelAttribute("user") User user,
 			@RequestParam(value = "roleList") List<Long> checkedRoleList, RedirectAttributes redirectAttributes) {
 
 		// bind roleList
@@ -105,7 +105,7 @@ public class UserController {
 	@ModelAttribute
 	public void getUser(@RequestParam(value = "id", required = false) Long id, Model model) {
 		if (id != null) {
-			model.addAttribute("preloadUser", accountService.getUser(id));
+			model.addAttribute("user", accountService.getUser(id));
 		}
 	}
 

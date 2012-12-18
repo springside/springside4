@@ -93,7 +93,7 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadTask") Task task, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
 		taskService.saveTask(task);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";
@@ -113,7 +113,7 @@ public class TaskController {
 	@ModelAttribute()
 	public void getTask(@RequestParam(value = "id", required = false) Long id, Model model) {
 		if (id != null) {
-			model.addAttribute("preloadTask", taskService.getTask(id));
+			model.addAttribute("task", taskService.getTask(id));
 		}
 	}
 

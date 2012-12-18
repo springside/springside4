@@ -22,7 +22,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		s.open("/");
 		s.click(By.linkText("帐号管理"));
 		loginAsAdminIfNecessary();
-		assertEquals("Showcase示例:综合演示用例", s.getTitle());
+		s.waitForTitleContains("综合演示用例");
 		WebElement table = s.findElement(By.id("contentTable"));
 		assertEquals("管理员 ", s.getTable(table, 0, 1));
 	}

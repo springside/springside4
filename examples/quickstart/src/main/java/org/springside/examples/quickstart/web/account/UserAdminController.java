@@ -43,7 +43,7 @@ public class UserAdminController {
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadUser") User user, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountService.updateUser(user);
 		redirectAttributes.addFlashAttribute("message", "更新用户" + user.getLoginName() + "成功");
 		return "redirect:/admin/user";
@@ -64,7 +64,7 @@ public class UserAdminController {
 	@ModelAttribute
 	public void getUser(@RequestParam(value = "id", required = false) Long id, Model model) {
 		if (id != null) {
-			model.addAttribute("preloadUser", accountService.getUser(id));
+			model.addAttribute("user", accountService.getUser(id));
 		}
 	}
 }

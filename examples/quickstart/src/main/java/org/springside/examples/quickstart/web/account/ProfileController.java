@@ -34,7 +34,7 @@ public class ProfileController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadUser") User user) {
+	public String update(@Valid @ModelAttribute("user") User user) {
 		accountService.updateUser(user);
 		updateCurrentUserName(user.getName());
 		return "redirect:/";
@@ -47,7 +47,7 @@ public class ProfileController {
 	@ModelAttribute
 	public void getUser(@RequestParam(value = "id", required = false) Long id, Model model) {
 		if (id != null) {
-			model.addAttribute("preloadUser", accountService.getUser(id));
+			model.addAttribute("user", accountService.getUser(id));
 		}
 	}
 
