@@ -2,9 +2,7 @@ package org.springside.examples.quickstart.rest;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Set;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,11 +56,8 @@ public class TaskRestController {
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
-		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<Task>> failures = validator.validate(task);
-		if (!failures.isEmpty()) {
-			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
-		}
+		//调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
+		BeanValidators.validateWithException(validator, task);
 
 		//保存任务
 		taskService.saveTask(task);
@@ -78,12 +73,8 @@ public class TaskRestController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Task task) {
-		//调用JSR303 Bean Validator进行校验，如果出错返回含400错误码及json格式的错误信息.
-		Set<ConstraintViolation<Task>> failures = validator.validate(task);
-		if (!failures.isEmpty()) {
-			return new ResponseEntity(BeanValidators.extractPropertyAndMessage(failures), HttpStatus.BAD_REQUEST);
-		}
-
+		//调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
+		BeanValidators.validateWithException(validator, task);
 		//保存
 		taskService.saveTask(task);
 

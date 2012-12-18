@@ -10,6 +10,7 @@
 	<!-- 自动扫描且只扫描@Controller -->
 	<context:component-scan base-package="org.springside.examples.showcase" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 	
 	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
@@ -47,8 +48,7 @@
 	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 		<property name="exceptionMappings">  
-			<props>  
-				<prop key="org.springframework.validation.BindException">error/400</prop>
+			<props>
 				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
 				<prop key="java.lang.Throwable">error/500</prop>
             </props>  
