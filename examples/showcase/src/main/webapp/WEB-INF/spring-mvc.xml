@@ -21,7 +21,7 @@
   		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<!-- 根据URL后缀自动判定Content-Type及相应的View -->
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
 	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 	    <property name="mediaTypes" >
 	        <value>
@@ -44,7 +44,18 @@
 	<mvc:view-controller path="/" view-name="index"/>
 	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>
 	
-	<!-- 支持 Shiro对Controller的方法级AOP安全控制 begin-->
+	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+		<property name="exceptionMappings">  
+			<props>  
+				<prop key="org.springframework.validation.BindException">error/400</prop>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+				<prop key="java.lang.Throwable">error/500</prop>
+            </props>  
+		</property>  
+    </bean> 
+    
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制  begin-->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true" />
 	</bean>
@@ -52,14 +63,5 @@
 	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
-	
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
-		<property name="exceptionMappings">  
-			<props>  
-				<prop key="org.springframework.validation.BindException">error/400</prop>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  
-            </props>  
-		</property>  
-    </bean> 
 	<!-- end -->
 </beans>
