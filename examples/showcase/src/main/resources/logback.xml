@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- console -->
+  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+  	<!-- Output pattern : date [thread] priority [category] - message -->
+    <encoder>	
+      <pattern>%d [%t] %-5p [%-40.40c] -%m%n</pattern>
+    </encoder>
+  </appender>
+  
+  <!-- hourly rolling file -->
+  <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <File.DatePattern>.yyyy-MM-dd-HH</File.DatePattern>
+    <File>logs/showcase.log</File>
+    <encoder>
+      <pattern>%d [%t] %-5p [%-40.40c] -%m%n</pattern>
+    </encoder>
+  </appender>
+  
+  <!-- project default level -->
+  <logger name="org.springside.examples.showcase" level="INFO"/>
+  
+  <!--log4jdbc--> 
+  <!-- <logger name="jdbc.sqltiming" level="INFO"/>-->
+   
+  <root level="WARN">
+    <appender-ref ref="Console"/>
+    <appender-ref ref="RollingFile"/>
+  </root>
+</configuration>

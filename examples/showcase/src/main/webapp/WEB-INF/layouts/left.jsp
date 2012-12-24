@@ -11,7 +11,6 @@
 	<div class="submenu">
 		<a id="web-tab" href="${ctx}/story/web">Web演示</a>
 		<a id="webservice-tab"href="${ctx}/story/webservice">WebService演示</a>
-		<a id="log-tab" href="${ctx}/log/console">日志控制演示</a>
 		<a id="jmx-tab" href="${ctx}/story/jmx">JMX演示</a>
 	</div>
 	<h1>演示说明</h1>

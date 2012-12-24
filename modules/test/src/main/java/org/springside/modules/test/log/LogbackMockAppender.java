@@ -7,29 +7,39 @@ package org.springside.modules.test.log;
 
 import java.util.List;
 
-import org.apache.log4j.AppenderSkeleton;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
-import org.apache.log4j.spi.LoggingEvent;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.AppenderBase;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * 在List中保存日志的Appender, 用于测试Log4j的日志输出.
+ * 在List中保存日志的Appender, 用于测试Logback的日志输出.
  * 
  * 在测试开始前, 使用任意一种addToLogger()方法将此appender添加到需要侦听的logger中.
  * 
  * @author calvin
  */
-public class Log4jMockAppender extends AppenderSkeleton {
+public class LogbackMockAppender extends AppenderBase<ILoggingEvent> {
 
-	private List<LoggingEvent> logs = Lists.newArrayList();
+	private final List<ILoggingEvent> logs = Lists.newArrayList();
+
+	public LogbackMockAppender() {
+		start();
+	}
+
+	@Override
+	protected void append(ILoggingEvent e) {
+		logs.add(e);
+	}
 
 	/**
 	 * 返回之前append的第一个log.
 	 */
-	public LoggingEvent getFirstLog() {
+	public ILoggingEvent getFirstLog() {
 		if (logs.isEmpty()) {
 			return null;
 		}
@@ -49,7 +59,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	/**
 	 * 返回之前append的最后一个log.
 	 */
-	public LoggingEvent getLastLog() {
+	public ILoggingEvent getLastLog() {
 		if (logs.isEmpty()) {
 			return null;
 		}
@@ -69,7 +79,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	/**
 	 * 返回之前append的所有log.
 	 */
-	public List<LoggingEvent> getAllLogs() {
+	public List<ILoggingEvent> getAllLogs() {
 		return logs;
 	}
 
@@ -98,7 +108,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	 * 将此appender添加到logger中.
 	 */
 	public void addToLogger(String loggerName) {
-		Logger logger = Logger.getLogger(loggerName);
+		Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
 		logger.addAppender(this);
 	}
 
@@ -106,7 +116,7 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	 * 将此appender添加到logger中.
 	 */
 	public void addToLogger(Class<?> loggerClass) {
-		Logger logger = Logger.getLogger(loggerClass);
+		Logger logger = (Logger) LoggerFactory.getLogger(loggerClass);
 		logger.addAppender(this);
 	}
 
@@ -114,46 +124,16 @@ public class Log4jMockAppender extends AppenderSkeleton {
 	 * 将此appender从logger中移除.
 	 */
 	public void removeFromLogger(String loggerName) {
-		Logger logger = Logger.getLogger(loggerName);
-		logger.removeAppender(this);
+		Logger logger = (Logger) LoggerFactory.getLogger(loggerName);
+		logger.detachAppender(this);
 	}
 
 	/**
 	 * 将此appender从logger中移除.
 	 */
 	public void removeFromLogger(Class<?> loggerClass) {
-		Logger logger = Logger.getLogger(loggerClass);
-		logger.removeAppender(this);
+		Logger logger = (Logger) LoggerFactory.getLogger(loggerClass);
+		logger.detachAppender(this);
 	}
 
-	/**
-	 * 设置输出格式.
-	 */
-	public void setLayout(String pattern) {
-		setLayout(new PatternLayout(pattern));
-	}
-
-	/**
-	 * 实现AppenderSkeleton的append函数, 将log加入到内部的List.
-	 */
-	@Override
-	protected void append(LoggingEvent event) {
-		logs.add(event);
-	}
-
-	/**
-	 * @see AppenderSkeleton#close()
-	 */
-	@Override
-	public void close() {
-		logs.clear();
-	}
-
-	/**
-	 * @see AppenderSkeleton#requiresLayout()
-	 */
-	@Override
-	public boolean requiresLayout() {
-		return false;
-	}
 }

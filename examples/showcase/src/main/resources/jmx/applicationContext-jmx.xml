@@ -8,11 +8,6 @@
 
 	<!-- 配置MBean自动注册 -->
 	<context:mbean-export default-domain="showcase" registration="replaceExisting" />
-
-	<!-- Log4j控制的 MBean -->
-	<bean class="org.springside.modules.log.Log4jManager">
-		<property name="projectLoggerName" value="org.springside.examples.showcase"/>
-	</bean>
 	
 	<!-- 应用使用情况統計的MBean -->
 	<bean class="org.springside.examples.showcase.demos.jmx.ApplicationStatistics"/>

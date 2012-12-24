@@ -6,14 +6,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Log4jMockAppenderTest {
+public class LogbackMockAppenderTest {
 
 	@Test
 	public void normal() {
 		String testString1 = "Hello";
 		String testString2 = "World";
-		Log4jMockAppender appender = new Log4jMockAppender();
-		appender.addToLogger(Log4jMockAppenderTest.class);
+		LogbackMockAppender appender = new LogbackMockAppender();
+		appender.addToLogger(LogbackMockAppenderTest.class);
 
 		//null
 		assertNull(appender.getFirstLog());
@@ -21,7 +21,7 @@ public class Log4jMockAppenderTest {
 		assertNull(appender.getFirstMessage());
 		assertNull(appender.getFirstMessage());
 
-		Logger logger = LoggerFactory.getLogger(Log4jMockAppenderTest.class);
+		Logger logger = LoggerFactory.getLogger(LogbackMockAppenderTest.class);
 		logger.warn(testString1);
 		logger.warn(testString2);
 
@@ -46,15 +46,15 @@ public class Log4jMockAppenderTest {
 	@Test
 	public void addAndRemoveAppender() {
 		String testString = "Hello";
-		Logger logger = LoggerFactory.getLogger(Log4jMockAppenderTest.class);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		Logger logger = LoggerFactory.getLogger(LogbackMockAppenderTest.class);
+		LogbackMockAppender appender = new LogbackMockAppender();
 		//class
-		appender.addToLogger(Log4jMockAppenderTest.class);
+		appender.addToLogger(LogbackMockAppenderTest.class);
 		logger.warn(testString);
 		assertNotNull(appender.getFirstLog());
 
 		appender.clearLogs();
-		appender.removeFromLogger(Log4jMockAppenderTest.class);
+		appender.removeFromLogger(LogbackMockAppenderTest.class);
 		logger.warn(testString);
 		assertNull(appender.getFirstLog());
 
@@ -68,6 +68,5 @@ public class Log4jMockAppenderTest {
 		appender.removeFromLogger("org.springside.modules.test.log");
 		logger.warn(testString);
 		assertNull(appender.getFirstLog());
-
 	}
 }

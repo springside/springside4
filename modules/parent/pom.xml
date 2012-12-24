@@ -27,12 +27,12 @@
 		<jolokia.version>1.0.6</jolokia.version>
 		<jackson.version>2.1.2</jackson.version>
 		<slf4j.version>1.7.2</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+		<logback.version>1.0.9</logback.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
 		<guava.version>13.0.1</guava.version>
 		<joda-time.version>2.1</joda-time.version>
-		<dozer.version>5.3.2</dozer.version>
+		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.2.2</httpclient.version>
 		<freemarker.version>2.3.19</freemarker.version>
 		<junit.version>4.11</junit.version>
@@ -450,15 +450,23 @@
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
-
-			<!-- slf4j-log4j绑定 -->
+			
+			<!-- logback -->
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			
+			<!-- log4j 实际调用slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-log4j12</artifactId>
+				<artifactId>log4j-over-slf4j</artifactId>
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-
+			
 			<!-- common-logging 实际调用slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -474,13 +482,6 @@
         		<version>${slf4j.version}</version>
         		<scope>runtime</scope>
       		</dependency>
-
-			<!-- log4j -->
-			<dependency>
-				<groupId>log4j</groupId>
-				<artifactId>log4j</artifactId>
-				<version>${log4j.version}</version>
-			</dependency>
 
 			<!-- log4jdbc -->
 			<dependency>
@@ -557,6 +558,12 @@
 				<groupId>net.sf.dozer</groupId>
 				<artifactId>dozer</artifactId>
 				<version>${dozer.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-log4j12</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			
 			<!-- httpclient -->
