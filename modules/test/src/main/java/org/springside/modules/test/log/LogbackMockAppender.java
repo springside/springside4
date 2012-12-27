@@ -121,6 +121,14 @@ public class LogbackMockAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	/**
+	 * 将此appender添加到root logger中.
+	 */
+	public void addToRootLogger() {
+		Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		logger.addAppender(this);
+	}
+
+	/**
 	 * 将此appender从logger中移除.
 	 */
 	public void removeFromLogger(String loggerName) {
@@ -133,6 +141,14 @@ public class LogbackMockAppender extends AppenderBase<ILoggingEvent> {
 	 */
 	public void removeFromLogger(Class<?> loggerClass) {
 		Logger logger = (Logger) LoggerFactory.getLogger(loggerClass);
+		logger.detachAppender(this);
+	}
+
+	/**
+	 * 将此appender从root logger中移除.
+	 */
+	public void removeFromRootLogger() {
+		Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
 		logger.detachAppender(this);
 	}
 

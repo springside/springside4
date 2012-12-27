@@ -1,30 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-  <!-- console -->
-  <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
-  	<!-- Output pattern : date [thread] priority [category] - message -->
-    <encoder>	
-      <pattern>%d [%t] %-5p [%-40.40c] -%m%n</pattern>
-    </encoder>
-  </appender>
-  
-  <!-- hourly rolling file -->
-  <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <File.DatePattern>.yyyy-MM-dd-HH</File.DatePattern>
-    <File>logs/showcase.log</File>
-    <encoder>
-      <pattern>%d [%t] %-5p [%-40.40c] -%m%n</pattern>
-    </encoder>
-  </appender>
-  
-  <!-- project default level -->
-  <logger name="org.springside.examples.showcase" level="INFO"/>
-  
-  <!--log4jdbc--> 
-  <!-- <logger name="jdbc.sqltiming" level="INFO"/>-->
-   
-  <root level="WARN">
-    <appender-ref ref="Console"/>
-    <appender-ref ref="RollingFile"/>
-  </root>
+	<!-- console -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- hourly rolling file -->
+	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>logs/showcase.log</file>
+		<!-- 按每小时滚动文件，如果一个小时内达到10M也会滚动文件, 滚动文件将会压缩成zip格式 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/showcase-%d{yyyy-MM-dd_HH}.%i.zip</fileNamePattern>
+			<maxHistory>300</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<!-- project default level -->
+	<logger name="org.springside.examples.showcase" level="INFO" />
+
+	<!--log4jdbc -->
+	<!-- <logger name="jdbc.sqltiming" level="INFO"/> -->
+
+	<root level="WARN">
+		<appender-ref ref="console" />
+		<appender-ref ref="rollingFile" />
+	</root>
 </configuration>

@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Validator;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,8 @@ import org.springside.modules.beanvalidator.BeanValidators;
 @RequestMapping(value = "/api/v1/task")
 public class TaskRestController {
 
+	Logger logger = LoggerFactory.getLogger(TaskRestController.class);
+
 	@Autowired
 	private TaskService taskService;
 
@@ -48,6 +52,7 @@ public class TaskRestController {
 	public ResponseEntity<?> get(@PathVariable("id") Long id) {
 		Task task = taskService.getTask(id);
 		if (task == null) {
+			logger.warn("task with id {} not found", id);
 			return new ResponseEntity(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity(task, HttpStatus.OK);
