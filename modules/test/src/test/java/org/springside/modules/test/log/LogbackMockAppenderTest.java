@@ -12,7 +12,7 @@ public class LogbackMockAppenderTest {
 	public void normal() {
 		String testString1 = "Hello";
 		String testString2 = "World";
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(LogbackMockAppenderTest.class);
 
 		//null
@@ -47,7 +47,7 @@ public class LogbackMockAppenderTest {
 	public void addAndRemoveAppender() {
 		String testString = "Hello";
 		Logger logger = LoggerFactory.getLogger(LogbackMockAppenderTest.class);
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		//class
 		appender.addToLogger(LogbackMockAppenderTest.class);
 		logger.warn(testString);

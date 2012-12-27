@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
-import ch.qos.logback.core.AppenderBase;
+import ch.qos.logback.core.UnsynchronizedAppenderBase;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -23,11 +23,11 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
-public class LogbackMockAppender extends AppenderBase<ILoggingEvent> {
+public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
 	private final List<ILoggingEvent> logs = Lists.newArrayList();
 
-	public LogbackMockAppender() {
+	public LogbackListAppender() {
 		start();
 	}
 

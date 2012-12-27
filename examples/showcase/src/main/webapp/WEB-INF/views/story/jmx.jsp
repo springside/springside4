@@ -42,15 +42,15 @@
 		<li>获取应用统计MBean的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics</a></li>
 		<li>只获取应用统计MBean的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
 	</ul>
-	<!-- 设置：
+	查询：
 	<ul>
-		<li>设置Root Logger Level的命令: <br/><a href="${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO">${baseUrl}/jolokia/write/log4j:name=Log4j/RootLoggerLevel/INFO</a></li>
+		<li>设置jolokia的属性: <br/><a href="${baseUrl}/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20">${baseUrl}/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20</a></li>
 	</ul>
-	 -->
+	
 	执行：
 	<ul>
 		<li>执行重置清零统计信息的命令: <br/><a href="${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics">${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics</a></li>
-		<!-- <li>执行获取特定Logger的Level的命令: <br/><a href="${baseUrl}/jolokia/exec/log4j:name=Log4j/getLoggerLevel/org.springframework">${baseUrl}/jolokia/exec/log4j:name=Log4j/getLoggerLevel/org.springframework</a></li> -->
+		<li>执行获取特定Logger的Level的命令: <br/><a href="${baseUrl}/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework">${baseUrl}/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework</a></li>
 	</ul>
 </body>
 </html>

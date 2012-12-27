@@ -20,7 +20,7 @@ import org.springside.examples.showcase.demos.jms.advanced.AdvancedNotifyMessage
 import org.springside.examples.showcase.demos.jms.advanced.AdvancedNotifyMessageProducer;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.LogbackMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -41,7 +41,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 	@Test
 	public void queueMessage() {
 		Threads.sleep(1000);
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -56,7 +56,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 	@Test
 	public void topicMessage() {
 		Threads.sleep(1000);
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -71,7 +71,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 	@Test
 	public void topicMessageWithWrongType() {
 		Threads.sleep(1000);
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		advancedJmsTemplate.send(advancedNotifyTopic, new MessageCreator() {

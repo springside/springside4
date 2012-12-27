@@ -20,6 +20,7 @@
 		<a id="cache-tab" href="${ctx}/story/cache">Cache演示</a>
 		<a id="schedule-tab" href="${ctx}/story/schedule">定时任务演示</a>
 		<a id="security-tab" href="${ctx}/story/security">安全高级演示</a>
+		<a id="log-tab" href="${ctx}/story/log">日志高级演示</a>
 		<a id="utilizes-tab"href="${ctx}/story/utilizes">工具类演示</a>
 		<a id="executablewar-tab"href="${ctx}/story/executablewar">可运行war包演示</a>
 	</div>

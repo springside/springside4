@@ -24,6 +24,8 @@ import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.security.utils.Digests;
 import org.springside.modules.utils.Encodes;
 
+import com.google.common.collect.Maps;
+
 /**
  * 用户管理业务类.
  * 
@@ -38,7 +40,6 @@ public class AccountService {
 	private static final int SALT_SIZE = 8;
 
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
-
 	private UserDao userDao;
 
 	private RoleDao roleDao;
@@ -46,6 +47,8 @@ public class AccountService {
 	private NotifyMessageProducer notifyProducer; // JMS消息发送
 
 	private ApplicationStatistics applicationStatistics;
+
+	private BusinessLogger businessLogger;
 
 	/**
 	 * 在保存用户时,发送用户修改通知消息, 由消息接收者异步进行较为耗时的通知邮件发送.
@@ -68,11 +71,20 @@ public class AccountService {
 
 		userDao.save(user);
 
+		//发送JMS消息
+		sendNotifyMessage(user);
+
+		//运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrUpdateUserTimes();
 		}
 
-		sendNotifyMessage(user);
+		//业务日志演示
+		if (businessLogger != null) {
+			Map map = Maps.newHashMap();
+			map.put("userId", user.getId());
+			businessLogger.log("UPDATE", getCurrentUserName(), map);
+		}
 	}
 
 	/**
@@ -87,14 +99,19 @@ public class AccountService {
 	}
 
 	public List<User> searchUser(Map<String, Object> searchParams) {
+		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
+		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
+		List<User> userList = userDao.findAll(spec);
 
+		//运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
 		}
-
-		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
-		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
-		return userDao.findAll(spec);
+		//业务日志演示
+		if (businessLogger != null) {
+			businessLogger.log("LIST", getCurrentUserName(), null);
+		}
+		return userList;
 	}
 
 	/**
@@ -195,5 +212,10 @@ public class AccountService {
 	@Autowired(required = false)
 	public void setApplicationStatistics(ApplicationStatistics applicationStatistics) {
 		this.applicationStatistics = applicationStatistics;
+	}
+
+	@Autowired(required = false)
+	public void setBusinessLogger(BusinessLogger businessLogger) {
+		this.businessLogger = businessLogger;
 	}
 }

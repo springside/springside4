@@ -18,7 +18,7 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.LogbackMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 
 @Category(UnStable.class)
 public class ThreadsTest {
@@ -27,7 +27,7 @@ public class ThreadsTest {
 	public void gracefulShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
 		//time enough to shutdown
@@ -74,7 +74,7 @@ public class ThreadsTest {
 	public void normalShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		LogbackMockAppender appender = new LogbackMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
 		//time not enough to shutdown,write error log.
