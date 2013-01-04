@@ -12,7 +12,6 @@ public class ShowcaseServer {
 
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/showcase";
-	public static final String BASE_URL = "http://localhost:8080/showcase";
 	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web" };
 
 	public static void main(String[] args) throws Exception {
@@ -26,8 +25,8 @@ public class ShowcaseServer {
 		try {
 			server.start();
 
-			System.out.println("Server running at " + BASE_URL);
-			System.out.println("Hit Enter to reload the application");
+			System.out.println("Server running at http://localhost:" + PORT + CONTEXT);
+			System.out.println("Hit Enter to reload the application quickly");
 
 			//等待用户输入回车重载应用.
 			while (true) {

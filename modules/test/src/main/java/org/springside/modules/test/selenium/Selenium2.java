@@ -6,9 +6,11 @@
 package org.springside.modules.test.selenium;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -248,10 +250,15 @@ public class Selenium2 {
 	}
 
 	/**
-	 * 截屏成png文件，存放于临时目录，在JVM退出时自动删除.
+	 * 截屏成png文件，复制到目标文件。源文件存放于临时目录，在JVM退出时自动删除.
 	 */
-	public File snapshot() {
-		return ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+	public void snapshot(String basePath, String outputFileName) {
+		File srcFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+		File targetFile = new File(basePath, outputFileName);
+		try {
+			FileUtils.copyFile(srcFile, targetFile);
+		} catch (IOException ioe) {
+		}
 	}
 
 	// WaitFor 函數 //

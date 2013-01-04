@@ -18,18 +18,20 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.util.Assert;
 
 /**
- * 创建WebDriver的工厂类, 支持主要的firefox,ie和remote三种driver.
+ * 创建WebDriver的工厂类.
  * 
  * @author calvin
  */
 public class WebDriverFactory {
-
 	/**
 	 * 根据driverName创建各种WebDriver的简便方法.
 	 * 
-	 * 当持续集成服务器安装在非Windows机器上, 没有IE浏览器与XWindows时, 需要使用remote driver调用远程的Windows机器.
+	 * 支持主要的firefox,ie,chrome三种常用浏览器.
+	 * 
+	 * 支持不需要浏览器，可快速运行的HtmlUnit.
+	 * 
+	 * 当持续集成服务器安装在非Windows机器上, 没有IE浏览器与XWindows时, 又希望使用真正的浏览器时，需要使用remote driver调用远程的Windows机器.
 	 * drivername如remote:192.168.0.2:4444:firefox, 此时要求远程服务器在http://192.168.0.2:4444/wd/hub上启动selenium remote服务.
-	 * @throws MalformedURLException 
 	 */
 	public static WebDriver createDriver(String driverName) {
 		WebDriver driver = null;
@@ -51,8 +53,10 @@ public class WebDriverFactory {
 			String remoteHost = params[1];
 			String remotePort = params[2];
 			String driverType = params[3];
-			DesiredCapabilities cap = null;
 
+			String remoteUrl = "http://" + remoteHost + ":" + remotePort + "/wd/hub";
+
+			DesiredCapabilities cap = null;
 			if (BrowserType.firefox.name().equals(driverType)) {
 				cap = DesiredCapabilities.firefox();
 			} else if (BrowserType.ie.name().equals(driverType)) {
@@ -62,7 +66,7 @@ public class WebDriverFactory {
 			}
 
 			try {
-				driver = new RemoteWebDriver(new URL("http://" + remoteHost + ":" + remotePort + "/wd/hub"), cap);
+				driver = new RemoteWebDriver(new URL(remoteUrl), cap);
 			} catch (MalformedURLException e) {
 				throw new RuntimeException(e);
 			}

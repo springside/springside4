@@ -38,11 +38,11 @@ public class BaseFunctionalTestCase {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-
-		baseUrl = propertiesLoader.getProperty("baseUrl", QuickStartServer.BASE_URL);
+		baseUrl = propertiesLoader.getProperty("baseUrl");
 
 		//如果是目标地址是localhost，则启动嵌入式jetty。如果指向远程地址，则不需要启动Jetty.
-		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
+		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost")
+				&& propertiesLoader.getBoolean("embeddedForLocal");
 
 		if (isEmbedded) {
 			startJettyOnce();
@@ -64,7 +64,7 @@ public class BaseFunctionalTestCase {
 			JettyFactory.setTldJarNames(jettyServer, QuickStartServer.TLD_JAR_NAMES);
 			jettyServer.start();
 
-			logger.info("Jetty Server started");
+			logger.info("Jetty Server started at {}", baseUrl);
 		}
 	}
 
