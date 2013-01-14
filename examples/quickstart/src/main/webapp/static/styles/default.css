@@ -1,7 +1,10 @@
 /* header */
 #header {margin-bottom:15px;}
 
-#header h1 {color: #658A16;}
+#header h1 a {
+	color: #658A16;
+	text-decoration: none
+}
 
 #header h1 small {color: #BACE87;}
 

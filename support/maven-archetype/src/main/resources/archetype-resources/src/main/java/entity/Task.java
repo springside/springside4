@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.entity;
+package ${package}.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;

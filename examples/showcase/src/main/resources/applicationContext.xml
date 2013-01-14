@@ -4,11 +4,11 @@
 	xmlns:jdbc="http://www.springframework.org/schema/jdbc" xmlns:tx="http://www.springframework.org/schema/tx"
 	xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 	xsi:schemaLocation="
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
-		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-3.2.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
 		http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd"
 		default-lazy-init="true">
 
@@ -17,6 +17,7 @@
 	<!-- 使用annotation 自动注册bean,并检查@Required,@Autowired的属性已被注入 -->
 	<context:component-scan base-package="org.springside.examples.showcase">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 
 	<!-- Jpa Entity Manager 配置 -->
@@ -80,8 +81,7 @@
 	<!-- production环境 -->
 	<beans profile="production">
 		<context:property-placeholder ignore-resource-not-found="true"
-			location="classpath*:/application.properties,
-          			  classpath*:/application.local.properties" />	
+			location="classpath*:/application.properties" />	
 
 		<!-- 数据源配置,使用应用内的DBCP数据库连接池 -->
 		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
@@ -94,11 +94,12 @@
 		</bean>
 	
 		<!-- quartz使用的数据源配置 -->
-		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
-			<property name="driverClass" value="${quartz.jdbc.driver}" />
+		<bean id="quartzDataSource"  class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+			<property name="driverClassName" value="${quartz.jdbc.driver}" />
 			<property name="url" value="${quartz.jdbc.url}" />
 			<property name="username" value="${quartz.jdbc.username}" />
 			<property name="password" value="${quartz.jdbc.password}" />
+			<property name="defaultAutoCommit" value="false" />
 		</bean>
 	</beans>
 	
@@ -117,7 +118,7 @@
 			<property name="defaultAutoCommit" value="false" />
 		</bean>
 		
-		<!-- quartz使用的数据源配置 -->
+		<!-- Simple连接池 for quartz -->
 		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<property name="driverClass" value="${quartz.jdbc.driver}" />
 			<property name="url" value="${quartz.jdbc.url}" />
@@ -125,23 +126,7 @@
 			<property name="password" value="${quartz.jdbc.password}" />
 		</bean>
 	</beans>
-	
-	<!-- unit test环境 -->
-	<beans profile="test">
-		<context:property-placeholder ignore-resource-not-found="true"
-			location="classpath*:/application.properties" />	
-		
-		<!-- 嵌入式内存中数据库 -->
-		<jdbc:embedded-database id="dataSource" type="H2">
-			<jdbc:script location="classpath:sql/h2/schema.sql" />
-			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8" />
-		</jdbc:embedded-database>
 
-		<jdbc:embedded-database id="quartzDataSource" type="H2">
-			<jdbc:script location="classpath:sql/h2/quartz.sql" />
-		</jdbc:embedded-database>
-	</beans>
-	
 	<!-- functional test环境 -->
 	<beans profile="functional">
 		<context:property-placeholder ignore-resource-not-found="true"
@@ -158,6 +143,7 @@
 			<property name="defaultAutoCommit" value="false" />
 		</bean>
 			
+		<!-- Simple连接池 for quartz -->
 		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<property name="driverClass" value="${quartz.jdbc.driver}" />
 			<property name="url" value="${quartz.jdbc.url}" />
@@ -173,5 +159,38 @@
 		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/quartz.sql" />
 		</jdbc:initialize-database>
-	</beans>	
+	</beans>
+	
+	<!-- unit test环境 -->
+	<beans profile="test">
+		<context:property-placeholder ignore-resource-not-found="true"
+			location="classpath*:/application.properties,
+          			  classpath*:/application.test.properties" />	
+		
+		<!-- Simple连接池 -->
+		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${jdbc.driver}" />
+			<property name="url" value="${jdbc.url}" />
+			<property name="username" value="${jdbc.username}" />
+			<property name="password" value="${jdbc.password}" />	
+		</bean>
+			
+		<!-- Simple连接池 for quartz -->
+		<bean id="quartzDataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+			<property name="driverClass" value="${quartz.jdbc.driver}" />
+			<property name="url" value="${quartz.jdbc.url}" />
+			<property name="username" value="${quartz.jdbc.username}" />
+			<property name="password" value="${quartz.jdbc.password}" />
+		</bean>
+		
+		<!-- 初始化数据结构与默认数据 -->
+		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:sql/h2/schema.sql" />
+			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8" />
+		</jdbc:initialize-database>
+
+		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
+			<jdbc:script location="classpath:sql/h2/quartz.sql" />
+		</jdbc:initialize-database>
+	</beans>
 </beans>

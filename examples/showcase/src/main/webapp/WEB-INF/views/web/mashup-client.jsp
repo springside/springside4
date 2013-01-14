@@ -6,6 +6,7 @@
 <head>
 	<title>跨域名Mashup演示</title>
 	<script type="text/javascript">
+		//相对于本地文件来说，服务器地址就是跨域的地址.
 		var remoteUrl = "http://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}";
 
 		//使用JQuery ajax jsonp方式跨域名访问内容
@@ -32,6 +33,6 @@
 		<input type="button" class="btn" value="获取内容" onclick="fetchMashupContent();" />
 	</p>
 	<p>跨域页面内容:</p>
-	<div id="mashupContent" style="display: none" />
+	<div id="mashupContent" style="display: none"></div>
 </body>
 </html>

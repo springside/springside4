@@ -20,7 +20,7 @@ public class AjaxFT extends BaseSeleniumTestCase {
 		s.click(By.linkText("跨域名Mashup演示"));
 
 		s.click(By.xpath("//input[@value='获取内容']"));
-		s.waitForVisible(By.id("mashupContent"), 5000);
-		assertEquals("Hello World!", s.getText(By.id("mashupContent")));
+		s.waitForVisible(By.id("mashupContent"));
+		assertEquals("你好，世界！", s.getText(By.id("mashupContent")));
 	}
 }

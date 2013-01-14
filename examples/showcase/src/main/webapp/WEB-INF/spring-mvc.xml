@@ -3,69 +3,59 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
 	<!-- 自动扫描且只扫描@Controller -->
 	<context:component-scan base-package="org.springside.examples.showcase" use-default-filters="false">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
 	</context:component-scan>
 	
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven content-negotiation-manager="contentNegotiationManager">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageCOnverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+  		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- REST中根据URL后缀自动判定Content-Type及相应的View -->
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+	    <property name="mediaTypes" >
+	        <value>
+	            json=application/json
+	            xml=application/xml
+	        </value>
+	    </property>
+	</bean>
 	
-	<!-- 将无法mapping到Controller的path交给default servlet handler处理 -->
-	<mvc:default-servlet-handler/>
-
-    <!-- 新浪微博、淘宝开放平台API风格 xxx.json xxx.xml -->
-    <!-- SpringMVC3.1 协商视图解析器(即自动根据请求头信息中的contentType选择视图解析器)-->
-    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
-        <property name="order" value="1" />
-        <!-- 忽略客户端请求的AcceptHeader，根据请求URL后缀来动态设置AcceptHeader -->
-        <property name="ignoreAcceptHeader" value="true"/>
-        <!-- 用于开启 /api/v1/user/1?format=json 的支持，默认关闭 -->
-        <property name="favorParameter" value="true"/>
-        <!-- 将没有添加后缀的请求默认设置为 text/html -->
-        <property name="defaultContentType" value="text/html"/>
-        <!-- 扩展名至mimeType的映射,即 api/v1/user/1.json => application/json -->
-        <property name="mediaTypes">
-            <map>
-                <entry key="json" value="application/json" />
-                <entry key="xml" value="application/xml" />
-            </map>
-        </property>
-        <property name="defaultViews">
-            <list>
-                <!-- for application/json -->
-                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
-                <!-- for application/xml -->
-                <bean class="org.springframework.web.servlet.view.xml.MarshallingView" >
-                    <property name="marshaller">
-                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-                            <property name="classesToBeBound">
-                                <list>
-                                    <value>org.springside.examples.showcase.webservice.rest.UserDTO</value>
-                                </list>
-                            </property>
-                        </bean>
-                    </property>
-                </bean>
-            </list>
-        </property>
-    </bean>
-
-	<!-- 定义JSP文件的位置 -->
+	<!-- 定义JSP文件的位置 -->  
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="order" value="2" />
-        <property name="prefix" value="/WEB-INF/views/"/>
+		<property name="prefix" value="/WEB-INF/views/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
 	
-	<!-- 定义无Controller的path<->view直接映射 -->
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+	<mvc:default-servlet-handler/>
+	
+	<!-- 定义无需Controller的url<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="index"/>
 	<mvc:view-controller path="/web/mashup-client" view-name="/web/mashup-client"/>
 	
-	<!-- 支持 Shiro对Controller的方法级AOP安全控制 begin-->
+	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
+	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
+		<property name="exceptionMappings">  
+			<props>
+				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
+				<prop key="java.lang.Throwable">error/500</prop>
+            </props>  
+		</property>  
+    </bean> 
+    
+	<!-- 支持 Shiro对Controller的方法级AOP安全控制  begin-->
 	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
 		<property name="proxyTargetClass" value="true" />
 	</bean>
@@ -73,14 +63,5 @@
 	<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
     	<property name="securityManager" ref="securityManager"/>
 	</bean>
-	
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
-		<property name="exceptionMappings">  
-			<props>  
-				<prop key="org.springframework.validation.BindException">error/400</prop>
-				<prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>  
-            </props>  
-		</property>  
-    </bean> 
 	<!-- end -->
 </beans>

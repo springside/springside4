@@ -1,7 +1,6 @@
 package org.springside.examples.showcase.webservice.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,17 +16,19 @@ public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
 
-    // /api/v1/user/1.json /api/v1/user/1.xml rest api风格
-    // 注意：不用再加@ResponseBody注解
+	/**
+	 * 基于ContentNegotiationManager,根据URL的后缀渲染不同的格式
+	 * eg. /api/v1/user/1.xml  返回xml
+	 *     /api/v1/user/1.json 返回json
+	 *     /api/v1/user/1                  返回xml(why?)
+	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public UserDTO getAsXxx(@PathVariable("id") Long id) {
+	@ResponseBody
+	public UserDTO getUser(@PathVariable("id") Long id) {
 		User user = accountService.getUser(id);
-		return bindDTO(user);
-	}
 
-	private UserDTO bindDTO(User user) {
+		//使用Dozer转换DTO类，并补充Dozer不能自动绑定的属性
 		UserDTO dto = BeanMapper.map(user, UserDTO.class);
-		//补充Dozer不能自动绑定的属性
 		dto.setTeamId(user.getTeam().getId());
 		return dto;
 	}

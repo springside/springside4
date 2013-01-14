@@ -25,13 +25,14 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 	@Test
 	public void getUser() throws Exception {
 		User user = userDao.get(1L);
+		assertNotNull("User not found", user);
 		assertEquals("admin", user.getLoginName());
 	}
 
 	@Test
 	public void searchUser() throws Exception {
 		Map<String, Object> parameter = Maps.newHashMap();
-		parameter.put("name", "Admin");
+		parameter.put("name", "管理员");
 		List<User> result = userDao.search(parameter);
 		assertEquals(1, result.size());
 		assertEquals("admin", result.get(0).getLoginName());

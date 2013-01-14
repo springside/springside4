@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
 import org.springside.modules.test.category.Smoke;
 
@@ -21,7 +22,9 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		s.open("/");
 		s.click(By.linkText("帐号管理"));
 		loginAsAdminIfNecessary();
-		assertEquals("Showcase示例:综合演示用例", s.getTitle());
+		s.waitForTitleContains("综合演示用例");
+		WebElement table = s.findElement(By.id("contentTable"));
+		assertEquals("管理员 ", s.getTable(table, 0, 1));
 	}
 
 	@Test

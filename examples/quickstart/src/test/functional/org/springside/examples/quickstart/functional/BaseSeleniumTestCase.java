@@ -1,11 +1,12 @@
 package org.springside.examples.quickstart.functional;
 
-import static org.junit.Assert.*;
-
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.springside.modules.test.selenium.Selenium2;
+import org.springside.modules.test.selenium.SeleniumSnapshotRule;
 import org.springside.modules.test.selenium.WebDriverFactory;
 
 /**
@@ -18,6 +19,10 @@ import org.springside.modules.test.selenium.WebDriverFactory;
 public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
+
+	//出错时截屏的规则
+	@Rule
+	public TestRule snapshotrule = new SeleniumSnapshotRule(s);
 
 	@BeforeClass
 	public static void init() throws Exception {
@@ -51,7 +56,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			s.type(By.name("password"), "user");
 			s.check(By.name("rememberMe"));
 			s.click(By.id("submit_btn"));
-			assertEquals("QuickStart示例:任务管理", s.getTitle());
+			s.waitForTitleContains("任务管理");
 		}
 	}
 

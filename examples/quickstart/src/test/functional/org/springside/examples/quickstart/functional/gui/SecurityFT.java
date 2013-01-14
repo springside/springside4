@@ -20,11 +20,11 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	public void anonymousUserAccessSystem() {
 		//访问退出登录页面,退出之前的登录
 		s.open("/logout");
-		assertEquals("QuickStart示例:登录页", s.getTitle());
+		s.waitForTitleContains("登录页");
 
 		//访问任意页面会跳转到登录界面
 		s.open("/task");
-		assertEquals("QuickStart示例:登录页", s.getTitle());
+		s.waitForTitleContains("登录页");
 	}
 
 	/**
@@ -48,7 +48,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 		s.check(By.name("rememberMe"));
 		s.click(By.id("submit_btn"));
 
-		assertEquals("QuickStart示例:登录页", s.getTitle());
+		s.waitForTitleContains("登录页");
 		assertTrue(s.isTextPresent("登录失败，请重试."));
 	}
 }

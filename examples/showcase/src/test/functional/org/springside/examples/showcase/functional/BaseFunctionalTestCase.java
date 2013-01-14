@@ -33,9 +33,10 @@ public class BaseFunctionalTestCase {
 
 	@BeforeClass
 	public static void beforeClass() throws Exception {
-		baseUrl = propertiesLoader.getProperty("baseUrl", ShowcaseServer.BASE_URL);
+		baseUrl = propertiesLoader.getProperty("baseUrl");
 
-		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost");
+		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost")
+				&& propertiesLoader.getBoolean("embeddedForLocal");
 
 		if (isEmbedded) {
 			startJettyOnce();
@@ -57,7 +58,7 @@ public class BaseFunctionalTestCase {
 			JettyFactory.setTldJarNames(jettyServer, ShowcaseServer.TLD_JAR_NAMES);
 			jettyServer.start();
 
-			logger.info("Jetty Server started at " + baseUrl);
+			logger.info("Jetty Server started at {}", baseUrl);
 		}
 	}
 
@@ -82,5 +83,4 @@ public class BaseFunctionalTestCase {
 	protected static void reloadSampleData() throws Exception {
 		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
 	}
-
 }

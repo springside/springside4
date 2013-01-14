@@ -93,7 +93,7 @@ public class TaskController {
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadTask") Task task, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("task") Task task, RedirectAttributes redirectAttributes) {
 		taskService.saveTask(task);
 		redirectAttributes.addFlashAttribute("message", "更新任务成功");
 		return "redirect:/task/";
@@ -107,15 +107,14 @@ public class TaskController {
 	}
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
-	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
+	 * 所有RequestMapping方法调用前的Model准备方法, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
+	 * 因为仅update()方法的form中有id属性，因此仅在update时实际执行.
 	 */
-	@ModelAttribute("preloadTask")
-	public Task getTask(@RequestParam(value = "id", required = false) Long id) {
+	@ModelAttribute()
+	public void getTask(@RequestParam(value = "id", required = false) Long id, Model model) {
 		if (id != null) {
-			return taskService.getTask(id);
+			model.addAttribute("task", taskService.getTask(id));
 		}
-		return null;
 	}
 
 	/**
