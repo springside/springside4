@@ -22,7 +22,7 @@ public abstract class BenchmarkBase {
 	}
 
 	public void run() throws Exception {
-		onPrepare();
+		onStart();
 
 		//start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
@@ -40,11 +40,13 @@ public abstract class BenchmarkBase {
 		finishLock.await();
 
 		long timeInMills = new Date().getTime() - startTime.getTime();
-		long totalTimes = threadCount * loopCount;
+		long invokeTimes = threadCount * loopCount;
 		System.out.printf("Thread count is %d, Spend %d ms for %d request, TPS is %d\n", threadCount, timeInMills,
-				totalTimes, (totalTimes * 1000 / timeInMills));
+				invokeTimes, (invokeTimes * 1000 / timeInMills));
 
 		threadPool.shutdownNow();
+
+		onFinish();
 	}
 
 	protected Date onThreadStart() {
@@ -67,13 +69,12 @@ public abstract class BenchmarkBase {
 		System.out.println("Thread average latency " + latency + "ms");
 	}
 
-	protected void onPrepare() {
-
+	protected void onStart() {
 	}
 
 	protected void onFinish() {
-
 	}
 
 	abstract protected Runnable getTask();
+
 }

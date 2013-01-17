@@ -23,7 +23,7 @@ public class RedisJedisBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected void onPrepare() {
+	protected void onStart() {
 		//reset counter
 		Jedis jedis = new Jedis(host);
 		jedis.set(counterName, "0");

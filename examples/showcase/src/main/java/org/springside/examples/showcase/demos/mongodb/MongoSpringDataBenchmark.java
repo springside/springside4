@@ -32,7 +32,7 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected void onPrepare() {
+	protected void onStart() {
 		try {
 			Mongo client = new Mongo(host);
 			client.setWriteConcern(WriteConcern.SAFE);

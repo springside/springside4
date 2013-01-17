@@ -30,7 +30,7 @@ public class MongoJavaDriverBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected void onPrepare() {
+	protected void onStart() {
 		Mongo mongoClient = null;
 		try {
 			mongoClient = new Mongo(host);
