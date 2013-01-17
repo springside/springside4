@@ -7,6 +7,11 @@ import java.security.ProtectionDomain;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+/**
+ * Main Class for standalone running.
+ * 
+ * @author calvin
+ */
 public class Main {
 
 	public static void main(String[] args) throws Exception {

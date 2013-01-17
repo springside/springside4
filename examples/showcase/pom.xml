@@ -178,6 +178,25 @@
 			<artifactId>quartz</artifactId>
 		</dependency>
 
+		<!-- MongoDB -->
+		<dependency>
+		    <groupId>org.springframework.data</groupId>
+		    <artifactId>spring-data-mongodb</artifactId>
+		    <version>1.1.1.RELEASE</version>
+  		</dependency>
+		<dependency>
+		    <groupId>org.mongodb</groupId>
+		    <artifactId>mongo-java-driver</artifactId>
+		    <version>2.10.1</version>
+		</dependency>
+  		
+  		<!-- Redis -->	
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.1.0</version>
+		</dependency>
+
 		<!-- CACHE begin -->
 		<dependency>
 			<groupId>spy</groupId>
