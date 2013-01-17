@@ -32,14 +32,17 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected void prepare() {
+	protected void onPrepare() {
 		try {
 			Mongo client = new Mongo(host);
 			client.setWriteConcern(WriteConcern.SAFE);
 			MongoOperations mongoOps = new MongoTemplate(client, dbName);
+
 			mongoOps.dropCollection(collectionName);
+
 			Counter counter = new Counter(counterName, 0);
 			mongoOps.insert(counter, collectionName);
+
 			client.close();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
@@ -76,18 +79,12 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 	}
 
 	public static class Counter {
-
-		private String id;
 		private final String name;
 		private final int count;
 
 		public Counter(String name, int count) {
 			this.name = name;
 			this.count = count;
-		}
-
-		public String getId() {
-			return id;
 		}
 
 		public String getName() {
@@ -100,8 +97,7 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 
 		@Override
 		public String toString() {
-			return "Counter [id=" + id + ", name=" + name + ", count=" + count + "]";
+			return "Counter [name=" + name + ", count=" + count + "]";
 		}
-
 	}
 }

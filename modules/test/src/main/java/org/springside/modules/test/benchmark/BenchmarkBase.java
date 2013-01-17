@@ -22,7 +22,7 @@ public abstract class BenchmarkBase {
 	}
 
 	public void run() throws Exception {
-		prepare();
+		onPrepare();
 
 		//start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
@@ -67,7 +67,13 @@ public abstract class BenchmarkBase {
 		System.out.println("Thread average latency " + latency + "ms");
 	}
 
-	abstract protected void prepare();
+	protected void onPrepare() {
+
+	}
+
+	protected void onFinish() {
+
+	}
 
 	abstract protected Runnable getTask();
 }

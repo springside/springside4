@@ -13,17 +13,17 @@ public class RedisJedisBenchmark extends BenchmarkBase {
 	private final String host = "localhost";
 	private final String counterName = "springside.counter";
 
-	public RedisJedisBenchmark(int threadCount, int loopCount) {
-		super(threadCount, loopCount);
-	}
-
 	public static void main(String[] args) throws Exception {
 		RedisJedisBenchmark benchmark = new RedisJedisBenchmark(THREAD_COUNT, LOOP_COUNT);
 		benchmark.run();
 	}
 
+	public RedisJedisBenchmark(int threadCount, int loopCount) {
+		super(threadCount, loopCount);
+	}
+
 	@Override
-	protected void prepare() {
+	protected void onPrepare() {
 		//reset counter
 		Jedis jedis = new Jedis(host);
 		jedis.set(counterName, "0");
@@ -31,7 +31,7 @@ public class RedisJedisBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected IncTask getTask() {
+	protected Runnable getTask() {
 		return new IncTask();
 	}
 

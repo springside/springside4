@@ -30,13 +30,14 @@ public class MongoJavaDriverBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected void prepare() {
+	protected void onPrepare() {
 		Mongo mongoClient = null;
 		try {
 			mongoClient = new Mongo(host);
 			mongoClient.setWriteConcern(WriteConcern.SAFE);
 			DB db = mongoClient.getDB(dbName);
 			DBCollection coll = db.getCollection(collectionName);
+
 			coll.drop();
 
 			BasicDBObject doc = new BasicDBObject("name", counterName).append("count", 0);
@@ -77,7 +78,6 @@ public class MongoJavaDriverBenchmark extends BenchmarkBase {
 			} catch (UnknownHostException e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 }
