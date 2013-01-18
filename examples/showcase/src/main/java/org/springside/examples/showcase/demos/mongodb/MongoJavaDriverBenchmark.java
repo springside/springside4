@@ -12,11 +12,11 @@ import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 
 public class MongoJavaDriverBenchmark extends BenchmarkBase {
-	private static int THREAD_COUNT = 20;
-	private static int LOOP_COUNT = 10000;
+	private static final int THREAD_COUNT = 20;
+	private static final int LOOP_COUNT = 10000;
+	private static final String HOST = "localhost";
 
-	private final String host = "localhost";
-	private final String dbName = "calvin";
+	private final String dbName = "springside";
 	private final String collectionName = "counter";
 	private final String counterName = "springside.counter";
 
@@ -33,7 +33,7 @@ public class MongoJavaDriverBenchmark extends BenchmarkBase {
 	protected void onStart() {
 		Mongo mongoClient = null;
 		try {
-			mongoClient = new Mongo(host);
+			mongoClient = new Mongo(HOST);
 			mongoClient.setWriteConcern(WriteConcern.SAFE);
 			DB db = mongoClient.getDB(dbName);
 			DBCollection coll = db.getCollection(collectionName);
@@ -59,7 +59,7 @@ public class MongoJavaDriverBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			try {
-				Mongo mongoClient = new Mongo(host);
+				Mongo mongoClient = new Mongo(HOST);
 
 				DB db = mongoClient.getDB(dbName);
 				db.setWriteConcern(WriteConcern.SAFE);

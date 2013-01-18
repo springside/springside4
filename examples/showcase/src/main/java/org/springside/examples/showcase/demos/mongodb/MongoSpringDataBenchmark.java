@@ -14,11 +14,11 @@ import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 
 public class MongoSpringDataBenchmark extends BenchmarkBase {
-	private static int THREAD_COUNT = 20;
-	private static int LOOP_COUNT = 10000;
+	private static final int THREAD_COUNT = 20;
+	private static final int LOOP_COUNT = 10000;
+	private static final String HOST = "localhost";
 
-	private final String host = "localhost";
-	private final String dbName = "calvin";
+	private final String dbName = "springside";
 	private final String collectionName = "counter";
 	private final String counterName = "springside.counter";
 
@@ -34,7 +34,7 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 	@Override
 	protected void onStart() {
 		try {
-			Mongo client = new Mongo(host);
+			Mongo client = new Mongo(HOST);
 			client.setWriteConcern(WriteConcern.SAFE);
 			MongoOperations mongoOps = new MongoTemplate(client, dbName);
 
@@ -59,7 +59,7 @@ public class MongoSpringDataBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			try {
-				Mongo client = new Mongo(host);
+				Mongo client = new Mongo(HOST);
 				client.setWriteConcern(WriteConcern.SAFE);
 				MongoOperations mongoOps = new MongoTemplate(client, dbName);
 

@@ -17,6 +17,7 @@ public abstract class BenchmarkBase {
 	public BenchmarkBase(int threadCount, int loopCount) {
 		this.threadCount = threadCount;
 		this.loopCount = loopCount;
+
 		startLock = new CountDownLatch(threadCount);
 		finishLock = new CountDownLatch(threadCount);
 	}
@@ -26,25 +27,28 @@ public abstract class BenchmarkBase {
 
 		//start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
-		for (int i = 0; i < threadCount; i++) {
-			threadPool.execute(getTask());
+		try {
+			for (int i = 0; i < threadCount; i++) {
+				threadPool.execute(getTask());
+			}
+
+			//wait for all threads ready
+			startLock.await();
+
+			System.out.println(this.getClass().getSimpleName() + " start");
+			Date startTime = new Date();
+
+			//wait for all threads finish
+			finishLock.await();
+
+			long timeInMills = new Date().getTime() - startTime.getTime();
+			long invokeTimes = threadCount * loopCount;
+			System.out.printf("%s finish.\nThread count is %d, spend %,d ms for %,d request, TPS is %,d.\n", this
+					.getClass().getSimpleName(), threadCount, timeInMills, invokeTimes,
+					(invokeTimes * 1000 / timeInMills));
+		} finally {
+			threadPool.shutdownNow();
 		}
-
-		//wait for all threads ready
-		startLock.await();
-
-		System.out.println("Test start");
-		Date startTime = new Date();
-
-		//wait for all threads finish
-		finishLock.await();
-
-		long timeInMills = new Date().getTime() - startTime.getTime();
-		long invokeTimes = threadCount * loopCount;
-		System.out.printf("Thread count is %d, Spend %d ms for %d request, TPS is %d\n", threadCount, timeInMills,
-				invokeTimes, (invokeTimes * 1000 / timeInMills));
-
-		threadPool.shutdownNow();
 
 		onFinish();
 	}
@@ -63,18 +67,26 @@ public abstract class BenchmarkBase {
 	protected void onThreadFinish(Date threadStartTime) {
 		// notify test finish
 		finishLock.countDown();
-
+		// print result
 		BigDecimal latency = new BigDecimal((new Date().getTime() - threadStartTime.getTime())).divide(new BigDecimal(
 				loopCount), 2, BigDecimal.ROUND_HALF_UP);
 		System.out.println("Thread average latency " + latency + "ms");
 	}
 
+	/**
+	 * Override to do some data prepare job.
+	 */
 	protected void onStart() {
 	}
 
+	/**
+	 * Override to do some data cleanup and verify job.
+	 */
 	protected void onFinish() {
 	}
 
+	/**
+	 * Return a new benchmark task. 
+	 */
 	abstract protected Runnable getTask();
-
 }

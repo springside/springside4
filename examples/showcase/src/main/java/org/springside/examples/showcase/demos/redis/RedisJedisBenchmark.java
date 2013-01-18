@@ -9,8 +9,8 @@ import redis.clients.jedis.Jedis;
 public class RedisJedisBenchmark extends BenchmarkBase {
 	private static final int THREAD_COUNT = 20;
 	private static final int LOOP_COUNT = 10000;
+	private static final String HOST = "localhost";
 
-	private final String host = "localhost";
 	private final String counterName = "springside.counter";
 
 	public static void main(String[] args) throws Exception {
@@ -25,7 +25,7 @@ public class RedisJedisBenchmark extends BenchmarkBase {
 	@Override
 	protected void onStart() {
 		//reset counter
-		Jedis jedis = new Jedis(host);
+		Jedis jedis = new Jedis(HOST);
 		jedis.set(counterName, "0");
 		jedis.disconnect();
 	}
@@ -39,7 +39,7 @@ public class RedisJedisBenchmark extends BenchmarkBase {
 
 		@Override
 		public void run() {
-			Jedis jedis = new Jedis(host);
+			Jedis jedis = new Jedis(HOST);
 
 			Date startTime = onThreadStart();
 
