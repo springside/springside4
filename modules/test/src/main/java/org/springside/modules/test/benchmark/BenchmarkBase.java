@@ -53,6 +53,9 @@ public abstract class BenchmarkBase {
 		onFinish();
 	}
 
+	/**
+	 * Must be invoked after each thread finish the prepare job, return the startTime. 
+	 */
 	protected Date onThreadStart() {
 		startLock.countDown();
 		//wait for all threads ready
@@ -64,6 +67,9 @@ public abstract class BenchmarkBase {
 		return new Date();
 	}
 
+	/**
+	 * Must be invoked after the loop finish.
+	 */
 	protected void onThreadFinish(Date threadStartTime) {
 		// notify test finish
 		finishLock.countDown();
@@ -74,13 +80,13 @@ public abstract class BenchmarkBase {
 	}
 
 	/**
-	 * Override to do some data prepare job.
+	 * Override to do some global data prepare job.
 	 */
 	protected void onStart() {
 	}
 
 	/**
-	 * Override to do some data cleanup and verify job.
+	 * Override to do some global data cleanup and verify job.
 	 */
 	protected void onFinish() {
 	}

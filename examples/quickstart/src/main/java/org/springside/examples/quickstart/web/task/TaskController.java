@@ -40,7 +40,7 @@ import com.google.common.collect.Maps;
 @RequestMapping(value = "/task")
 public class TaskController {
 
-	private static final int PAGE_SIZE = 3;
+	private static final String PAGE_SIZE = "3";
 
 	private static Map<String, String> sortTypes = Maps.newLinkedHashMap();
 	static {
@@ -52,12 +52,14 @@ public class TaskController {
 	private TaskService taskService;
 
 	@RequestMapping(value = "")
-	public String list(@RequestParam(value = "sortType", defaultValue = "auto") String sortType,
-			@RequestParam(value = "page", defaultValue = "1") int pageNumber, Model model, ServletRequest request) {
+	public String list(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
+			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
+			@RequestParam(value = "sortType", defaultValue = "auto") String sortType, Model model,
+			ServletRequest request) {
 		Map<String, Object> searchParams = Servlets.getParametersStartingWith(request, "search_");
 		Long userId = getCurrentUserId();
 
-		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, PAGE_SIZE, sortType);
+		Page<Task> tasks = taskService.getUserTask(userId, searchParams, pageNumber, pageSize, sortType);
 
 		model.addAttribute("tasks", tasks);
 		model.addAttribute("sortType", sortType);

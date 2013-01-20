@@ -456,7 +456,6 @@
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>${logback.version}</version>
-				<scope>runtime</scope>
 			</dependency>
 			
 			<!-- log4j 实际调用slf4j -->
