@@ -39,7 +39,7 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected Runnable getTask() {
+	protected Runnable getTask(int index) {
 		return new CounterTask();
 	}
 

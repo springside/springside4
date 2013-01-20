@@ -29,7 +29,7 @@ public abstract class BenchmarkBase {
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		try {
 			for (int i = 0; i < threadCount; i++) {
-				threadPool.execute(getTask());
+				threadPool.execute(getTask(i));
 			}
 
 			//wait for all threads ready
@@ -94,5 +94,5 @@ public abstract class BenchmarkBase {
 	/**
 	 * Return a new benchmark task. 
 	 */
-	abstract protected Runnable getTask();
+	abstract protected Runnable getTask(int index);
 }
