@@ -548,7 +548,7 @@
 								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue"  encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
 									<transaction src="src/main/resources/sql/h2/schema.sql"/>
-									<transaction src="src/test/resources/data/import-data.sql"/>
+									<transaction src="src/test/resources/data/h2/import-data.sql"/>
 								</sql>
 								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"  encoding="${project.build.sourceEncoding}"
 									src="src/main/resources/sql/h2/quartz.sql" onerror="continue">

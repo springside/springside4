@@ -153,11 +153,11 @@
 				
 		<!-- 初始化数据结构 -->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
-			<jdbc:script location="classpath:sql/h2/schema.sql" />
+			<jdbc:script location="classpath:sql/${db.type}/schema.sql" />
 		</jdbc:initialize-database>
 
 		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">
-			<jdbc:script location="classpath:sql/h2/quartz.sql" />
+			<jdbc:script location="classpath:sql/${db.type}/quartz.sql" />
 		</jdbc:initialize-database>
 	</beans>
 	
@@ -186,7 +186,7 @@
 		<!-- 初始化数据结构与默认数据 -->
 		<jdbc:initialize-database data-source="dataSource" ignore-failures="ALL">
 			<jdbc:script location="classpath:sql/h2/schema.sql" />
-			<jdbc:script location="classpath:data/import-data.sql" encoding="UTF-8" />
+			<jdbc:script location="classpath:data/h2/import-data.sql" encoding="UTF-8" />
 		</jdbc:initialize-database>
 
 		<jdbc:initialize-database data-source="quartzDataSource" ignore-failures="ALL">

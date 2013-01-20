@@ -664,7 +664,6 @@
 		<profile>
 			<id>refresh-db</id>
 			<build>
-
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -676,7 +675,7 @@
 								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue" encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
 									<transaction src="src/main/resources/sql/h2/schema.sql"/>
-									<transaction src="src/test/resources/data/import-data.sql"/>
+									<transaction src="src/test/resources/data/h2/import-data.sql"/>
 								</sql>
 							</target>
 						</configuration>
