@@ -30,11 +30,9 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 
 	@Override
 	protected void onStart() {
-		//reset counter
+		//remove all keys
 		Jedis jedis = new Jedis(HOST);
-		for (int i = 0; i < COUNTERS; i++) {
-			jedis.set(counterName + i, "0");
-		}
+		jedis.set(counterName, "0");
 		jedis.disconnect();
 	}
 
@@ -48,16 +46,14 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			Jedis jedis = new Jedis(HOST);
+			Date startTime = onThreadStart();
 			try {
-				Date startTime = onThreadStart();
-
 				// start test loop
 				for (int i = 0; i < loopCount; i++) {
 					jedis.incr(counterName + (i % COUNTERS));
 				}
-
-				onThreadFinish(startTime);
 			} finally {
+				onThreadFinish(startTime);
 				jedis.disconnect();
 			}
 		}

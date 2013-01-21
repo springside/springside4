@@ -31,8 +31,9 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 
 	@Override
 	protected void onStart() {
-		//reset counter
+		//remove all keys
 		Jedis jedis = new Jedis(HOST);
+		jedis.flushDB();
 		jedis.disconnect();
 	}
 
@@ -51,14 +52,15 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			Jedis jedis = new Jedis(HOST);
+			Date startTime = onThreadStart();
 			try {
-				Date startTime = onThreadStart();
 
 				// start test loop
 				for (int i = 0; i < loopCount; i++) {
 					//set session expired after 100 seconds
 					Session session = new Session(keyPrefix + i);
-					session.addAttrbute("name", "user_" + index + "_" + i);
+					session.addAttrbute("name", new StringBuilder().append("user_").append(index).append("_").append(i)
+							.toString());
 					session.addAttrbute("age", i);
 					jedis.setex(session.getId(), 100, jsonMapper.toJson(session));
 
@@ -66,9 +68,8 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 					String sessionBackString = jedis.get(keyPrefix + i);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 				}
-
-				onThreadFinish(startTime);
 			} finally {
+				onThreadFinish(startTime);
 				jedis.disconnect();
 			}
 		}
