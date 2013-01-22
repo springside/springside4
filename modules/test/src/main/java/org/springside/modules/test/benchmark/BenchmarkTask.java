@@ -8,14 +8,13 @@ import com.google.common.util.concurrent.RateLimiter;
 public abstract class BenchmarkTask implements Runnable {
 
 	protected int threadIndex;
+	protected BenchmarkBase parent;
 
-	protected Date startTime;
-
+	//use for print info//
 	protected RateLimiter rateLimiter;
 	protected int printInfoInterval; //单位为秒.
 	protected long previous = 0L;
-
-	protected BenchmarkBase parent;
+	protected Date startTime;
 
 	public BenchmarkTask(int threadIndex, BenchmarkBase parent, int printInfoInterval) {
 		this.threadIndex = threadIndex;
@@ -49,7 +48,7 @@ public abstract class BenchmarkTask implements Runnable {
 	}
 
 	/**
-	 * 间隔printInfoInterval的时间打印信息。
+	 * 每间隔printInfoInterval的时间打印信息�?
 	 */
 	protected void printInfo(int current) {
 		if (rateLimiter.tryAcquire()) {
