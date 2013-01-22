@@ -2,38 +2,41 @@ package org.springside.examples.showcase.demos.redis;
 
 import java.util.Date;
 
+import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.benchmark.BenchmarkBase;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis用于做计数器的incr()方法性能.
+ * 测试Redis批量插入时的性能, 使用PipeLine加速.
  * 
  * @author calvin
  */
-public class RedisCounterBenchmark extends BenchmarkBase {
+public class RedisMassInsertion extends BenchmarkBase {
 	private static final int THREAD_COUNT = 20;
-	private static final long LOOP_COUNT = 50000;
+	private static final long LOOP_COUNT = 500000;
 	private static final int PRINT_INTERVAL_SECONDS = 10;
-	private static final int COUNTERS = 1;
+	private static final int BATCH_SIZE = 10;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
-	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
+	private static final int TIMEOUT = 40000;
 
-	private String counterName = "springside.counter";
+	private String keyPrefix = "springside.key_";
+	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
 
 	public static void main(String[] args) throws Exception {
-		RedisCounterBenchmark benchmark = new RedisCounterBenchmark(THREAD_COUNT, LOOP_COUNT);
+		RedisMassInsertion benchmark = new RedisMassInsertion(THREAD_COUNT, LOOP_COUNT);
 		benchmark.run();
 	}
 
-	public RedisCounterBenchmark(int threadCount, long loopCount) {
+	public RedisMassInsertion(int threadCount, long loopCount) {
 		super(threadCount, loopCount);
 	}
 
@@ -44,10 +47,10 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 		poolConfig.setMaxActive(THREAD_COUNT);
 		pool = new JedisPool(poolConfig, HOST, PORT, TIMEOUT);
 
-		//reset counter
+		//remove all keys
 		Jedis jedis = pool.getResource();
 		try {
-			jedis.set(counterName, "0");
+			jedis.flushDB();
 		} finally {
 			pool.returnResource(jedis);
 		}
@@ -60,12 +63,12 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 
 	@Override
 	protected Runnable getTask(int index) {
-		return new CounterTask(index, this, PRINT_INTERVAL_SECONDS);
+		return new MassInsertionTask(index, this, PRINT_INTERVAL_SECONDS);
 	}
 
-	public class CounterTask extends BenchmarkTask {
+	public class MassInsertionTask extends BenchmarkTask {
 
-		public CounterTask(int index, BenchmarkBase parent, int printInfoInterval) {
+		public MassInsertionTask(int index, BenchmarkBase parent, int printInfoInterval) {
 			super(index, parent, printInfoInterval);
 		}
 
@@ -75,15 +78,30 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 			Date startTime = onThreadStart();
 
 			try {
+				Pipeline pl = jedis.pipelined();
 				// start test loop
 				for (int i = 0; i < loopCount; i++) {
-					jedis.incr(counterName + (i % COUNTERS));
-					printInfo(startTime, i);
+					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append("_").append(i)
+							.toString();
+					//set session expired after 100 seconds
+					Session session = new Session(key);
+					session.addAttrbute("name", key);
+					session.addAttrbute("age", i);
+					session.addAttrbute("address", "address:" + i);
+					session.addAttrbute("tel", "tel:" + i);
+
+					pl.set(session.getId(), jsonMapper.toJson(session));
+
+					if (i % BATCH_SIZE == 0) {
+						pl.sync();
+						printInfo(startTime, i);
+					}
 				}
 			} finally {
 				onThreadFinish();
 				pool.returnResource(jedis);
 			}
 		}
+
 	}
 }

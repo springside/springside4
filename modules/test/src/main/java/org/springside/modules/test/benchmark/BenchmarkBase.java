@@ -1,6 +1,5 @@
 package org.springside.modules.test.benchmark;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -9,12 +8,12 @@ import java.util.concurrent.Executors;
 public abstract class BenchmarkBase {
 
 	protected int threadCount;
-	protected int loopCount;
+	protected long loopCount;
 
 	protected CountDownLatch startLock;
 	protected CountDownLatch finishLock;
 
-	public BenchmarkBase(int threadCount, int loopCount) {
+	public BenchmarkBase(int threadCount, long loopCount) {
 		this.threadCount = threadCount;
 		this.loopCount = loopCount;
 
@@ -35,48 +34,24 @@ public abstract class BenchmarkBase {
 			//wait for all threads ready
 			startLock.await();
 
-			System.out.println(this.getClass().getSimpleName() + " start");
+			//print start message
+			String className = this.getClass().getSimpleName();
+			long invokeTimes = threadCount * loopCount;
+			System.out.printf("%s start. %,d request will be invoked.\n", className, invokeTimes);
 			Date startTime = new Date();
 
 			//wait for all threads finish
 			finishLock.await();
 
+			//print summary message
 			long timeInMills = new Date().getTime() - startTime.getTime();
-			long invokeTimes = threadCount * loopCount;
-			System.out.printf("%s finish.\nThread count is %d, spend %,d ms for %,d request, TPS is %,d.\n", this
-					.getClass().getSimpleName(), threadCount, timeInMills, invokeTimes,
-					(invokeTimes * 1000 / timeInMills));
+
+			System.out.printf("%s finish.\nThread count is %d, spend %,d ms for %,d request, TPS is %,d.\n", className,
+					threadCount, timeInMills, invokeTimes, (invokeTimes * 1000 / timeInMills));
 		} finally {
 			threadPool.shutdownNow();
+			onFinish();
 		}
-
-		onFinish();
-	}
-
-	/**
-	 * Must be invoked after each thread finish the prepare job, return the startTime. 
-	 */
-	protected Date onThreadStart() {
-		startLock.countDown();
-		//wait for all threads ready
-		try {
-			startLock.await();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		return new Date();
-	}
-
-	/**
-	 * Must be invoked after the loop finish.
-	 */
-	protected void onThreadFinish(Date threadStartTime) {
-		// notify test finish
-		finishLock.countDown();
-		// print result
-		BigDecimal latency = new BigDecimal((new Date().getTime() - threadStartTime.getTime())).divide(new BigDecimal(
-				loopCount), 2, BigDecimal.ROUND_HALF_UP);
-		System.out.println("Thread average latency " + latency + "ms");
 	}
 
 	/**
@@ -94,5 +69,5 @@ public abstract class BenchmarkBase {
 	/**
 	 * Return a new benchmark task. 
 	 */
-	abstract protected Runnable getTask(int index);
+	abstract protected Runnable getTask(int threadIndex);
 }

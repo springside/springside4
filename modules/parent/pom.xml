@@ -30,7 +30,7 @@
 		<logback.version>1.0.9</logback.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
-		<guava.version>13.0.1</guava.version>
+		<guava.version>14.0-rc2</guava.version>
 		<joda-time.version>2.1</joda-time.version>
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.2.2</httpclient.version>
