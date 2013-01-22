@@ -1,6 +1,6 @@
 package org.springside.examples.showcase.demos.redis;
 
-import org.springside.modules.test.benchmark.BenchmarkBase;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 
 import redis.clients.jedis.Jedis;
@@ -13,10 +13,10 @@ import redis.clients.jedis.Protocol;
  * 
  * @author calvin
  */
-public class RedisCounterBenchmark extends BenchmarkBase {
+public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	private static final int THREAD_COUNT = 20;
 	private static final long LOOP_COUNT = 50000;
-	private static final int PRINT_INTERVAL_SECONDS = 10;
+	private static final int PRINT_BETWEEN_SECONDS = 10;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
@@ -56,14 +56,14 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected Runnable getTask(int index) {
-		return new CounterTask(index, this, PRINT_INTERVAL_SECONDS);
+	protected BenchmarkTask createTask(int index) {
+		return new CounterTask(index, this, PRINT_BETWEEN_SECONDS);
 	}
 
 	public class CounterTask extends BenchmarkTask {
 
-		public CounterTask(int index, BenchmarkBase parent, int printInfoInterval) {
-			super(index, parent, printInfoInterval);
+		public CounterTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
+			super(index, parent, printBetweenSeconds);
 		}
 
 		@Override
@@ -75,7 +75,7 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 				// start test loop
 				for (int i = 0; i < loopCount; i++) {
 					jedis.incr(counterName);
-					printInfo(i);
+					printProgressMessage(i);
 				}
 			} finally {
 				onThreadFinish();

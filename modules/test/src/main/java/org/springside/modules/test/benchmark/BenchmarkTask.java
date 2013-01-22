@@ -5,23 +5,27 @@ import java.util.Date;
 
 import com.google.common.util.concurrent.RateLimiter;
 
+/**
+ * Beanchmark中任务线程的基类.
+ * 
+ * @see ConcurrentBenchmark 
+ */
 public abstract class BenchmarkTask implements Runnable {
 
 	protected int threadIndex;
-	protected BenchmarkBase parent;
+	protected ConcurrentBenchmark parent;
+	protected int printBetweenSeconds;
 
-	//use for print info//
 	protected RateLimiter rateLimiter;
-	protected int printInfoInterval; //单位为秒.
+	protected Date threadStartTime;
 	protected long previous = 0L;
-	protected Date startTime;
 
-	public BenchmarkTask(int threadIndex, BenchmarkBase parent, int printInfoInterval) {
+	public BenchmarkTask(int threadIndex, ConcurrentBenchmark parent, int printBetweenSeconds) {
 		this.threadIndex = threadIndex;
 		this.parent = parent;
-		this.printInfoInterval = printInfoInterval;
+		this.printBetweenSeconds = printBetweenSeconds;
 
-		this.rateLimiter = RateLimiter.create(1d / printInfoInterval);
+		this.rateLimiter = RateLimiter.create(1d / printBetweenSeconds);
 	}
 
 	/**
@@ -35,7 +39,7 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		startTime = new Date();
+		threadStartTime = new Date();
 	}
 
 	/**
@@ -44,26 +48,51 @@ public abstract class BenchmarkTask implements Runnable {
 	protected void onThreadFinish() {
 		// notify test finish
 		parent.finishLock.countDown();
-		System.out.printf("Thread %02d finish.\n", threadIndex);
+
+		// print finish summary message
+		printThreadFinishMessage();
 	}
 
 	/**
-	 * 每间隔printInfoInterval的时间打印信息�?
+	 * 间隔固定时间打印进度信息.
 	 */
-	protected void printInfo(int current) {
+	protected void printProgressMessage(int current) {
 		if (rateLimiter.tryAcquire()) {
-			String totalTime = new BigDecimal(new Date().getTime() - startTime.getTime()).divide(new BigDecimal(1000),
-					0, BigDecimal.ROUND_HALF_UP).toString();
-			long requests = (current - previous) + 1;
+			long totalRequest = current + 1;
+			long lastRequests = totalRequest - previous;
 
-			long tps = requests / printInfoInterval;
-			String latency = new BigDecimal(printInfoInterval * 1000).divide(new BigDecimal(requests), 2,
+			long totalTimeInMills = new Date().getTime() - threadStartTime.getTime();
+			totalTimeInMills = totalTimeInMills == 0 ? 1 : totalTimeInMills;
+			String totalTimeInSeconds = new BigDecimal(totalTimeInMills).divide(new BigDecimal(1000), 0,
 					BigDecimal.ROUND_HALF_UP).toString();
 
-			System.out.printf(
-					"Thread %02d finish %,d requests after %s seconds. Last TPS is %,d and latency is %sms.\n",
-					threadIndex, current + 1, totalTime, tps, latency);
+			long totalTps = totalRequest * 1000 / totalTimeInMills;
+			long lastTps = lastRequests / printBetweenSeconds;
+
+			BigDecimal lastLatency = new BigDecimal(printBetweenSeconds * 1000).divide(new BigDecimal(lastRequests), 2,
+					BigDecimal.ROUND_HALF_UP);
+			BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
+					BigDecimal.ROUND_HALF_UP);
+
+			System.out
+					.printf("Thread %02d process %,d requests after %s seconds. Last Tps/latency is %,d/%sms, total Tps/latency is %,d/%sms.\n",
+							threadIndex, totalRequest, totalTimeInSeconds, lastTps, lastLatency.toString(), totalTps,
+							totalLatency.toString());
 			previous = current;
 		}
+	}
+
+	/**
+	 * 打印线程结果信息.
+	 */
+	protected void printThreadFinishMessage() {
+		long totalTimeInMills = new Date().getTime() - threadStartTime.getTime();
+		long totalRequest = parent.loopCount;
+		long totalTps = totalRequest * 1000 / totalTimeInMills;
+		BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
+				BigDecimal.ROUND_HALF_UP);
+
+		System.out.printf("Thread %02d finish.Total Tps/latency is %,d/%sms\n", threadIndex, totalTps,
+				totalLatency.toString());
 	}
 }

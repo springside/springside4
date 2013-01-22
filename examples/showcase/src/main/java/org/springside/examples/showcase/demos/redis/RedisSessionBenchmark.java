@@ -1,7 +1,7 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.test.benchmark.BenchmarkBase;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 
 import redis.clients.jedis.Jedis;
@@ -14,10 +14,10 @@ import redis.clients.jedis.Protocol;
  * 
  * @author calvin
  */
-public class RedisSessionBenchmark extends BenchmarkBase {
+public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	private static final int THREAD_COUNT = 20;
 	private static final long LOOP_COUNT = 50000;
-	private static final int PRINT_INTERVAL_SECONDS = 10;
+	private static final int PRINT_BETWEEN_SECONDS = 10;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
@@ -58,13 +58,13 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 	}
 
 	@Override
-	protected Runnable getTask(int index) {
-		return new SessionTask(index, this, PRINT_INTERVAL_SECONDS);
+	protected BenchmarkTask createTask(int index) {
+		return new SessionTask(index, this, PRINT_BETWEEN_SECONDS);
 	}
 
 	public class SessionTask extends BenchmarkTask {
-		public SessionTask(int index, BenchmarkBase parent, int printInfoInterval) {
-			super(index, parent, printInfoInterval);
+		public SessionTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
+			super(index, parent, printBetweenSeconds);
 		}
 
 		@Override
@@ -88,9 +88,7 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 
 					//print message
-					if (i % 10 == 0) {
-						printInfo(i);
-					}
+					printProgressMessage(i);
 				}
 			} finally {
 				onThreadFinish();

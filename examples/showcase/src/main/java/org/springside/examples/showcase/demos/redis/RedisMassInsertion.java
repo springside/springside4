@@ -1,7 +1,7 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.test.benchmark.BenchmarkBase;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 
 import redis.clients.jedis.Jedis;
@@ -11,14 +11,14 @@ import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis批量插入时的性能, 使用PipeLine加�?.
+ * 测试Redis批量插入时的性能, 使用PipeLine加�?.
  * 
  * @author calvin
  */
-public class RedisMassInsertion extends BenchmarkBase {
+public class RedisMassInsertion extends ConcurrentBenchmark {
 	private static final int THREAD_COUNT = 20;
 	private static final long LOOP_COUNT = 500000;
-	private static final int PRINT_INTERVAL_SECONDS = 10;
+	private static final int PRINT_BETWEEN_SECONDS = 10;
 	private static final int BATCH_SIZE = 10;
 
 	private static final String HOST = "localhost";
@@ -60,14 +60,14 @@ public class RedisMassInsertion extends BenchmarkBase {
 	}
 
 	@Override
-	protected Runnable getTask(int index) {
-		return new MassInsertionTask(index, this, PRINT_INTERVAL_SECONDS);
+	protected BenchmarkTask createTask(int index) {
+		return new MassInsertionTask(index, this, PRINT_BETWEEN_SECONDS);
 	}
 
 	public class MassInsertionTask extends BenchmarkTask {
 
-		public MassInsertionTask(int index, BenchmarkBase parent, int printInfoInterval) {
-			super(index, parent, printInfoInterval);
+		public MassInsertionTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
+			super(index, parent, printBetweenSeconds);
 		}
 
 		@Override
@@ -92,7 +92,7 @@ public class RedisMassInsertion extends BenchmarkBase {
 
 					if (i % BATCH_SIZE == 0) {
 						pl.sync();
-						printInfo(i);
+						printProgressMessage(i);
 					}
 				}
 			} finally {
