@@ -49,11 +49,12 @@ public abstract class BenchmarkTask implements Runnable {
 	}
 
 	/**
-	 * 间隔printInfoInterval的时间打印信�?
+	 * 间隔printInfoInterval的时间打印信息。
 	 */
 	protected void printInfo(int current) {
 		if (rateLimiter.tryAcquire()) {
-			long totalTime = (new Date().getTime() - startTime.getTime()) / 1000;
+			String totalTime = new BigDecimal(new Date().getTime() - startTime.getTime()).divide(new BigDecimal(1000),
+					0, BigDecimal.ROUND_HALF_UP).toString();
 			long requests = (current - previous) + 1;
 
 			long tps = requests / printInfoInterval;
@@ -61,8 +62,8 @@ public abstract class BenchmarkTask implements Runnable {
 					BigDecimal.ROUND_HALF_UP).toString();
 
 			System.out.printf(
-					"Thread %02d finish %,d requests after %d seconds. Last TPS is %,d and latency is %sms.\n",
-					threadIndex, current, totalTime, tps, latency);
+					"Thread %02d finish %,d requests after %s seconds. Last TPS is %,d and latency is %sms.\n",
+					threadIndex, current + 1, totalTime, tps, latency);
 			previous = current;
 		}
 	}

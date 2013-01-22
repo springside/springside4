@@ -10,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis用于做Session管理的setEx()与get()方法的�?�? 并使用JSON格式存储数据.
+ * 测试Redis用于做Session管理的setEx()与get()方法, 并使用JSON格式存储数据.
  * 
  * @author calvin
  */
@@ -86,7 +86,11 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 					//get it back
 					String sessionBackString = jedis.get(keyPrefix + i);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
-					printInfo(i);
+
+					//print message
+					if (i % 10 == 0) {
+						printInfo(i);
+					}
 				}
 			} finally {
 				onThreadFinish();
