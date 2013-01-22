@@ -9,6 +9,8 @@ public abstract class BenchmarkTask implements Runnable {
 
 	protected int threadIndex;
 
+	protected Date startTime;
+
 	protected RateLimiter rateLimiter;
 	protected int printInfoInterval; //单位为秒.
 	protected long previous = 0L;
@@ -26,7 +28,7 @@ public abstract class BenchmarkTask implements Runnable {
 	/**
 	 * Must be invoked after each thread finish the prepare job, return the startTime. 
 	 */
-	protected Date onThreadStart() {
+	protected void onThreadStart() {
 		parent.startLock.countDown();
 		//wait for all other threads ready
 		try {
@@ -34,7 +36,7 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		return new Date();
+		startTime = new Date();
 	}
 
 	/**
@@ -47,21 +49,21 @@ public abstract class BenchmarkTask implements Runnable {
 	}
 
 	/**
-	 * 间隔printInfoInterval的时间打印信息.
+	 * 间隔printInfoInterval的时间打印信�?
 	 */
-	protected void printInfo(Date startTime, long last) {
+	protected void printInfo(int current) {
 		if (rateLimiter.tryAcquire()) {
 			long totalTime = (new Date().getTime() - startTime.getTime()) / 1000;
-			long requests = (last - previous) + 1;
+			long requests = (current - previous) + 1;
 
 			long tps = requests / printInfoInterval;
-			BigDecimal latency = new BigDecimal(printInfoInterval * 1000).divide(new BigDecimal(requests), 2,
-					BigDecimal.ROUND_HALF_UP);
+			String latency = new BigDecimal(printInfoInterval * 1000).divide(new BigDecimal(requests), 2,
+					BigDecimal.ROUND_HALF_UP).toString();
 
 			System.out.printf(
-					"Thread %02d finish %,d request after %d seconds. Last TPS is %,d. Last latency is %sms.\n",
-					threadIndex, last, totalTime, tps, latency.toString());
-			previous = last;
+					"Thread %02d finish %,d requests after %d seconds. Last TPS is %,d and latency is %sms.\n",
+					threadIndex, current, totalTime, tps, latency);
+			previous = current;
 		}
 	}
 }

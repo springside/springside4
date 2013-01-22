@@ -1,7 +1,5 @@
 package org.springside.examples.showcase.demos.redis;
 
-import java.util.Date;
-
 import org.springside.modules.test.benchmark.BenchmarkBase;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 
@@ -19,7 +17,6 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 	private static final int THREAD_COUNT = 20;
 	private static final long LOOP_COUNT = 50000;
 	private static final int PRINT_INTERVAL_SECONDS = 10;
-	private static final int COUNTERS = 1;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
@@ -72,13 +69,13 @@ public class RedisCounterBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			Jedis jedis = pool.getResource();
-			Date startTime = onThreadStart();
+			onThreadStart();
 
 			try {
 				// start test loop
 				for (int i = 0; i < loopCount; i++) {
-					jedis.incr(counterName + (i % COUNTERS));
-					printInfo(startTime, i);
+					jedis.incr(counterName);
+					printInfo(i);
 				}
 			} finally {
 				onThreadFinish();

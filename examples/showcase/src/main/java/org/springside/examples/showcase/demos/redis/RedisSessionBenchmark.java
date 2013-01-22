@@ -1,7 +1,5 @@
 package org.springside.examples.showcase.demos.redis;
 
-import java.util.Date;
-
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.benchmark.BenchmarkBase;
 import org.springside.modules.test.benchmark.BenchmarkTask;
@@ -12,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis用于做Session管理的setEx()与get()方法的性能, 并使用JSON格式存储数据.
+ * 测试Redis用于做Session管理的setEx()与get()方法的�?�? 并使用JSON格式存储数据.
  * 
  * @author calvin
  */
@@ -72,7 +70,7 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 		@Override
 		public void run() {
 			Jedis jedis = pool.getResource();
-			Date startTime = onThreadStart();
+			onThreadStart();
 
 			try {
 
@@ -88,7 +86,7 @@ public class RedisSessionBenchmark extends BenchmarkBase {
 					//get it back
 					String sessionBackString = jedis.get(keyPrefix + i);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
-					printInfo(startTime, i);
+					printInfo(i);
 				}
 			} finally {
 				onThreadFinish();

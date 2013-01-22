@@ -37,7 +37,8 @@ public abstract class BenchmarkBase {
 			//print start message
 			String className = this.getClass().getSimpleName();
 			long invokeTimes = threadCount * loopCount;
-			System.out.printf("%s start. %,d request will be invoked.\n", className, invokeTimes);
+			System.out.printf("%s start.%d threads with %,d loops, totally %,d requests will be invoked.\n", className,
+					threadCount, loopCount, invokeTimes);
 			Date startTime = new Date();
 
 			//wait for all threads finish
@@ -45,9 +46,10 @@ public abstract class BenchmarkBase {
 
 			//print summary message
 			long timeInMills = new Date().getTime() - startTime.getTime();
+			long tps = invokeTimes * 1000 / timeInMills;
 
-			System.out.printf("%s finish.\nThread count is %d, spend %,d ms for %,d request, TPS is %,d.\n", className,
-					threadCount, timeInMills, invokeTimes, (invokeTimes * 1000 / timeInMills));
+			System.out.printf("%s finish.\n%d thread spend %,d ms for %,d requests, TPS is %,d.\n", className,
+					threadCount, timeInMills, invokeTimes, tps);
 		} finally {
 			threadPool.shutdownNow();
 			onFinish();

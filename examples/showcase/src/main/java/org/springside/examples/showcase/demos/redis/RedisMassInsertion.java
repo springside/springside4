@@ -1,7 +1,5 @@
 package org.springside.examples.showcase.demos.redis;
 
-import java.util.Date;
-
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.benchmark.BenchmarkBase;
 import org.springside.modules.test.benchmark.BenchmarkTask;
@@ -13,7 +11,7 @@ import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis批量插入时的性能, 使用PipeLine加速.
+ * 测试Redis批量插入时的性能, 使用PipeLine加�?.
  * 
  * @author calvin
  */
@@ -75,7 +73,7 @@ public class RedisMassInsertion extends BenchmarkBase {
 		@Override
 		public void run() {
 			Jedis jedis = pool.getResource();
-			Date startTime = onThreadStart();
+			onThreadStart();
 
 			try {
 				Pipeline pl = jedis.pipelined();
@@ -94,7 +92,7 @@ public class RedisMassInsertion extends BenchmarkBase {
 
 					if (i % BATCH_SIZE == 0) {
 						pl.sync();
-						printInfo(startTime, i);
+						printInfo(i);
 					}
 				}
 			} finally {
