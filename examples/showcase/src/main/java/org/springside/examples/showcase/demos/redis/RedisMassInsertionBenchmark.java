@@ -1,8 +1,8 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -11,11 +11,11 @@ import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis批量插入时的性能, 使用PipeLine加�?.
+ * 测试Redis批量插入时的性能, 使用PipeLine加速.
  * 
  * @author calvin
  */
-public class RedisMassInsertion extends ConcurrentBenchmark {
+public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	private static final int THREAD_COUNT = 20;
 	private static final long LOOP_COUNT = 500000;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
@@ -30,11 +30,11 @@ public class RedisMassInsertion extends ConcurrentBenchmark {
 	private JedisPool pool;
 
 	public static void main(String[] args) throws Exception {
-		RedisMassInsertion benchmark = new RedisMassInsertion(THREAD_COUNT, LOOP_COUNT);
+		RedisMassInsertionBenchmark benchmark = new RedisMassInsertionBenchmark(THREAD_COUNT, LOOP_COUNT);
 		benchmark.run();
 	}
 
-	public RedisMassInsertion(int threadCount, long loopCount) {
+	public RedisMassInsertionBenchmark(int threadCount, long loopCount) {
 		super(threadCount, loopCount);
 	}
 
@@ -77,16 +77,15 @@ public class RedisMassInsertion extends ConcurrentBenchmark {
 
 			try {
 				Pipeline pl = jedis.pipelined();
-				// start test loop
+
 				for (int i = 0; i < loopCount; i++) {
 					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append("_").append(i)
 							.toString();
-					//set session expired after 100 seconds
 					Session session = new Session(key);
-					session.addAttrbute("name", key);
-					session.addAttrbute("age", i);
-					session.addAttrbute("address", "address:" + i);
-					session.addAttrbute("tel", "tel:" + i);
+					session.setAttrbute("name", key);
+					session.setAttrbute("seq", i);
+					session.setAttrbute("address", "address:" + i);
+					session.setAttrbute("tel", "tel:" + i);
 
 					pl.set(session.getId(), jsonMapper.toJson(session));
 
@@ -100,6 +99,5 @@ public class RedisMassInsertion extends ConcurrentBenchmark {
 				pool.returnResource(jedis);
 			}
 		}
-
 	}
 }

@@ -1,8 +1,8 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -10,7 +10,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis用于做Session管理的setEx()与get()方法, 并使用JSON格式存储数据.
+ * 测试Redis用于Session管理的setEx()与get()方法性能, 使用JSON格式存储数据.
  * 
  * @author calvin
  */
@@ -73,21 +73,20 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 			onThreadStart();
 
 			try {
-
-				// start test loop
 				for (int i = 0; i < loopCount; i++) {
-					//set session expired after 100 seconds
-					Session session = new Session(keyPrefix + i);
-					session.addAttrbute("name", new StringBuilder().append("user_").append(threadIndex).append("_")
-							.append(i).toString());
-					session.addAttrbute("age", i);
-					jedis.setex(session.getId(), 100, jsonMapper.toJson(session));
+					//set session expired after 300 seconds
+					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append("_").append(i)
+							.toString();
+					Session session = new Session(key);
+					session.setAttrbute("name", key);
+					session.setAttrbute("seq", i);
+					jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
 
 					//get it back
-					String sessionBackString = jedis.get(keyPrefix + i);
+					String sessionBackString = jedis.get(key);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 
-					//print message
+					//print progress message between seconds.
 					printProgressMessage(i);
 				}
 			} finally {

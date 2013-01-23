@@ -33,8 +33,13 @@ public class Session {
 		this.attributes = attributes;
 	}
 
-	public void addAttrbute(String key, Object value) {
+	public Session setAttrbute(String key, Object value) {
 		attributes.put(key, value);
+		return this;
 	}
 
+	public Session removeAttrbute(String key) {
+		attributes.remove(key);
+		return this;
+	}
 }

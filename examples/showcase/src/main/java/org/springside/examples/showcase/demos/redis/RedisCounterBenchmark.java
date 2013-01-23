@@ -1,7 +1,7 @@
 package org.springside.examples.showcase.demos.redis;
 
-import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.test.benchmark.BenchmarkTask;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -9,7 +9,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis用于做计数器的incr()方法性能.
+ * 测试Redis用于计数器时incr()方法的性能.
  * 
  * @author calvin
  */
@@ -72,7 +72,6 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 			onThreadStart();
 
 			try {
-				// start test loop
 				for (int i = 0; i < loopCount; i++) {
 					jedis.incr(counterName);
 					printProgressMessage(i);
