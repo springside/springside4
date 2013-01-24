@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 /**
  * 多线程Benchmark测试框架.
  * 使用JDK Concurrency中的CountDownLatch精确控制多线程中的测试任务启动与停止及计时.
- * 使用Guava RateLimiter 间隔固定时间打印测试进度及性能数据.
  * 
  * @author calvin
  */
@@ -64,7 +63,7 @@ public abstract class ConcurrentBenchmark {
 		String className = this.getClass().getSimpleName();
 		long invokeTimes = threadCount * loopCount;
 
-		System.out.printf("%s start at %s.\n%d threads with %,d loops, total %,d requests will be invoked.\n",
+		System.out.printf("%s started at %s.\n%d threads with %,d loops, totally %,d requests will be invoked.\n",
 				className, startTime.toString(), threadCount, loopCount, invokeTimes);
 	}
 
@@ -75,8 +74,8 @@ public abstract class ConcurrentBenchmark {
 		long timeInMills = endTime.getTime() - startTime.getTime();
 		long tps = invokeTimes * 1000 / timeInMills;
 
-		System.out.printf("%s finish at %s.\n%d threads process %,d requests after %,d ms, TPS is %,d.\n", className,
-				endTime.toString(), threadCount, invokeTimes, timeInMills, tps);
+		System.out.printf("%s finished at %s.\n%d threads processed %,d requests after %,d ms, tps is %,d.\n",
+				className, endTime.toString(), threadCount, invokeTimes, timeInMills, tps);
 	}
 
 	/**
