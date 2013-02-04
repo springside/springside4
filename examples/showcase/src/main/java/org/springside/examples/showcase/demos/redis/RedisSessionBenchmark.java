@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.demos.redis;
 
+import java.security.SecureRandom;
+
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
@@ -23,7 +25,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	private static final int PORT = Protocol.DEFAULT_PORT;
 	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private String keyPrefix = "springside.key_";
+	private String keyPrefix = "springside.map:";
 	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
 
@@ -63,6 +65,8 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	}
 
 	public class SessionTask extends BenchmarkTask {
+		private SecureRandom random = new SecureRandom();
+
 		public SessionTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
 			super(index, parent, printBetweenSeconds);
 		}
@@ -74,12 +78,13 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 
 			try {
 				for (int i = 0; i < loopCount; i++) {
-					//set session expired after 300 seconds
-					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append("_").append(i)
-							.toString();
+					int randomIndex = random.nextInt((int) loopCount);
+					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append(":")
+							.append(randomIndex).toString();
 					Session session = new Session(key);
 					session.setAttrbute("name", key);
 					session.setAttrbute("seq", i);
+					//set session expired after 300 seconds
 					jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
 
 					//get it back

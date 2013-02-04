@@ -6,8 +6,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * 多线程Benchmark测试框架.
- * 使用JDK Concurrency中的CountDownLatch精确控制多线程中的测试任务启动与停止及计时.
+ * 多线程Benchmark测试框架. 提供多线程调度及定时的测试进度, tps/latency信息打印.
+ * 为方便移植重用, 无任何第三方类库依赖.
  * 
  * @author calvin
  */
@@ -79,13 +79,13 @@ public abstract class ConcurrentBenchmark {
 	}
 
 	/**
-	 * Override to do some global data prepare job.
+	 * Override to do some resource connect and global data prepare job.
 	 */
 	protected void onStart() {
 	}
 
 	/**
-	 * Override to do some global data cleanup and verify job.
+	 * Override to do some resource cleanup, result verify and global data cleanup job.
 	 */
 	protected void onFinish() {
 	}

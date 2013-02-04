@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Beanchmark中任务线程的基类.
+ * Benchmark中任务线程的基类.
  * 
  * @see ConcurrentBenchmark 
  */

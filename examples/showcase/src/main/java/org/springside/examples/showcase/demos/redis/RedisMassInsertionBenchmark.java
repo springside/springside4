@@ -25,7 +25,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	private static final int PORT = Protocol.DEFAULT_PORT;
 	private static final int TIMEOUT = 40000;
 
-	private String keyPrefix = "springside.key_";
+	private String keyPrefix = "springside.map:";
 	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
 
@@ -79,7 +79,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 				Pipeline pl = jedis.pipelined();
 
 				for (int i = 0; i < loopCount; i++) {
-					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append("_").append(i)
+					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append(":").append(i)
 							.toString();
 					Session session = new Session(key);
 					session.setAttrbute("name", key);
