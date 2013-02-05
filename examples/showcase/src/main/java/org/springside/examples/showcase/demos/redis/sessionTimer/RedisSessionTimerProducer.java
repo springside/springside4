@@ -1,40 +1,36 @@
-package org.springside.examples.showcase.demos.redis;
+package org.springside.examples.showcase.demos.redis.sessionTimer;
 
-import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Protocol;
 
 /**
- * 测试Redis批量插入时的性能, 使用PipeLine加速.
+ * 将Timer插入sorted set.
  * 
  * @author calvin
  */
-public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
+public class RedisSessionTimerProducer extends ConcurrentBenchmark {
 	private static final int THREAD_COUNT = 50;
-	private static final long LOOP_COUNT = 100000;
+	private static final long LOOP_COUNT = 500 * 60;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
-	private static final int BATCH_SIZE = 10;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
-	private static final int TIMEOUT = 40000;
+	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private String keyPrefix = "ss.map:";
-	private JsonMapper jsonMapper = new JsonMapper();
+	private String keyPrefix = "ss.timer";
 	private JedisPool pool;
 
 	public static void main(String[] args) throws Exception {
-		RedisMassInsertionBenchmark benchmark = new RedisMassInsertionBenchmark(THREAD_COUNT, LOOP_COUNT);
+		RedisSessionTimerProducer benchmark = new RedisSessionTimerProducer(THREAD_COUNT, LOOP_COUNT);
 		benchmark.run();
 	}
 
-	public RedisMassInsertionBenchmark(int threadCount, long loopCount) {
+	public RedisSessionTimerProducer(int threadCount, long loopCount) {
 		super(threadCount, loopCount);
 	}
 
@@ -61,12 +57,12 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected BenchmarkTask createTask(int index) {
-		return new MassInsertionTask(index, this, PRINT_BETWEEN_SECONDS);
+		return new SessionTimerProducerTask(index, this, PRINT_BETWEEN_SECONDS);
 	}
 
-	public class MassInsertionTask extends BenchmarkTask {
+	public class SessionTimerProducerTask extends BenchmarkTask {
 
-		public MassInsertionTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
+		public SessionTimerProducerTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
 			super(index, parent, printBetweenSeconds);
 		}
 
@@ -76,23 +72,11 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 			onThreadStart();
 
 			try {
-				Pipeline pl = jedis.pipelined();
 
 				for (int i = 0; i < loopCount; i++) {
-					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append(":").append(i)
-							.toString();
-					Session session = new Session(key);
-					session.setAttrbute("name", key);
-					session.setAttrbute("seq", i);
-					session.setAttrbute("address", "address:" + i);
-					session.setAttrbute("tel", "tel:" + i);
-
-					pl.set(session.getId(), jsonMapper.toJson(session));
-
-					if (i % BATCH_SIZE == 0) {
-						pl.sync();
-						printProgressMessage(i);
-					}
+					long scheduleTime = threadIndex * loopCount + i;
+					jedis.zadd(keyPrefix, scheduleTime, String.valueOf(scheduleTime));
+					printProgressMessage(i);
 				}
 			} finally {
 				onThreadFinish();

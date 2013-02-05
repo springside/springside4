@@ -17,15 +17,15 @@ import redis.clients.jedis.Protocol;
  * @author calvin
  */
 public class RedisSessionBenchmark extends ConcurrentBenchmark {
-	private static final int THREAD_COUNT = 20;
-	private static final long LOOP_COUNT = 50000;
+	private static final int THREAD_COUNT = 50;
+	private static final long LOOP_COUNT = 20000;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
 
 	private static final String HOST = "localhost";
 	private static final int PORT = Protocol.DEFAULT_PORT;
 	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private String keyPrefix = "springside.map:";
+	private String keyPrefix = "ss.session:";
 	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
 
