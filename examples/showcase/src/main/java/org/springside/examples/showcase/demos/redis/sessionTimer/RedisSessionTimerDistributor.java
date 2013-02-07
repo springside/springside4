@@ -23,9 +23,9 @@ public class RedisSessionTimerDistributor implements Runnable {
 
 	public static final String HOST = "localhost";
 	public static final int PORT = Protocol.DEFAULT_PORT;
-	public static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
+	public static final int TIMEOUT = 5000;
 
-	private static final int PRINT_BETWEEN_SECONDS = 10;
+	private static final int PRINT_BETWEEN_SECONDS = 20;
 	private static int BATCH_SIZE = 2500;
 
 	private Jedis jedis;
@@ -42,7 +42,7 @@ public class RedisSessionTimerDistributor implements Runnable {
 			ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
 			threadPool.scheduleAtFixedRate(distributor, 5, 1, TimeUnit.SECONDS);
 
-			System.out.println("Hit enter to stop");
+			System.out.println("Hit enter to stop.");
 			System.in.read();
 			System.out.println("Shuting down");
 			threadPool.shutdownNow();
@@ -54,15 +54,14 @@ public class RedisSessionTimerDistributor implements Runnable {
 
 	public void setUp() {
 		jedis = new Jedis(HOST, PORT, TIMEOUT);
-		//TODO: get with score and add it to ack
-		String script = "local jobs=redis.call('zrangebyscore',KEYS[1],0,ARGV[1])\n";
+		String script = "local jobWithScores=redis.call('zrangebyscore', KEYS[1], 0, ARGV[1], 'withscores')\n";
 		script += "      for i=1,ARGV[2] do \n";
-		script += "          redis.call('lpush',KEYS[2],jobs[i])\n";
+		script += "          redis.call('lpush', KEYS[2], jobWithScores[i*2-1])\n";
 		script += "      end\n";
 		script += "      for i=1,ARGV[2] do \n";
-		script += "          redis.call('zadd',KEYS[3],1,jobs[i])\n";
+		script += "          redis.call('zadd', KEYS[3], jobWithScores[i*2], jobWithScores[i*2-1])\n";
 		script += "      end\n";
-		script += "      redis.call('zremrangebyscore',KEYS[1],0,ARGV[1])";
+		script += "      redis.call('zremrangebyscore', KEYS[1], 0, ARGV[1])";
 
 		System.out.println(script);
 		scriptSha = jedis.scriptLoad(script);
@@ -76,7 +75,7 @@ public class RedisSessionTimerDistributor implements Runnable {
 	public void run() {
 		long startTime = System.currentTimeMillis();
 		jedis.evalsha(scriptSha, Lists.newArrayList(TIMER_KEY, JOB_KEY, ACK_KEY),
-				Lists.newArrayList(String.valueOf(loop * BATCH_SIZE), String.valueOf(BATCH_SIZE)));
+				Lists.newArrayList(String.valueOf(loop * BATCH_SIZE - 1), String.valueOf(BATCH_SIZE)));
 		loop++;
 		long spendTime = System.currentTimeMillis() - startTime;
 		totalTime += spendTime;

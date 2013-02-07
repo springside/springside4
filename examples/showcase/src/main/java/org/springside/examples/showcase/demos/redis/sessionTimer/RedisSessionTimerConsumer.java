@@ -47,7 +47,6 @@ public class RedisSessionTimerConsumer implements Runnable {
 		System.out.println("Shuting down");
 		threadPool.shutdownNow();
 		threadPool.awaitTermination(5, TimeUnit.SECONDS);
-
 		tearDown();
 	}
 
@@ -59,8 +58,6 @@ public class RedisSessionTimerConsumer implements Runnable {
 	}
 
 	public static void tearDown() {
-		//TODO: can't destroy
-		System.out.println("Destroy connections");
 		pool.destroy();
 	}
 
@@ -68,10 +65,10 @@ public class RedisSessionTimerConsumer implements Runnable {
 	public void run() {
 		Jedis jedis = pool.getResource();
 		try {
-			while (true) {
+			while (!Thread.currentThread().isInterrupted()) {
 				//fetch job
 				List<String> result = jedis.brpop(Integer.MAX_VALUE, RedisSessionTimerDistributor.JOB_KEY);
-				String id = result.get(0);
+				String id = result.get(1);
 
 				//ack job
 				jedis.zrem(RedisSessionTimerDistributor.ACK_KEY, id);
