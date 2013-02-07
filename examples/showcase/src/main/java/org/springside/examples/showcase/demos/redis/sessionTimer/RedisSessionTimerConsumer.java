@@ -46,8 +46,12 @@ public class RedisSessionTimerConsumer implements Runnable {
 		System.in.read();
 		System.out.println("Shuting down");
 		threadPool.shutdownNow();
-		threadPool.awaitTermination(5, TimeUnit.SECONDS);
+		boolean shutdownSucess = threadPool.awaitTermination(5, TimeUnit.SECONDS);
 		tearDown();
+		if (!shutdownSucess) {
+			System.out.println("Forcing exiting.");
+			System.exit(-1);
+		}
 	}
 
 	public static void setUp() {
@@ -65,9 +69,10 @@ public class RedisSessionTimerConsumer implements Runnable {
 	public void run() {
 		Jedis jedis = pool.getResource();
 		try {
+			//Jedis的brpop 不会被中断, 所以下面的判断基本没用, 全靠外围的强行退出.
 			while (!Thread.currentThread().isInterrupted()) {
 				//fetch job
-				List<String> result = jedis.brpop(Integer.MAX_VALUE, RedisSessionTimerDistributor.JOB_KEY);
+				List<String> result = jedis.brpop(0, RedisSessionTimerDistributor.JOB_KEY);
 				String id = result.get(1);
 
 				//ack job
@@ -88,6 +93,7 @@ public class RedisSessionTimerConsumer implements Runnable {
 							(localCount - lastLocalPrintCount) / PRINT_BETWEEN_SECONDS);
 					lastLocalPrintCount = localCount;
 				}
+
 			}
 		} finally {
 			pool.returnResource(jedis);
