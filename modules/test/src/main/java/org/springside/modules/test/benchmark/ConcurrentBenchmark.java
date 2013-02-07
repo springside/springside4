@@ -31,7 +31,7 @@ public abstract class ConcurrentBenchmark {
 
 	public void run() throws Exception {
 		//override for data prepare
-		onStart();
+		setUp();
 
 		//start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
@@ -55,7 +55,7 @@ public abstract class ConcurrentBenchmark {
 		} finally {
 			threadPool.shutdownNow();
 			//override for data cleanup
-			onFinish();
+			tearDown();
 		}
 	}
 
@@ -79,19 +79,21 @@ public abstract class ConcurrentBenchmark {
 	}
 
 	/**
-	 * Override to do some resource connect and global data prepare job.
+	 * Override to connect resource and prepare global data.
 	 */
-	protected void onStart() {
+	protected void setUp() {
 	}
 
 	/**
-	 * Override to do some resource cleanup, result verify and global data cleanup job.
+	 * Override to disconnect resource, verify result and cleanup global data .
 	 */
-	protected void onFinish() {
+	protected void tearDown() {
 	}
 
 	/**
-	 * Return a new benchmark task. 
+	 * Return a new benchmark task.
+	 * 
+	 * @param taskSequence the sequence number of the task. 
 	 */
-	abstract protected BenchmarkTask createTask(int threadIndex);
+	abstract protected BenchmarkTask createTask(int taskSequence);
 }

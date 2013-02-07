@@ -8,51 +8,80 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.RateLimiter;
 
 /**
- * 每秒执行一次Lua Script，从Sorted Set中取出到时间的任务，放入List中等待List中领取.
+ * 每秒执行一次Lua Script，从ss.timer(Sorted Set)中取出到时的任务，放入ss.job(List)和ss.ack(Sorted Set)中等待领取和完成呢个确认.
  * 
  * @author calvin
  */
 public class RedisSessionTimerDistributor implements Runnable {
 
-	private static final String HOST = "localhost";
-	private static final int PORT = Protocol.DEFAULT_PORT;
+	public static final String TIMER_KEY = "ss.timer";
+	public static final String JOB_KEY = "ss.job";
+	public static final String ACK_KEY = "ss.ack";
 
-	private static String timerKey = "ss.timer";
-	private static String jobKey = "ss.job";
-	private static int batchSize = 2500;
+	public static final String HOST = "localhost";
+	public static final int PORT = Protocol.DEFAULT_PORT;
+	public static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private static Jedis jedis;
+	private static final int PRINT_BETWEEN_SECONDS = 10;
+	private static int BATCH_SIZE = 2500;
+
+	private Jedis jedis;
+	private String scriptSha;
 	private int loop = 1;
+	private long totalTime;
+	private RateLimiter printRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
 
 	public static void main(String[] args) throws Exception {
-		jedis = new Jedis(HOST, PORT);
-		jedis.connect();
 
 		RedisSessionTimerDistributor distributor = new RedisSessionTimerDistributor();
-		ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
-		threadPool.scheduleAtFixedRate(distributor, 0, 1, TimeUnit.SECONDS);
+		distributor.setUp();
+		try {
+			ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
+			threadPool.scheduleAtFixedRate(distributor, 5, 1, TimeUnit.SECONDS);
 
-		System.out.println("Hit Any Key to stop");
-		System.in.read();
-		System.out.println("Shuting down");
-		threadPool.shutdownNow();
-		threadPool.awaitTermination(3, TimeUnit.SECONDS);
+			System.out.println("Hit enter to stop");
+			System.in.read();
+			System.out.println("Shuting down");
+			threadPool.shutdownNow();
+			threadPool.awaitTermination(3, TimeUnit.SECONDS);
+		} finally {
+			distributor.tearDown();
+		}
+	}
 
+	public void setUp() {
+		jedis = new Jedis(HOST, PORT, TIMEOUT);
+		//TODO: get with score and add it to ack
+		String script = "local jobs=redis.call('zrangebyscore',KEYS[1],0,ARGV[1])\n";
+		script += "      for i=1,ARGV[2] do \n";
+		script += "          redis.call('lpush',KEYS[2],jobs[i])\n";
+		script += "      end\n";
+		script += "      for i=1,ARGV[2] do \n";
+		script += "          redis.call('zadd',KEYS[3],1,jobs[i])\n";
+		script += "      end\n";
+		script += "      redis.call('zremrangebyscore',KEYS[1],0,ARGV[1])";
+
+		System.out.println(script);
+		scriptSha = jedis.scriptLoad(script);
+	}
+
+	public void tearDown() {
 		jedis.disconnect();
 	}
 
 	@Override
 	public void run() {
 		long startTime = System.currentTimeMillis();
-		//TODO: add to ack sorted set , and try to run multi key for lpush/zadd
-		String script = "local jobs=redis.call('zrangebyscore',KEYS[1],0,ARGV[1])\n"
-				+ " for i=1,ARGV[2] do \n  redis.call('lpush',KEYS[2],jobs[i])\n end\n"
-				+ " redis.call('zremrangebyscore',KEYS[1],0,ARGV[1])";
-		jedis.eval(script, Lists.newArrayList(timerKey, jobKey),
-				Lists.newArrayList(String.valueOf(loop * batchSize), String.valueOf(batchSize)));
+		jedis.evalsha(scriptSha, Lists.newArrayList(TIMER_KEY, JOB_KEY, ACK_KEY),
+				Lists.newArrayList(String.valueOf(loop * BATCH_SIZE), String.valueOf(BATCH_SIZE)));
 		loop++;
-		System.out.println("Times spend " + (System.currentTimeMillis() - startTime));
+		long spendTime = System.currentTimeMillis() - startTime;
+		totalTime += spendTime;
+		if (printRate.tryAcquire()) {
+			System.out.printf("Average time %d ms \n", totalTime / loop);
+		}
 	}
 }

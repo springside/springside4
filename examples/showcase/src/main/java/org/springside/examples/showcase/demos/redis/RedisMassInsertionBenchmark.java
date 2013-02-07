@@ -39,7 +39,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void setUp() {
 		//create jedis pool
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(THREAD_COUNT);
@@ -55,7 +55,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected void onFinish() {
+	protected void tearDown() {
 		pool.destroy();
 	}
 
@@ -79,7 +79,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 				Pipeline pl = jedis.pipelined();
 
 				for (int i = 0; i < loopCount; i++) {
-					String key = new StringBuilder().append(keyPrefix).append(threadIndex).append(":").append(i)
+					String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":").append(i)
 							.toString();
 					Session session = new Session(key);
 					session.setAttrbute("name", key);

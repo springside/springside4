@@ -35,7 +35,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void setUp() {
 		//create jedis pool
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(THREAD_COUNT);
@@ -51,7 +51,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected void onFinish() {
+	protected void tearDown() {
 		pool.destroy();
 	}
 

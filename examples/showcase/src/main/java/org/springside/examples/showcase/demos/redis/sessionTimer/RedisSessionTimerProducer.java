@@ -6,23 +6,17 @@ import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.jedis.Protocol;
 
 /**
- * 将Timer插入sorted set.
+ * 将Timer放入ss.timer(Sorted set).
  * 
  * @author calvin
  */
 public class RedisSessionTimerProducer extends ConcurrentBenchmark {
-	private static final int THREAD_COUNT = 50;
-	private static final long LOOP_COUNT = 500 * 60;
+	private static final int THREAD_COUNT = 10;
+	private static final long LOOP_COUNT = 2500 * 60;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
 
-	private static final String HOST = "localhost";
-	private static final int PORT = Protocol.DEFAULT_PORT;
-	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
-
-	private String keyPrefix = "ss.timer";
 	private JedisPool pool;
 
 	public static void main(String[] args) throws Exception {
@@ -35,23 +29,16 @@ public class RedisSessionTimerProducer extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected void onStart() {
+	protected void setUp() {
 		//create jedis pool
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(THREAD_COUNT);
-		pool = new JedisPool(poolConfig, HOST, PORT, TIMEOUT);
-
-		//remove all keys
-		Jedis jedis = pool.getResource();
-		try {
-			jedis.flushDB();
-		} finally {
-			pool.returnResource(jedis);
-		}
+		pool = new JedisPool(poolConfig, RedisSessionTimerDistributor.HOST, RedisSessionTimerDistributor.PORT,
+				RedisSessionTimerDistributor.TIMEOUT);
 	}
 
 	@Override
-	protected void onFinish() {
+	protected void tearDown() {
 		pool.destroy();
 	}
 
@@ -74,8 +61,8 @@ public class RedisSessionTimerProducer extends ConcurrentBenchmark {
 			try {
 
 				for (int i = 0; i < loopCount; i++) {
-					long scheduleTime = threadIndex * loopCount + i;
-					jedis.zadd(keyPrefix, scheduleTime, String.valueOf(scheduleTime));
+					long scheduleTime = taskSequence * loopCount + i;
+					jedis.zadd(RedisSessionTimerDistributor.TIMER_KEY, scheduleTime, String.valueOf(scheduleTime));
 					printProgressMessage(i);
 				}
 			} finally {
