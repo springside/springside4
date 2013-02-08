@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.demos.redis.sessionTimer;
+package org.springside.examples.showcase.demos.redis.job;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -17,7 +17,7 @@ import com.google.common.util.concurrent.RateLimiter;
  * 
  * @author calvin
  */
-public class RedisSessionTimerConsumer implements Runnable {
+public class JobConsumer implements Runnable {
 
 	private static final int THREAD_COUNT = 10;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
@@ -38,27 +38,31 @@ public class RedisSessionTimerConsumer implements Runnable {
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
 		for (int i = 0; i < THREAD_COUNT; i++) {
-			RedisSessionTimerConsumer consumer = new RedisSessionTimerConsumer();
+			JobConsumer consumer = new JobConsumer();
 			threadPool.submit(consumer);
 		}
 
 		System.out.println("Hit enter to stop");
-		System.in.read();
-		System.out.println("Shuting down");
-		threadPool.shutdownNow();
-		boolean shutdownSucess = threadPool.awaitTermination(5, TimeUnit.SECONDS);
-		tearDown();
-		if (!shutdownSucess) {
-			System.out.println("Forcing exiting.");
-			System.exit(-1);
+		while (true) {
+			char c = (char) System.in.read();
+			if (c == '\n') {
+				System.out.println("Shuting down");
+				threadPool.shutdownNow();
+				boolean shutdownSucess = threadPool.awaitTermination(5, TimeUnit.SECONDS);
+				tearDown();
+				if (!shutdownSucess) {
+					System.out.println("Forcing exiting.");
+					System.exit(-1);
+				}
+			}
 		}
+
 	}
 
 	public static void setUp() {
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(THREAD_COUNT);
-		pool = new JedisPool(poolConfig, RedisSessionTimerDistributor.HOST, RedisSessionTimerDistributor.PORT,
-				RedisSessionTimerDistributor.TIMEOUT);
+		pool = new JedisPool(poolConfig, JobManager.HOST, JobManager.PORT, JobManager.TIMEOUT);
 	}
 
 	public static void tearDown() {
@@ -72,11 +76,11 @@ public class RedisSessionTimerConsumer implements Runnable {
 			//Jedis的brpop 不会被中断, 所以下面的判断基本没用, 全靠外围的强行退出.
 			while (!Thread.currentThread().isInterrupted()) {
 				//fetch job
-				List<String> result = jedis.brpop(0, RedisSessionTimerDistributor.JOB_KEY);
+				List<String> result = jedis.brpop(0, JobManager.JOB_KEY);
 				String id = result.get(1);
 
 				//ack job
-				jedis.zrem(RedisSessionTimerDistributor.ACK_KEY, id);
+				jedis.zrem(JobManager.ACK_KEY, id);
 				int count = counter.incrementAndGet();
 				int localCount = localCounter.incrementAndGet();
 

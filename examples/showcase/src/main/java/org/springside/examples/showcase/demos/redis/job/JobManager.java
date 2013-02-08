@@ -1,8 +1,9 @@
-package org.springside.examples.showcase.demos.redis.sessionTimer;
+package org.springside.examples.showcase.demos.redis.job;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Protocol;
@@ -15,38 +16,44 @@ import com.google.common.util.concurrent.RateLimiter;
  * 
  * @author calvin
  */
-public class RedisSessionTimerDistributor implements Runnable {
+public class JobManager implements Runnable {
 
-	public static final String TIMER_KEY = "ss.timer";
-	public static final String JOB_KEY = "ss.job";
-	public static final String ACK_KEY = "ss.ack";
+	public static final String TIMER_KEY = "ss.job:schedule";
+	public static final String JOB_KEY = "ss.job:queue";
+	public static final String ACK_KEY = "ss.job:ack";
+	public static final int EXPECT_TPS = 2500;
+	public static final int DELAY_SECONDS = 10;
 
 	public static final String HOST = "localhost";
 	public static final int PORT = Protocol.DEFAULT_PORT;
 	public static final int TIMEOUT = 5000;
 
 	private static final int PRINT_BETWEEN_SECONDS = 20;
-	private static int BATCH_SIZE = 2500;
 
 	private Jedis jedis;
 	private String scriptSha;
 	private int loop = 1;
-	private long totalTime;
+	private AtomicLong totalTime = new AtomicLong(0);
 	private RateLimiter printRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
 
 	public static void main(String[] args) throws Exception {
 
-		RedisSessionTimerDistributor distributor = new RedisSessionTimerDistributor();
+		JobManager distributor = new JobManager();
 		distributor.setUp();
 		try {
 			ScheduledExecutorService threadPool = Executors.newScheduledThreadPool(1);
-			threadPool.scheduleAtFixedRate(distributor, 5, 1, TimeUnit.SECONDS);
+			threadPool.scheduleAtFixedRate(distributor, 10, 1, TimeUnit.SECONDS);
 
 			System.out.println("Hit enter to stop.");
-			System.in.read();
-			System.out.println("Shuting down");
-			threadPool.shutdownNow();
-			threadPool.awaitTermination(3, TimeUnit.SECONDS);
+			while (true) {
+				char c = (char) System.in.read();
+				if (c == '\n') {
+					System.out.println("Shuting down");
+					threadPool.shutdownNow();
+					threadPool.awaitTermination(3, TimeUnit.SECONDS);
+				}
+			}
+
 		} finally {
 			distributor.tearDown();
 		}
@@ -54,16 +61,16 @@ public class RedisSessionTimerDistributor implements Runnable {
 
 	public void setUp() {
 		jedis = new Jedis(HOST, PORT, TIMEOUT);
-		String script = "local jobWithScores=redis.call('zrangebyscore', KEYS[1], 0, ARGV[1], 'withscores')\n";
+		String script = "local jobWithScores=redis.call('zrangebyscore', KEYS[1], '-inf', ARGV[1], 'withscores')\n";
+		script += "      redis.call('zremrangebyscore', KEYS[1], '-inf', ARGV[1])\n";
 		script += "      for i=1,ARGV[2] do \n";
 		script += "          redis.call('lpush', KEYS[2], jobWithScores[i*2-1])\n";
 		script += "      end\n";
 		script += "      for i=1,ARGV[2] do \n";
 		script += "          redis.call('zadd', KEYS[3], jobWithScores[i*2], jobWithScores[i*2-1])\n";
 		script += "      end\n";
-		script += "      redis.call('zremrangebyscore', KEYS[1], 0, ARGV[1])";
 
-		System.out.println(script);
+		System.out.println("Lua Scripts is:\n" + script);
 		scriptSha = jedis.scriptLoad(script);
 	}
 
@@ -74,13 +81,16 @@ public class RedisSessionTimerDistributor implements Runnable {
 	@Override
 	public void run() {
 		long startTime = System.currentTimeMillis();
+
 		jedis.evalsha(scriptSha, Lists.newArrayList(TIMER_KEY, JOB_KEY, ACK_KEY),
-				Lists.newArrayList(String.valueOf(loop * BATCH_SIZE - 1), String.valueOf(BATCH_SIZE)));
-		loop++;
+				Lists.newArrayList(String.valueOf(startTime), String.valueOf(EXPECT_TPS)));
+
 		long spendTime = System.currentTimeMillis() - startTime;
-		totalTime += spendTime;
+		totalTime.addAndGet(spendTime);
+		loop++;
+
 		if (printRate.tryAcquire()) {
-			System.out.printf("Average time %d ms \n", totalTime / loop);
+			System.out.printf("Last time %,d ms, average time %,d ms \n", spendTime, totalTime.longValue() / loop);
 		}
 	}
 }

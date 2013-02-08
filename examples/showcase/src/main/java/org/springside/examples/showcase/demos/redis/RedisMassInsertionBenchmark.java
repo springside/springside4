@@ -94,6 +94,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 						printProgressMessage(i);
 					}
 				}
+				pl.sync();
 			} finally {
 				onThreadFinish();
 				pool.returnResource(jedis);
