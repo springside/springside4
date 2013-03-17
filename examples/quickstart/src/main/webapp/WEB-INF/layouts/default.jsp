@@ -8,31 +8,42 @@
 <html>
 <head>
 <title>QuickStart示例:<sitemesh:title/></title>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta http-equiv="Cache-Control" content="no-store" />
-<meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width">
 
-<link type="image/x-icon" href="${ctx}/static/images/favicon.ico" rel="shortcut icon">
-<link href="${ctx}/static/bootstrap/2.2.2/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
-<link href="${ctx}/static/jquery-validation/1.10.0/validate.css" type="text/css" rel="stylesheet" />
-<link href="${ctx}/static/styles/default.css" type="text/css" rel="stylesheet" />
-<script src="${ctx}/static/jquery/jquery-1.8.3.min.js" type="text/javascript"></script>
-<script src="${ctx}/static/jquery-validation/1.10.0/jquery.validate.min.js" type="text/javascript"></script>
-<script src="${ctx}/static/jquery-validation/1.10.0/messages_bs_zh.js" type="text/javascript"></script>
+<link rel="shortcut icon" type="image/x-icon" href="${ctx}/static/images/favicon.ico">
+<link rel="stylesheet"  href="${ctx}/static/bootstrap/2.3.1/css/bootstrap.min.css">
+<link rel="stylesheet"  href="${ctx}/static/styles/default.css"> 
 
+<!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+<!--[if lt IE 9]>
+	<script src="${ctx}/static/bootstrap/2.3.1/html5/html5shiv.js"></script>
+<![endif]-->
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="${ctx}/static/jquery/jquery-1.8.3.min.js"><\/script>')</script>
 <sitemesh:head/>
 </head>
 
 <body>
-	<div class="container">
+	 <!--[if lt IE 7]>
+          <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+      <![endif]-->
+        
+	<div id="wrap">
 		<%@ include file="/WEB-INF/layouts/header.jsp"%>
-		<div id="content">
+		<div class="container">
 			<sitemesh:body/>
 		</div>
-		<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+		<div id="push"></div>
 	</div>
-	<script src="${ctx}/static/bootstrap/2.2.2/js/bootstrap.min.js" type="text/javascript"></script>
+	<%@ include file="/WEB-INF/layouts/footer.jsp"%>
+	
+	<script src="${ctx}/static/jquery-validation/1.12.0/jquery.validate.js"></script>
+	<script src="${ctx}/static/jquery-validation/1.12.0/messages_zh.js"></script>
+	<script src="${ctx}/static/bootstrap/2.3.1/js/bootstrap.min.js"></script>
+    
 </body>
 </html>
