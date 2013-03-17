@@ -1,20 +1,62 @@
-/* header */
-#header {margin-bottom:15px;}
-
-#header h1 a {
-	color: #658A16;
-	text-decoration: none
+/* Sticky footer styles
+      -------------------------------------------------- */
+html,body {
+	height: 100%;
+	/* The html and body elements cannot have any padding or margin. */
 }
 
-#header h1 small {color: #BACE87;}
+/* Wrapper for page content to push down footer */
+#wrap {
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	/* Negative indent footer by it's height */
+	margin: 0 auto -60px;
+}
 
-/* footer */
-#footer {
-	margin-top: 15px;
-	padding: 15px 0px 0px 0px;
-	font-size: 95%;
+/* Set the fixed height of the footer here */
+#push,#footer {
+	height: 60px;
 	text-align: center;
-	border-top: 2px solid #658A16;
 }
 
-#footer a {color: #999;}
+#footer {
+	background-color: #f5f5f5;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media ( max-width : 767px) {
+	#footer {
+		margin-left: -20px;
+		margin-right: -20px;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+/* Custom page CSS
+      -------------------------------------------------- */
+/* Not required for template or sticky footer method. */
+#wrap>.container {
+	padding-top: 60px;
+}
+
+.container .credit {
+	margin: 20px 0;
+}
+
+/* Input Form
+      -------------------------------------------------- */
+.input-form {
+	max-width: 650px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .05);
+}
