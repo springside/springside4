@@ -28,31 +28,31 @@
 </head>
 
 <body>
-	<form id="inputForm" action="${ctx}/register" method="post" class="form-horizontal">
+	<form id="inputForm" action="${ctx}/register" method="post" class="form-horizontal input-form ">
 		<fieldset>
 			<legend><small>用户注册</small></legend>
 			<div class="control-group">
 				<label for="loginName" class="control-label">登录名:</label>
 				<div class="controls">
-					<input type="text" id="loginName" name="loginName" class="input-large required" minlength="3"/>
+					<input type="text" id="loginName" name="loginName" class="input-large required" minlength="3" placeholder="Login Name"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="name" class="control-label">用户名:</label>
 				<div class="controls">
-					<input type="text" id="name" name="name" class="input-large required"/>
+					<input type="text" id="name" name="name" class="input-large required" placeholder="用户名"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="plainPassword" class="control-label">密码:</label>
 				<div class="controls">
-					<input type="password" id="plainPassword" name="plainPassword" class="input-large required"/>
+					<input type="password" id="plainPassword" name="plainPassword" class="input-large required" placeholder="password"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label for="confirmPassword" class="control-label">确认密码:</label>
 				<div class="controls">
-					<input type="password" id="confirmPassword" name="confirmPassword" class="input-large required" equalTo="#plainPassword"/>
+					<input type="password" id="confirmPassword" name="confirmPassword" class="input-large required" equalTo="#plainPassword" placeholder="confirmPassword"/>
 				</div>
 			</div>
 			<div class="form-actions">

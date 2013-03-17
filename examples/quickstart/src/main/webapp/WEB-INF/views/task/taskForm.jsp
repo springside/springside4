@@ -17,14 +17,14 @@
 </head>
 
 <body>
-	<form id="inputForm" action="${ctx}/task/${action}" method="post" class="form-horizontal">
+	<form id="inputForm" action="${ctx}/task/${action}" method="post" class="form-horizontal input-form ">
 		<input type="hidden" name="id" value="${task.id}"/>
 		<fieldset>
 			<legend><small>管理任务</small></legend>
 			<div class="control-group">
 				<label for="task_title" class="control-label">任务名称:</label>
 				<div class="controls">
-					<input type="text" id="task_title" name="title"  value="${task.title}" class="input-large required" minlength="3"/>
+					<input type="text" id="task_title" name="title"  value="${task.title}" class="input-large required" minlength="3" placeholder="任务名称"/>
 				</div>
 			</div>	
 			<div class="control-group">
