@@ -50,7 +50,7 @@
 			<!-- 配置greenmail simulatore中的默认值 -->
 			<property name="host" value="localhost" />
 			<property name="port" value="3025" />
-			<property name="username" value="greenmail@localhost。com" />
+			<property name="username" value="greenmail@localhost.com" />
 			<property name="password" value="greenmail" />
 			<property name="defaultEncoding" value="UTF-8"/>
 			<property name="javaMailProperties">
