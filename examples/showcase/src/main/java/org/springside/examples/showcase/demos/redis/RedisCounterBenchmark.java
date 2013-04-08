@@ -5,41 +5,42 @@ import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
 /**
  * 测试Redis用于计数器时incr()方法的性能.
  * 
+ * 可用-Dbenchmark.thread.count,-Dbenchmark.loop.count 重置测试规模
+ * 可用-Dbenchmark.host,-Dbenchmark.port,-Dbenchmark.timeout 重置连接参数
+ * 
  * @author calvin
  */
 public class RedisCounterBenchmark extends ConcurrentBenchmark {
-	private static final int THREAD_COUNT = 50;
-	private static final long LOOP_COUNT = 20000;
+	private static final int DEFAULT_THREAD_COUNT = 50;
+	private static final long DEFAULT_LOOP_COUNT = 20000;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
 
-	private static final String HOST = "localhost";
-	private static final int PORT = Protocol.DEFAULT_PORT;
-	private static final int TIMEOUT = Protocol.DEFAULT_TIMEOUT;
+	private static final String DEFAULT_HOST = "localhost";
+	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
+	private static final int DEFAULT_TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
 	private String counterName = "ss.counter";
 	private JedisPool pool;
 
 	public static void main(String[] args) throws Exception {
-		RedisCounterBenchmark benchmark = new RedisCounterBenchmark(THREAD_COUNT, LOOP_COUNT);
-		benchmark.run();
+		RedisCounterBenchmark benchmark = new RedisCounterBenchmark(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT,
+				PRINT_BETWEEN_SECONDS);
+		benchmark.execute();
 	}
 
-	public RedisCounterBenchmark(int threadCount, long loopCount) {
-		super(threadCount, loopCount);
+	public RedisCounterBenchmark(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
+		super(defaultThreadCount, defaultLoopCount, printBetweenSeconds);
 	}
 
 	@Override
 	protected void setUp() {
-		//create jedis pool
-		JedisPoolConfig poolConfig = new JedisPoolConfig();
-		poolConfig.setMaxActive(THREAD_COUNT);
-		pool = new JedisPool(poolConfig, HOST, PORT, TIMEOUT);
+
+		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 
 		//reset counter
 		Jedis jedis = pool.getResource();
@@ -56,14 +57,14 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected BenchmarkTask createTask(int index) {
-		return new CounterTask(index, this, PRINT_BETWEEN_SECONDS);
+	protected BenchmarkTask createTask(int taskSequence) {
+		return new CounterTask(taskSequence, this);
 	}
 
 	public class CounterTask extends BenchmarkTask {
 
-		public CounterTask(int index, ConcurrentBenchmark parent, int printBetweenSeconds) {
-			super(index, parent, printBetweenSeconds);
+		public CounterTask(int taskSequence, ConcurrentBenchmark parent) {
+			super(taskSequence, parent);
 		}
 
 		@Override

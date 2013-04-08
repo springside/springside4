@@ -62,7 +62,7 @@ public class JobConsumer implements Runnable {
 	public static void setUp() {
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(THREAD_COUNT);
-		pool = new JedisPool(poolConfig, JobManager.HOST, JobManager.PORT, JobManager.TIMEOUT);
+		pool = new JedisPool(poolConfig, JobManager.DEFAULT_HOST, JobManager.DEFAULT_PORT, JobManager.DEFAULT_TIMEOUT);
 	}
 
 	public static void tearDown() {

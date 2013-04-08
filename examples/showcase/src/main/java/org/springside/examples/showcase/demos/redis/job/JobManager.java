@@ -24,9 +24,9 @@ public class JobManager implements Runnable {
 	public static final int EXPECT_TPS = 2500;
 	public static final int DELAY_SECONDS = 10;
 
-	public static final String HOST = "localhost";
-	public static final int PORT = Protocol.DEFAULT_PORT;
-	public static final int TIMEOUT = 5000;
+	public static final String DEFAULT_HOST = "localhost";
+	public static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
+	public static final int DEFAULT_TIMEOUT = 5000;
 
 	private static final int PRINT_BETWEEN_SECONDS = 20;
 
@@ -60,7 +60,7 @@ public class JobManager implements Runnable {
 	}
 
 	public void setUp() {
-		jedis = new Jedis(HOST, PORT, TIMEOUT);
+		jedis = new Jedis(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT);
 		String script = "local jobWithScores=redis.call('zrangebyscore', KEYS[1], '-inf', ARGV[1], 'withscores')\n";
 		script += "      redis.call('zremrangebyscore', KEYS[1], '-inf', ARGV[1])\n";
 		script += "      for i=1,ARGV[2] do \n";

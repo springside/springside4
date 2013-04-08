@@ -13,6 +13,9 @@ import java.util.concurrent.Executors;
  */
 public abstract class ConcurrentBenchmark {
 
+	public static final String THREAD_COUNT_NAME = "benchmark.thread.count";
+	public static final String LOOP_COUNT_NAME = "benchmark.loop.count";
+
 	protected int threadCount;
 	protected long loopCount;
 
@@ -20,24 +23,29 @@ public abstract class ConcurrentBenchmark {
 	protected CountDownLatch finishLock;
 
 	protected Date startTime;
+	protected int printBetweenMills;
 
-	public ConcurrentBenchmark(int threadCount, long loopCount) {
-		this.threadCount = threadCount;
-		this.loopCount = loopCount;
+	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
+		//merge default setting and system properties
+		this.threadCount = Integer.parseInt(System.getProperty(THREAD_COUNT_NAME, String.valueOf(defaultThreadCount)));
+		this.loopCount = Long.parseLong(System.getProperty(LOOP_COUNT_NAME, String.valueOf(defaultLoopCount)));
 
 		startLock = new CountDownLatch(threadCount);
 		finishLock = new CountDownLatch(threadCount);
+
+		this.printBetweenMills = printBetweenSeconds * 1000;
 	}
 
-	public void run() throws Exception {
-		//override for data prepare
+	public void execute() throws Exception {
+		//override for connection & data setup
 		setUp();
 
 		//start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		try {
 			for (int i = 0; i < threadCount; i++) {
-				threadPool.execute(createTask(i));
+				BenchmarkTask task = createTask(i);
+				threadPool.execute(task);
 			}
 
 			//wait for all threads ready
@@ -54,7 +62,7 @@ public abstract class ConcurrentBenchmark {
 			printFinishMessage();
 		} finally {
 			threadPool.shutdownNow();
-			//override for data cleanup
+			//override for connection & data cleanup
 			tearDown();
 		}
 	}

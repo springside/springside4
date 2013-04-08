@@ -12,20 +12,18 @@ public abstract class BenchmarkTask implements Runnable {
 
 	protected int taskSequence;
 	protected ConcurrentBenchmark parent;
-	protected int printBetweenMills;
 
-	protected long threadStartTime;
 	protected long previousPrintTime;
 	protected long previousLoop = 0L;
 
-	public BenchmarkTask(int taskSequence, ConcurrentBenchmark parent, int printBetweenSeconds) {
+	public BenchmarkTask(int taskSequence, ConcurrentBenchmark parent) {
 		this.taskSequence = taskSequence;
 		this.parent = parent;
-		this.printBetweenMills = printBetweenSeconds * 1000;
+
 	}
 
 	/**
-	 * Must be invoked when each thread finish the preparation. 
+	 * Must be invoked in children class when each thread finish the preparation. 
 	 */
 	protected void onThreadStart() {
 		parent.startLock.countDown();
@@ -35,12 +33,11 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		threadStartTime = System.currentTimeMillis();
-		previousPrintTime = threadStartTime;
+		previousPrintTime = parent.startTime.getTime();
 	}
 
 	/**
-	 * Must be invoked when the loop in thread finished.
+	 * Must be invoked in children class when the loop in thread finish.
 	 */
 	protected void onThreadFinish() {
 		// notify test finish
@@ -56,14 +53,14 @@ public abstract class BenchmarkTask implements Runnable {
 	protected void printProgressMessage(int currentLoop) {
 		long currentTime = System.currentTimeMillis();
 
-		if ((currentTime - previousPrintTime) > printBetweenMills) {
+		if ((currentTime - previousPrintTime) > parent.printBetweenMills) {
 			long lastTimeInMills = currentTime - previousPrintTime;
 			previousPrintTime = currentTime;
 
 			long totalRequest = currentLoop + 1;
 			long lastRequests = totalRequest - previousLoop;
 
-			long totalTimeInMills = currentTime - threadStartTime;
+			long totalTimeInMills = currentTime - parent.startTime.getTime();
 			long totalTimeInSeconds = TimeUnit.MILLISECONDS.toSeconds(totalTimeInMills);
 
 			long totalTps = totalRequest * 1000 / totalTimeInMills;
@@ -87,7 +84,7 @@ public abstract class BenchmarkTask implements Runnable {
 	 * 打印线程结果信息.
 	 */
 	protected void printThreadFinishMessage() {
-		long totalTimeInMills = System.currentTimeMillis() - threadStartTime;
+		long totalTimeInMills = System.currentTimeMillis() - parent.startTime.getTime();
 		long totalRequest = parent.loopCount;
 		long totalTps = totalRequest * 1000 / totalTimeInMills;
 		BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
