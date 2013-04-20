@@ -20,7 +20,6 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.util.Assert;
 import org.springside.modules.utils.Exceptions;
 import org.springside.modules.utils.Reflections;
@@ -148,8 +147,8 @@ public class JaxbMapper {
 				jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
 				jaxbContexts.putIfAbsent(clazz, jaxbContext);
 			} catch (JAXBException ex) {
-				throw new HttpMessageConversionException("Could not instantiate JAXBContext for class [" + clazz
-						+ "]: " + ex.getMessage(), ex);
+				throw new RuntimeException("Could not instantiate JAXBContext for class [" + clazz + "]: "
+						+ ex.getMessage(), ex);
 			}
 		}
 		return jaxbContext;

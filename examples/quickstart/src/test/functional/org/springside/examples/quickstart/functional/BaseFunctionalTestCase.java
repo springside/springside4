@@ -87,6 +87,8 @@ public class BaseFunctionalTestCase {
 	 * 载入测试数据.
 	 */
 	protected static void reloadSampleData() throws Exception {
-		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
+		String dbType = propertiesLoader.getProperty("db.type", "h2");
+		DataFixtures.executeScript(dataSource, "classpath:data/" + dbType + "cleanup-data.sql", "classpath:data/"
+				+ dbType + "import-data.sql");
 	}
 }

@@ -23,7 +23,7 @@ import com.google.common.cache.LoadingCache;
 /**
  * 本地缓存演示，使用GuavaCache.
  * 
- * @author hzl7652
+ * @author calvin
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class GuavaCacheDemo extends SpringTransactionalTestCase {

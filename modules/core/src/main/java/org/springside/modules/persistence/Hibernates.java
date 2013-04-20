@@ -12,9 +12,6 @@ import org.hibernate.dialect.MySQL5InnoDBDialect;
 import org.hibernate.dialect.Oracle10gDialect;
 
 public class Hibernates {
-
-	public static final String DATETIME_TYPE = "org.jadira.usertype.dateandtime.joda.PersistentDateTime";
-
 	/**
 	 * Initialize the lazy property value.
 	 * 
