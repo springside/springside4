@@ -636,7 +636,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
+							<groups>org.springside.modules.test.category.Smoke</groups>
 						</configuration>
 					</plugin>				
 				</plugins>
