@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
  */
 // Spring Service Bean的标识.
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class AccountService {
 	public static final String HASH_ALGORITHM = "SHA-1";
 	public static final int HASH_INTERATIONS = 1024;
@@ -56,7 +56,6 @@ public class AccountService {
 	 * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
 	 * 
 	 */
-	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
 		if (isSupervisor(user)) {
