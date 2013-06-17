@@ -93,7 +93,13 @@
 		<dependency>
 			<groupId>com.thimbleware.jmemcached</groupId>
 			<artifactId>jmemcached-core</artifactId>
-		</dependency>		
+		</dependency>
+		
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

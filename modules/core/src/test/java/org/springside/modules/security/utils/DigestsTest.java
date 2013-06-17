@@ -27,7 +27,7 @@ public class DigestsTest {
 
 	@Test
 	public void digestFile() throws IOException {
-		Resource resource = new ClassPathResource("/log4j.properties");
+		Resource resource = new ClassPathResource("/logback.xml");
 		byte[] md5result = Digests.md5(resource.getInputStream());
 		byte[] sha1result = Digests.sha1(resource.getInputStream());
 		System.out.println("md5: " + Encodes.encodeHex(md5result));

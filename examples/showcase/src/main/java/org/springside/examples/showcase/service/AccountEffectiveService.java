@@ -22,7 +22,7 @@ import com.google.common.collect.Maps;
  * @author calvin
  */
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class AccountEffectiveService {
 
 	@Autowired
@@ -67,12 +67,10 @@ public class AccountEffectiveService {
 		return userDao.search(parameters);
 	}
 
-	@Transactional
 	public void saveUser(User user) {
 		userDao.save(user);
 	}
 
-	@Transactional
 	public void deleteUser(Long id) {
 		userDao.delete(id);
 	}
