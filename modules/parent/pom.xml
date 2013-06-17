@@ -11,7 +11,7 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.0-SNAPSHOT</springside.version>
-		<spring.version>3.2.2.RELEASE</spring.version>
+		<spring.version>3.2.3.RELEASE</spring.version>
 		<hibernate.version>4.2.0.Final</hibernate.version>
 		<mybatis.version>3.2.2</mybatis.version>
 		<spring-data-jpa.version>1.3.0.RELEASE</spring-data-jpa.version>
@@ -142,6 +142,11 @@
 				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-oxm</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 			<!-- SPRING basic end -->			
 			
 			<!-- AOP begin-->
@@ -928,7 +933,11 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
+                            <includes>
+                                <include>
+                                    org.springside.modules.test.category.Smoke
+                                </include>
+                            </includes>
 						</configuration>
 					</plugin>				
 				</plugins>
@@ -960,7 +969,11 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.UnStable</includedGroups>
+                            <includes>
+                                <include>
+                                    org.springside.modules.test.category.UnStable
+                                </include>
+                            </includes>
 						</configuration>
 					</plugin>				
 				</plugins>
