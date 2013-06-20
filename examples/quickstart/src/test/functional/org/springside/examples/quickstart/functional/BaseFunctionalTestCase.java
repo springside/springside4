@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springside.examples.quickstart.QuickStartServer;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.jetty.JettyFactory;
 import org.springside.modules.test.selenium.Selenium2;

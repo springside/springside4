@@ -1,4 +1,4 @@
-package org.springside.examples.quickstart.functional;
+package org.springside.examples.quickstart;
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.jetty.JettyFactory;
