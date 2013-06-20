@@ -458,7 +458,7 @@
 				<version>${logback.version}</version>
 			</dependency>
 			
-			<!-- log4j 实际调用slf4j -->
+			<!-- 代码直接调用log4j会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>log4j-over-slf4j</artifactId>
@@ -466,7 +466,7 @@
 				<scope>runtime</scope>
 			</dependency>
 			
-			<!-- common-logging 实际调用slf4j -->
+			<!-- 代码直接调用common-logging会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
@@ -474,7 +474,7 @@
 				<scope>runtime</scope>
 			</dependency>
 			
-			<!-- java.util.logging 实际调用slf4j -->
+			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
 			<dependency>
         		<groupId>org.slf4j</groupId>
         		<artifactId>jul-to-slf4j</artifactId>
