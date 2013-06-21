@@ -40,6 +40,13 @@
 			<artifactId>spymemcached</artifactId>
 			<optional>true</optional>
 		</dependency>
+
+        <!-- NOSQL -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <optional>true</optional>
+        </dependency>
 		
 		<!-- freemarker -->
 		<dependency>

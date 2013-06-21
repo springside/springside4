@@ -45,11 +45,14 @@ public class AdvancedMapDemo {
 	@Test
 	public void biMap() {
 		BiMap<Integer, String> bimap = HashBiMap.create();
+        BiMap<String, Integer> inverseMap = bimap.inverse();
+
 		bimap.put(1, "a");
 		bimap.put(2, "b");
+    	assertEquals(Integer.valueOf(2), inverseMap.get("b"));
 
-		BiMap<String, Integer> bimap2 = bimap.inverse();
-		assertEquals(Integer.valueOf(2), bimap2.get("b"));
+        inverseMap.put( "c",3);
+        assertEquals("c", bimap.get(3));
 	}
 
 	/*

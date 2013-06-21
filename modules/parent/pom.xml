@@ -21,6 +21,7 @@
 		<cxf.version>2.7.5</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.1.7</quartz.version>
+        <jedis.version>2.1.0</jedis.version>
 		<ehcache.version>2.6.6</ehcache.version>
 		<spymemcached.version>2.8.9</spymemcached.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
@@ -372,6 +373,14 @@
 				<artifactId>quartz</artifactId>
 				<version>${quartz.version}</version>
 			</dependency>
+
+            <!-- NOSQL begin-->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
+            <!-- NOSQL end-->
 
 			<!-- CACHE begin -->
 			<!-- memcached -->
