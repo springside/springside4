@@ -61,13 +61,13 @@ public class TaskRestController {
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
-		//调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
+		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
 		BeanValidators.validateWithException(validator, task);
 
-		//保存任务
+		// 保存任务
 		taskService.saveTask(task);
 
-		//按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
+		// 按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
 		Long id = task.getId();
 		URI uri = uriBuilder.path("/api/v1/task/" + id).build().toUri();
 		HttpHeaders headers = new HttpHeaders();
@@ -78,12 +78,12 @@ public class TaskRestController {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> update(@RequestBody Task task) {
-		//调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
+		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
 		BeanValidators.validateWithException(validator, task);
-		//保存
+		// 保存
 		taskService.saveTask(task);
 
-		//按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
+		// 按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
 		return new ResponseEntity(HttpStatus.NO_CONTENT);
 	}
 

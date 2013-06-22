@@ -24,7 +24,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * 融合了Selenium 1.0 API与Selenium 2.0的By选择器的API.
- *
+ * 
  * @author calvin
  */
 public class Selenium2 {
@@ -40,7 +40,7 @@ public class Selenium2 {
 	}
 
 	/**
-	 * 不设置baseUrl的构造函数, 调用open函数时必须使用绝对路径. 
+	 * 不设置baseUrl的构造函数, 调用open函数时必须使用绝对路径.
 	 */
 	public Selenium2(WebDriver driver) {
 		this(driver, "");
@@ -58,7 +58,7 @@ public class Selenium2 {
 		});
 	}
 
-	// Driver 函數  //
+	// Driver 函數 //
 	/**
 	 * 打开地址,如果url为相对地址, 自动添加baseUrl.
 	 */
@@ -120,7 +120,7 @@ public class Selenium2 {
 		return driver;
 	}
 
-	//Element 函數//
+	// Element 函數//
 
 	/**
 	 * 查找Element.

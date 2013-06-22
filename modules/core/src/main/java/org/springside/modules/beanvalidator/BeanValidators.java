@@ -26,6 +26,7 @@ import com.google.common.collect.Maps;
  * 3. Map<propertyPath, message>
  * 
  * 详情见wiki: https://github.com/springside/springside4/wiki/HibernateValidator
+ * 
  * @author calvin
  */
 public class BeanValidators {

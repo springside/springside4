@@ -6,7 +6,6 @@ import java.util.Date;
  * 日期提供者，使用它而不是直接取得系统时间，将方便测试。
  * 
  * @author calvin
- *
  */
 public interface DateProvider {
 
