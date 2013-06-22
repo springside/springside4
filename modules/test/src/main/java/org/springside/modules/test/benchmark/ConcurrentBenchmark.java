@@ -103,5 +103,5 @@ public abstract class ConcurrentBenchmark {
 	 * 
 	 * @param taskSequence the sequence number of the task.
 	 */
-	abstract protected BenchmarkTask createTask(int taskSequence);
+	protected abstract BenchmarkTask createTask(int taskSequence);
 }

@@ -11,8 +11,11 @@ public interface DateProvider {
 
 	Date getDate();
 
-	public static final DateProvider DEFAULT = new CurrentDateProvider();
+	static final DateProvider DEFAULT = new CurrentDateProvider();
 
+	/**
+	 * 返回当前的时间。
+	 */
 	public static class CurrentDateProvider implements DateProvider {
 
 		@Override
@@ -21,6 +24,9 @@ public interface DateProvider {
 		}
 	}
 
+	/**
+	 * 返回设定的时间.
+	 */
 	public static class ConfigurableDateProvider implements DateProvider {
 
 		private final Date date;
