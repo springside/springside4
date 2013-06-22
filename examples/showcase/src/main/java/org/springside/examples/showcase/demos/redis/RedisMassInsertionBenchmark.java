@@ -43,10 +43,10 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		//create jedis pool
+		// create jedis pool
 		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 
-		//remove all keys
+		// remove all keys
 		Jedis jedis = pool.getResource();
 		try {
 			jedis.flushDB();
@@ -90,7 +90,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 					pl.set(session.getId(), jsonMapper.toJson(session));
 
-					if (i % batchSize == 0) {
+					if ((i % batchSize) == 0) {
 						pl.sync();
 						printProgressMessage(i);
 					}

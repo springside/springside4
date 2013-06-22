@@ -31,7 +31,7 @@ public class Main {
 	}
 
 	private static Server createServer(String contextPath, int port) {
-		//use Eclipse JDT compiler
+		// use Eclipse JDT compiler
 		System.setProperty("org.apache.jasper.compiler.disablejsr199", "true");
 
 		Server server = new Server(port);
@@ -44,7 +44,7 @@ public class Main {
 		WebAppContext context = new WebAppContext(warFile, contextPath);
 		context.setServer(server);
 
-		//设置work dir,war包将解压到该目录，jsp编译后的文件也将放入其中。
+		// 设置work dir,war包将解压到该目录，jsp编译后的文件也将放入其中。
 		String currentDir = new File(location.getPath()).getParent();
 		File workDir = new File(currentDir, "work");
 		context.setTempDirectory(workDir);

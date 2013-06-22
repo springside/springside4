@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class BusinessLogger {
-	//业务日志的logger
+	// 业务日志的logger
 	private static Logger businessLogger = LoggerFactory.getLogger("business");
 
 	public void log(String action, String user, Map data) {

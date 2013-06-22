@@ -42,10 +42,10 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		//create jedis pool
+		// create jedis pool
 		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 
-		//remove all keys
+		// remove all keys
 		Jedis jedis = pool.getResource();
 		try {
 			jedis.flushDB();
@@ -84,14 +84,14 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 					Session session = new Session(key);
 					session.setAttrbute("name", key);
 					session.setAttrbute("seq", i);
-					//set session expired after 300 seconds
+					// set session expired after 300 seconds
 					jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
 
-					//get it back
+					// get it back
 					String sessionBackString = jedis.get(key);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 
-					//print progress message between seconds.
+					// print progress message between seconds.
 					printProgressMessage(i);
 				}
 			} finally {

@@ -26,14 +26,14 @@ public class AdvancedMapDemo {
 		multimap.put(3, "c");
 		multimap.put(1, "a2");
 
-		//取出key=1的两个值
+		// 取出key=1的两个值
 		Collection<String> values = multimap.get(1);
 		assertEquals(2, values.size());
 
-		//size是4不是3
+		// size是4不是3
 		assertEquals(4, multimap.size());
 
-		//删除其中一个值
+		// 删除其中一个值
 		multimap.remove(1, "a");
 		assertEquals(1, multimap.get(1).size());
 
@@ -45,14 +45,14 @@ public class AdvancedMapDemo {
 	@Test
 	public void biMap() {
 		BiMap<Integer, String> bimap = HashBiMap.create();
-        BiMap<String, Integer> inverseMap = bimap.inverse();
+		BiMap<String, Integer> inverseMap = bimap.inverse();
 
 		bimap.put(1, "a");
 		bimap.put(2, "b");
-    	assertEquals(Integer.valueOf(2), inverseMap.get("b"));
+		assertEquals(Integer.valueOf(2), inverseMap.get("b"));
 
-        inverseMap.put( "c",3);
-        assertEquals("c", bimap.get(3));
+		inverseMap.put("c", 3);
+		assertEquals("c", bimap.get(3));
 	}
 
 	/*
