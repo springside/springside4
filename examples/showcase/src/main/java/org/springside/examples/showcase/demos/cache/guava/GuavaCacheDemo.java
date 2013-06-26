@@ -35,7 +35,7 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 	@Test
 	public void demo() throws Exception {
-		////设置缓存最大个数为100，缓存过期时间为5秒
+		// 设置缓存最大个数为100，缓存过期时间为5秒
 		LoadingCache<Long, User> cache = CacheBuilder.newBuilder().maximumSize(100)
 				.expireAfterAccess(5, TimeUnit.SECONDS).build(new CacheLoader<Long, User>() {
 					@Override
@@ -46,25 +46,25 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 				});
 
-		//初始化数据
+		// 初始化数据
 		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
 
-		//插入appender用于assert。
+		// 插入appender用于assert。
 		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(GuavaCacheDemo.class);
 
-		//第一次加载会查数据库
+		// 第一次加载会查数据库
 		User user = cache.get(1L);
 		assertEquals("admin", user.getLoginName());
 		assertFalse(appender.isEmpty());
 		appender.clearLogs();
 
-		//第二次加载时直接从缓存里取
+		// 第二次加载时直接从缓存里取
 		User user2 = cache.get(1L);
 		assertEquals("admin", user2.getLoginName());
 		assertTrue(appender.isEmpty());
 
-		//第三次加载时，因为缓存已经过期所以会查数据库
+		// 第三次加载时，因为缓存已经过期所以会查数据库
 		Threads.sleep(10, TimeUnit.SECONDS);
 		User user3 = cache.get(1L);
 		assertEquals("admin", user3.getLoginName());

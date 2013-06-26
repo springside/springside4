@@ -32,7 +32,7 @@ public class Identities {
 	}
 
 	/**
-	 * 使用SecureRandom随机生成Long. 
+	 * 使用SecureRandom随机生成Long.
 	 */
 	public static long randomLong() {
 		return Math.abs(random.nextLong());

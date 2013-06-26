@@ -16,7 +16,7 @@ public class Hibernates {
 	 * Initialize the lazy property value.
 	 * 
 	 * eg.
-	 * Hibernates.initLazyProperty(user.getGroups()); 
+	 * Hibernates.initLazyProperty(user.getGroups());
 	 */
 	public static void initLazyProperty(Object proxyedPropertyValue) {
 		Hibernate.initialize(proxyedPropertyValue);

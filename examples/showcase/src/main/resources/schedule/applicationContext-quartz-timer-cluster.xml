@@ -34,6 +34,7 @@
 
 	<!-- JobDetail, 基于JobDetailBean实例化Job Class,可持久化到数据库实现集群 -->
 	<bean id="timerJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+		<property name="durability" value="true"/>
 		<property name="jobClass" value="org.springside.examples.showcase.demos.schedule.QuartzClusterableJob" />
 	</bean>
 

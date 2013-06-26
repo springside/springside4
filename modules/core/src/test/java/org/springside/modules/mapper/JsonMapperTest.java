@@ -28,13 +28,13 @@ public class JsonMapperTest {
 	 */
 	@Test
 	public void toJson() throws Exception {
-		//Bean
+		// Bean
 		TestBean bean = new TestBean("A");
 		String beanString = binder.toJson(bean);
 		System.out.println("Bean:" + beanString);
 		assertEquals("{\"name\":\"A\"}", beanString);
 
-		//Map
+		// Map
 		Map<String, Object> map = Maps.newLinkedHashMap();
 		map.put("name", "A");
 		map.put("age", 2);
@@ -42,19 +42,19 @@ public class JsonMapperTest {
 		System.out.println("Map:" + mapString);
 		assertEquals("{\"name\":\"A\",\"age\":2}", mapString);
 
-		//List<String>
+		// List<String>
 		List<String> stringList = Lists.newArrayList("A", "B", "C");
 		String listString = binder.toJson(stringList);
 		System.out.println("String List:" + listString);
 		assertEquals("[\"A\",\"B\",\"C\"]", listString);
 
-		//List<Bean>
+		// List<Bean>
 		List<TestBean> beanList = Lists.newArrayList(new TestBean("A"), new TestBean("B"));
 		String beanListString = binder.toJson(beanList);
 		System.out.println("Bean List:" + beanListString);
 		assertEquals("[{\"name\":\"A\"},{\"name\":\"B\"}]", beanListString);
 
-		//Bean[]
+		// Bean[]
 		TestBean[] beanArray = new TestBean[] { new TestBean("A"), new TestBean("B") };
 		String beanArrayString = binder.toJson(beanArray);
 		System.out.println("Array List:" + beanArrayString);
@@ -66,12 +66,12 @@ public class JsonMapperTest {
 	 */
 	@Test
 	public void fromJson() throws Exception {
-		//Bean
+		// Bean
 		String beanString = "{\"name\":\"A\"}";
 		TestBean bean = binder.fromJson(beanString, TestBean.class);
 		System.out.println("Bean:" + bean);
 
-		//Map
+		// Map
 		String mapString = "{\"name\":\"A\",\"age\":2}";
 		Map<String, Object> map = binder.fromJson(mapString, HashMap.class);
 		System.out.println("Map:");
@@ -79,7 +79,7 @@ public class JsonMapperTest {
 			System.out.println(entry.getKey() + " " + entry.getValue());
 		}
 
-		//List<String>
+		// List<String>
 		String listString = "[\"A\",\"B\",\"C\"]";
 		List<String> stringList = binder.getMapper().readValue(listString, List.class);
 		System.out.println("String List:");
@@ -87,7 +87,7 @@ public class JsonMapperTest {
 			System.out.println(element);
 		}
 
-		//List<Bean>
+		// List<Bean>
 		String beanListString = "[{\"name\":\"A\"},{\"name\":\"B\"}]";
 		List<TestBean> beanList = binder.getMapper().readValue(beanListString, new TypeReference<List<TestBean>>() {
 		});
@@ -104,26 +104,26 @@ public class JsonMapperTest {
 	public void nullAndEmpty() {
 		// toJson测试 //
 
-		//Null Bean
+		// Null Bean
 		TestBean nullBean = null;
 		String nullBeanString = binder.toJson(nullBean);
 		assertEquals("null", nullBeanString);
 
-		//Empty List
+		// Empty List
 		List<String> emptyList = Lists.newArrayList();
 		String emptyListString = binder.toJson(emptyList);
 		assertEquals("[]", emptyListString);
 
 		// fromJson测试 //
 
-		//Null String for Bean
+		// Null String for Bean
 		TestBean nullBeanResult = binder.fromJson(null, TestBean.class);
 		assertNull(nullBeanResult);
 
 		nullBeanResult = binder.fromJson("null", TestBean.class);
 		assertNull(nullBeanResult);
 
-		//Null/Empty String for List
+		// Null/Empty String for List
 		List nullListResult = binder.fromJson(null, List.class);
 		assertNull(nullListResult);
 
@@ -139,16 +139,16 @@ public class JsonMapperTest {
 	 */
 	@Test
 	public void threeTypeBinders() {
-		//打印全部属性
+		// 打印全部属性
 		JsonMapper normalBinder = new JsonMapper();
 		TestBean bean = new TestBean("A");
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalBinder.toJson(bean));
 
-		//不打印nullValue属性
+		// 不打印nullValue属性
 		JsonMapper nonNullBinder = JsonMapper.nonEmptyMapper();
 		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonNullBinder.toJson(bean));
 
-		//不打印默认值未改变的nullValue与defaultValue属性
+		// 不打印默认值未改变的nullValue与defaultValue属性
 		JsonMapper nonDefaultBinder = JsonMapper.nonDefaultMapper();
 		assertEquals("{\"name\":\"A\"}", nonDefaultBinder.toJson(bean));
 	}

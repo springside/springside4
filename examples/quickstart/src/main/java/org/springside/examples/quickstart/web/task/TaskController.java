@@ -27,10 +27,10 @@ import com.google.common.collect.Maps;
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
  * 
- * List page     : GET /task/
- * Create page   : GET /task/create
+ * List page : GET /task/
+ * Create page : GET /task/create
  * Create action : POST /task/create
- * Update page   : GET /task/update/{id}
+ * Update page : GET /task/update/{id}
  * Update action : POST /task/update
  * Delete action : GET /task/delete/{id}
  * 

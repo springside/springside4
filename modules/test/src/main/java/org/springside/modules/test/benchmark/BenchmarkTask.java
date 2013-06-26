@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Benchmark中任务线程的基类.
  * 
- * @see ConcurrentBenchmark 
+ * @see ConcurrentBenchmark
  */
 public abstract class BenchmarkTask implements Runnable {
 
@@ -23,11 +23,11 @@ public abstract class BenchmarkTask implements Runnable {
 	}
 
 	/**
-	 * Must be invoked in children class when each thread finish the preparation. 
+	 * Must be invoked in children class when each thread finish the preparation.
 	 */
 	protected void onThreadStart() {
 		parent.startLock.countDown();
-		//wait for all other threads ready
+		// wait for all other threads ready
 		try {
 			parent.startLock.await();
 		} catch (InterruptedException e) {
@@ -63,8 +63,8 @@ public abstract class BenchmarkTask implements Runnable {
 			long totalTimeInMills = currentTime - parent.startTime.getTime();
 			long totalTimeInSeconds = TimeUnit.MILLISECONDS.toSeconds(totalTimeInMills);
 
-			long totalTps = totalRequest * 1000 / totalTimeInMills;
-			long lastTps = lastRequests * 1000 / lastTimeInMills;
+			long totalTps = (totalRequest * 1000) / totalTimeInMills;
+			long lastTps = (lastRequests * 1000) / lastTimeInMills;
 
 			BigDecimal lastLatency = new BigDecimal(lastTimeInMills).divide(new BigDecimal(lastRequests), 2,
 					BigDecimal.ROUND_HALF_UP);
@@ -86,7 +86,7 @@ public abstract class BenchmarkTask implements Runnable {
 	protected void printThreadFinishMessage() {
 		long totalTimeInMills = System.currentTimeMillis() - parent.startTime.getTime();
 		long totalRequest = parent.loopCount;
-		long totalTps = totalRequest * 1000 / totalTimeInMills;
+		long totalTps = (totalRequest * 1000) / totalTimeInMills;
 		BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
 				BigDecimal.ROUND_HALF_UP);
 

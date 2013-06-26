@@ -39,11 +39,11 @@ public class JsonMapper {
 
 	public JsonMapper(Include include) {
 		mapper = new ObjectMapper();
-		//设置输出时包含属性的风格
+		// 设置输出时包含属性的风格
 		if (include != null) {
 			mapper.setSerializationInclusion(include);
 		}
-		//设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
+		// 设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
 		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 	}
 
@@ -83,6 +83,7 @@ public class JsonMapper {
 	 * 如果JSON字符串为"[]", 返回空集合.
 	 * 
 	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
+	 * 
 	 * @see #fromJson(String, JavaType)
 	 */
 	public <T> T fromJson(String jsonString, Class<T> clazz) {
@@ -100,6 +101,7 @@ public class JsonMapper {
 
 	/**
 	 * 反序列化复杂Collection如List<Bean>, 先使用函數createCollectionType构造类型,然后调用本函数.
+	 * 
 	 * @see #createCollectionType(Class, Class...)
 	 */
 	public <T> T fromJson(String jsonString, JavaType javaType) {
@@ -129,7 +131,7 @@ public class JsonMapper {
 	 */
 	public <T> T update(String jsonString, T object) {
 		try {
-			return (T) mapper.readerForUpdating(object).readValue(jsonString);
+			return mapper.readerForUpdating(object).readValue(jsonString);
 		} catch (JsonProcessingException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		} catch (IOException e) {

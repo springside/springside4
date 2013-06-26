@@ -16,10 +16,9 @@ import com.google.common.collect.Lists;
 /**
  * 演示基于JAXB2.0的Java对象-XML转换及Dom4j的使用.
  * 
- * @author calvin
- * 
  * 演示用xml如下:
  * 
+ * <pre>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <user id="1">
  * 	<name>calvin</name>
@@ -36,6 +35,7 @@ import com.google.common.collect.Lists;
  * 		<hosue key="gz">house2</item>
  * 	</houses>
  * </user>
+ * </pre>
  */
 public class JaxbDemo {
 
@@ -105,17 +105,17 @@ public class JaxbDemo {
 
 		root.addElement("name").setText("calvin");
 
-		//List<Role>
+		// List<Role>
 		Element roles = root.addElement("roles");
 		roles.addElement("role").addAttribute("id", "1").addAttribute("name", "admin");
 		roles.addElement("role").addAttribute("id", "2").addAttribute("name", "user");
 
-		//List<String>
+		// List<String>
 		Element interests = root.addElement("interests");
 		interests.addElement("interest").addText("movie");
 		interests.addElement("interest").addText("sports");
 
-		//Map<String,String>
+		// Map<String,String>
 		Element houses = root.addElement("houses");
 		houses.addElement("house").addAttribute("key", "bj").addText("house1");
 		houses.addElement("house").addAttribute("key", "gz").addText("house2");

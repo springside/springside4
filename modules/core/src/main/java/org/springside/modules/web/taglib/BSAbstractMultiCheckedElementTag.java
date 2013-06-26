@@ -41,7 +41,7 @@ public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiChec
 				: null);
 
 		Class<?> boundType = getBindStatus().getValueType();
-		if (itemsObject == null && boundType != null && boundType.isEnum()) {
+		if ((itemsObject == null) && (boundType != null) && boundType.isEnum()) {
 			itemsObject = boundType.getEnumConstants();
 		}
 

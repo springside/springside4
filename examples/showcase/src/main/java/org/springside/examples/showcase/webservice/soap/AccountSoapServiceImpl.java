@@ -32,7 +32,7 @@ import org.springside.modules.utils.Exceptions;
  * 
  * @author calvin
  */
-//serviceName指明WSDL中<wsdl:service>与<wsdl:binding>元素的名称, endpointInterface属性指向Interface类全称.
+// serviceName指明WSDL中<wsdl:service>与<wsdl:binding>元素的名称, endpointInterface属性指向Interface类全称.
 @WebService(serviceName = "AccountService", endpointInterface = "org.springside.examples.showcase.webservice.soap.AccountSoapService", targetNamespace = WsConstants.NS)
 public class AccountSoapServiceImpl implements AccountSoapService {
 

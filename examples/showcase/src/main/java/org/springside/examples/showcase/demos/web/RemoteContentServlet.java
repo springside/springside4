@@ -53,12 +53,12 @@ public class RemoteContentServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() throws ServletException {
-		//Set connection pool
+		// Set connection pool
 		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
 		cm.setMaxTotal(CONNECTION_POOL_SIZE);
 		httpClient = new DefaultHttpClient(cm);
 
-		//set timeout
+		// set timeout
 		HttpParams httpParams = httpClient.getParams();
 		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SECONDS * 1000);
 	}
@@ -75,21 +75,21 @@ public class RemoteContentServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//获取参数
+		// 获取参数
 		String contentUrl = request.getParameter("contentUrl");
 		if (StringUtils.isBlank(contentUrl)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "contentUrl parameter is required.");
 		}
 
-		//远程访问获取内容的方式
+		// 远程访问获取内容的方式
 		String client = request.getParameter("client");
 
 		InputStream input = null;
 		if ("apache".equals(client)) {
-			//使用Apache HttpClient
+			// 使用Apache HttpClient
 			fetchContentByApacheHttpClient(response, contentUrl);
 		} else {
-			//使用JDK HttpUrlConnection
+			// 使用JDK HttpUrlConnection
 			fetchContentByJDKConnection(response, contentUrl);
 		}
 	}
@@ -99,7 +99,7 @@ public class RemoteContentServlet extends HttpServlet {
 	 */
 	private void fetchContentByApacheHttpClient(HttpServletResponse response, String contentUrl) throws IOException {
 
-		//获取内容
+		// 获取内容
 		HttpEntity entity = null;
 		HttpGet httpGet = new HttpGet(contentUrl);
 		try {
@@ -112,27 +112,27 @@ public class RemoteContentServlet extends HttpServlet {
 			return;
 		}
 
-		//404返回
+		// 404返回
 		if (entity == null) {
 			response.sendError(HttpServletResponse.SC_NOT_FOUND, contentUrl + " is not found.");
 			return;
 		}
 
-		//设置Header
+		// 设置Header
 		response.setContentType(entity.getContentType().getValue());
 		if (entity.getContentLength() > 0) {
 			response.setContentLength((int) entity.getContentLength());
 		}
 
-		//输出内容
+		// 输出内容
 		InputStream input = entity.getContent();
 		OutputStream output = response.getOutputStream();
 		try {
-			//基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
+			// 基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
 			IOUtils.copy(input, output);
 			output.flush();
 		} finally {
-			//保证InputStream的关闭.
+			// 保证InputStream的关闭.
 			IOUtils.closeQuietly(input);
 		}
 
@@ -141,12 +141,12 @@ public class RemoteContentServlet extends HttpServlet {
 	private void fetchContentByJDKConnection(HttpServletResponse response, String contentUrl) throws IOException {
 
 		HttpURLConnection connection = (HttpURLConnection) new URL(contentUrl).openConnection();
-		//设置Socket超时
+		// 设置Socket超时
 		connection.setReadTimeout(TIMEOUT_SECONDS * 1000);
 		try {
 			connection.connect();
 
-			//真正发出请求
+			// 真正发出请求
 			InputStream input;
 			try {
 				input = connection.getInputStream();
@@ -155,20 +155,20 @@ public class RemoteContentServlet extends HttpServlet {
 				return;
 			}
 
-			//设置Header
+			// 设置Header
 			response.setContentType(connection.getContentType());
 			if (connection.getContentLength() > 0) {
 				response.setContentLength(connection.getContentLength());
 			}
 
-			//输出内容
+			// 输出内容
 			OutputStream output = response.getOutputStream();
 			try {
-				//基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
+				// 基于byte数组读取InputStream并直接写入OutputStream, 数组默认大小为4k.
 				IOUtils.copy(input, output);
 				output.flush();
 			} finally {
-				//保证InputStream的关闭.
+				// 保证InputStream的关闭.
 				IOUtils.closeQuietly(input);
 			}
 		} finally {

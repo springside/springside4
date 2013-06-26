@@ -73,25 +73,25 @@ public class JobConsumer implements Runnable {
 	public void run() {
 		Jedis jedis = pool.getResource();
 		try {
-			//Jedis的brpop 不会被中断, 所以下面的判断基本没用, 全靠外围的强行退出.
+			// Jedis的brpop 不会被中断, 所以下面的判断基本没用, 全靠外围的强行退出.
 			while (!Thread.currentThread().isInterrupted()) {
-				//fetch job
+				// fetch job
 				List<String> result = jedis.brpop(0, JobManager.JOB_KEY);
 				String id = result.get(1);
 
-				//ack job
+				// ack job
 				jedis.zrem(JobManager.ACK_KEY, id);
 				int count = counter.incrementAndGet();
 				int localCount = localCounter.incrementAndGet();
 
-				//print global progress
+				// print global progress
 				if (printRate.tryAcquire()) {
 					System.out.printf("Total pop %,d jobs, tps is %,d\n", count, (count - lastPrintCount)
 							/ PRINT_BETWEEN_SECONDS);
 					lastPrintCount = count;
 				}
 
-				//print current thread progress
+				// print current thread progress
 				if (localPrintRate.tryAcquire()) {
 					System.out.printf("Local thread pop %,d jobs, tps is %,d\n", localCount,
 							(localCount - lastLocalPrintCount) / PRINT_BETWEEN_SECONDS);

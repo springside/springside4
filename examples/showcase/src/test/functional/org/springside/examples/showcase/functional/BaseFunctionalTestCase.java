@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springside.examples.showcase.ShowcaseServer;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.jetty.JettyFactory;
 import org.springside.modules.utils.PropertiesLoader;
@@ -82,7 +83,7 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void reloadSampleData() throws Exception {
 		String dbType = propertiesLoader.getProperty("db.type", "h2");
-		DataFixtures.executeScript(dataSource, "classpath:data/" + dbType + "cleanup-data.sql", "classpath:data/"
-				+ dbType + "import-data.sql");
+		DataFixtures.executeScript(dataSource, "classpath:data/" + dbType + "/cleanup-data.sql", "classpath:data/"
+				+ dbType + "/import-data.sql");
 	}
 }

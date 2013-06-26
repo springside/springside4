@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springside.examples.showcase.service.AccountService;
 
 /**
- * 被Spring各种Scheduler反射调用的Service POJO
+ * 被Spring各种Scheduler反射调用的Service POJO.
  * 
  * @author Calvin
  */
@@ -27,17 +27,17 @@ public class UserCountScanner {
 		execute("spring cron job by java");
 	}
 
-	//被Spring的Quartz MethodInvokingJobDetailFactoryBean反射执行
+	// 被Spring的Quartz MethodInvokingJobDetailFactoryBean反射执行
 	public void executeByQuartzLocalJob() {
 		execute("quartz local job");
 	}
 
-	//被Spring的Scheduler namespace 反射构造成ScheduledMethodRunnable
+	// 被Spring的Scheduler namespace 反射构造成ScheduledMethodRunnable
 	public void executeBySpringCronByXml() {
 		execute("spring cron job by xml");
 	}
 
-	//被Spring的Scheduler namespace 反射构造成ScheduledMethodRunnable
+	// 被Spring的Scheduler namespace 反射构造成ScheduledMethodRunnable
 	public void executeBySpringTimerByXml() {
 		execute("spring timer job by xml");
 	}

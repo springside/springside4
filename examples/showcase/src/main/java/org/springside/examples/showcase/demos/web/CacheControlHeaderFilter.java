@@ -16,6 +16,8 @@ import org.springside.modules.web.Servlets;
  * 为Response设置客户端缓存控制Header的Filter.
  * 
  * eg.在web.xml中设置
+ * 
+ * <pre>
  * 	<filter>
  * 		<filter-name>cacheControlHeaderFilter</filter-name>
  * 		<filter-class>org.springside.modules.web.CacheControlHeaderFilter</filter-class>
@@ -28,6 +30,7 @@ import org.springside.modules.web.Servlets;
  * 		<filter-name>cacheControlHeaderFilter</filter-name>
  * 		<url-pattern>/images/*</url-pattern>
  * 	</filter-mapping>
+ * </pre>
  * 
  * @author calvin
  */

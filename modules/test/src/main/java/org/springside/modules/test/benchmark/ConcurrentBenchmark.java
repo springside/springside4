@@ -26,7 +26,7 @@ public abstract class ConcurrentBenchmark {
 	protected int printBetweenMills;
 
 	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
-		//merge default setting and system properties
+		// merge default setting and system properties
 		this.threadCount = Integer.parseInt(System.getProperty(THREAD_COUNT_NAME, String.valueOf(defaultThreadCount)));
 		this.loopCount = Long.parseLong(System.getProperty(LOOP_COUNT_NAME, String.valueOf(defaultLoopCount)));
 
@@ -37,10 +37,10 @@ public abstract class ConcurrentBenchmark {
 	}
 
 	public void execute() throws Exception {
-		//override for connection & data setup
+		// override for connection & data setup
 		setUp();
 
-		//start threads
+		// start threads
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		try {
 			for (int i = 0; i < threadCount; i++) {
@@ -48,21 +48,21 @@ public abstract class ConcurrentBenchmark {
 				threadPool.execute(task);
 			}
 
-			//wait for all threads ready
+			// wait for all threads ready
 			startLock.await();
 
-			//print start message
+			// print start message
 			startTime = new Date();
 			printStartMessage();
 
-			//wait for all threads finish
+			// wait for all threads finish
 			finishLock.await();
 
-			//print finish summary message
+			// print finish summary message
 			printFinishMessage();
 		} finally {
 			threadPool.shutdownNow();
-			//override for connection & data cleanup
+			// override for connection & data cleanup
 			tearDown();
 		}
 	}
@@ -80,7 +80,7 @@ public abstract class ConcurrentBenchmark {
 		String className = this.getClass().getSimpleName();
 		long invokeTimes = threadCount * loopCount;
 		long timeInMills = endTime.getTime() - startTime.getTime();
-		long tps = invokeTimes * 1000 / timeInMills;
+		long tps = (invokeTimes * 1000) / timeInMills;
 
 		System.out.printf("%s finished at %s.\n%d threads processed %,d requests after %,d ms, tps is %,d.\n",
 				className, endTime.toString(), threadCount, invokeTimes, timeInMills, tps);
@@ -101,7 +101,7 @@ public abstract class ConcurrentBenchmark {
 	/**
 	 * Return a new benchmark task.
 	 * 
-	 * @param taskSequence the sequence number of the task. 
+	 * @param taskSequence the sequence number of the task.
 	 */
-	abstract protected BenchmarkTask createTask(int taskSequence);
+	protected abstract BenchmarkTask createTask(int taskSequence);
 }

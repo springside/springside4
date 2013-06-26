@@ -195,9 +195,6 @@
   <rule ref="rulesets/migrating.xml/AvoidAssertAsIdentifier">
     <priority>3</priority>
   </rule>
-  <rule ref="rulesets/design.xml/UnnecessaryLocalBeforeReturn">
-    <priority>3</priority>
-  </rule>
   <rule ref="rulesets/finalizers.xml/AvoidCallingFinalize">
     <priority>3</priority>
   </rule>

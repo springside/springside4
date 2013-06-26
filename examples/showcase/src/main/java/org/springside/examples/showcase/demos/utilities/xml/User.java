@@ -19,9 +19,9 @@ import com.google.common.collect.Maps;
 /**
  * 使用JAXB2.0标注的待转换Java Bean.
  */
-//根节点
+// 根节点
 @XmlRootElement
-//指定子节点的顺序
+// 指定子节点的顺序
 @XmlType(propOrder = { "name", "roles", "interests", "houses" })
 public class User {
 
@@ -33,7 +33,7 @@ public class User {
 	private List<String> interests = Lists.newArrayList();
 	private Map<String, String> houses = Maps.newHashMap();
 
-	//设置转换为xml节点中的属性
+	// 设置转换为xml节点中的属性
 	@XmlAttribute
 	public Long getId() {
 		return id;
@@ -51,7 +51,7 @@ public class User {
 		this.name = name;
 	}
 
-	//设置不转换为xml
+	// 设置不转换为xml
 	@XmlTransient
 	public String getPassword() {
 		return password;
@@ -61,7 +61,7 @@ public class User {
 		this.password = password;
 	}
 
-	//设置对List<Object>的映射, xml为<roles><role id="1" name="admin"/></roles>
+	// 设置对List<Object>的映射, xml为<roles><role id="1" name="admin"/></roles>
 	@XmlElementWrapper
 	@XmlElement(name = "role")
 	public List<Role> getRoles() {
@@ -72,7 +72,7 @@ public class User {
 		this.roles = roles;
 	}
 
-	//设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
+	// 设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
 	@XmlElementWrapper
 	@XmlElement(name = "interest")
 	public List<String> getInterests() {
@@ -83,7 +83,7 @@ public class User {
 		this.interests = interests;
 	}
 
-	//设置对Map的映射为<houses><house key="bj">house1</house></houses>
+	// 设置对Map的映射为<houses><house key="bj">house1</house></houses>
 	@XmlJavaTypeAdapter(HouseMapAdapter.class)
 	public Map<String, String> getHouses() {
 		return houses;

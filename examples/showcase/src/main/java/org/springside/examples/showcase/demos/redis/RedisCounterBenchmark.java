@@ -42,7 +42,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 
 		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 
-		//reset counter
+		// reset counter
 		Jedis jedis = pool.getResource();
 		try {
 			jedis.set(counterName, "0");

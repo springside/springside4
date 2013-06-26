@@ -25,10 +25,10 @@ public class MashupServerController {
 	@ResponseBody
 	public String execute(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
-		//设置需要被格式化为JSON字符串的内容.
+		// 设置需要被格式化为JSON字符串的内容.
 		Map<String, String> map = Collections.singletonMap("content", "<p>你好，世界！</p>");
 
-		//渲染返回结果.
+		// 渲染返回结果.
 		return mapper.toJsonP(callbackName, map);
 	}
 }

@@ -10,8 +10,8 @@ public class CryptosTest {
 	public void mac() {
 		String input = "foo message";
 
-		//key可为任意字符串
-		//byte[] key = "a foo key".getBytes();
+		// key可为任意字符串
+		// byte[] key = "a foo key".getBytes();
 		byte[] key = Cryptos.generateHmacSha1Key();
 		assertEquals(20, key.length);
 

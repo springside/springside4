@@ -33,7 +33,7 @@ import com.google.common.collect.Maps;
  */
 // Spring Service Bean的标识.
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class AccountService {
 	public static final String HASH_ALGORITHM = "SHA-1";
 	public static final int HASH_INTERATIONS = 1024;
@@ -56,7 +56,6 @@ public class AccountService {
 	 * 如果企图修改超级用户,取出当前操作员用户,打印其信息然后抛出异常.
 	 * 
 	 */
-	@Transactional(readOnly = false)
 	public void saveUser(User user) {
 
 		if (isSupervisor(user)) {
@@ -71,15 +70,15 @@ public class AccountService {
 
 		userDao.save(user);
 
-		//发送JMS消息
+		// 发送JMS消息
 		sendNotifyMessage(user);
 
-		//运行统计演示
+		// 运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrUpdateUserTimes();
 		}
 
-		//业务日志演示
+		// 业务日志演示
 		if (businessLogger != null) {
 			Map map = Maps.newHashMap();
 			map.put("userId", user.getId());
@@ -103,11 +102,11 @@ public class AccountService {
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
 		List<User> userList = userDao.findAll(spec);
 
-		//运行统计演示
+		// 运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
 		}
-		//业务日志演示
+		// 业务日志演示
 		if (businessLogger != null) {
 			businessLogger.log("LIST", getCurrentUserName(), null);
 		}
@@ -129,7 +128,7 @@ public class AccountService {
 	 * 判断是否超级管理员.
 	 */
 	private boolean isSupervisor(User user) {
-		return (user.getId() != null && user.getId() == 1L);
+		return ((user.getId() != null) && (user.getId() == 1L));
 	}
 
 	public User getUser(Long id) {

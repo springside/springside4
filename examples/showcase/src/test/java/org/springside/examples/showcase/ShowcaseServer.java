@@ -1,19 +1,18 @@
-package org.springside.examples.quickstart.functional;
+package org.springside.examples.showcase;
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.jetty.JettyFactory;
 
 /**
- * 使用Jetty运行调试Web应用, 在Console输入回车快速重新加载应用.
+ * 使用Jetty运行调试Web应用, 在Console快速重载应用.
  * 
  * @author calvin
  */
-public class QuickStartServer {
+public class ShowcaseServer {
 
 	public static final int PORT = 8080;
-	public static final String CONTEXT = "/quickstart";
-	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web",
-			"springside-core" };
+	public static final String CONTEXT = "/showcase";
+	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web" };
 
 	public static void main(String[] args) throws Exception {
 		// 设定Spring的profile

@@ -30,7 +30,7 @@ public class ThreadsTest {
 		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time enough to shutdown
+		// time enough to shutdown
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 500, 0);
 		pool.execute(task);
@@ -38,7 +38,7 @@ public class ThreadsTest {
 		assertTrue(pool.isTerminated());
 		assertNull(appender.getFirstLog());
 
-		//time not enough to shutdown,call shutdownNow
+		// time not enough to shutdown,call shutdownNow
 		appender.clearLogs();
 		pool = Executors.newSingleThreadExecutor();
 		task = new Task(logger, 1000, 0);
@@ -47,7 +47,7 @@ public class ThreadsTest {
 		assertTrue(pool.isTerminated());
 		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
 
-		//self thread interrupt while calling gracefulShutdown
+		// self thread interrupt while calling gracefulShutdown
 		appender.clearLogs();
 
 		final ExecutorService self = Executors.newSingleThreadExecutor();
@@ -77,7 +77,7 @@ public class ThreadsTest {
 		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time not enough to shutdown,write error log.
+		// time not enough to shutdown,write error log.
 		appender.clearLogs();
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 1000, 0);
@@ -105,7 +105,7 @@ public class ThreadsTest {
 			System.out.println("start task");
 			if (runTime > 0) {
 				long start = System.currentTimeMillis();
-				while (System.currentTimeMillis() - start < runTime) {
+				while ((System.currentTimeMillis() - start) < runTime) {
 				}
 			}
 

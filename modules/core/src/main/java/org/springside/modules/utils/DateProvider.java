@@ -6,14 +6,16 @@ import java.util.Date;
  * 日期提供者，使用它而不是直接取得系统时间，将方便测试。
  * 
  * @author calvin
- *
  */
 public interface DateProvider {
 
 	Date getDate();
 
-	public static final DateProvider DEFAULT = new CurrentDateProvider();
+	static final DateProvider DEFAULT = new CurrentDateProvider();
 
+	/**
+	 * 返回当前的时间。
+	 */
 	public static class CurrentDateProvider implements DateProvider {
 
 		@Override
@@ -22,6 +24,9 @@ public interface DateProvider {
 		}
 	}
 
+	/**
+	 * 返回设定的时间.
+	 */
 	public static class ConfigurableDateProvider implements DateProvider {
 
 		private final Date date;
