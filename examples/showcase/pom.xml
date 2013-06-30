@@ -270,8 +270,8 @@
 	    </dependency>
 
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
+	 		<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 
