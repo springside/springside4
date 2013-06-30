@@ -491,27 +491,6 @@
 					</instrumentation>
                 </configuration>
 			</plugin>
-
-			<!-- eclipse插件, 设定wtp版本 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-					<wtpversion>2.0</wtpversion>
-					<!-- 增加设置项目encoding的文件 -->
-					<additionalConfig>
-						<file>
-							<name>.settings/org.eclipse.core.resources.prefs</name>
-							<content>
-					                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-							</content>
-						</file>
-					</additionalConfig>
-				</configuration>
-			</plugin>
 			
 			<!-- enforcer插件, 设定环境与依赖的规则 -->
 			<plugin>
