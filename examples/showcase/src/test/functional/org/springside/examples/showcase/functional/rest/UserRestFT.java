@@ -91,6 +91,11 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		assertEquals("admin", response.getBody().getLoginName());
 		assertEquals("管理员", response.getBody().getName());
 		assertEquals(new Long(1), response.getBody().getTeamId());
+
+		// 直接取出XML串
+		HttpEntity<String> xml = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
+				String.class, 1L);
+		System.out.println("xml output is " + xml.getBody());
 	}
 
 	/**
@@ -104,6 +109,10 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		assertEquals("admin", user.getLoginName());
 		assertEquals("管理员", user.getName());
 		assertEquals(new Long(1), user.getTeamId());
+
+		// 直接取出JSON串
+		String json = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", String.class, 1L);
+		System.out.println("json output is " + json);
 	}
 
 	/**

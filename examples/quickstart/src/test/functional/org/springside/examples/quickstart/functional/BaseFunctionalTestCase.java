@@ -35,7 +35,7 @@ public class BaseFunctionalTestCase {
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
-	public static void beforeClass() throws Exception {
+	public static void initFunctionalTestEnv() throws Exception {
 		baseUrl = propertiesLoader.getProperty("baseUrl");
 
 		// 如果是目标地址是localhost，则启动嵌入式jetty。如果指向远程地址，则不需要启动Jetty.

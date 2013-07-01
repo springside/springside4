@@ -33,7 +33,10 @@ public class BaseFunctionalTestCase {
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
-	public static void beforeClass() throws Exception {
+	public static void initFunctionalTestEnv() throws Exception {
+
+		System.out.println("[Hint] Don't forget to set -XX:MaxPermSize=128m");
+
 		baseUrl = propertiesLoader.getProperty("baseUrl");
 
 		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost")
@@ -52,7 +55,7 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
-			//设定Spring的profile
+			// 设定Spring的profile
 			System.setProperty("spring.profiles.active", "functional");
 
 			jettyServer = JettyFactory.createServerInSource(new URL(baseUrl).getPort(), ShowcaseServer.CONTEXT);

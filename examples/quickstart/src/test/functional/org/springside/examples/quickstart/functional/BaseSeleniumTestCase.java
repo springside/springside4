@@ -20,12 +20,12 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
 
-	//出错时截屏的规则
+	// 出错时截屏的规则
 	@Rule
-	public TestRule snapshotrule = new SeleniumSnapshotRule(s);
+	public TestRule snapshotRule = new SeleniumSnapshotRule(s);
 
 	@BeforeClass
-	public static void init() throws Exception {
+	public static void initSelenium() throws Exception {
 		createSeleniumOnce();
 		loginAsUserIfNecessary();
 	}
@@ -35,7 +35,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 	 */
 	protected static void createSeleniumOnce() throws Exception {
 		if (s == null) {
-			//根据配置创建Selenium driver.
+			// 根据配置创建Selenium driver.
 			String driverName = propertiesLoader.getProperty("selenium.driver");
 
 			WebDriver driver = WebDriverFactory.createDriver(driverName);
@@ -59,5 +59,4 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			s.waitForTitleContains("任务管理");
 		}
 	}
-
 }

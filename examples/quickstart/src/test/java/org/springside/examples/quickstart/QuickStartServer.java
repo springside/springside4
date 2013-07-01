@@ -26,8 +26,8 @@ public class QuickStartServer {
 		try {
 			server.start();
 
-			System.out.println("Server running at http://localhost:" + PORT + CONTEXT);
-			System.out.println("Hit Enter to reload the application quickly");
+			System.out.println("[INFO] Server running at http://localhost:" + PORT + CONTEXT);
+			System.out.println("[Hint] Hit Enter to reload the application quickly");
 
 			// 等待用户输入回车重载应用.
 			while (true) {
