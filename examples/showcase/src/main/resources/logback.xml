@@ -41,7 +41,7 @@
 	</logger>
 
 	<!--log4jdbc -->
-	<!-- <logger name="jdbc.sqltiming" level="INFO"/> -->
+	<logger name="jdbc.sqltiming" level="INFO"/>
 
 	<root level="WARN">
 		<appender-ref ref="console" />
