@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springside.examples.showcase.ShowcaseServer;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.jetty.JettyFactory;
+import org.springside.modules.test.spring.Profiles;
 import org.springside.modules.utils.PropertiesLoader;
 
 /**
@@ -35,7 +36,7 @@ public class BaseFunctionalTestCase {
 	@BeforeClass
 	public static void initFunctionalTestEnv() throws Exception {
 
-		System.out.println("[Hint] Don't forget to set -XX:MaxPermSize=128m");
+		System.out.println("[HINT] Don't forget to set -XX:MaxPermSize=128m");
 
 		baseUrl = propertiesLoader.getProperty("baseUrl");
 
@@ -56,7 +57,7 @@ public class BaseFunctionalTestCase {
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
 			// 设定Spring的profile
-			System.setProperty("spring.profiles.active", "functional");
+			Profiles.setProfileAsSystemProperty(Profiles.FUNCTIONAL_TEST);
 
 			jettyServer = JettyFactory.createServerInSource(new URL(baseUrl).getPort(), ShowcaseServer.CONTEXT);
 			JettyFactory.setTldJarNames(jettyServer, ShowcaseServer.TLD_JAR_NAMES);

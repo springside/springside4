@@ -35,7 +35,7 @@
 	<!-- 定义无需Controller的url<->view直接映射 -->
 	<mvc:view-controller path="/" view-name="redirect:/task"/>
 	
-	<!-- 将Controller抛出的异常转到特定View,保持SiteMesh的装饰效果 -->
+	<!-- 将Controller抛出的异常转到特定View, 保持SiteMesh的装饰效果 -->
 	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">  
 		<property name="exceptionMappings">  
 			<props>  
