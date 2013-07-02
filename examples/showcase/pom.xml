@@ -190,7 +190,7 @@
 
 		<!-- CACHE begin -->
 		<dependency>
-			<groupId>spy</groupId>
+			<groupId>net.spy</groupId>
 			<artifactId>spymemcached</artifactId>
 		</dependency>
 
@@ -270,8 +270,8 @@
 	    </dependency>
 
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
+	 		<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 
@@ -442,18 +442,6 @@
 							<exclude>**/*Demo.class</exclude>
 						</excludes>
 					</instrumentation>
-				</configuration>
-			</plugin>
-
-			<!-- eclipse插件, 设定wtp版本并添加springIDE nature -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<wtpversion>2.0</wtpversion>
-					<additionalProjectnatures>
-						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-					</additionalProjectnatures>
 				</configuration>
 			</plugin>
 

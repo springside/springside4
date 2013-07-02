@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 import org.springside.examples.quickstart.QuickStartServer;
 import org.springside.modules.test.data.DataFixtures;
 import org.springside.modules.test.jetty.JettyFactory;
+import org.springside.modules.test.spring.Profiles;
 import org.springside.modules.utils.PropertiesLoader;
 
 /**
@@ -35,7 +36,7 @@ public class BaseFunctionalTestCase {
 	private static Logger logger = LoggerFactory.getLogger(BaseFunctionalTestCase.class);
 
 	@BeforeClass
-	public static void beforeClass() throws Exception {
+	public static void initFunctionalTestEnv() throws Exception {
 		baseUrl = propertiesLoader.getProperty("baseUrl");
 
 		// 如果是目标地址是localhost，则启动嵌入式jetty。如果指向远程地址，则不需要启动Jetty.
@@ -56,7 +57,7 @@ public class BaseFunctionalTestCase {
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
 			// 设定Spring的profile
-			System.setProperty("spring.profiles.active", "functional");
+			Profiles.setProfileAsSystemProperty(Profiles.FUNCTIONAL_TEST);
 
 			jettyServer = JettyFactory.createServerInSource(new URL(baseUrl).getPort(), QuickStartServer.CONTEXT);
 			JettyFactory.setTldJarNames(jettyServer, QuickStartServer.TLD_JAR_NAMES);

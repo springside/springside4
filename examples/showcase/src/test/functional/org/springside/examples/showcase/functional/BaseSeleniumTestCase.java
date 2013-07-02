@@ -21,7 +21,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	//出错时截屏的规则
 	@Rule
-	public TestRule snapshotrule = new SeleniumSnapshotRule(s);
+	public TestRule snapshotRule = new SeleniumSnapshotRule(s);
 
 	@BeforeClass
 	public static void createSeleniumOnce() throws Exception {

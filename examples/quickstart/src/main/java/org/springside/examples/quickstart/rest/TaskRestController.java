@@ -33,7 +33,7 @@ import org.springside.modules.beanvalidator.BeanValidators;
 @RequestMapping(value = "/api/v1/task")
 public class TaskRestController {
 
-	Logger logger = LoggerFactory.getLogger(TaskRestController.class);
+	private static Logger logger = LoggerFactory.getLogger(TaskRestController.class);
 
 	@Autowired
 	private TaskService taskService;

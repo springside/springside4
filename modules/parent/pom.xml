@@ -23,9 +23,9 @@
 		<quartz.version>2.1.7</quartz.version>
         <jedis.version>2.1.0</jedis.version>
 		<ehcache.version>2.6.6</ehcache.version>
-		<spymemcached.version>2.8.9</spymemcached.version>
+		<spymemcached.version>2.9.0</spymemcached.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jolokia.version>1.1.1</jolokia.version>
+		<jolokia.version>1.1.2</jolokia.version>
 		<jackson.version>2.2.2</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
@@ -35,7 +35,7 @@
 		<joda-time.version>2.2</joda-time.version>
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.2.3</httpclient.version>
-		<freemarker.version>2.3.19</freemarker.version>
+		<freemarker.version>2.3.20</freemarker.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.1</powermock.version>
@@ -57,26 +57,9 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		-->
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>	
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-			
-		<repository>
-			<id>spy</id>
-			<name>Spy Repository</name>
-			<url>http://files.couchbase.com/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-	    </repository>
 	</repositories>
 
-	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
+	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<pluginRepositories> 
 		<pluginRepository> 
 			<id>nexus</id>
@@ -149,12 +132,12 @@
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjrt</artifactId>
-				<version>1.7.2</version>
+				<version>1.7.3</version>
 			</dependency>
 			<dependency>
 				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjweaver</artifactId>
-				<version>1.7.2</version>
+				<version>1.7.3</version>
 				<scope>runtime</scope>
 			</dependency>
 			<!-- AOP end -->
@@ -385,7 +368,7 @@
 			<!-- CACHE begin -->
 			<!-- memcached -->
 			<dependency>
-				<groupId>spy</groupId>
+				<groupId>net.spy</groupId>
 				<artifactId>spymemcached</artifactId>
 				<version>${spymemcached.version}</version>
 			</dependency>
@@ -493,9 +476,9 @@
 
 			<!-- log4jdbc -->
 			<dependency>
-				<groupId>org.lazyluke</groupId>
-				<artifactId>log4jdbc-remix</artifactId>
-				<version>0.2.7</version>
+	 			<groupId>org.bgee.log4jdbc-log4j2</groupId>
+  				<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+  				<version>1.15</version>
 				<scope>runtime</scope>
 			</dependency>
 			<!-- LOGGING end -->
@@ -862,26 +845,6 @@
 							</configuration>
 						</execution>
 					</executions>
-				</plugin>
-
-				<!-- eclipse插件, 设定下载依赖包的source code -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-eclipse-plugin</artifactId>
-					<version>2.9</version>
-					<configuration>
-						<downloadSources>true</downloadSources>
-						<downloadJavadocs>false</downloadJavadocs>
-						<!-- 增加设置项目encoding的文件 -->
-						<additionalConfig>
-							<file>
-								<name>.settings/org.eclipse.core.resources.prefs</name>
-								<content>
-						                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-								</content>
-							</file>
-						</additionalConfig>						
-					</configuration>
 				</plugin>
 
 				<!-- jetty插件 -->
