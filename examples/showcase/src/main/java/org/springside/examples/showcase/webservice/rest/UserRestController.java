@@ -19,8 +19,8 @@ public class UserRestController {
 	/**
 	 * 基于ContentNegotiationManager,根据URL的后缀渲染不同的格式
 	 * eg. /api/v1/user/1.xml 返回xml
-	 * /api/v1/user/1.json 返回json
-	 * /api/v1/user/1 返回xml(why?)
+	 *     /api/v1/user/1.json 返回json
+	 *     /api/v1/user/1 返回xml(why?)
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
