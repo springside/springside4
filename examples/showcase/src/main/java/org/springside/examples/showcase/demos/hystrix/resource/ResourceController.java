@@ -1,5 +1,6 @@
 package org.springside.examples.showcase.demos.hystrix.resource;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,7 +19,7 @@ import org.springside.modules.utils.Threads;
  */
 @Controller
 public class ResourceController {
-	public static final int TIMEOUT = 20000;
+	public static final int TIMEOUT = 10000;
 
 	@Autowired
 	private AccountEffectiveService accountService;
@@ -39,7 +40,7 @@ public class ResourceController {
 		}
 
 		if ("fail".equals(HystrixController.status)) {
-			throw new RuntimeException("Server Exception");
+			throw new ServiceException("Server Exception");
 		}
 
 		return null;
