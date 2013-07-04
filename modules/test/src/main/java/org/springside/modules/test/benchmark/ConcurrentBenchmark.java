@@ -23,9 +23,9 @@ public abstract class ConcurrentBenchmark {
 	protected CountDownLatch finishLock;
 
 	protected Date startTime;
-	protected int printBetweenMills;
+	protected int intervalInMills;
 
-	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
+	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
 		// merge default setting and system properties
 		this.threadCount = Integer.parseInt(System.getProperty(THREAD_COUNT_NAME, String.valueOf(defaultThreadCount)));
 		this.loopCount = Long.parseLong(System.getProperty(LOOP_COUNT_NAME, String.valueOf(defaultLoopCount)));
@@ -33,7 +33,7 @@ public abstract class ConcurrentBenchmark {
 		startLock = new CountDownLatch(threadCount);
 		finishLock = new CountDownLatch(threadCount);
 
-		this.printBetweenMills = printBetweenSeconds * 1000;
+		this.intervalInMills = intervalInSeconds * 1000;
 	}
 
 	public void execute() throws Exception {

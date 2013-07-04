@@ -1,6 +1,8 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.mapper.JsonMapper;
+import org.springside.modules.nosql.redis.JedisTemplate;
+import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
@@ -19,40 +21,42 @@ import redis.clients.jedis.Protocol;
 public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 50;
 	private static final long DEFAULT_LOOP_COUNT = 100000;
-	private static final int PRINT_BETWEEN_SECONDS = 10;
+	private static final int INTERVAL_IN_SECONDS = 10;
 
 	private static final String DEFAULT_HOST = "localhost";
 	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
 	private static final int DEFAULT_TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private String keyPrefix = "ss.map:";
+	private String keyPrefix = "ss.session:";
 	private int batchSize = 10;
 
 	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
+	private JedisTemplate jedisTemplate;
 
 	public static void main(String[] args) throws Exception {
 		RedisMassInsertionBenchmark benchmark = new RedisMassInsertionBenchmark(DEFAULT_THREAD_COUNT,
-				DEFAULT_LOOP_COUNT, PRINT_BETWEEN_SECONDS);
+				DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
 		benchmark.execute();
 	}
 
-	public RedisMassInsertionBenchmark(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
-		super(defaultThreadCount, defaultLoopCount, printBetweenSeconds);
+	public RedisMassInsertionBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
+		super(defaultThreadCount, defaultLoopCount, intervalInSeconds);
 	}
 
 	@Override
 	protected void setUp() {
 		// create jedis pool
 		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
+		jedisTemplate = new JedisTemplate(pool);
 
 		// remove all keys
-		Jedis jedis = pool.getResource();
-		try {
-			jedis.flushDB();
-		} finally {
-			pool.returnResource(jedis);
-		}
+		jedisTemplate.execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				jedis.flushDB();
+			}
+		});
 	}
 
 	@Override
@@ -73,32 +77,36 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 		@Override
 		public void run() {
-			Jedis jedis = pool.getResource();
 			onThreadStart();
 
 			try {
-				Pipeline pl = jedis.pipelined();
+				jedisTemplate.execute(new JedisActionNoResult() {
 
-				for (int i = 0; i < loopCount; i++) {
-					String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":").append(i)
-							.toString();
-					Session session = new Session(key);
-					session.setAttrbute("name", key);
-					session.setAttrbute("seq", i);
-					session.setAttrbute("address", "address:" + i);
-					session.setAttrbute("tel", "tel:" + i);
+					@Override
+					public void action(Jedis jedis) {
+						Pipeline pl = jedis.pipelined();
 
-					pl.set(session.getId(), jsonMapper.toJson(session));
+						for (int i = 1; i <= loopCount; i++) {
+							String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":")
+									.append(i).toString();
+							Session session = new Session(key);
+							session.setAttrbute("name", key);
+							session.setAttrbute("seq", i);
+							session.setAttrbute("address", "address:" + i);
+							session.setAttrbute("tel", "tel:" + i);
 
-					if ((i % batchSize) == 0) {
+							pl.set(session.getId(), jsonMapper.toJson(session));
+
+							if ((i % batchSize) == 0) {
+								pl.sync();
+								printProgressMessage(i);
+							}
+						}
 						pl.sync();
-						printProgressMessage(i);
 					}
-				}
-				pl.sync();
+				});
 			} finally {
 				onThreadFinish();
-				pool.returnResource(jedis);
 			}
 		}
 	}
