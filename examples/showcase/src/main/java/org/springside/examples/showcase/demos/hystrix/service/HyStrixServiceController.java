@@ -15,8 +15,8 @@ import org.springside.examples.showcase.webservice.rest.UserDTO;
  * 使用Hystrix访问资源的服务。
  */
 @Controller
-public class ServiceController {
-	private static Logger logger = LoggerFactory.getLogger(ServiceController.class);
+public class HyStrixServiceController {
+	private static Logger logger = LoggerFactory.getLogger(HyStrixServiceController.class);
 
 	@RequestMapping(value = "/hystrix/service/{id}", method = RequestMethod.GET)
 	@ResponseBody

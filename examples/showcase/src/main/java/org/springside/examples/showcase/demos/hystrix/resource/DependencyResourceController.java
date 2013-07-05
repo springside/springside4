@@ -18,7 +18,7 @@ import org.springside.modules.utils.Threads;
  * 被Service所依赖的Resource.
  */
 @Controller
-public class ResourceController {
+public class DependencyResourceController {
 	public static final int TIMEOUT = 10000;
 
 	@Autowired
@@ -44,6 +44,14 @@ public class ResourceController {
 		}
 
 		return null;
+	}
+
+	/**
+	 * 备用的节点，永远返回正确结果。
+	 */
+	@RequestMapping(value = "/hystrix/resource/standby/{id}", method = RequestMethod.GET)
+	public UserDTO getUserOnStandby(@PathVariable("id") Long id) {
+		return handleRequest(id);
 	}
 
 	private UserDTO handleRequest(Long id) {

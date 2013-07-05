@@ -8,10 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class HystrixController {
 
 	public static String status = "normal";
+	public static String fallback = "exception";
 
-	@RequestMapping(value = "/story/hystrix/{status}")
-	public String updateStatus(@PathVariable("status") String status) {
-		HystrixController.status = status;
-		return "story/hystrix";
+	@RequestMapping(value = "/story/hystrix/status/{status}")
+	public String updateStatus(@PathVariable("status") String newStatus) {
+		HystrixController.status = newStatus;
+		return "redirect:/story/hystrix";
+	}
+
+	@RequestMapping(value = "/story/hystrix/fallback/{fallback}")
+	public String updateFallback(@PathVariable("fallback") String newFallback) {
+		HystrixController.fallback = newFallback;
+		return "redirect:/story/hystrix";
 	}
 }
