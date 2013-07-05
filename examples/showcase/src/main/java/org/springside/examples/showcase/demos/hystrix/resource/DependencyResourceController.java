@@ -50,6 +50,7 @@ public class DependencyResourceController {
 	 * 备用的节点，永远返回正确结果。
 	 */
 	@RequestMapping(value = "/hystrix/resource/standby/{id}", method = RequestMethod.GET)
+	@ResponseBody
 	public UserDTO getUserOnStandby(@PathVariable("id") Long id) {
 		return handleRequest(id);
 	}
