@@ -20,25 +20,25 @@
 
 	<h2>演示操作</h2>
 	<ul>
-		<li>当前依赖资源状态为<%= HystrixController.status %>：切换为<a href="${ctx}/story/hystrix/status/normal">正常</a>、<a href="${ctx}/story/hystrix/status/timeout">超时</a>、<a href="${ctx}/story/hystrix/status/fail">失败</a>。</li>
-		<li>当前异常处理方式为<%= HystrixController.fallback %>：切换为<a href="${ctx}/story/hystrix/fallback/exception">抛出异常</a>、<a href="${ctx}/story/hystrix/fallback/dummy">返回默认用户</a>、<a href="${ctx}/story/hystrix/fallback/standby">访问备用节点</a>。</li>
+		<li>依赖资源当前状态为<%= HystrixController.status %>：切换为<a href="${ctx}/story/hystrix/status/normal">正常</a>、<a href="${ctx}/story/hystrix/status/timeout">超时</a>、<a href="${ctx}/story/hystrix/status/fail">失败</a>。</li>
+		<li>Hystrix服务当前异常处理方式为<%= HystrixController.fallback %>：切换为<a href="${ctx}/story/hystrix/fallback/exception">抛出异常</a>、<a href="${ctx}/story/hystrix/fallback/dummy">返回默认用户</a>、<a href="${ctx}/story/hystrix/fallback/standby">访问备用节点</a>。</li>
 		<li>访问服务：<a href="${ctx}/hystrix/service/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a>、<a href="${ctx}/hystrix/resource/standby/1" target="_blank">资源的备用节点</a>。</li>
 	</ul>
 	<h2>主要用户故事</h2>
 	<ul>
-		<li> 在默认的正常状态，访问Hystrix服务和依赖资源和，均返回正常结果。</li>
-		<li> 将资源状态切换为"超时"，点击依赖资源，需要在10秒后才返回结果。</li>
-		<li> 点击Hystrix服务，2秒后超时，返回503。</li>
+		<li> 在默认的正常状态，访问Hystrix服务和依赖资源，均返回正常结果。</li>
+		<li> 将资源状态切换为"超时"，访问依赖资源，需要在10秒后才返回结果。</li>
+		<li> 访问Hystrix服务，2秒后超时，返回503。</li>
 		<li> 三次超时后满足短路条件(60秒滚动窗口内起码有3个请求，50%失败)，再次刷新服务，立即返回503。</li>
-		<li> 10秒短路保护期内，所有刷新都立即返回503，不会进入真正服务调用。</li>
+		<li> 10秒短路保护期内，所有访问都立即返回503，不会访问依赖资源。</li>
 		<li> 保护期过后，会放行一个请求，如果还是超时，则继续保持短路状态。如果成功则重置所有计数器。</li>
 	</ul>
 	
 	<h2>其他用户故事</h2>
 	<ul>
-		<li> 将资源状态切换为"失败"，点击访问依赖资源，返回500错误，点击访问Hystrix服务，即时返回503错误。</li>
-		<li> 将异常处理方式切换为"返回默认用户"，点击访问Hystrix服务，返回默认用户。</li>
-		<li> 将异常处理方式切换为"访问备用节点"，点击访问Hystrix服务，返回正确结果。</li>
+		<li> 将资源状态切换为"失败"，访问依赖资源，立即返回500错误，访问Hystrix服务，即时返回503错误。</li>
+		<li> 将异常处理方式切换为"返回默认用户"，访问Hystrix服务，返回默认用户。</li>
+		<li> 将异常处理方式切换为"访问备用节点"，访问Hystrix服务，返回正确结果。</li>
 	</ul>
 	
 	<h2>监控结果 </h2>
@@ -54,15 +54,9 @@
 	%>
 		<ul>
 			<li>是否短路：<%= circuitBreaker.isOpen() %></li>
-			<li>窗口内请求：<%= counts.getTotalRequests() %></li>
-			<li>窗口内成功：<%= metrics.getRollingCount(HystrixRollingNumberEvent.SUCCESS) %></li>
-			<li>窗口内超时：<%= metrics.getRollingCount(HystrixRollingNumberEvent.TIMEOUT) %></li>
-			<li>窗口内失败：<%= metrics.getRollingCount(HystrixRollingNumberEvent.FAILURE) %></li>
-			<li>窗口内短路：<%= metrics.getRollingCount(HystrixRollingNumberEvent.SHORT_CIRCUITED) %></li>
-			<li>窗口内失败百分比：<%= counts.getErrorPercentage() %></li>
-			<li>50%延时：<%= metrics.getTotalTimePercentile(50) +"ms"%></li>
-			<li>90%延时：<%= metrics.getTotalTimePercentile(90) +"ms"%></li>
-			<li>100%延时：<%= metrics.getTotalTimePercentile(100) +"ms"%></li>
+			<li>窗口内请求：<%= counts.getTotalRequests()%>，失败百分比：<%= counts.getErrorPercentage() %>%
+			<li>窗口成功：<%= metrics.getRollingCount(HystrixRollingNumberEvent.SUCCESS) %>， 超时：<%= metrics.getRollingCount(HystrixRollingNumberEvent.TIMEOUT) %>，失败：<%= metrics.getRollingCount(HystrixRollingNumberEvent.FAILURE) %>，短路：<%= metrics.getRollingCount(HystrixRollingNumberEvent.SHORT_CIRCUITED) %></li>
+			<li>50%延时：<%= metrics.getTotalTimePercentile(50) +"ms"%>，90%延时：<%= metrics.getTotalTimePercentile(90) +"ms"%>，100%延时：<%= metrics.getTotalTimePercentile(100) +"ms"%></li>
 		</ul>
 	<%} %>
 </body>
