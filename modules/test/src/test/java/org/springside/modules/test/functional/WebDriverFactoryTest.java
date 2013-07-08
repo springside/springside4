@@ -11,7 +11,6 @@ import org.mockito.MockitoAnnotations;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -22,7 +21,7 @@ import org.springside.modules.test.selenium.WebDriverFactory;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ WebDriverFactory.class, FirefoxDriver.class, InternetExplorerDriver.class, ChromeDriver.class,
-		HtmlUnitDriver.class, RemoteWebDriver.class })
+		RemoteWebDriver.class })
 public class WebDriverFactoryTest {
 	@Mock
 	FirefoxDriver firefoxDriver;
@@ -30,8 +29,6 @@ public class WebDriverFactoryTest {
 	InternetExplorerDriver internetExplorerDriver;
 	@Mock
 	ChromeDriver chromerDriver;
-	@Mock
-	HtmlUnitDriver htmlUnitDriver;
 	@Mock
 	RemoteWebDriver remoteWebDriver;
 
@@ -50,10 +47,6 @@ public class WebDriverFactoryTest {
 		PowerMockito.whenNew(ChromeDriver.class).withNoArguments().thenReturn(chromerDriver);
 		driver = WebDriverFactory.createDriver("chrome");
 		assertTrue(driver instanceof ChromeDriver);
-
-		PowerMockito.whenNew(HtmlUnitDriver.class).withArguments(true).thenReturn(htmlUnitDriver);
-		driver = WebDriverFactory.createDriver("htmlunit");
-		assertTrue(driver instanceof HtmlUnitDriver);
 
 		PowerMockito.whenNew(RemoteWebDriver.class)
 				.withArguments(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox())
