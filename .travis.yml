@@ -1,7 +1,11 @@
 language: java
 script:
 - mvn test
+- mvn antrun:run -Prefresh-db
 - mvn test -Pfunctional-test,run-smoke -Dselenium.driver=firefox
 env: MAVEN_OPTS="-XX:MaxPermSize=128m"
 addons:
   firefox: "22.0"
+before_install:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
