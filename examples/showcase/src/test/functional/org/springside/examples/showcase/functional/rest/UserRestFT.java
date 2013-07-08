@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
+import org.springside.modules.test.category.Smoke;
 import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Lists;
@@ -104,6 +106,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	 * 演示使用Apache Http client4.
 	 */
 	@Test
+	@Category(Smoke.class)
 	public void getUserAsJson() {
 		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
 		assertEquals("admin", user.getLoginName());

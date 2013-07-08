@@ -16,10 +16,8 @@ import org.springside.examples.showcase.webservice.rest.UserDTO;
 public class UserJaxRsFT extends BaseFunctionalTestCase {
 
 	private static String resoureUrl;
-	
+
 	private RestTemplate restTemplate = new RestTemplate();
-
-
 
 	@BeforeClass
 	public static void initUrl() {
