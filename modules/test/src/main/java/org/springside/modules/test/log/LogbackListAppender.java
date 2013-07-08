@@ -47,13 +47,13 @@ public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEven
 	}
 
 	/**
-	 * 返回之前append的第一个log的信息.
+	 * 返回之前append的第一个log的内容.
 	 */
 	public String getFirstMessage() {
 		if (logs.isEmpty()) {
 			return null;
 		}
-		return getFirstLog().getMessage().toString();
+		return getFirstLog().getFormattedMessage();
 	}
 
 	/**
@@ -67,13 +67,13 @@ public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEven
 	}
 
 	/**
-	 * 返回之前append的最后一个log的信息.
+	 * 返回之前append的最后一个log的内容.
 	 */
 	public String getLastMessage() {
 		if (logs.isEmpty()) {
 			return null;
 		}
-		return getLastLog().getMessage().toString();
+		return getLastLog().getFormattedMessage();
 	}
 
 	/**
