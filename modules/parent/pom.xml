@@ -15,7 +15,7 @@
 		<hibernate.version>4.2.2.Final</hibernate.version>
 		<mybatis.version>3.2.2</mybatis.version>
 		<spring-data-jpa.version>1.3.2.RELEASE</spring-data-jpa.version>
-		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
 		<cxf.version>2.7.5</cxf.version>
@@ -197,11 +197,11 @@
 				<version>${spring.version}</version>
 			</dependency>
 
-			<!-- optional datasource pool -->
+			<!-- connection pool -->
 			<dependency>
-				<groupId>commons-dbcp</groupId>
-				<artifactId>commons-dbcp</artifactId>
-				<version>${commons-dbcp.version}</version>
+				<groupId>org.apache.tomcat</groupId>
+				<artifactId>tomcat-jdbc</artifactId>
+				<version>${tomcat-jdbc.version}</version>
 				<scope>runtime</scope>
 			</dependency>
 			<!-- PERSISTENCE end -->
@@ -652,6 +652,10 @@
 					<exclusion>
 						<groupId>org.seleniumhq.selenium</groupId>
 						<artifactId>selenium-htmlunit-driver</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.seleniumhq.selenium</groupId>
+						<artifactId>selenium-safari-driver</artifactId>
 					</exclusion>
 					<exclusion>
 						<groupId>commons-logging</groupId>

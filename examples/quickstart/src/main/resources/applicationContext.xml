@@ -60,8 +60,8 @@
  		<context:property-placeholder ignore-unresolvable="true"
 			location="classpath*:/application.properties" />	
 		
-		<!-- 数据源配置, 使用DBCP数据库连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- 数据源配置, 使用Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<!-- Connection Info -->
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
@@ -69,8 +69,8 @@
 			<property name="password" value="${jdbc.password}" />
 		
 			<!-- Connection Pooling Info -->
-			<property name="maxActive" value="${dbcp.maxActive}" />
-			<property name="maxIdle" value="${dbcp.maxIdle}" />
+			<property name="maxActive" value="${jdbc.pool.maxActive}" />
+			<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
 			<property name="defaultAutoCommit" value="false" />
 			<!-- 连接Idle一个小时后超时 -->
 			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
@@ -87,8 +87,8 @@
 			location="classpath*:/application.properties,
           			  classpath*:/application.development.properties" />	
 
-		<!-- DBCP连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
@@ -104,8 +104,8 @@
           			  classpath*:/application.functional.properties,
           			  classpath*:/application.functional-local.properties" />	
 
-		<!-- DBCP连接池 -->
-		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<!-- Tomcat JDBC连接池 -->
+		<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
 			<property name="driverClassName" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />
 			<property name="username" value="${jdbc.username}" />
@@ -125,7 +125,7 @@
 			location="classpath*:/application.properties,
           			  classpath*:/application.test.properties" />	
 		
-		<!-- Simple连接池 -->
+		<!-- Spring Simple连接池 -->
 		<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
 			<property name="driverClass" value="${jdbc.driver}" />
 			<property name="url" value="${jdbc.url}" />

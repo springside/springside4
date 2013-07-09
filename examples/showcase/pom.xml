@@ -91,10 +91,10 @@
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
 
-		<!-- dbcp -->
+		<!-- connection pool -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
 		</dependency>
 
 		<!-- jdbc driver -->
