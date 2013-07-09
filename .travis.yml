@@ -1,7 +1,6 @@
 language: java
 script:
 - mvn test
-- mvn antrun:run -Prefresh-db
 - mvn test -Pfunctional-test -Dselenium.driver=firefox
 env: MAVEN_OPTS="-XX:MaxPermSize=128m"
 addons:

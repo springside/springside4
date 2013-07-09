@@ -18,7 +18,7 @@
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jackson.version>2.2.2</jackson.version>
+		<jackson.version>2.1.5</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
