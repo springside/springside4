@@ -31,18 +31,18 @@ public class StringDemo {
 	 */
 	@Test
 	public void utilsByApache() {
-		//判断非空，最常用函数
+		// 判断非空，最常用函数
 		assertFalse(StringUtils.isNotBlank(null));
 		assertFalse(StringUtils.isNotBlank(""));
 		assertFalse(StringUtils.isNotBlank(" "));
 
-		//null的default值
+		// null的default值
 		assertEquals("", StringUtils.defaultString(null));
 		assertEquals("defaultStr", StringUtils.defaultString(null, "defaultStr"));
 		assertEquals("defaultStr", StringUtils.defaultIfBlank(null, "defaultStr"));
 		assertEquals("defaultStr", StringUtils.defaultIfBlank(" ", "defaultStr"));
 
-		//截取字符串
+		// 截取字符串
 		String input = "hahakaka";
 		String result = StringUtils.substringAfter(input, "ha");
 		assertEquals("hakaka", result);
@@ -53,29 +53,29 @@ public class StringDemo {
 		assertEquals("haha", StringUtils.substringBetween("'haha'", "'"));
 		assertEquals("haha", StringUtils.substringBetween("{haha}", "{", "}"));
 
-		//join
+		// join
 		List<String> inputList = Lists.newArrayList("a", "b", "c");
 		result = StringUtils.join(inputList, ",");
 		assertEquals("a,b,c", result);
 
-		//ignoreCase的比较函数:contains/startWith/EndWith/indexOf/lastIndexOf
+		// ignoreCase的比较函数:contains/startWith/EndWith/indexOf/lastIndexOf
 		assertTrue(StringUtils.containsIgnoreCase("Aaabbb", "aaa"));
 		assertEquals(0, StringUtils.indexOfIgnoreCase("Aaabbb", "aaa"));
 
-		///split
+		// /split
 		input = "a,b,c";
 		String[] resultArray = StringUtils.split(input, ",");
 		assertEquals("b", resultArray[1]);
 
-		//左边补0
+		// 左边补0
 		result = StringUtils.leftPad("1", 3, '0');
 		assertEquals("001", result);
 
-		//超长部分变省略号
+		// 超长部分变省略号
 		assertEquals("abcdefg", StringUtils.abbreviate("abcdefg", 7));
 		assertEquals("abc...", StringUtils.abbreviate("abcdefg", 6));
 
-		//首字母大写
+		// 首字母大写
 		assertEquals("Abc", StringUtils.capitalize("abc"));
 		assertEquals("abc", StringUtils.uncapitalize("Abc"));
 	}
@@ -88,17 +88,17 @@ public class StringDemo {
 	@Test
 	public void joinerByGuava() {
 
-		//忽略Null值。
+		// 忽略Null值。
 		String[] fantasyGenres = { "Space Opera", null, "Horror", "Magic realism", null, "Religion" };
 		String joined = Joiner.on(", ").skipNulls().join(fantasyGenres);
 		assertEquals("Space Opera, Horror, Magic realism, Religion", joined);
 
-		//将Null值转换为特定字符串.
+		// 将Null值转换为特定字符串.
 		String[] fantasyGenres2 = { "Space Opera", null, "Horror", "Magic realism", null, "Religion" };
 		joined = Joiner.on(", ").useForNull("NULL!!!").join(fantasyGenres2);
 		assertEquals("Space Opera, NULL!!!, Horror, Magic realism, NULL!!!, Religion", joined);
 
-		//join Map类型
+		// join Map类型
 		Map<Integer, String> map = Maps.newHashMap();
 		map.put(1, "Space Opera");
 		map.put(2, "Horror");
@@ -106,7 +106,7 @@ public class StringDemo {
 		joined = Joiner.on(",").withKeyValueSeparator(":").join(map);
 		assertEquals("1:Space Opera,2:Horror,3:Magic realism", joined);
 
-		//append一个已存在的字符串
+		// append一个已存在的字符串
 		StringBuilder sb = new StringBuilder("Append StringBulder demo: ");
 		joined = Joiner.on(", ").skipNulls().appendTo(sb, fantasyGenres).toString();
 		assertEquals("Append StringBulder demo: Space Opera, Horror, Magic realism, Religion", joined);

@@ -5,10 +5,9 @@ import javax.xml.bind.annotation.XmlType;
 import org.springside.examples.showcase.webservice.soap.WsConstants;
 
 /**
- * 创建某个对象返回的 通用IdResult
+ * 创建某个对象返回的 通用IdResult.
  * 
  * @author badqiu
- *
  */
 @XmlType(name = "IdResult", namespace = WsConstants.NS)
 public class IdResult extends WSResult {

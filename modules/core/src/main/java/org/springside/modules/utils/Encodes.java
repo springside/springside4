@@ -108,7 +108,7 @@ public class Encodes {
 	}
 
 	/**
-	 * URL 编码, Encode默认为UTF-8. 
+	 * URL 编码, Encode默认为UTF-8.
 	 */
 	public static String urlEncode(String part) {
 		try {
@@ -119,7 +119,7 @@ public class Encodes {
 	}
 
 	/**
-	 * URL 解码, Encode默认为UTF-8. 
+	 * URL 解码, Encode默认为UTF-8.
 	 */
 	public static String urlDecode(String part) {
 

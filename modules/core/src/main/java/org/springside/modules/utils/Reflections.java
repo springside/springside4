@@ -136,7 +136,7 @@ public class Reflections {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);
 				return field;
-			} catch (NoSuchFieldException e) {//NOSONAR
+			} catch (NoSuchFieldException e) {// NOSONAR
 				// Field不在当前类定义,继续向上转型
 			}
 		}
@@ -215,7 +215,7 @@ public class Reflections {
 	 * 如无法找到, 返回Object.class.
 	 * eg.
 	 * public UserDao extends HibernateDao<User>
-	 *
+	 * 
 	 * @param clazz The class to introspect
 	 * @return the first generic declaration, or Object.class if cannot be determined
 	 */
@@ -228,7 +228,7 @@ public class Reflections {
 	 * 如无法找到, 返回Object.class.
 	 * 
 	 * 如public UserDao extends HibernateDao<User,Long>
-	 *
+	 * 
 	 * @param clazz clazz The class to introspect
 	 * @param index the Index of the generic ddeclaration,start from 0.
 	 * @return the index generic declaration, or Object.class if cannot be determined
@@ -244,7 +244,7 @@ public class Reflections {
 
 		Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
 
-		if (index >= params.length || index < 0) {
+		if ((index >= params.length) || (index < 0)) {
 			logger.warn("Index: " + index + ", Size of " + clazz.getSimpleName() + "'s Parameterized Type: "
 					+ params.length);
 			return Object.class;
@@ -260,9 +260,9 @@ public class Reflections {
 	public static Class<?> getUserClass(Object instance) {
 		Assert.notNull(instance, "Instance must not be null");
 		Class clazz = instance.getClass();
-		if (clazz != null && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+		if ((clazz != null) && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superClass = clazz.getSuperclass();
-			if (superClass != null && !Object.class.equals(superClass)) {
+			if ((superClass != null) && !Object.class.equals(superClass)) {
 				return superClass;
 			}
 		}
@@ -274,8 +274,8 @@ public class Reflections {
 	 * 将反射时的checked exception转换为unchecked exception.
 	 */
 	public static RuntimeException convertReflectionExceptionToUnchecked(Exception e) {
-		if (e instanceof IllegalAccessException || e instanceof IllegalArgumentException
-				|| e instanceof NoSuchMethodException) {
+		if ((e instanceof IllegalAccessException) || (e instanceof IllegalArgumentException)
+				|| (e instanceof NoSuchMethodException)) {
 			return new IllegalArgumentException(e);
 		} else if (e instanceof InvocationTargetException) {
 			return new RuntimeException(((InvocationTargetException) e).getTargetException());

@@ -18,16 +18,16 @@ public class UserRestController {
 
 	/**
 	 * 基于ContentNegotiationManager,根据URL的后缀渲染不同的格式
-	 * eg. /api/v1/user/1.xml  返回xml
+	 * eg. /api/v1/user/1.xml 返回xml
 	 *     /api/v1/user/1.json 返回json
-	 *     /api/v1/user/1                  返回xml(why?)
+	 *     /api/v1/user/1 返回xml(why?)
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserDTO getUser(@PathVariable("id") Long id) {
 		User user = accountService.getUser(id);
 
-		//使用Dozer转换DTO类，并补充Dozer不能自动绑定的属性
+		// 使用Dozer转换DTO类，并补充Dozer不能自动绑定的属性
 		UserDTO dto = BeanMapper.map(user, UserDTO.class);
 		dto.setTeamId(user.getTeam().getId());
 		return dto;

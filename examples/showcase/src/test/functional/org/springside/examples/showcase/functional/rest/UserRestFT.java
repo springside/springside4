@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,6 +23,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
+import org.springside.modules.test.category.Smoke;
 import org.springside.modules.web.Servlets;
 
 import com.google.common.collect.Lists;
@@ -91,6 +93,11 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		assertEquals("admin", response.getBody().getLoginName());
 		assertEquals("管理员", response.getBody().getName());
 		assertEquals(new Long(1), response.getBody().getTeamId());
+
+		// 直接取出XML串
+		HttpEntity<String> xml = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
+				String.class, 1L);
+		System.out.println("xml output is " + xml.getBody());
 	}
 
 	/**
@@ -99,11 +106,16 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	 * 演示使用Apache Http client4.
 	 */
 	@Test
+	@Category(Smoke.class)
 	public void getUserAsJson() {
 		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
 		assertEquals("admin", user.getLoginName());
 		assertEquals("管理员", user.getName());
 		assertEquals(new Long(1), user.getTeamId());
+
+		// 直接取出JSON串
+		String json = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", String.class, 1L);
+		System.out.println("json output is " + json);
 	}
 
 	/**

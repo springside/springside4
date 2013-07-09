@@ -34,11 +34,11 @@ public class JobProducer extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		//create jedis pool
+		// create jedis pool
 		pool = Utils.createJedisPool(JobManager.DEFAULT_HOST, JobManager.DEFAULT_PORT, JobManager.DEFAULT_TIMEOUT,
 				threadCount);
 
-		expireTime = System.currentTimeMillis() + JobManager.DELAY_SECONDS * 1000;
+		expireTime = System.currentTimeMillis() + (JobManager.DELAY_SECONDS * 1000);
 	}
 
 	@Override
@@ -67,8 +67,8 @@ public class JobProducer extends ConcurrentBenchmark {
 					long jobId = idGenerator.getAndIncrement();
 					jedis.zadd(JobManager.TIMER_KEY, expireTime, String.valueOf(jobId));
 
-					//达到TPS上限后，expireTime往后滚动一秒
-					if (jobId % JobManager.EXPECT_TPS == 0) {
+					// 达到TPS上限后，expireTime往后滚动一秒
+					if ((jobId % JobManager.EXPECT_TPS) == 0) {
 						expireTime += 1000;
 					}
 					printProgressMessage(i);

@@ -16,7 +16,7 @@ public class PropertiesLoaderTest {
 				.getProperties();
 
 		assertEquals("1", p.getProperty("p1"));
-		//value in test2 will override the value in test1
+		// value in test2 will override the value in test1
 		assertEquals("10", p.getProperty("p2"));
 		assertEquals("3", p.getProperty("p3"));
 	}

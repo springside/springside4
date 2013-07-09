@@ -190,12 +190,30 @@
 		<dependency>
 		    <groupId>redis.clients</groupId>
 		    <artifactId>jedis</artifactId>
-		    <version>2.1.0</version>
+		</dependency>
+		
+		<!-- Netflix Hystrix  -->
+		<dependency>
+			<groupId>com.netflix.hystrix</groupId>
+			<artifactId>hystrix-core</artifactId>
+			<version>1.2.16</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- only for hystrix dashboard -->
+		<dependency>
+			<groupId>com.netflix.hystrix</groupId>
+			<artifactId>hystrix-metrics-event-stream</artifactId>
+			<version>1.2.16</version>
 		</dependency>
 
 		<!-- CACHE begin -->
 		<dependency>
-			<groupId>spy</groupId>
+			<groupId>net.spy</groupId>
 			<artifactId>spymemcached</artifactId>
 		</dependency>
 
@@ -275,8 +293,8 @@
 	    </dependency>
 
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
+	 		<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 
@@ -411,7 +429,7 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>add-source</id>
+						<id>add-functional-source</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-test-source</goal>
@@ -447,18 +465,6 @@
 							<exclude>**/*Demo.class</exclude>
 						</excludes>
 					</instrumentation>
-				</configuration>
-			</plugin>
-
-			<!-- eclipse插件, 设定wtp版本并添加springIDE nature -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<wtpversion>2.0</wtpversion>
-					<additionalProjectnatures>
-						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-					</additionalProjectnatures>
 				</configuration>
 			</plugin>
 

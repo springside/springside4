@@ -28,7 +28,7 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 	@BeforeClass
 	public static void beforeClass() {
-		//To avoid the non-English environment test failure on message asserts.
+		// To avoid the non-English environment test failure on message asserts.
 		Locale.setDefault(Locale.ENGLISH);
 	}
 
@@ -41,17 +41,17 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		assertEquals(2, violations.size());
 
-		//extract message as list
+		// extract message as list
 		List<String> result = BeanValidators.extractMessage(violations);
 		assertTrue(result.contains("not a well-formed email address"));
 		assertTrue(result.contains("may not be empty"));
 
-		//extract propertyPath and message as map;
+		// extract propertyPath and message as map;
 		Map mapResult = BeanValidators.extractPropertyAndMessage(violations);
 		assertEquals("not a well-formed email address", mapResult.get("email"));
 		assertEquals("may not be empty", mapResult.get("name"));
 
-		//extract propertyPath and message as map;
+		// extract propertyPath and message as map;
 		result = BeanValidators.extractPropertyAndMessageAsList(violations);
 		assertTrue(result.contains("email not a well-formed email address"));
 		assertTrue(result.contains("name may not be empty"));

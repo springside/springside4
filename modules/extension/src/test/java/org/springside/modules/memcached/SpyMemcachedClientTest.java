@@ -31,23 +31,23 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 		String key2 = "consumer:2";
 		String value2 = "user";
 
-		//get/set
+		// get/set
 		client.set(key, 60 * 60 * 1, value);
 		Threads.sleep(1000);
 		String result = client.get(key);
 		assertEquals(value, result);
 
-		//safeSet
+		// safeSet
 		client.safeSet(key2, 60 * 60 * 1, value2);
 		result = client.get(key2);
 		assertEquals(value2, result);
 
-		//bulk
+		// bulk
 		Map<String, Object> bulkResult = client.getBulk(Lists.newArrayList(key, key2));
 		assertEquals(2, bulkResult.size());
 		assertEquals(value, bulkResult.get(key));
 
-		//delete
+		// delete
 		client.delete(key);
 		Threads.sleep(1000);
 		result = client.get(key);
@@ -63,7 +63,7 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 		String key = "counter";
 
 		assertEquals(1, client.incr(key, 1, 1));
-		//注意counter的实际类型是String
+		// 注意counter的实际类型是String
 		assertEquals("1", client.get(key));
 
 		assertEquals(2, client.incr(key, 1, 1));

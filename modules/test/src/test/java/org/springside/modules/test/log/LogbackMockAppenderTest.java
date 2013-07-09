@@ -15,7 +15,7 @@ public class LogbackMockAppenderTest {
 		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(LogbackMockAppenderTest.class);
 
-		//null
+		// null
 		assertNull(appender.getFirstLog());
 		assertNull(appender.getLastLog());
 		assertNull(appender.getFirstMessage());
@@ -25,19 +25,19 @@ public class LogbackMockAppenderTest {
 		logger.warn(testString1);
 		logger.warn(testString2);
 
-		//getFirstLog/getLastLog
+		// getFirstLog/getLastLog
 		assertEquals(testString1, appender.getFirstLog().getMessage());
 		assertEquals(testString2, appender.getLastLog().getMessage());
 
 		assertEquals(testString1, appender.getFirstMessage());
 		assertEquals(testString2, appender.getLastMessage());
 
-		//getAllLogs
+		// getAllLogs
 		assertEquals(2, appender.getLogsCount());
 		assertEquals(2, appender.getAllLogs().size());
 		assertEquals(testString2, appender.getAllLogs().get(1).getMessage());
 
-		//clearLogs
+		// clearLogs
 		appender.clearLogs();
 		assertNull(appender.getFirstLog());
 		assertNull(appender.getLastLog());
@@ -48,7 +48,7 @@ public class LogbackMockAppenderTest {
 		String testString = "Hello";
 		Logger logger = LoggerFactory.getLogger(LogbackMockAppenderTest.class);
 		LogbackListAppender appender = new LogbackListAppender();
-		//class
+		// class
 		appender.addToLogger(LogbackMockAppenderTest.class);
 		logger.warn(testString);
 		assertNotNull(appender.getFirstLog());
@@ -58,7 +58,7 @@ public class LogbackMockAppenderTest {
 		logger.warn(testString);
 		assertNull(appender.getFirstLog());
 
-		//name
+		// name
 		appender.clearLogs();
 		appender.addToLogger("org.springside.modules.test.log");
 		logger.warn(testString);

@@ -37,7 +37,7 @@ public class Servlets {
 	 */
 	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
 		// Http 1.0 header, set a fix expires date.
-		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + expiresSeconds * 1000);
+		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + (expiresSeconds * 1000));
 		// Http 1.1 header, set a time after now.
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "private, max-age=" + expiresSeconds);
 	}
@@ -77,7 +77,7 @@ public class Servlets {
 	public static boolean checkIfModifiedSince(HttpServletRequest request, HttpServletResponse response,
 			long lastModified) {
 		long ifModifiedSince = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
-		if ((ifModifiedSince != -1) && (lastModified < ifModifiedSince + 1000)) {
+		if ((ifModifiedSince != -1) && (lastModified < (ifModifiedSince + 1000))) {
 			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return false;
 		}
@@ -143,12 +143,12 @@ public class Servlets {
 		if (prefix == null) {
 			prefix = "";
 		}
-		while (paramNames != null && paramNames.hasMoreElements()) {
+		while ((paramNames != null) && paramNames.hasMoreElements()) {
 			String paramName = (String) paramNames.nextElement();
 			if ("".equals(prefix) || paramName.startsWith(prefix)) {
 				String unprefixed = paramName.substring(prefix.length());
 				String[] values = request.getParameterValues(paramName);
-				if (values == null || values.length == 0) {
+				if ((values == null) || (values.length == 0)) {
 					// Do nothing, no values found at all.
 				} else if (values.length > 1) {
 					params.put(unprefixed, values);
@@ -166,7 +166,7 @@ public class Servlets {
 	 * @see #getParametersStartingWith
 	 */
 	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
-		if (params == null || params.size() == 0) {
+		if ((params == null) || (params.size() == 0)) {
 			return "";
 		}
 

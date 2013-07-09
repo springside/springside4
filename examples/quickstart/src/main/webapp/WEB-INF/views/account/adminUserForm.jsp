@@ -6,15 +6,6 @@
 <html>
 <head>
 	<title>用户管理</title>
-	
-	<script>
-		$(document).ready(function() {
-			//聚焦第一个输入框
-			$("#name").focus();
-			//为inputForm注册validate函数
-			$("#inputForm").validate();
-		});
-	</script>
 </head>
 
 <body>
@@ -58,5 +49,14 @@
 			</div>
 		</fieldset>
 	</form>
+	
+	<script>
+		$(document).ready(function() {
+			//聚焦第一个输入框
+			$("#name").focus();
+			//为inputForm注册validate函数
+			$("#inputForm").validate();
+		});
+	</script>
 </body>
 </html>

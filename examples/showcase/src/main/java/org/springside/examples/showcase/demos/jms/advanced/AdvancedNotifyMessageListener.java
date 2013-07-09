@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
  * 使用Spring的MessageListenerContainer侦听消息并调用本Listener进行处理.
  * 
  * @author calvin
- *
  */
 public class AdvancedNotifyMessageListener implements MessageListener {
 
@@ -27,7 +26,7 @@ public class AdvancedNotifyMessageListener implements MessageListener {
 		try {
 			MapMessage mapMessage = (MapMessage) message;
 
-			//打印消息详情
+			// 打印消息详情
 			logger.info("UserName:{}, Email:{}, ObjectType:{}", mapMessage.getString("userName"),
 					mapMessage.getString("email"), mapMessage.getStringProperty("objectType"));
 		} catch (Exception e) {

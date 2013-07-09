@@ -70,15 +70,15 @@ public class AccountService {
 
 		userDao.save(user);
 
-		//发送JMS消息
+		// 发送JMS消息
 		sendNotifyMessage(user);
 
-		//运行统计演示
+		// 运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrUpdateUserTimes();
 		}
 
-		//业务日志演示
+		// 业务日志演示
 		if (businessLogger != null) {
 			Map map = Maps.newHashMap();
 			map.put("userId", user.getId());
@@ -102,11 +102,11 @@ public class AccountService {
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
 		List<User> userList = userDao.findAll(spec);
 
-		//运行统计演示
+		// 运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrListUserTimes();
 		}
-		//业务日志演示
+		// 业务日志演示
 		if (businessLogger != null) {
 			businessLogger.log("LIST", getCurrentUserName(), null);
 		}
@@ -128,7 +128,7 @@ public class AccountService {
 	 * 判断是否超级管理员.
 	 */
 	private boolean isSupervisor(User user) {
-		return (user.getId() != null && user.getId() == 1L);
+		return ((user.getId() != null) && (user.getId() == 1L));
 	}
 
 	public User getUser(Long id) {

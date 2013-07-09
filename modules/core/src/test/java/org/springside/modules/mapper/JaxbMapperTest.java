@@ -23,10 +23,9 @@ import com.google.common.collect.Lists;
 /**
  * 演示基于JAXB2.0的Java对象-XML转换及Dom4j的使用.
  * 
- * @author calvin
- * 
  * 演示用xml如下:
  * 
+ * <pre>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <user id="1">
  * 	<name>calvin</name>
@@ -35,6 +34,7 @@ import com.google.common.collect.Lists;
  * 		<interest>sports</interest>
  * 	</interests>
  * </user>
+ * </pre>
  */
 public class JaxbMapperTest {
 
@@ -93,7 +93,7 @@ public class JaxbMapperTest {
 
 		root.addElement("name").setText("calvin");
 
-		//List<String>
+		// List<String>
 		Element interests = root.addElement("interests");
 		interests.addElement("interest").addText("movie");
 		interests.addElement("interest").addText("sports");
@@ -120,7 +120,7 @@ public class JaxbMapperTest {
 	}
 
 	@XmlRootElement
-	//指定子节点的顺序
+	// 指定子节点的顺序
 	@XmlType(propOrder = { "name", "interests" })
 	private static class User {
 
@@ -130,7 +130,7 @@ public class JaxbMapperTest {
 
 		private List<String> interests = Lists.newArrayList();
 
-		//设置转换为xml节点中的属性
+		// 设置转换为xml节点中的属性
 		@XmlAttribute
 		public Long getId() {
 			return id;
@@ -148,7 +148,7 @@ public class JaxbMapperTest {
 			this.name = name;
 		}
 
-		//设置不转换为xml
+		// 设置不转换为xml
 		@XmlTransient
 		public String getPassword() {
 			return password;
@@ -158,7 +158,7 @@ public class JaxbMapperTest {
 			this.password = password;
 		}
 
-		//设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
+		// 设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
 		@XmlElementWrapper(name = "interests")
 		@XmlElement(name = "interest")
 		public List<String> getInterests() {

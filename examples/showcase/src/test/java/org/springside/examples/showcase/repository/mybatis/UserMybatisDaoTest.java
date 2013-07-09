@@ -40,7 +40,7 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void createAndDeleteUser() throws Exception {
-		//create
+		// create
 		int count = countRowsInTable("ss_user");
 		User user = UserData.randomUser();
 		userDao.save(user);
@@ -50,7 +50,7 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 		User result = userDao.get(id);
 		assertEquals(user.getLoginName(), result.getLoginName());
 
-		//delete
+		// delete
 		userDao.delete(id);
 		assertEquals(count, countRowsInTable("ss_user"));
 		assertNull(userDao.get(id));
