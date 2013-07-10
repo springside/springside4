@@ -22,7 +22,6 @@ import redis.clients.jedis.Protocol;
 public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 50;
 	private static final long DEFAULT_LOOP_COUNT = 20000;
-	private static final int INTERVAL_IN_SECONDS = 10;
 
 	private static final String DEFAULT_HOST = "localhost";
 	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
@@ -39,7 +38,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	}
 
 	public RedisSessionBenchmark() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
 	}
 
 	@Override
@@ -58,49 +57,35 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected BenchmarkTask createTask(int taskSequence) {
-		return new SessionTask(taskSequence, this);
+	protected BenchmarkTask createTask() {
+		return new SessionTask();
 	}
 
 	public class SessionTask extends BenchmarkTask {
 		private SecureRandom random = new SecureRandom();
 
-		public SessionTask(int taskSequence, ConcurrentBenchmark parent) {
-			super(taskSequence, parent);
-		}
-
 		@Override
-		public void run() {
-			onThreadStart();
+		protected void execute(final int requestSequnce) {
 
-			try {
-				for (int i = 1; i <= loopCount; i++) {
-					final int seq = i;
-					final int randomIndex = random.nextInt((int) loopCount);
-					final String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":")
-							.append(randomIndex).toString();
+			final int randomIndex = random.nextInt((int) loopCount);
+			final String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":")
+					.append(randomIndex).toString();
 
-					jedisTemplate.execute(new JedisActionNoResult() {
-						@Override
-						public void action(Jedis jedis) {
-							Session session = new Session(key);
-							session.setAttrbute("name", key);
-							session.setAttrbute("seq", seq);
-							// set session expired after 300 seconds
-							jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
+			jedisTemplate.execute(new JedisActionNoResult() {
+				@Override
+				public void action(Jedis jedis) {
+					Session session = new Session(key);
+					session.setAttrbute("name", key);
+					session.setAttrbute("seq", requestSequnce);
+					// set session expired after 300 seconds
+					jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
 
-							// also get it back
-							String sessionBackString = jedis.get(key);
-							Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
-						}
-					});
-
-					// print progress message between seconds.
-					printProgressMessage(i);
+					// also get it back
+					String sessionBackString = jedis.get(key);
+					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 				}
-			} finally {
-				onThreadFinish();
-			}
+			});
 		}
+
 	}
 }

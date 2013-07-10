@@ -21,7 +21,6 @@ import redis.clients.jedis.Protocol;
 public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 50;
 	private static final long DEFAULT_LOOP_COUNT = 100000;
-	private static final int INTERVAL_IN_SECONDS = 10;
 
 	private static final String DEFAULT_HOST = "localhost";
 	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
@@ -40,7 +39,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	}
 
 	public RedisMassInsertionBenchmark() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
 	}
 
 	@Override
@@ -59,15 +58,11 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected BenchmarkTask createTask(int taskSequence) {
-		return new MassInsertionTask(taskSequence, this);
+	protected BenchmarkTask createTask() {
+		return new MassInsertionTask();
 	}
 
 	public class MassInsertionTask extends BenchmarkTask {
-
-		public MassInsertionTask(int taskSequence, ConcurrentBenchmark parent) {
-			super(taskSequence, parent);
-		}
 
 		@Override
 		public void run() {

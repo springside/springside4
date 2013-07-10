@@ -8,6 +8,9 @@ package org.springside.modules.utils;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 线程相关工具类.
  * 
@@ -27,13 +30,13 @@ public class Threads {
 	}
 
 	/**
-	 * sleep等待,忽略InterruptedException.
+	 * sleep等待.
 	 */
 	public static void sleep(long duration, TimeUnit unit) {
 		try {
 			Thread.sleep(unit.toMillis(duration));
 		} catch (InterruptedException e) {
-			// Ignore.
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -75,6 +78,30 @@ public class Threads {
 			}
 		} catch (InterruptedException ie) {
 			Thread.currentThread().interrupt();
+		}
+	}
+
+	/**
+	 * 保证不会有Exception抛出到线程池的Runnable，防止用户没有捕捉异常导致中断了线程池中的线程。
+	 */
+	public static class WrapExceptionRunnable implements Runnable {
+
+		private static Logger logger = LoggerFactory.getLogger(WrapExceptionRunnable.class);
+
+		private Runnable runnable;
+
+		public WrapExceptionRunnable(Runnable runnable) {
+			this.runnable = runnable;
+		}
+
+		@Override
+		public void run() {
+			try {
+				runnable.run();
+			} catch (Exception e) {
+				// catch any exception, because the scheduled thread will break if the excetpion thrown outside
+				logger.error("Unexpected error occurred in task", e);
+			}
 		}
 	}
 

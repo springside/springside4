@@ -18,7 +18,6 @@ import redis.clients.jedis.Protocol;
 public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 50;
 	private static final long DEFAULT_LOOP_COUNT = 20000;
-	private static final int INTERVAL_IN_SECONDS = 10;
 
 	private static final String DEFAULT_HOST = "localhost";
 	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
@@ -35,7 +34,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	public RedisCounterBenchmark() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
 	}
 
 	@Override
@@ -51,28 +50,16 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	@Override
-	protected BenchmarkTask createTask(int taskSequence) {
-		return new CounterTask(taskSequence, this);
+	protected BenchmarkTask createTask() {
+		return new CounterTask();
 	}
 
 	public class CounterTask extends BenchmarkTask {
 
-		public CounterTask(int taskSequence, ConcurrentBenchmark parent) {
-			super(taskSequence, parent);
-		}
-
 		@Override
-		public void run() {
-			onThreadStart();
+		protected void execute(int requestSequence) {
+			jedisTemplate.incr(counterName);
 
-			try {
-				for (int i = 1; i <= loopCount; i++) {
-					jedisTemplate.incr(counterName);
-					printProgressMessage(i);
-				}
-			} finally {
-				onThreadFinish();
-			}
 		}
 	}
 }

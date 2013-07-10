@@ -47,6 +47,11 @@
             <artifactId>jedis</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<optional>true</optional>
+		</dependency>
 		
 		<!-- freemarker -->
 		<dependency>

@@ -24,18 +24,18 @@ import redis.clients.jedis.JedisPool;
 /**
  * This is the Redis implementation of SchedulerManager.
  */
-public class SchedulerManager {
+public class JobManager {
 
 	private static final int REDIS_READ_TIMEOUT = 5;
 
-	private static Logger logger = LoggerFactory.getLogger(SchedulerManager.class);
+	private static Logger logger = LoggerFactory.getLogger(JobManager.class);
 
 	private String sleepingJobName;
 	private String readyJobName;
 
 	private JedisTemplate jedisTemplate = null;
 
-	public SchedulerManager(JedisPool jedisPool, String jobName) {
+	public JobManager(String jobName, JedisPool jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 
 		sleepingJobName = jobName + ".job:sleeping";
@@ -79,7 +79,7 @@ public class SchedulerManager {
 		});
 	}
 
-	interface JobListener {
+	public interface JobListener {
 		void receiveJob(String job);
 	}
 }

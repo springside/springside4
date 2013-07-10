@@ -13,12 +13,37 @@ public abstract class BenchmarkTask implements Runnable {
 	protected int taskSequence;
 	protected ConcurrentBenchmark parent;
 
-	protected long previousTime;
 	protected long previousRequests = 0L;
+	protected long nextTime;
 
-	public BenchmarkTask(int taskSequence, ConcurrentBenchmark parent) {
-		this.taskSequence = taskSequence;
-		this.parent = parent;
+	@Override
+	public void run() {
+		setUp();
+		onThreadStart();
+		try {
+			for (int i = 1; i <= parent.loopCount; i++) {
+				execute(i);
+			}
+		} finally {
+			tearDown();
+			onThreadFinish();
+		}
+	}
+
+	protected void execute(final int requestSequence) {
+
+	}
+
+	/**
+	 * Override to connect resource and prepare global data.
+	 */
+	protected void setUp() {
+	}
+
+	/**
+	 * Override to disconnect resource, verify result and cleanup global data .
+	 */
+	protected void tearDown() {
 	}
 
 	/**
@@ -32,7 +57,8 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		previousTime = System.currentTimeMillis();
+		nextTime = System.currentTimeMillis() + parent.intervalInMills;
+
 	}
 
 	/**
@@ -49,12 +75,12 @@ public abstract class BenchmarkTask implements Runnable {
 	/**
 	 * 间隔固定时间打印进度信息.
 	 */
-	protected void printProgressMessage(int currentRequests) {
+	protected void printProgressMessage(final int currentRequests) {
 		long currentTime = System.currentTimeMillis();
 
-		if ((currentTime - previousTime) > parent.intervalInMills) {
-			long lastIntervalInMills = currentTime - previousTime;
-			previousTime = currentTime;
+		if (currentTime > nextTime) {
+			long lastIntervalInMills = parent.intervalInMills + (currentTime - nextTime);
+			nextTime = currentTime + parent.intervalInMills;
 
 			long lastRequests = currentRequests - previousRequests;
 
