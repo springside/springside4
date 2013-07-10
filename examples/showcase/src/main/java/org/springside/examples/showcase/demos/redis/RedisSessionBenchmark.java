@@ -34,13 +34,12 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	private JedisTemplate jedisTemplate;
 
 	public static void main(String[] args) throws Exception {
-		RedisSessionBenchmark benchmark = new RedisSessionBenchmark(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT,
-				INTERVAL_IN_SECONDS);
+		RedisSessionBenchmark benchmark = new RedisSessionBenchmark();
 		benchmark.execute();
 	}
 
-	public RedisSessionBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
-		super(defaultThreadCount, defaultLoopCount, intervalInSeconds);
+	public RedisSessionBenchmark() {
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
 	}
 
 	@Override
@@ -50,12 +49,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 		jedisTemplate = new JedisTemplate(pool);
 
 		// remove all keys
-		jedisTemplate.execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				jedis.flushDB();
-			}
-		});
+		jedisTemplate.flushDB();
 	}
 
 	@Override

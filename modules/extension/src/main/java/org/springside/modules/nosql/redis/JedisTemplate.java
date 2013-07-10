@@ -89,4 +89,90 @@ public class JedisTemplate {
 	public interface JedisActionNoResult {
 		void action(Jedis jedis);
 	}
+
+	// ////////////// 常用方法的封装 ///////////////////////// //
+
+	// ////////////// Key ///////////////////////// //
+	public Long del(final String key) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.del(key);
+			}
+		});
+	}
+
+	public void flushDB() {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.flushDB();
+			}
+		});
+	}
+
+	// ////////////// String ///////////////////////// //
+	public <T> T get(final String key) {
+		return execute(new JedisAction<T>() {
+
+			@Override
+			public T action(Jedis jedis) {
+				return (T) jedis.get(key);
+			}
+		});
+	}
+
+	public void set(final String key, final String value) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.set(key, value);
+			}
+		});
+	}
+
+	public Long incr(final String key) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.incr(key);
+			}
+		});
+	}
+
+	public Long decr(final String key) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.decr(key);
+			}
+		});
+	}
+
+	// ////////////// List ///////////////////////// //
+	public void lpush(final String key, final String value) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.lpush(key, value);
+			}
+		});
+	}
+
+	// ////////////// Sorted Set ///////////////////////// //
+	public void zadd(final String key, final double score, final String value) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.zadd(key, score, value);
+			}
+		});
+	}
 }

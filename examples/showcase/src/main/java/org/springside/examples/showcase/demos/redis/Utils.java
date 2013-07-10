@@ -14,6 +14,7 @@ public class Utils {
 		// create jedis pool
 		JedisPoolConfig poolConfig = new JedisPoolConfig();
 		poolConfig.setMaxActive(threadCount);
+		poolConfig.setMaxIdle(threadCount);
 		return new JedisPool(poolConfig, host, Integer.valueOf(port), Integer.valueOf(timeout));
 	}
 }

@@ -35,13 +35,12 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 	private JedisTemplate jedisTemplate;
 
 	public static void main(String[] args) throws Exception {
-		RedisMassInsertionBenchmark benchmark = new RedisMassInsertionBenchmark(DEFAULT_THREAD_COUNT,
-				DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
+		RedisMassInsertionBenchmark benchmark = new RedisMassInsertionBenchmark();
 		benchmark.execute();
 	}
 
-	public RedisMassInsertionBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
-		super(defaultThreadCount, defaultLoopCount, intervalInSeconds);
+	public RedisMassInsertionBenchmark() {
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
 	}
 
 	@Override
@@ -51,12 +50,7 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 		jedisTemplate = new JedisTemplate(pool);
 
 		// remove all keys
-		jedisTemplate.execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				jedis.flushDB();
-			}
-		});
+		jedisTemplate.flushDB();
 	}
 
 	@Override

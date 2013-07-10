@@ -1,35 +1,40 @@
 package org.springside.examples.showcase.demos.redis.job;
 
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.Utils;
+import org.springside.modules.nosql.redis.scheduler.SchedulerManager;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
- * 将Job放入ss.job:schedule(sorted set).
+ * 将Job放入ss.job:slepping(sorted set).
+ * 
+ * 可用-Dbenchmark.thread.count, -Dbenchmark.loop.count 重置测试规模
+ * 可用-Dbenchmark.host,-Dbenchmark.port,-Dbenchmark.timeout 重置连接参数
  * 
  * @author calvin
  */
 public class JobProducer extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 5;
 	private static final long DEFAULT_LOOP_COUNT = 5000 * 60;
-	private static final int PRINT_BETWEEN_SECONDS = 10;
+	private static final int INTERVAL_IN_SECONDS = 10;
 
 	private static AtomicLong idGenerator = new AtomicLong(0);
-	private static long expireTime;
+	private static long delayInSeconds = 0;
 	private JedisPool pool;
+	private SchedulerManager scheduler;
 
 	public static void main(String[] args) throws Exception {
-		JobProducer benchmark = new JobProducer(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, PRINT_BETWEEN_SECONDS);
+		JobProducer benchmark = new JobProducer();
 		benchmark.execute();
 	}
 
-	public JobProducer(int defaultThreadCount, long defaultLoopCount, int printBetweenSeconds) {
-		super(defaultThreadCount, defaultLoopCount, printBetweenSeconds);
+	public JobProducer() {
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
 	}
 
 	@Override
@@ -37,8 +42,7 @@ public class JobProducer extends ConcurrentBenchmark {
 		// create jedis pool
 		pool = Utils.createJedisPool(JobManager.DEFAULT_HOST, JobManager.DEFAULT_PORT, JobManager.DEFAULT_TIMEOUT,
 				threadCount);
-
-		expireTime = System.currentTimeMillis() + (JobManager.DELAY_SECONDS * 1000);
+		scheduler = new SchedulerManager(pool, "ss");
 	}
 
 	@Override
@@ -59,23 +63,22 @@ public class JobProducer extends ConcurrentBenchmark {
 
 		@Override
 		public void run() {
-			Jedis jedis = pool.getResource();
+
 			onThreadStart();
 
 			try {
 				for (int i = 0; i < loopCount; i++) {
 					long jobId = idGenerator.getAndIncrement();
-					jedis.zadd(JobManager.TIMER_KEY, expireTime, String.valueOf(jobId));
+					scheduler.scheduleJob("job:" + jobId, delayInSeconds, TimeUnit.SECONDS);
 
 					// 达到TPS上限后，expireTime往后滚动一秒
-					if ((jobId % JobManager.EXPECT_TPS) == 0) {
-						expireTime += 1000;
+					if ((jobId % (JobManager.EXPECT_TPS / threadCount)) == 0) {
+						delayInSeconds += 1;
 					}
 					printProgressMessage(i);
 				}
 			} finally {
 				onThreadFinish();
-				pool.returnResource(jedis);
 			}
 		}
 	}

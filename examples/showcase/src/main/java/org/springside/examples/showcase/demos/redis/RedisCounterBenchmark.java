@@ -1,11 +1,9 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.nosql.redis.JedisTemplate;
-import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 
@@ -31,29 +29,20 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	private JedisTemplate jedisTemplate;
 
 	public static void main(String[] args) throws Exception {
-		RedisCounterBenchmark benchmark = new RedisCounterBenchmark(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT,
-				INTERVAL_IN_SECONDS);
+		RedisCounterBenchmark benchmark = new RedisCounterBenchmark();
 
 		benchmark.execute();
 	}
 
-	public RedisCounterBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
-		super(defaultThreadCount, defaultLoopCount, intervalInSeconds);
+	public RedisCounterBenchmark() {
+		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT, INTERVAL_IN_SECONDS);
 	}
 
 	@Override
 	protected void setUp() {
 		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
-
-		// 重置counter为0
-		jedisTemplate.execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				jedis.set(counterName, "0");
-			}
-		});
-
+		jedisTemplate.set(counterName, "0");
 	}
 
 	@Override
@@ -78,12 +67,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 
 			try {
 				for (int i = 1; i <= loopCount; i++) {
-					jedisTemplate.execute(new JedisActionNoResult() {
-						@Override
-						public void action(Jedis jedis) {
-							jedis.incr(counterName);
-						}
-					});
+					jedisTemplate.incr(counterName);
 					printProgressMessage(i);
 				}
 			} finally {

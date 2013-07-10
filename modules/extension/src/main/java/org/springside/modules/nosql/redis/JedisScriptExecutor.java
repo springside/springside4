@@ -12,8 +12,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisDataException;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 /**
  * Load and Run the lua scripts and support to reload the script when execution failed.
@@ -24,32 +23,23 @@ public class JedisScriptExecutor {
 	private JedisTemplate jedisTemplate;
 
 	// Map contains <Script Hash, Script Content> pair
-	private BiMap<String, String> hashScriptMap;
-	// Map contains <Script Content, Script Hash> pair
-	private BiMap<String, String> scriptHashMap;
+	private Map<String, String> hashScriptMap = Maps.newHashMap();
 
 	public JedisScriptExecutor(JedisPool jedisPool) {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
-		hashScriptMap = HashBiMap.create();
-		scriptHashMap = hashScriptMap.inverse();
 	}
 
 	/**
 	 * Load the script to redis, return the script hash.
 	 */
 	public synchronized String load(final String script) {
-		String hash = scriptHashMap.get(script);
-
-		if (hash == null) {
-			hash = jedisTemplate.execute(new JedisTemplate.JedisAction<String>() {
-				@Override
-				public String action(Jedis jedis) {
-					return jedis.scriptLoad(script);
-				}
-			});
-			hashScriptMap.put(hash, script);
-		}
-
+		String hash = jedisTemplate.execute(new JedisTemplate.JedisAction<String>() {
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.scriptLoad(script);
+			}
+		});
+		hashScriptMap.put(hash, script);
 		return hash;
 	}
 
@@ -89,19 +79,10 @@ public class JedisScriptExecutor {
 		return jedisTemplate.execute(new JedisAction<Object>() {
 			@Override
 			public Object action(Jedis jedis) {
-				// concurrent checking again
-				if (!jedis.scriptExists(hash)) {
-					String script = hashScriptMap.get(hash);
-					jedis.scriptLoad(script);
-				}
-
+				String script = hashScriptMap.get(hash);
+				jedis.scriptLoad(script);
 				return jedis.evalsha(hash, keys, args);
 			}
 		});
-	}
-
-	// just for test.
-	public Map<String, String> getHashScriptMap() {
-		return hashScriptMap;
 	}
 }
