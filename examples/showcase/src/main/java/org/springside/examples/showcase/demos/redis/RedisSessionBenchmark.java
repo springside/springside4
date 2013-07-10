@@ -43,11 +43,10 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		// create jedis pool
 		pool = JedisPoolFactory.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
 
-		// remove all keys
+		// 清空数据库
 		jedisTemplate.flushDB();
 	}
 
@@ -67,7 +66,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 		@Override
 		protected void execute(final int requestSequnce) {
 
-			final int randomIndex = random.nextInt((int) loopCount);
+			int randomIndex = random.nextInt((int) loopCount);
 			final String key = new StringBuilder().append(keyPrefix).append(taskSequence).append(":")
 					.append(randomIndex).toString();
 
@@ -77,10 +76,13 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 					Session session = new Session(key);
 					session.setAttrbute("name", key);
 					session.setAttrbute("seq", requestSequnce);
-					// set session expired after 300 seconds
+					session.setAttrbute("address", "address:" + requestSequnce);
+					session.setAttrbute("tel", "tel:" + requestSequnce);
+
+					// 设置session，超时时间为300秒
 					jedis.setex(session.getId(), 300, jsonMapper.toJson(session));
 
-					// also get it back
+					// 再重新从Redis中取出并反序列化
 					String sessionBackString = jedis.get(key);
 					Session sessionBack = jsonMapper.fromJson(sessionBackString, Session.class);
 				}

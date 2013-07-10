@@ -45,7 +45,7 @@ public class JobListener implements Runnable {
 					List<String> nameValuePair = jedis.brpop(POPUP_TIMEOUT, readyJobName);
 					if ((nameValuePair != null) && !nameValuePair.isEmpty()) {
 						String job = nameValuePair.get(1);
-						jobHandler.receiveJob(job);
+						jobHandler.handleJob(job);
 					}
 				}
 			}
@@ -53,6 +53,6 @@ public class JobListener implements Runnable {
 	}
 
 	public interface JobHandler {
-		void receiveJob(String job);
+		void handleJob(String job);
 	}
 }

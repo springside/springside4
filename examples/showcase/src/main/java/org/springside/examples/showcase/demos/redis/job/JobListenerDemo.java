@@ -14,7 +14,9 @@ import redis.clients.jedis.JedisPool;
 import com.google.common.util.concurrent.RateLimiter;
 
 /**
- * 消费者多线程执行BRPOP从ss.job(List)中阻塞取出Job，完成后执行ZREM从ss.ack(Sorted Set)中删除任务实现Ack.
+ * 多线程运行JobListener，从"ss.job:ready" list中popup job进行处理。
+ * 
+ * 可用系统参数重置相关变量，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
@@ -67,12 +69,15 @@ public class JobListenerDemo implements JobHandler {
 		}
 	}
 
+	/**
+	 * 处理Job的回调函数.
+	 */
 	@Override
-	public void receiveJob(String job) {
+	public void handleJob(String job) {
 		long globalCount = golbalCounter.incrementAndGet();
 		localCounter++;
 
-		// print global progress, 所有線程裡只有一個需要在10秒內打印
+		// print global progress, 所有線程裡只有一個线程会在10秒內打印一次。
 		if (golbalPrintRate.tryAcquire()) {
 			System.out.printf("Total pop %,d jobs, tps is %,d\n", globalCount,
 					(globalCount - golbalPreviousCount.get()) / PRINT_BETWEEN_SECONDS);
@@ -85,6 +90,5 @@ public class JobListenerDemo implements JobHandler {
 					(localCounter - localPreviousCount) / PRINT_BETWEEN_SECONDS);
 			localPreviousCount = localCounter;
 		}
-
 	}
 }

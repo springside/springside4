@@ -23,13 +23,12 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
 	private static final int DEFAULT_TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
-	private String counterName = "ss.counter";
+	private String counterKey = "ss.counter";
 	private JedisPool pool;
 	private JedisTemplate jedisTemplate;
 
 	public static void main(String[] args) throws Exception {
 		RedisCounterBenchmark benchmark = new RedisCounterBenchmark();
-
 		benchmark.execute();
 	}
 
@@ -41,7 +40,9 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	protected void setUp() {
 		pool = JedisPoolFactory.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
-		jedisTemplate.set(counterName, "0");
+
+		// 重置Counter
+		jedisTemplate.set(counterKey, "0");
 	}
 
 	@Override
@@ -58,8 +59,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 
 		@Override
 		protected void execute(int requestSequence) {
-			jedisTemplate.incr(counterName);
-
+			jedisTemplate.incr(counterKey);
 		}
 	}
 }

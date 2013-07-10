@@ -7,7 +7,9 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.Protocol;
 
 /**
- * 每秒执行一次Lua Script，从ss.timer(Sorted Set)中取出到时的任务，放入ss.job(List)和ss.ack(Sorted Set)中等待领取和完成呢个确认.
+ * 运行JobDispatcher，每秒将Job从"ss.sleeping" sorted set 发布到"ss.ready" list.
+ * 
+ * 可用系统参数重置相关变量，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
@@ -36,7 +38,6 @@ public class JobDispatcherDemo {
 					return;
 				}
 			}
-
 		} finally {
 			pool.destroy();
 		}

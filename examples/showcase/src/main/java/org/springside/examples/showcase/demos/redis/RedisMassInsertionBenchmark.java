@@ -28,7 +28,6 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 	private String keyPrefix = "ss.session:";
 	private int batchSize = 10;
-
 	private JsonMapper jsonMapper = new JsonMapper();
 	private JedisPool pool;
 	private JedisTemplate jedisTemplate;
@@ -44,11 +43,10 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		// create jedis pool
 		pool = JedisPoolFactory.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
 
-		// remove all keys
+		// 清空数据库
 		jedisTemplate.flushDB();
 	}
 
@@ -64,6 +62,9 @@ public class RedisMassInsertionBenchmark extends ConcurrentBenchmark {
 
 	public class MassInsertionTask extends BenchmarkTask {
 
+		/**
+		 * 在最快速环境下, 循环在JedisAction中完成，所以没有使用父类的run框架。
+		 */
 		@Override
 		public void run() {
 			onThreadStart();

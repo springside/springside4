@@ -11,19 +11,20 @@ import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import redis.clients.jedis.JedisPool;
 
 /**
- * 将Job放入ss.job:slepping(sorted set).
+ * 运行JobManager产生新的Job。
  * 
- * 可用-Dbenchmark.thread.count, -Dbenchmark.loop.count 重置测试规模
- * 可用-Dbenchmark.host,-Dbenchmark.port,-Dbenchmark.timeout 重置连接参数
+ * 可用系统参数重置相关变量，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
 public class JobProducerDemo extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 5;
-	private static final long DEFAULT_LOOP_COUNT = 5000 * 60;
+	private static final long DEFAULT_LOOP_COUNT = 100000;
 
-	private static long delayInSeconds = JobDispatcherDemo.DELAY_SECONDS;
+	private static AtomicLong delayInSeconds = new AtomicLong(JobDispatcherDemo.DELAY_SECONDS);
 	private static AtomicLong idGenerator = new AtomicLong(0);
+
+	private long expectTps;
 	private JedisPool pool;
 	private JobManager jobManager;
 
@@ -34,11 +35,12 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 
 	public JobProducerDemo() {
 		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
+		this.expectTps = Long.parseLong(System.getProperty("benchmark.tps",
+				String.valueOf(JobDispatcherDemo.EXPECT_TPS)));
 	}
 
 	@Override
 	protected void setUp() {
-		// create jedis pool
 		pool = JedisPoolFactory.createJedisPool(JobDispatcherDemo.DEFAULT_HOST, JobDispatcherDemo.DEFAULT_PORT,
 				JobDispatcherDemo.DEFAULT_TIMEOUT, threadCount);
 		jobManager = new JobManager("ss", pool);
@@ -58,13 +60,12 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 		@Override
 		public void execute(final int requestSequence) {
 			long jobId = idGenerator.getAndIncrement();
-			jobManager.scheduleJob("job:" + jobId, delayInSeconds, TimeUnit.SECONDS);
+			jobManager.scheduleJob("job:" + jobId, delayInSeconds.get(), TimeUnit.SECONDS);
 
-			// 达到TPS上限后，expireTime往后滚动一秒
-			if ((jobId % (JobDispatcherDemo.EXPECT_TPS)) == 0) {
-				delayInSeconds += 1;
+			// 达到期望的每秒的TPS后，expireTime往后滚动一秒
+			if ((jobId % (expectTps)) == 0) {
+				delayInSeconds.incrementAndGet();
 			}
-
 		}
 	}
 }
