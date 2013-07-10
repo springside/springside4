@@ -45,7 +45,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	@Override
 	protected void setUp() {
 		// create jedis pool
-		pool = Utils.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
+		pool = JedisPoolFactory.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
 
 		// remove all keys

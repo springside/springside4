@@ -3,7 +3,7 @@ package org.springside.examples.showcase.demos.redis.job;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.springside.examples.showcase.demos.redis.Utils;
+import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.scheduler.SchedulerManager;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
@@ -40,7 +40,7 @@ public class JobProducer extends ConcurrentBenchmark {
 	@Override
 	protected void setUp() {
 		// create jedis pool
-		pool = Utils.createJedisPool(JobManager.DEFAULT_HOST, JobManager.DEFAULT_PORT, JobManager.DEFAULT_TIMEOUT,
+		pool = JedisPoolFactory.createJedisPool(JobManager.DEFAULT_HOST, JobManager.DEFAULT_PORT, JobManager.DEFAULT_TIMEOUT,
 				threadCount);
 		scheduler = new SchedulerManager(pool, "ss");
 	}
