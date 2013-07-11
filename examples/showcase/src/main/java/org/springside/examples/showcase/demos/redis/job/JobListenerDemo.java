@@ -53,7 +53,7 @@ public class JobListenerDemo implements JobHandler {
 				if (c == '\n') {
 					System.out.println("Shutting down");
 					threadPool.shutdownNow();
-					boolean shutdownSucess = threadPool.awaitTermination(JobListener.POPUP_TIMEOUT + 1,
+					boolean shutdownSucess = threadPool.awaitTermination(JobListener.DEFAULT_POPUP_TIMEOUT + 1,
 							TimeUnit.SECONDS);
 
 					if (!shutdownSucess) {

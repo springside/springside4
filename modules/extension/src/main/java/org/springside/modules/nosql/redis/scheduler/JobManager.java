@@ -24,13 +24,13 @@ public class JobManager {
 
 	private static Logger logger = LoggerFactory.getLogger(JobManager.class);
 
-	private String sleepingJobName;
+	private String sleepingJobKey;
 
 	private JedisTemplate jedisTemplate;
 
 	public JobManager(String jobName, JedisPool jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
-		sleepingJobName = jobName + ".job:sleeping";
+		sleepingJobKey = Keys.getSleepingJobKey(jobName);
 	}
 
 	/**
@@ -38,14 +38,14 @@ public class JobManager {
 	 */
 	public void scheduleJob(final String job, final long delay, final TimeUnit timeUnit) {
 		final long delayTimeInMillisecond = System.currentTimeMillis() + timeUnit.toMillis(delay);
-		jedisTemplate.zadd(sleepingJobName, delayTimeInMillisecond, job);
+		jedisTemplate.zadd(sleepingJobKey, delayTimeInMillisecond, job);
 	}
 
 	/**
-	 * 取消任务,如果任务不存在或已触发返回false, 否则返回true.
+	 * 取消任务, 如果任务不存在或已被触发返回false, 否则返回true.
 	 */
 	public boolean cancelJob(final String job) {
-		boolean removed = jedisTemplate.zrem(sleepingJobName, job);
+		boolean removed = jedisTemplate.zrem(sleepingJobKey, job);
 
 		if (!removed) {
 			logger.warn("Can't cancel job by value {}", job);

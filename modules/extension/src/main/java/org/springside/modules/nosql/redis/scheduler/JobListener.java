@@ -18,21 +18,21 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
- * This is the Redis implementation of SchedulerManager.
+ * 阻塞接收任务的Runnable.
  */
 public class JobListener implements Runnable {
 
-	public static final int POPUP_TIMEOUT = 5;
+	public static final int DEFAULT_POPUP_TIMEOUT = 5;
 
-	private String readyJobName;
+	private String readyJobKey;
 
-	private JedisTemplate jedisTemplate = null;
+	private JedisTemplate jedisTemplate;
 
 	private final JobHandler jobHandler;
 
 	public JobListener(String jobName, JedisPool jedisPool, JobHandler jobHandler) {
 		jedisTemplate = new JedisTemplate(jedisPool);
-		readyJobName = jobName + ".job:ready";
+		readyJobKey = Keys.getReadyJobKey(jobName);
 		this.jobHandler = jobHandler;
 	}
 
@@ -42,7 +42,7 @@ public class JobListener implements Runnable {
 			@Override
 			public void action(Jedis jedis) {
 				while (!Thread.currentThread().isInterrupted()) {
-					List<String> nameValuePair = jedis.brpop(POPUP_TIMEOUT, readyJobName);
+					List<String> nameValuePair = jedis.brpop(DEFAULT_POPUP_TIMEOUT, readyJobKey);
 					if ((nameValuePair != null) && !nameValuePair.isEmpty()) {
 						String job = nameValuePair.get(1);
 						jobHandler.handleJob(job);

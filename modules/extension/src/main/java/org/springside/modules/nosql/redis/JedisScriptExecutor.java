@@ -58,6 +58,9 @@ public class JedisScriptExecutor {
 	 */
 	public Object execute(final String hash, final List<String> keys, final List<String> args)
 			throws IllegalArgumentException {
+
+		final long start = System.currentTimeMillis();
+
 		if (!hashScriptMap.containsKey(hash)) {
 			throw new IllegalArgumentException("Script hash " + hash + " is not loaded in executor。");
 		}
@@ -66,12 +69,16 @@ public class JedisScriptExecutor {
 			return jedisTemplate.execute(new JedisAction<Object>() {
 				@Override
 				public Object action(Jedis jedis) {
-					return jedis.evalsha(hash, keys, args);
+					Object result = jedis.evalsha(hash, keys, args);
+					logger.debug("Script hash {} execution time is {}ms", hash, System.currentTimeMillis() - start);
+					return result;
 				}
 			});
 		} catch (JedisDataException e) {
-			logger.warn("Lua execution error, try to reload the script.", e);
-			return reloadAndExecute(hash, keys, args);
+			logger.warn("Script hash {} is not loaded yet, try to reload and run it again", hash, e);
+			Object result = reloadAndExecute(hash, keys, args);
+			logger.debug("Script hash {} reload and execution time is {}ms", hash, System.currentTimeMillis() - start);
+			return result;
 		}
 	}
 
