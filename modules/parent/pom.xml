@@ -585,6 +585,13 @@
 				<version>${freemarker.version}</version>
 			</dependency>
 
+			<!-- commons-pool -->
+	        <dependency>
+	            <groupId>commons-pool</groupId>
+	            <artifactId>commons-pool</artifactId>
+	            <version>1.6</version>
+	        </dependency>
+
 			<!-- email -->
 			<dependency>
 				<groupId>javax.mail</groupId>

@@ -20,7 +20,7 @@ import redis.clients.jedis.JedisPool;
 import com.google.common.collect.Lists;
 
 public class JobDispatcher implements Runnable {
-	public static final String DISPATCH_LUA_FILE = "classpath:/redis/dispatch.lua";
+	public static final String DEFAULT_DISPATCH_LUA_FILE = "classpath:/redis/dispatch.lua";
 
 	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
@@ -33,19 +33,23 @@ public class JobDispatcher implements Runnable {
 	private List<String> keys;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
-		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
-		keys = Lists.newArrayList(jobName + ".job:sleeping", jobName + ".job:ready");
-		loadLuaScript();
+		this(jobName, jedisPool, DEFAULT_DISPATCH_LUA_FILE);
 	}
 
-	private void loadLuaScript() {
+	public JobDispatcher(String jobName, JedisPool jedisPool, String scriptPath) {
+		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
+		keys = Lists.newArrayList(jobName + ".job:sleeping", jobName + ".job:ready");
+		loadLuaScript(scriptPath);
+	}
+
+	private void loadLuaScript(String scriptPath) {
 		ResourceLoader resourceLoader = new DefaultResourceLoader();
-		Resource resource = resourceLoader.getResource(DISPATCH_LUA_FILE);
+		Resource resource = resourceLoader.getResource(scriptPath);
 		try {
 			String script = FileUtils.readFileToString(resource.getFile());
 			scriptHash = scriptExecutor.load(script);
 		} catch (IOException e) {
-			throw new IllegalStateException(DISPATCH_LUA_FILE + "not exist", e);
+			throw new IllegalStateException(DEFAULT_DISPATCH_LUA_FILE + "not exist", e);
 		}
 	}
 

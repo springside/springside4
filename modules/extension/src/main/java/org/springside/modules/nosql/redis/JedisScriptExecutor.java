@@ -15,14 +15,14 @@ import redis.clients.jedis.exceptions.JedisDataException;
 import com.google.common.collect.Maps;
 
 /**
- * Load and Run the lua scripts and support to reload the script when execution failed.
+ * 装载并执行Lua Script，如果服务器上因为集群多台服务器或重启等原因没有装载script，会自动重新装载后重试。
  */
 public class JedisScriptExecutor {
 	private static Logger logger = LoggerFactory.getLogger(JedisScriptExecutor.class);
 
 	private JedisTemplate jedisTemplate;
 
-	// Map contains <Script Hash, Script Content> pair
+	// 以 <Script Hash, Script Content>存储装载过的script，用于重试。
 	private Map<String, String> hashScriptMap = Maps.newHashMap();
 
 	public JedisScriptExecutor(JedisPool jedisPool) {
@@ -30,9 +30,10 @@ public class JedisScriptExecutor {
 	}
 
 	/**
-	 * Load the script to redis, return the script hash.
+	 * 装载Lua Script，返回Hash值。
+	 * 如果Script出错，抛出JedisDataException。
 	 */
-	public synchronized String load(final String script) {
+	public synchronized String load(final String script) throws JedisDataException {
 		String hash = jedisTemplate.execute(new JedisTemplate.JedisAction<String>() {
 			@Override
 			public String action(Jedis jedis) {
@@ -44,18 +45,21 @@ public class JedisScriptExecutor {
 	}
 
 	/**
-	 * Execute the script, auto reload the script if it is not in redis.
+	 * 执行Lua Script, 如果Redis服务器上还没装载Script则自动装载并重试。
+	 * 如果Script之前未在executor内装载，抛出IllegalArgumentException。
 	 */
-	public Object execute(final String hash, final String[] keys, final String[] args) {
+	public Object execute(final String hash, final String[] keys, final String[] args) throws IllegalArgumentException {
 		return execute(hash, Arrays.asList(keys), Arrays.asList(args));
 	}
 
 	/**
-	 * Execute the script, auto reload the script if it is not in redis.
+	 * 执行Lua Script, 如果Redis服务器上还没装载Script则自动装载并重试。
+	 * 如果Script之前未在executor内装载，抛出IllegalArgumentException。
 	 */
-	public Object execute(final String hash, final List<String> keys, final List<String> args) {
+	public Object execute(final String hash, final List<String> keys, final List<String> args)
+			throws IllegalArgumentException {
 		if (!hashScriptMap.containsKey(hash)) {
-			throw new IllegalArgumentException("Script hash " + hash + " is not loaded in executor");
+			throw new IllegalArgumentException("Script hash " + hash + " is not loaded in executor。");
 		}
 
 		try {
@@ -72,7 +76,7 @@ public class JedisScriptExecutor {
 	}
 
 	/**
-	 * Reload the script and execute it again.
+	 * 重新装载script并执行。
 	 */
 	private Object reloadAndExecute(final String hash, final List<String> keys, final List<String> args) {
 

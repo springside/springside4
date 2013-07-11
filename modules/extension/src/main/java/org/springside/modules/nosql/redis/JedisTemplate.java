@@ -9,7 +9,9 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisException;
 
 /**
- * JedisTemplate is the template to execute jedis actions, handle the connection with the pool correctly.
+ * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
+ * JedisAction<T> 和 JedisActionNoResult两种回调接口，适用于有无返回值两种情况。
+ * 同时提供一些最常用函数的封装, 如get/set/zadd等。
  */
 public class JedisTemplate {
 	private static Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
@@ -21,7 +23,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * Execute with a call back action with result.
+	 * 执行有返回结果的action。
 	 */
 	public <T> T execute(JedisAction<T> jedisAction) throws JedisException {
 		Jedis jedis = null;
@@ -39,7 +41,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * Execute with a call back action without result.
+	 * 执行无返回结果的action。
 	 */
 	public void execute(JedisActionNoResult jedisAction) throws JedisException {
 		Jedis jedis = null;
@@ -57,7 +59,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * Return jedis connection to the pool, call different return methods depends on the conectionBroken status.
+	 * 根据连接是否已中断的标志，分别调用returnBrokenResource或returnResource。
 	 */
 	protected void closeResource(Jedis jedis, boolean connectionBroken) {
 		if (jedis != null) {
@@ -70,21 +72,21 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * Get the internal JedisPool.
+	 * 获取内部的pool做进一步的动作。
 	 */
 	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
 
 	/**
-	 * Callback interface for template method.
+	 * 有返回结果的回调接口定义。
 	 */
 	public interface JedisAction<T> {
 		T action(Jedis jedis);
 	}
 
 	/**
-	 * Callback interface for template method without result.
+	 * 无返回结果的回调接口定义。
 	 */
 	public interface JedisActionNoResult {
 		void action(Jedis jedis);
@@ -92,13 +94,16 @@ public class JedisTemplate {
 
 	// ////////////// 常用方法的封装 ///////////////////////// //
 
-	// ////////////// Key ///////////////////////// //
-	public Long del(final String key) {
-		return execute(new JedisAction<Long>() {
+	// ////////////// 公共 ///////////////////////////
+	/**
+	 * 删除key, 如果key存在返回true, 否则返回false。
+	 */
+	public boolean del(final String key) {
+		return execute(new JedisAction<Boolean>() {
 
 			@Override
-			public Long action(Jedis jedis) {
-				return jedis.del(key);
+			public Boolean action(Jedis jedis) {
+				return jedis.del(key) == 1 ? true : false;
 			}
 		});
 	}
@@ -113,13 +118,13 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// String ///////////////////////// //
-	public <T> T get(final String key) {
-		return execute(new JedisAction<T>() {
+	// ////////////// 关于String ///////////////////////////
+	public String get(final String key) {
+		return execute(new JedisAction<String>() {
 
 			@Override
-			public T action(Jedis jedis) {
-				return (T) jedis.get(key);
+			public String action(Jedis jedis) {
+				return jedis.get(key);
 			}
 		});
 	}
@@ -134,7 +139,30 @@ public class JedisTemplate {
 		});
 	}
 
-	public Long incr(final String key) {
+	public void setex(final String key, final String value, final int seconds) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.setex(key, seconds, value);
+			}
+		});
+	}
+
+	/**
+	 * 如果key还不存在则进行设置，返回true，否则返回false.
+	 */
+	public boolean setnx(final String key, final String value) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.setnx(key, value) == 1 ? true : false;
+			}
+		});
+	}
+
+	public long incr(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override
@@ -144,7 +172,7 @@ public class JedisTemplate {
 		});
 	}
 
-	public Long decr(final String key) {
+	public long decr(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override
@@ -154,7 +182,7 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// List ///////////////////////// //
+	// ////////////// 关于List ///////////////////////////
 	public void lpush(final String key, final String value) {
 		execute(new JedisActionNoResult() {
 
@@ -165,13 +193,26 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// Sorted Set ///////////////////////// //
-	public void zadd(final String key, final double score, final String value) {
+	// ////////////// 关于Sorted Set ///////////////////////// //
+	public void zadd(final String key, final double score, final String member) {
 		execute(new JedisActionNoResult() {
 
 			@Override
 			public void action(Jedis jedis) {
-				jedis.zadd(key, score, value);
+				jedis.zadd(key, score, member);
+			}
+		});
+	}
+
+	/**
+	 * 删除sorted set中的元素，成功删除返回true，key或member不存在返回false。
+	 */
+	public boolean zrem(final String key, final String member) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.zrem(key, member) == 1 ? true : false;
 			}
 		});
 	}

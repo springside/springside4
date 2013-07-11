@@ -23,6 +23,7 @@ public abstract class BenchmarkTask implements Runnable {
 		try {
 			for (int i = 1; i <= parent.loopCount; i++) {
 				execute(i);
+				printProgressMessage(i);
 			}
 		} finally {
 			tearDown();
