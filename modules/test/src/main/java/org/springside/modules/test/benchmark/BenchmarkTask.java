@@ -14,7 +14,7 @@ public abstract class BenchmarkTask implements Runnable {
 	protected ConcurrentBenchmark parent;
 
 	protected long previousRequests = 0L;
-	protected long nextTime;
+	protected long nextPrintTime;
 
 	@Override
 	public void run() {
@@ -31,24 +31,22 @@ public abstract class BenchmarkTask implements Runnable {
 		}
 	}
 
-	protected void execute(final int requestSequence) {
-
-	}
+	abstract protected void execute(final int requestSequence);
 
 	/**
-	 * Override to connect resource and prepare global data.
+	 * Override for thread local connection and data setup.
 	 */
 	protected void setUp() {
 	}
 
 	/**
-	 * Override to disconnect resource, verify result and cleanup global data .
+	 * Override for thread local connection and data cleanup.
 	 */
 	protected void tearDown() {
 	}
 
 	/**
-	 * Must be invoked in children class when each thread finish the preparation.
+	 * Must be invoked in children class when each thread finish the setup.
 	 */
 	protected void onThreadStart() {
 		parent.startLock.countDown();
@@ -58,12 +56,12 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		nextTime = System.currentTimeMillis() + parent.intervalInMills;
+		nextPrintTime = System.currentTimeMillis() + parent.intervalInMills;
 
 	}
 
 	/**
-	 * Must be invoked in children class when each thread finish loop.
+	 * Must be invoked in children class when each thread finish loop, before the tearDown().
 	 */
 	protected void onThreadFinish() {
 		// notify test finish
@@ -79,9 +77,9 @@ public abstract class BenchmarkTask implements Runnable {
 	protected void printProgressMessage(final int currentRequests) {
 		long currentTime = System.currentTimeMillis();
 
-		if (currentTime > nextTime) {
-			long lastIntervalInMills = parent.intervalInMills + (currentTime - nextTime);
-			nextTime = currentTime + parent.intervalInMills;
+		if (currentTime > nextPrintTime) {
+			long lastIntervalInMills = parent.intervalInMills + (currentTime - nextPrintTime);
+			nextPrintTime = currentTime + parent.intervalInMills;
 
 			long lastRequests = currentRequests - previousRequests;
 

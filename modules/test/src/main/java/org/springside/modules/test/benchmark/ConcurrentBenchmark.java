@@ -92,21 +92,19 @@ public abstract class ConcurrentBenchmark {
 	}
 
 	/**
-	 * Override to connect resource and prepare global data.
+	 * Override for connection & data setup.
 	 */
 	protected void setUp() {
 	}
 
 	/**
-	 * Override to disconnect resource, verify result and cleanup global data .
+	 * Override to connection & data cleanup.
 	 */
 	protected void tearDown() {
 	}
 
 	/**
-	 * Return a new benchmark task.
-	 * 
-	 * @param taskSequence the sequence number of the task.
+	 * create a new benchmark task.
 	 */
 	protected abstract BenchmarkTask createTask();
 }

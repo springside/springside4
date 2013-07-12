@@ -9,6 +9,7 @@ import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.scheduler.JobListener;
 import org.springside.modules.nosql.redis.scheduler.JobListener.JobHandler;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import com.google.common.util.concurrent.RateLimiter;
@@ -73,7 +74,7 @@ public class JobListenerDemo implements JobHandler {
 	 * 处理Job的回调函数.
 	 */
 	@Override
-	public void handleJob(String job) {
+	public void handleJob(Jedis jedis, String job) {
 		long globalCount = golbalCounter.incrementAndGet();
 		localCounter++;
 

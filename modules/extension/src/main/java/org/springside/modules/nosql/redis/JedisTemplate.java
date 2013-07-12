@@ -193,6 +193,16 @@ public class JedisTemplate {
 		});
 	}
 
+	public long llen(final String key) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.llen(key);
+			}
+		});
+	}
+
 	// ////////////// 关于Sorted Set ///////////////////////// //
 	public void zadd(final String key, final double score, final String member) {
 		execute(new JedisActionNoResult() {
@@ -213,6 +223,16 @@ public class JedisTemplate {
 			@Override
 			public Boolean action(Jedis jedis) {
 				return jedis.zrem(key, member) == 1 ? true : false;
+			}
+		});
+	}
+
+	public long zcard(final String key) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zcard(key);
 			}
 		});
 	}

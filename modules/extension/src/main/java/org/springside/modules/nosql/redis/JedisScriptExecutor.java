@@ -7,6 +7,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
+import org.springside.modules.utils.StopWatch;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -58,26 +59,26 @@ public class JedisScriptExecutor {
 	 */
 	public Object execute(final String hash, final List<String> keys, final List<String> args)
 			throws IllegalArgumentException {
-
-		final long start = System.currentTimeMillis();
-
 		if (!hashScriptMap.containsKey(hash)) {
 			throw new IllegalArgumentException("Script hash " + hash + " is not loaded in executor。");
 		}
+
+		final StopWatch stopWatch = new StopWatch();
 
 		try {
 			return jedisTemplate.execute(new JedisAction<Object>() {
 				@Override
 				public Object action(Jedis jedis) {
 					Object result = jedis.evalsha(hash, keys, args);
-					logger.debug("Script hash {} execution time is {}ms", hash, System.currentTimeMillis() - start);
+					logger.debug("Script hash {} execution time is {}ms", hash, stopWatch.getMills());
 					return result;
 				}
 			});
 		} catch (JedisDataException e) {
 			logger.warn("Script hash {} is not loaded yet, try to reload and run it again", hash, e);
+			stopWatch.reset();
 			Object result = reloadAndExecute(hash, keys, args);
-			logger.debug("Script hash {} reload and execution time is {}ms", hash, System.currentTimeMillis() - start);
+			logger.debug("Script hash {} reload and execution time is {}ms", hash, stopWatch.getMills());
 			return result;
 		}
 	}
