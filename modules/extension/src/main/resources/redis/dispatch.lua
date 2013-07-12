@@ -14,5 +14,5 @@ if count>0  then
   redis.call('zremrangebyscore', KEYS[1], '-inf', ARGV[1])
   
   -- Comments: incr Dispatch counter
-  redis.call('incr', KEYS[3], count);
+  redis.call('incrby', KEYS[3], count);
 end

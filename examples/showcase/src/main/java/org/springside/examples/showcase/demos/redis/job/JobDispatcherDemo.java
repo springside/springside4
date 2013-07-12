@@ -28,18 +28,29 @@ public class JobDispatcherDemo {
 				JobDispatcherDemo.DEFAULT_PORT, JobDispatcherDemo.DEFAULT_TIMEOUT, 1);
 		try {
 			JobDispatcher jobDispatcher = new JobDispatcher("ss", pool);
+
+			printJobNumbers(jobDispatcher);
+
 			jobDispatcher.start(1000);
+
 			System.out.println("Hit enter to stop.");
 			while (true) {
 				char c = (char) System.in.read();
 				if (c == '\n') {
 					System.out.println("Shuting down");
 					jobDispatcher.stop();
+					printJobNumbers(jobDispatcher);
 					return;
 				}
 			}
 		} finally {
 			pool.destroy();
 		}
+	}
+
+	private static void printJobNumbers(JobDispatcher jobDispatcher) {
+		System.out.printf("Sleeping job %d, Ready Job %d, Dispatch Counter %d \n",
+				jobDispatcher.getSleepingJobNumber(), jobDispatcher.getReadyJobNumber(),
+				jobDispatcher.getDispatchNumber());
 	}
 }

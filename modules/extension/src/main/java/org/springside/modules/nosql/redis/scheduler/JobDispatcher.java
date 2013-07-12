@@ -63,6 +63,7 @@ public class JobDispatcher implements Runnable {
 		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
 		keys = Lists.newArrayList(sleepingJobKey, readyJobKey, dispatchCounterKey);
 
+		jedisTemplate = new JedisTemplate(jedisPool);
 		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
 		loadLuaScript(scriptPath);
 	}
@@ -135,7 +136,8 @@ public class JobDispatcher implements Runnable {
 	 * 获取已分发的Job数量。
 	 */
 	public long getDispatchNumber() {
-		return Long.valueOf(jedisTemplate.get(dispatchCounterKey));
+		String result = jedisTemplate.get(dispatchCounterKey);
+		return result != null ? Long.valueOf(result) : 0;
 	}
 
 	/**
