@@ -24,9 +24,9 @@ public class JobManager {
 
 	private static Logger logger = LoggerFactory.getLogger(JobManager.class);
 
-	private String sleepingJobKey;
-
 	private JedisTemplate jedisTemplate;
+
+	private String sleepingJobKey;
 
 	public JobManager(String jobName, JedisPool jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
@@ -37,8 +37,8 @@ public class JobManager {
 	 * 安排任务.
 	 */
 	public void scheduleJob(final String job, final long delay, final TimeUnit timeUnit) {
-		final long delayTimeInMillisecond = System.currentTimeMillis() + timeUnit.toMillis(delay);
-		jedisTemplate.zadd(sleepingJobKey, delayTimeInMillisecond, job);
+		final long delayTimeMillis = System.currentTimeMillis() + timeUnit.toMillis(delay);
+		jedisTemplate.zadd(sleepingJobKey, job, delayTimeMillis);
 	}
 
 	/**

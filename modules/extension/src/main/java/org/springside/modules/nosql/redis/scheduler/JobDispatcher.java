@@ -34,23 +34,17 @@ public class JobDispatcher implements Runnable {
 	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
 	private static final AtomicInteger poolNumber = new AtomicInteger(1);
-
 	private ScheduledExecutorService internalScheduledThreadPool;
-
 	private ScheduledFuture dispatchJob;
-
-	private JedisScriptExecutor scriptExecutor;
 
 	private JedisTemplate jedisTemplate;
 
+	private JedisScriptExecutor scriptExecutor;
 	private String scriptHash;
 
 	private List<String> keys;
-
 	private String readyJobKey;
-
 	private String sleepingJobKey;
-
 	private String dispatchCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
@@ -83,17 +77,17 @@ public class JobDispatcher implements Runnable {
 	/**
 	 * 启动分发线程, 自行创建scheduler线程池.
 	 */
-	public void start(long periodMilliseconds) {
+	public void start(long periodMillis) {
 		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
 				Threads.buildJobFactory("Job-Dispatcher-" + poolNumber.getAndIncrement() + "-%d"));
-		start(periodMilliseconds, internalScheduledThreadPool);
+		start(periodMillis, internalScheduledThreadPool);
 	}
 
 	/**
 	 * 启动分发线程, 使用传入的scheduler线程池.
 	 */
-	public void start(long periodMilliseconds, ScheduledExecutorService scheduledThreadPool) {
-		dispatchJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, periodMilliseconds,
+	public void start(long periodMillis, ScheduledExecutorService scheduledThreadPool) {
+		dispatchJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, periodMillis,
 				TimeUnit.MILLISECONDS);
 	}
 

@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.demos.redis;
 
+import org.springside.modules.nosql.redis.JedisUtils;
+
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
@@ -11,10 +13,8 @@ public class JedisPoolFactory {
 		String port = System.getProperty("benchmark.port", String.valueOf(defaultPort));
 		String timeout = System.getProperty("benchmark.timeout", String.valueOf(defaultTimeout));
 
-		// 设置Pool大小，设为与线程数等大。
-		JedisPoolConfig poolConfig = new JedisPoolConfig();
-		poolConfig.setMaxActive(threadCount);
-		poolConfig.setMaxIdle(threadCount);
+		// 设置Pool大小，设为与线程数等大，并屏蔽掉idle checking
+		JedisPoolConfig poolConfig = JedisUtils.createPoolConfig(threadCount, threadCount);
 
 		// create jedis pool
 		return new JedisPool(poolConfig, host, Integer.valueOf(port), Integer.valueOf(timeout));

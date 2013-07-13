@@ -12,7 +12,7 @@ public class StopWatch {
 		startTime = System.currentTimeMillis();
 	}
 
-	public long getMills() {
+	public long getMillis() {
 		return System.currentTimeMillis() - startTime;
 	}
 

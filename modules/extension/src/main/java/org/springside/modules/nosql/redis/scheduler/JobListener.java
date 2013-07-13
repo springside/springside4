@@ -30,11 +30,11 @@ public class JobListener implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(JobListener.class);
 
-	private String readyJobKey;
-
 	private JedisTemplate jedisTemplate;
 
 	private final JobHandler jobHandler;
+
+	private String readyJobKey;
 
 	public JobListener(String jobName, JedisPool jedisPool, JobHandler jobHandler) {
 		jedisTemplate = new JedisTemplate(jedisPool);

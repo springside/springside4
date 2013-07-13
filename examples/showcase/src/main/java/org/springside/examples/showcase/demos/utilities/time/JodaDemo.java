@@ -58,7 +58,7 @@ public class JodaDemo {
 		// 将日期按UTC时区打印
 		DateTime zoneWithUTC = fooDate.withZone(DateTimeZone.UTC);
 		System.out.println(zoneWithUTC.toString(format) + " " + zoneWithUTC.getMillis());// "1978-06-01 04:10:08",
-																							// sameMills
+																							// sameMillis
 
 		// 按不同的时区分析字符串,得到不同的时间
 		String dateString = "1978-06-01 12:10:08";

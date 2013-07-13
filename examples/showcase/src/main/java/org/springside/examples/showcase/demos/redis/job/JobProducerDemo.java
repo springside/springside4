@@ -21,7 +21,7 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 5;
 	private static final long DEFAULT_LOOP_COUNT = 100000;
 
-	private static AtomicLong delayInSeconds = new AtomicLong(JobDispatcherDemo.DELAY_SECONDS);
+	private static AtomicLong delaySeconds = new AtomicLong(JobDispatcherDemo.DELAY_SECONDS);
 	private static AtomicLong idGenerator = new AtomicLong(0);
 
 	private long expectTps;
@@ -60,11 +60,11 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 		@Override
 		public void execute(final int requestSequence) {
 			long jobId = idGenerator.getAndIncrement();
-			jobManager.scheduleJob("job:" + jobId, delayInSeconds.get(), TimeUnit.SECONDS);
+			jobManager.scheduleJob("job:" + jobId, delaySeconds.get(), TimeUnit.SECONDS);
 
 			// 达到期望的每秒的TPS后，expireTime往后滚动一秒
 			if ((jobId % (expectTps)) == 0) {
-				delayInSeconds.incrementAndGet();
+				delaySeconds.incrementAndGet();
 			}
 		}
 	}

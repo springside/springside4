@@ -193,6 +193,9 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * 返回List长度, key不存在时返回0，key类型不是list时抛出异常.
+	 */
 	public long llen(final String key) {
 		return execute(new JedisAction<Long>() {
 
@@ -203,13 +206,16 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// 关于Sorted Set ///////////////////////// //
-	public void zadd(final String key, final double score, final String member) {
-		execute(new JedisActionNoResult() {
+	// ////////////// 关于Sorted Set ///////////////////////////
+	/**
+	 * 加入Sorted set, 如果member在Set里已存在，只更新score并返回false,否则返回true.
+	 */
+	public boolean zadd(final String key, final String member, final double score) {
+		return execute(new JedisAction<Boolean>() {
 
 			@Override
-			public void action(Jedis jedis) {
-				jedis.zadd(key, score, member);
+			public Boolean action(Jedis jedis) {
+				return jedis.zadd(key, score, member) == 1 ? true : false;
 			}
 		});
 	}
@@ -227,6 +233,9 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * 返回List长度, key不存在时返回0，key类型不是sorted set时抛出异常.
+	 */
 	public long zcard(final String key) {
 		return execute(new JedisAction<Long>() {
 

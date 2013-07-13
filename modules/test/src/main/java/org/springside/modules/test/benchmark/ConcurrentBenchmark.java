@@ -23,7 +23,7 @@ public abstract class ConcurrentBenchmark {
 	protected CountDownLatch finishLock;
 
 	protected Date startTime;
-	protected int intervalInMills = 10 * 1000;
+	protected int intervalMillis = 10 * 1000;
 
 	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount) {
 		// merge default setting and system properties
@@ -80,15 +80,15 @@ public abstract class ConcurrentBenchmark {
 		Date endTime = new Date();
 		String className = this.getClass().getSimpleName();
 		long invokeTimes = threadCount * loopCount;
-		long timeInMills = endTime.getTime() - startTime.getTime();
-		long tps = (invokeTimes * 1000) / timeInMills;
+		long totalTimeMillis = endTime.getTime() - startTime.getTime();
+		long tps = (invokeTimes * 1000) / totalTimeMillis;
 
 		System.out.printf("%s finished at %s.\n%d threads processed %,d requests after %,d ms, tps is %,d.\n",
-				className, endTime.toString(), threadCount, invokeTimes, timeInMills, tps);
+				className, endTime.toString(), threadCount, invokeTimes, totalTimeMillis, tps);
 	}
 
-	protected void setIntervalInSecondss(int intervalInSeconds) {
-		this.intervalInMills = intervalInSeconds * 1000;
+	protected void setIntervalSeconds(int intervalSeconds) {
+		this.intervalMillis = intervalSeconds * 1000;
 	}
 
 	/**

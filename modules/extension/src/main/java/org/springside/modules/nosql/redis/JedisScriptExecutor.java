@@ -70,7 +70,7 @@ public class JedisScriptExecutor {
 				@Override
 				public Object action(Jedis jedis) {
 					Object result = jedis.evalsha(hash, keys, args);
-					logger.debug("Script hash {} execution time is {}ms", hash, stopWatch.getMills());
+					logger.debug("Script hash {} execution time is {}ms", hash, stopWatch.getMillis());
 					return result;
 				}
 			});
@@ -78,7 +78,7 @@ public class JedisScriptExecutor {
 			logger.warn("Script hash {} is not loaded yet, try to reload and run it again", hash, e);
 			stopWatch.reset();
 			Object result = reloadAndExecute(hash, keys, args);
-			logger.debug("Script hash {} reload and execution time is {}ms", hash, stopWatch.getMills());
+			logger.debug("Script hash {} reload and execution time is {}ms", hash, stopWatch.getMillis());
 			return result;
 		}
 	}
