@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
+import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobManager;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
@@ -41,8 +42,8 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		pool = JedisPoolFactory.createJedisPool(JobDispatcherDemo.DEFAULT_HOST, JobDispatcherDemo.DEFAULT_PORT,
-				JobDispatcherDemo.DEFAULT_TIMEOUT, threadCount);
+		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
+				JedisUtils.DEFAULT_TIMEOUT, threadCount);
 		jobManager = new JobManager("ss", pool);
 	}
 

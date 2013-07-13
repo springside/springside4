@@ -42,6 +42,9 @@
 
 	<!--log4jdbc -->
 	<logger name="jdbc.sqltiming" level="INFO"/>
+	
+	<!-- springside modules -->
+	<logger name="org.springside.modules" level="INFO" />
 
 	<root level="WARN">
 		<appender-ref ref="console" />

@@ -5,12 +5,12 @@ import java.security.SecureRandom;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
+import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.Protocol;
 
 /**
  * 测试Redis用于Session管理的setEx()与get()方法性能, 使用JSON格式存储数据.
@@ -22,10 +22,6 @@ import redis.clients.jedis.Protocol;
 public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 50;
 	private static final long DEFAULT_LOOP_COUNT = 20000;
-
-	private static final String DEFAULT_HOST = "localhost";
-	private static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
-	private static final int DEFAULT_TIMEOUT = Protocol.DEFAULT_TIMEOUT;
 
 	private String keyPrefix = "ss.session:";
 	private JsonMapper jsonMapper = new JsonMapper();
@@ -43,7 +39,8 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		pool = JedisPoolFactory.createJedisPool(DEFAULT_HOST, DEFAULT_PORT, DEFAULT_TIMEOUT, threadCount);
+		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
+				JedisUtils.DEFAULT_TIMEOUT, threadCount);
 		jedisTemplate = new JedisTemplate(pool);
 
 		// 清空数据库

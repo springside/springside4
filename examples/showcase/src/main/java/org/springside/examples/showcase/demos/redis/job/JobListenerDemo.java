@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
+import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobListener;
 import org.springside.modules.nosql.redis.scheduler.JobListener.JobHandler;
 
@@ -38,8 +39,8 @@ public class JobListenerDemo implements JobHandler {
 
 	public static void main(String[] args) throws Exception {
 
-		pool = JedisPoolFactory.createJedisPool(JobDispatcherDemo.DEFAULT_HOST, JobDispatcherDemo.DEFAULT_PORT,
-				JobDispatcherDemo.DEFAULT_TIMEOUT, THREAD_COUNT);
+		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
+				JedisUtils.DEFAULT_TIMEOUT, THREAD_COUNT);
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
 		for (int i = 0; i < THREAD_COUNT; i++) {
