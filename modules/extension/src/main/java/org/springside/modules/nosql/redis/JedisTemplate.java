@@ -119,6 +119,9 @@ public class JedisTemplate {
 	}
 
 	// ////////////// 关于String ///////////////////////////
+	/**
+	 * 如果key不存在, 返回null.
+	 */
 	public String get(final String key) {
 		return execute(new JedisAction<String>() {
 
@@ -127,6 +130,22 @@ public class JedisTemplate {
 				return jedis.get(key);
 			}
 		});
+	}
+
+	/**
+	 * 如果key不存在, 返回0.
+	 */
+	public Long getAsLong(final String key) {
+		String result = get(key);
+		return result != null ? Long.valueOf(result) : 0;
+	}
+
+	/**
+	 * 如果key不存在, 返回0.
+	 */
+	public Integer getAsInt(final String key) {
+		String result = get(key);
+		return result != null ? Integer.valueOf(result) : 0;
 	}
 
 	public void set(final String key, final String value) {

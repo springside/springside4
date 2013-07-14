@@ -131,8 +131,7 @@ public class JobDispatcher implements Runnable {
 	 * 获取已分发的Job数量。
 	 */
 	public long getDispatchNumber() {
-		String result = jedisTemplate.get(dispatchCounterKey);
-		return result != null ? Long.valueOf(result) : 0;
+		return jedisTemplate.getAsLong(dispatchCounterKey);
 	}
 
 	/**

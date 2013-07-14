@@ -30,9 +30,9 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
+ * Master选举实现, 基于setNx()与expire()两大API
  * 
- * The purpose of this class is define a MasterElector to select a server is a master. The client can invoke the
- * function isMaster().
+ * @author calvin
  */
 public class MasterElector implements Runnable {
 
@@ -66,7 +66,7 @@ public class MasterElector implements Runnable {
 	}
 
 	/**
-	 * 启动分发线程, 自行创建scheduler线程池.
+	 * 启动抢注线程, 自行创建scheduler线程池.
 	 */
 	public void start() {
 		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
@@ -75,7 +75,7 @@ public class MasterElector implements Runnable {
 	}
 
 	/**
-	 * 启动分发线程, 使用传入的scheduler线程池.
+	 * 启动抢注线程, 使用传入的scheduler线程池.
 	 */
 	public void start(ScheduledExecutorService scheduledThreadPool) {
 		if (intervalSeconds >= expireSeconds) {
