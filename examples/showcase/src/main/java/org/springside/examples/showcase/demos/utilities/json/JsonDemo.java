@@ -121,7 +121,7 @@ public class JsonDemo {
 
 		// List<Bean>
 		String beanListString = "[{\"name\":\"A\"},{\"name\":\"B\"}]";
-		JavaType beanListType = mapper.createCollectionType(List.class, TestBean.class);
+		JavaType beanListType = mapper.contructCollectionType(List.class, TestBean.class);
 		List<TestBean> beanList = mapper.fromJson(beanListString, beanListType);
 		System.out.println("Bean List:");
 		for (TestBean element : beanList) {

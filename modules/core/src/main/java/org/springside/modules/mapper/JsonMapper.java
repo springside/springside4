@@ -6,6 +6,8 @@
 package org.springside.modules.mapper;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -82,7 +84,7 @@ public class JsonMapper {
 	 * 如果JSON字符串为Null或"null"字符串, 返回Null.
 	 * 如果JSON字符串为"[]", 返回空集合.
 	 * 
-	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
+	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String, JavaType)
 	 * 
 	 * @see #fromJson(String, JavaType)
 	 */
@@ -100,7 +102,7 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 反序列化复杂Collection如List<Bean>, 先使用函數createCollectionType构造类型,然后调用本函数.
+	 * 反序列化复杂Collection如List<Bean>, 先使用createCollectionType()或contructMapType()构造类型, 然后调用本函数.
 	 * 
 	 * @see #createCollectionType(Class, Class...)
 	 */
@@ -118,12 +120,17 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 構造泛型的Collection Type如:
-	 * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
-	 * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
+	 * 构造Collection类型.
 	 */
-	public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
-		return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+	public JavaType contructCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
+		return mapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
+	}
+
+	/**
+	 * 构造Map类型.
+	 */
+	public JavaType contructMapType(Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
+		return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
 	}
 
 	/**
