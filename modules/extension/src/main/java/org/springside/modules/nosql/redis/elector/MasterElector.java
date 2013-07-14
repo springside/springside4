@@ -36,13 +36,14 @@ import redis.clients.jedis.JedisPool;
  */
 public class MasterElector implements Runnable {
 
-	private static final String DEFAULT_MASTER_KEY = "master";
+	public static final String DEFAULT_MASTER_KEY = "master";
 
 	private static Logger logger = LoggerFactory.getLogger(MasterElector.class);
 
-	private static final AtomicInteger poolNumber = new AtomicInteger(1);
+	private static AtomicInteger poolNumber = new AtomicInteger(1);
 	private ScheduledExecutorService internalScheduledThreadPool;
 	private ScheduledFuture electorJob;
+	private int intervalSeconds;
 
 	private JedisTemplate jedisTemplate;
 
@@ -51,11 +52,15 @@ public class MasterElector implements Runnable {
 	private AtomicBoolean master = new AtomicBoolean(false);
 	private String masterKey = DEFAULT_MASTER_KEY;
 
-	public MasterElector(JedisPool jedisPool, int expireSeconds) {
+	public MasterElector(JedisPool jedisPool, int intervalSeconds, int expireSeconds) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 		this.expireSeconds = expireSeconds;
+		this.intervalSeconds = intervalSeconds;
 	}
 
+	/**
+	 * 发挥目前该实例是否master
+	 */
 	public boolean isMaster() {
 		return master.get();
 	}
@@ -63,23 +68,23 @@ public class MasterElector implements Runnable {
 	/**
 	 * 启动分发线程, 自行创建scheduler线程池.
 	 */
-	public void start(long periodSeconds) {
+	public void start() {
 		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
 				Threads.buildJobFactory("Master-Elector-" + poolNumber.getAndIncrement() + "-%d"));
-		start(periodSeconds, internalScheduledThreadPool);
+		start(internalScheduledThreadPool);
 	}
 
 	/**
 	 * 启动分发线程, 使用传入的scheduler线程池.
 	 */
-	public void start(long periodSeconds, ScheduledExecutorService scheduledThreadPool) {
-		if (periodSeconds >= expireSeconds) {
+	public void start(ScheduledExecutorService scheduledThreadPool) {
+		if (intervalSeconds >= expireSeconds) {
 			throw new IllegalArgumentException("periodSeconds must less than expireSeconds. periodSeconds is "
-					+ periodSeconds + " expireSeconds is " + expireSeconds);
+					+ intervalSeconds + " expireSeconds is " + expireSeconds);
 		}
 
 		hostId = generateHostId();
-		electorJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, periodSeconds,
+		electorJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalSeconds,
 				TimeUnit.SECONDS);
 		logger.info("masterElector start, hostName:{}.", hostId);
 	}
@@ -95,6 +100,9 @@ public class MasterElector implements Runnable {
 		}
 	}
 
+	/**
+	 * 生成host id的方法哦，可在子类重载.
+	 */
 	protected String generateHostId() {
 		String host = "localhost";
 		try {
@@ -144,6 +152,9 @@ public class MasterElector implements Runnable {
 				});
 	}
 
+	/**
+	 * 如果应用中有多种master，设置唯一的master name
+	 */
 	public void setMasterKey(String masterKey) {
 		this.masterKey = masterKey;
 	}

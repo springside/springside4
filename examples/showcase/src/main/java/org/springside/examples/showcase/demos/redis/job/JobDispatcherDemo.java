@@ -27,7 +27,7 @@ public class JobDispatcherDemo {
 
 			printJobNumbers(jobDispatcher);
 
-			jobDispatcher.start(1000);
+			jobDispatcher.start();
 
 			System.out.println("Hit enter to stop.");
 			while (true) {

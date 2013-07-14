@@ -30,28 +30,27 @@ import com.google.common.collect.Lists;
  */
 public class JobDispatcher implements Runnable {
 	public static final String DEFAULT_DISPATCH_LUA_FILE = "classpath:/redis/dispatch.lua";
+	public static final long DEFAULT_INTERVAL_MILLIS = 1000;
 
 	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
-	private static final AtomicInteger poolNumber = new AtomicInteger(1);
+	private static AtomicInteger poolNumber = new AtomicInteger(1);
 	private ScheduledExecutorService internalScheduledThreadPool;
+
 	private ScheduledFuture dispatchJob;
+	private long intervalMillis = DEFAULT_INTERVAL_MILLIS;
 
 	private JedisTemplate jedisTemplate;
-
 	private JedisScriptExecutor scriptExecutor;
+	private String scriptPath = DEFAULT_DISPATCH_LUA_FILE;
 	private String scriptHash;
 
 	private List<String> keys;
-	private String readyJobKey;
 	private String sleepingJobKey;
+	private String readyJobKey;
 	private String dispatchCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
-		this(jobName, jedisPool, DEFAULT_DISPATCH_LUA_FILE);
-	}
-
-	public JobDispatcher(String jobName, JedisPool jedisPool, String scriptPath) {
 		sleepingJobKey = Keys.getSleepingJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
@@ -59,10 +58,29 @@ public class JobDispatcher implements Runnable {
 
 		jedisTemplate = new JedisTemplate(jedisPool);
 		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
-		loadLuaScript(scriptPath);
 	}
 
-	private void loadLuaScript(String scriptPath) {
+	/**
+	 * 启动分发线程, 自行创建scheduler线程池.
+	 */
+	public void start() {
+		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
+				Threads.buildJobFactory("Job-Dispatcher-" + poolNumber.getAndIncrement() + "-%d"));
+
+		start(internalScheduledThreadPool);
+	}
+
+	/**
+	 * 启动分发线程, 使用传入的scheduler线程池.
+	 */
+	public void start(ScheduledExecutorService scheduledThreadPool) {
+		loadLuaScript();
+
+		dispatchJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalMillis,
+				TimeUnit.MILLISECONDS);
+	}
+
+	private void loadLuaScript() {
 		String script;
 		try {
 			Resource resource = new DefaultResourceLoader().getResource(scriptPath);
@@ -72,23 +90,6 @@ public class JobDispatcher implements Runnable {
 		}
 
 		scriptHash = scriptExecutor.load(script);
-	}
-
-	/**
-	 * 启动分发线程, 自行创建scheduler线程池.
-	 */
-	public void start(long periodMillis) {
-		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
-				Threads.buildJobFactory("Job-Dispatcher-" + poolNumber.getAndIncrement() + "-%d"));
-		start(periodMillis, internalScheduledThreadPool);
-	}
-
-	/**
-	 * 启动分发线程, 使用传入的scheduler线程池.
-	 */
-	public void start(long periodMillis, ScheduledExecutorService scheduledThreadPool) {
-		dispatchJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, periodMillis,
-				TimeUnit.MILLISECONDS);
 	}
 
 	/**
@@ -139,5 +140,19 @@ public class JobDispatcher implements Runnable {
 	 */
 	public void restDispatchNumber() {
 		jedisTemplate.set(dispatchCounterKey, "0");
+	}
+
+	/**
+	 * 设置非默认的script path, 格式为spring的Resource路径风格。
+	 */
+	public void setScriptPath(String scriptPath) {
+		this.scriptPath = scriptPath;
+	}
+
+	/**
+	 * 设置非默认1秒的分发间隔.
+	 */
+	public void setIntervalMillis(long intervalMillis) {
+		this.intervalMillis = intervalMillis;
 	}
 }
