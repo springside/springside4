@@ -1,10 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${package}.functional;
+package ${package};
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.jetty.JettyFactory;
+import org.springside.modules.test.spring.Profiles;
 
 /**
  * 使用Jetty运行调试Web应用, 在Console输入回车快速重新加载应用.
@@ -15,13 +16,12 @@ public class QuickStartServer {
 
 	public static final int PORT = 8080;
 	public static final String CONTEXT = "/${artifactId}";
-	public static final String BASE_URL = "http://localhost:8080/${artifactId}";
 	public static final String[] TLD_JAR_NAMES = new String[] { "sitemesh", "spring-webmvc", "shiro-web",
 			"springside-core" };
 
 	public static void main(String[] args) throws Exception {
 		// 设定Spring的profile
-		System.setProperty("spring.profiles.active", "development");
+		Profiles.setProfileAsSystemProperty(Profiles.DEVELOPMENT);
 
 		// 启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
@@ -30,8 +30,8 @@ public class QuickStartServer {
 		try {
 			server.start();
 
-			System.out.println("Server running at " + BASE_URL);
-			System.out.println("Hit Enter to reload the application");
+			System.out.println("[INFO] Server running at http://localhost:" + PORT + CONTEXT);
+			System.out.println("[HINT] Hit Enter to reload the application quickly");
 
 			// 等待用户输入回车重载应用.
 			while (true) {
