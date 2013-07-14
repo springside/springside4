@@ -10,24 +10,23 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.0-SNAPSHOT</springside.version>
-		<spring.version>3.1.3.RELEASE</spring.version>
-		<hibernate.version>4.1.8.Final</hibernate.version>
-		<spring-data-jpa.version>1.2.0.RELEASE</spring-data-jpa.version>
-		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<spring.version>3.2.3.RELEASE</spring.version>
+		<hibernate.version>4.2.3.Final</hibernate.version>
+		<spring-data-jpa.version>1.3.2.RELEASE</spring-data-jpa.version>
+		<tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
-		<shiro.version>1.2.1</shiro.version>
-		<hibernate-validator.version>4.3.0.Final</hibernate-validator.version>
-		<jackson.version>2.1.2</jackson.version>
-		<slf4j.version>1.7.2</slf4j.version>
-		<log4j.version>1.2.17</log4j.version>
+		<shiro.version>1.2.2</shiro.version>
+		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
+		<jackson.version>2.1.5</jackson.version>
+		<slf4j.version>1.7.5</slf4j.version>
+		<logback.version>1.0.13</logback.version>
 		<commons-lang3.version>3.1</commons-lang3.version>
-		<guava.version>13.0.1</guava.version>
-		<joda-time.version>2.1</joda-time.version>
+		<guava.version>14.0.1</guava.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
-		<selenium.version>2.28.0</selenium.version>
-		<jetty.version>7.6.8.v20121106</jetty.version>
-		<h2.version>1.3.170</h2.version>
+		<selenium.version>2.33.0</selenium.version>
+		<jetty.version>7.6.11.v20130520</jetty.version>
+		<h2.version>1.3.172</h2.version>
 
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,24 +42,6 @@
 			<jdbc.driver.version>5.1.21</jdbc.driver.version>
 		-->	
 	</properties>
-	
-	<repositories>
-		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.
-		<repository>
-			<id>nexus</id>
-			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
-		</repository>
-		-->
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>	
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 
 	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<pluginRepositories> 
@@ -88,23 +69,12 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.7.1</version>
+			<version>1.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.1</version>
-		</dependency>		
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-			<version>2.2.2</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-			<version>3.3.1</version>
+			<version>1.7.3</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- AOP end -->
@@ -118,6 +88,11 @@
 		</dependency>
 
 		<!-- spring data access -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
@@ -140,11 +115,11 @@
 			<version>${spring.version}</version>
 		</dependency>
 
-		<!-- dbcp connection pool -->
+		<!-- connection pool -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>${commons-dbcp.version}</version>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>${tomcat-jdbc.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -197,9 +172,14 @@
 			<version>${shiro.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>net.sf.ehcache</groupId>
+			<artifactId>ehcache-core</artifactId>
+			<version>2.6.6</version>
+		</dependency>
+		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.7</version>
+			<version>1.8</version>
 		</dependency>
 		<!-- SECURITY end -->
 		
@@ -211,6 +191,11 @@
 		</dependency>
 		
 		<!-- JSON begin -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -229,35 +214,40 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- 代码直接调用log4j会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<artifactId>log4j-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- common-logging 实际调用slf4j -->
+		<!-- 代码直接调用common-logging会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- java.util.logging 实际调用slf4j -->
+		<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
 		<dependency>
-	        	<groupId>org.slf4j</groupId>
-	        	<artifactId>jul-to-slf4j</artifactId>
-	        	<version>${slf4j.version}</version>
-	        	<scope>runtime</scope>
-	      	</dependency>
+			<groupId>org.slf4j</groupId>
+	        <artifactId>jul-to-slf4j</artifactId>
+	        <version>${slf4j.version}</version>
+	        <scope>runtime</scope>
+	    </dependency>
+	      	
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${log4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
-			<version>0.2.7</version>
+	 		<groupId>org.bgee.log4jdbc-log4j2</groupId>
+			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+			<version>1.15</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- LOGGING end -->
@@ -313,11 +303,19 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium</groupId>
+					<artifactId>selenium-htmlunit-driver</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.seleniumhq.selenium</groupId>
 					<artifactId>selenium-android-driver</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium</groupId>
 					<artifactId>selenium-iphone-driver</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.seleniumhq.selenium</groupId>
+					<artifactId>selenium-safari-driver</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -409,7 +407,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.1</version>
 				<configuration>
 					<source>${jdk.version}</source>
 					<target>${jdk.version}</target>
@@ -421,7 +419,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.4</version>
 				<configuration>
 					<warName>${project.artifactId}</warName>
 				</configuration>
@@ -431,7 +429,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.12.4</version>
+				<version>2.15</version>
 				<configuration>
 					<includes>
 						<include>**/*Test.java</include>
@@ -442,7 +440,7 @@
 					<dependency>
 						<groupId>org.apache.maven.surefire</groupId>
 						<artifactId>surefire-junit47</artifactId>
-						<version>2.12.4</version>
+						<version>2.15</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -451,7 +449,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<executions>
 					<execution>
 						<id>add-functional-source</id>
@@ -472,7 +470,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>2.5.2</version>
 				<configuration>
 					<instrumentation>
 						<excludes>
@@ -480,33 +478,14 @@
 							<exclude>**/*Controller.class</exclude>
 						</excludes>
 					</instrumentation>
-				</configuration>
-			</plugin>
-
-			<!-- eclipse插件, 设定wtp版本 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-					<wtpversion>2.0</wtpversion>
-					<!-- 增加设置项目encoding的文件 -->
-					<additionalConfig>
-						<file>
-							<name>.settings/org.eclipse.core.resources.prefs</name>
-							<content>eclipse.preferences.version=1${line.separator}encoding/&lt;project&gt;=${project.build.sourceEncoding}${line.separator}</content>
-						</file>
-					</additionalConfig>
-				</configuration>
+                </configuration>
 			</plugin>
 			
 			<!-- enforcer插件, 设定环境与依赖的规则 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.2</version>
+				<version>1.3</version>
 				<executions>
 					<execution>
 						<id>enforce-banned-dependencies</id>
@@ -590,7 +569,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.6</version>
+				<version>2.8</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -630,23 +609,7 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
-							<includedGroups>org.springside.modules.test.category.Smoke</includedGroups>
-						</configuration>
-					</plugin>				
-				</plugins>
-			</build>
-		</profile>
-		
-		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
-		<profile>
-			<id>skip-unstable</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
+							<groups>org.springside.modules.test.category.Smoke</groups>
 						</configuration>
 					</plugin>				
 				</plugins>
@@ -657,7 +620,6 @@
 		<profile>
 			<id>refresh-db</id>
 			<build>
-
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -669,7 +631,7 @@
 								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue" encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
 									<transaction src="src/main/resources/sql/h2/schema.sql" />
-									<transaction src="src/test/resources/data/import-data.sql" />
+									<transaction src="src/test/resources/data/h2/import-data.sql" />
 								</sql>
 							</target>
 						</configuration>
