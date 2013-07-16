@@ -4,7 +4,6 @@
 		<pattern>/static/*</pattern>
 		<pattern>/cxf/*</pattern>
 		<pattern>/api/*</pattern>
-		<pattern>/hystrix/*</pattern>
 	</excludes>
 	
 	<decorator name="default" page="default.jsp">

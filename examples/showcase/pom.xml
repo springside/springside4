@@ -188,18 +188,6 @@
 		    <artifactId>jedis</artifactId>
 		</dependency>
 		
-		<!-- Netflix Hystrix  -->
-		<dependency>
-			<groupId>com.netflix.hystrix</groupId>
-			<artifactId>hystrix-core</artifactId>
-		</dependency>
-		<!-- only for hystrix dashboard -->
-		<dependency>
-			<groupId>com.netflix.hystrix</groupId>
-			<artifactId>hystrix-metrics-event-stream</artifactId>
-			<version>${hystrix.version}</version>
-		</dependency>
-
 		<!-- CACHE begin -->
 		<dependency>
 			<groupId>net.spy</groupId>
