@@ -45,6 +45,7 @@
 	
 	<!-- springside modules -->
 	<logger name="org.springside.modules" level="INFO" />
+	<logger name="org.springside.modules.nosql" level="DEBUG" />
 
 	<root level="WARN">
 		<appender-ref ref="console" />

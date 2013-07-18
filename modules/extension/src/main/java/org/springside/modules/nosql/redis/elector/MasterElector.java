@@ -129,6 +129,7 @@ public class MasterElector implements Runnable {
 						if (masterFromRedis == null) {
 							// use setnx to make sure only one client can register as master.
 							if (jedis.setnx(masterKey, hostId) > 0) {
+								// 等jedis支持2.6.12开始的新的set语法，就可以不用再担心setnx后expire还没来得及执行就crash。
 								jedis.expire(masterKey, expireSeconds);
 								master.set(true);
 
@@ -144,10 +145,15 @@ public class MasterElector implements Runnable {
 						if (hostId.equals(masterFromRedis)) {
 							jedis.expire(masterKey, expireSeconds);
 							master.set(true);
-							return;
+						} else {
+							// 如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
+							if (jedis.ttl(masterKey) == -1) {
+								jedis.expire(masterKey, expireSeconds);
+								logger.info("master key doesn't has expired time, set it again");
+							}
+							master.set(false);
 						}
 
-						master.set(false);
 					}
 				});
 	}

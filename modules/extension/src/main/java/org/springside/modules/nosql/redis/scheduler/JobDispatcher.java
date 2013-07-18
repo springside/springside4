@@ -110,7 +110,8 @@ public class JobDispatcher implements Runnable {
 	public void run() {
 		long currTime = System.currentTimeMillis();
 		List<String> args = Lists.newArrayList(String.valueOf(currTime));
-		scriptExecutor.execute(scriptHash, keys, args);
+		Long count = (Long) scriptExecutor.execute(scriptHash, keys, args);
+		logger.debug("{} Job dispatched", count != null ? count : 0);
 	}
 
 	/**

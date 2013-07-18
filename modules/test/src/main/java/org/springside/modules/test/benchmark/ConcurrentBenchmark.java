@@ -16,14 +16,14 @@ public abstract class ConcurrentBenchmark {
 	public static final String THREAD_COUNT_NAME = "benchmark.thread.count";
 	public static final String LOOP_COUNT_NAME = "benchmark.loop.count";
 
-	protected int threadCount;
-	protected long loopCount;
+	public int threadCount;
+	public long loopCount;
 
-	protected CountDownLatch startLock;
-	protected CountDownLatch finishLock;
+	public CountDownLatch startLock;
+	public CountDownLatch finishLock;
 
-	protected Date startTime;
-	protected int intervalMillis = 10 * 1000;
+	public Date startTime;
+	public int intervalMillis = 10 * 1000;
 
 	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount) {
 		// merge default setting and system properties
@@ -107,4 +107,5 @@ public abstract class ConcurrentBenchmark {
 	 * create a new benchmark task.
 	 */
 	protected abstract BenchmarkTask createTask();
+
 }
