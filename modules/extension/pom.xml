@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>4.1.1-SNAPSHOT</version>
 		<relativePath>../parent/</relativePath>
 	</parent>
 	<artifactId>springside-extension</artifactId>
@@ -36,7 +36,7 @@
 
 		<!-- CACHE -->
 		<dependency>
-			<groupId>spy</groupId>
+			<groupId>net.spy</groupId>
 			<artifactId>spymemcached</artifactId>
 			<optional>true</optional>
 		</dependency>
@@ -47,6 +47,11 @@
             <artifactId>jedis</artifactId>
             <optional>true</optional>
         </dependency>
+        <dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<optional>true</optional>
+		</dependency>
 		
 		<!-- freemarker -->
 		<dependency>
@@ -111,12 +116,6 @@
 
 	<build>
 		<plugins>
-			<!-- eclipse plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-			</plugin>
-
 			<!-- source attach plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

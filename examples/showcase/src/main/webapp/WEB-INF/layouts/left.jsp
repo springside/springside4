@@ -17,6 +17,7 @@
 	<div class="submenu">
 		<a id="persistence-tab" href="${ctx}/story/persistence">持久化高级演示</a>
 		<a id="jms-tab" href="${ctx}/story/jms">JMS演示</a>
+		<a id="reids-tab" href="${ctx}/story/redis">Redis演示</a>
 		<a id="cache-tab" href="${ctx}/story/cache">Cache演示</a>
 		<a id="schedule-tab" href="${ctx}/story/schedule">定时任务演示</a>
 		<a id="security-tab" href="${ctx}/story/security">安全高级演示</a>

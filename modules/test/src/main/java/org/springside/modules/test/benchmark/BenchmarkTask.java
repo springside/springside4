@@ -13,17 +13,40 @@ public abstract class BenchmarkTask implements Runnable {
 	protected int taskSequence;
 	protected ConcurrentBenchmark parent;
 
-	protected long previousPrintTime;
-	protected long previousLoop = 0L;
+	protected long previousRequests = 0L;
+	protected long nextPrintTime;
 
-	public BenchmarkTask(int taskSequence, ConcurrentBenchmark parent) {
-		this.taskSequence = taskSequence;
-		this.parent = parent;
+	@Override
+	public void run() {
+		setUp();
+		onThreadStart();
+		try {
+			for (int i = 1; i <= parent.loopCount; i++) {
+				execute(i);
+				printProgressMessage(i);
+			}
+		} finally {
+			tearDown();
+			onThreadFinish();
+		}
+	}
 
+	abstract protected void execute(final int requestSequence);
+
+	/**
+	 * Override for thread local connection and data setup.
+	 */
+	protected void setUp() {
 	}
 
 	/**
-	 * Must be invoked in children class when each thread finish the preparation.
+	 * Override for thread local connection and data cleanup.
+	 */
+	protected void tearDown() {
+	}
+
+	/**
+	 * Must be invoked in children class when each thread finish the setup.
 	 */
 	protected void onThreadStart() {
 		parent.startLock.countDown();
@@ -33,11 +56,12 @@ public abstract class BenchmarkTask implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		previousPrintTime = parent.startTime.getTime();
+		nextPrintTime = System.currentTimeMillis() + parent.intervalMillis;
+
 	}
 
 	/**
-	 * Must be invoked in children class when the loop in thread finish.
+	 * Must be invoked in children class when each thread finish loop, before the tearDown().
 	 */
 	protected void onThreadFinish() {
 		// notify test finish
@@ -50,33 +74,32 @@ public abstract class BenchmarkTask implements Runnable {
 	/**
 	 * 间隔固定时间打印进度信息.
 	 */
-	protected void printProgressMessage(int currentLoop) {
+	protected void printProgressMessage(final int currentRequests) {
 		long currentTime = System.currentTimeMillis();
 
-		if ((currentTime - previousPrintTime) > parent.printBetweenMills) {
-			long lastTimeInMills = currentTime - previousPrintTime;
-			previousPrintTime = currentTime;
+		if (currentTime > nextPrintTime) {
+			long lastIntervalMillis = parent.intervalMillis + (currentTime - nextPrintTime);
+			nextPrintTime = currentTime + parent.intervalMillis;
 
-			long totalRequest = currentLoop + 1;
-			long lastRequests = totalRequest - previousLoop;
+			long lastRequests = currentRequests - previousRequests;
 
-			long totalTimeInMills = currentTime - parent.startTime.getTime();
-			long totalTimeInSeconds = TimeUnit.MILLISECONDS.toSeconds(totalTimeInMills);
+			long totalTimeMillis = currentTime - parent.startTime.getTime();
+			long totalTimeSeconds = TimeUnit.MILLISECONDS.toSeconds(totalTimeMillis);
 
-			long totalTps = (totalRequest * 1000) / totalTimeInMills;
-			long lastTps = (lastRequests * 1000) / lastTimeInMills;
+			long totalTps = (currentRequests * 1000) / totalTimeMillis;
+			long lastTps = (lastRequests * 1000) / lastIntervalMillis;
 
-			BigDecimal lastLatency = new BigDecimal(lastTimeInMills).divide(new BigDecimal(lastRequests), 2,
+			BigDecimal lastLatency = new BigDecimal(lastIntervalMillis).divide(new BigDecimal(lastRequests), 2,
 					BigDecimal.ROUND_HALF_UP);
-			BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
+			BigDecimal totalLatency = new BigDecimal(totalTimeMillis).divide(new BigDecimal(currentRequests), 2,
 					BigDecimal.ROUND_HALF_UP);
 
 			System.out
 					.printf("Thread %02d process %,d requests after %s seconds. Last tps/latency is %,d/%sms. Total tps/latency is %,d/%sms.\n",
-							taskSequence, totalRequest, totalTimeInSeconds, lastTps, lastLatency.toString(), totalTps,
-							totalLatency.toString());
+							taskSequence, currentRequests, totalTimeSeconds, lastTps, lastLatency.toString(),
+							totalTps, totalLatency.toString());
 
-			previousLoop = currentLoop;
+			previousRequests = currentRequests;
 		}
 	}
 
@@ -84,10 +107,10 @@ public abstract class BenchmarkTask implements Runnable {
 	 * 打印线程结果信息.
 	 */
 	protected void printThreadFinishMessage() {
-		long totalTimeInMills = System.currentTimeMillis() - parent.startTime.getTime();
+		long totalTimeMillis = System.currentTimeMillis() - parent.startTime.getTime();
 		long totalRequest = parent.loopCount;
-		long totalTps = (totalRequest * 1000) / totalTimeInMills;
-		BigDecimal totalLatency = new BigDecimal(totalTimeInMills).divide(new BigDecimal(totalRequest), 2,
+		long totalTps = (totalRequest * 1000) / totalTimeMillis;
+		BigDecimal totalLatency = new BigDecimal(totalTimeMillis).divide(new BigDecimal(totalRequest), 2,
 				BigDecimal.ROUND_HALF_UP);
 
 		System.out.printf("Thread %02d finish.Total tps/latency is %,d/%sms\n", taskSequence, totalTps,

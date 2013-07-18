@@ -39,7 +39,7 @@ public class Exceptions {
 	 * 判断异常是否由某些底层的异常引起.
 	 */
 	public static boolean isCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {
-		Throwable cause = ex.getCause();
+		Throwable cause = ex;
 		while (cause != null) {
 			for (Class<? extends Exception> causeClass : causeExceptionClasses) {
 				if (causeClass.isInstance(cause)) {

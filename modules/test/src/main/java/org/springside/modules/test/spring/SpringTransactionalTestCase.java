@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.AbstractTransactionalJUnit4Spring
  * 
  * @author calvin
  */
-@ActiveProfiles("test")
+@ActiveProfiles(Profiles.UNIT_TEST)
 public abstract class SpringTransactionalTestCase extends AbstractTransactionalJUnit4SpringContextTests {
 
 	protected DataSource dataSource;

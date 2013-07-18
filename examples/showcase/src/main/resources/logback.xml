@@ -11,7 +11,7 @@
 	<appender name="rollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>logs/quickstart.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/quickstart.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>logs/showcase.%d{yyyy-MM-dd}.log</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -41,7 +41,10 @@
 	</logger>
 
 	<!--log4jdbc -->
-	<!-- <logger name="jdbc.sqltiming" level="INFO"/> -->
+	<logger name="jdbc.sqltiming" level="INFO"/>
+	
+	<!-- springside modules -->
+	<logger name="org.springside.modules" level="INFO" />
 
 	<root level="WARN">
 		<appender-ref ref="console" />

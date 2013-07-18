@@ -17,6 +17,6 @@ import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
  * 
  * @author calvin
  */
-@ActiveProfiles("test")
+@ActiveProfiles(Profiles.UNIT_TEST)
 public abstract class SpringContextTestCase extends AbstractJUnit4SpringContextTests {
 }

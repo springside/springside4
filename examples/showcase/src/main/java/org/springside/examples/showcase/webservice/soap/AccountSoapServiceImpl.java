@@ -11,6 +11,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springside.examples.showcase.entity.Team;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
@@ -131,7 +132,7 @@ public class AccountSoapServiceImpl implements AccountSoapService {
 			String message = StringUtils.join(BeanValidators.extractPropertyAndMessageAsList(e, " "), "\n");
 			return handleParameterError(result, e, message);
 		} catch (RuntimeException e) {
-			if (Exceptions.isCausedBy(e, org.hibernate.exception.ConstraintViolationException.class)) {
+			if (Exceptions.isCausedBy(e, DuplicateKeyException.class)) {
 				String message = "新建用户参数存在唯一性冲突(用户:" + user + ")";
 				return handleParameterError(result, e, message);
 			} else {

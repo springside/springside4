@@ -28,7 +28,7 @@ import org.springside.modules.utils.Encodes;
  */
 // Spring Service Bean的标识.
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class AccountService {
 
 	public static final String HASH_ALGORITHM = "SHA-1";
@@ -53,7 +53,6 @@ public class AccountService {
 		return userDao.findByLoginName(loginName);
 	}
 
-	@Transactional(readOnly = false)
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
@@ -62,7 +61,6 @@ public class AccountService {
 		userDao.save(user);
 	}
 
-	@Transactional(readOnly = false)
 	public void updateUser(User user) {
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {
 			entryptPassword(user);
@@ -70,7 +68,6 @@ public class AccountService {
 		userDao.save(user);
 	}
 
-	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
 		if (isSupervisor(id)) {
 			logger.warn("操作员{}尝试删除超级管理员用户", getCurrentUserName());

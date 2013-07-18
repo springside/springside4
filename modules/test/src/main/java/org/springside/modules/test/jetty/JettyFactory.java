@@ -70,7 +70,7 @@ public class JettyFactory {
 	public static void reloadContext(Server server) throws Exception {
 		WebAppContext context = (WebAppContext) server.getHandler();
 
-		System.out.println("Application reloading");
+		System.out.println("[INFO] Application reloading");
 		context.stop();
 
 		WebAppClassLoader classLoader = new WebAppClassLoader(context);
@@ -80,6 +80,6 @@ public class JettyFactory {
 
 		context.start();
 
-		System.out.println("Application reloaded");
+		System.out.println("[INFO] Application reloaded");
 	}
 }

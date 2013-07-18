@@ -19,7 +19,7 @@ public class MashupServerController {
 
 	private static final String DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME = "callback";
 
-	private final JsonMapper mapper = new JsonMapper();
+	private JsonMapper mapper = new JsonMapper();
 
 	@RequestMapping(value = "/web/mashup", produces = "applicaiton/javascript")
 	@ResponseBody

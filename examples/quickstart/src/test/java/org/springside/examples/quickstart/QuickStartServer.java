@@ -2,6 +2,7 @@ package org.springside.examples.quickstart;
 
 import org.eclipse.jetty.server.Server;
 import org.springside.modules.test.jetty.JettyFactory;
+import org.springside.modules.test.spring.Profiles;
 
 /**
  * 使用Jetty运行调试Web应用, 在Console输入回车快速重新加载应用.
@@ -17,7 +18,7 @@ public class QuickStartServer {
 
 	public static void main(String[] args) throws Exception {
 		// 设定Spring的profile
-		System.setProperty("spring.profiles.active", "development");
+		Profiles.setProfileAsSystemProperty(Profiles.DEVELOPMENT);
 
 		// 启动Jetty
 		Server server = JettyFactory.createServerInSource(PORT, CONTEXT);
@@ -26,8 +27,8 @@ public class QuickStartServer {
 		try {
 			server.start();
 
-			System.out.println("Server running at http://localhost:" + PORT + CONTEXT);
-			System.out.println("Hit Enter to reload the application quickly");
+			System.out.println("[INFO] Server running at http://localhost:" + PORT + CONTEXT);
+			System.out.println("[HINT] Hit Enter to reload the application quickly");
 
 			// 等待用户输入回车重载应用.
 			while (true) {
