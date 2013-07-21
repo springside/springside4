@@ -24,6 +24,7 @@
 	<h2>MBean介绍:</h2>
 	<ul>
 		<li>Application Statistics Mbean, 当用户在综合演示里查看/更新用户时，计数器将会递增, name为showcase:name=ApplicationStatistics</li>
+		<li>Tomcat JDBC 和  Logback同样提供JMX支持</li>
 	</ul>
 	
 	<h2>使用Jconsole或其他JMX客户端:</h2>
