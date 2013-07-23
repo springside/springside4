@@ -12,4 +12,6 @@
 target/
 logs/
 /examples/showcase/bin/yuicompressor-2.4.*.jar
+/support/jmeter/*.jtl
+/support/jmeter/*.log
 /support/local-script/
