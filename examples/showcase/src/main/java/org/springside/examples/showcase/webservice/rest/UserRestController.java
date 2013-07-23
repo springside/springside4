@@ -10,8 +10,13 @@ import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.modules.mapper.BeanMapper;
 
+/**
+ * Shiro的配置文件中对/api/secure/**进行拦截，要求authBasic认证.
+ * 
+ * @author calvin
+ */
 @Controller
-@RequestMapping(value = "/api/v1/user")
+@RequestMapping(value = { "/api/v1/user", "/api/secure/v1/user" })
 public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
@@ -19,8 +24,8 @@ public class UserRestController {
 	/**
 	 * 基于ContentNegotiationManager,根据URL的后缀渲染不同的格式
 	 * eg. /api/v1/user/1.xml 返回xml
-	 *     /api/v1/user/1.json 返回json
-	 *     /api/v1/user/1 返回xml(why?)
+	 * /api/v1/user/1.json 返回json
+	 * /api/v1/user/1 返回xml(why?)
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody

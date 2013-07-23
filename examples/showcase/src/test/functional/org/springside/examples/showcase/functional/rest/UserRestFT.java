@@ -47,7 +47,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 
 	@BeforeClass
 	public static void initUrl() {
-		resoureUrl = baseUrl + "/api/v1/user";
+		resoureUrl = baseUrl + "/api/secure/v1/user";
 	}
 
 	@Before
@@ -86,6 +86,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		// 设置Http Basic参数
 		HttpHeaders requestHeaders = new HttpHeaders();
 		requestHeaders.set(com.google.common.net.HttpHeaders.AUTHORIZATION, Servlets.encodeHttpBasic("admin", "admin"));
+		System.out.println("Http header is" + requestHeaders);
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
 
 		HttpEntity<UserDTO> response = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,

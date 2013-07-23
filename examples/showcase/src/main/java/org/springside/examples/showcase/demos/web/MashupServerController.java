@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.modules.mapper.JsonMapper;
+import org.springside.modules.web.MediaTypes;
 
 /**
  * 输出JsonP格式的Mashup 服务端, 支持被跨域调用.
@@ -21,7 +22,7 @@ public class MashupServerController {
 
 	private JsonMapper mapper = new JsonMapper();
 
-	@RequestMapping(value = "/web/mashup", produces = "applicaiton/javascript")
+	@RequestMapping(value = "/web/mashup", produces = MediaTypes.JAVASCRIPT_UTF_8)
 	@ResponseBody
 	public String execute(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
