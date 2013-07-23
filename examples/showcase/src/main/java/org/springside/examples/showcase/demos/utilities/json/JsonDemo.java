@@ -229,7 +229,7 @@ public class JsonDemo {
 		TestBean bean = new TestBean();
 		bean.setDefaultValue("Foobar");
 
-		bean = mapper.update(jsonString, bean);
+		mapper.update(jsonString, bean);
 
 		// name被赋值
 		assertEquals("A", bean.getName());

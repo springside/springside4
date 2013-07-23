@@ -134,17 +134,16 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+	 * 当JSON里只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
 	 */
-	public <T> T update(String jsonString, T object) {
+	public void update(String jsonString, Object object) {
 		try {
-			return mapper.readerForUpdating(object).readValue(jsonString);
+			mapper.readerForUpdating(object).readValue(jsonString);
 		} catch (JsonProcessingException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		} catch (IOException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		}
-		return null;
 	}
 
 	/**
