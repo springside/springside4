@@ -25,6 +25,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		String body = jsonMapper.toJson(errors);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.TEXT_PLAIN);
-		return handleExceptionInternal(ex, body, null, HttpStatus.BAD_REQUEST, request);
+		return handleExceptionInternal(ex, body, headers, HttpStatus.BAD_REQUEST, request);
+	}
+
+	@ExceptionHandler(value = { RestException.class })
+	public final ResponseEntity<?> handleException(RestException ex, WebRequest request) {
+		String body = ex.getMessage();
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+
+		HttpStatus status = (ex.status != null) ? ex.status : HttpStatus.INTERNAL_SERVER_ERROR;
+
+		return handleExceptionInternal(ex, body, headers, status, request);
 	}
 }

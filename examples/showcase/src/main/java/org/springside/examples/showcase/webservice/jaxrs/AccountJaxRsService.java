@@ -37,6 +37,7 @@ public class AccountJaxRsService {
 		User user = accountService.getUser(id);
 		if (user == null) {
 			String message = "用户不存在(id:" + id + ")";
+			logger.warn(message);
 			throw buildException(Status.NOT_FOUND, message);
 		}
 		return bindDTO(user);
@@ -49,6 +50,7 @@ public class AccountJaxRsService {
 		User user = accountService.getUser(id);
 		if (user == null) {
 			String message = "用户不存在(id:" + id + ")";
+			logger.warn(message);
 			throw buildException(Status.NOT_FOUND, message);
 		}
 		return bindDTO(user);
