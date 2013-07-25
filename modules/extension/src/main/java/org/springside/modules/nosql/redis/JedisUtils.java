@@ -1,5 +1,6 @@
 package org.springside.modules.nosql.redis;
 
+import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 
@@ -38,5 +39,22 @@ public class JedisUtils {
 		poolConfig.setTimeBetweenEvictionRunsMillis(checkingIntervalSecs * 1000);
 		poolConfig.setMinEvictableIdleTimeMillis(idleTimeSecs * 1000);
 		return poolConfig;
+	}
+
+	/**
+	 * 退出然后关闭Jedis。
+	 */
+	public static void closeJedis(Jedis jedis) {
+		if (jedis.isConnected()) {
+			try {
+				try {
+					jedis.quit();
+				} catch (Exception e) {
+				}
+				jedis.disconnect();
+			} catch (Exception e) {
+
+			}
+		}
 	}
 }
