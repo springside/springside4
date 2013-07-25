@@ -46,8 +46,11 @@
 	
 	<!-- springside modules -->
 	<logger name="org.springside.modules" level="INFO" />
-	<logger name="org.springside.modules.nosql" level="DEBUG" />
+	
+	<!-- cxf inbound/outbound logger -->
+	<!-- <logger name="org.apache.cxf.services" level="INFO" /> -->
 
+	<!-- root -->
 	<root level="WARN">
 		<appender-ref ref="console" />
 		<appender-ref ref="rollingFile" />

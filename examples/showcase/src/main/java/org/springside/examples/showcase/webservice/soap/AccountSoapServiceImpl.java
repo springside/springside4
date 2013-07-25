@@ -8,6 +8,7 @@ import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.cxf.feature.Features;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ import org.springside.modules.utils.Exceptions;
  */
 // serviceName指明WSDL中<wsdl:service>与<wsdl:binding>元素的名称, endpointInterface属性指向Interface类全称.
 @WebService(serviceName = "AccountService", endpointInterface = "org.springside.examples.showcase.webservice.soap.AccountSoapService", targetNamespace = WsConstants.NS)
+@Features(features = "org.apache.cxf.feature.LoggingFeature")
 public class AccountSoapServiceImpl implements AccountSoapService {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountSoapServiceImpl.class);
