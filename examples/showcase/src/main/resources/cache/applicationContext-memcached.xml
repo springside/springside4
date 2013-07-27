@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
 	default-lazy-init="true">
 	<!-- SpyMemcached客户端 -->
-	<bean id="spyMemcachedClient" class="org.springside.modules.cache.memcached.SpyMemcachedClient" depends-on="memcachedSimulator">
+	<bean id="spyMemcachedClient" class="org.springside.modules.cache.memcached.SpyMemcachedClient">
 		<property name="memcachedClient">
 			<bean class="net.spy.memcached.spring.MemcachedClientFactoryBean">
 				<property name="servers" value="${memcached.url}" />
