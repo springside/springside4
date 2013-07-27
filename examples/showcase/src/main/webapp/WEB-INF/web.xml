@@ -79,16 +79,6 @@
 		<servlet-name>RemoteContentServlet</servlet-name>
 		<url-pattern>/remote-content</url-pattern>
 	</servlet-mapping>
-	
-	<!-- only for hystrix dashboard -->
-	<servlet>
-        <servlet-name>HystrixMetricsStreamServlet</servlet-name>
-        <servlet-class>com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>HystrixMetricsStreamServlet</servlet-name>
-        <url-pattern>/hystrix/hystrix.stream</url-pattern>
-    </servlet-mapping>
 
 	<!-- Filter 定义 -->
 	<!-- Character Encoding filter -->

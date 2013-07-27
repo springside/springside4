@@ -23,9 +23,9 @@ public abstract class ConcurrentBenchmark {
 	protected CountDownLatch finishLock;
 
 	protected Date startTime;
-	protected int intervalInMills;
+	protected int intervalMillis = 10 * 1000;
 
-	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount, int intervalInSeconds) {
+	public ConcurrentBenchmark(int defaultThreadCount, long defaultLoopCount) {
 		// merge default setting and system properties
 		this.threadCount = Integer.parseInt(System.getProperty(THREAD_COUNT_NAME, String.valueOf(defaultThreadCount)));
 		this.loopCount = Long.parseLong(System.getProperty(LOOP_COUNT_NAME, String.valueOf(defaultLoopCount)));
@@ -33,7 +33,6 @@ public abstract class ConcurrentBenchmark {
 		startLock = new CountDownLatch(threadCount);
 		finishLock = new CountDownLatch(threadCount);
 
-		this.intervalInMills = intervalInSeconds * 1000;
 	}
 
 	public void execute() throws Exception {
@@ -44,7 +43,9 @@ public abstract class ConcurrentBenchmark {
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		try {
 			for (int i = 0; i < threadCount; i++) {
-				BenchmarkTask task = createTask(i);
+				BenchmarkTask task = createTask();
+				task.taskSequence = i;
+				task.parent = this;
 				threadPool.execute(task);
 			}
 
@@ -79,29 +80,31 @@ public abstract class ConcurrentBenchmark {
 		Date endTime = new Date();
 		String className = this.getClass().getSimpleName();
 		long invokeTimes = threadCount * loopCount;
-		long timeInMills = endTime.getTime() - startTime.getTime();
-		long tps = (invokeTimes * 1000) / timeInMills;
+		long totalTimeMillis = endTime.getTime() - startTime.getTime();
+		long tps = (invokeTimes * 1000) / totalTimeMillis;
 
 		System.out.printf("%s finished at %s.\n%d threads processed %,d requests after %,d ms, tps is %,d.\n",
-				className, endTime.toString(), threadCount, invokeTimes, timeInMills, tps);
+				className, endTime.toString(), threadCount, invokeTimes, totalTimeMillis, tps);
+	}
+
+	protected void setIntervalSeconds(int intervalSeconds) {
+		this.intervalMillis = intervalSeconds * 1000;
 	}
 
 	/**
-	 * Override to connect resource and prepare global data.
+	 * Override for connection & data setup.
 	 */
 	protected void setUp() {
 	}
 
 	/**
-	 * Override to disconnect resource, verify result and cleanup global data .
+	 * Override to connection & data cleanup.
 	 */
 	protected void tearDown() {
 	}
 
 	/**
-	 * Return a new benchmark task.
-	 * 
-	 * @param taskSequence the sequence number of the task.
+	 * create a new benchmark task.
 	 */
-	protected abstract BenchmarkTask createTask(int taskSequence);
+	protected abstract BenchmarkTask createTask();
 }

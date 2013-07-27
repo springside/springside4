@@ -23,7 +23,7 @@ import org.springside.modules.persistence.SearchFilter.Operator;
 //Spring Bean的标识.
 @Component
 // 默认将类中的所有public函数纳入事务管理.
-@Transactional(readOnly = true)
+@Transactional
 public class TaskService {
 
 	private TaskDao taskDao;
@@ -32,12 +32,10 @@ public class TaskService {
 		return taskDao.findOne(id);
 	}
 
-	@Transactional(readOnly = false)
 	public void saveTask(Task entity) {
 		taskDao.save(entity);
 	}
 
-	@Transactional(readOnly = false)
 	public void deleteTask(Long id) {
 		taskDao.delete(id);
 	}

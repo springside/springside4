@@ -9,15 +9,6 @@
 <html>
 <head>
 	<title>用户管理</title>
-	
-	<script>
-		${symbol_dollar}(document).ready(function() {
-			//聚焦第一个输入框
-			${symbol_dollar}("${symbol_pound}name").focus();
-			//为inputForm注册validate函数
-			${symbol_dollar}("${symbol_pound}inputForm").validate();
-		});
-	</script>
 </head>
 
 <body>
@@ -61,5 +52,14 @@
 			</div>
 		</fieldset>
 	</form>
+	
+	<script>
+		${symbol_dollar}(document).ready(function() {
+			//聚焦第一个输入框
+			${symbol_dollar}("${symbol_pound}name").focus();
+			//为inputForm注册validate函数
+			${symbol_dollar}("${symbol_pound}inputForm").validate();
+		});
+	</script>
 </body>
 </html>

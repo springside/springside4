@@ -109,7 +109,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());
-			assertEquals("may not be empty", messages.get("title"));
+			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
 		}
 
 		// update
@@ -121,7 +121,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());
-			assertEquals("may not be empty", messages.get("title"));
+			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
 		}
 	}
 }

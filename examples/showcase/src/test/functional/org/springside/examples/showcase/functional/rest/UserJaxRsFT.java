@@ -26,12 +26,12 @@ public class UserJaxRsFT extends BaseFunctionalTestCase {
 
 	@Test
 	public void getUser() {
-		UserDTO user = restTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
+		UserDTO user = restTemplate.getForObject(resoureUrl + "/{id}.xml", UserDTO.class, 1L);
 		assertEquals("admin", user.getLoginName());
 		assertEquals("管理员", user.getName());
 		assertEquals(new Long(1), user.getTeamId());
 
-		user = restTemplate.getForObject(resoureUrl + "/{id}.xml", UserDTO.class, 1L);
+		user = restTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
 		assertEquals("admin", user.getLoginName());
 		assertEquals("管理员", user.getName());
 		assertEquals(new Long(1), user.getTeamId());
