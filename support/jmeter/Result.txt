@@ -1,4 +1,0 @@
-showcase-rest: 3038 TPS
-showcase-rest-xml: 3006 TPS
-showcase-rest-shiro:1344 TPS
-showcase-jaxrs: 2609 TPS
