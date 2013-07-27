@@ -30,7 +30,13 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 /**
- * Master选举实现, 基于setNx()与expire()两大API
+ * Master选举实现, 基于setNx()与expire()两大API.
+ * 与每次使用setNx争夺的分布式锁不同，Master用setNX争夺Master Key成功后，会不断的更新key的expireTime，保持自己的master地位，直到自己倒掉了不能再更新为止。
+ * 其他Slave会定时检查Master Key是否已过期，如果已过期则重新发起争夺。
+ * 
+ * 其他服务可以随时调用isMaster()，查询自己是否master, 与MasterElector的内部定时操作是解耦的。
+ * 
+ * 在最差情况下，可能有两倍的intervalSecs内集群内没有Master。
  * 
  * @author calvin
  */
@@ -43,23 +49,23 @@ public class MasterElector implements Runnable {
 	private static AtomicInteger poolNumber = new AtomicInteger(1);
 	private ScheduledExecutorService internalScheduledThreadPool;
 	private ScheduledFuture electorJob;
-	private int intervalSeconds;
+	private int intervalSecs;
+	private int expireSecs;
 
 	private JedisTemplate jedisTemplate;
 
-	private int expireSeconds;
 	private String hostId;
-	private AtomicBoolean master = new AtomicBoolean(false);
 	private String masterKey = DEFAULT_MASTER_KEY;
+	private AtomicBoolean master = new AtomicBoolean(false);
 
-	public MasterElector(JedisPool jedisPool, int intervalSeconds, int expireSeconds) {
+	public MasterElector(JedisPool jedisPool, int intervalSecs) {
 		jedisTemplate = new JedisTemplate(jedisPool);
-		this.expireSeconds = expireSeconds;
-		this.intervalSeconds = intervalSeconds;
+		this.intervalSecs = intervalSecs;
+		this.expireSecs = intervalSecs + (intervalSecs / 2);
 	}
 
 	/**
-	 * 发挥目前该实例是否master
+	 * 返回目前该实例是否master。
 	 */
 	public boolean isMaster() {
 		return master.get();
@@ -78,21 +84,21 @@ public class MasterElector implements Runnable {
 	 * 启动抢注线程, 使用传入的scheduler线程池.
 	 */
 	public void start(ScheduledExecutorService scheduledThreadPool) {
-		if (intervalSeconds >= expireSeconds) {
-			throw new IllegalArgumentException("periodSeconds must less than expireSeconds. periodSeconds is "
-					+ intervalSeconds + " expireSeconds is " + expireSeconds);
-		}
-
 		hostId = generateHostId();
-		electorJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalSeconds,
+		electorJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalSecs,
 				TimeUnit.SECONDS);
 		logger.info("masterElector start, hostName:{}.", hostId);
 	}
 
 	/**
-	 * 停止分发任务，如果是自行创建的threadPool则自行销毁。
+	 * 停止抢注线程，如果是自行创建的threadPool则自行销毁。
+	 * 如果是master, 则主动注销key.
 	 */
 	public void stop() {
+		if (master.get()) {
+			jedisTemplate.del(masterKey);
+		}
+
 		electorJob.cancel(false);
 
 		if (internalScheduledThreadPool != null) {
@@ -130,7 +136,7 @@ public class MasterElector implements Runnable {
 							// use setnx to make sure only one client can register as master.
 							if (jedis.setnx(masterKey, hostId) > 0) {
 								// 等jedis支持2.6.12开始的新的set语法，就可以不用再担心setnx后expire还没来得及执行就crash。
-								jedis.expire(masterKey, expireSeconds);
+								jedis.expire(masterKey, expireSecs);
 								master.set(true);
 
 								logger.info("master is changed to {}.", hostId);
@@ -143,23 +149,22 @@ public class MasterElector implements Runnable {
 
 						// if master is myself, update the expire time.
 						if (hostId.equals(masterFromRedis)) {
-							jedis.expire(masterKey, expireSeconds);
+							jedis.expire(masterKey, expireSecs);
 							master.set(true);
 						} else {
-							// 如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
+							// 在jedis支持2.6.12开始的新的set语法前，如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
 							if (jedis.ttl(masterKey) == -1) {
-								jedis.expire(masterKey, expireSeconds);
+								jedis.expire(masterKey, expireSecs);
 								logger.info("master key doesn't has expired time, set it again");
 							}
 							master.set(false);
 						}
-
 					}
 				});
 	}
 
 	/**
-	 * 如果应用中有多种master，设置唯一的master name
+	 * 如果应用中有多种master，设置唯一的master name。
 	 */
 	public void setMasterKey(String masterKey) {
 		this.masterKey = masterKey;

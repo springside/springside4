@@ -13,7 +13,7 @@ public class MasterElectorDemo {
 		JedisPool pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
 				JedisUtils.DEFAULT_TIMEOUT, 1);
 		try {
-			MasterElector masterElector = new MasterElector(pool, 5, 10);
+			MasterElector masterElector = new MasterElector(pool, 5);
 
 			masterElector.start();
 
