@@ -63,10 +63,15 @@ public class JedisTemplate {
 	 */
 	protected void closeResource(Jedis jedis, boolean connectionBroken) {
 		if (jedis != null) {
-			if (connectionBroken) {
-				jedisPool.returnBrokenResource(jedis);
-			} else {
-				jedisPool.returnResource(jedis);
+			try {
+				if (connectionBroken) {
+					jedisPool.returnBrokenResource(jedis);
+				} else {
+					jedisPool.returnResource(jedis);
+				}
+			} catch (Exception e) {
+				logger.error("Error happen when return jedis to pool, try to close it directly.", e);
+				JedisUtils.closeJedis(jedis);
 			}
 		}
 	}
