@@ -236,7 +236,7 @@
               </elementProp>
               <elementProp name="loginName" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">user1</stringProp>
+                <stringProp name="Argument.value">user${USER_ID}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
                 <boolProp name="HTTPArgument.use_equals">true</boolProp>
                 <stringProp name="Argument.name">loginName</stringProp>

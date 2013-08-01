@@ -36,6 +36,7 @@
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.2.5</httpclient.version>
 		<freemarker.version>2.3.20</freemarker.version>
+		<javasimon.version>3.3.0</javasimon.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.1</powermock.version>
@@ -590,6 +591,19 @@
 				<version>1.1.1</version>
 			</dependency>
 			<!-- OTHER TOOLS end -->
+	
+			<!-- Monitor begin-->
+			<dependency>
+				<groupId>org.javasimon</groupId>
+				<artifactId>javasimon-spring</artifactId>
+				<version>${javasimon.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.javasimon</groupId>
+				<artifactId>javasimon-console-embed</artifactId>
+				<version>${javasimon.version}</version>
+			</dependency>
+			<!-- Monitor end-->					
 	
 			<!-- TEST begin -->
 			<!-- junit -->
