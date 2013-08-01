@@ -26,7 +26,7 @@
 		<li>演示地址：<a href="${ctx}/cxf/jaxrs/user/1.xml">/cxf/jaxrs/user/1.xml</a> 与 <a href="${ctx}/cxf/jaxrs/user/1.json">/cxf/jaxrs/user/1.json</a></li>
 	</ul>	
 
-	<h2>3. SpringMVC Restful Service高级演示</h2>
+	<h2>3. SpringMVC Restful Service高级演示(xxx.json、xxx.xml风格)</h2>
 	服务端:
 	<ul>
 		<li>集成Shiro进行HttpBasic的认证 </li>

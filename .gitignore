@@ -15,3 +15,13 @@ logs/
 /support/jmeter/*.jtl
 /support/jmeter/*.log
 /support/local-script/
+/springside-project.iml
+/.idea
+/examples/quickstart/quickstart.iml
+/examples/showcase/showcase.iml
+/examples/springside-examples.iml
+/modules/core/springside-core.iml
+/modules/extension/springside-extension.iml
+/modules/parent/springside-parent.iml
+/modules/springside-modules.iml
+/modules/test/springside-test.iml
