@@ -40,16 +40,6 @@
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
 		<!-- SPRING basic end -->
-		
-		<!-- AOP -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-		</dependency>
 		<!-- SPRING end -->
 
 		<!-- PERSISTENCE begin -->
@@ -217,6 +207,12 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
+		</dependency>
+		
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
 		</dependency>
 		
 		<!-- JSON -->
