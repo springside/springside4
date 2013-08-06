@@ -26,7 +26,6 @@ import com.google.common.collect.Maps;
 @Transactional
 @Monitored
 public class AccountEffectiveService {
-
 	@Autowired
 	private UserMybatisDao userDao;
 	@Autowired
@@ -45,21 +44,21 @@ public class AccountEffectiveService {
 	 * 先访问Memcached, 使用JSON字符串存放对象以节约空间.
 	 */
 	public User getUser(Long id) {
+
 		String key = MemcachedObjectType.USER.getPrefix() + id;
 
-		User user = null;
 		String jsonString = memcachedClient.get(key);
 
-		if (jsonString == null) {
-			user = userDao.get(id);
+		if (jsonString != null) {
+			return jsonMapper.fromJson(jsonString, User.class);
+		} else {
+			User user = userDao.get(id);
 			if (user != null) {
 				jsonString = jsonMapper.toJson(user);
 				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
 			}
-		} else {
-			user = jsonMapper.fromJson(jsonString, User.class);
+			return user;
 		}
-		return user;
 	}
 
 	public List<User> searchUser(String loginName, String name) {

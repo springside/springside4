@@ -27,7 +27,7 @@ public class MashupServerController {
 
 	@RequestMapping(value = "/web/mashup", produces = MediaTypes.JAVASCRIPT_UTF_8)
 	@ResponseBody
-	public String executeWay1(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
+	public String mashup1(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
 		// 设置需要被格式化为JSON字符串的内容.
 		Map<String, String> map = Collections.singletonMap("content", "<p>你好，世界！</p>");
@@ -38,7 +38,7 @@ public class MashupServerController {
 
 	@RequestMapping(value = "/web/mashup2", produces = MediaTypes.JAVASCRIPT_UTF_8)
 	@ResponseBody
-	public JSONPObject executeWay2(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
+	public JSONPObject mashup2(@RequestParam(DEFAULT_JQUERY_JSONP_CALLBACK_PARM_NAME) String callbackName) {
 
 		// 设置需要被格式化为JSON字符串的内容.
 		Map<String, String> map = Collections.singletonMap("content", "<p>你好，世界！</p>");
