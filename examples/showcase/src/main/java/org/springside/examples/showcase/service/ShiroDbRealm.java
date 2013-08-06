@@ -34,7 +34,6 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.utils.Encodes;
@@ -94,7 +93,6 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		setCredentialsMatcher(matcher);
 	}
 
-	@Autowired
 	public void setAccountService(AccountService accountService) {
 		this.accountService = accountService;
 	}
