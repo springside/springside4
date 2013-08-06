@@ -22,6 +22,9 @@ public class AccountServiceTest {
 	@Mock
 	private UserDao mockUserDao;
 
+	@Mock
+	private BusinessLogger businessLogger;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
