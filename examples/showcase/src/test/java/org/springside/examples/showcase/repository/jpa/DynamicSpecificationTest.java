@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.persistence.DynamicSpecifications;
@@ -16,6 +17,7 @@ import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 import com.google.common.collect.Lists;
 
+@DirtiesContext
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class DynamicSpecificationTest extends SpringTransactionalTestCase {
 
