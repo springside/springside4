@@ -46,7 +46,7 @@ public class AccountService {
 
 	private RoleDao roleDao;
 
-	private NotifyMessageProducer notifyProducer; // JMS消息发送
+	private NotifyMessageProducer notifyProducer;
 
 	private ApplicationStatistics applicationStatistics;
 
@@ -81,24 +81,50 @@ public class AccountService {
 		}
 
 		// 业务日志演示
-		if (businessLogger != null) {
-			Map map = Maps.newHashMap();
-			map.put("userId", user.getId());
-			businessLogger.log("UPDATE", getCurrentUserName(), map);
-		}
+		Map logData = Maps.newHashMap();
+		logData.put("userId", user.getId());
+		businessLogger.log("USER", "UPDATE", getCurrentUserName(), logData);
 	}
 
 	/**
-	 * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+	 * 按Id获得用户.
 	 */
-	private void entryptPassword(User user) {
-		byte[] salt = Digests.generateSalt(SALT_SIZE);
-		user.setSalt(Encodes.encodeHex(salt));
-
-		byte[] hashPassword = Digests.sha1(user.getPlainPassword().getBytes(), salt, HASH_INTERATIONS);
-		user.setPassword(Encodes.encodeHex(hashPassword));
+	public User getUser(Long id) {
+		return userDao.findOne(id);
 	}
 
+	/**
+	 * 获取全部用户，并在返回前对用户的延迟加载关联角色进行初始化.
+	 */
+	public List<User> getAllUserInitialized() {
+		List<User> result = (List<User>) userDao.findAll();
+		for (User user : result) {
+			Hibernates.initLazyProperty(user.getRoleList());
+		}
+		return result;
+	}
+
+	/**
+	 * 按登录名查询用户.
+	 */
+	public User findUserByLoginName(String loginName) {
+		return userDao.findByLoginName(loginName);
+	}
+
+	/**
+	 * 按名称查询用户, 并在返回前对用户的延迟加载关联角色进行初始化.
+	 */
+	public User findUserByNameInitialized(String name) {
+		User user = userDao.findByName(name);
+		if (user != null) {
+			Hibernates.initLazyProperty(user.getRoleList());
+		}
+		return user;
+	}
+
+	/**
+	 * 按页面传来的查询条件查询用户.
+	 */
 	public List<User> searchUser(Map<String, Object> searchParams) {
 		Map<String, SearchFilter> filters = SearchFilter.parse(searchParams);
 		Specification<User> spec = DynamicSpecifications.bySearchFilter(filters.values(), User.class);
@@ -110,42 +136,9 @@ public class AccountService {
 		}
 		// 业务日志演示
 		if (businessLogger != null) {
-			businessLogger.log("LIST", getCurrentUserName(), null);
+			businessLogger.log("USER", "LIST", getCurrentUserName(), null);
 		}
 		return userList;
-	}
-
-	/**
-	 * 获取全部用户对象，并在返回前完成LazyLoad属性的初始化。
-	 */
-	public List<User> getAllUserInitialized() {
-		List<User> result = (List<User>) userDao.findAll();
-		for (User user : result) {
-			Hibernates.initLazyProperty(user.getRoleList());
-		}
-		return result;
-	}
-
-	/**
-	 * 判断是否超级管理员.
-	 */
-	private boolean isSupervisor(User user) {
-		return ((user.getId() != null) && (user.getId() == 1L));
-	}
-
-	public User getUser(Long id) {
-		return userDao.findOne(id);
-	}
-
-	/**
-	 * 按名称查询用户, 并对用户的延迟加载关联进行初始化.
-	 */
-	public User findUserByNameInitialized(String name) {
-		User user = userDao.findByName(name);
-		if (user != null) {
-			Hibernates.initLazyProperty(user.getRoleList());
-		}
-		return user;
 	}
 
 	/**
@@ -155,8 +148,22 @@ public class AccountService {
 		return userDao.count();
 	}
 
-	public User findUserByLoginName(String loginName) {
-		return userDao.findByLoginName(loginName);
+	/**
+	 * 判断是否超级管理员.
+	 */
+	private boolean isSupervisor(User user) {
+		return ((user.getId() != null) && (user.getId() == 1L));
+	}
+
+	/**
+	 * 设定安全的密码，生成随机的salt并经过1024次 sha-1 hash
+	 */
+	private void entryptPassword(User user) {
+		byte[] salt = Digests.generateSalt(SALT_SIZE);
+		user.setSalt(Encodes.encodeHex(salt));
+
+		byte[] hashPassword = Digests.sha1(user.getPlainPassword().getBytes(), salt, HASH_INTERATIONS);
+		user.setPassword(Encodes.encodeHex(hashPassword));
 	}
 
 	/**
@@ -205,6 +212,11 @@ public class AccountService {
 		this.roleDao = roleDao;
 	}
 
+	@Autowired
+	public void setBusinessLogger(BusinessLogger businessLogger) {
+		this.businessLogger = businessLogger;
+	}
+
 	@Autowired(required = false)
 	public void setNotifyProducer(NotifyMessageProducer notifyProducer) {
 		this.notifyProducer = notifyProducer;
@@ -213,10 +225,5 @@ public class AccountService {
 	@Autowired(required = false)
 	public void setApplicationStatistics(ApplicationStatistics applicationStatistics) {
 		this.applicationStatistics = applicationStatistics;
-	}
-
-	@Autowired(required = false)
-	public void setBusinessLogger(BusinessLogger businessLogger) {
-		this.businessLogger = businessLogger;
 	}
 }
