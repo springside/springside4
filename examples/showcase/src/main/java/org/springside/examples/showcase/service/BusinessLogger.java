@@ -7,16 +7,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springside.modules.mapper.JsonMapper;
 
+/**
+ * 打印业务日志，格式为:
+ * 
+ * 日期,实体类型,操作类型 ,操作用户,json格式的扩展字段
+ * 
+ * @author calvin
+ */
 @Component
 public class BusinessLogger {
-	public static String BUSINESS_LOGGER = "business";
+	public static final String BUSINESS_LOGGER_NAME = "business";
 
+	private Logger businessLogger = LoggerFactory.getLogger(BUSINESS_LOGGER_NAME);
 	private JsonMapper jsonMapper = new JsonMapper();
-	// 业务日志的logger
-	private static Logger businessLogger = LoggerFactory.getLogger(BUSINESS_LOGGER);
 
 	public void log(String entity, String action, String user, Map data) {
-
-		businessLogger.info("{},{},{},{}", entity, action, user, jsonMapper.toJson(data));
+		String json = (data != null ? jsonMapper.toJson(data) : "{}");
+		businessLogger.info("{},{},{},{}", entity, action, user, json);
 	}
 }
