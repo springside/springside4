@@ -27,7 +27,7 @@ public class ApplicationStatistics {
 		updateUserTimes.incrementAndGet();
 	}
 
-	@ManagedAttribute(description = "Times of all users be listed")
+	@ManagedAttribute(description = "Times of users be listed")
 	public int getListUserTimes() {
 		return listUserTimes.get();
 	}
@@ -42,5 +42,4 @@ public class ApplicationStatistics {
 		listUserTimes.set(0);
 		updateUserTimes.set(0);
 	}
-
 }

@@ -31,7 +31,7 @@ public class AccountEffectiveService {
 	@Autowired
 	private TeamMybatisDao teamDao;
 
-	@Autowired
+	@Autowired(required = false)
 	private SpyMemcachedClient memcachedClient;
 
 	private final JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
@@ -40,11 +40,18 @@ public class AccountEffectiveService {
 		return teamDao.getWithDetail(id);
 	}
 
+	public User getUser(Long id) {
+		if (memcachedClient != null) {
+			return getUserWithMemcached(id);
+		} else {
+			return userDao.get(id);
+		}
+	}
+
 	/**
 	 * 先访问Memcached, 使用JSON字符串存放对象以节约空间.
 	 */
-	public User getUser(Long id) {
-
+	private User getUserWithMemcached(Long id) {
 		String key = MemcachedObjectType.USER.getPrefix() + id;
 
 		String jsonString = memcachedClient.get(key);

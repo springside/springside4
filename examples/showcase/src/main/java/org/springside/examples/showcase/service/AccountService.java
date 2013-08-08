@@ -73,8 +73,9 @@ public class AccountService {
 		userDao.save(user);
 
 		// 发送JMS消息
-		sendNotifyMessage(user);
-
+		if (notifyProducer != null) {
+			sendNotifyMessage(user);
+		}
 		// 运行统计演示
 		if (applicationStatistics != null) {
 			applicationStatistics.incrUpdateUserTimes();
@@ -172,13 +173,11 @@ public class AccountService {
 	 * 同时发送只有一个消费者的Queue消息与发布订阅模式有多个消费者的Topic消息.
 	 */
 	private void sendNotifyMessage(User user) {
-		if (notifyProducer != null) {
-			try {
-				notifyProducer.sendQueue(user);
-				notifyProducer.sendTopic(user);
-			} catch (Exception e) {
-				logger.error("消息发送失败", e);
-			}
+		try {
+			notifyProducer.sendQueue(user);
+			notifyProducer.sendTopic(user);
+		} catch (Exception e) {
+			logger.error("消息发送失败", e);
 		}
 	}
 
