@@ -36,8 +36,6 @@ public class BaseFunctionalTestCase {
 	@BeforeClass
 	public static void initFunctionalTestEnv() throws Exception {
 
-		System.out.println("[HINT] Don't forget to set -XX:MaxPermSize=128m");
-
 		baseUrl = propertiesLoader.getProperty("baseUrl");
 
 		Boolean isEmbedded = new URL(baseUrl).getHost().equals("localhost")
@@ -56,6 +54,8 @@ public class BaseFunctionalTestCase {
 	 */
 	protected static void startJettyOnce() throws Exception {
 		if (jettyServer == null) {
+			System.out.println("[HINT] Don't forget to set -XX:MaxPermSize=128m");
+
 			// 设定Spring的profile
 			Profiles.setProfileAsSystemProperty(Profiles.FUNCTIONAL_TEST);
 
