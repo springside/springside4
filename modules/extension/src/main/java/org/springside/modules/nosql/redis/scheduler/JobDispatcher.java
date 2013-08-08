@@ -43,7 +43,7 @@ public class JobDispatcher implements Runnable {
 	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor scriptExecutor;
 	private String scriptPath = DEFAULT_DISPATCH_LUA_FILE;
-	private String scriptHash;
+	private String scriptSha1;
 
 	private List<String> keys;
 	private String sleepingJobKey;
@@ -89,7 +89,7 @@ public class JobDispatcher implements Runnable {
 			throw new IllegalArgumentException(scriptPath + " is not exist.", e);
 		}
 
-		scriptHash = scriptExecutor.load(script);
+		scriptSha1 = scriptExecutor.load(script);
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class JobDispatcher implements Runnable {
 	public void run() {
 		long currTime = System.currentTimeMillis();
 		List<String> args = Lists.newArrayList(String.valueOf(currTime));
-		Long count = (Long) scriptExecutor.execute(scriptHash, keys, args);
+		Long count = (Long) scriptExecutor.execute(scriptSha1, keys, args);
 		logger.debug("{} Job dispatched", count != null ? count : 0);
 	}
 
