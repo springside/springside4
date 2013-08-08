@@ -38,20 +38,20 @@
 	<p>以下种种，成本就是在web.xml里添加一个jolokia的servlet而已。</p>
 	查询：
 	<ul>
-		<li>列出showcase域下的所有MBean及其描述: <br/><a href="${baseUrl}/jolokia/list/showcase">${baseUrl}/jolokia/list/showcase</a></li>
-		<li>获取showcase域下的所有MBean的属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=*">${baseUrl}/jolokia/read/showcase:name=*</a></li>
-		<li>获取应用统计MBean的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics</a></li>
-		<li>只获取应用统计MBean的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
+		<li>列出showcase域下的所有MBean及其描述: <br/><a href="${baseUrl}/jolokia/list/showcase">/jolokia/list/showcase</a></li>
+		<li>获取showcase域下的所有MBean的属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=*">/jolokia/read/showcase:name=*</a></li>
+		<li>获取应用统计MBean的所有属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics">/jolokia/read/showcase:name=ApplicationStatistics</a></li>
+		<li>只获取应用统计MBean的展示用户列表次数属性: <br/><a href="${baseUrl}/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes">/jolokia/read/showcase:name=ApplicationStatistics/ListUserTimes</a></li>
 	</ul>
-	查询：
+	设置：
 	<ul>
-		<li>设置jolokia的属性: <br/><a href="${baseUrl}/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20">${baseUrl}/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20</a></li>
+		<li>设置jolokia的属性: <br/><a href="${baseUrl}/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20">/jolokia/write/jolokia:type=Config/HistoryMaxEntries/20</a></li>
 	</ul>
 	
 	执行：
 	<ul>
-		<li>执行重置清零统计信息的命令: <br/><a href="${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics">${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics</a></li>
-		<li>执行获取特定Logger的Level的命令: <br/><a href="${baseUrl}/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework">${baseUrl}/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework</a></li>
+		<li>执行重置清零统计信息的命令: <br/><a href="${baseUrl}/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics">/jolokia/exec/showcase:name=ApplicationStatistics/resetStatistics</a></li>
+		<li>执行获取特定Logger的Level的命令: <br/><a href="${baseUrl}/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework">/jolokia/exec/ch.qos.logback.classic:Name=default,Type=ch.qos.logback.classic.jmx.JMXConfigurator/getLoggerEffectiveLevel/org.springframework</a></li>
 	</ul>
 </body>
 </html>
