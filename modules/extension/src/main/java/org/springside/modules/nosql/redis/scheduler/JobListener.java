@@ -26,7 +26,7 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
  */
 public class JobListener implements Runnable {
 
-	public static final int DEFAULT_POPUP_TIMEOUT = 5;
+	public static final int DEFAULT_POPUP_TIMEOUT_SECONDS = 5;
 
 	private static Logger logger = LoggerFactory.getLogger(JobListener.class);
 
@@ -47,7 +47,7 @@ public class JobListener implements Runnable {
 	 */
 	@Override
 	public void run() {
-		// 第一层大循环保证了如果redis服务连接异常，等待两秒后继续执行。
+		// 第一层大循环保证了如果redis服务连接异常，等待2秒后继续执行。
 		while (true) {
 			try {
 				jedisTemplate.execute(new JedisActionNoResult() {
@@ -55,18 +55,17 @@ public class JobListener implements Runnable {
 					public void action(Jedis jedis) {
 						// 第二层循环发生在jedis action内，用同一个Jedis不断popup任务直到线程中断。
 						while (!Thread.currentThread().isInterrupted()) {
-							List<String> nameValuePair = jedis.brpop(DEFAULT_POPUP_TIMEOUT, readyJobKey);
+							List<String> nameValuePair = jedis.brpop(DEFAULT_POPUP_TIMEOUT_SECONDS, readyJobKey);
 							if ((nameValuePair != null) && !nameValuePair.isEmpty()) {
 								String job = nameValuePair.get(1);
 								try {
 									jobHandler.handleJob(jedis, job);
 								} catch (Exception e) {
-									// 记录流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
+									// 记录jobHandler流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
 									logger.error("Handler exception for job " + job, e);
 								}
 							}
 						}
-
 					}
 				});
 				// 线程已中断，退出循环.

@@ -230,6 +230,32 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回0.
+	 */
+	public boolean lremOne(final String key, final String value) {
+		return execute(new JedisAction<Boolean>() {
+			@Override
+			public Boolean action(Jedis jedis) {
+				Long count = jedis.lrem(key, 1, value);
+				return (count == 1);
+			}
+		});
+	}
+
+	/**
+	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回0.
+	 */
+	public boolean lremAll(final String key, final String value) {
+		return execute(new JedisAction<Boolean>() {
+			@Override
+			public Boolean action(Jedis jedis) {
+				Long count = jedis.lrem(key, 0, value);
+				return (count > 0);
+			}
+		});
+	}
+
 	// ////////////// 关于Sorted Set ///////////////////////////
 	/**
 	 * 加入Sorted set, 如果member在Set里已存在，只更新score并返回false,否则返回true.

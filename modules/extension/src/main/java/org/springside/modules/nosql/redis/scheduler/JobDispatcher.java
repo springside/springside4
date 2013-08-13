@@ -23,7 +23,7 @@ import redis.clients.jedis.JedisPool;
 import com.google.common.collect.Lists;
 
 /**
- * 定时分发任务。 启动线程定时从sleeping job sorted set 中取出到期的任务放入ready job list.
+ * 定时分发任务。 启动线程定时从scheduled job sorted set 中取出到期的任务放入ready job list.
  * 线程池可自行创建，也可以从外部传入共用。
  * 
  * @author calvin
@@ -46,15 +46,15 @@ public class JobDispatcher implements Runnable {
 	private String scriptSha1;
 
 	private List<String> keys;
-	private String sleepingJobKey;
+	private String scheduledJobKey;
 	private String readyJobKey;
 	private String dispatchCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
-		sleepingJobKey = Keys.getSleepingJobKey(jobName);
+		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
-		keys = Lists.newArrayList(sleepingJobKey, readyJobKey, dispatchCounterKey);
+		keys = Lists.newArrayList(scheduledJobKey, readyJobKey, dispatchCounterKey);
 
 		jedisTemplate = new JedisTemplate(jedisPool);
 		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
@@ -93,7 +93,7 @@ public class JobDispatcher implements Runnable {
 	}
 
 	/**
-	 * 停止分发任务，如果是自行创建的threadPool则自行销毁。
+	 * 停止分发任务，如果是自行创建的threadPool则自行销毁，关闭时最多等待5秒。
 	 */
 	public void stop() {
 		dispatchJob.cancel(false);
@@ -117,8 +117,8 @@ public class JobDispatcher implements Runnable {
 	/**
 	 * 获取未达到触发条件进行分发的Job数量.
 	 */
-	public long getSleepingJobNumber() {
-		return jedisTemplate.zcard(sleepingJobKey);
+	public long getScheduledJobNumber() {
+		return jedisTemplate.zcard(scheduledJobKey);
 	}
 
 	/**

@@ -7,7 +7,7 @@ import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
 import redis.clients.jedis.JedisPool;
 
 /**
- * 运行JobDispatcher，每秒将Job从"ss.sleeping" sorted set 发布到"ss.ready" list.
+ * 运行JobDispatcher，每秒将Job从"job:ss:scheduled" sorted set 发布到"job:ss:ready" list.
  * 
  * 可用系统参数重置相关变量，@see RedisCounterBenchmark
  * 
@@ -45,8 +45,8 @@ public class JobDispatcherDemo {
 	}
 
 	private static void printJobNumbers(JobDispatcher jobDispatcher) {
-		System.out.printf("Sleeping job %d, Ready Job %d, Dispatch Counter %d \n",
-				jobDispatcher.getSleepingJobNumber(), jobDispatcher.getReadyJobNumber(),
+		System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
+				jobDispatcher.getScheduledJobNumber(), jobDispatcher.getReadyJobNumber(),
 				jobDispatcher.getDispatchNumber());
 	}
 }
