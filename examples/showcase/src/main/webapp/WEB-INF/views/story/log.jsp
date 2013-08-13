@@ -18,8 +18,7 @@
 	<h2>业务日志：</h2>
 	<ul>
 		<li>业务日志，在综合演示中的CRUD操作将产生业务日志.</li>
-		<li>有特殊Time+ Size的滚动规则, 格式为规定字段(时间，entity类型，动作，操作用户)+JSON的扩展字段。
-		
+		<li>有特殊Time+ Size的滚动规则, 格式为规定字段(时间，entity类型，动作，操作用户)+JSON的扩展字段。</li>
 	</ul>
 	
 	<h2>Logback的JMX控制，</h2>

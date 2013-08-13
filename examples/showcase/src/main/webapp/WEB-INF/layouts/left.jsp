@@ -13,7 +13,7 @@
 		<a id="webservice-tab"href="${ctx}/story/webservice">WebService演示</a>
 		<a id="jmx-tab" href="${ctx}/story/jmx">JMX演示</a>
 		<a id="log-tab" href="${ctx}/story/log">日志高级演示</a>
-		<a id="javasimon-tab" href="${ctx}/javasimon" target="_blank">性能监控演示</a>
+		<a id="monitor-tab" href="${ctx}/story/monitor">性能监控演示</a>
 	</div>
 	<h1>演示说明</h1>
 	<div class="submenu">
