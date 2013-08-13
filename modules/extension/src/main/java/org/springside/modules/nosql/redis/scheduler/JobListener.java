@@ -30,6 +30,10 @@ public class JobListener implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(JobListener.class);
 
+	private boolean reliable = false;
+
+	private int batchSize = 1;
+
 	private JedisTemplate jedisTemplate;
 
 	private final JobHandler jobHandler;
@@ -47,6 +51,19 @@ public class JobListener implements Runnable {
 	 */
 	@Override
 	public void run() {
+		if ((reliable == false) && (batchSize == 1)) {
+			consumeSimpleJob();
+		} else if ((reliable == true) && (batchSize == 1)) {
+			consumeReliableJob();
+		} else {
+			consumeBatchJob();
+		}
+	}
+
+	/**
+	 * 直接popup ready job。
+	 */
+	private void consumeSimpleJob() {
 		// 第一层大循环保证了如果redis服务连接异常，等待2秒后继续执行。
 		while (true) {
 			try {
@@ -74,6 +91,58 @@ public class JobListener implements Runnable {
 				Threads.sleep(2000);
 			}
 		}
+	}
+
+	private void consumeReliableJob() {
+		// 第一层大循环保证了如果redis服务连接异常，等待2秒后继续执行。
+		while (true) {
+			try {
+				jedisTemplate.execute(new JedisActionNoResult() {
+					@Override
+					public void action(Jedis jedis) {
+						// 第二层循环发生在jedis action内，用同一个Jedis不断popup任务直到线程中断。
+						while (!Thread.currentThread().isInterrupted()) {
+							// call reliablepop lua script
+							// call handler
+							// call jedis.zrem lock table
+						}
+					}
+				});
+				// 线程已中断，退出循环.
+				break;
+			} catch (JedisConnectionException e) {
+				Threads.sleep(2000);
+			}
+		}
+	}
+
+	private void consumeBatchJob() {
+		// 第一层大循环保证了如果redis服务连接异常，等待2秒后继续执行。
+		while (true) {
+			try {
+				jedisTemplate.execute(new JedisActionNoResult() {
+					@Override
+					public void action(Jedis jedis) {
+						// 第二层循环发生在jedis action内，用同一个Jedis不断popup任务直到线程中断。
+						// call batchpop lua script
+						// call handler for several job
+						// call jedis.zrem lock table if reliable is true
+					}
+				});
+				// 线程已中断，退出循环.
+				break;
+			} catch (JedisConnectionException e) {
+				Threads.sleep(2000);
+			}
+		}
+	}
+
+	public void setReliable(boolean reliable) {
+		this.reliable = reliable;
+	}
+
+	public void setBatchSize(int batchSize) {
+		this.batchSize = batchSize;
 	}
 
 	/**
