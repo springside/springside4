@@ -16,7 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
 
 /**
  * 反射工具类.
@@ -258,7 +257,7 @@ public class Reflections {
 	}
 
 	public static Class<?> getUserClass(Object instance) {
-		Assert.notNull(instance, "Instance must not be null");
+		Validate.notNull(instance, "Instance must not be null");
 		Class clazz = instance.getClass();
 		if ((clazz != null) && clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
 			Class<?> superClass = clazz.getSuperclass();

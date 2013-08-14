@@ -8,13 +8,13 @@ package org.springside.modules.test.selenium;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.apache.commons.lang3.Validate;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.springframework.util.Assert;
 
 /**
  * 创建WebDriver的工厂类.
@@ -41,7 +41,7 @@ public class WebDriverFactory {
 			driver = new ChromeDriver();
 		} else if (driverName.startsWith(BrowserType.remote.name())) {
 			String[] params = driverName.split(":");
-			Assert.isTrue(params.length == 4,
+			Validate.isTrue(params.length == 4,
 					"Remote driver is not right, accept format is \"remote:localhost:4444:firefox\", but the input is\""
 							+ driverName + "\"");
 
@@ -67,7 +67,7 @@ public class WebDriverFactory {
 			}
 		}
 
-		Assert.notNull(driver, "Driver could be found by name:" + driverName);
+		Validate.notNull(driver, "Driver could be found by name:" + driverName);
 
 		return driver;
 	}

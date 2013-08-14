@@ -20,7 +20,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.Exceptions;
 import org.springside.modules.utils.Reflections;
 
@@ -140,7 +140,7 @@ public class JaxbMapper {
 	}
 
 	protected static JAXBContext getJaxbContext(Class clazz) {
-		Assert.notNull(clazz, "'clazz' must not be null");
+		Validate.notNull(clazz, "'clazz' must not be null");
 		JAXBContext jaxbContext = jaxbContexts.get(clazz);
 		if (jaxbContext == null) {
 			try {
