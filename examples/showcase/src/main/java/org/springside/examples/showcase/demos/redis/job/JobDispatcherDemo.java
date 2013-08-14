@@ -47,6 +47,6 @@ public class JobDispatcherDemo {
 	private static void printJobNumbers(JobDispatcher jobDispatcher) {
 		System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
 				jobDispatcher.getScheduledJobNumber(), jobDispatcher.getReadyJobNumber(),
-				jobDispatcher.getDispatchNumber());
+				jobDispatcher.getDispatchCounter());
 	}
 }

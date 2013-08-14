@@ -9,7 +9,7 @@ end
 
 if (reliable=='true') then
 	for i=1,batchsize do
-	redis.call('zadd', KEYS[2], batchJobs[i], now)
+	redis.call('zadd', KEYS[2],  now, batchJobs[i])
 	end
 end
 

@@ -10,6 +10,10 @@ public class Keys {
 		return new StringBuilder().append("job:").append(jobName).append(":ready").toString();
 	}
 
+	public static String getLockJobKey(String jobName) {
+		return new StringBuilder().append("job:").append(jobName).append(":lock").toString();
+	}
+
 	public static String getDispatchCounterKey(String jobName) {
 		return new StringBuilder().append("job:").append(jobName).append(":dispatch.counter").toString();
 	}

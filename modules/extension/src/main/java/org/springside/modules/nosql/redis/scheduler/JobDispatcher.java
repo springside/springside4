@@ -1,6 +1,5 @@
 package org.springside.modules.nosql.redis.scheduler;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -8,11 +7,8 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.utils.Threads;
@@ -43,21 +39,23 @@ public class JobDispatcher implements Runnable {
 	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor scriptExecutor;
 	private String scriptPath = DEFAULT_DISPATCH_LUA_FILE;
-	private String scriptSha1;
 
 	private List<String> keys;
 	private String scheduledJobKey;
 	private String readyJobKey;
+	private String lockJobKey;
 	private String dispatchCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
+		lockJobKey = Keys.getLockJobKey(jobName);
+
 		keys = Lists.newArrayList(scheduledJobKey, readyJobKey, dispatchCounterKey);
 
 		jedisTemplate = new JedisTemplate(jedisPool);
-		this.scriptExecutor = new JedisScriptExecutor(jedisPool);
+		scriptExecutor = new JedisScriptExecutor(jedisPool);
 	}
 
 	/**
@@ -74,22 +72,10 @@ public class JobDispatcher implements Runnable {
 	 * 启动分发线程, 使用传入的scheduler线程池.
 	 */
 	public void start(ScheduledExecutorService scheduledThreadPool) {
-		loadLuaScript();
+		scriptExecutor.loadFromFile(scriptPath);
 
 		dispatchJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalMillis,
 				TimeUnit.MILLISECONDS);
-	}
-
-	private void loadLuaScript() {
-		String script;
-		try {
-			Resource resource = new DefaultResourceLoader().getResource(scriptPath);
-			script = FileUtils.readFileToString(resource.getFile());
-		} catch (IOException e) {
-			throw new IllegalArgumentException(scriptPath + " is not exist.", e);
-		}
-
-		scriptSha1 = scriptExecutor.load(script);
 	}
 
 	/**
@@ -110,7 +96,7 @@ public class JobDispatcher implements Runnable {
 	public void run() {
 		long currTime = System.currentTimeMillis();
 		List<String> args = Lists.newArrayList(String.valueOf(currTime));
-		Long count = (Long) scriptExecutor.execute(scriptSha1, keys, args);
+		Long count = (Long) scriptExecutor.execute(keys, args);
 		logger.debug("{} Job dispatched", count != null ? count : 0);
 	}
 
@@ -129,16 +115,23 @@ public class JobDispatcher implements Runnable {
 	}
 
 	/**
+	 * 获取reliable job时已被取走执行但未报告完成的Job数量.
+	 */
+	public long getLockJobNumber() {
+		return jedisTemplate.zcard(lockJobKey);
+	}
+
+	/**
 	 * 获取已分发的Job数量。
 	 */
-	public long getDispatchNumber() {
+	public long getDispatchCounter() {
 		return jedisTemplate.getAsLong(dispatchCounterKey);
 	}
 
 	/**
 	 * 重置已分发的Job数量计数器.
 	 */
-	public void restDispatchNumber() {
+	public void restCounter() {
 		jedisTemplate.set(dispatchCounterKey, "0");
 	}
 

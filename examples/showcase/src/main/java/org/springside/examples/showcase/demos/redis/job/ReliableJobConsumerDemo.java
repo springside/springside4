@@ -7,22 +7,21 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.JobListener;
-import org.springside.modules.nosql.redis.scheduler.JobListener.JobHandler;
+import org.springside.modules.nosql.redis.scheduler.JobConsumer;
+import org.springside.modules.nosql.redis.scheduler.JobConsumer.JobHandler;
 
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 import com.google.common.util.concurrent.RateLimiter;
 
 /**
- * 多线程运行JobListener，从"ss.job:ready" list中popup job进行处理。
+ * 多线程运行JobConsumer，从"ss.job:ready" list中popup job进行处理。
  * 
  * 可用系统参数重置相关变量，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
-public class JobListenerDemo implements JobHandler {
+public class ReliableJobConsumerDemo implements JobHandler {
 
 	private static final int THREAD_COUNT = 10;
 	private static final int PRINT_BETWEEN_SECONDS = 10;
@@ -44,8 +43,9 @@ public class JobListenerDemo implements JobHandler {
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
 		for (int i = 0; i < THREAD_COUNT; i++) {
-			JobListener listener = new JobListener("ss", pool, new JobListenerDemo());
-			threadPool.submit(listener);
+			JobConsumer consumer = new JobConsumer("ss", pool, new ReliableJobConsumerDemo());
+			consumer.setReliable(true);
+			threadPool.submit(consumer);
 		}
 
 		System.out.println("Hit enter to stop");
@@ -55,7 +55,7 @@ public class JobListenerDemo implements JobHandler {
 				if (c == '\n') {
 					System.out.println("Shutting down");
 					threadPool.shutdownNow();
-					boolean shutdownSucess = threadPool.awaitTermination(JobListener.DEFAULT_POPUP_TIMEOUT_SECONDS + 1,
+					boolean shutdownSucess = threadPool.awaitTermination(JobConsumer.DEFAULT_POPUP_TIMEOUT_SECONDS + 1,
 							TimeUnit.SECONDS);
 
 					if (!shutdownSucess) {
@@ -75,7 +75,7 @@ public class JobListenerDemo implements JobHandler {
 	 * 处理Job的回调函数.
 	 */
 	@Override
-	public void handleJob(Jedis jedis, String job) {
+	public void handleJob(String job) {
 		long globalCount = golbalCounter.incrementAndGet();
 		localCounter++;
 

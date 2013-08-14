@@ -1,5 +1,10 @@
 -- KEYS: [1]job:ready, [2]job:lock
+-- ARGS: No
 
 local job=redis.call('rpop', KEYS[1])
-redis.call('zadd', KEYS[2], job, now)
+
+if(job ~=nil) then
+	redis.call('zadd', KEYS[2], now, job)
+end
+
 return job;
