@@ -32,6 +32,10 @@ public class JedisScriptExecutor {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
 	}
 
+	public JedisScriptExecutor(JedisTemplate jedisTemplate) {
+		this.jedisTemplate = jedisTemplate;
+	}
+
 	/**
 	 * 装载Lua Script，返回Sha1 Hash值。
 	 * 如果Script出错，抛出JedisDataException。
