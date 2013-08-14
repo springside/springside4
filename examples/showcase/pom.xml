@@ -271,8 +271,8 @@
 	    </dependency>
 
 		<dependency>
-	 		<groupId>org.bgee.log4jdbc-log4j2</groupId>
-			<artifactId>log4jdbc-log4j2-jdbc4</artifactId>
+		 	<groupId>com.googlecode.log4jdbc</groupId>
+			<artifactId>log4jdbc</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 
@@ -331,6 +331,10 @@
 		<dependency>
 			<groupId>org.javasimon</groupId>
 			<artifactId>javasimon-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-jdbc4</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.javasimon</groupId>

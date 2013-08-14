@@ -19,6 +19,7 @@
 	<ul>
 		<li>监控AccountService类及两个相关类</li>
 		<li>点击综合演示页面，修改并保存用户，或者运行JMeter压力测试脚本(support/jmeter/showcase-gui.jmx)</li>
+		<li>要监控数据库访问的性能，打开javasimon jdbc driver的注释</li>
 	</ul>
 	
 	<h2>JavaSimon DashBoard</h2>
