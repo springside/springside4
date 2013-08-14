@@ -23,18 +23,18 @@ import com.google.common.util.concurrent.RateLimiter;
  */
 public class SimpleJobConsumerDemo implements JobHandler {
 
-	private static final int THREAD_COUNT = 10;
-	private static final int PRINT_BETWEEN_SECONDS = 10;
+	protected static final int THREAD_COUNT = 10;
+	protected static final int PRINT_BETWEEN_SECONDS = 10;
 
-	private static JedisPool pool;
+	protected static JedisPool pool;
 
-	private static AtomicLong golbalCounter = new AtomicLong(0);
-	private static AtomicLong golbalPreviousCount = new AtomicLong(0);
-	private static RateLimiter golbalPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
+	protected static AtomicLong golbalCounter = new AtomicLong(0);
+	protected static AtomicLong golbalPreviousCount = new AtomicLong(0);
+	protected static RateLimiter golbalPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
 
-	private long localCounter = 0L;
-	private long localPreviousCount = 0L;
-	private RateLimiter localPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
+	protected long localCounter = 0L;
+	protected long localPreviousCount = 0L;
+	protected RateLimiter localPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
 
 	public static void main(String[] args) throws Exception {
 

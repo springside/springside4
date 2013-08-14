@@ -9,7 +9,6 @@
  *----------------------------------------------------------------------------*/
 package org.springside.modules.nosql.redis.scheduler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -114,7 +113,9 @@ public class JobConsumer implements Runnable {
 		while (!Thread.currentThread().isInterrupted()) {
 			String job = null;
 			try {
-				job = (String) reliabelPopScriptExecutor.execute(keys, new ArrayList());
+				long currTime = System.currentTimeMillis();
+				List<String> args = Lists.newArrayList(String.valueOf(currTime));
+				job = (String) reliabelPopScriptExecutor.execute(keys, args);
 			} catch (JedisConnectionException e) {
 				Threads.sleep(2000);
 			}
@@ -141,22 +142,27 @@ public class JobConsumer implements Runnable {
 		final List<String> keys = Lists.newArrayList(readyJobKey, lockJobKey);
 
 		while (!Thread.currentThread().isInterrupted()) {
-			String job = null;
+			List<String> jobs = null;
 			try {
-				job = (String) batchPopScriptExecutor.execute(keys, new ArrayList());
+				long currTime = System.currentTimeMillis();
+				List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(batchSize),
+						String.valueOf(reliable));
+				jobs = (List<String>) batchPopScriptExecutor.execute(keys, args);
 			} catch (JedisConnectionException e) {
 				Threads.sleep(2000);
 			}
 
-			if (job != null) {
-				try {
-					jobHandler.handleJob(job);
-				} catch (Exception e) {
-					// 记录jobHandler流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
-					logger.error("Handler exception for job " + job, e);
-				} finally {
-					// 无论出错与否,删除lockJob.
-					jedisTemplate.zrem(lockJobKey, job);
+			if ((jobs != null) && !jobs.isEmpty()) {
+				for (String job : jobs) {
+					try {
+						jobHandler.handleJob(job);
+					} catch (Exception e) {
+						// 记录jobHandler流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
+						logger.error("Handler exception for job " + job, e);
+					} finally {
+						// 无论出错与否,删除lockJob.
+						jedisTemplate.zrem(lockJobKey, job);
+					}
 				}
 			} else {
 				Threads.sleep(1000);

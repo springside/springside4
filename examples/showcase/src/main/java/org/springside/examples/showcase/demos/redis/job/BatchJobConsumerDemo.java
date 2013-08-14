@@ -15,7 +15,7 @@ import org.springside.modules.nosql.redis.scheduler.JobConsumer;
  * 
  * @author calvin
  */
-public class ReliableJobConsumerDemo extends SimpleJobConsumerDemo {
+public class BatchJobConsumerDemo extends SimpleJobConsumerDemo {
 
 	public static void main(String[] args) throws Exception {
 
@@ -24,9 +24,11 @@ public class ReliableJobConsumerDemo extends SimpleJobConsumerDemo {
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
 		for (int i = 0; i < THREAD_COUNT; i++) {
-			JobConsumer consumer = new JobConsumer("ss", pool, new ReliableJobConsumerDemo());
+			JobConsumer consumer = new JobConsumer("ss", pool, new BatchJobConsumerDemo());
 			// set it as true
 			consumer.setReliable(true);
+			// set it to 10
+			consumer.setBatchSize(10);
 			threadPool.submit(consumer);
 		}
 
