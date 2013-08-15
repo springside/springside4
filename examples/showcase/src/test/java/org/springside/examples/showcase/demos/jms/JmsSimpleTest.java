@@ -11,7 +11,7 @@ import org.springside.examples.showcase.demos.jms.simple.NotifyMessageListener;
 import org.springside.examples.showcase.demos.jms.simple.NotifyMessageProducer;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -26,7 +26,7 @@ public class JmsSimpleTest extends SpringContextTestCase {
 	@Test
 	public void queueMessage() {
 		Threads.sleep(1000);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(NotifyMessageListener.class);
 
 		User user = new User();
@@ -43,7 +43,7 @@ public class JmsSimpleTest extends SpringContextTestCase {
 	@Test
 	public void topicMessage() {
 		Threads.sleep(1000);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(NotifyMessageListener.class);
 
 		User user = new User();

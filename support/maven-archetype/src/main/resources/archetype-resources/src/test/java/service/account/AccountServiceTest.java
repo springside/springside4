@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.service.account;
+package ${package}.service.account;
 
 import static org.junit.Assert.*;
 
@@ -13,12 +13,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import ${groupId}.${artifactId}.data.UserData;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.repository.TaskDao;
-import ${groupId}.${artifactId}.repository.UserDao;
-import ${groupId}.${artifactId}.service.ServiceException;
-import ${groupId}.${artifactId}.service.account.ShiroDbRealm.ShiroUser;
+import ${package}.data.UserData;
+import ${package}.entity.User;
+import ${package}.repository.TaskDao;
+import ${package}.repository.UserDao;
+import ${package}.service.ServiceException;
+import ${package}.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.test.security.shiro.ShiroTestUtils;
 import org.springside.modules.utils.DateProvider.ConfigurableDateProvider;
 

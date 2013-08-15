@@ -11,13 +11,15 @@
 	<div class="submenu">
 		<a id="web-tab" href="${ctx}/story/web">Web演示</a>
 		<a id="webservice-tab"href="${ctx}/story/webservice">WebService演示</a>
-		<a id="log-tab" href="${ctx}/log/console">日志控制演示</a>
 		<a id="jmx-tab" href="${ctx}/story/jmx">JMX演示</a>
+		<a id="log-tab" href="${ctx}/story/log">日志高级演示</a>
+		<a id="monitor-tab" href="${ctx}/story/monitor">性能监控演示</a>
 	</div>
 	<h1>演示说明</h1>
 	<div class="submenu">
 		<a id="persistence-tab" href="${ctx}/story/persistence">持久化高级演示</a>
 		<a id="jms-tab" href="${ctx}/story/jms">JMS演示</a>
+		<a id="reids-tab" href="${ctx}/story/redis">Redis演示</a>
 		<a id="cache-tab" href="${ctx}/story/cache">Cache演示</a>
 		<a id="schedule-tab" href="${ctx}/story/schedule">定时任务演示</a>
 		<a id="security-tab" href="${ctx}/story/security">安全高级演示</a>

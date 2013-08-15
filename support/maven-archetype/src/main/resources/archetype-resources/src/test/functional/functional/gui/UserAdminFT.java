@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+package ${package}.functional.gui;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 import org.springside.modules.test.category.Smoke;
 
 public class UserAdminFT extends BaseSeleniumTestCase {

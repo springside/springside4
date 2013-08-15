@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.1.GA-SNAPSHOT</version>
+		<version>4.1.1-SNAPSHOT</version>
 		<relativePath>../parent/</relativePath>
 	</parent>
 	<artifactId>springside-core</artifactId>
@@ -49,6 +49,11 @@
 		<!-- Security end -->
 
 		<!-- Web begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<optional>true</optional>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -113,18 +118,8 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
 			<optional>true</optional>
 		</dependency>
 		<!-- LOGGING end -->
@@ -169,12 +164,6 @@
 
 	<build>
 		<plugins>
-			<!-- eclipse plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-			</plugin>
-
 			<!-- source attach plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

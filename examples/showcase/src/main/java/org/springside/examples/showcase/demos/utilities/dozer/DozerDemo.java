@@ -30,18 +30,18 @@ public class DozerDemo {
 
 		productDTO.setParts(new PartDTO[] { partDTO });
 
-		//ProductDTO->Product
+		// ProductDTO->Product
 		Product product = BeanMapper.map(productDTO, Product.class);
 
 		assertEquals("car", product.getProductName());
-		//原来的字符串被Map成Double。
+		// 原来的字符串被Map成Double。
 		assertEquals(Double.valueOf(200), product.getPrice());
-		//原来的PartDTO同样被Map成Part ,Array被Map成List
+		// 原来的PartDTO同样被Map成Part ,Array被Map成List
 		assertEquals("door", product.getParts().get(0).getName());
-		//Part中循环依赖的Product同样被赋值。
+		// Part中循环依赖的Product同样被赋值。
 		assertEquals("car", product.getParts().get(0).getProduct().getProductName());
 
-		//再反向从Product->ProductDTO
+		// 再反向从Product->ProductDTO
 		ProductDTO productDTO2 = BeanMapper.map(product, ProductDTO.class);
 		assertEquals("car", productDTO2.getName());
 		assertEquals("200.0", productDTO2.getPrice());
@@ -63,20 +63,20 @@ public class DozerDemo {
 
 		productDTO.setParts(new PartDTO[] { partDTO });
 
-		//已存在的Product实例
+		// 已存在的Product实例
 		Product product = new Product();
 		product.setProductName("horse");
 		product.setWeight(new Double(20));
 
 		BeanMapper.copy(productDTO, product);
 
-		//原来的horse，被替换成car
+		// 原来的horse，被替换成car
 		assertEquals("car", product.getProductName());
-		//原来的20的属性被覆盖成200，同样被从字符串被专为Double。
+		// 原来的20的属性被覆盖成200，同样被从字符串被专为Double。
 		assertEquals(Double.valueOf(200), product.getPrice());
-		//DTO中没有的属性值,在Product中被保留
+		// DTO中没有的属性值,在Product中被保留
 		assertEquals(Double.valueOf(20), product.getWeight());
-		//Part中循环依赖的Product同样被赋值。
+		// Part中循环依赖的Product同样被赋值。
 		assertEquals("car", product.getParts().get(0).getProduct().getProductName());
 	}
 
@@ -84,7 +84,7 @@ public class DozerDemo {
 		private String productName;
 		private Double price;
 		private List<Part> parts;
-		//DTO中没有的属性
+		// DTO中没有的属性
 		private Double weight;
 
 		public String getProductName() {
@@ -122,7 +122,7 @@ public class DozerDemo {
 	}
 
 	public static class Part {
-		//反向依赖Product
+		// 反向依赖Product
 		private Product product;
 
 		private String name;
@@ -145,12 +145,12 @@ public class DozerDemo {
 	}
 
 	public static class ProductDTO {
-		//定义到Product中的productName,只要在一边定义，双向转换都可以使用.
+		// 定义到Product中的productName,只要在一边定义，双向转换都可以使用.
 		@Mapping("productName")
 		private String name;
-		//类型为String 而非 Double
+		// 类型为String 而非 Double
 		private String price;
-		//类型为Array而非List, PartDTO而非Part
+		// 类型为Array而非List, PartDTO而非Part
 		private PartDTO[] parts;
 
 		public String getName() {
@@ -179,7 +179,7 @@ public class DozerDemo {
 	}
 
 	public static class PartDTO {
-		//反向依赖ProductDTO
+		// 反向依赖ProductDTO
 		private ProductDTO product;
 
 		private String name;

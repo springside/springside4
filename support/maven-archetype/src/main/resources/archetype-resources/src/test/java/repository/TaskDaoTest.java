@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.repository;
+package ${package}.repository;
 
 import static org.junit.Assert.*;
 
@@ -11,7 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.ContextConfiguration;
-import ${groupId}.${artifactId}.entity.Task;
+import ${package}.entity.Task;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 
 @ContextConfiguration(locations = { "/applicationContext.xml" })

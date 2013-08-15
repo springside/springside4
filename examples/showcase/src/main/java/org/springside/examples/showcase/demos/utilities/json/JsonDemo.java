@@ -121,7 +121,7 @@ public class JsonDemo {
 
 		// List<Bean>
 		String beanListString = "[{\"name\":\"A\"},{\"name\":\"B\"}]";
-		JavaType beanListType = mapper.createCollectionType(List.class, TestBean.class);
+		JavaType beanListType = mapper.contructCollectionType(List.class, TestBean.class);
 		List<TestBean> beanList = mapper.fromJson(beanListString, beanListType);
 		System.out.println("Bean List:");
 		for (TestBean element : beanList) {
@@ -229,7 +229,7 @@ public class JsonDemo {
 		TestBean bean = new TestBean();
 		bean.setDefaultValue("Foobar");
 
-		bean = mapper.update(jsonString, bean);
+		mapper.update(jsonString, bean);
 
 		// name被赋值
 		assertEquals("A", bean.getName());

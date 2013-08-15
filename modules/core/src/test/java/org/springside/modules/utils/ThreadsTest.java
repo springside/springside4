@@ -18,7 +18,7 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 
 @Category(UnStable.class)
 public class ThreadsTest {
@@ -27,10 +27,10 @@ public class ThreadsTest {
 	public void gracefulShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time enough to shutdown
+		// time enough to shutdown
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 500, 0);
 		pool.execute(task);
@@ -38,7 +38,7 @@ public class ThreadsTest {
 		assertTrue(pool.isTerminated());
 		assertNull(appender.getFirstLog());
 
-		//time not enough to shutdown,call shutdownNow
+		// time not enough to shutdown,call shutdownNow
 		appender.clearLogs();
 		pool = Executors.newSingleThreadExecutor();
 		task = new Task(logger, 1000, 0);
@@ -47,7 +47,7 @@ public class ThreadsTest {
 		assertTrue(pool.isTerminated());
 		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
 
-		//self thread interrupt while calling gracefulShutdown
+		// self thread interrupt while calling gracefulShutdown
 		appender.clearLogs();
 
 		final ExecutorService self = Executors.newSingleThreadExecutor();
@@ -74,10 +74,10 @@ public class ThreadsTest {
 	public void normalShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time not enough to shutdown,write error log.
+		// time not enough to shutdown,write error log.
 		appender.clearLogs();
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 1000, 0);
@@ -88,11 +88,11 @@ public class ThreadsTest {
 	}
 
 	static class Task implements Runnable {
-		private Logger logger;
+		private final Logger logger;
 
 		private int runTime = 0;
 
-		private int sleepTime;
+		private final int sleepTime;
 
 		Task(Logger logger, int sleepTime, int runTime) {
 			this.logger = logger;
@@ -105,7 +105,7 @@ public class ThreadsTest {
 			System.out.println("start task");
 			if (runTime > 0) {
 				long start = System.currentTimeMillis();
-				while (System.currentTimeMillis() - start < runTime) {
+				while ((System.currentTimeMillis() - start) < runTime) {
 				}
 			}
 

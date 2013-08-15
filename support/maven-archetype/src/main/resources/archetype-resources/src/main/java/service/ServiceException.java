@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.service;
+package ${package}.service;
 
 /**
  * Service层公用的Exception.

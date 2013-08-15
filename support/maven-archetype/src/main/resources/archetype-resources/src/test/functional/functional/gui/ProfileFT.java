@@ -1,13 +1,13 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+package ${package}.functional.gui;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 
 public class ProfileFT extends BaseSeleniumTestCase {
 

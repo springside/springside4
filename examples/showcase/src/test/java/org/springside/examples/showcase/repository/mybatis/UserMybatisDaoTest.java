@@ -25,13 +25,14 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 	@Test
 	public void getUser() throws Exception {
 		User user = userDao.get(1L);
+		assertNotNull("User not found", user);
 		assertEquals("admin", user.getLoginName());
 	}
 
 	@Test
 	public void searchUser() throws Exception {
 		Map<String, Object> parameter = Maps.newHashMap();
-		parameter.put("name", "Admin");
+		parameter.put("name", "管理员");
 		List<User> result = userDao.search(parameter);
 		assertEquals(1, result.size());
 		assertEquals("admin", result.get(0).getLoginName());
@@ -39,7 +40,7 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 
 	@Test
 	public void createAndDeleteUser() throws Exception {
-		//create
+		// create
 		int count = countRowsInTable("ss_user");
 		User user = UserData.randomUser();
 		userDao.save(user);
@@ -49,7 +50,7 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 		User result = userDao.get(id);
 		assertEquals(user.getLoginName(), result.getLoginName());
 
-		//delete
+		// delete
 		userDao.delete(id);
 		assertEquals(count, countRowsInTable("ss_user"));
 		assertNull(userDao.get(id));

@@ -45,7 +45,7 @@ public class MailServiceTest extends SpringContextTestCase {
 
 		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
 		assertEquals("用户修改通知", message.getSubject());
-		//text格式内容
+		// text格式内容
 		System.out.println(message.getContent());
 		assertTrue(((String) message.getContent()).contains("被修改"));
 
@@ -66,12 +66,12 @@ public class MailServiceTest extends SpringContextTestCase {
 
 		assertEquals(2, mimeMultipart.getCount());
 
-		//Html格式的主邮件
+		// Html格式的主邮件
 		String mainPartText = getMainPartText(mimeMultipart.getBodyPart(0));
 		System.out.println(mainPartText);
 		assertTrue(mainPartText.contains("<h1>用户calvin被修改.</h1>"));
 
-		//附件
+		// 附件
 		assertEquals("Hello,i am a attachment.", GreenMailUtil.getBody(mimeMultipart.getBodyPart(1)).trim());
 
 	}

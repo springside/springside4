@@ -18,7 +18,7 @@ import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
  * 
  * @author calvin
  */
-//name 指明wsdl中<wsdl:portType>元素的名称
+// name 指明wsdl中<wsdl:portType>元素的名称
 @WebService(name = "AccountService", targetNamespace = WsConstants.NS)
 public interface AccountSoapService {
 	/**

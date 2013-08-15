@@ -22,11 +22,13 @@ public class AccountServiceTest {
 	@Mock
 	private UserDao mockUserDao;
 
+	@Mock
+	private BusinessLogger businessLogger;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 		ShiroTestUtils.mockSubject(new ShiroUser("foo", "Foo"));
-
 	}
 
 	@After
@@ -43,15 +45,15 @@ public class AccountServiceTest {
 		user.setId(2L);
 		user.setPlainPassword("123");
 
-		//正常保存用户.
+		// 正常保存用户.
 		accountService.saveUser(user);
 
-		//保存超级管理用户抛出异常.
+		// 保存超级管理用户抛出异常.
 		try {
 			accountService.saveUser(admin);
 			fail("expected ServicExcepton should be thrown");
 		} catch (ServiceException e) {
-			//expected exception
+			// expected exception
 		}
 		Mockito.verify(mockUserDao, Mockito.never()).delete(1L);
 	}

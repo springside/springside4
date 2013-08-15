@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.1.GA-SNAPSHOT</version>
+		<version>4.1.1-SNAPSHOT</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
 	<groupId>org.springside.examples</groupId>
@@ -39,9 +39,10 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		<!-- SPRING basic end -->
-		
-		<!-- AOP -->
+		<!-- SPRING basic end -->	
+		<!-- SPRING end -->
+	
+		<!-- AOP begin -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
@@ -50,15 +51,7 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-		</dependency>
-		<!-- SPRING end -->
+		<!-- AOP end -->	
 
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->
@@ -99,10 +92,10 @@
 			<artifactId>spring-jdbc</artifactId>
 		</dependency>
 
-		<!-- dbcp -->
+		<!-- connection pool -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
 		</dependency>
 
 		<!-- jdbc driver -->
@@ -115,6 +108,10 @@
 		<!-- PERSISTENCE end -->
 
 		<!-- WEB begin -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -185,10 +182,16 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>
-
+  		
+  		<!-- Redis -->	
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		</dependency>
+		
 		<!-- CACHE begin -->
 		<dependency>
-			<groupId>spy</groupId>
+			<groupId>net.spy</groupId>
 			<artifactId>spymemcached</artifactId>
 		</dependency>
 
@@ -248,21 +251,28 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
+	
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+		</dependency>
+		
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
+			<artifactId>log4j-over-slf4j</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-		</dependency>
+			<groupId>org.slf4j</groupId>
+	        <artifactId>jul-to-slf4j</artifactId>
+	    </dependency>
+
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
+		 	<groupId>com.googlecode.log4jdbc</groupId>
+			<artifactId>log4jdbc</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
 
@@ -316,6 +326,21 @@
 			<artifactId>activation</artifactId>
 		</dependency>
 		<!-- OTHER TOOLS end -->
+	
+		<!-- MONITOR begin -->
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-jdbc4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-console-embed</artifactId>
+		</dependency>
+		<!-- MONITOR end -->		
 
 		<!-- TEST begin -->		
 		<dependency>
@@ -397,7 +422,7 @@
 				<artifactId>build-helper-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>add-source</id>
+						<id>add-functional-source</id>
 						<phase>generate-sources</phase>
 						<goals>
 							<goal>add-test-source</goal>
@@ -433,18 +458,6 @@
 							<exclude>**/*Demo.class</exclude>
 						</excludes>
 					</instrumentation>
-				</configuration>
-			</plugin>
-
-			<!-- eclipse插件, 设定wtp版本并添加springIDE nature -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<wtpversion>2.0</wtpversion>
-					<additionalProjectnatures>
-						<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
-					</additionalProjectnatures>
 				</configuration>
 			</plugin>
 
@@ -527,12 +540,12 @@
 							<target>
 								<property file="src/main/resources/application.development.properties" />
 								<property file="src/main/resources/application.properties" />
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue">
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue"  encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
-									<transaction  src="src/main/resources/sql/h2/schema.sql"/>
-									<transaction  src="src/test/resources/data/import-data.sql"/>
+									<transaction src="src/main/resources/sql/h2/schema.sql"/>
+									<transaction src="src/test/resources/data/h2/import-data.sql"/>
 								</sql>
-								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"
+								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"  encoding="${project.build.sourceEncoding}"
 									src="src/main/resources/sql/h2/quartz.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>

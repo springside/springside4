@@ -31,7 +31,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	private final JsonMapper jsonMapper = new JsonMapper();
 
 	private static class TaskList extends ArrayList<Task> {
-	};
+	}
 
 	private static String resoureUrl;
 
@@ -68,7 +68,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Category(Smoke.class)
 	public void createUpdateAndDeleteTask() {
 
-		//create
+		// create
 		Task task = TaskData.randomTask();
 
 		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
@@ -76,7 +76,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
 		assertEquals(task.getTitle(), createdTask.getTitle());
 
-		//update
+		// update
 		String id = StringUtils.substringAfterLast(taskUri.toString(), "/");
 		task.setId(new Long(id));
 		task.setTitle(TaskData.randomTitle());
@@ -86,7 +86,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		Task updatedTask = restTemplate.getForObject(taskUri, Task.class);
 		assertEquals(task.getTitle(), updatedTask.getTitle());
 
-		//delete
+		// delete
 		restTemplate.delete(taskUri);
 
 		try {
@@ -100,7 +100,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Test
 	public void invalidInput() {
 
-		//create
+		// create
 		Task titleBlankTask = new Task();
 		try {
 			restTemplate.postForLocation(resoureUrl, titleBlankTask);
@@ -109,10 +109,10 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());
-			assertEquals("may not be empty", messages.get("title"));
+			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
 		}
 
-		//update
+		// update
 		titleBlankTask.setId(1L);
 		try {
 			restTemplate.put(resoureUrl + "/1", titleBlankTask);
@@ -121,7 +121,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());
-			assertEquals("may not be empty", messages.get("title"));
+			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
 		}
 	}
 }

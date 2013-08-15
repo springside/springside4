@@ -1,7 +1,7 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.repository;
+package ${package}.repository;
 
 import static org.junit.Assert.*;
 
@@ -27,7 +27,7 @@ public class JpaMappingTest extends SpringTransactionalTestCase {
 	@Test
 	public void allClassMapping() throws Exception {
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
-		
+
 		assertTrue("No entity mapping found", model.getEntities().size() > 0);
 
 		for (EntityType entityType : model.getEntities()) {

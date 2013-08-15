@@ -9,7 +9,7 @@ import org.junit.experimental.categories.Category;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 import org.springside.modules.test.spring.SpringTransactionalTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -18,12 +18,12 @@ import org.springside.modules.utils.Threads;
 @ContextConfiguration(locations = { "/applicationContext.xml", "/schedule/applicationContext-jdk-timer.xml" })
 public class JdkTimerJobTest extends SpringTransactionalTestCase {
 
-	private static Log4jMockAppender appender;
+	private static LogbackListAppender appender;
 
 	@BeforeClass
 	public static void initLogger() {
 		// 加载测试用logger appender
-		appender = new Log4jMockAppender();
+		appender = new LogbackListAppender();
 		appender.addToLogger(UserCountScanner.class);
 	}
 

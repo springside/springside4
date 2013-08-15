@@ -22,8 +22,6 @@ import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -36,10 +34,11 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springside.examples.showcase.entity.Role;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.utils.Encodes;
+
+import com.google.common.base.Objects;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
@@ -75,9 +74,9 @@ public class ShiroDbRealm extends AuthorizingRealm {
 
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		for (Role role : user.getRoleList()) {
-			//基于Role的权限信息
+			// 基于Role的权限信息
 			info.addRole(role.getName());
-			//基于Permission的权限信息
+			// 基于Permission的权限信息
 			info.addStringPermissions(role.getPermissionList());
 		}
 		return info;
@@ -94,7 +93,6 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		setCredentialsMatcher(matcher);
 	}
 
-	@Autowired
 	public void setAccountService(AccountService accountService) {
 		this.accountService = accountService;
 	}
@@ -125,19 +123,36 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		}
 
 		/**
-		 * 重载equals,只计算loginName;
+		 * 重载hashCode,只计算loginName;
 		 */
 		@Override
 		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this, "loginName");
+			return Objects.hashCode(loginName);
 		}
 
 		/**
-		 * 重载equals,只比较loginName
+		 * 重载equals,只计算loginName;
 		 */
 		@Override
 		public boolean equals(Object obj) {
-			return EqualsBuilder.reflectionEquals(this, obj, "loginName");
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			ShiroUser other = (ShiroUser) obj;
+			if (loginName == null) {
+				if (other.loginName != null) {
+					return false;
+				}
+			} else if (!loginName.equals(other.loginName)) {
+				return false;
+			}
+			return true;
 		}
 	}
 }
