@@ -23,7 +23,7 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 	private static final long DEFAULT_LOOP_COUNT = 100000;
 
 	private static AtomicLong expiredMills = new AtomicLong(System.currentTimeMillis()
-			+ (JobDispatcherDemo.DELAY_SECONDS * 1000));
+			+ (SimpleJobDispatcherDemo.DELAY_SECONDS * 1000));
 	private static AtomicLong idGenerator = new AtomicLong(0);
 
 	private long expectTps;
@@ -38,7 +38,7 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 	public JobProducerDemo() {
 		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
 		this.expectTps = Long.parseLong(System.getProperty("benchmark.tps",
-				String.valueOf(JobDispatcherDemo.EXPECT_TPS)));
+				String.valueOf(SimpleJobDispatcherDemo.EXPECT_TPS)));
 	}
 
 	@Override

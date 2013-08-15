@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
-import org.springside.modules.utils.StopWatch;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -37,7 +36,7 @@ public class JedisScriptExecutor {
 	}
 
 	/**
-	 * 装载Lua Script，返回Sha1 Hash值。
+	 * 装载Lua Script。
 	 * 如果Script出错，抛出JedisDataException。
 	 */
 	public void load(final String scriptContent) throws JedisDataException {
@@ -49,7 +48,7 @@ public class JedisScriptExecutor {
 		});
 		script = scriptContent;
 
-		logger.info("Script \"{}\" had been loaded as {}", scriptContent, sha1);
+		logger.debug("Script \"{}\" had been loaded as {}", scriptContent, sha1);
 	}
 
 	/**
@@ -72,8 +71,8 @@ public class JedisScriptExecutor {
 	 * keys与args不允许为null.
 	 */
 	public Object execute(final String[] keys, final String[] args) throws IllegalArgumentException {
-		Validate.notNull(keys, "keys can't be null");
-		Validate.notNull(args, "args can't be null");
+		Validate.notNull(keys, "keys can't be null.");
+		Validate.notNull(args, "args can't be null.");
 
 		return execute(Arrays.asList(keys), Arrays.asList(args));
 	}
@@ -83,24 +82,19 @@ public class JedisScriptExecutor {
 	 * keys与args不允许为null.
 	 */
 	public Object execute(final List<String> keys, final List<String> args) throws IllegalArgumentException {
-		Validate.notNull(keys, "keys can't be null");
-		Validate.notNull(args, "args can't be null");
+		Validate.notNull(keys, "keys can't be null.");
+		Validate.notNull(args, "args can't be null.");
 
 		return jedisTemplate.execute(new JedisAction<Object>() {
 			@Override
 			public Object action(Jedis jedis) {
-				StopWatch stopWatch = new StopWatch();
-
 				try {
 					return jedis.evalsha(sha1, keys, args);
 				} catch (JedisDataException e) {
 					logger.warn(
-							"Script sha1 {} is not loaded in server yet or the script is wrong, try to reload and run it again",
-							sha1, e);
-					stopWatch.reset();
+							"Script {} is not loaded in server yet or the script is wrong, try to reload and run it again.",
+							script, e);
 					return jedis.eval(script, keys, args);
-				} finally {
-					logger.debug("Script sha1 {} execution time is {}ms", sha1, stopWatch.getMillis());
 				}
 			}
 		});

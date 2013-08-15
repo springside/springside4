@@ -1,5 +1,10 @@
 package org.springside.examples.showcase.demos.redis.job;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
@@ -13,29 +18,31 @@ import redis.clients.jedis.JedisPool;
  * 
  * @author calvin
  */
-public class JobDispatcherDemo {
+public class SimpleJobDispatcherDemo {
 
 	public static final int EXPECT_TPS = 5000;
 	public static final int DELAY_SECONDS = 10;
+
+	private static ScheduledFuture statisticsTask;
 
 	public static void main(String[] args) throws Exception {
 
 		JedisPool pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
 				JedisUtils.DEFAULT_TIMEOUT, 1);
 		try {
-			JobDispatcher jobDispatcher = new JobDispatcher("ss", pool);
+			JobDispatcher dispatcher = new JobDispatcher("ss", pool);
 
-			printJobNumbers(jobDispatcher);
+			startPrintStatistics(dispatcher);
 
-			jobDispatcher.start();
+			dispatcher.start();
 
 			System.out.println("Hit enter to stop.");
 			while (true) {
 				char c = (char) System.in.read();
 				if (c == '\n') {
 					System.out.println("Shuting down");
-					jobDispatcher.stop();
-					printJobNumbers(jobDispatcher);
+					dispatcher.stop();
+					stopPrintStatistics();
 					return;
 				}
 			}
@@ -44,9 +51,19 @@ public class JobDispatcherDemo {
 		}
 	}
 
-	private static void printJobNumbers(JobDispatcher jobDispatcher) {
-		System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
-				jobDispatcher.getScheduledJobNumber(), jobDispatcher.getReadyJobNumber(),
-				jobDispatcher.getDispatchCounter());
+	private static void startPrintStatistics(final JobDispatcher dispatcher) {
+		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+		statisticsTask = scheduler.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
+						dispatcher.getScheduledJobNumber(), dispatcher.getReadyJobNumber(),
+						dispatcher.getDispatchCounter());
+			}
+		}, 0, 5, TimeUnit.SECONDS);
+	}
+
+	private static void stopPrintStatistics() {
+		statisticsTask.cancel(true);
 	}
 }

@@ -17,4 +17,8 @@ public class Keys {
 	public static String getDispatchCounterKey(String jobName) {
 		return new StringBuilder().append("job:").append(jobName).append(":dispatch.counter").toString();
 	}
+
+	public static String getRetryCounterKey(String jobName) {
+		return new StringBuilder().append("job:").append(jobName).append(":retry.counter").toString();
+	}
 }

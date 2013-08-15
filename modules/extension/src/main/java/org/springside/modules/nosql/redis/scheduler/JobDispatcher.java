@@ -27,6 +27,8 @@ import com.google.common.collect.Lists;
 public class JobDispatcher implements Runnable {
 	public static final String DEFAULT_DISPATCH_LUA_FILE = "classpath:/redis/dispatch.lua";
 	public static final long DEFAULT_INTERVAL_MILLIS = 1000;
+	public static final boolean DEFAULT_RELIABLE = false;
+	public static final long DEFAULT_TIMEOUT_SECONDS = 60;
 
 	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
@@ -35,6 +37,8 @@ public class JobDispatcher implements Runnable {
 
 	private ScheduledFuture dispatchJob;
 	private long intervalMillis = DEFAULT_INTERVAL_MILLIS;
+	private boolean reliable = DEFAULT_RELIABLE;
+	private long timeoutSecs = DEFAULT_TIMEOUT_SECONDS;
 
 	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor scriptExecutor;
@@ -45,14 +49,16 @@ public class JobDispatcher implements Runnable {
 	private String readyJobKey;
 	private String lockJobKey;
 	private String dispatchCounterKey;
+	private String retryCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
 		lockJobKey = Keys.getLockJobKey(jobName);
+		retryCounterKey = Keys.getRetryCounterKey(jobName);
 
-		keys = Lists.newArrayList(scheduledJobKey, readyJobKey, dispatchCounterKey);
+		keys = Lists.newArrayList(scheduledJobKey, readyJobKey, dispatchCounterKey, lockJobKey, retryCounterKey);
 
 		jedisTemplate = new JedisTemplate(jedisPool);
 		scriptExecutor = new JedisScriptExecutor(jedisPool);
@@ -95,9 +101,9 @@ public class JobDispatcher implements Runnable {
 	@Override
 	public void run() {
 		long currTime = System.currentTimeMillis();
-		List<String> args = Lists.newArrayList(String.valueOf(currTime));
-		Long count = (Long) scriptExecutor.execute(keys, args);
-		logger.debug("{} Job dispatched", count != null ? count : 0);
+		List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
+				String.valueOf(timeoutSecs));
+		scriptExecutor.execute(keys, args);
 	}
 
 	/**
@@ -129,6 +135,13 @@ public class JobDispatcher implements Runnable {
 	}
 
 	/**
+	 * 获取已重做的Job数量。
+	 */
+	public long getRetryCounter() {
+		return jedisTemplate.getAsLong(retryCounterKey);
+	}
+
+	/**
 	 * 重置已分发的Job数量计数器.
 	 */
 	public void restCounter() {
@@ -147,5 +160,13 @@ public class JobDispatcher implements Runnable {
 	 */
 	public void setIntervalMillis(long intervalMillis) {
 		this.intervalMillis = intervalMillis;
+	}
+
+	public void setReliable(boolean reliable) {
+		this.reliable = reliable;
+	}
+
+	public void setTimeoutSecs(long timeoutSecs) {
+		this.timeoutSecs = timeoutSecs;
 	}
 }

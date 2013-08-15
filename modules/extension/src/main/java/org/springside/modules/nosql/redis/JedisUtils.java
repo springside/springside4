@@ -31,18 +31,18 @@ public class JedisUtils {
 	}
 
 	/**
-	 * 快速设置JedisPoolConfig, 设置执行idle checking的间隔和idle时间.
+	 * 快速设置JedisPoolConfig, 设置执行idle checking的间隔和可清除的idle时间.
 	 */
 	public static JedisPoolConfig createPoolConfig(int maxIdle, int maxActive, int checkingIntervalSecs,
-			int idleTimeSecs) {
+			int evictableIdleTimeSecs) {
 		JedisPoolConfig poolConfig = createPoolConfig(maxIdle, maxActive);
 		poolConfig.setTimeBetweenEvictionRunsMillis(checkingIntervalSecs * 1000);
-		poolConfig.setMinEvictableIdleTimeMillis(idleTimeSecs * 1000);
+		poolConfig.setMinEvictableIdleTimeMillis(evictableIdleTimeSecs * 1000);
 		return poolConfig;
 	}
 
 	/**
-	 * 退出然后关闭Jedis。
+	 * 退出然后关闭Jedis连接。
 	 */
 	public static void closeJedis(Jedis jedis) {
 		if (jedis.isConnected()) {

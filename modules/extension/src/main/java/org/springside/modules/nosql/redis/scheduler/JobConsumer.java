@@ -32,11 +32,13 @@ public class JobConsumer implements Runnable {
 	public static final int DEFAULT_POPUP_TIMEOUT_SECONDS = 5;
 	public static final String DEFAULT_RELIABLE_POP_LUA_FILE = "classpath:/redis/reliablepop.lua";
 	public static final String DEFAULT_BATCH_POP_LUA_FILE = "classpath:/redis/batchpop.lua";
+	public static final boolean DEFAULT_RELIABLE = false;
+	public static final int DEFAULT_BATCH_SIZE = 1;
 
 	private static Logger logger = LoggerFactory.getLogger(JobConsumer.class);
 
-	private boolean reliable = false;
-	private int batchSize = 1;
+	private boolean reliable = DEFAULT_RELIABLE;
+	private int batchSize = DEFAULT_BATCH_SIZE;
 
 	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor reliabelPopScriptExecutor;
