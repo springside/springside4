@@ -60,7 +60,7 @@ public class SimpleJobDispatcherDemo {
 						dispatcher.getScheduledJobNumber(), dispatcher.getReadyJobNumber(),
 						dispatcher.getDispatchCounter());
 			}
-		}, 0, 5, TimeUnit.SECONDS);
+		}, 0, 10, TimeUnit.SECONDS);
 	}
 
 	private static void stopPrintStatistics() {

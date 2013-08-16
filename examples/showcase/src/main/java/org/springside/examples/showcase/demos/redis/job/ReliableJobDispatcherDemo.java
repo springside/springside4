@@ -62,7 +62,7 @@ public class ReliableJobDispatcherDemo {
 						dispatcher.getScheduledJobNumber(), dispatcher.getReadyJobNumber(),
 						dispatcher.getLockJobNumber(), dispatcher.getDispatchCounter(), dispatcher.getRetryCounter());
 			}
-		}, 0, 5, TimeUnit.SECONDS);
+		}, 0, 10, TimeUnit.SECONDS);
 	}
 
 	public static void stopPrintStatistics() {
