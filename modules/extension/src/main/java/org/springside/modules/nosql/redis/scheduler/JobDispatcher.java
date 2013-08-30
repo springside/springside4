@@ -5,12 +5,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
-import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
 
@@ -19,7 +15,7 @@ import redis.clients.jedis.JedisPool;
 import com.google.common.collect.Lists;
 
 /**
- * 定时分发任务。 启动线程定时从scheduled job sorted set 中取出到期的任务放入ready job list.
+ * 定时分发任务的线程，定时从scheduled job sorted set 中取出到期的任务放入ready job list，并在高可靠模式下，将lock job 中 已超时的任务重新放入 ready job.
  * 线程池可自行创建，也可以从外部传入共用。
  * 
  * @author calvin
@@ -28,39 +24,32 @@ public class JobDispatcher implements Runnable {
 	public static final String DEFAULT_DISPATCH_LUA_FILE = "classpath:/redis/dispatch.lua";
 	public static final long DEFAULT_INTERVAL_MILLIS = 1000;
 	public static final boolean DEFAULT_RELIABLE = false;
-	public static final long DEFAULT_TIMEOUT_SECONDS = 60;
+	public static final long DEFAULT_JOB_TIMEOUT_SECONDS = 60;
 
-	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
-
-	private static AtomicInteger poolNumber = new AtomicInteger(1);
 	private ScheduledExecutorService internalScheduledThreadPool;
-
 	private ScheduledFuture dispatchJob;
+
 	private long intervalMillis = DEFAULT_INTERVAL_MILLIS;
 	private boolean reliable = DEFAULT_RELIABLE;
-	private long timeoutSecs = DEFAULT_TIMEOUT_SECONDS;
+	private long jobTimeoutSecs = DEFAULT_JOB_TIMEOUT_SECONDS;
 
-	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor scriptExecutor;
 	private String scriptPath = DEFAULT_DISPATCH_LUA_FILE;
 
+	private String jobName;
 	private List<String> keys;
-	private String scheduledJobKey;
-	private String readyJobKey;
-	private String lockJobKey;
-	private String dispatchCounterKey;
-	private String retryCounterKey;
 
 	public JobDispatcher(String jobName, JedisPool jedisPool) {
-		scheduledJobKey = Keys.getScheduledJobKey(jobName);
-		readyJobKey = Keys.getReadyJobKey(jobName);
-		dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
-		lockJobKey = Keys.getLockJobKey(jobName);
-		retryCounterKey = Keys.getRetryCounterKey(jobName);
+		this.jobName = jobName;
+
+		String scheduledJobKey = Keys.getScheduledJobKey(jobName);
+		String readyJobKey = Keys.getReadyJobKey(jobName);
+		String dispatchCounterKey = Keys.getDispatchCounterKey(jobName);
+		String lockJobKey = Keys.getLockJobKey(jobName);
+		String retryCounterKey = Keys.getRetryCounterKey(jobName);
 
 		keys = Lists.newArrayList(scheduledJobKey, readyJobKey, dispatchCounterKey, lockJobKey, retryCounterKey);
 
-		jedisTemplate = new JedisTemplate(jedisPool);
 		scriptExecutor = new JedisScriptExecutor(jedisPool);
 	}
 
@@ -69,7 +58,7 @@ public class JobDispatcher implements Runnable {
 	 */
 	public void start() {
 		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
-				Threads.buildJobFactory("Job-Dispatcher-" + poolNumber.getAndIncrement() + "-%d"));
+				Threads.buildJobFactory("Job-Dispatcher-" + jobName + "-%d"));
 
 		start(internalScheduledThreadPool);
 	}
@@ -102,50 +91,8 @@ public class JobDispatcher implements Runnable {
 	public void run() {
 		long currTime = System.currentTimeMillis();
 		List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
-				String.valueOf(timeoutSecs));
+				String.valueOf(jobTimeoutSecs));
 		scriptExecutor.execute(keys, args);
-	}
-
-	/**
-	 * 获取未达到触发条件进行分发的Job数量.
-	 */
-	public long getScheduledJobNumber() {
-		return jedisTemplate.zcard(scheduledJobKey);
-	}
-
-	/**
-	 * 获取已分发但未被执行的Job数量.
-	 */
-	public long getReadyJobNumber() {
-		return jedisTemplate.llen(readyJobKey);
-	}
-
-	/**
-	 * 获取reliable job时已被取走执行但未报告完成的Job数量.
-	 */
-	public long getLockJobNumber() {
-		return jedisTemplate.zcard(lockJobKey);
-	}
-
-	/**
-	 * 获取已分发的Job数量。
-	 */
-	public long getDispatchCounter() {
-		return jedisTemplate.getAsLong(dispatchCounterKey);
-	}
-
-	/**
-	 * 获取已重做的Job数量。
-	 */
-	public long getRetryCounter() {
-		return jedisTemplate.getAsLong(retryCounterKey);
-	}
-
-	/**
-	 * 重置已分发的Job数量计数器.
-	 */
-	public void restCounter() {
-		jedisTemplate.set(dispatchCounterKey, "0");
 	}
 
 	/**
@@ -162,11 +109,17 @@ public class JobDispatcher implements Runnable {
 		this.intervalMillis = intervalMillis;
 	}
 
+	/**
+	 * 设置是否支持高可靠性.
+	 */
 	public void setReliable(boolean reliable) {
 		this.reliable = reliable;
 	}
 
-	public void setTimeoutSecs(long timeoutSecs) {
-		this.timeoutSecs = timeoutSecs;
+	/**
+	 * 设置高可靠性模式下，非默认1分钟的任务执行超时时间。
+	 */
+	public void setJobTimeoutSecs(long jobTimeoutSecs) {
+		this.jobTimeoutSecs = jobTimeoutSecs;
 	}
 }

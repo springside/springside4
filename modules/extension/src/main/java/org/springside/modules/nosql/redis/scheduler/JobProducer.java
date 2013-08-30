@@ -19,8 +19,7 @@ import redis.clients.jedis.JedisPool;
 
 /**
  * 任务管理，支持任务的安排与取消。
- * 任务分延时任务与立即执行任务两种。
- * 未来还将支持固定间隔循环执行任务.
+ * 任务分延时任务与立即执行任务两种, 未来或将支持固定间隔循环执行任务.
  */
 public class JobProducer {
 

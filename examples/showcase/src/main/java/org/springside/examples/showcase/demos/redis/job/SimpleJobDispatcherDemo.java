@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
+import org.springside.modules.nosql.redis.scheduler.JobStatistics;
 
 import redis.clients.jedis.JedisPool;
 
@@ -31,9 +32,9 @@ public class SimpleJobDispatcherDemo {
 				JedisUtils.DEFAULT_TIMEOUT, 1);
 		try {
 			JobDispatcher dispatcher = new JobDispatcher("ss", pool);
+			JobStatistics statistics = new JobStatistics("ss", pool);
 
-			startPrintStatistics(dispatcher);
-
+			startPrintStatistics(statistics);
 			dispatcher.start();
 
 			System.out.println("Hit enter to stop.");
@@ -51,14 +52,14 @@ public class SimpleJobDispatcherDemo {
 		}
 	}
 
-	private static void startPrintStatistics(final JobDispatcher dispatcher) {
+	private static void startPrintStatistics(final JobStatistics statistics) {
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		statisticsTask = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
 				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
-						dispatcher.getScheduledJobNumber(), dispatcher.getReadyJobNumber(),
-						dispatcher.getDispatchCounter());
+						statistics.getScheduledJobNumber(), statistics.getReadyJobNumber(),
+						statistics.getDispatchCounter());
 			}
 		}, 0, 10, TimeUnit.SECONDS);
 	}

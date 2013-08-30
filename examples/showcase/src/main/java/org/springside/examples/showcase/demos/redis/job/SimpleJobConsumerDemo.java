@@ -44,7 +44,7 @@ public class SimpleJobConsumerDemo implements JobHandler {
 		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
 		for (int i = 0; i < THREAD_COUNT; i++) {
 			JobConsumer consumer = new JobConsumer("ss", pool, new SimpleJobConsumerDemo());
-			threadPool.submit(consumer);
+			threadPool.execute(consumer);
 		}
 
 		System.out.println("Hit enter to stop");

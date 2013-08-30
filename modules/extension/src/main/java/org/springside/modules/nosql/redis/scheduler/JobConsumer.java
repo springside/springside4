@@ -25,11 +25,13 @@ import redis.clients.jedis.exceptions.JedisConnectionException;
 import com.google.common.collect.Lists;
 
 /**
- * 阻塞接收任务的Runnable.
+ * 持续接收任务并交予JobHandler处理的线程.
+ * 分三种方式循环接收任务并交给JobHandler进行处理。
  */
 public class JobConsumer implements Runnable {
-
-	public static final int DEFAULT_POPUP_TIMEOUT_SECONDS = 5;
+	public static final int DEFAULT_CONNECTION_RETRY_MILLS = 5000; // for all
+	public static final int DEFAULT_POPUP_TIMEOUT_SECONDS = 5; // for simple popup
+	public static final int DEFAULT_QUEUE_EMPTY_WAIT_MILLS = 100; // for other 2 popup
 	public static final String DEFAULT_RELIABLE_POP_LUA_FILE = "classpath:/redis/reliablepop.lua";
 	public static final String DEFAULT_BATCH_POP_LUA_FILE = "classpath:/redis/batchpop.lua";
 	public static final boolean DEFAULT_RELIABLE = false;
@@ -39,6 +41,7 @@ public class JobConsumer implements Runnable {
 
 	private boolean reliable = DEFAULT_RELIABLE;
 	private int batchSize = DEFAULT_BATCH_SIZE;
+	private int queueEmptyWaitMills = DEFAULT_QUEUE_EMPTY_WAIT_MILLS;
 
 	private JedisTemplate jedisTemplate;
 	private JedisScriptExecutor reliabelPopScriptExecutor;
@@ -63,7 +66,7 @@ public class JobConsumer implements Runnable {
 	}
 
 	/**
-	 * 循环调用
+	 * 启动任务。
 	 */
 	@Override
 	public void run() {
@@ -77,7 +80,7 @@ public class JobConsumer implements Runnable {
 	}
 
 	/**
-	 * 直接popup ready job。
+	 * 循环blocking popup ready job，默认5秒超时。
 	 */
 	private void consumeSimpleJob() {
 		while (!Thread.currentThread().isInterrupted()) {
@@ -90,7 +93,7 @@ public class JobConsumer implements Runnable {
 					}
 				});
 			} catch (JedisConnectionException e) {
-				Threads.sleep(2000);
+				Threads.sleep(DEFAULT_CONNECTION_RETRY_MILLS);
 			}
 
 			if ((nameValuePair != null) && !nameValuePair.isEmpty()) {
@@ -106,11 +109,11 @@ public class JobConsumer implements Runnable {
 	}
 
 	/**
-	 * 高可靠性的处理单个Job, 取走的job会放入job:lock sorted set中，处理完毕后再清除。
+	 * 循环高可靠性的接收单个Job, 取走的job会放入job:lock sorted set中，处理完毕后再清除。
 	 */
 	private void consumeReliableJob() {
 		reliabelPopScriptExecutor.loadFromFile(reliablePopScriptPath);
-		final List<String> keys = Lists.newArrayList(readyJobKey, lockJobKey);
+		List<String> keys = Lists.newArrayList(readyJobKey, lockJobKey);
 
 		while (!Thread.currentThread().isInterrupted()) {
 			String job = null;
@@ -119,29 +122,32 @@ public class JobConsumer implements Runnable {
 				List<String> args = Lists.newArrayList(String.valueOf(currTime));
 				job = (String) reliabelPopScriptExecutor.execute(keys, args);
 			} catch (JedisConnectionException e) {
-				Threads.sleep(2000);
+				Threads.sleep(DEFAULT_CONNECTION_RETRY_MILLS);
 			}
 
 			if (job != null) {
 				try {
 					jobHandler.handleJob(job);
-
 				} catch (Exception e) {
 					// 记录jobHandler流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
 					logger.error("Handler exception for job " + job, e);
 				} finally {
-					// 无论出错与否,删除lockJob.
+					// 暂不支持retry逻辑，已交予JobHandler处理完毕的任务，无论成功与否，删除lockJob.
 					jedisTemplate.zrem(lockJobKey, job);
 				}
 			} else {
-				Threads.sleep(1000);
+				Threads.sleep(queueEmptyWaitMills);
 			}
 		}
 	}
 
+	/**
+	 * 循环批量接收Job, 是否将取走的job会放入job:lock中看 reliable 参数。
+	 */
 	private void consumeBatchJob() {
 		batchPopScriptExecutor.loadFromFile(batchPopScriptPath);
-		final List<String> keys = Lists.newArrayList(readyJobKey, lockJobKey);
+
+		List<String> keys = Lists.newArrayList(readyJobKey, lockJobKey);
 
 		while (!Thread.currentThread().isInterrupted()) {
 			List<String> jobs = null;
@@ -151,7 +157,7 @@ public class JobConsumer implements Runnable {
 						String.valueOf(reliable));
 				jobs = (List<String>) batchPopScriptExecutor.execute(keys, args);
 			} catch (JedisConnectionException e) {
-				Threads.sleep(2000);
+				Threads.sleep(DEFAULT_CONNECTION_RETRY_MILLS);
 			}
 
 			if ((jobs != null) && !jobs.isEmpty()) {
@@ -162,12 +168,12 @@ public class JobConsumer implements Runnable {
 						// 记录jobHandler流出的异常，然后毫不停顿的继续运行，做个坚强的Listener。
 						logger.error("Handler exception for job " + job, e);
 					} finally {
-						// 无论出错与否,删除lockJob.
+						// 暂不支持retry逻辑，已交予JobHandler处理完毕的任务，删除lockJob.
 						jedisTemplate.zrem(lockJobKey, job);
 					}
 				}
 			} else {
-				Threads.sleep(1000);
+				Threads.sleep(queueEmptyWaitMills);
 			}
 		}
 	}
@@ -178,6 +184,10 @@ public class JobConsumer implements Runnable {
 
 	public void setBatchSize(int batchSize) {
 		this.batchSize = batchSize;
+	}
+
+	public void setQueueEmptyWaitMills(int queueEmptyWaitMills) {
+		this.queueEmptyWaitMills = queueEmptyWaitMills;
 	}
 
 	/**

@@ -27,7 +27,7 @@ public class ReliableJobConsumerDemo extends SimpleJobConsumerDemo {
 			JobConsumer consumer = new JobConsumer("ss", pool, new ReliableJobConsumerDemo());
 			// set it as true
 			consumer.setReliable(true);
-			threadPool.submit(consumer);
+			threadPool.execute(consumer);
 		}
 
 		System.out.println("Hit enter to stop");

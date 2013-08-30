@@ -29,7 +29,7 @@ public class BatchJobConsumerDemo extends SimpleJobConsumerDemo {
 			consumer.setReliable(true);
 			// set it to 10
 			consumer.setBatchSize(10);
-			threadPool.submit(consumer);
+			threadPool.execute(consumer);
 		}
 
 		System.out.println("Hit enter to stop");

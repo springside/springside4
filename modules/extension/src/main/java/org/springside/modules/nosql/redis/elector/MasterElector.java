@@ -17,7 +17,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +45,6 @@ public class MasterElector implements Runnable {
 
 	private static Logger logger = LoggerFactory.getLogger(MasterElector.class);
 
-	private static AtomicInteger poolNumber = new AtomicInteger(1);
 	private ScheduledExecutorService internalScheduledThreadPool;
 	private ScheduledFuture electorJob;
 	private int intervalSecs;
@@ -59,13 +57,13 @@ public class MasterElector implements Runnable {
 	private AtomicBoolean master = new AtomicBoolean(false);
 
 	public MasterElector(JedisPool jedisPool, int intervalSecs) {
-		jedisTemplate = new JedisTemplate(jedisPool);
+		this.jedisTemplate = new JedisTemplate(jedisPool);
 		this.intervalSecs = intervalSecs;
 		this.expireSecs = intervalSecs + (intervalSecs / 2);
 	}
 
 	/**
-	 * 返回目前该实例是否master。
+	 * 返回当前实例是否master。
 	 */
 	public boolean isMaster() {
 		return master.get();
@@ -76,7 +74,7 @@ public class MasterElector implements Runnable {
 	 */
 	public void start() {
 		internalScheduledThreadPool = Executors.newScheduledThreadPool(1,
-				Threads.buildJobFactory("Master-Elector-" + poolNumber.getAndIncrement() + "-%d"));
+				Threads.buildJobFactory("Master-Elector-" + masterKey + "-%d"));
 		start(internalScheduledThreadPool);
 	}
 
@@ -87,12 +85,13 @@ public class MasterElector implements Runnable {
 		hostId = generateHostId();
 		electorJob = scheduledThreadPool.scheduleAtFixedRate(new WrapExceptionRunnable(this), 0, intervalSecs,
 				TimeUnit.SECONDS);
-		logger.info("masterElector start, hostName:{}.", hostId);
+		logger.info("masterElector for {} start, hostName:{}.", masterKey, hostId);
 	}
 
 	/**
-	 * 停止抢注线程，如果是自行创建的threadPool则自行销毁。
+	 * 停止抢注线程，
 	 * 如果是master, 则主动注销key.
+	 * 如果是自行创建的threadPool则自行销毁,最多5秒超时.
 	 */
 	public void stop() {
 		if (master.get()) {
@@ -107,14 +106,14 @@ public class MasterElector implements Runnable {
 	}
 
 	/**
-	 * 生成host id的方法哦，可在子类重载.
+	 * 生成host id的方法，可在子类重载.
 	 */
 	protected String generateHostId() {
 		String host = "localhost";
 		try {
 			host = InetAddress.getLocalHost().getHostName();
 		} catch (UnknownHostException e) {
-			logger.warn("can not get hostName", e);
+			logger.warn("can not get hostName, use localhost as default.", e);
 		}
 		host = host + "-" + new SecureRandom().nextInt(10000);
 
@@ -123,44 +122,42 @@ public class MasterElector implements Runnable {
 
 	@Override
 	public void run() {
-		jedisTemplate.execute(new JedisActionNoResult() {// NOSONAR
-					@Override
-					public void action(Jedis jedis) {
-						String masterFromRedis = jedis.get(masterKey);
+		jedisTemplate.execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				String masterFromRedis = jedis.get(masterKey);
 
-						logger.debug("master is {}", masterFromRedis);
+				logger.debug("master {} is {}", masterKey, masterFromRedis);
 
-						// if master is null, the cluster just start or the master had crashed, try to register myself
-						// as master
-						if (masterFromRedis == null) {
-							// use setnx to make sure only one client can register as master.
-							if (jedis.setnx(masterKey, hostId) > 0) {
-								// 等jedis支持2.6.12开始的新的set语法，就可以不用再担心setnx后expire还没来得及执行就crash。
-								jedis.expire(masterKey, expireSecs);
-								master.set(true);
-
-								logger.info("master is changed to {}.", hostId);
-								return;
-							} else {
-								master.set(false);
-								return;
-							}
-						}
-
-						// if master is myself, update the expire time.
-						if (hostId.equals(masterFromRedis)) {
-							jedis.expire(masterKey, expireSecs);
-							master.set(true);
-						} else {
-							// 在jedis支持2.6.12开始的新的set语法前，如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
-							if (jedis.ttl(masterKey) == -1) {
-								jedis.expire(masterKey, expireSecs);
-								logger.info("master key doesn't has expired time, set it again");
-							}
-							master.set(false);
-						}
+				// 如果masterKey返回值为空，证明集群刚重启 或master已crash，尝试注册为Master.
+				if (masterFromRedis == null) {
+					// 使用setnx，保证只有一个Client能注册为Master.
+					if (jedis.setnx(masterKey, hostId) > 0) {
+						// 等jedis支持2.6.12开始的新的set语法，就可以不用再担心执行setnx后expire还没来得及执行就crash。
+						jedis.expire(masterKey, expireSecs);
+						master.set(true);
+						logger.info("master {} is changed to {}.", masterKey, hostId);
+						return;
+					} else {
+						master.set(false);
+						return;
 					}
-				});
+				}
+
+				// 如果我已是master，更新key的超时时间
+				if (hostId.equals(masterFromRedis)) {
+					jedis.expire(masterKey, expireSecs);
+					master.set(true);
+				} else {
+					// 在jedis支持2.6.12开始的新的set语法前，如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
+					if (jedis.ttl(masterKey) == -1) {
+						jedis.expire(masterKey, expireSecs);
+						logger.info("master {} doesn't has expired time, set it again", masterKey);
+					}
+					master.set(false);
+				}
+			}
+		});
 	}
 
 	/**

@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
+import org.springside.modules.nosql.redis.scheduler.JobStatistics;
 
 import redis.clients.jedis.JedisPool;
 
@@ -33,8 +34,9 @@ public class ReliableJobDispatcherDemo {
 			JobDispatcher dispatcher = new JobDispatcher("ss", pool);
 			dispatcher.setReliable(true);
 
-			startPrintStatistics(dispatcher);
+			JobStatistics statistics = new JobStatistics("ss", pool);
 
+			startPrintStatistics(statistics);
 			dispatcher.start();
 
 			System.out.println("Hit enter to stop.");
@@ -52,15 +54,15 @@ public class ReliableJobDispatcherDemo {
 		}
 	}
 
-	public static void startPrintStatistics(final JobDispatcher dispatcher) {
+	public static void startPrintStatistics(final JobStatistics statistics) {
 		ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 		statisticsTask = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
 				System.out.printf(
 						"Scheduled job %d, Ready Job %d, Lock Job %d, Dispatch Counter %d, Retry Counter %d \n",
-						dispatcher.getScheduledJobNumber(), dispatcher.getReadyJobNumber(),
-						dispatcher.getLockJobNumber(), dispatcher.getDispatchCounter(), dispatcher.getRetryCounter());
+						statistics.getScheduledJobNumber(), statistics.getReadyJobNumber(),
+						statistics.getLockJobNumber(), statistics.getDispatchCounter(), statistics.getRetryCounter());
 			}
 		}, 0, 10, TimeUnit.SECONDS);
 	}

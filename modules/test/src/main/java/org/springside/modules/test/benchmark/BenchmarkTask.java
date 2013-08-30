@@ -34,19 +34,7 @@ public abstract class BenchmarkTask implements Runnable {
 	abstract protected void execute(final int requestSequence);
 
 	/**
-	 * Override for thread local connection and data setup.
-	 */
-	protected void setUp() {
-	}
-
-	/**
-	 * Override for thread local connection and data cleanup.
-	 */
-	protected void tearDown() {
-	}
-
-	/**
-	 * Must be invoked in children class when each thread finish the setup.
+	 * Must be invoked when each thread after the setup().
 	 */
 	protected void onThreadStart() {
 		parent.startLock.countDown();
@@ -61,7 +49,7 @@ public abstract class BenchmarkTask implements Runnable {
 	}
 
 	/**
-	 * Must be invoked in children class when each thread finish loop, before the tearDown().
+	 * Must be invoked when each thread finish loop, before the tearDown().
 	 */
 	protected void onThreadFinish() {
 		// notify test finish
@@ -96,8 +84,8 @@ public abstract class BenchmarkTask implements Runnable {
 
 			System.out
 					.printf("Thread %02d process %,d requests after %s seconds. Last tps/latency is %,d/%sms. Total tps/latency is %,d/%sms.\n",
-							taskSequence, currentRequests, totalTimeSeconds, lastTps, lastLatency.toString(),
-							totalTps, totalLatency.toString());
+							taskSequence, currentRequests, totalTimeSeconds, lastTps, lastLatency.toString(), totalTps,
+							totalLatency.toString());
 
 			previousRequests = currentRequests;
 		}
@@ -115,5 +103,17 @@ public abstract class BenchmarkTask implements Runnable {
 
 		System.out.printf("Thread %02d finish.Total tps/latency is %,d/%sms\n", taskSequence, totalTps,
 				totalLatency.toString());
+	}
+
+	/**
+	 * Override for thread local connection and data setup.
+	 */
+	protected void setUp() {
+	}
+
+	/**
+	 * Override for thread local connection and data cleanup.
+	 */
+	protected void tearDown() {
 	}
 }
