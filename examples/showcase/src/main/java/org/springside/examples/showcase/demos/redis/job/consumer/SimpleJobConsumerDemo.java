@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.demos.redis.job;
+package org.springside.examples.showcase.demos.redis.job.consumer;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.JobConsumer;
-import org.springside.modules.nosql.redis.scheduler.JobConsumer.JobHandler;
+import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
+import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.JedisPool;
 
@@ -17,20 +17,23 @@ import com.google.common.util.concurrent.RateLimiter;
 /**
  * 多线程运行JobConsumer，从"ss.job:ready" list中popup job进行处理。
  * 
- * 可用系统参数重置相关变量，@see RedisCounterBenchmark
+ * 可用系统参数重置变量改变线程数，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
-public class SimpleJobConsumerDemo implements JobHandler {
+public class SimpleJobConsumerDemo implements Runnable {
 
 	protected static final int THREAD_COUNT = 10;
 	protected static final int PRINT_BETWEEN_SECONDS = 10;
 
 	protected static JedisPool pool;
+	protected static int threadCount;
 
 	protected static AtomicLong golbalCounter = new AtomicLong(0);
 	protected static AtomicLong golbalPreviousCount = new AtomicLong(0);
 	protected static RateLimiter golbalPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
+
+	private SimpleJobConsumer consumer;
 
 	protected long localCounter = 0L;
 	protected long localPreviousCount = 0L;
@@ -38,13 +41,16 @@ public class SimpleJobConsumerDemo implements JobHandler {
 
 	public static void main(String[] args) throws Exception {
 
-		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
-				JedisUtils.DEFAULT_TIMEOUT, THREAD_COUNT);
+		threadCount = Integer.parseInt(System.getProperty(ConcurrentBenchmark.THREAD_COUNT_NAME,
+				String.valueOf(THREAD_COUNT)));
 
-		ExecutorService threadPool = Executors.newFixedThreadPool(THREAD_COUNT);
-		for (int i = 0; i < THREAD_COUNT; i++) {
-			JobConsumer consumer = new JobConsumer("ss", pool, new SimpleJobConsumerDemo());
-			threadPool.execute(consumer);
+		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
+				JedisUtils.DEFAULT_TIMEOUT, threadCount);
+
+		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
+		for (int i = 0; i < threadCount; i++) {
+			SimpleJobConsumerDemo demo = new SimpleJobConsumerDemo();
+			threadPool.execute(demo);
 		}
 
 		System.out.println("Hit enter to stop");
@@ -54,8 +60,8 @@ public class SimpleJobConsumerDemo implements JobHandler {
 				if (c == '\n') {
 					System.out.println("Shutting down");
 					threadPool.shutdownNow();
-					boolean shutdownSucess = threadPool.awaitTermination(JobConsumer.DEFAULT_POPUP_TIMEOUT_SECONDS + 1,
-							TimeUnit.SECONDS);
+					boolean shutdownSucess = threadPool.awaitTermination(
+							SimpleJobConsumer.DEFAULT_POPUP_TIMEOUT_SECONDS + 1, TimeUnit.SECONDS);
 
 					if (!shutdownSucess) {
 						System.out.println("Forcing exiting.");
@@ -70,15 +76,33 @@ public class SimpleJobConsumerDemo implements JobHandler {
 		}
 	}
 
+	public SimpleJobConsumerDemo() {
+		consumer = new SimpleJobConsumer("ss", pool);
+	}
+
+	@Override
+	public void run() {
+		while (!Thread.currentThread().isInterrupted()) {
+			try {
+				String job = consumer.popupJob();
+				if (job != null) {
+					handleJob(job);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	/**
 	 * 处理Job的回调函数.
 	 */
-	@Override
 	public void handleJob(String job) {
+
 		long globalCount = golbalCounter.incrementAndGet();
 		localCounter++;
 
-		// print global progress, 所有線程裡只有一個线程会在10秒內打印一次。
+		// print global progress, 所有線程裡只有一個会在10秒內打印一次。
 		if (golbalPrintRate.tryAcquire()) {
 			System.out.printf("Total pop %,d jobs, tps is %,d\n", globalCount,
 					(globalCount - golbalPreviousCount.get()) / PRINT_BETWEEN_SECONDS);

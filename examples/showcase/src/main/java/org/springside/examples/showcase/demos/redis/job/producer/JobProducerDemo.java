@@ -1,9 +1,10 @@
-package org.springside.examples.showcase.demos.redis.job;
+package org.springside.examples.showcase.demos.redis.job.producer;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
+import org.springside.examples.showcase.demos.redis.job.dispatcher.SimpleJobDispatcherDemo;
 import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.nosql.redis.scheduler.JobProducer;
 import org.springside.modules.test.benchmark.BenchmarkTask;

@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.demos.redis.job;
+package org.springside.examples.showcase.demos.redis.job.dispatcher;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
