@@ -21,7 +21,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
@@ -48,29 +47,14 @@ public class RemoteContentServlet extends HttpServlet {
 
 	private HttpClient httpClient = null;
 
-	/**
-	 * 创建多线程安全的HttpClient实例.
-	 */
 	@Override
 	public void init() throws ServletException {
-		// Set connection pool
-		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
-		cm.setMaxTotal(CONNECTION_POOL_SIZE);
-		httpClient = new DefaultHttpClient(cm);
-
-		// set timeout
-		HttpParams httpParams = httpClient.getParams();
-		HttpConnectionParams.setSoTimeout(httpParams, TIMEOUT_SECONDS * 1000);
+		initApacheHttpClient();
 	}
 
-	/**
-	 * 销毁HttpClient实例.
-	 */
 	@Override
 	public void destroy() {
-		if (httpClient != null) {
-			httpClient.getConnectionManager().shutdown();
-		}
+		destoryApacheHttpClient();
 	}
 
 	@Override
@@ -91,6 +75,30 @@ public class RemoteContentServlet extends HttpServlet {
 		} else {
 			// 使用JDK HttpUrlConnection
 			fetchContentByJDKConnection(response, contentUrl);
+		}
+	}
+
+	/**
+	 * 创建多线程安全的HttpClient实例并设置连接池和timeout.
+	 */
+	private void initApacheHttpClient() {
+		// init connection pool
+		PoolingClientConnectionManager cm = new PoolingClientConnectionManager();
+		cm.setMaxTotal(CONNECTION_POOL_SIZE);
+
+		// create client
+		httpClient = new DefaultHttpClient(cm);
+
+		// set timeout
+		HttpConnectionParams.setSoTimeout(httpClient.getParams(), TIMEOUT_SECONDS * 1000);
+	}
+
+	/**
+	 * 销毁HttpClient连接池.
+	 */
+	private void destoryApacheHttpClient() {
+		if (httpClient != null) {
+			httpClient.getConnectionManager().shutdown();
 		}
 	}
 
