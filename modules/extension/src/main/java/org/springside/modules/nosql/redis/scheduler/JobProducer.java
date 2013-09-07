@@ -45,18 +45,6 @@ public class JobProducer {
 	}
 
 	/**
-	 * 尝试取消立即执行的任务,如果任务不存在或已被执行返回false, 否则返回true.
-	 */
-	public boolean cancel(final String job) {
-		boolean removed = jedisTemplate.lremOne(readyJobKey, job);
-		if (!removed) {
-			logger.warn("Can't cancel job by value {}", job);
-		}
-
-		return removed;
-	}
-
-	/**
 	 * 安排延时执行任务.
 	 */
 	public void schedule(final String job, final long delay, final TimeUnit timeUnit) {
@@ -67,7 +55,7 @@ public class JobProducer {
 	/**
 	 * 尝试取消延时任务, 如果任务不存在或已被触发返回false, 否则返回true.
 	 */
-	public boolean cancelSchedule(final String job) {
+	public boolean cancel(final String job) {
 		boolean removed = jedisTemplate.zrem(scheduledJobKey, job);
 
 		if (!removed) {

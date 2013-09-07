@@ -3,10 +3,10 @@
 local batchJobs={}
 for i=1,ARGV[2] do
 	local job = redis.call('rpop', KEYS[1])
-	if (job == nil) then
-		break
-	else
+	if (job) then
 		batchJobs[i] = job
+	else
+		break
 	end	
 end	
 

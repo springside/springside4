@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.BatchJobConsumer;
+import org.springside.modules.nosql.redis.scheduler.AdvancedConsumer;
 import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
@@ -19,9 +19,9 @@ import org.springside.modules.utils.Threads;
  * 
  * @author calvin
  */
-public class BatchJobConsumerDemo extends SimpleJobConsumerDemo {
+public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 
-	private BatchJobConsumer consumer;
+	private AdvancedConsumer consumer;
 
 	private static boolean reliable;
 	private static int batchSize;
@@ -32,9 +32,9 @@ public class BatchJobConsumerDemo extends SimpleJobConsumerDemo {
 				String.valueOf(THREAD_COUNT)));
 
 		reliable = Boolean.parseBoolean(System.getProperty("reliable",
-				String.valueOf(BatchJobConsumer.DEFAULT_RELIABLE)));
+				String.valueOf(AdvancedConsumer.DEFAULT_RELIABLE)));
 		batchSize = Integer.parseInt(System.getProperty("batchsize",
-				String.valueOf(BatchJobConsumer.DEFAULT_BATCH_SIZE)));
+				String.valueOf(AdvancedConsumer.DEFAULT_BATCH_SIZE)));
 
 		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
 				JedisUtils.DEFAULT_TIMEOUT, threadCount);
@@ -68,8 +68,8 @@ public class BatchJobConsumerDemo extends SimpleJobConsumerDemo {
 		}
 	}
 
-	public BatchJobConsumerDemo() {
-		consumer = new BatchJobConsumer("ss", pool);
+	public AdvancedJobConsumerBatchPopDemo() {
+		consumer = new AdvancedConsumer("ss", pool);
 		consumer.setReliable(reliable);
 		consumer.setBatchSize(batchSize);
 	}

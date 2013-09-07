@@ -31,42 +31,42 @@ public class JobStatistics {
 	}
 
 	/**
-	 * 获取未达到触发条件进行分发的Job数量.
+	 * 获取已安排但未达到触发条件的Job数量.
 	 */
 	public long getScheduledJobNumber() {
 		return jedisTemplate.zcard(scheduledJobKey);
 	}
 
 	/**
-	 * 获取已分发但未被执行的Job数量.
+	 * 获取已触发但未被客户端取走的Job数量.
 	 */
 	public long getReadyJobNumber() {
 		return jedisTemplate.llen(readyJobKey);
 	}
 
 	/**
-	 * 获取高可靠模式下已被取走执行但未报告完成的Job数量.
+	 * 获取高可靠模式下，已被取走执行但未报告完成的Job数量.
 	 */
 	public long getLockJobNumber() {
 		return jedisTemplate.zcard(lockJobKey);
 	}
 
 	/**
-	 * 获取已分发的Job总数。
+	 * 获取已触发的Job总数。
 	 */
 	public long getDispatchCounter() {
 		return jedisTemplate.getAsLong(dispatchCounterKey);
 	}
 
 	/**
-	 * 获取已重做的Job总数。
+	 * 获取高可靠模式下，已重做的Job总数。
 	 */
 	public long getRetryCounter() {
 		return jedisTemplate.getAsLong(retryCounterKey);
 	}
 
 	/**
-	 * 重置已分发的Job计数器和已重做的计数器.
+	 * 重置所有计数器.
 	 */
 	public void restCounters() {
 		jedisTemplate.set(dispatchCounterKey, "0");

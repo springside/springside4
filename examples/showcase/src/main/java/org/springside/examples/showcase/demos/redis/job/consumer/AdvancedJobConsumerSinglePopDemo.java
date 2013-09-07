@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.ReliableJobConsumer;
+import org.springside.modules.nosql.redis.scheduler.AdvancedConsumer;
 import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
@@ -18,9 +18,9 @@ import org.springside.modules.utils.Threads;
  * 
  * @author calvin
  */
-public class ReliableJobConsumerDemo extends SimpleJobConsumerDemo {
+public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 
-	private ReliableJobConsumer consumer;
+	private AdvancedConsumer consumer;
 
 	public static void main(String[] args) throws Exception {
 
@@ -59,8 +59,9 @@ public class ReliableJobConsumerDemo extends SimpleJobConsumerDemo {
 		}
 	}
 
-	public ReliableJobConsumerDemo() {
-		consumer = new ReliableJobConsumer("ss", pool);
+	public AdvancedJobConsumerSinglePopDemo() {
+		consumer = new AdvancedConsumer("ss", pool);
+		consumer.setReliable(true);
 	}
 
 	@Override
