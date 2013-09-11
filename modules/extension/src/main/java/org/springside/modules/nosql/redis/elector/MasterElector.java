@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
+import org.springside.modules.nosql.redis.JedisUtils;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
 
@@ -132,9 +133,7 @@ public class MasterElector implements Runnable {
 				// 如果masterKey返回值为空，证明集群刚重启 或master已crash，尝试注册为Master.
 				if (masterFromRedis == null) {
 					// 使用setnx，保证只有一个Client能注册为Master.
-					if (jedis.setnx(masterKey, hostId) > 0) {
-						// 等jedis支持2.6.12开始的新的set语法，就可以不用再担心执行setnx后expire还没来得及执行就crash。
-						jedis.expire(masterKey, expireSecs);
+					if (JedisUtils.isStatusOk(jedis.set(masterKey, hostId, "NX", "EX", expireSecs))) {
 						master.set(true);
 						logger.info("master {} is changed to {}.", masterKey, hostId);
 						return;
@@ -149,11 +148,6 @@ public class MasterElector implements Runnable {
 					jedis.expire(masterKey, expireSecs);
 					master.set(true);
 				} else {
-					// 在jedis支持2.6.12开始的新的set语法前，如果我不是master，以在野党的身份检查一下master key上的expire是否已设置。
-					if (jedis.ttl(masterKey) == -1) {
-						jedis.expire(masterKey, expireSecs);
-						logger.info("master {} doesn't has expired time, set it again", masterKey);
-					}
 					master.set(false);
 				}
 			}
