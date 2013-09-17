@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +25,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import ${package}.entity.Task;
 import ${package}.service.task.TaskService;
 import org.springside.modules.beanvalidator.BeanValidators;
+import org.springside.modules.web.MediaTypes;
 
 /**
  * Task的Restful API的Controller.
@@ -44,24 +44,25 @@ public class TaskRestController {
 	@Autowired
 	private Validator validator;
 
-	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	@ResponseBody
 	public List<Task> list() {
 		return taskService.getAllTask();
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	@ResponseBody
-	public ResponseEntity<?> get(@PathVariable("id") Long id) {
+	public Task get(@PathVariable("id") Long id) {
 		Task task = taskService.getTask(id);
 		if (task == null) {
-			logger.warn("task with id {} not found", id);
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			String message = "任务不存在(id:" + id + ")";
+			logger.warn(message);
+			throw new RestException(HttpStatus.NOT_FOUND, message);
 		}
-		return new ResponseEntity(task, HttpStatus.OK);
+		return task;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(method = RequestMethod.POST, consumes = MediaTypes.JSON)
 	@ResponseBody
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
 		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
@@ -79,7 +80,7 @@ public class TaskRestController {
 		return new ResponseEntity(headers, HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaTypes.JSON)
 	public ResponseEntity<?> update(@RequestBody Task task) {
 		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
 		BeanValidators.validateWithException(validator, task);
