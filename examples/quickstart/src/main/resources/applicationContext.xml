@@ -72,9 +72,9 @@
 			<property name="maxActive" value="${jdbc.pool.maxActive}" />
 			<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
 			<property name="defaultAutoCommit" value="false" />
-			<!-- 连接Idle一个小时后超时 -->
-			<property name="timeBetweenEvictionRunsMillis" value="3600000" />
-			<property name="minEvictableIdleTimeMillis" value="3600000" />
+			<!-- 连接Idle半个小时后超时，每15分钟检查一次 -->
+			<property name="timeBetweenEvictionRunsMillis" value="900000" />
+			<property name="minEvictableIdleTimeMillis" value="1800000" />
 		</bean>
 		
 		<!-- 数据源配置,使用应用服务器的数据库连接池 -->
