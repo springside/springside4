@@ -26,7 +26,7 @@
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<selenium.version>2.35.0</selenium.version>
-		<jetty.version>7.6.12.v20130726</jetty.version>
+		<jetty.version>7.6.13.v20130916</jetty.version>
 		<h2.version>1.3.173</h2.version>
 
 		<!-- Plugin的属性定义 -->
@@ -43,6 +43,10 @@
 			<jdbc.driver.version>5.1.22</jdbc.driver.version>
 		-->	
 	</properties>
+
+	<prerequisites>
+  		<maven>2.2.1</maven>
+	</prerequisites>
 	
 	<repositories>
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.
@@ -481,7 +485,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.2</version>
+				<version>2.6</version>
 				<configuration>
 					<instrumentation>
 						<excludes>
