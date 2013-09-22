@@ -355,13 +355,13 @@
 			</exclusions>
 		</dependency>
 
-		<!-- h2 -->
+		<!-- h2  如果生产数据库不是H2，解开下面的注释
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
-			<scope>test</scope>
 		</dependency>
+		-->
 
 		<!-- jetty -->
 		<dependency>
