@@ -479,6 +479,19 @@
 				</configuration>
 			</plugin>
 			
+			<!-- Tomcat7 插件 -->
+			<plugin>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.1</version>
+				<configuration>
+					<systemProperties>
+						<spring.profiles.active>development</spring.profiles.active>
+					</systemProperties>
+					<useTestClasspath>true</useTestClasspath>
+				</configuration>
+			</plugin>
+			
 			<!-- enforcer, 规则统一定义在parent -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
