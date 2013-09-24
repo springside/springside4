@@ -25,14 +25,6 @@
 			<artifactId>spring-context</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
-		<!-- WEB begin -->
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- WEB end -->
 
 		<!-- CACHE -->
 		<dependency>
