@@ -45,7 +45,7 @@
 	</properties>
 
 	<prerequisites>
-  		<maven>2.2.1</maven>
+  		<maven>3.0.0</maven>
 	</prerequisites>
 	
 	<repositories>
@@ -515,6 +515,7 @@
                 				<requireJavaVersion>
                   					<version>1.6</version>
                 				</requireJavaVersion>
+                				<requireUpperBoundDeps/>
 								<bannedDependencies>
 									<searchTransitive>true</searchTransitive>
 									<!-- 避免引入过期的jar包 -->
