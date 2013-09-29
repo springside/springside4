@@ -1,4 +1,4 @@
-insert into ss_user (id, login_name, name, email, password, salt, status, team_id) values(1,'admin','管理员','admin@springside.org.cn','691b14d79bf0fa2215f155235df5e670b64394cc','7efbd59d9741d34f','enabled',1);
+insert into ss_user (id, login_name, name, email, password, salt, status, team_id) values(1,'admin','Administrator','admin@springside.org.cn','691b14d79bf0fa2215f155235df5e670b64394cc','7efbd59d9741d34f','enabled',1);
 insert into ss_user (id, login_name, name, email, password, salt, status, team_id) values(2,'user','Calvin','user@springside.org.cn','2488aa0c31c624687bd9928e0a5d29e7d1ed520b','6d65d24122c30500','enabled',1);
 insert into ss_user (id, login_name, name, email, password, salt, status, team_id) values(3,'user2','Jack','jack@springside.org.cn','2488aa0c31c624687bd9928e0a5d29e7d1ed520b','6d65d24122c30500','enabled',1);
 insert into ss_user (id, login_name, name, email, password, salt, status, team_id) values(4,'user3','Kate','kate@springside.org.cn','2488aa0c31c624687bd9928e0a5d29e7d1ed520b','6d65d24122c30500','enabled',1);
