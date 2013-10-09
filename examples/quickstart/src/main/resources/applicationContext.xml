@@ -14,7 +14,7 @@
 
 	<description>Spring公共配置 </description>
 
-	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired的属性被注入 -->
+	<!-- 使用annotation 自动注册bean, 并保证@Required、@Autowired、@PostConstruct的属性被注入 -->
 	<context:component-scan base-package="org.springside.examples.quickstart">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 		<context:exclude-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
