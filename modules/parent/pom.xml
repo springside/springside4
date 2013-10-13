@@ -12,20 +12,20 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.1-SNAPSHOT</springside.version>
 		<spring.version>3.2.4.RELEASE</spring.version>
-		<hibernate.version>4.2.5.Final</hibernate.version>
-		<mybatis.version>3.2.2</mybatis.version>
+		<hibernate.version>4.2.6.Final</hibernate.version>
+		<mybatis.version>3.2.3</mybatis.version>
 		<spring-data-jpa.version>1.4.1.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
-		<cxf.version>2.7.6</cxf.version>
+		<cxf.version>2.7.7</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
-		<quartz.version>2.2.0</quartz.version>
+		<quartz.version>2.2.1</quartz.version>
         <jedis.version>2.2.1</jedis.version>
 		<ehcache.version>2.6.6</ehcache.version>
-		<spymemcached.version>2.10.0</spymemcached.version>
+		<spymemcached.version>2.10.1</spymemcached.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jolokia.version>1.1.3</jolokia.version>
+		<jolokia.version>1.1.4</jolokia.version>
 		<jackson.version>2.2.3</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
@@ -34,7 +34,7 @@
 		<guava.version>15.0</guava.version>
 		<joda-time.version>2.3</joda-time.version>
 		<dozer.version>5.4.0</dozer.version>
-		<httpclient.version>4.3</httpclient.version>
+		<httpclient.version>4.3.1</httpclient.version>
 		<freemarker.version>2.3.20</freemarker.version>
 		<javasimon.version>3.4.0</javasimon.version>
 		<aspectj.version>1.7.3</aspectj.version>
@@ -192,7 +192,7 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.2.0</version>
+				<version>1.2.1</version>
 			</dependency>
 
 			<!-- spring orm -->
@@ -352,6 +352,10 @@
 					<exclusion>
 						<groupId>org.osgi</groupId>
 						<artifactId>org.osgi.core</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.fusesource.mqtt-client</groupId>
+						<artifactId>mqtt-client</artifactId>
 					</exclusion>
 					<exclusion>
 						<groupId>commons-logging</groupId>

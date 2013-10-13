@@ -12,7 +12,7 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.1-SNAPSHOT</springside.version>
 		<spring.version>3.2.4.RELEASE</spring.version>
-		<hibernate.version>4.2.5.Final</hibernate.version>
+		<hibernate.version>4.2.6.Final</hibernate.version>
 		<spring-data-jpa.version>1.4.1.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
@@ -543,11 +543,25 @@
 				</configuration>
 			</plugin>
 
+			<!-- resource插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resource-plugin</artifactId>
+				<version>2.5</version>
+			</plugin>
+			
 			<!-- install插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
 				<version>2.5</version>
+			</plugin>
+			
+			<!-- ant插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
 			</plugin>
 		</plugins>
 	</build>

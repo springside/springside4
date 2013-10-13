@@ -425,7 +425,7 @@
 				</executions>
 			</plugin>
 			
-			<!-- test插件,设定內存 -->
+			<!-- test插件, 设定內存 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -434,7 +434,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- cobertura插件 ,取消不需要计算覆盖率的类 -->
+			<!-- cobertura插件, 取消不需要计算覆盖率的类 -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
@@ -468,7 +468,7 @@
 				</configuration>
 			</plugin>
 			
-			<!-- Tomcat7 插件 -->
+			<!-- tomcat7 插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -481,7 +481,7 @@
 				</configuration>
 			</plugin>
 			
-			<!-- enforcer, 规则统一定义在parent -->
+			<!-- enforcer插件, 规则统一定义在parent -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
@@ -558,6 +558,7 @@
 			</build>
 		</profile>
 
+		<!--打包可执行war包 -->
 		<profile>
 			<id>standalone</id>
 			<build>
