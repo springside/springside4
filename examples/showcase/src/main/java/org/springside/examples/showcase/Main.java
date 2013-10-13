@@ -39,8 +39,8 @@ public class Main {
 
 		ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
 		URL location = protectionDomain.getCodeSource().getLocation();
-
 		String warFile = location.toExternalForm();
+
 		WebAppContext context = new WebAppContext(warFile, contextPath);
 		context.setServer(server);
 
