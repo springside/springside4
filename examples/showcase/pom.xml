@@ -201,6 +201,12 @@
 			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-core</artifactId>
 		</dependency>
+
+		<!-- hystrix -->
+		<dependency>
+			<groupId>com.netflix.hystrix</groupId>
+			<artifactId>hystrix-core</artifactId>
+		</dependency>
 				
 		<!-- JSR303  BeanValidator -->
 		<dependency>
