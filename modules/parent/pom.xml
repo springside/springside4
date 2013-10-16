@@ -21,7 +21,7 @@
 		<cxf.version>2.7.7</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.2.1</quartz.version>
-        <jedis.version>2.2.1</jedis.version>
+		<jedis.version>2.2.1</jedis.version>
 		<ehcache.version>2.6.6</ehcache.version>
 		<spymemcached.version>2.10.1</spymemcached.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
@@ -52,7 +52,7 @@
 	</properties>
 
 	<prerequisites>
-  		<maven>3.0.0</maven>
+		<maven>3.0.0</maven>
 	</prerequisites>
 
 	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找.如有Nexus私服, 取消注释并指向正确的服务器地址.
@@ -77,7 +77,7 @@
 		</pluginRepository>
 	</pluginRepositories>
 	-->
-	
+
 	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
 	<dependencyManagement>
 		<dependencies>
@@ -116,7 +116,7 @@
 				<artifactId>spring-context</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-			
+
 			<!-- aop/tx -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -170,7 +170,7 @@
 				<artifactId>javassist</artifactId>
 				<version>3.18.0-GA</version>
 			</dependency>
-			
+
 			<!-- spring data jpa -->
 			<dependency>
 				<groupId>org.springframework.data</groupId>
@@ -182,8 +182,8 @@
 						<artifactId>junit-dep</artifactId>
 					</exclusion>
 				</exclusions>
-        	</dependency>
-			
+			</dependency>
+
 			<!-- mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
@@ -251,7 +251,7 @@
 				<version>1.2</version>
 			</dependency>
 			<!-- WEB end -->
-			
+
 			<!-- SECURITY begin -->
 			<dependency>
 				<groupId>org.apache.shiro</groupId>
@@ -323,13 +323,13 @@
 				<version>${cxf.version}</version>
 			</dependency>
 			<dependency>
-	            <groupId>com.fasterxml.jackson.jaxrs</groupId>
-	            <artifactId>jackson-jaxrs-json-provider</artifactId>
-	            <version>${jackson.version}</version>
-	            <scope>runtime</scope>
-        	</dependency>
+				<groupId>com.fasterxml.jackson.jaxrs</groupId>
+				<artifactId>jackson-jaxrs-json-provider</artifactId>
+				<version>${jackson.version}</version>
+				<scope>runtime</scope>
+			</dependency>
 			<!-- JAX-RS end -->
-			
+
 			<!-- JMS begin -->
 			<dependency>
 				<groupId>org.springframework</groupId>
@@ -373,13 +373,13 @@
 				<version>${quartz.version}</version>
 			</dependency>
 
-            <!-- NOSQL begin-->
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis.version}</version>
-            </dependency>
-            <!-- NOSQL end-->
+			<!-- NOSQL begin -->
+			<dependency>
+				<groupId>redis.clients</groupId>
+				<artifactId>jedis</artifactId>
+				<version>${jedis.version}</version>
+			</dependency>
+			<!-- NOSQL end -->
 
 			<!-- CACHE begin -->
 			<!-- memcached -->
@@ -388,7 +388,7 @@
 				<artifactId>spymemcached</artifactId>
 				<version>${spymemcached.version}</version>
 			</dependency>
-			
+
 			<!-- ehcache -->
 			<dependency>
 				<groupId>net.sf.ehcache</groupId>
@@ -403,16 +403,22 @@
 				<artifactId>jolokia-core</artifactId>
 				<version>${jolokia.version}</version>
 			</dependency>
-			<!-- jolokia end-->
-			
+			<!-- jolokia end -->
+
 			<!-- hystrix begin -->
 			<dependency>
 				<groupId>com.netflix.hystrix</groupId>
 				<artifactId>hystrix-core</artifactId>
 				<version>${hystrix.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<!-- hystrix end -->
-			
+
 			<!-- JSR303 Bean Validator -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -425,7 +431,7 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
 				<version>${jackson.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-databind</artifactId>
@@ -457,8 +463,8 @@
 				<artifactId>jaxen</artifactId>
 				<version>1.1.4</version>
 			</dependency>
-			<!-- XML end -->			
-			
+			<!-- XML end -->
+
 			<!-- LOGGING begin -->
 			<!-- slf4j -->
 			<dependency>
@@ -466,14 +472,14 @@
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
-			
+
 			<!-- logback -->
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
 				<version>${logback.version}</version>
 			</dependency>
-			
+
 			<!-- 代码直接调用log4j会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
@@ -481,32 +487,32 @@
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-			
-			<!-- 代码直接调用common-logging会被桥接到slf4j -->
+
+			<!-- 代码直接调用commons-logging会被桥接到slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
 				<version>${slf4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
-			
+
 			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
 			<dependency>
-        		<groupId>org.slf4j</groupId>
-        		<artifactId>jul-to-slf4j</artifactId>
-        		<version>${slf4j.version}</version>
-        		<scope>runtime</scope>
-      		</dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jul-to-slf4j</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
 
 			<!-- log4jdbc -->
 			<dependency>
-		 		<groupId>com.googlecode.log4jdbc</groupId>
+				<groupId>com.googlecode.log4jdbc</groupId>
 				<artifactId>log4jdbc</artifactId>
 				<version>1.2</version>
 				<scope>runtime</scope>
 			</dependency>
 			<!-- LOGGING end -->
-			
+
 			<!-- GENERAL UTILS begin -->
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -555,10 +561,10 @@
 			</dependency>
 			<!-- joda for jackson -->
 			<dependency>
-	            <groupId>com.fasterxml.jackson.datatype</groupId>
-	            <artifactId>jackson-datatype-joda</artifactId>
-	            <version>${jackson.version}</version>
-        	</dependency>	
+				<groupId>com.fasterxml.jackson.datatype</groupId>
+				<artifactId>jackson-datatype-joda</artifactId>
+				<version>${jackson.version}</version>
+			</dependency>
 			<!-- GENERAL UTILS end -->
 
 			<!-- OTHER TOOLS begin -->
@@ -574,7 +580,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- httpclient -->
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
@@ -596,11 +602,11 @@
 			</dependency>
 
 			<!-- commons-pool -->
-	        <dependency>
-	            <groupId>commons-pool</groupId>
-	            <artifactId>commons-pool</artifactId>
-	            <version>1.6</version>
-	        </dependency>
+			<dependency>
+				<groupId>commons-pool</groupId>
+				<artifactId>commons-pool</artifactId>
+				<version>1.6</version>
+			</dependency>
 
 			<!-- email -->
 			<dependency>
@@ -614,8 +620,8 @@
 				<version>1.1.1</version>
 			</dependency>
 			<!-- OTHER TOOLS end -->
-	
-			<!-- Monitor begin-->
+
+			<!-- Monitor begin -->
 			<dependency>
 				<groupId>org.javasimon</groupId>
 				<artifactId>javasimon-spring</artifactId>
@@ -631,8 +637,8 @@
 				<artifactId>javasimon-console-embed</artifactId>
 				<version>${javasimon.version}</version>
 			</dependency>
-			<!-- Monitor end-->					
-	
+			<!-- Monitor end -->
+
 			<!-- TEST begin -->
 			<!-- junit -->
 			<dependency>
@@ -682,7 +688,7 @@
 				<version>${spring.version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- selenium 2.0 -->
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
@@ -728,7 +734,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			
+
 			<!-- jetty -->
 			<dependency>
 				<groupId>org.eclipse.jetty.aggregate</groupId>
@@ -742,7 +748,7 @@
 				<version>${jetty.version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- h2 -->
 			<dependency>
 				<groupId>com.h2database</groupId>
@@ -750,7 +756,7 @@
 				<version>${h2.version}</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- memcached simulator -->
 			<dependency>
 				<groupId>com.thimbleware.jmemcached</groupId>
@@ -758,7 +764,7 @@
 				<version>1.0.0</version>
 				<scope>test</scope>
 			</dependency>
-		
+
 			<!-- smtp server simulator -->
 			<dependency>
 				<groupId>com.icegreen</groupId>
@@ -766,7 +772,7 @@
 				<version>1.3.1b</version>
 				<scope>test</scope>
 			</dependency>
-			
+
 			<!-- 定义隐式依赖的版本 -->
 			<dependency>
 				<groupId>org.hamcrest</groupId>
@@ -825,15 +831,15 @@
 						</dependency>
 					</dependencies>
 				</plugin>
-				
+
 				<!-- 增加更多的Source和Test Source目录插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
 					<version>1.8</version>
 				</plugin>
-					
-        		<!-- cobertura 测试覆盖率统计插件 -->
+
+				<!-- cobertura 测试覆盖率统计插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
@@ -882,7 +888,7 @@
 					<artifactId>maven-install-plugin</artifactId>
 					<version>2.5</version>
 				</plugin>
-				
+
 				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -897,12 +903,12 @@
 							<configuration>
 								<rules>
 									<requireMavenVersion>
-                  						<version>3.0.3</version>
-                					</requireMavenVersion>
-                					<requireJavaVersion>
-                  						<version>1.6</version>
-                					</requireJavaVersion>
-                					<requireUpperBoundDeps/>
+										<version>3.0.3</version>
+									</requireMavenVersion>
+									<requireJavaVersion>
+										<version>1.6</version>
+									</requireJavaVersion>
+									<requireUpperBoundDeps />
 									<bannedDependencies>
 										<searchTransitive>true</searchTransitive>
 										<excludes>
@@ -926,7 +932,7 @@
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>${jetty.version}</version>
 				</plugin>
-				
+
 				<!-- assembly插件 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -952,7 +958,7 @@
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>1.7</version>
 				</plugin>
-				
+
 				<!-- exec java 插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
@@ -962,7 +968,7 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-	
+
 	<profiles>
 		<!-- 执行@Category(Smoke.class)的TestCase -->
 		<profile>
@@ -975,11 +981,11 @@
 						<configuration>
 							<groups>org.springside.modules.test.category.Smoke</groups>
 						</configuration>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
 		<profile>
 			<id>skip-unstable</id>
@@ -991,11 +997,11 @@
 						<configuration>
 							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
 						</configuration>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 执行@Category(UnStable.class)的TestCase -->
 		<profile>
 			<id>run-unstable</id>
@@ -1007,7 +1013,7 @@
 						<configuration>
 							<includedGroups>org.springside.modules.test.category.UnStable</includedGroups>
 						</configuration>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
