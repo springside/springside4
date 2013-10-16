@@ -52,7 +52,7 @@ public class DependencyResourceController {
 		if ("bad-request".equals(status)) {
 			throw new RestException(HttpStatus.BAD_REQUEST, "Client send a bad request");
 		}
-		
+
 		return null;
 	}
 
@@ -63,12 +63,4 @@ public class DependencyResourceController {
 		return dto;
 	}
 
-	/**
-	 * 设定Resource的状态.
-	 */
-	@RequestMapping(value = "/hystrix/resource/status/{status}")
-	public String updateStatus(@PathVariable("status") String newStatus) {
-		status = newStatus;
-		return "redirect:/story/hystrix";
-	}
 }

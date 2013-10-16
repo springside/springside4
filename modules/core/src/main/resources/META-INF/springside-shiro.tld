@@ -19,17 +19,11 @@
   -->
 <!DOCTYPE taglib PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
   "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
-
 <taglib>
-
   <tlib-version>1.1.2</tlib-version>
-
   <jsp-version>1.2</jsp-version>
-
-  <short-name>Apache Shiro</short-name>
-
+  <short-name>shiro</short-name>
   <uri>http://www.springside.org.cn/tags/shiro</uri>
-
   <description>Apache Shiro JSP Tag Library extends the hasAnyPermissions tag.</description>
 
   <tag>
@@ -46,6 +40,7 @@
     </attribute>
   </tag>
   
+  <!-- SpringSide additional tag -->
   <tag>
     <name>hasAnyPermissions</name>
     <tag-class>org.springside.modules.security.shiro.HasAnyPermissionsTag</tag-class>

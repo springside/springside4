@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="org.springside.examples.showcase.demos.hystrix.dependency.DependencyResourceController,com.netflix.hystrix.*,com.netflix.hystrix.HystrixCommandMetrics.HealthCounts,com.netflix.hystrix.util.*" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%!  %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springside.org.cn/tags/form" %>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}"/>
 <html>
@@ -19,10 +20,9 @@
         <p><a href="https://github.com/Netflix/Hystrix" target="_blank">Netflix Hystrix</a> 是一个延迟与容错类库，通过独立访问远程系统、服务和第三方库的节点，在复杂的分布式系统里停止雪崩及提供恢复能力。</p>
 
         <h2>演示操作</h2>
-        <ul>
-                <li>依赖资源当前状态为<%= DependencyResourceController.status %>：切换为<a href="${ctx}/hystrix/resource/status/normal">正常</a>、<a href="${ctx}/hystrix/resource/status/timeout">超时</a>、<a href="${ctx}/hystrix/resource/status/server-error">服务端失败</a>、<a href="${ctx}/hystrix/resource/status/bad-request">错误请求</a>。</li>
-                <li>访问服务：<a href="${ctx}/hystrix/user/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a></li>
-        </ul>
+        <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源当前状态为:</span><form:bsradiobuttons id="status" path="statusHolder.status" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn btn-primary" type="submit" value="更新"/></form> </div>
+        <div>访问服务：<a href="${ctx}/hystrix/user/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a></div>
+        
         <h2>主要用户故事</h2>
         <ul>
                 <li> 在默认的正常状态，访问Hystrix服务和依赖资源，均返回正常结果。</li>
