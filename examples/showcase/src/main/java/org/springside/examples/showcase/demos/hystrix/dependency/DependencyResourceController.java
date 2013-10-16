@@ -16,11 +16,11 @@ import org.springside.modules.mapper.BeanMapper;
 import org.springside.modules.utils.Threads;
 
 /**
- * 模拟被Service所依赖的远程Resource.
+ * 模拟被Service所依赖的Resource.
  */
 @Controller
 public class DependencyResourceController {
-	public static final int TIMEOUT = 10000;
+	public static final int TIMEOUT = 15000;
 
 	private String status = "normal";
 
@@ -28,7 +28,7 @@ public class DependencyResourceController {
 	private AccountEffectiveService accountService;
 
 	/**
-	 * 根据控制器中的状态而演示不同的行为，如正常返回，10秒后返回或直接报错
+	 * 根据控制器中的状态而演示不同的行为，如正常返回，15秒后返回或直接报错
 	 */
 	@RequestMapping(value = "/hystrix/resource/{id}", method = RequestMethod.GET)
 	@ResponseBody
