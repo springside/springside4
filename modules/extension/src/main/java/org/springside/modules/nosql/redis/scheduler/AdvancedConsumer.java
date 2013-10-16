@@ -11,8 +11,6 @@ package org.springside.modules.nosql.redis.scheduler;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.utils.Threads;
@@ -36,8 +34,6 @@ public class AdvancedConsumer {
 	public static final int DEFAULT_CONNECTION_RETRY_MILLS = 5000;
 	public static final boolean DEFAULT_RELIABLE = false;
 	public static final int DEFAULT_BATCH_SIZE = 10;
-
-	private static Logger logger = LoggerFactory.getLogger(AdvancedConsumer.class);
 
 	private boolean reliable = DEFAULT_RELIABLE;
 	private int batchSize = DEFAULT_BATCH_SIZE;

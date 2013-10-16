@@ -5,8 +5,6 @@ import static org.junit.Assert.*;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.entity.User;
@@ -27,8 +25,6 @@ import com.google.common.cache.LoadingCache;
  */
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class GuavaCacheDemo extends SpringTransactionalTestCase {
-
-	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);
 
 	@Autowired
 	private AccountService accountService;
