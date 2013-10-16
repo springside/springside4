@@ -32,5 +32,4 @@ public class HystrixDemoController {
 			throw new RestException(HttpStatus.SERVICE_UNAVAILABLE);
 		}
 	}
-
 }

@@ -73,8 +73,8 @@ public class UserService {
 
 		// 设置超时与并发控制 //
 		if (runInNewThread) {
-			// 线程超时，默认为1秒，设为2秒方便演示
-			commandProperties.withExecutionIsolationThreadTimeoutInMilliseconds(2000);
+			// 线程超时，默认为1秒，设为3秒方便演示
+			commandProperties.withExecutionIsolationThreadTimeoutInMilliseconds(3000);
 			// 线程池属性， 线程池大小，默认为10，无改变。待执行队列的大小，默认为5，无改变。
 			commandConfig.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(10)
 					.withQueueSizeRejectionThreshold(5));

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
-import org.springside.examples.showcase.service.ServiceException;
 import org.springside.examples.showcase.webservice.rest.RestException;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
 import org.springside.modules.mapper.BeanMapper;
@@ -45,8 +44,8 @@ public class DependencyResourceController {
 		}
 
 		// 演示服务端出错情况.
-		if ("fail".equals(status)) {
-			throw new ServiceException("Server Exception");
+		if ("serverfail".equals(status)) {
+			throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Server Exception");
 		}
 
 		// 演示客户端请求出错。

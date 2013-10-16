@@ -20,14 +20,14 @@
 
         <h2>演示操作</h2>
         <ul>
-                <li>依赖资源当前状态为<%= DependencyResourceController.status %>：切换为<a href="${ctx}/hystrix/resource/status/normal">正常</a>、<a href="${ctx}/hystrix/resource/status/timeout">超时</a>、<a href="${ctx}/hystrix/resource/status/fail">失败</a>。</li>
+                <li>依赖资源当前状态为<%= DependencyResourceController.status %>：切换为<a href="${ctx}/hystrix/resource/status/normal">正常</a>、<a href="${ctx}/hystrix/resource/status/timeout">超时</a>、<a href="${ctx}/hystrix/resource/status/serverfail">服务端失败</a>、<a href="${ctx}/hystrix/resource/status/clientfail">客户端错误</a>。</li>
                 <li>访问服务：<a href="${ctx}/hystrix/user/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a></li>
         </ul>
         <h2>主要用户故事</h2>
         <ul>
                 <li> 在默认的正常状态，访问Hystrix服务和依赖资源，均返回正常结果。</li>
                 <li> 将资源状态切换为"超时"，访问依赖资源，需要在15秒后才返回结果。</li>
-                <li> 访问Hystrix服务，2秒后超时，返回503。</li>
+                <li> 访问Hystrix服务，3秒后超时，返回503。</li>
                 <li> 三次超时后满足短路条件(60秒滚动窗口内起码有3个请求，50%失败)，再次刷新服务，立即返回503。</li>
                 <li> 10秒短路保护期内，所有访问都立即返回503，不会访问依赖资源。</li>
                 <li> 保护期过后，会放行一个请求，如果还是超时，则继续保持短路状态。如果成功则重置所有计数器。</li>
