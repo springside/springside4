@@ -15,34 +15,38 @@ public class GetUserCommand extends HystrixCommand<UserDTO> {
 	private static Logger logger = LoggerFactory.getLogger(GetUserCommand.class);
 
 	private RestTemplate restTemplate;
-
 	private Long id;
 
-	protected GetUserCommand(Setter config, RestTemplate restTemplate, Long id) {
-		super(config);
-
+	/**
+	 * 构造函数，注入配置，命令用到的资源访问类和命令参数.
+	 */
+	protected GetUserCommand(Setter commandConfig, RestTemplate restTemplate, Long id) {
+		super(commandConfig);
 		this.restTemplate = restTemplate;
 		this.id = id;
 	}
 
 	/**
-	 * 实际访问依赖资源的函数的实现。
+	 * 访问依赖资源的函数的实现。
 	 */
 	@Override
 	protected UserDTO run() throws Exception {
-		UserDTO user;
-
 		try {
 			logger.info("Access restful resource");
-			user = restTemplate.getForObject("http://localhost:8080/showcase/hystrix/resource/{id}", UserDTO.class, id);
+			return restTemplate.getForObject("http://localhost:8080/showcase/hystrix/resource/{id}", UserDTO.class, id);
 		} catch (HttpClientErrorException e) {
-			// 排除 400错误不算入错误统计内
-			HttpStatus status = e.getStatusCode();
-			if (status.equals(HttpStatus.BAD_REQUEST)) {
-				throw new HystrixBadRequestException(e.getResponseBodyAsString(), e);
-			}
-			throw e;
+			throw handleException(e);
 		}
-		return user;
+	}
+
+	/**
+	 * 处理异常，对于客户端本身的异常，抛出HystrixBadRequestException，不计算入短路统计内。
+	 */
+	protected Exception handleException(HttpClientErrorException e) {
+		HttpStatus status = e.getStatusCode();
+		if (status.equals(HttpStatus.BAD_REQUEST)) {
+			throw new HystrixBadRequestException(e.getResponseBodyAsString(), e);
+		}
+		throw e;
 	}
 }

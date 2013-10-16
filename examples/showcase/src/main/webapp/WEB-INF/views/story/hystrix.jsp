@@ -20,7 +20,7 @@
 
         <h2>演示操作</h2>
         <ul>
-                <li>依赖资源当前状态为<%= DependencyResourceController.status %>：切换为<a href="${ctx}/hystrix/resource/status/normal">正常</a>、<a href="${ctx}/hystrix/resource/status/timeout">超时</a>、<a href="${ctx}/hystrix/resource/status/serverfail">服务端失败</a>、<a href="${ctx}/hystrix/resource/status/clientfail">客户端错误</a>。</li>
+                <li>依赖资源当前状态为<%= DependencyResourceController.status %>：切换为<a href="${ctx}/hystrix/resource/status/normal">正常</a>、<a href="${ctx}/hystrix/resource/status/timeout">超时</a>、<a href="${ctx}/hystrix/resource/status/server-error">服务端失败</a>、<a href="${ctx}/hystrix/resource/status/bad-request">错误请求</a>。</li>
                 <li>访问服务：<a href="${ctx}/hystrix/user/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a></li>
         </ul>
         <h2>主要用户故事</h2>
@@ -35,8 +35,9 @@
         
         <h2>其他用户故事</h2>
         <ul>
-                <li> 将资源状态切换为"失败"，访问依赖资源，立即返回500错误，访问Hystrix服务，即时返回503错误。</li>
-                <li> 默认使用Hystrix线程池模式，可修改代码使用调用线程池模式。</li>
+                <li> 将资源状态切换为"服务端失败"，访问依赖资源，与 Hystrix服务，均即时返回500错误。</li>
+                <li> 将资源状态切换为"错误请求"，访问依赖资源，返回400错误，访问Hystrix服务，返回500错误，但错误率变化统计无变化。</li>
+                <li> 切换为调用者线程模式。</li>
         </ul>
         
         <h2>监控结果 </h2>

@@ -44,14 +44,15 @@ public class DependencyResourceController {
 		}
 
 		// 演示服务端出错情况.
-		if ("serverfail".equals(status)) {
+		if ("server-error".equals(status)) {
 			throw new RestException(HttpStatus.INTERNAL_SERVER_ERROR, "Server Exception");
 		}
 
 		// 演示客户端请求出错。
-		if ("clientfail".equals(status)) {
-			throw new RestException(HttpStatus.BAD_REQUEST, "Client Exception");
+		if ("bad-request".equals(status)) {
+			throw new RestException(HttpStatus.BAD_REQUEST, "Client send a bad request");
 		}
+		
 		return null;
 	}
 
