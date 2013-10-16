@@ -22,7 +22,7 @@ import org.springside.modules.utils.Threads;
 public class DependencyResourceController {
 	public static final int TIMEOUT = 15000;
 
-	private String status = "normal";
+	public static String status = "normal";
 
 	@Autowired
 	private AccountEffectiveService accountService;

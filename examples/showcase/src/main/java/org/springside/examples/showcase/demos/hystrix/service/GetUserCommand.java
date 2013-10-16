@@ -16,11 +16,9 @@ public class GetUserCommand extends HystrixCommand<UserDTO> {
 	private Long id;
 
 	protected GetUserCommand(Setter config, RestTemplate restTemplate, Long id) {
-		// 配置Command
 		super(config);
-		// 传入
+
 		this.restTemplate = restTemplate;
-		// 传入请求参数
 		this.id = id;
 	}
 
