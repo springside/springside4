@@ -14,7 +14,7 @@
 	<h2>Mybatis演示</h2>
 	<ul>
 		<li>MyBatis + Spring的最佳实践</li>
-		<li>在AccountEffectiveService。java中被使用</li>
+		<li>在AccountEffectiveService.java中被使用</li>
 	</ul>
 	<hr/>
 	<h2>JPA/Hibernate高级演示</h2>

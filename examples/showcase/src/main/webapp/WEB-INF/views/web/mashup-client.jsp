@@ -23,12 +23,13 @@
 </head>
 
 <body>
-	<h2>Mashup演示</h2>
+	<h1>Mashup演示</h1>
 
-	<h3>技术说明：</h3>
+	<h2>技术说明：</h2>
 	<p>
 		演示基于JQuery的JSONP实现，绕过浏览器对Ajax不能访问跨域名网站内容的限制实现Mashup。<br /> 请先将本页另存为本地html文件，打开本地文件访问本地应用服务器中的内容即为跨域访问的场景。
 	</p>
+	<h2>演示：</h2>
 	<p>
 		<input type="button" class="btn" value="获取内容" onclick="fetchMashupContent();" />
 	</p>
