@@ -16,6 +16,7 @@ import org.springside.examples.showcase.demos.hystrix.dependency.DependencyResou
 import org.springside.examples.showcase.demos.hystrix.service.UserService;
 import org.springside.examples.showcase.webservice.rest.RestException;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
+import org.springside.modules.web.MediaTypes;
 
 import com.google.common.collect.Maps;
 
@@ -24,7 +25,7 @@ public class HystrixDemoController {
 
 	private static Logger logger = LoggerFactory.getLogger(HystrixDemoController.class);
 
-	private static Map<String, String> allStatus = Maps.newHashMap();
+	private static Map<String, String> allStatus = Maps.newLinkedHashMap();
 
 	static {
 		allStatus.put("normal", "正常");
@@ -44,7 +45,7 @@ public class HystrixDemoController {
 		return "story/hystrix";
 	}
 
-	@RequestMapping(value = "/hystrix/user/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "/hystrix/user/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	@ResponseBody
 	public UserDTO getUser(@PathVariable("id") Long id) {
 		try {

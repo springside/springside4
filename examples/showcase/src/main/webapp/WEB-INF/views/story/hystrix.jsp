@@ -11,6 +11,15 @@
                 $(document).ready(function() {
                         $("#hystrix-tab").addClass("active");
                 });
+                
+            	function accessHystrixService() {
+        		$.ajax("${ctx}/hystrix/user/1")
+        				.done( function(data,textStatus ,jqXHR) {
+        					$('#hystrixResponse').text('Status: '+jqXHR.status+' ,Content: ' + jqXHR.responseText );
+        			}).fail( function(data,textStatus ,jqXHR) {
+        					$('#hystrixResponse').text('Status:' + textStatus );
+        			});
+        		}
         </script>
 </head>
 
@@ -20,9 +29,10 @@
         <p><a href="https://github.com/Netflix/Hystrix" target="_blank">Netflix Hystrix</a> 是一个延迟与容错类库，通过独立访问远程系统、服务和第三方库的节点，在复杂的分布式系统里停止雪崩及提供恢复能力。</p>
 
         <h2>演示操作</h2>
-        <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源当前状态为:</span><form:bsradiobuttons id="status" path="statusHolder.status" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn btn-primary" type="submit" value="更新"/></form> </div>
-        <div>访问服务：<a href="${ctx}/hystrix/user/1" target="_blank">Hystrix服务</a>、<a href="${ctx}/hystrix/resource/1" target="_blank">依赖资源</a></div>
-        
+        <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源状态: </span><form:bsradiobuttons id="status" path="statusHolder.status" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn btn-primary" type="submit" value="更新"/></form> </div>
+        <div><input type="button" class="btn" value="访问Hystrix服务" onclick="accessHystrixService();"/></div>
+       	<div id="hystrixResponse"></div>
+       	
         <h2>主要用户故事</h2>
         <ul>
                 <li> 在默认的正常状态，访问Hystrix服务和依赖资源，均返回正常结果。</li>
