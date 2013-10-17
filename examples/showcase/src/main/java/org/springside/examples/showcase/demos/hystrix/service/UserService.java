@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.demos.hystrix.service;
 
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
@@ -7,13 +9,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
 
+import com.google.common.collect.Maps;
+import com.netflix.hystrix.HystrixCircuitBreaker;
 import com.netflix.hystrix.HystrixCommand.Setter;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixCommandMetrics;
+import com.netflix.hystrix.HystrixCommandMetrics.HealthCounts;
 import com.netflix.hystrix.HystrixCommandProperties;
 import com.netflix.hystrix.HystrixCommandProperties.ExecutionIsolationStrategy;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
-import com.netflix.hystrix.exception.HystrixBadRequestException;
+import com.netflix.hystrix.util.HystrixRollingNumberEvent;
 
 /**
  * 使用Hystrix 封装的Service。原来直接调用restTemplate改为调用Hystrix Command的封装.
@@ -28,29 +34,59 @@ public class UserService {
 	private Setter commandConfig;
 	private RestTemplate restTemplate;
 
+	/**
+	 * 创建并调用command, 不处理Hystrix Error，直接透传到Web层.
+	 */
 	public UserDTO getUser(Long id) throws Exception {
 		GetUserCommand command = new GetUserCommand(commandConfig, restTemplate, id);
-
-		try {
-			return command.execute();
-		} catch (Exception e) {
-			throw tranlateHystrixException(e);
-		}
+		return command.execute();
 	}
 
 	/**
-	 * 如果异常是HystrixBadRequestException，需要进行转换.
+	 * 演示获取Hystrix的Metrics.
 	 */
-	protected static Exception tranlateHystrixException(Exception e) throws Exception {
-		if (e instanceof HystrixBadRequestException) {
-			return (Exception) e.getCause();
+	public Map<String, Object> getHystrixMetrics() {
+		Map<String, Object> metricsMap = Maps.newHashMap();
+		HystrixCommandKey key = HystrixCommandKey.Factory.asKey("GetUserCommand");
+		HystrixCommandMetrics metrics = HystrixCommandMetrics.getInstance(key);
+
+		if (metrics != null) {
+			HealthCounts counts = metrics.getHealthCounts();
+			HystrixCircuitBreaker circuitBreaker = HystrixCircuitBreaker.Factory.getInstance(key);
+
+			metricsMap.put("circuitOpen", circuitBreaker.isOpen());
+			metricsMap.put("totalRequest", counts.getTotalRequests());
+			metricsMap.put("errorPercentage", counts.getErrorPercentage());
+			metricsMap.put("success", metrics.getRollingCount(HystrixRollingNumberEvent.SUCCESS));
+			metricsMap.put("timeout", metrics.getRollingCount(HystrixRollingNumberEvent.TIMEOUT));
+			metricsMap.put("failure", metrics.getRollingCount(HystrixRollingNumberEvent.FAILURE));
+			metricsMap.put("shortCircuited", metrics.getRollingCount(HystrixRollingNumberEvent.SHORT_CIRCUITED));
+			metricsMap.put("threadPoolRejected",
+					metrics.getRollingCount(HystrixRollingNumberEvent.THREAD_POOL_REJECTED));
+			metricsMap.put("semaphoreRejected", metrics.getRollingCount(HystrixRollingNumberEvent.SEMAPHORE_REJECTED));
+			metricsMap.put("latency50", metrics.getTotalTimePercentile(50));
+			metricsMap.put("latency90", metrics.getTotalTimePercentile(90));
+			metricsMap.put("latency100", metrics.getTotalTimePercentile(100));
 		} else {
-			return e;
+			metricsMap.put("circuitOpen", false);
+			metricsMap.put("totalRequest", 0);
+			metricsMap.put("errorPercentage", 0);
+			metricsMap.put("success", 0);
+			metricsMap.put("timeout", 0);
+			metricsMap.put("failure", 0);
+			metricsMap.put("shortCircuited", 0);
+			metricsMap.put("threadPoolRejected", 0);
+			metricsMap.put("semaphoreRejected", 0);
+			metricsMap.put("latency50", 0);
+			metricsMap.put("latency90", 0);
+			metricsMap.put("latency100", 0);
 		}
+
+		return metricsMap;
 	}
 
 	/**
-	 * 演示Command的各种配置项, 并构造Thread-Safed的RestTemplate.
+	 * 演示Hystrix Command的各种配置项, 并构造Thread-Safed的RestTemplate.
 	 */
 	@PostConstruct
 	private void init() {
@@ -94,8 +130,7 @@ public class UserService {
 		}
 	}
 
-	public void setRunInNewThread(Boolean runInNewThread) {
+	public void setRunInNewThread(boolean runInNewThread) {
 		this.runInNewThread = runInNewThread;
-		init();
 	}
 }

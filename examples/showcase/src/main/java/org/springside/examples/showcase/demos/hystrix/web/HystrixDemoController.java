@@ -2,8 +2,8 @@ package org.springside.examples.showcase.demos.hystrix.web;
 
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.examples.showcase.demos.hystrix.dependency.DependencyResourceController;
 import org.springside.examples.showcase.demos.hystrix.service.UserService;
-import org.springside.examples.showcase.webservice.rest.RestException;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
 import org.springside.modules.web.MediaTypes;
 
@@ -22,59 +21,58 @@ import com.google.common.collect.Maps;
 
 @Controller
 public class HystrixDemoController {
-
-	private static Logger logger = LoggerFactory.getLogger(HystrixDemoController.class);
-
-	private static Map<String, String> allStatus = Maps.newLinkedHashMap();
-
-	static {
-		allStatus.put("normal", "正常");
-		allStatus.put("timeout", "超时");
-		allStatus.put("server-error", "服务器错误");
-		allStatus.put("bad-request", "请求错误");
-	}
+	private Map<String, String> allStatus = Maps.newLinkedHashMap();
 
 	@Autowired
 	private UserService userService;
 
 	@RequestMapping(value = "/hystrix", method = RequestMethod.GET)
 	public String index(Model model) {
-
 		model.addAttribute("allStatus", allStatus);
 		model.addAttribute("statusHolder", new StatusHolder(DependencyResourceController.status));
-		return "story/hystrix";
-	}
+		model.addAttribute("metrics", userService.getHystrixMetrics());
 
-	@RequestMapping(value = "/hystrix/user/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
-	@ResponseBody
-	public UserDTO getUser(@PathVariable("id") Long id) {
-		try {
-			return userService.getUser(id);
-		} catch (Exception e) {
-			// 化简异常处理，正式项目应区分错误类型.
-			logger.error(e.getMessage(), e);
-			throw new RestException();
-		}
+		return "hystrix/hystrix";
 	}
 
 	/**
-	 * 设定Resource的状态.
+	 * 调用Hystrix保护的UserService从远端资源获取用户信息， 异常由HystrixExceptionHandler统一处理.
+	 */
+	@RequestMapping(value = "/hystrix/user/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
+	@ResponseBody
+	public UserDTO getUser(@PathVariable("id") Long id) throws Exception {
+		return userService.getUser(id);
+	}
+
+	/**
+	 * 设定资源的状态.
 	 */
 	@RequestMapping(value = "/hystrix/status")
-	public String updateStatus(@RequestParam("status") String newStatus) {
+	public String updateStatus(@RequestParam("value") String newStatus) {
 		DependencyResourceController.status = newStatus;
 		return "redirect:/hystrix";
 	}
 
-	public static class StatusHolder {
-		public String status;
+	@PostConstruct
+	public void init() {
+		allStatus.put("normal", "正常");
+		allStatus.put("timeout", "超时");
+		allStatus.put("server-error", "服务器错误");
+		allStatus.put("bad-request", "请求错误");
+	}
 
-		public StatusHolder(String status) {
-			this.status = status;
+	/**
+	 * 给Spring Form Tag使用的类
+	 */
+	public static class StatusHolder {
+		public String value;
+
+		public StatusHolder(String value) {
+			this.value = value;
 		}
 
-		public String getStatus() {
-			return status;
+		public String getValue() {
+			return value;
 		}
 	}
 }
