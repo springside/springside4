@@ -19,7 +19,7 @@ import org.springside.modules.utils.Threads;
  */
 @Controller
 public class DependencyResourceController {
-	public static final int TIMEOUT = 15000;
+	public static final int TIMEOUT = 30000;
 
 	public static String status = "normal";
 
@@ -27,7 +27,7 @@ public class DependencyResourceController {
 	private AccountEffectiveService accountService;
 
 	/**
-	 * 根据控制器中的状态而演示不同的行为，如正常返回，15秒后返回或直接报错
+	 * 根据控制器中的状态而演示不同的行为，如正常返回，30秒后返回或直接报错
 	 */
 	@RequestMapping(value = "/hystrix/resource/{id}", method = RequestMethod.GET)
 	@ResponseBody
@@ -37,7 +37,7 @@ public class DependencyResourceController {
 			return handleRequest(id);
 		}
 
-		// 演示超时，10秒后返回.
+		// 演示超时，30秒后返回.
 		if ("timeout".equals(status)) {
 			Threads.sleep(TIMEOUT);
 			return handleRequest(id);

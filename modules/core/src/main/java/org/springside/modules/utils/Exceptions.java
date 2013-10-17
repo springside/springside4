@@ -36,6 +36,16 @@ public class Exceptions {
 	}
 
 	/**
+	 * 获取组合本异常信息与底层异常信息的异常描述, 适用于本异常为统一包装异常类，底层异常才是根本原因的情况。
+	 */
+	public static String getErrorMessageWithNested(Exception e) {
+		Throwable nestedException = e.getCause();
+		return new StringBuilder().append(e.getMessage()).append(" nested exception is ")
+				.append(nestedException.getClass().getName()).append(":").append(nestedException.getMessage())
+				.toString();
+	}
+
+	/**
 	 * 判断异常是否由某些底层的异常引起.
 	 */
 	public static boolean isCausedBy(Exception ex, Class<? extends Exception>... causeExceptionClasses) {

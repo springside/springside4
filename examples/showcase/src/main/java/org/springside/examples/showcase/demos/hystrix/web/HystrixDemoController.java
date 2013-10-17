@@ -31,7 +31,6 @@ public class HystrixDemoController {
 		model.addAttribute("allStatus", allStatus);
 		model.addAttribute("statusHolder", new StatusHolder(DependencyResourceController.status));
 		model.addAttribute("metrics", userService.getHystrixMetrics());
-
 		return "hystrix/hystrix";
 	}
 
@@ -53,6 +52,17 @@ public class HystrixDemoController {
 		return "redirect:/hystrix";
 	}
 
+	/**
+	 * 从默认的Hystrix线程池模式切换为使用原调用者线程的模式.
+	 */
+	@RequestMapping(value = "/hystrix/disableIsolateThreadPool")
+	public String disableIsolateThreadPool() {
+		userService.setIsolateThreadPool(false);
+		userService.init();
+		return "redirect:/hystrix";
+
+	}
+
 	@PostConstruct
 	public void init() {
 		allStatus.put("normal", "正常");
@@ -62,10 +72,10 @@ public class HystrixDemoController {
 	}
 
 	/**
-	 * 给Spring Form Tag使用的类
+	 * 给Spring Form Tag使用的类.
 	 */
 	public static class StatusHolder {
-		public String value;
+		private String value;
 
 		public StatusHolder(String value) {
 			this.value = value;

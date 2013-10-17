@@ -19,7 +19,7 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
@@ -56,6 +56,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		jdkTemplate = new RestTemplate();
 		// (optional)设置20秒超时
 		((SimpleClientHttpRequestFactory) jdkTemplate.getRequestFactory()).setConnectTimeout(20000);
+		((SimpleClientHttpRequestFactory) jdkTemplate.getRequestFactory()).setReadTimeout(20000);
 
 		// 设置使用HttpClient4.0
 		httpClientRestTemplate = new RestTemplate();
@@ -100,7 +101,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 			HttpEntity<String> xml = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
 					String.class, 1L);
 			System.out.println("xml output is " + xml.getBody());
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -122,7 +123,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 			// 直接取出JSON串
 			String json = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", String.class, 1L);
 			System.out.println("json output is " + json);
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			fail(e.getMessage());
 		}
 	}
@@ -141,7 +142,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		try {
 			jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
 			fail("Get should fail with error username/password");
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
 		}
 	}

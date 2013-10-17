@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.showcase.functional.BaseFunctionalTestCase;
 import org.springside.examples.showcase.webservice.rest.UserDTO;
@@ -33,7 +33,7 @@ public class UserJaxRsFT extends BaseFunctionalTestCase {
 		assertEquals(new Long(1), user.getTeamId());
 		try {
 			user = restTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			fail(e.getMessage());
 		}
 		assertEquals("admin", user.getLoginName());
