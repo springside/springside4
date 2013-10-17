@@ -15,26 +15,26 @@
 <body>
 	<h1>JMX演示用例</h1>
 
-	<h2>技术说明：</h2>
+	<h2>技术说明</h2>
 	<ul>
 		<li>演示使用Spring annotation将POJO定义为MBean</li>
 		<li>演示使用jolokia将JMX输出为Restul JSON Monitor API</li>
 	</ul>
 
-	<h2>MBean介绍:</h2>
+	<h2>MBean介绍</h2>
 	<ul>
 		<li>Application Statistics Mbean, 当用户在综合演示里查看/更新用户时，计数器将会递增, name为showcase:name=ApplicationStatistics</li>
 		<li>Tomcat JDBC 和  Logback同样提供JMX支持</li>
 	</ul>
 	
-	<h2>使用Jconsole或其他JMX客户端:</h2>
+	<h2>使用Jconsole或其他JMX客户端</h2>
 	<ul>
 	<li>如果JConsole与应用在同一台机器，直接选择该进程。</li>
 	<li>否则远程进程URL为 localhost:2099 或完整版的service:jmx:rmi:///jndi/rmi://localhost:2099/jmxrmi</li>
 	</ul>
 	
 	<hr/>
-	<h2>与国际接轨的JMX Resultful API:</h2>
+	<h2>与国际接轨的JMX Resultful API</h2>
 	<p>以下种种，成本就是在web.xml里添加一个jolokia的servlet而已。</p>
 	查询：
 	<ul>

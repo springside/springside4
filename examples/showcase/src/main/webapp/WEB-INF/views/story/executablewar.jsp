@@ -12,12 +12,12 @@
 <body>
 	<h1>可运行War演示</h1>
 
-	<h2>技术说明：</h2>
+	<h2>技术说明</h2>
 	<ul>
 		<li>可运行war使用嵌入式的Jetty，简便地在容器外运行web应用。</li>
 	</ul>
 
-	<h2>用户故事：</h2>
+	<h2>用户故事</h2>
 	<ul>
 		<li>在showcase中打包可运行war包的命令：<br/>
 		mvn clean package -Pstandalone</li>

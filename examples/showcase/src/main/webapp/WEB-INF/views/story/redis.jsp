@@ -12,7 +12,7 @@
 <body>
 	<h1>Redis演示</h1>
 	
-	<h2>用户故事：</h2>
+	<h2>用户故事</h2>
 	<p>所有演示在src/**/demo/redis/ 目录中独立运行main函数。</p>
 	<ul>
 		<li>高性能Counter的benchmark测试</li>

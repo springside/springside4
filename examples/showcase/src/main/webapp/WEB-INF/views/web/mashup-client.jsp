@@ -34,6 +34,6 @@
 		<input type="button" class="btn" value="获取内容" onclick="fetchMashupContent();" />
 	</p>
 	<p>跨域页面内容:</p>
-	<div id="mashupContent" style="display: none"></div>
+	<div id="mashupContent" style="display: none" class="alert alert-success"></div>
 </body>
 </html>

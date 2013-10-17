@@ -31,8 +31,8 @@
         <p><a href="https://github.com/Netflix/Hystrix" target="_blank">Netflix Hystrix</a> 是一个延迟与容错类库，通过独立访问远程系统、服务和第三方库的节点，在复杂的分布式系统里停止雪崩及提供恢复能力。</p>
 
         <h2>演示操作</h2>
-        <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源状态: </span><form:bsradiobuttons id="status" path="statusHolder.value" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn btn-primary" type="submit" value="更新"/></form> </div>
-        <div><input type="button" class="btn" value="访问Hystrix服务" onclick="accessHystrixService();"/></div>
+        <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源状态:  </span><form:select id="status" path="statusHolder.value" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn" type="submit" value="更新"/></form> </div>
+        <div><input type="button" class="btn btn-primary" value="访问Hystrix服务" onclick="accessHystrixService();"/></div>
         <div>&nbsp;  </div>
         <div id="hystrixResponse"></div>
        	
@@ -53,11 +53,11 @@
         </ul>
         
         <h2>监控结果 </h2>
-        <form><input type="submit" value="刷新" class="btn"/></form>
-		<ul>
-			<li>是否短路：${metrics['circuitOpen']}</li>
-			<li>3分钟窗口内，请求数：${metrics['totalRequest']}， 失败百分比：${metrics['errorPercentage']}%，成功：${metrics['success']}， 超时：${metrics['timeout']}，失败：${metrics['failure']}，短路：${metrics['shortCircuited']}， 线程池满：${metrics['threadPoolRejected']}
-			<li>50%延时：${metrics['latency50']}ms，90%延时：${metrics['latency90']}ms，100%延时：${metrics['latency100']}ms</li>
-		</ul>
+        <form><input type="submit" value="刷新" class="btn btn-success"/></form>
+		<table class="table table-bordered">
+			<tr><td>是否短路：${metrics['circuitOpen']}</td></tr>
+			<tr><td>3分钟窗口内，请求数：${metrics['totalRequest']}， 失败百分比：${metrics['errorPercentage']}%，成功：${metrics['success']}， 超时：${metrics['timeout']}，失败：${metrics['failure']}，短路：${metrics['shortCircuited']}， 线程池满：${metrics['threadPoolRejected']}</td></tr>
+			<tr><td>50%延时：${metrics['latency50']}ms，90%延时：${metrics['latency90']}ms，100%延时：${metrics['latency100']}ms </td></tr>
+		</table>
 </body>
 </html>
