@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.demos.hystrix.web;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,9 @@ import com.netflix.hystrix.exception.HystrixRuntimeException.FailureType;
  */
 @ControllerAdvice
 public class HystrixExceptionHandler extends ResponseEntityExceptionHandler {
+
+	private static Logger logger = LoggerFactory.getLogger(HystrixExceptionHandler.class);
+
 	/**
 	 * 处理Hystrix Runtime异常, 异常分为两类，一类是Command内部抛出异常，一类是Hystrix自身的保护机制
 	 */

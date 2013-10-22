@@ -25,9 +25,9 @@
 		<guava.version>15.0</guava.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
-		<selenium.version>2.35.0</selenium.version>
+		<selenium.version>2.37.1</selenium.version>
 		<jetty.version>7.6.13.v20130916</jetty.version>
-		<h2.version>1.3.173</h2.version>
+		<h2.version>1.3.174</h2.version>
 
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

@@ -27,7 +27,7 @@
 <body>
         <h1>Hystrix 演示</h1>
         
-        <p><a href="https://github.com/Netflix/Hystrix" target="_blank">Netflix Hystrix</a> 是一个延迟与容错类库，通过独立访问远程系统、服务和第三方库的节点，在复杂的分布式系统里停止雪崩及提供恢复能力。</p>
+        <p><a href="https://github.com/Netflix/Hystrix" target="_blank">Netflix Hystrix</a> 是一个类库，通过控制远程系统、服务的访问，对延迟和故障提供更强大的容错能力，在复杂的分布式系统里停止雪崩式的错误。</p>
 
         <h2>演示操作</h2>
         <div><form action="${ctx}/hystrix/status" class="form-inline"><span class="help-inline">依赖资源状态:  </span><form:select id="status" path="statusHolder.value" items="${allStatus}" labelCssClass="inline"/> <input id="submit_btn" class="btn" type="submit" value="更新"/></form> </div>
