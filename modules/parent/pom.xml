@@ -485,7 +485,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>log4j-over-slf4j</artifactId>
 				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
 			</dependency>
 
 			<!-- 代码直接调用commons-logging会被桥接到slf4j -->
@@ -493,7 +492,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
 				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
 			</dependency>
 
 			<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
@@ -501,7 +499,6 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>jul-to-slf4j</artifactId>
 				<version>${slf4j.version}</version>
-				<scope>runtime</scope>
 			</dependency>
 
 			<!-- log4jdbc -->
