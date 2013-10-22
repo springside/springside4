@@ -564,7 +564,7 @@
 			</build>
 		</profile>
 
-		<!--打包可执行war包 -->
+		<!--打包可执行war包, 基于Jetty -->
 		<profile>
 			<id>standalone</id>
 			<build>
@@ -588,6 +588,32 @@
 										</manifest>
 									</archive>
 								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<!--打包可执行war包,基于Tomcat -->
+		<profile>
+			<id>standalone-tomcat</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.1</version>
+						<executions>
+							<execution>
+								<id>tomcat-run</id>
+								<goals>
+									<goal>exec-war-only</goal>
+								</goals>
+								<phase>package</phase>
+								<configuration>
+					              <attachArtifactClassifier>standalone-tomcat</attachArtifactClassifier>
+					            </configuration>
 							</execution>
 						</executions>
 					</plugin>
