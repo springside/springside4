@@ -36,7 +36,7 @@ public class HystrixExceptionHandler extends ResponseEntityExceptionHandler {
 		// 对命令抛出的异常进行特殊处理
 		if (type.equals(FailureType.COMMAND_EXCEPTION)) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			message = Exceptions.getErrorMessageWithNested(e);
+			message = Exceptions.getErrorMessageWithNestedException(e);
 		}
 
 		logger.error(message, e);
@@ -51,7 +51,7 @@ public class HystrixExceptionHandler extends ResponseEntityExceptionHandler {
 	 */
 	@ExceptionHandler(value = { HystrixBadRequestException.class })
 	public final ResponseEntity<?> handleException(HystrixBadRequestException e, WebRequest request) {
-		String message = Exceptions.getErrorMessageWithNested(e);
+		String message = Exceptions.getErrorMessageWithNestedException(e);
 		logger.error(message, e);
 
 		HttpHeaders headers = new HttpHeaders();

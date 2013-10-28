@@ -18,11 +18,14 @@
 	</ul>
 
 	<h2>用户故事</h2>
-	<ul>
-		<li>在showcase中打包可运行war包的命令：<br/>
-		mvn clean package -Pstandalone</li>
-		
-		<li>运行war包的命令： <br/>java -jar showcase-4.x.x.standalone.war</li>
+		<p>在showcase中打包可运行war包的命令：</p>
+		<blockquote>
+		mvn clean package -Pstandalone
+		</blockquote>
+		<p>运行war包的命令： </p>
+		<blockquote>
+		java -jar showcase-4.x.x.standalone.war
+		</blockquote>
 	</ul>
 </body>
 </html>
