@@ -10,7 +10,7 @@ import com.google.common.collect.Maps;
 public class SearchFilter {
 
 	public enum Operator {
-		EQ, LIKE, GT, LT, GTE, LTE
+		EQ, LIKE, GT, LT, GTE, LTE, IN;
 	}
 
 	public String fieldName;
@@ -33,23 +33,37 @@ public class SearchFilter {
 			// 过滤掉空值
 			String key = entry.getKey();
 			Object value = entry.getValue();
-			if (StringUtils.isBlank((String) value)) {
+
+			if ((value == null)) {
+				// value wont be null here indeed
 				continue;
 			}
 
-			// 拆分operator与filedAttribute
-			String[] names = StringUtils.split(key, "_");
-			if (names.length != 2) {
-				throw new IllegalArgumentException(key + " is not a valid search filter name");
+			boolean isValidString = (value instanceof String) && StringUtils.isNotBlank((String) value);
+			boolean isValidList = (value instanceof String[]) && (((String[]) value).length > 0);
+			if (isValidString || isValidList) {
+				String[] names = StringUtils.split(key, "_");
+				if (names.length != 2) {
+					throw new IllegalArgumentException(key + " is not a valid search filter name");
+				}
+				String filedName = names[1];
+				Operator operator = Operator.valueOf(names[0].toUpperCase());
+				SearchFilter filter = new SearchFilter(filedName, operator, value);
+				filters.put(key, filter);
 			}
-			String filedName = names[1];
-			Operator operator = Operator.valueOf(names[0]);
-
-			// 创建searchFilter
-			SearchFilter filter = new SearchFilter(filedName, operator, value);
-			filters.put(key, filter);
 		}
 
 		return filters;
 	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "SearchFilter [fieldName=" + fieldName + ", value=" + value + ", operator=" + operator + "]";
+	}
+
 }
