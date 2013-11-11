@@ -9,35 +9,72 @@ import java.util.Date;
  */
 public interface DateProvider {
 
-	Date getDate();
+	Date getCurrentDate();
 
-	static final DateProvider DEFAULT = new CurrentDateProvider();
+	long getCurrentTimeInMillis();
+
+	static final DateProvider DEFAULT = new DefaultDateProvider();
 
 	/**
-	 * 返回当前的时间。
+	 * 默认时间提供者，返回当前的时间，线程安全。
 	 */
-	public static class CurrentDateProvider implements DateProvider {
+	public static class DefaultDateProvider implements DateProvider {
 
 		@Override
-		public Date getDate() {
+		public Date getCurrentDate() {
 			return new Date();
+		}
+
+		@Override
+		public long getCurrentTimeInMillis() {
+			return System.currentTimeMillis();
 		}
 	}
 
 	/**
-	 * 返回设定的时间.
+	 * 可配置的时间提供者，用于测试.
 	 */
-	public static class ConfigurableDateProvider implements DateProvider {
+	public static class MockedDateProvider implements DateProvider {
 
-		private final Date date;
+		private long time;
 
-		public ConfigurableDateProvider(Date date) {
-			this.date = date;
+		public MockedDateProvider(Date date) {
+			this.time = date.getTime();
+		}
+
+		public MockedDateProvider(long time) {
+			this.time = time;
 		}
 
 		@Override
-		public Date getDate() {
-			return date;
+		public Date getCurrentDate() {
+			return new Date(time);
+		}
+
+		@Override
+		public long getCurrentTimeInMillis() {
+			return time;
+		}
+
+		/**
+		 * 重新设置时间。
+		 */
+		public void update(Date newDate) {
+			time = newDate.getTime();
+		}
+
+		/**
+		 * 重新设置时间。
+		 */
+		public void update(long newTime) {
+			this.time = newTime;
+		}
+
+		/**
+		 * 增加时间戳.
+		 */
+		public void incrementTime(int millis) {
+			time += millis;
 		}
 	}
 
