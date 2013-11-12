@@ -617,8 +617,8 @@
 								</goals>
 								<phase>package</phase>
 								<configuration>
-					              <attachArtifactClassifier>standalone-tomcat</attachArtifactClassifier>
-					            </configuration>
+									<attachArtifactClassifier>standalone-tomcat</attachArtifactClassifier>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>
