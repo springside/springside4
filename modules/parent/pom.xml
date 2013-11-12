@@ -46,7 +46,7 @@
 		<jetty.version>7.6.14.v20131031</jetty.version>
 		<h2.version>1.3.174</h2.version>
 
-		<!-- Plugin的属性定义 -->
+		<!-- Plugin的属性定�?-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<jdk.version>1.6</jdk.version>
 	</properties>
@@ -55,7 +55,7 @@
 		<maven>3.0.0</maven>
 	</prerequisites>
 
-	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找.如有Nexus私服, 取消注释并指向正确的服务器地址.
+	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�?如有Nexus私服, 取消注释并指向正确的服务器地�?
 	<repositories>
 		<repository>
 			<id>nexus</id>
@@ -65,7 +65,7 @@
 	</repositories>
 	-->
 		
-	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. 
+	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地�? 
 	<pluginRepositories> 
 		<pluginRepository> 
 			<id>nexus</id>
@@ -78,7 +78,7 @@
 	</pluginRepositories>
 	-->
 
-	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
+	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId �?artifactId 即可 -->
 	<dependencyManagement>
 		<dependencies>
 			<!-- SPRINGSIDE MODULES begin -->
@@ -99,7 +99,7 @@
 			</dependency>
 			<!-- SPRINGSIDE MODULES end -->
 
-			<!-- SPRING basic begin(一般不需要显式定义) -->
+			<!-- SPRING basic begin(�?��不需要显式定�? -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
@@ -475,7 +475,7 @@
 				</exclusions>
 			</dependency>
 
-			<!-- 重新定义Java XPath Engine到最新版，避免旧版那些不必要的依赖 -->
+			<!-- 重新定义Java XPath Engine到最新版，避免旧版那些不必要的依�?-->
 			<dependency>
 				<groupId>jaxen</groupId>
 				<artifactId>jaxen</artifactId>
@@ -770,7 +770,7 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- 定义隐式依赖的版本 -->
+			<!-- 定义隐式依赖的版�?-->
 			<dependency>
 				<groupId>org.hamcrest</groupId>
 				<artifactId>hamcrest-core</artifactId>
@@ -836,7 +836,7 @@
 					<version>1.8</version>
 				</plugin>
 
-				<!-- cobertura 测试覆盖率统计插件 -->
+				<!-- cobertura 测试覆盖率统计插�?-->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
@@ -886,7 +886,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
@@ -983,7 +983,7 @@
 			</build>
 		</profile>
 
-		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
+		<!-- 忽略�?��@Category(UnStable.class)的TestCase -->
 		<profile>
 			<id>skip-unstable</id>
 			<build>
