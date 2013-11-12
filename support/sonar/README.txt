@@ -1,5 +1,8 @@
-Exported Sonar profile.
+Exported Sonar Code Quality Platform profile.
 
 springside-*.xml is a springside version base on sonar default profle.
 
-please see the wiki: https://github.com/springside/springside4/wiki/Sonar
+
+See the wiki for details:
+
+https://github.com/springside/springside4/wiki/Sonar
