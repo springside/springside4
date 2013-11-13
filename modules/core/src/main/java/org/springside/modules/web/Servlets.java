@@ -181,8 +181,14 @@ public class Servlets {
 				for (String v : (String[]) values) {
 					list.add(String.format("%s%s=%s", prefix_, entry.getKey(), v));
 				}
-			} else if (values instanceof String) {
-				list.add(String.format("%s%s=%s", prefix_, entry.getKey(), values));
+			}
+			// else if (values instanceof String) {
+			// list.add(String.format("%s%s=%s", prefix_, entry.getKey(), values));
+			// }
+			else {
+				// ok, no matter what type it is, just return the 'string' value of it.
+				// indeed, web transfers string value only. But test-case has other type.
+				list.add(String.format("%s%s=%s", prefix_, entry.getKey(), values.toString()));
 			}
 		}
 		return Collections3.convertToString(list, "&");
