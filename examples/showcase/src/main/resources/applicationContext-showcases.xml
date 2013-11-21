@@ -8,17 +8,18 @@
 	<import resource="security/applicationContext-shiro.xml" />
 
 	<!-- optional -->
-	<import resource="cache/applicationContext-ehcache.xml" />
+	<!--  <import resource="cache/applicationContext-ehcache.xml" />
 	<import resource="cache/applicationContext-memcached.xml" />
 	<import resource="email/applicationContext-email.xml" />
 	<import resource="jms/applicationContext-jms-simple.xml" />
 	<import resource="jms/applicationContext-jms-advanced.xml" />
-	<import resource="jmx/applicationContext-jmx.xml" />
-	<import resource="monitor/applicationContext-monitor.xml" />
+	<import resource="jmx/applicationContext-jmx.xml" />-->
+	<import resource="monitor/applicationContext-metrics.xml" />
+	<!-- <import resource="monitor/applicationContext-profiler.xml" />
 	<import resource="schedule/applicationContext-jdk-timer.xml" />
 	<import resource="schedule/applicationContext-spring-scheduler.xml" />
 	<import resource="schedule/applicationContext-quartz-cron-local.xml" />
 	<import resource="schedule/applicationContext-quartz-timer-cluster.xml" />
-	<import resource="webservice/applicationContext-soap-server.xml" />
+	<import resource="webservice/applicationContext-soap-server.xml" /> -->
 	<import resource="webservice/applicationContext-jaxrs-server.xml" />
 </beans>

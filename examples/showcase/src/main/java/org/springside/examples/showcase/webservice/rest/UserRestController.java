@@ -1,5 +1,7 @@
 package org.springside.examples.showcase.webservice.rest;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.modules.mapper.BeanMapper;
+
+import com.codahale.metrics.MetricRegistry;
+import com.codahale.metrics.Timer;
 
 /**
  * Shiro的配置文件中对/api/secure/**进行拦截，要求authBasic认证.
@@ -26,6 +31,16 @@ public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
 
+	@Autowired
+	private MetricRegistry metricRegistry;
+
+	private Timer metrics;
+
+	@PostConstruct
+	public void register() {
+		metrics = metricRegistry.timer("Rest_GetUser");
+	}
+
 	/**
 	 * 基于ContentNegotiationManager,根据URL的后缀渲染不同的格式
 	 * eg. /api/v1/user/1.xml 返回xml
@@ -35,17 +50,22 @@ public class UserRestController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserDTO getUser(@PathVariable("id") Long id) {
-		User user = accountService.getUser(id);
+		final Timer.Context metricsContext = metrics.time();
+		try {
+			User user = accountService.getUser(id);
 
-		if (user == null) {
-			String message = "用户不存在(id:" + id + ")";
-			logger.warn(message);
-			throw new RestException(HttpStatus.NOT_FOUND, message);
+			if (user == null) {
+				String message = "用户不存在(id:" + id + ")";
+				logger.warn(message);
+				throw new RestException(HttpStatus.NOT_FOUND, message);
+			}
+
+			// 使用Dozer转换DTO类，并补充Dozer不能自动绑定的属性
+			UserDTO dto = BeanMapper.map(user, UserDTO.class);
+			dto.setTeamId(user.getTeam().getId());
+			return dto;
+		} finally {
+			metricsContext.stop();
 		}
-
-		// 使用Dozer转换DTO类，并补充Dozer不能自动绑定的属性
-		UserDTO dto = BeanMapper.map(user, UserDTO.class);
-		dto.setTeamId(user.getTeam().getId());
-		return dto;
 	}
 }

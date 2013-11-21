@@ -209,16 +209,16 @@
 		</dependency>
 		
 		<!-- MONITOR begin -->
-		<!-- servo -->
-		<dependency>
-			<groupId>com.netflix.servo</groupId>
-			<artifactId>servo-core</artifactId>
+		<!-- codahale metrics -->
+    	<dependency>
+			<groupId>com.codahale.metrics</groupId>
+			<artifactId>metrics-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.netflix.servo</groupId>
-			<artifactId>servo-graphite</artifactId>
+		    <groupId>com.codahale.metrics</groupId>
+		    <artifactId>metrics-graphite</artifactId>
 		</dependency>
-
+		
 		<!-- javasimon -->
 		<dependency>
 			<groupId>org.javasimon</groupId>
