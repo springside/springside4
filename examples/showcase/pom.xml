@@ -207,6 +207,32 @@
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-core</artifactId>
 		</dependency>
+		
+		<!-- MONITOR begin -->
+		<!-- servo -->
+		<dependency>
+			<groupId>com.netflix.servo</groupId>
+			<artifactId>servo-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.netflix.servo</groupId>
+			<artifactId>servo-graphite</artifactId>
+		</dependency>
+
+		<!-- javasimon -->
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-spring</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-jdbc4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-console-embed</artifactId>
+		</dependency>
+		<!-- MONITOR end -->	
 				
 		<!-- JSR303  BeanValidator -->
 		<dependency>
@@ -319,22 +345,7 @@
 			<groupId>javax.activation</groupId>
 			<artifactId>activation</artifactId>
 		</dependency>
-		<!-- OTHER TOOLS end -->
-	
-		<!-- MONITOR begin -->
-		<dependency>
-			<groupId>org.javasimon</groupId>
-			<artifactId>javasimon-spring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.javasimon</groupId>
-			<artifactId>javasimon-jdbc4</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.javasimon</groupId>
-			<artifactId>javasimon-console-embed</artifactId>
-		</dependency>
-		<!-- MONITOR end -->		
+		<!-- OTHER TOOLS end -->	
 
 		<!-- TEST begin -->		
 		<dependency>
