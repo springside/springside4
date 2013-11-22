@@ -165,12 +165,6 @@
 				<artifactId>hibernate-ehcache</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-			<!-- 定义隐式依赖的版本 -->
-			<dependency>
-				<groupId>org.javassist</groupId>
-				<artifactId>javassist</artifactId>
-				<version>3.18.0-GA</version>
-			</dependency>
 
 			<!-- spring data jpa -->
 			<dependency>
