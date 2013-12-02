@@ -1,65 +1,79 @@
 package org.springside.modules.metrics;
 
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.springside.modules.metrics.utils.Clock;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Histogram {
 
-	// allow for this many duplicate ticks before overwriting measurements
-	private static final int COLLISION_BUFFER = 256;
-	// only trim on updating once every N
-	private static final int TRIM_THRESHOLD = 256;
+	private LinkedList<Long> measurements = new LinkedList<Long>();
+	private Double[] pcts;
 
-	private final Clock clock;
-	private final ConcurrentSkipListMap<Long, Long> measurements;
-	private final long window;
-	private final AtomicLong lastTick;
-	private final AtomicLong count;
-
-	public Histogram(long window, TimeUnit windowUnit) {
-		this(window, windowUnit, Clock.DEFAULT);
-	}
-
-	public Histogram(long window, TimeUnit windowUnit, Clock clock) {
-		this.clock = clock;
-		this.measurements = new ConcurrentSkipListMap<Long, Long>();
-		this.window = windowUnit.toMillis(window) * COLLISION_BUFFER;
-		this.lastTick = new AtomicLong();
-		this.count = new AtomicLong();
+	public Histogram(Double[] pcts) {
+		this.pcts = pcts;
 	}
 
 	public void update(long value) {
-		if ((count.incrementAndGet() % TRIM_THRESHOLD) == 0) {
-			trim();
-		}
-		measurements.put(getTick(), value);
-	}
-
-	public HistogramSnapshot getSnapshot() {
-		trim();
-		return new HistogramSnapshot(measurements.values());
-	}
-
-	/**
-	 * TODO:??
-	 */
-	private long getTick() {
-		for (;;) {
-			final long oldTick = lastTick.get();
-			final long tick = clock.getCurrentTime() * COLLISION_BUFFER;
-
-			final long newTick = tick > oldTick ? tick : oldTick + 1;
-			if (lastTick.compareAndSet(oldTick, newTick)) {
-				return newTick;
-			}
+		synchronized (measurements) {
+			measurements.add(value);
 		}
 	}
 
-	private void trim() {
-		measurements.headMap(getTick() - window).clear();
+	public HistogramMetric getMetric() {
+
+		LinkedList<Long> snapshotList = measurements;
+		measurements = new LinkedList();
+
+		if (snapshotList.isEmpty()) {
+			return createEmptyMetric();
+		}
+
+		Collections.sort(snapshotList);
+
+		int count = snapshotList.size();
+
+		HistogramMetric metric = new HistogramMetric();
+		metric.min = snapshotList.get(0);
+		metric.max = snapshotList.get(count - 1);
+
+		double sum = 0;
+		for (long value : snapshotList) {
+			sum += value;
+		}
+		metric.mean = sum / count;
+
+		for (Double pct : pcts) {
+
+			metric.pcts.put(pct, getPercent(snapshotList, count, pct));
+		}
+
+		return metric;
 	}
 
+	public Long getPercent(List<Long> snapshotList, int count, double pct) {
+
+		final double pos = pct * (count + 1);
+
+		if (pos < 1) {
+			return snapshotList.get(0);
+		}
+
+		if (pos >= count) {
+			return snapshotList.get(count - 1);
+		}
+
+		return snapshotList.get((int) pos - 1);
+	}
+
+	private HistogramMetric createEmptyMetric() {
+		HistogramMetric metric = new HistogramMetric();
+		metric.min = 0;
+		metric.max = 0;
+		metric.mean = 0;
+		for (Double pct : pcts) {
+			metric.pcts.put(pct, 0L);
+		}
+
+		return metric;
+	}
 }

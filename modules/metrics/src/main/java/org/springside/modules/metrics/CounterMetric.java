@@ -1,7 +1,7 @@
-package org.springside.modules.metrics.report.metrics;
+package org.springside.modules.metrics;
 
 public class CounterMetric {
-	public long coute;
+	public long count;
 	public double lastRate;
 	public double meanRate;
 }

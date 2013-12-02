@@ -1,10 +1,12 @@
 package org.springside.modules.metrics.report;
 
-import java.util.SortedMap;
+import java.util.Map;
 
-import org.springside.modules.metrics.report.metrics.CounterMetric;
-import org.springside.modules.metrics.report.metrics.HistogramMetric;
+import org.springside.modules.metrics.CounterMetric;
+import org.springside.modules.metrics.ExecutionMetric;
+import org.springside.modules.metrics.HistogramMetric;
 
 public interface Reporter {
-	void report(SortedMap<String, CounterMetric> counters, SortedMap<String, HistogramMetric> histograms);
+	void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
+			Map<String, ExecutionMetric> executions);
 }

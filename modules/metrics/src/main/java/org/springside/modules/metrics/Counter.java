@@ -7,15 +7,11 @@ import org.springside.modules.metrics.utils.Clock;
 public class Counter {
 
 	private AtomicLong counter = new AtomicLong(0);
-	private long lastReportCounter = 0L;
+	private long lastReportCount = 0L;
 
 	private Clock clock;
 	private long startTime;
 	private long lastReportTime;
-
-	public Counter() {
-		this(Clock.DEFAULT);
-	}
 
 	public Counter(Clock clock) {
 		this.clock = clock;
@@ -40,32 +36,25 @@ public class Counter {
 	}
 
 	public long reset() {
-		return counter.getAndSet(0);
+		long currentValue = counter.getAndSet(0);
+		lastReportCount = 0L;
+		startTime = clock.getCurrentTime();
+		lastReportTime = startTime;
+		return currentValue;
 	}
 
-	public long getCount() {
-		return counter.get();
-	}
+	public CounterMetric getMetric() {
+		long currentCount = counter.get();
+		long currentTime = clock.getCurrentTime();
 
-	public double getLastRate() {
-		long currentCounter = counter.get();
-		long reportTime = clock.getCurrentTime();
+		CounterMetric metric = new CounterMetric();
+		metric.count = currentCount;
+		metric.lastRate = ((currentCount - lastReportCount) * 1000) / (currentTime - lastReportTime);
+		metric.meanRate = ((currentCount * 1000) / (currentTime - startTime));
 
-		double rate = 0.0;
-		if (currentCounter != 0) {
-			rate = ((currentCounter - lastReportCounter) / (reportTime - lastReportTime)) * 1000;
-		}
-		lastReportCounter = currentCounter;
-		lastReportTime = reportTime;
+		lastReportCount = currentCount;
+		lastReportTime = currentTime;
 
-		return rate;
-	}
-
-	public double getMeanRate() {
-		if (counter.get() == 0) {
-			return 0.0;
-		} else {
-			return (counter.get() / (clock.getCurrentTime() - startTime)) * 1000;
-		}
+		return metric;
 	}
 }
