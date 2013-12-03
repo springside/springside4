@@ -15,7 +15,7 @@ public class MetricRegistry {
 
 	private Clock defaultClock = Clock.DEFAULT;
 
-	private Double[] defaultPcts = new Double[] { 0.9 };
+	private Double[] defaultPcts = new Double[] { 90d };
 
 	private ConcurrentMap<String, Object> metrics = new ConcurrentHashMap<String, Object>();
 

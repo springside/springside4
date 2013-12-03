@@ -55,7 +55,7 @@ public class Histogram {
 
 	public Long getPercent(List<Long> snapshotList, int count, double pct) {
 
-		final double pos = pct * (count + 1);
+		final double pos = (pct * (count + 1)) / 100;
 
 		if (pos < 1) {
 			return snapshotList.get(0);

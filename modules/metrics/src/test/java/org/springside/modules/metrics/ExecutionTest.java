@@ -11,7 +11,7 @@ public class ExecutionTest {
 	@Test
 	public void normal() {
 		MockedClock clock = new MockedClock();
-		Execution execution = new Execution(clock, new Double[] { 0.9 });
+		Execution execution = new Execution(clock, new Double[] { 90d });
 
 		ExecutionTimer timer = execution.start();
 		clock.incrementTime(200);
@@ -29,6 +29,6 @@ public class ExecutionTest {
 
 		assertEquals(200, metric.histogram.min);
 		assertEquals(250, metric.histogram.mean, 0);
-		assertEquals(300, metric.histogram.pcts.get(0.9), 0);
+		assertEquals(300, metric.histogram.pcts.get(90d), 0);
 	}
 }

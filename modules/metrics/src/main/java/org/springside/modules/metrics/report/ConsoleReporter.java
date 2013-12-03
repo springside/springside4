@@ -69,7 +69,7 @@ public class ConsoleReporter implements Reporter {
 		output.printf("               max = %d%n", histogram.max);
 		output.printf("              mean = %2.2f%n", histogram.mean);
 		for (Entry<Double, Long> pct : histogram.pcts.entrySet()) {
-			output.printf("           %2.2f%% <= %d %n", pct.getKey() * 100, pct.getValue());
+			output.printf("           %2.2f%% <= %d %n", pct.getKey(), pct.getValue());
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ConsoleReporter implements Reporter {
 		output.printf("               max = %d ms%n", execution.histogram.max);
 		output.printf("              mean = %2.2f ms%n", execution.histogram.mean);
 		for (Entry<Double, Long> pct : execution.histogram.pcts.entrySet()) {
-			output.printf("           %2.2f%% <= %d ms%n", pct.getKey() * 100, pct.getValue());
+			output.printf("           %2.2f%% <= %d ms%n", pct.getKey(), pct.getValue());
 		}
 	}
 }

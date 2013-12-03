@@ -1,16 +1,19 @@
 package org.springside.modules.metrics;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.springside.modules.metrics.Execution.ExecutionTimer;
 import org.springside.modules.metrics.report.ConsoleReporter;
+import org.springside.modules.metrics.report.Graphite;
+import org.springside.modules.metrics.report.GraphiteReporter;
 import org.springside.modules.metrics.report.ReportScheduler;
 import org.springside.modules.metrics.report.Reporter;
 import org.springside.modules.metrics.report.Slf4jReporter;
 import org.springside.modules.metrics.utils.Clock.MockedClock;
 
-public class ReportSchedulerTest {
+public class ReporterTest {
 
 	@Test
 	public void consoleReporter() {
@@ -23,7 +26,14 @@ public class ReportSchedulerTest {
 	}
 
 	@Test
-	public void startStop() throws InterruptedException {
+	// @Ignore("manual test")
+	public void graphiteReporter() {
+		Graphite graphite = new Graphite(new InetSocketAddress("localhost", 2003));
+		runReport(new GraphiteReporter(graphite));
+	}
+
+	@Test
+	public void schedulerStartStop() throws InterruptedException {
 		ReportScheduler scheduler = new ReportScheduler(new MetricRegistry(), new ConsoleReporter());
 		scheduler.start(1, TimeUnit.SECONDS);
 		Thread.sleep(2000);
@@ -56,13 +66,13 @@ public class ReportSchedulerTest {
 		Execution execution = metricRegistry.execution(MetricRegistry.name("UserService", "getUser.timer"));
 		for (int i = 1; i <= 10; i++) {
 			ExecutionTimer timer = execution.start();
-			clock.incrementTime(50);
+			clock.incrementTime(25);
 			timer.stop();
 		}
 		Execution execution2 = metricRegistry.execution(MetricRegistry.name("UserService", "setUser.timer"));
 		for (int i = 1; i <= 10; i++) {
 			ExecutionTimer timer = execution2.start();
-			clock.incrementTime(50);
+			clock.incrementTime(75);
 			timer.stop();
 		}
 
