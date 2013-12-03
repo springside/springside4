@@ -3,6 +3,7 @@ package org.springside.modules.metrics;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springside.modules.metrics.Execution.ExecutionTimer;
 import org.springside.modules.metrics.report.ConsoleReporter;
@@ -26,7 +27,7 @@ public class ReporterTest {
 	}
 
 	@Test
-	// @Ignore("manual test")
+	@Ignore("manual test")
 	public void graphiteReporter() {
 		Graphite graphite = new Graphite(new InetSocketAddress("localhost", 2003));
 		runReport(new GraphiteReporter(graphite));
