@@ -10,8 +10,8 @@ import org.springside.modules.metrics.ExecutionMetric;
 import org.springside.modules.metrics.HistogramMetric;
 
 public class ConsoleReporter implements Reporter {
-	private static final int CONSOLE_WIDTH = 80;
 
+	private static final int CONSOLE_WIDTH = 80;
 	private PrintStream output = System.out;
 
 	@Override
@@ -60,8 +60,8 @@ public class ConsoleReporter implements Reporter {
 
 	private void printCounter(CounterMetric counter) {
 		output.printf("             count = %d%n", counter.count);
-		output.printf("         last rate = %2.2f /%s%n", counter.lastRate);
-		output.printf("         mean rate = %2.2f /%s%n", counter.meanRate);
+		output.printf("         last rate = %2.2f/s%n", counter.lastRate);
+		output.printf("         mean rate = %2.2f/s%n", counter.meanRate);
 	}
 
 	private void printHistogram(HistogramMetric histogram) {
@@ -69,13 +69,19 @@ public class ConsoleReporter implements Reporter {
 		output.printf("               max = %d%n", histogram.max);
 		output.printf("              mean = %2.2f%n", histogram.mean);
 		for (Entry<Double, Long> pct : histogram.pcts.entrySet()) {
-			output.printf("              %d%% <= %2.2f%n", pct.getKey(), pct.getValue());
+			output.printf("           %2.2f%% <= %d %n", pct.getKey() * 100, pct.getValue());
 		}
-
 	}
 
 	private void printExecution(ExecutionMetric execution) {
-		printCounter(execution.counter);
-		printHistogram(execution.histogram);
+		output.printf("             count = %d%n", execution.counter.count);
+		output.printf("         last rate = %2.2f/s%n", execution.counter.lastRate);
+		output.printf("         mean rate = %2.2f/s%n", execution.counter.meanRate);
+		output.printf("               min = %d ms%n", execution.histogram.min);
+		output.printf("               max = %d ms%n", execution.histogram.max);
+		output.printf("              mean = %2.2f ms%n", execution.histogram.mean);
+		for (Entry<Double, Long> pct : execution.histogram.pcts.entrySet()) {
+			output.printf("           %2.2f%% <= %d ms%n", pct.getKey() * 100, pct.getValue());
+		}
 	}
 }

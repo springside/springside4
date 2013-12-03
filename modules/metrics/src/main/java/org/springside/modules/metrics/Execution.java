@@ -8,13 +8,16 @@ public class Execution {
 	private Clock clock;
 
 	public Execution(Clock clock, Double[] pcts) {
+		if (clock == null) {
+			throw new IllegalArgumentException("Clock can't be null ");
+		}
 		this.clock = clock;
 		counter = new Counter(clock);
 		histogram = new Histogram(pcts);
 	}
 
-	public ExecutiomTimer start() {
-		return new ExecutiomTimer(this, clock);
+	public ExecutionTimer start() {
+		return new ExecutionTimer(this, clock);
 	}
 
 	private void update(long duration) {
@@ -29,12 +32,12 @@ public class Execution {
 		return metric;
 	}
 
-	public static class ExecutiomTimer {
+	public static class ExecutionTimer {
 		private final Execution execution;
 		private final Clock clock;
 		private final long startTime;
 
-		private ExecutiomTimer(Execution execution, Clock clock) {
+		private ExecutionTimer(Execution execution, Clock clock) {
 			this.execution = execution;
 			this.clock = clock;
 			this.startTime = clock.getCurrentTime();
@@ -44,5 +47,10 @@ public class Execution {
 			final long elapsed = clock.getCurrentTime() - startTime;
 			execution.update(elapsed);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "Execution [counter=" + counter + ", histogram=" + histogram + "]";
 	}
 }

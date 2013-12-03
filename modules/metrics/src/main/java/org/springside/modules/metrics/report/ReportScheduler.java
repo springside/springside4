@@ -12,6 +12,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
 import org.springside.modules.metrics.Execution;
@@ -22,6 +24,7 @@ import org.springside.modules.metrics.MetricRegistry;
 
 public class ReportScheduler {
 	private static final String SCHEDULER_NAME = "metrics-reporter";
+	private static Logger logger = LoggerFactory.getLogger(ReportScheduler.class);
 	private List<Reporter> reporters;
 	private MetricRegistry metricRegistry;
 	private ScheduledExecutorService executor;
@@ -72,15 +75,21 @@ public class ReportScheduler {
 				}
 			}
 		}, period, period, unit);
+		logger.info("metric reporter started.");
 	}
 
 	public void stop() {
 		executor.shutdownNow();
 		try {
-			executor.awaitTermination(1, TimeUnit.SECONDS);
+			if (executor.awaitTermination(1, TimeUnit.SECONDS)) {
+				logger.info("metric reporter stopped.");
+			} else {
+				logger.info("metric reporter can stopped in 1 seconds, force stopped");
+			}
 		} catch (InterruptedException ignored) {
 			// do nothing
 		}
+
 	}
 
 	private static class NamedThreadFactory implements ThreadFactory {

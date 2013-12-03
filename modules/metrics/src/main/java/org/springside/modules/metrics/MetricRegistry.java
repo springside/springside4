@@ -32,22 +32,39 @@ public class MetricRegistry {
 	}
 
 	public Counter counter(String name) {
-		Counter counter = new Counter(defaultClock);
-		return (Counter) register(name, counter);
+		if (metrics.containsKey(name)) {
+			return (Counter) metrics.get(name);
+		} else {
+			Counter counter = new Counter(defaultClock);
+			return (Counter) register(name, counter);
+		}
 	}
 
 	public Histogram histogram(String name) {
-		Histogram histogram = new Histogram(defaultPcts);
-		return (Histogram) register(name, histogram);
+		if (metrics.containsKey(name)) {
+			return (Histogram) metrics.get(name);
+		} else {
+			Histogram histogram = new Histogram(defaultPcts);
+			return (Histogram) register(name, histogram);
+		}
 	}
 
 	public Execution execution(String name) {
-		Execution execution = new Execution(defaultClock, defaultPcts);
-		return (Execution) register(name, execution);
+		if (metrics.containsKey(name)) {
+			return (Execution) metrics.get(name);
+		} else {
+			Execution execution = new Execution(defaultClock, defaultPcts);
+			return (Execution) register(name, execution);
+		}
 	}
 
-	public Object register(String name, Object metric) {
-		return metrics.putIfAbsent(name, metric);
+	public Object register(String name, Object newMetric) {
+		Object existingMetric = metrics.putIfAbsent(name, newMetric);
+		if (existingMetric != null) {
+			return existingMetric;
+		} else {
+			return newMetric;
+		}
 	}
 
 	public SortedMap<String, Counter> getCounters() {

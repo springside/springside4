@@ -1,5 +1,6 @@
 package org.springside.modules.metrics;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +11,9 @@ public class Histogram {
 	private Double[] pcts;
 
 	public Histogram(Double[] pcts) {
+		if (pcts == null) {
+			throw new IllegalArgumentException("Pcts can't be null");
+		}
 		this.pcts = pcts;
 	}
 
@@ -43,7 +47,6 @@ public class Histogram {
 		metric.mean = sum / count;
 
 		for (Double pct : pcts) {
-
 			metric.pcts.put(pct, getPercent(snapshotList, count, pct));
 		}
 
@@ -75,5 +78,10 @@ public class Histogram {
 		}
 
 		return metric;
+	}
+
+	@Override
+	public String toString() {
+		return "Histogram [measurements=" + measurements + ", pcts=" + Arrays.toString(pcts) + "]";
 	}
 }

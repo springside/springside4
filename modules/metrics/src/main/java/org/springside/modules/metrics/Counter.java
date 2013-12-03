@@ -14,6 +14,10 @@ public class Counter {
 	private long lastReportTime;
 
 	public Counter(Clock clock) {
+		if (clock == null) {
+			throw new IllegalArgumentException("Clock can't be null ");
+		}
+
 		this.clock = clock;
 		startTime = clock.getCurrentTime();
 		lastReportTime = startTime;
@@ -49,12 +53,24 @@ public class Counter {
 
 		CounterMetric metric = new CounterMetric();
 		metric.count = currentCount;
-		metric.lastRate = ((currentCount - lastReportCount) * 1000) / (currentTime - lastReportTime);
-		metric.meanRate = ((currentCount * 1000) / (currentTime - startTime));
+		if ((currentTime - lastReportTime) > 0) {
+			metric.lastRate = ((currentCount - lastReportCount) * 1000) / ((currentTime - lastReportTime));
+		}
+
+		if ((currentTime - startTime) > 0) {
+			metric.meanRate = ((currentCount * 1000) / ((currentTime - startTime)));
+		}
 
 		lastReportCount = currentCount;
 		lastReportTime = currentTime;
 
 		return metric;
 	}
+
+	@Override
+	public String toString() {
+		return "Counter [counter=" + counter + ", lastReportCount=" + lastReportCount + ", startTime=" + startTime
+				+ ", lastReportTime=" + lastReportTime + "]";
+	}
+
 }
