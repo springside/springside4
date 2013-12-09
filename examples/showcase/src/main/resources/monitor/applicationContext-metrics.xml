@@ -3,10 +3,6 @@
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
-	<description>Yammer Coda Hale's Metrics监控配置</description>
-
-	<bean id="metrics" class="com.codahale.metrics.MetricRegistry "/>
-	
-	<bean id="graphiteReporterManager" class="org.springside.examples.showcase.demos.metrics.MetricsReporterManager"/>
-	
+	<description>Metrics监控配置</description>
+	<bean id="metricsManager" class="org.springside.examples.showcase.demos.metrics.MetricsManager"/>
 </beans>

@@ -79,6 +79,8 @@ public class GraphiteReporter implements Reporter {
 
 	private void reportCounter(String name, CounterMetric counter, long timestamp) throws IOException {
 		send(MetricRegistry.name(prefix, name, "count"), format(counter.count), timestamp);
+		send(MetricRegistry.name(prefix, name, "lastRate"), format(counter.lastRate), timestamp);
+		send(MetricRegistry.name(prefix, name, "meanRate"), format(counter.meanRate), timestamp);
 	}
 
 	private void reportHistogram(String name, HistogramMetric histogram, long timestamp) throws IOException {
@@ -93,6 +95,8 @@ public class GraphiteReporter implements Reporter {
 
 	private void reportExecution(String name, ExecutionMetric execution, long timestamp) throws IOException {
 		send(MetricRegistry.name(prefix, name, "count"), format(execution.counter.count), timestamp);
+		send(MetricRegistry.name(prefix, name, "lastRate"), format(execution.counter.lastRate), timestamp);
+		send(MetricRegistry.name(prefix, name, "meanRate"), format(execution.counter.meanRate), timestamp);
 
 		send(MetricRegistry.name(prefix, name, "min"), format(execution.histogram.min), timestamp);
 		send(MetricRegistry.name(prefix, name, "max"), format(execution.histogram.max), timestamp);

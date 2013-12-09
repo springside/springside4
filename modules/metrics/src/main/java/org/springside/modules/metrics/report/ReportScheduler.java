@@ -75,16 +75,16 @@ public class ReportScheduler {
 				}
 			}
 		}, period, period, unit);
-		logger.info("metric reporter started.");
+		logger.info("metric reporters started.");
 	}
 
 	public void stop() {
 		executor.shutdownNow();
 		try {
 			if (executor.awaitTermination(1, TimeUnit.SECONDS)) {
-				logger.info("metric reporter stopped.");
+				logger.info("metric reporters stopped.");
 			} else {
-				logger.info("metric reporter can stopped in 1 seconds, force stopped");
+				logger.info("metric reporters can't stopped in 1 seconds, force stopped");
 			}
 		} catch (InterruptedException ignored) {
 			// do nothing
