@@ -23,31 +23,26 @@ import org.springside.modules.metrics.MetricRegistry;
 
 public class GraphiteReporter implements Reporter {
 
-	private static final Logger logger = LoggerFactory.getLogger(GraphiteReporter.class);
+	private static final Pattern WHITESPACE = Pattern.compile("[\\s]+");
+	private static final Charset UTF_8 = Charset.forName("UTF-8");
+
+	private static Logger logger = LoggerFactory.getLogger(GraphiteReporter.class);
 
 	private String prefix;
 
-	private static final Pattern WHITESPACE = Pattern.compile("[\\s]+");
-	// this may be optimistic about Carbon/Graphite
-	private static final Charset UTF_8 = Charset.forName("UTF-8");
-
 	private InetSocketAddress address;
 	private SocketFactory socketFactory;
-	private Charset charset;
-
 	private Socket socket;
 	private Writer writer;
-	private int failures;
 
 	public GraphiteReporter(InetSocketAddress address) {
-		this("metrics", address);
+		this(address, "metrics");
 	}
 
-	public GraphiteReporter(String prefix, InetSocketAddress address) {
+	public GraphiteReporter(InetSocketAddress address, String prefix) {
 		this.prefix = prefix;
 		this.address = address;
 		this.socketFactory = SocketFactory.getDefault();
-		this.charset = UTF_8;
 	}
 
 	@Override
@@ -69,6 +64,8 @@ public class GraphiteReporter implements Reporter {
 				reportExecution(entry.getKey(), entry.getValue(), timestamp);
 			}
 
+			flush();
+
 		} catch (IOException e) {
 			logger.warn("Unable to report to Graphite", e);
 		} finally {
@@ -78,7 +75,6 @@ public class GraphiteReporter implements Reporter {
 				logger.warn("Error disconnecting from Graphite", e);
 			}
 		}
-
 	}
 
 	private void reportCounter(String name, CounterMetric counter, long timestamp) throws IOException {
@@ -132,13 +128,13 @@ public class GraphiteReporter implements Reporter {
 		return String.format(Locale.US, "%2.2f", v);
 	}
 
-	public void connect() throws IllegalStateException, IOException {
+	private void connect() throws IllegalStateException, IOException {
 		if (socket != null) {
 			throw new IllegalStateException("Already connected");
 		}
 
 		this.socket = socketFactory.createSocket(address.getAddress(), address.getPort());
-		this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), charset));
+		this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), UTF_8));
 	}
 
 	/**
@@ -149,7 +145,7 @@ public class GraphiteReporter implements Reporter {
 	 * @param timestamp the timestamp of the metric
 	 * @throws IOException if there was an error sending the metric
 	 */
-	public void send(String name, String value, long timestamp) throws IOException {
+	private void send(String name, String value, long timestamp) throws IOException {
 		try {
 			writer.write(sanitize(name));
 			writer.write(' ');
@@ -157,27 +153,24 @@ public class GraphiteReporter implements Reporter {
 			writer.write(' ');
 			writer.write(Long.toString(timestamp));
 			writer.write('\n');
-			writer.flush();
-			this.failures = 0;
 		} catch (IOException e) {
-			failures++;
 			throw e;
 		}
 	}
 
-	public int getFailures() {
-		return failures;
+	private String sanitize(String s) {
+		return WHITESPACE.matcher(s).replaceAll("-");
 	}
 
-	public void close() throws IOException {
+	private void flush() throws IOException {
+		writer.flush();
+	}
+
+	private void close() throws IOException {
 		if (socket != null) {
 			socket.close();
 		}
 		this.socket = null;
 		this.writer = null;
-	}
-
-	protected String sanitize(String s) {
-		return WHITESPACE.matcher(s).replaceAll("-");
 	}
 }

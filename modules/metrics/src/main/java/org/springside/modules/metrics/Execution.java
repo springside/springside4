@@ -17,11 +17,12 @@ public class Execution {
 	}
 
 	public ExecutionTimer start() {
-		return new ExecutionTimer(this, clock);
+		return new ExecutionTimer(this, clock.getCurrentTime());
 	}
 
-	private void update(long duration) {
-		histogram.update(duration);
+	private void update(long startTime) {
+		final long elapsed = clock.getCurrentTime() - startTime;
+		histogram.update(elapsed);
 		counter.inc();
 	}
 
@@ -32,25 +33,22 @@ public class Execution {
 		return metric;
 	}
 
-	public static class ExecutionTimer {
-		private final Execution execution;
-		private final Clock clock;
-		private final long startTime;
-
-		private ExecutionTimer(Execution execution, Clock clock) {
-			this.execution = execution;
-			this.clock = clock;
-			this.startTime = clock.getCurrentTime();
-		}
-
-		public void stop() {
-			final long elapsed = clock.getCurrentTime() - startTime;
-			execution.update(elapsed);
-		}
-	}
-
 	@Override
 	public String toString() {
 		return "Execution [counter=" + counter + ", histogram=" + histogram + "]";
+	}
+
+	public static class ExecutionTimer {
+		private final Execution execution;
+		private final long startTime;
+
+		private ExecutionTimer(Execution execution, long startTime) {
+			this.execution = execution;
+			this.startTime = startTime;
+		}
+
+		public void stop() {
+			execution.update(startTime);
+		}
 	}
 }

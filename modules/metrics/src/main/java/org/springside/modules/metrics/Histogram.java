@@ -9,6 +9,7 @@ public class Histogram {
 
 	private LinkedList<Long> measurements = new LinkedList<Long>();
 	private Double[] pcts;
+	private Object lock = new Object();
 
 	public Histogram(Double[] pcts) {
 		if (pcts == null) {
@@ -18,15 +19,18 @@ public class Histogram {
 	}
 
 	public void update(long value) {
-		synchronized (measurements) {
+		synchronized (lock) {
 			measurements.add(value);
 		}
 	}
 
 	public HistogramMetric getMetric() {
+		LinkedList<Long> snapshotList = null;
 
-		LinkedList<Long> snapshotList = measurements;
-		measurements = new LinkedList();
+		synchronized (lock) {
+			snapshotList = measurements;
+			measurements = new LinkedList();
+		}
 
 		if (snapshotList.isEmpty()) {
 			return createEmptyMetric();
@@ -53,7 +57,7 @@ public class Histogram {
 		return metric;
 	}
 
-	public Long getPercent(List<Long> snapshotList, int count, double pct) {
+	private Long getPercent(List<Long> snapshotList, int count, double pct) {
 
 		final double pos = (pct * (count + 1)) / 100;
 

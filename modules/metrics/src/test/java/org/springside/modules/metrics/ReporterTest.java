@@ -7,7 +7,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.springside.modules.metrics.Execution.ExecutionTimer;
 import org.springside.modules.metrics.report.ConsoleReporter;
-import org.springside.modules.metrics.report.Graphite;
 import org.springside.modules.metrics.report.GraphiteReporter;
 import org.springside.modules.metrics.report.ReportScheduler;
 import org.springside.modules.metrics.report.Reporter;
@@ -29,8 +28,7 @@ public class ReporterTest {
 	@Test
 	@Ignore("manual test")
 	public void graphiteReporter() {
-		Graphite graphite = new Graphite(new InetSocketAddress("localhost", 2003));
-		runReport(new GraphiteReporter(graphite));
+		runReport(new GraphiteReporter(new InetSocketAddress("localhost", 2003)));
 	}
 
 	@Test
