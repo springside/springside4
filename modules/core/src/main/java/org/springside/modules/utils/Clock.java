@@ -7,18 +7,18 @@ import java.util.Date;
  * 
  * @author calvin
  */
-public interface DateProvider {
+public interface Clock {
 
 	Date getCurrentDate();
 
 	long getCurrentTimeInMillis();
 
-	static final DateProvider DEFAULT = new DefaultDateProvider();
+	static final Clock DEFAULT = new DefaultClock();
 
 	/**
 	 * 默认时间提供者，返回当前的时间，线程安全。
 	 */
-	public static class DefaultDateProvider implements DateProvider {
+	public static class DefaultClock implements Clock {
 
 		@Override
 		public Date getCurrentDate() {
@@ -34,15 +34,19 @@ public interface DateProvider {
 	/**
 	 * 可配置的时间提供者，用于测试.
 	 */
-	public static class MockedDateProvider implements DateProvider {
+	public static class MockedClock implements Clock {
 
 		private long time;
 
-		public MockedDateProvider(Date date) {
+		public MockedClock() {
+			this(0);
+		}
+
+		public MockedClock(Date date) {
 			this.time = date.getTime();
 		}
 
-		public MockedDateProvider(long time) {
+		public MockedClock(long time) {
 			this.time = time;
 		}
 
@@ -57,7 +61,7 @@ public interface DateProvider {
 		}
 
 		/**
-		 * 重新设置时间。
+		 * 重新设置日期。
 		 */
 		public void update(Date newDate) {
 			time = newDate.getTime();
@@ -71,7 +75,7 @@ public interface DateProvider {
 		}
 
 		/**
-		 * 增加时间戳.
+		 * 滚动时间.
 		 */
 		public void incrementTime(int millis) {
 			time += millis;

@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.modules.mapper.BeanMapper;
-
-import com.codahale.metrics.MetricRegistry;
-import com.codahale.metrics.Timer;
+import org.springside.modules.metrics.Execution;
+import org.springside.modules.metrics.Execution.ExecutionTimer;
+import org.springside.modules.metrics.MetricRegistry;
 
 /**
  * Shiro的配置文件中对/api/secure/**进行拦截，要求authBasic认证.
@@ -31,14 +31,11 @@ public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
 
-	@Autowired
-	private MetricRegistry metricRegistry;
-
-	private Timer metrics;
+	private Execution executionMetrics;
 
 	@PostConstruct
 	public void register() {
-		metrics = metricRegistry.timer("Rest_GetUser");
+		executionMetrics = MetricRegistry.INSTANCE.execution("Rest_GetUser");
 	}
 
 	/**
@@ -50,7 +47,7 @@ public class UserRestController {
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
 	public UserDTO getUser(@PathVariable("id") Long id) {
-		final Timer.Context metricsContext = metrics.time();
+		final ExecutionTimer exectuionTimer = executionMetrics.start();
 		try {
 			User user = accountService.getUser(id);
 
@@ -65,7 +62,7 @@ public class UserRestController {
 			dto.setTeamId(user.getTeam().getId());
 			return dto;
 		} finally {
-			metricsContext.stop();
+			exectuionTimer.stop();
 		}
 	}
 }

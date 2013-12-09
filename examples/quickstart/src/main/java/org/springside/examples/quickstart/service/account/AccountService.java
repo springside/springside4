@@ -15,7 +15,7 @@ import org.springside.examples.quickstart.repository.UserDao;
 import org.springside.examples.quickstart.service.ServiceException;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
-import org.springside.modules.utils.DateProvider;
+import org.springside.modules.utils.Clock;
 import org.springside.modules.utils.Encodes;
 
 /**
@@ -36,7 +36,7 @@ public class AccountService {
 
 	private UserDao userDao;
 	private TaskDao taskDao;
-	private DateProvider dateProvider = DateProvider.DEFAULT;
+	private Clock clock = Clock.DEFAULT;
 
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll();
@@ -53,7 +53,7 @@ public class AccountService {
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
-		user.setRegisterDate(dateProvider.getCurrentDate());
+		user.setRegisterDate(clock.getCurrentDate());
 
 		userDao.save(user);
 	}
@@ -111,7 +111,7 @@ public class AccountService {
 		this.taskDao = taskDao;
 	}
 
-	public void setDateProvider(DateProvider dateProvider) {
-		this.dateProvider = dateProvider;
+	public void setClock(Clock clock) {
+		this.clock = clock;
 	}
 }
