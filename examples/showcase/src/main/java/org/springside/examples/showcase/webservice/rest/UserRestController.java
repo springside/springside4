@@ -35,7 +35,7 @@ public class UserRestController {
 
 	@PostConstruct
 	public void register() {
-		executionMetrics = MetricRegistry.INSTANCE.execution("Rest_GetUser");
+		executionMetrics = MetricRegistry.INSTANCE.execution("REST.GetUser");
 	}
 
 	/**
