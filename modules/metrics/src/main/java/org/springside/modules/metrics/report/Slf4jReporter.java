@@ -38,8 +38,7 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
-		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}, meanRate={}", name, counter.count,
-				counter.lastRate, counter.meanRate);
+		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}", name, counter.count, counter.lastRate);
 	}
 
 	private void logHistogram(String name, HistogramMetric histogram) {
@@ -48,17 +47,16 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logExecution(String name, ExecutionMetric execution) {
-		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, meanRate={}, min={}, max={}, mean={}{}",
-				name, execution.counter.count, execution.counter.lastRate, execution.counter.meanRate,
-				execution.histogram.min, execution.histogram.max, execution.histogram.mean,
-				buildPcts(execution.histogram.pcts));
+		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, min={}ms, max={}ms, mean={}ms", name,
+				execution.counter.count, execution.counter.lastRate, execution.histogram.min, execution.histogram.max,
+				execution.histogram.mean, buildPcts(execution.histogram.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {
 		StringBuilder builder = new StringBuilder();
 
 		for (Entry<Double, Long> entry : pcts.entrySet()) {
-			builder.append(", p").append(entry.getKey()).append("=").append(entry.getValue());
+			builder.append(", =").append(entry.getKey()).append("%<=").append(entry.getValue()).append("ms");
 		}
 
 		return builder.toString();

@@ -7,20 +7,18 @@ import org.springside.modules.metrics.utils.Clock;
 public class Counter {
 
 	private AtomicLong counter = new AtomicLong(0);
-	private long lastReportCount = 0L;
 
 	private Clock clock;
-	private long startTime;
+	private long lastReportCount = 0L;
 	private long lastReportTime;
 
 	public Counter(Clock clock) {
 		if (clock == null) {
-			throw new IllegalArgumentException("Clock can't be null ");
+			throw new IllegalArgumentException("Clock can't be null");
 		}
 
 		this.clock = clock;
-		startTime = clock.getCurrentTime();
-		lastReportTime = startTime;
+		lastReportTime = clock.getCurrentTime();
 	}
 
 	public void inc() {
@@ -42,8 +40,7 @@ public class Counter {
 	public long reset() {
 		long currentValue = counter.getAndSet(0);
 		lastReportCount = 0L;
-		startTime = clock.getCurrentTime();
-		lastReportTime = startTime;
+		lastReportTime = clock.getCurrentTime();
 		return currentValue;
 	}
 
@@ -57,10 +54,6 @@ public class Counter {
 			metric.lastRate = ((currentCount - lastReportCount) * 1000) / ((currentTime - lastReportTime));
 		}
 
-		if ((currentTime - startTime) > 0) {
-			metric.meanRate = ((currentCount * 1000) / ((currentTime - startTime)));
-		}
-
 		lastReportCount = currentCount;
 		lastReportTime = currentTime;
 
@@ -69,8 +62,7 @@ public class Counter {
 
 	@Override
 	public String toString() {
-		return "Counter [counter=" + counter + ", lastReportCount=" + lastReportCount + ", startTime=" + startTime
-				+ ", lastReportTime=" + lastReportTime + "]";
+		return "Counter [counter=" + counter + ", lastReportCount=" + lastReportCount + ", lastReportTime="
+				+ lastReportTime + "]";
 	}
-
 }

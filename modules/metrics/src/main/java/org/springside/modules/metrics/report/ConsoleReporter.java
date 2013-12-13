@@ -61,7 +61,6 @@ public class ConsoleReporter implements Reporter {
 	private void printCounter(CounterMetric counter) {
 		output.printf("             count = %d%n", counter.count);
 		output.printf("         last rate = %2.2f/s%n", counter.lastRate);
-		output.printf("         mean rate = %2.2f/s%n", counter.meanRate);
 	}
 
 	private void printHistogram(HistogramMetric histogram) {
@@ -76,7 +75,6 @@ public class ConsoleReporter implements Reporter {
 	private void printExecution(ExecutionMetric execution) {
 		output.printf("             count = %d%n", execution.counter.count);
 		output.printf("         last rate = %2.2f/s%n", execution.counter.lastRate);
-		output.printf("         mean rate = %2.2f/s%n", execution.counter.meanRate);
 		output.printf("               min = %d ms%n", execution.histogram.min);
 		output.printf("               max = %d ms%n", execution.histogram.max);
 		output.printf("              mean = %2.2f ms%n", execution.histogram.mean);
