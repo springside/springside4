@@ -56,7 +56,7 @@ public class Slf4jReporter implements Reporter {
 		StringBuilder builder = new StringBuilder();
 
 		for (Entry<Double, Long> entry : pcts.entrySet()) {
-			builder.append(", =").append(entry.getKey()).append("%<=").append(entry.getValue()).append("ms");
+			builder.append(", ").append(entry.getKey()).append("%<=").append(entry.getValue()).append("ms");
 		}
 
 		return builder.toString();

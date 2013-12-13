@@ -77,8 +77,15 @@ public interface Clock {
 		/**
 		 * 滚动时间.
 		 */
-		public void incrementTime(int millis) {
+		public void increaseTime(int millis) {
 			time += millis;
+		}
+
+		/**
+		 * 滚动时间.
+		 */
+		public void decreaseTime(int millis) {
+			time -= millis;
 		}
 	}
 

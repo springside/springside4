@@ -70,7 +70,7 @@ public class MetricRegistryTest {
 
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.new.counter"));
 		counter.inc(100000);
-		clock.incrementTime(50000);
+		clock.increaseTime(50000);
 
 		assertEquals(2000, counter.getMetric().lastRate, 1);
 

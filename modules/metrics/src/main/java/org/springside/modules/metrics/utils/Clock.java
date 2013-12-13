@@ -53,8 +53,15 @@ public interface Clock {
 		/**
 		 * 增加时间戳.
 		 */
-		public void incrementTime(int millis) {
+		public void increaseTime(int millis) {
 			time += millis;
+		}
+
+		/**
+		 * 滚动时间.
+		 */
+		public void decreaseTime(int millis) {
+			time -= millis;
 		}
 	}
 }

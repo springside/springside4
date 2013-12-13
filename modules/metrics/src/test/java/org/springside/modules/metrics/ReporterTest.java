@@ -49,7 +49,7 @@ public class ReporterTest {
 		counter.inc(4);
 		Counter counter2 = metricRegistry.counter(MetricRegistry.name("UserService", "setUser.counter"));
 		counter2.inc(6);
-		clock.incrementTime(1000);
+		clock.increaseTime(1000);
 
 		// histogram
 		Histogram histogram = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.latency"));
@@ -65,13 +65,13 @@ public class ReporterTest {
 		Execution execution = metricRegistry.execution(MetricRegistry.name("UserService", "getUser.timer"));
 		for (int i = 1; i <= 10; i++) {
 			ExecutionTimer timer = execution.start();
-			clock.incrementTime(25);
+			clock.increaseTime(25);
 			timer.stop();
 		}
 		Execution execution2 = metricRegistry.execution(MetricRegistry.name("UserService", "setUser.timer"));
 		for (int i = 1; i <= 10; i++) {
 			ExecutionTimer timer = execution2.start();
-			clock.incrementTime(75);
+			clock.increaseTime(75);
 			timer.stop();
 		}
 
