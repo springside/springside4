@@ -71,7 +71,7 @@ public class ReportScheduler {
 				try {
 					report();
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.error(e.getMessage(), e);
 				}
 			}
 		}, period, period, unit);
@@ -89,9 +89,11 @@ public class ReportScheduler {
 		} catch (InterruptedException ignored) {
 			// do nothing
 		}
-
 	}
 
+	/**
+	 * 给线程命名的线程工厂类，为了减少项目依赖，没有直接使用Guava里的实现。
+	 */
 	private static class NamedThreadFactory implements ThreadFactory {
 		private final ThreadGroup group;
 		private final AtomicInteger threadNumber = new AtomicInteger(1);
@@ -100,7 +102,7 @@ public class ReportScheduler {
 		private NamedThreadFactory(String name) {
 			final SecurityManager s = System.getSecurityManager();
 			this.group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-			this.namePrefix = "metrics-" + name + "-thread-";
+			this.namePrefix = name;
 		}
 
 		@Override

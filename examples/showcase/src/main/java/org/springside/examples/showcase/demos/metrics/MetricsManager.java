@@ -18,7 +18,8 @@ public class MetricsManager {
 	@PostConstruct
 	public void start() {
 		GraphiteReporter graphiteReporter = new GraphiteReporter(new InetSocketAddress("localhost", 2003));
-		scheduler = new ReportScheduler(MetricRegistry.INSTANCE, new ConsoleReporter(), graphiteReporter);
+		ConsoleReporter consoleReporter = new ConsoleReporter();
+		scheduler = new ReportScheduler(MetricRegistry.INSTANCE, consoleReporter, graphiteReporter);
 		scheduler.start(10, TimeUnit.SECONDS);
 	}
 

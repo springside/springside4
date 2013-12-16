@@ -20,21 +20,20 @@ public interface Clock {
 		public long getCurrentTime() {
 			return System.currentTimeMillis();
 		}
-
 	}
 
 	/**
 	 * 可配置的时间提供者，用于测试.
 	 */
-	public static class MockedClock implements Clock {
+	public static class MockClock implements Clock {
 
 		private long time;
 
-		public MockedClock() {
+		public MockClock() {
 			this(0);
 		}
 
-		public MockedClock(long time) {
+		public MockClock(long time) {
 			this.time = time;
 		}
 

@@ -11,7 +11,7 @@ import org.springside.modules.metrics.report.GraphiteReporter;
 import org.springside.modules.metrics.report.ReportScheduler;
 import org.springside.modules.metrics.report.Reporter;
 import org.springside.modules.metrics.report.Slf4jReporter;
-import org.springside.modules.metrics.utils.Clock.MockedClock;
+import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class ReporterTest {
 
@@ -41,7 +41,7 @@ public class ReporterTest {
 
 	private void runReport(Reporter reporter) {
 		MetricRegistry metricRegistry = new MetricRegistry();
-		MockedClock clock = new MockedClock();
+		MockClock clock = new MockClock();
 		Counter.clock = clock;
 		Execution.clock = clock;
 

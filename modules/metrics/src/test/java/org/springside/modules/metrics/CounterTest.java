@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.springside.modules.metrics.utils.Clock.MockedClock;
+import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class CounterTest {
 
-	private MockedClock clock = new MockedClock();
+	private MockClock clock = new MockClock();
 
 	@Before
 	public void setup() {

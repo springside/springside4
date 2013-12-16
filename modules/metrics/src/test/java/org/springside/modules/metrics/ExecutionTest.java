@@ -4,13 +4,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.springside.modules.metrics.Execution.ExecutionTimer;
-import org.springside.modules.metrics.utils.Clock.MockedClock;
+import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class ExecutionTest {
 
 	@Test
 	public void normal() {
-		MockedClock clock = new MockedClock();
+		MockClock clock = new MockClock();
 		Execution.clock = clock;
 		Counter.clock = clock;
 		Execution execution = new Execution(new Double[] { 90d });

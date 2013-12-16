@@ -17,7 +17,7 @@ import org.springside.examples.quickstart.repository.UserDao;
 import org.springside.examples.quickstart.service.ServiceException;
 import org.springside.examples.quickstart.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.test.security.shiro.ShiroTestUtils;
-import org.springside.modules.utils.Clock.MockedClock;
+import org.springside.modules.utils.Clock.MockClock;
 
 /**
  * AccountService的测试用例, 测试Service层的业务逻辑.
@@ -45,7 +45,7 @@ public class AccountServiceTest {
 	public void registerUser() {
 		User user = UserData.randomNewUser();
 		Date currentTime = new Date();
-		accountService.setClock(new MockedClock(currentTime));
+		accountService.setClock(new MockClock(currentTime));
 
 		accountService.registerUser(user);
 
