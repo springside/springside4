@@ -511,9 +511,9 @@
 									<!-- 避免引入过期的jar包 -->
 									<excludes>
 										<exclude>commons-logging</exclude>
-										<exclude>org.springframework:2.*</exclude>
-										<exclude>org.springframework:3.0.*</exclude>
-										<exclude>org.springframework:3.1.*</exclude>
+										<exclude>org.springframework:*:2.*</exclude>
+										<exclude>org.springframework:*:3.0.*</exclude>
+										<exclude>org.springframework:*:3.1.*</exclude>
 									</excludes>
 								</bannedDependencies>
 							</rules>
