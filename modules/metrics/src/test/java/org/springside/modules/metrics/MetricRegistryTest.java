@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.util.Map;
 
 import org.junit.Test;
-import org.springside.modules.metrics.utils.Clock.MockedClock;
 
 public class MetricRegistryTest {
 
@@ -62,27 +61,42 @@ public class MetricRegistryTest {
 	}
 
 	@Test
-	public void updateDefault() {
-		// default clock
-		MockedClock clock = new MockedClock();
+	public void defaultPcts() {
 		MetricRegistry metricRegistry = new MetricRegistry();
-		metricRegistry.setDefaultClock(clock);
 
-		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.new.counter"));
-		counter.inc(100000);
-		clock.increaseTime(50000);
-
-		assertEquals(2000, counter.getMetric().lastRate, 1);
-
-		// default pcts
-		metricRegistry.setDefaultPcts(new Double[] { 50d });
-		Histogram histogram = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.new.histogram"));
+		// set pcts 60,70
+		Histogram histogram = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.histogram.setPcts"),
+				60d, 70d);
 
 		for (int i = 1; i <= 100; i++) {
 			histogram.update(i);
 		}
 
 		HistogramMetric metric = histogram.getMetric();
+
+		assertEquals(60, metric.pcts.get(60d), 0);
+		assertEquals(70, metric.pcts.get(70d), 0);
+
+		// default 90
+		Histogram histogramWithDefaultPcts = metricRegistry.histogram(MetricRegistry.name("UserService",
+				"getUser.histogram.default"));
+		for (int i = 1; i <= 100; i++) {
+			histogramWithDefaultPcts.update(i);
+		}
+
+		metric = histogramWithDefaultPcts.getMetric();
+		assertEquals(90, metric.pcts.get(90d), 0);
+
+		// new default 50
+		metricRegistry.setDefaultPcts(new Double[] { 50d });
+		Histogram histogramWithNewDefaultPcts = metricRegistry.histogram(MetricRegistry.name("UserService",
+				"getUser.histogram.newDefault"));
+
+		for (int i = 1; i <= 100; i++) {
+			histogramWithNewDefaultPcts.update(i);
+		}
+
+		metric = histogramWithNewDefaultPcts.getMetric();
 
 		assertEquals(50, metric.pcts.get(50d), 0);
 		assertNull(metric.pcts.get(90d));

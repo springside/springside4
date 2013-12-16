@@ -11,10 +11,7 @@ public class Histogram {
 	private Double[] pcts;
 	private Object lock = new Object();
 
-	public Histogram(Double[] pcts) {
-		if (pcts == null) {
-			throw new IllegalArgumentException("Pcts can't be null");
-		}
+	public Histogram(Double... pcts) {
 		this.pcts = pcts;
 	}
 

@@ -3,16 +3,12 @@ package org.springside.modules.metrics;
 import org.springside.modules.metrics.utils.Clock;
 
 public class Execution {
+	public static Clock clock = Clock.DEFAULT;
 	private Counter counter;
 	private Histogram histogram;
-	private Clock clock;
 
-	public Execution(Clock clock, Double[] pcts) {
-		if (clock == null) {
-			throw new IllegalArgumentException("Clock can't be null ");
-		}
-		this.clock = clock;
-		counter = new Counter(clock);
+	public Execution(Double... pcts) {
+		counter = new Counter();
 		histogram = new Histogram(pcts);
 	}
 

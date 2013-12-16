@@ -42,7 +42,8 @@ public class ReporterTest {
 	private void runReport(Reporter reporter) {
 		MetricRegistry metricRegistry = new MetricRegistry();
 		MockedClock clock = new MockedClock();
-		metricRegistry.setDefaultClock(clock);
+		Counter.clock = clock;
+		Execution.clock = clock;
 
 		// counter
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));

@@ -2,16 +2,23 @@ package org.springside.modules.metrics;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.springside.modules.metrics.utils.Clock.MockedClock;
 
 public class CounterTest {
 
+	private MockedClock clock = new MockedClock();
+
+	@Before
+	public void setup() {
+		Counter.clock = clock;
+	}
+
 	@Test
 	public void normal() {
-		MockedClock clock = new MockedClock();
-		Counter counter = new Counter(clock);
 
+		Counter counter = new Counter();
 		counter.inc(10);
 		counter.inc(20);
 		counter.inc(30);
@@ -31,8 +38,7 @@ public class CounterTest {
 
 	@Test
 	public void incAndDec() {
-		MockedClock clock = new MockedClock();
-		Counter counter = new Counter(clock);
+		Counter counter = new Counter();
 
 		counter.inc(20);
 		counter.inc();
@@ -47,8 +53,7 @@ public class CounterTest {
 
 	@Test
 	public void reset() {
-		MockedClock clock = new MockedClock();
-		Counter counter = new Counter(clock);
+		Counter counter = new Counter();
 
 		counter.inc(20);
 		clock.increaseTime(1000);
@@ -68,17 +73,11 @@ public class CounterTest {
 
 	@Test
 	public void empty() {
-		MockedClock clock = new MockedClock();
-		Counter counter = new Counter(clock);
+		Counter counter = new Counter();
 		clock.increaseTime(1000);
 
 		CounterMetric metric = counter.getMetric();
 		assertEquals(0, metric.count);
 		assertEquals(0d, metric.lastRate, 0);
-	}
-
-	@Test(expected = IllegalArgumentException.class)
-	public void checkArgument() {
-		Counter counter = new Counter(null);
 	}
 }

@@ -11,7 +11,9 @@ public class ExecutionTest {
 	@Test
 	public void normal() {
 		MockedClock clock = new MockedClock();
-		Execution execution = new Execution(clock, new Double[] { 90d });
+		Execution.clock = clock;
+		Counter.clock = clock;
+		Execution execution = new Execution(new Double[] { 90d });
 
 		ExecutionTimer timer = execution.start();
 		clock.increaseTime(200);

@@ -7,13 +7,9 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.springside.modules.metrics.utils.Clock;
-
 public class MetricRegistry {
 
 	public static final MetricRegistry INSTANCE = new MetricRegistry();
-
-	private Clock defaultClock = Clock.DEFAULT;
 
 	private Double[] defaultPcts = new Double[] { 90d };
 
@@ -35,25 +31,33 @@ public class MetricRegistry {
 		if (metrics.containsKey(name)) {
 			return (Counter) metrics.get(name);
 		} else {
-			Counter counter = new Counter(defaultClock);
+			Counter counter = new Counter();
 			return (Counter) register(name, counter);
 		}
 	}
 
 	public Histogram histogram(String name) {
+		return histogram(name, defaultPcts);
+	}
+
+	public Histogram histogram(String name, Double... pcts) {
 		if (metrics.containsKey(name)) {
 			return (Histogram) metrics.get(name);
 		} else {
-			Histogram histogram = new Histogram(defaultPcts);
+			Histogram histogram = new Histogram(pcts);
 			return (Histogram) register(name, histogram);
 		}
 	}
 
 	public Execution execution(String name) {
+		return execution(name, defaultPcts);
+	}
+
+	public Execution execution(String name, Double... pcts) {
 		if (metrics.containsKey(name)) {
 			return (Execution) metrics.get(name);
 		} else {
-			Execution execution = new Execution(defaultClock, defaultPcts);
+			Execution execution = new Execution(pcts);
 			return (Execution) register(name, execution);
 		}
 	}
@@ -87,10 +91,6 @@ public class MetricRegistry {
 			}
 		}
 		return Collections.unmodifiableSortedMap(result);
-	}
-
-	public void setDefaultClock(Clock clock) {
-		this.defaultClock = clock;
 	}
 
 	public void setDefaultPcts(Double[] defaultPcts) {

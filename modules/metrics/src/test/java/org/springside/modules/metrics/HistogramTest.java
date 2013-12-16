@@ -8,7 +8,7 @@ public class HistogramTest {
 
 	@Test
 	public void normal() {
-		Histogram histogram = new Histogram(new Double[] { 90d, 95d });
+		Histogram histogram = new Histogram(90d, 95d);
 
 		for (int i = 1; i <= 100; i++) {
 			histogram.update(i);
@@ -37,7 +37,7 @@ public class HistogramTest {
 
 	@Test
 	public void fewData() {
-		Histogram histogram = new Histogram(new Double[] { 90d, 95d });
+		Histogram histogram = new Histogram(90d, 95d);
 
 		histogram.update(1);
 		HistogramMetric metric = histogram.getMetric();
@@ -58,7 +58,7 @@ public class HistogramTest {
 
 	@Test
 	public void emptyMesures() {
-		Histogram histogram = new Histogram(new Double[] { 90d, 95d });
+		Histogram histogram = new Histogram(90d, 95d);
 
 		HistogramMetric metric = histogram.getMetric();
 
@@ -68,14 +68,9 @@ public class HistogramTest {
 		assertEquals(0, metric.pcts.get(90d), 0);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void checkArgument() {
-		Histogram histogram = new Histogram(null);
-	}
-
 	@Test()
 	public void emptyPcts() {
-		Histogram histogram = new Histogram(new Double[] {});
+		Histogram histogram = new Histogram();
 		for (int i = 1; i <= 3; i++) {
 			histogram.update(i);
 		}
@@ -83,5 +78,6 @@ public class HistogramTest {
 		HistogramMetric metric = histogram.getMetric();
 		assertEquals(3, metric.max);
 		assertTrue(metric.pcts.isEmpty());
+		assertNull(metric.pcts.get(90d));
 	}
 }

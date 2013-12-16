@@ -5,19 +5,14 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springside.modules.metrics.utils.Clock;
 
 public class Counter {
+	public static Clock clock = Clock.DEFAULT;
 
 	private AtomicLong counter = new AtomicLong(0);
 
-	private Clock clock;
 	private long lastReportCount = 0L;
 	private long lastReportTime;
 
-	public Counter(Clock clock) {
-		if (clock == null) {
-			throw new IllegalArgumentException("Clock can't be null");
-		}
-
-		this.clock = clock;
+	public Counter() {
 		lastReportTime = clock.getCurrentTime();
 	}
 
