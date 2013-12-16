@@ -1,5 +1,6 @@
 package org.springside.modules.persistence;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -51,6 +52,16 @@ public class DynamicSpecifications {
 							break;
 						case LTE:
 							predicates.add(builder.lessThanOrEqualTo(expression, (Comparable) filter.value));
+							break;
+						case IN:
+							if (filter.value instanceof String[]) {
+								predicates.add(builder.in(expression).value(Arrays.asList(((String[]) filter.value))));
+							} else {
+								// only one element, convert to equal expression
+								predicates.add(builder.equal(expression, filter.value));
+							}
+							break;
+						default:
 							break;
 						}
 					}

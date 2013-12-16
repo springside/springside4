@@ -14,9 +14,12 @@ public class SearchFilterTest {
 	@Test
 	public void normal() {
 		// linkedHashMap保证顺序
+
 		Map<String, Object> params = Maps.newLinkedHashMap();
+		String[] inValue = new String[] { "1", "2" };
 		params.put("EQ_name", "foo");
 		params.put("LT_age", "1");
+		params.put("IN_prop", inValue);
 
 		Map<String, SearchFilter> filters = SearchFilter.parse(params);
 
@@ -29,6 +32,11 @@ public class SearchFilterTest {
 		assertEquals(Operator.LT, ageFilter.operator);
 		assertEquals("age", ageFilter.fieldName);
 		assertEquals("1", ageFilter.value);
+
+		SearchFilter inFilter = filters.get("IN_prop");
+		assertEquals(Operator.IN, inFilter.operator);
+		assertEquals("prop", inFilter.fieldName);
+		assertArrayEquals(inValue, (String[]) inFilter.value);
 	}
 
 	@Test

@@ -8,6 +8,7 @@ package org.springside.modules.web;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringTokenizer;
@@ -18,8 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.Collections3;
 import org.springside.modules.utils.Encodes;
 
+import com.google.common.collect.Lists;
 import com.google.common.net.HttpHeaders;
 
 /**
@@ -140,13 +143,11 @@ public class Servlets {
 		Validate.notNull(request, "Request must not be null");
 		Enumeration paramNames = request.getParameterNames();
 		Map<String, Object> params = new TreeMap<String, Object>();
-		if (prefix == null) {
-			prefix = "";
-		}
+		String prefix_ = prefix == null ? "" : prefix;
 		while ((paramNames != null) && paramNames.hasMoreElements()) {
 			String paramName = (String) paramNames.nextElement();
-			if ("".equals(prefix) || paramName.startsWith(prefix)) {
-				String unprefixed = paramName.substring(prefix.length());
+			if ("".equals(prefix_) || paramName.startsWith(prefix_)) {
+				String unprefixed = paramName.substring(prefix_.length());
 				String[] values = request.getParameterValues(paramName);
 				if ((values == null) || (values.length == 0)) {
 					// Do nothing, no values found at all.
@@ -165,25 +166,32 @@ public class Servlets {
 	 * 
 	 * @see #getParametersStartingWith
 	 */
-	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
+	public static String encodeParameterStringWithPrefix(final Map<String, Object> params, final String prefix) {
 		if ((params == null) || (params.size() == 0)) {
 			return "";
 		}
 
-		if (prefix == null) {
-			prefix = "";
-		}
-
-		StringBuilder queryStringBuilder = new StringBuilder();
+		String prefix_ = prefix == null ? "" : prefix;
+		List<String> list = Lists.newArrayList();
 		Iterator<Entry<String, Object>> it = params.entrySet().iterator();
 		while (it.hasNext()) {
 			Entry<String, Object> entry = it.next();
-			queryStringBuilder.append(prefix).append(entry.getKey()).append('=').append(entry.getValue());
-			if (it.hasNext()) {
-				queryStringBuilder.append('&');
+			Object values = entry.getValue();
+			if (values instanceof String[]) {
+				for (String v : (String[]) values) {
+					list.add(String.format("%s%s=%s", prefix_, entry.getKey(), v));
+				}
+			}
+			// else if (values instanceof String) {
+			// list.add(String.format("%s%s=%s", prefix_, entry.getKey(), values));
+			// }
+			else {
+				// ok, no matter what type it is, just return the 'string' value of it.
+				// indeed, web transfers string value only. But test-case has other type.
+				list.add(String.format("%s%s=%s", prefix_, entry.getKey(), values.toString()));
 			}
 		}
-		return queryStringBuilder.toString();
+		return Collections3.convertToString(list, "&");
 	}
 
 	/**
