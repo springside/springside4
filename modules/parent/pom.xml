@@ -905,16 +905,16 @@
 									<requireJavaVersion>
 										<version>1.6</version>
 									</requireJavaVersion>
-									<requireUpperBoundDeps />
 									<bannedDependencies>
 										<searchTransitive>true</searchTransitive>
 										<excludes>
 											<exclude>commons-logging</exclude>
 											<exclude>aspectj:aspectj*</exclude>
-											<exclude>org.springframework:*:2.*</exclude>
-											<exclude>org.springframework:*:3.0.*</exclude>
-											<exclude>org.springframework:*:3.1.*</exclude>
+											<exclude>org.springframework</exclude>
 										</excludes>
+										<includes>
+											<include>org.springframework:*:3.2.*</include>
+										</includes>
 									</bannedDependencies>
 								</rules>
 								<fail>true</fail>
