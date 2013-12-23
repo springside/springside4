@@ -11,7 +11,7 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.1-SNAPSHOT</springside.version>
-		<spring.version>3.2.5.RELEASE</spring.version>
+		<spring.version>3.2.6.RELEASE</spring.version>
 		<hibernate.version>4.2.8.Final</hibernate.version>
 		<mybatis.version>3.2.3</mybatis.version>
 		<spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
@@ -38,7 +38,7 @@
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.3.1</httpclient.version>
 		<freemarker.version>2.3.20</freemarker.version>
-		<aspectj.version>1.7.4</aspectj.version>
+		<aspectj.version>1.7.3</aspectj.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.2</powermock.version>
