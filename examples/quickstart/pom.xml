@@ -11,7 +11,7 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.1.1-SNAPSHOT</springside.version>
-		<spring.version>3.2.5.RELEASE</spring.version>
+		<spring.version>3.2.6.RELEASE</spring.version>
 		<hibernate.version>4.2.8.Final</hibernate.version>
 		<spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.47</tomcat-jdbc.version>
@@ -84,12 +84,12 @@
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjrt</artifactId>
-			<version>1.7.4</version>
+			<version>1.7.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.4</version>
+			<version>1.7.3</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- Spring AOP end -->	
