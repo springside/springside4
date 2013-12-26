@@ -22,10 +22,10 @@ public class Execution {
 		counter.inc();
 	}
 
-	public ExecutionMetric getMetric() {
+	public ExecutionMetric calculateMetric() {
 		ExecutionMetric metric = new ExecutionMetric();
-		metric.counter = counter.getMetric();
-		metric.histogram = histogram.getMetric();
+		metric.counter = counter.calculateMetric();
+		metric.histogram = histogram.calculateMetric();
 		return metric;
 	}
 

@@ -39,7 +39,7 @@ public class Counter {
 		return currentValue;
 	}
 
-	public CounterMetric getMetric() {
+	public CounterMetric calculateMetric() {
 		long currentCount = counter.get();
 		long currentTime = clock.getCurrentTime();
 

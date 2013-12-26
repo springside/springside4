@@ -72,7 +72,7 @@ public class MetricRegistryTest {
 			histogram.update(i);
 		}
 
-		HistogramMetric metric = histogram.getMetric();
+		HistogramMetric metric = histogram.calculateMetric();
 
 		assertEquals(60, metric.pcts.get(60d), 0);
 		assertEquals(70, metric.pcts.get(70d), 0);
@@ -84,7 +84,7 @@ public class MetricRegistryTest {
 			histogramWithDefaultPcts.update(i);
 		}
 
-		metric = histogramWithDefaultPcts.getMetric();
+		metric = histogramWithDefaultPcts.calculateMetric();
 		assertEquals(90, metric.pcts.get(90d), 0);
 
 		// new default 50
@@ -96,7 +96,7 @@ public class MetricRegistryTest {
 			histogramWithNewDefaultPcts.update(i);
 		}
 
-		metric = histogramWithNewDefaultPcts.getMetric();
+		metric = histogramWithNewDefaultPcts.calculateMetric();
 
 		assertEquals(50, metric.pcts.get(50d), 0);
 		assertNull(metric.pcts.get(90d));

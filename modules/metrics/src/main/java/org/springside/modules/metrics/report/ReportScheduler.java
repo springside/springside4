@@ -46,17 +46,17 @@ public class ReportScheduler {
 
 		Map<String, CounterMetric> counterMetricMap = new LinkedHashMap<String, CounterMetric>();
 		for (Entry<String, Counter> entry : counterMap.entrySet()) {
-			counterMetricMap.put(entry.getKey(), entry.getValue().getMetric());
+			counterMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
 		Map<String, HistogramMetric> histogramMetricMap = new LinkedHashMap<String, HistogramMetric>();
 		for (Entry<String, Histogram> entry : histogramMap.entrySet()) {
-			histogramMetricMap.put(entry.getKey(), entry.getValue().getMetric());
+			histogramMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
 		Map<String, ExecutionMetric> executionMetricMap = new LinkedHashMap<String, ExecutionMetric>();
 		for (Entry<String, Execution> entry : executionMap.entrySet()) {
-			executionMetricMap.put(entry.getKey(), entry.getValue().getMetric());
+			executionMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
 		for (Reporter reporter : reporters) {

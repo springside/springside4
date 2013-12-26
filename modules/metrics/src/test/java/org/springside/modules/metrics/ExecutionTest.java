@@ -23,7 +23,7 @@ public class ExecutionTest {
 		clock.increaseTime(300);
 		timer2.stop();
 
-		ExecutionMetric metric = execution.getMetric();
+		ExecutionMetric metric = execution.calculateMetric();
 
 		assertEquals(2, metric.counter.count);
 		assertEquals(4, metric.counter.lastRate, 0);

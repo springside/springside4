@@ -14,7 +14,7 @@ public class HistogramTest {
 			histogram.update(i);
 		}
 
-		HistogramMetric metric = histogram.getMetric();
+		HistogramMetric metric = histogram.calculateMetric();
 
 		assertEquals(1, metric.min);
 		assertEquals(100, metric.max);
@@ -26,7 +26,7 @@ public class HistogramTest {
 			histogram.update(i * 2);
 		}
 
-		metric = histogram.getMetric();
+		metric = histogram.calculateMetric();
 
 		assertEquals(2, metric.min);
 		assertEquals(200, metric.max);
@@ -40,14 +40,14 @@ public class HistogramTest {
 		Histogram histogram = new Histogram(90d, 95d);
 
 		histogram.update(1);
-		HistogramMetric metric = histogram.getMetric();
+		HistogramMetric metric = histogram.calculateMetric();
 		assertEquals(1, metric.pcts.get(90d), 0);
 		assertEquals(1, metric.pcts.get(95d), 0);
 
 		for (int i = 1; i <= 3; i++) {
 			histogram.update(i);
 		}
-		metric = histogram.getMetric();
+		metric = histogram.calculateMetric();
 
 		assertEquals(1, metric.min);
 		assertEquals(3, metric.max);
@@ -60,7 +60,7 @@ public class HistogramTest {
 	public void emptyMesures() {
 		Histogram histogram = new Histogram(90d, 95d);
 
-		HistogramMetric metric = histogram.getMetric();
+		HistogramMetric metric = histogram.calculateMetric();
 
 		assertEquals(0, metric.min);
 		assertEquals(0, metric.max);
@@ -75,7 +75,7 @@ public class HistogramTest {
 			histogram.update(i);
 		}
 
-		HistogramMetric metric = histogram.getMetric();
+		HistogramMetric metric = histogram.calculateMetric();
 		assertEquals(3, metric.max);
 		assertTrue(metric.pcts.isEmpty());
 		assertNull(metric.pcts.get(90d));

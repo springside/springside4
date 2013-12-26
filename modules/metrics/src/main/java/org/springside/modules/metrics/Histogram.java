@@ -21,7 +21,7 @@ public class Histogram {
 		}
 	}
 
-	public HistogramMetric getMetric() {
+	public HistogramMetric calculateMetric() {
 		LinkedList<Long> snapshotList = null;
 
 		synchronized (lock) {

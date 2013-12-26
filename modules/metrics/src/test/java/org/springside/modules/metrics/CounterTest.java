@@ -24,13 +24,13 @@ public class CounterTest {
 		counter.inc(30);
 		clock.increaseTime(1000);
 
-		CounterMetric metric = counter.getMetric();
+		CounterMetric metric = counter.calculateMetric();
 		assertEquals(60, metric.count);
 		assertEquals(60d, metric.lastRate, 0);
 
 		counter.inc(20);
 		clock.increaseTime(1000);
-		metric = counter.getMetric();
+		metric = counter.calculateMetric();
 
 		assertEquals(80, metric.count);
 		assertEquals(20d, metric.lastRate, 0);
@@ -47,7 +47,7 @@ public class CounterTest {
 		counter.dec();
 		clock.increaseTime(1000);
 
-		CounterMetric metric = counter.getMetric();
+		CounterMetric metric = counter.calculateMetric();
 		assertEquals(11, metric.count);
 	}
 
@@ -58,7 +58,7 @@ public class CounterTest {
 		counter.inc(20);
 		clock.increaseTime(1000);
 
-		CounterMetric metric = counter.getMetric();
+		CounterMetric metric = counter.calculateMetric();
 		assertEquals(20, metric.count);
 		assertEquals(20d, metric.lastRate, 0);
 
@@ -66,7 +66,7 @@ public class CounterTest {
 		counter.inc(30);
 		clock.increaseTime(1000);
 
-		metric = counter.getMetric();
+		metric = counter.calculateMetric();
 		assertEquals(30, metric.count);
 		assertEquals(30d, metric.lastRate, 0);
 	}
@@ -76,7 +76,7 @@ public class CounterTest {
 		Counter counter = new Counter();
 		clock.increaseTime(1000);
 
-		CounterMetric metric = counter.getMetric();
+		CounterMetric metric = counter.calculateMetric();
 		assertEquals(0, metric.count);
 		assertEquals(0d, metric.lastRate, 0);
 	}
