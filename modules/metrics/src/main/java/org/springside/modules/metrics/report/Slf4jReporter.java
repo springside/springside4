@@ -38,7 +38,7 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
-		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}", name, counter.count, counter.lastRate);
+		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}", name, counter.totalCount, counter.lastRate);
 	}
 
 	private void logHistogram(String name, HistogramMetric histogram) {
@@ -48,8 +48,8 @@ public class Slf4jReporter implements Reporter {
 
 	private void logExecution(String name, ExecutionMetric execution) {
 		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, min={}ms, max={}ms, mean={}ms", name,
-				execution.counter.count, execution.counter.lastRate, execution.histogram.min, execution.histogram.max,
-				execution.histogram.mean, buildPcts(execution.histogram.pcts));
+				execution.counterMetric.totalCount, execution.counterMetric.lastRate, execution.histogramMetric.min, execution.histogramMetric.max,
+				execution.histogramMetric.mean, buildPcts(execution.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {

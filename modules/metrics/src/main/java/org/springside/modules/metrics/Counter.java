@@ -9,7 +9,7 @@ public class Counter {
 
 	private AtomicLong counter = new AtomicLong(0);
 
-	private long lastReportCount = 0L;
+	private long totalCount = 0L;
 	private long lastReportTime;
 
 	public Counter() {
@@ -32,32 +32,23 @@ public class Counter {
 		counter.addAndGet(-n);
 	}
 
-	public long reset() {
-		long currentValue = counter.getAndSet(0);
-		lastReportCount = 0L;
-		lastReportTime = clock.getCurrentTime();
-		return currentValue;
-	}
-
 	public CounterMetric calculateMetric() {
-		long currentCount = counter.get();
+
+		long currentCount = counter.getAndSet(0);
 		long currentTime = clock.getCurrentTime();
 
 		CounterMetric metric = new CounterMetric();
-		metric.count = currentCount;
-		if ((currentTime - lastReportTime) > 0) {
-			metric.lastRate = ((currentCount - lastReportCount) * 1000) / ((currentTime - lastReportTime));
+
+		totalCount += currentCount;
+		metric.lastCount = currentCount;
+		metric.totalCount = totalCount;
+
+		long timePass = currentTime - lastReportTime;
+		if (timePass > 0) {
+			metric.lastRate = (currentCount * 1000) / timePass;
 		}
 
-		lastReportCount = currentCount;
 		lastReportTime = currentTime;
-
 		return metric;
-	}
-
-	@Override
-	public String toString() {
-		return "Counter [counter=" + counter + ", lastReportCount=" + lastReportCount + ", lastReportTime="
-				+ lastReportTime + "]";
 	}
 }

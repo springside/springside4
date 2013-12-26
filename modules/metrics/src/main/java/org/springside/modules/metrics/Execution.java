@@ -24,8 +24,8 @@ public class Execution {
 
 	public ExecutionMetric calculateMetric() {
 		ExecutionMetric metric = new ExecutionMetric();
-		metric.counter = counter.calculateMetric();
-		metric.histogram = histogram.calculateMetric();
+		metric.counterMetric = counter.calculateMetric();
+		metric.histogramMetric = histogram.calculateMetric();
 		return metric;
 	}
 

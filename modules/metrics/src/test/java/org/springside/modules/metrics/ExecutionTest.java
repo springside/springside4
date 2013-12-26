@@ -25,11 +25,11 @@ public class ExecutionTest {
 
 		ExecutionMetric metric = execution.calculateMetric();
 
-		assertEquals(2, metric.counter.count);
-		assertEquals(4, metric.counter.lastRate, 0);
+		assertEquals(2, metric.counterMetric.totalCount);
+		assertEquals(4, metric.counterMetric.lastRate, 0);
 
-		assertEquals(200, metric.histogram.min);
-		assertEquals(250, metric.histogram.mean, 0);
-		assertEquals(300, metric.histogram.pcts.get(90d), 0);
+		assertEquals(200, metric.histogramMetric.min);
+		assertEquals(250, metric.histogramMetric.mean, 0);
+		assertEquals(300, metric.histogramMetric.pcts.get(90d), 0);
 	}
 }

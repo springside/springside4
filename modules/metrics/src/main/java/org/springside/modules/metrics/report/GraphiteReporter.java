@@ -65,7 +65,6 @@ public class GraphiteReporter implements Reporter {
 			}
 
 			flush();
-
 		} catch (IOException e) {
 			logger.warn("Unable to report to Graphite", e);
 		} finally {
@@ -78,7 +77,7 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	private void reportCounter(String name, CounterMetric counter, long timestamp) throws IOException {
-		send(MetricRegistry.name(prefix, name, "count"), format(counter.count), timestamp);
+		send(MetricRegistry.name(prefix, name, "count"), format(counter.lastCount), timestamp);
 	}
 
 	private void reportHistogram(String name, HistogramMetric histogram, long timestamp) throws IOException {
@@ -92,40 +91,15 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	private void reportExecution(String name, ExecutionMetric execution, long timestamp) throws IOException {
-		send(MetricRegistry.name(prefix, name, "count"), format(execution.counter.count), timestamp);
+		send(MetricRegistry.name(prefix, name, "count"), format(execution.counterMetric.lastCount), timestamp);
 
-		send(MetricRegistry.name(prefix, name, "min"), format(execution.histogram.min), timestamp);
-		send(MetricRegistry.name(prefix, name, "max"), format(execution.histogram.max), timestamp);
-		send(MetricRegistry.name(prefix, name, "mean"), format(execution.histogram.mean), timestamp);
-		for (Entry<Double, Long> pct : execution.histogram.pcts.entrySet()) {
+		send(MetricRegistry.name(prefix, name, "min"), format(execution.histogramMetric.min), timestamp);
+		send(MetricRegistry.name(prefix, name, "max"), format(execution.histogramMetric.max), timestamp);
+		send(MetricRegistry.name(prefix, name, "mean"), format(execution.histogramMetric.mean), timestamp);
+		for (Entry<Double, Long> pct : execution.histogramMetric.pcts.entrySet()) {
 			send(MetricRegistry.name(prefix, name, format(pct.getKey()).replace('.', '_')), format(pct.getValue()),
 					timestamp);
 		}
-	}
-
-	private String format(Object o) {
-		if (o instanceof Float) {
-			return format(((Float) o).doubleValue());
-		} else if (o instanceof Double) {
-			return format(((Double) o).doubleValue());
-		} else if (o instanceof Byte) {
-			return format(((Byte) o).longValue());
-		} else if (o instanceof Short) {
-			return format(((Short) o).longValue());
-		} else if (o instanceof Integer) {
-			return format(((Integer) o).longValue());
-		} else if (o instanceof Long) {
-			return format(((Long) o).longValue());
-		}
-		return null;
-	}
-
-	private String format(long n) {
-		return Long.toString(n);
-	}
-
-	private String format(double v) {
-		return String.format(Locale.US, "%2.2f", v);
 	}
 
 	private void connect() throws IllegalStateException, IOException {
@@ -137,14 +111,6 @@ public class GraphiteReporter implements Reporter {
 		this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream(), UTF_8));
 	}
 
-	/**
-	 * Sends the given measurement to the server.
-	 * 
-	 * @param name the name of the metric
-	 * @param value the value of the metric
-	 * @param timestamp the timestamp of the metric
-	 * @throws IOException if there was an error sending the metric
-	 */
 	private void send(String name, String value, long timestamp) throws IOException {
 		try {
 			writer.write(sanitize(name));
@@ -158,10 +124,6 @@ public class GraphiteReporter implements Reporter {
 		}
 	}
 
-	private String sanitize(String s) {
-		return WHITESPACE.matcher(s).replaceAll("-");
-	}
-
 	private void flush() throws IOException {
 		writer.flush();
 	}
@@ -172,5 +134,17 @@ public class GraphiteReporter implements Reporter {
 		}
 		this.socket = null;
 		this.writer = null;
+	}
+
+	private String format(long n) {
+		return Long.toString(n);
+	}
+
+	private String format(double v) {
+		return String.format(Locale.US, "%2.2f", v);
+	}
+
+	private String sanitize(String s) {
+		return WHITESPACE.matcher(s).replaceAll("-");
 	}
 }

@@ -59,7 +59,7 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printCounter(CounterMetric counter) {
-		output.printf("             count = %d%n", counter.count);
+		output.printf("             count = %d%n", counter.totalCount);
 		output.printf("         last rate = %2.2f/s%n", counter.lastRate);
 	}
 
@@ -73,12 +73,12 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printExecution(ExecutionMetric execution) {
-		output.printf("             count = %d%n", execution.counter.count);
-		output.printf("         last rate = %2.2f/s%n", execution.counter.lastRate);
-		output.printf("               min = %d ms%n", execution.histogram.min);
-		output.printf("               max = %d ms%n", execution.histogram.max);
-		output.printf("              mean = %2.2f ms%n", execution.histogram.mean);
-		for (Entry<Double, Long> pct : execution.histogram.pcts.entrySet()) {
+		output.printf("             count = %d%n", execution.counterMetric.totalCount);
+		output.printf("         last rate = %2.2f/s%n", execution.counterMetric.lastRate);
+		output.printf("               min = %d ms%n", execution.histogramMetric.min);
+		output.printf("               max = %d ms%n", execution.histogramMetric.max);
+		output.printf("              mean = %2.2f ms%n", execution.histogramMetric.mean);
+		for (Entry<Double, Long> pct : execution.histogramMetric.pcts.entrySet()) {
 			output.printf("           %2.2f%% <= %d ms%n", pct.getKey(), pct.getValue());
 		}
 	}
