@@ -117,7 +117,7 @@ public class GraphiteReporter implements Reporter {
 			writer.write(' ');
 			writer.write(sanitize(value));
 			writer.write(' ');
-			writer.write(Long.toString(timestamp));
+			writer.write(format(timestamp));
 			writer.write('\n');
 		} catch (IOException e) {
 			throw e;

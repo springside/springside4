@@ -32,23 +32,22 @@ public class Counter {
 		counter.addAndGet(-n);
 	}
 
-	public CounterMetric calculateMetric() {
+    public CounterMetric calculateMetric() {
+        long lastCount = counter.getAndSet(0);
+        long currentTime = clock.getCurrentTime();
 
-		long currentCount = counter.getAndSet(0);
-		long currentTime = clock.getCurrentTime();
+        CounterMetric metric = new CounterMetric();
 
-		CounterMetric metric = new CounterMetric();
+        totalCount += lastCount;
+        metric.lastCount = lastCount;
+        metric.totalCount = totalCount;
 
-		totalCount += currentCount;
-		metric.lastCount = currentCount;
-		metric.totalCount = totalCount;
+        long elapsed = currentTime - lastReportTime;
+        if (elapsed > 0) {
+            metric.lastRate = (lastCount * 1000) / elapsed;
+        }
 
-		long timePass = currentTime - lastReportTime;
-		if (timePass > 0) {
-			metric.lastRate = (currentCount * 1000) / timePass;
-		}
-
-		lastReportTime = currentTime;
-		return metric;
-	}
+        lastReportTime = currentTime;
+        return metric;
+    }
 }
