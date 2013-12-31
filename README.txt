@@ -10,8 +10,3 @@
 -------------------------------
 Offical Site: http://www.springside.org.cn
 Document: https://github.com/springside/springside4/wiki
-
-branch1
-zemi.peng updated fetch  pull
-
-remove
