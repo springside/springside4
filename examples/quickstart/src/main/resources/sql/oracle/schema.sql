@@ -16,7 +16,7 @@ create table ss_user (
 	password varchar2(255) not null,
 	salt varchar2(64) not null,
 	roles varchar2(255) not null,
-	regiser_date date not null,
+	register_date date not null,
 	primary key (id)
 );
 
