@@ -1,1 +1,2 @@
-/logstash-*-flatjar.jar
+logstash-*-flatjar.jar
+shipper.conf
