@@ -31,7 +31,7 @@
 
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
+		<java.version>1.6</java.version>
 
 		<!-- 项目属性 -->
 		<jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
@@ -414,8 +414,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
