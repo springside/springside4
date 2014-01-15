@@ -308,14 +308,14 @@ public class Selenium2 {
 	 * 等待Element的内容为text, 使用默认timeout时间.
 	 */
 	public void waitForTextPresent(By by, String text) {
-		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), DEFAULT_WAIT_TIME);
+		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), DEFAULT_WAIT_TIME);
 	}
 
 	/**
 	 * 等待Element的内容为text, timeout单位为秒.
 	 */
 	public void waitForTextPresent(By by, String text, int timeout) {
-		waitForCondition(ExpectedConditions.textToBePresentInElement(by, text), timeout);
+		waitForCondition(ExpectedConditions.textToBePresentInElementLocated(by, text), timeout);
 	}
 
 	/**
