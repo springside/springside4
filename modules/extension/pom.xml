@@ -33,25 +33,25 @@
 			<optional>true</optional>
 		</dependency>
 
-        <!-- NOSQL -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
+		<!-- NOSQL -->
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- freemarker -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- UTILS -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -79,17 +79,17 @@
 			<groupId>org.springside</groupId>
 			<artifactId>springside-test</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-			
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -98,10 +98,17 @@
 			<groupId>com.thimbleware.jmemcached</groupId>
 			<artifactId>jmemcached-core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>com.lordofthejars</groupId>
+			<artifactId>nosqlunit-redis</artifactId>
+			<version>0.7.9</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -121,12 +128,12 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- enforcer, 规则统一定义在parent -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-			</plugin>			
+			</plugin>
 		</plugins>
 	</build>
 </project>

@@ -103,7 +103,7 @@ public class JedisTemplate {
 	/**
 	 * 删除key, 如果key存在返回true, 否则返回false。
 	 */
-	public boolean del(final String key) {
+	public boolean del(final String... key) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
