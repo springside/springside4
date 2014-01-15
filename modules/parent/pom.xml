@@ -42,7 +42,7 @@
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.2</powermock.version>
-		<selenium.version>2.38.0</selenium.version>
+		<selenium.version>2.39.0</selenium.version>
 		<jetty.version>7.6.14.v20131031</jetty.version>
 		<h2.version>1.3.174</h2.version>
 
@@ -55,30 +55,28 @@
 		<maven>3.0.0</maven>
 	</prerequisites>
 
-	<!-- 设定除中央仓�?repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查�?如有Nexus私服, 取消注释并指向正确的服务器地�?
+	<!-- 设定除中央仓库 (repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查询，如有Nexus私服, 取消注释并指向正确的服务器地址 
 	<repositories>
 		<repository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
+			<url>http://localhost:8081/nexus/content/groups/public</url>
 		</repository>
-	</repositories>
-	-->
-		
-	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地�? 
-	<pluginRepositories> 
-		<pluginRepository> 
+	</repositories>-->
+
+	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址
+	<pluginRepositories>
+		<pluginRepository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
+			<url>http://localhost:8081/nexus/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
-	</pluginRepositories>
-	-->
+	</pluginRepositories> -->
 
-	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId �?artifactId 即可 -->
+	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 与  artifactId 即可 -->
 	<dependencyManagement>
 		<dependencies>
 			<!-- SPRINGSIDE MODULES begin -->
@@ -86,11 +84,13 @@
 				<groupId>org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
+				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
+				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springside</groupId>
@@ -99,7 +99,7 @@
 			</dependency>
 			<!-- SPRINGSIDE MODULES end -->
 
-			<!-- SPRING basic begin(�?��不需要显式定�? -->
+			<!-- SPRING basic begin(不需要显式定义) -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
@@ -417,9 +417,9 @@
 				</exclusions>
 			</dependency>
 			<!-- hystrix end -->
-			
+
 			<!-- Monitor begin -->
-			<!-- javasimon -->	
+			<!-- javasimon -->
 			<dependency>
 				<groupId>org.javasimon</groupId>
 				<artifactId>javasimon-spring</artifactId>
@@ -475,7 +475,7 @@
 				</exclusions>
 			</dependency>
 
-			<!-- 重新定义Java XPath Engine到最新版，避免旧版那些不必要的依�?-->
+			<!-- 重新定义Java XPath Engine到最新版，避免旧版那些不必要的依赖 -->
 			<dependency>
 				<groupId>jaxen</groupId>
 				<artifactId>jaxen</artifactId>
@@ -673,8 +673,16 @@
 			<!-- springside -->
 			<dependency>
 				<groupId>org.springside</groupId>
-				<artifactId>springside-test</artifactId>
+				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
+				<classifier>tests</classifier>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-extension</artifactId>
+				<version>${springside.version}</version>
+				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
 
@@ -770,7 +778,7 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- 定义隐式依赖的版�?-->
+			<!-- 定义隐式依赖的版�? -->
 			<dependency>
 				<groupId>org.hamcrest</groupId>
 				<artifactId>hamcrest-core</artifactId>
@@ -836,7 +844,7 @@
 					<version>1.8</version>
 				</plugin>
 
-				<!-- cobertura 测试覆盖率统计插�?-->
+				<!-- cobertura 测试覆盖率统计插插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
@@ -886,7 +894,7 @@
 					<version>2.5.1</version>
 				</plugin>
 
-				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�?-->
+				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-enforcer-plugin</artifactId>
@@ -983,7 +991,7 @@
 			</build>
 		</profile>
 
-		<!-- 忽略�?��@Category(UnStable.class)的TestCase -->
+		<!-- 忽略@Category(UnStable.class)的TestCase -->
 		<profile>
 			<id>skip-unstable</id>
 			<build>

@@ -18,7 +18,6 @@
 			<groupId>org.springside</groupId>
 			<artifactId>springside-core</artifactId>
 		</dependency>
-
 		<!-- SPRING -->
 		<dependency>
 			<groupId>org.springframework</groupId>
@@ -76,13 +75,14 @@
 
 		<!-- TEST -->
 		<dependency>
-			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
-		</dependency>
-
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-core</artifactId>
+			<classifier>tests</classifier>
 		</dependency>
 
 		<dependency>
@@ -111,6 +111,13 @@
 			<version>0.7.9</version>
 			<scope>test</scope>
 		</dependency>
+
+		<!-- Mail -->
+		<dependency>
+			<groupId>com.icegreen</groupId>
+			<artifactId>greenmail</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -125,6 +132,26 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 打包测试用的jar包，classfier为tests -->
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>org/springside/modules/test/**/*.class</include>
+							</includes>
+							<excludes>
+								<exclude>org/springside/modules/test/**/*Test.class</exclude>
+							</excludes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

@@ -1,10 +1,9 @@
-package org.springside.modules.test.shiro;
+package org.springside.modules.test.security.shiro;
 
 import static org.junit.Assert.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.junit.Test;
-import org.springside.modules.test.security.shiro.ShiroTestUtils;
 
 public class ShiroTestUtilsTest {
 

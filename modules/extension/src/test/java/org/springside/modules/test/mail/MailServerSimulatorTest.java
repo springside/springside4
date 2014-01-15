@@ -9,7 +9,7 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 
 import com.icegreen.greenmail.util.GreenMail;
 
-@ContextConfiguration(locations = { "/applicationContext-test.xml" })
+@ContextConfiguration(locations = { "/applicationContext-mail.xml" })
 public class MailServerSimulatorTest extends SpringContextTestCase {
 
 	@Autowired

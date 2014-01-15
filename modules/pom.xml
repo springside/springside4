@@ -17,6 +17,5 @@
 		<module>core</module>
 		<module>extension</module>
 		<module>metrics</module>
-		<module>test</module>
 	</modules>
 </project>

@@ -39,6 +39,10 @@ public class ReportScheduler {
 		this.executor = Executors.newSingleThreadScheduledExecutor(new NamedThreadFactory(SCHEDULER_NAME));
 	}
 
+	public void addReporter(Reporter reporter) {
+		reporters.add(reporter);
+	}
+
 	public void report() {
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();

@@ -365,7 +365,16 @@
 
 		<dependency>
 			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
+			<artifactId>springside-core</artifactId>
+			<classifier>tests</classifier>
+			<!-- for xxxDemo class -->
+			<scope>compile</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-extension</artifactId>
+			<classifier>tests</classifier>
 			<!-- for xxxDemo class -->
 			<scope>compile</scope>
 		</dependency>

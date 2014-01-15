@@ -273,8 +273,9 @@
 		<!-- TEST begin -->
 		<dependency>
 			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
+			<artifactId>springside-core</artifactId>
 			<version>${springside.version}</version>
+			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 
