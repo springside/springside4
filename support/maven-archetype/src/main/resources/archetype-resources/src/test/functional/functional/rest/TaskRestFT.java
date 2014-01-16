@@ -14,7 +14,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import ${package}.data.TaskData;
 import ${package}.entity.Task;
@@ -95,7 +95,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		try {
 			restTemplate.getForObject(taskUri, Task.class);
 			fail("Get should fail while feth a deleted task");
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			assertEquals(HttpStatus.NOT_FOUND, e.getStatusCode());
 		}
 	}
@@ -108,7 +108,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		try {
 			restTemplate.postForLocation(resoureUrl, titleBlankTask);
 			fail("Create should fail while title is blank");
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());
@@ -120,7 +120,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		try {
 			restTemplate.put(resoureUrl + "/1", titleBlankTask);
 			fail("Update should fail while title is blank");
-		} catch (HttpClientErrorException e) {
+		} catch (HttpStatusCodeException e) {
 			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertEquals(1, messages.size());

@@ -20,7 +20,7 @@ import ${package}.repository.UserDao;
 import ${package}.service.ServiceException;
 import ${package}.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.test.security.shiro.ShiroTestUtils;
-import org.springside.modules.utils.DateProvider.ConfigurableDateProvider;
+import org.springside.modules.utils.Clock.MockClock;
 
 /**
  * AccountService的测试用例, 测试Service层的业务逻辑.
@@ -48,7 +48,7 @@ public class AccountServiceTest {
 	public void registerUser() {
 		User user = UserData.randomNewUser();
 		Date currentTime = new Date();
-		accountService.setDateProvider(new ConfigurableDateProvider(currentTime));
+		accountService.setClock(new MockClock(currentTime));
 
 		accountService.registerUser(user);
 
