@@ -1,9 +1,10 @@
 package org.springside.examples.quickstart.service.account;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -50,10 +51,10 @@ public class AccountServiceTest {
 		accountService.registerUser(user);
 
 		// 验证user的角色，注册日期和加密后的密码都被自动更新了。
-		assertEquals("user", user.getRoles());
-		assertEquals(currentTime, user.getRegisterDate());
-		assertNotNull(user.getPassword());
-		assertNotNull(user.getSalt());
+		assertThat(user.getRoles()).isEqualTo("user");
+		assertThat(user.getRegisterDate()).isEqualTo(currentTime);
+		assertThat(user.getPassword()).isNotNull();
+		assertThat(user.getSalt()).isNotNull();
 	}
 
 	@Test
@@ -61,13 +62,13 @@ public class AccountServiceTest {
 		// 如果明文密码不为空，加密密码会被更新.
 		User user = UserData.randomNewUser();
 		accountService.updateUser(user);
-		assertNotNull(user.getSalt());
+		assertThat(user.getSalt()).isNotNull();
 
 		// 如果明文密码为空，加密密码无变化。
 		User user2 = UserData.randomNewUser();
 		user2.setPlainPassword(null);
 		accountService.updateUser(user2);
-		assertNull(user2.getSalt());
+		assertThat(user2.getSalt()).isNull();
 	}
 
 	@Test
@@ -79,7 +80,7 @@ public class AccountServiceTest {
 		// 删除超级管理用户抛出异常, userDao没有被执行
 		try {
 			accountService.deleteUser(1L);
-			fail("expected ServicExcepton not be thrown");
+			Assert.fail("expected ServiceException not be thrown");
 		} catch (ServiceException e) {
 			// expected exception
 		}

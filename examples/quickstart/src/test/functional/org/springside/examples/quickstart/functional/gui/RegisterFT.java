@@ -1,6 +1,6 @@
 package org.springside.examples.quickstart.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -10,7 +10,7 @@ public class RegisterFT extends BaseSeleniumTestCase {
 
 	@Test
 	public void register() {
-		//注册用户
+		// 注册用户
 		s.open("/logout");
 		s.click(By.linkText("注册"));
 
@@ -21,17 +21,17 @@ public class RegisterFT extends BaseSeleniumTestCase {
 
 		s.click(By.id("submit_btn"));
 
-		//跳转到登录页
+		// 跳转到登录页
 		s.waitForTitleContains("登录页");
-		assertEquals("user2", s.getValue(By.name("username")));
+		assertThat(s.getValue(By.name("username"))).isEqualTo("user2");
 
 		s.type(By.name("password"), "user2");
 		s.click(By.id("submit_btn"));
 
-		//登陆成功
+		// 登陆成功
 		s.waitForTitleContains("任务管理");
 
-		//退出用户
+		// 退出用户
 		s.open("/logout");
 	}
 
@@ -40,7 +40,7 @@ public class RegisterFT extends BaseSeleniumTestCase {
 		s.open("/register");
 		s.click(By.id("submit_btn"));
 
-		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/span")));
+		assertThat(s.getText(By.xpath("//fieldset/div/div/span"))).isEqualTo("必选字段");
 	}
 
 }

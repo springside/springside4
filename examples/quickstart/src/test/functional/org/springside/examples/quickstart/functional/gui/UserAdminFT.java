@@ -1,6 +1,6 @@
 package org.springside.examples.quickstart.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -34,8 +34,8 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 	public void viewUserList() {
 		s.open("/admin/user");
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("admin", s.getTable(table, 0, 0));
-		assertEquals("user", s.getTable(table, 1, 0));
+		assertThat(s.getTable(table, 0, 0)).isEqualTo("admin");
+		assertThat(s.getTable(table, 1, 0)).isEqualTo("user");
 	}
 
 	@Test
@@ -46,14 +46,14 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 		s.type(By.id("confirmPassword"), "user2");
 		s.click(By.id("submit_btn"));
 
-		assertTrue("没有成功消息", s.isTextPresent("更新用户user成功"));
+		assertThat(s.isTextPresent("更新用户user成功")).describedAs("没有成功消息").isTrue();
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("Kevin", s.getTable(table, 1, 1));
+		assertThat(s.getTable(table, 1, 1)).isEqualTo("Kevin");
 	}
 
 	@Test
 	public void deleteUser() {
 		s.open("/admin/user/delete/2");
-		assertTrue("没有成功消息", s.isTextPresent("删除用户user成功"));
+		assertThat(s.isTextPresent("删除用户user成功")).describedAs("没有成功消息").isTrue();
 	}
 }
