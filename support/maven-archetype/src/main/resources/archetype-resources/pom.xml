@@ -536,8 +536,8 @@
 			<!-- resource插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resource-plugin</artifactId>
-				<version>2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
 			</plugin>
 			
 			<!-- install插件 -->

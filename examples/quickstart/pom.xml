@@ -11,17 +11,17 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
-		<spring.version>3.2.6.RELEASE</spring.version>
-		<hibernate.version>4.2.8.Final</hibernate.version>
+		<spring.version>4.0.0.RELEASE</spring.version>
+		<hibernate.version>4.3.0.Final</hibernate.version>
 		<spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>7.0.47</tomcat-jdbc.version>
+		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
 		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jackson.version>2.3.0</jackson.version>
+		<jackson.version>2.3.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
+		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<guava.version>15.0</guava.version>
 		<junit.version>4.11</junit.version>
 		<mockito.version>1.9.5</mockito.version>
@@ -189,7 +189,7 @@
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>1.8</version>
+			<version>1.9</version>
 		</dependency>
 		<!-- SECURITY end -->
 		
@@ -544,11 +544,11 @@
 				</configuration>
 			</plugin>
 
-			<!-- resource插件 -->
+			<!-- resources插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resource-plugin</artifactId>
-				<version>2.5</version>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
 			</plugin>
 			
 			<!-- install插件 -->
