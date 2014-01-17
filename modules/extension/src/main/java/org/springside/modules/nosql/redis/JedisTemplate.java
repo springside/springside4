@@ -103,7 +103,7 @@ public class JedisTemplate {
 	/**
 	 * 删除key, 如果key存在返回true, 否则返回false。
 	 */
-	public boolean del(final String... keys) {
+	public Boolean del(final String... keys) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -138,19 +138,19 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 如果key不存在, 返回0.
+	 * 如果key不存在, 返回null.
 	 */
 	public Long getAsLong(final String key) {
 		String result = get(key);
-		return result != null ? Long.valueOf(result) : 0;
+		return result != null ? Long.valueOf(result) : null;
 	}
 
 	/**
-	 * 如果key不存在, 返回0.
+	 * 如果key不存在, 返回null.
 	 */
 	public Integer getAsInt(final String key) {
 		String result = get(key);
-		return result != null ? Integer.valueOf(result) : 0;
+		return result != null ? Integer.valueOf(result) : null;
 	}
 
 	public void set(final String key, final String value) {
@@ -176,7 +176,7 @@ public class JedisTemplate {
 	/**
 	 * 如果key还不存在则进行设置，返回true，否则返回false.
 	 */
-	public boolean setnx(final String key, final String value) {
+	public Boolean setnx(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -186,7 +186,7 @@ public class JedisTemplate {
 		});
 	}
 
-	public long incr(final String key) {
+	public Long incr(final String key) {
 		return execute(new JedisAction<Long>() {
 			@Override
 			public Long action(Jedis jedis) {
@@ -195,7 +195,7 @@ public class JedisTemplate {
 		});
 	}
 
-	public long decr(final String key) {
+	public Long decr(final String key) {
 		return execute(new JedisAction<Long>() {
 			@Override
 			public Long action(Jedis jedis) {
@@ -227,7 +227,7 @@ public class JedisTemplate {
 	/**
 	 * 返回List长度, key不存在时返回0，key类型不是list时抛出异常.
 	 */
-	public long llen(final String key) {
+	public Long llen(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override
@@ -238,9 +238,9 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回0.
+	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回false.
 	 */
-	public boolean lremOne(final String key, final String value) {
+	public Boolean lremOne(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
 			public Boolean action(Jedis jedis) {
@@ -251,9 +251,9 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回0.
+	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回false.
 	 */
-	public boolean lremAll(final String key, final String value) {
+	public Boolean lremAll(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
 			public Boolean action(Jedis jedis) {
@@ -265,9 +265,9 @@ public class JedisTemplate {
 
 	// ////////////// 关于Sorted Set ///////////////////////////
 	/**
-	 * 加入Sorted set, 如果member在Set里已存在，只更新score并返回false,否则返回true.
+	 * 加入Sorted set, 如果member在Set里已存在, 只更新score并返回false, 否则返回true.
 	 */
-	public boolean zadd(final String key, final String member, final double score) {
+	public Boolean zadd(final String key, final String member, final double score) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -280,7 +280,7 @@ public class JedisTemplate {
 	/**
 	 * 删除sorted set中的元素，成功删除返回true，key或member不存在返回false。
 	 */
-	public boolean zrem(final String key, final String member) {
+	public Boolean zrem(final String key, final String member) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -291,9 +291,22 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 返回sorted set长度, key不存在时返回0，key类型不是sorted set时抛出异常.
+	 * 当key不存在时返回null.
 	 */
-	public long zcard(final String key) {
+	public Double zscore(final String key, final String member) {
+		return execute(new JedisAction<Double>() {
+
+			@Override
+			public Double action(Jedis jedis) {
+				return jedis.zscore(key, member);
+			}
+		});
+	}
+
+	/**
+	 * 返回sorted set长度, key不存在时返回0.
+	 */
+	public Long zcard(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override
