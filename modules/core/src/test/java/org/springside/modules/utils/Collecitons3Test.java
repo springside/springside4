@@ -1,6 +1,6 @@
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class Collecitons3Test {
 
 		List list = Lists.newArrayList(bean1, bean2);
 
-		assertEquals("1,2", Collections3.extractToString(list, "id", ","));
+		assertThat(Collections3.extractToString(list, "id", ",")).isEqualTo("1,2");
 	}
 
 	@Test
@@ -30,19 +30,18 @@ public class Collecitons3Test {
 		bean2.setId(2);
 
 		List list = Lists.newArrayList(bean1, bean2);
-		List<String> result = Collections3.extractToList(list, "id");
-		assertEquals(2, result.size());
-		assertEquals(1, result.get(0));
+		List result = Collections3.extractToList(list, "id");
+		assertThat(result).containsOnly(1, 2);
 	}
 
 	@Test
 	public void convertCollectionToString() {
 		List<String> list = Lists.newArrayList("aa", "bb");
 		String result = Collections3.convertToString(list, ",");
-		assertEquals("aa,bb", result);
+		assertThat(result).isEqualTo("aa,bb");
 
 		result = Collections3.convertToString(list, "<li>", "</li>");
-		assertEquals("<li>aa</li><li>bb</li>", result);
+		assertThat(result).isEqualTo("<li>aa</li><li>bb</li>");
 	}
 
 	public static class TestBean3 {

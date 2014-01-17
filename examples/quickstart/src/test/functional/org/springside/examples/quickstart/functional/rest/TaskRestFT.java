@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -110,7 +109,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertThat(messages).hasSize(1);
-			Assert.assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
+			assertThat(messages.get("title")).isIn("may not be empty", "不能为空");
 		}
 
 		// update
@@ -122,7 +121,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
 			assertThat(messages).hasSize(1);
-			Assert.assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
+			assertThat(messages.get("title")).isIn("may not be empty", "不能为空");
 		}
 	}
 }

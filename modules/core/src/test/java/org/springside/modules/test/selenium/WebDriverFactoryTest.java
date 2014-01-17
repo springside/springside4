@@ -1,6 +1,6 @@
 package org.springside.modules.test.selenium;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.net.URL;
 
@@ -37,20 +37,20 @@ public class WebDriverFactoryTest {
 
 		PowerMockito.whenNew(FirefoxDriver.class).withNoArguments().thenReturn(firefoxDriver);
 		WebDriver driver = WebDriverFactory.createDriver("firefox");
-		assertTrue(driver instanceof FirefoxDriver);
+		assertThat(driver).isInstanceOf(FirefoxDriver.class);
 
 		PowerMockito.whenNew(InternetExplorerDriver.class).withNoArguments().thenReturn(internetExplorerDriver);
 		driver = WebDriverFactory.createDriver("ie");
-		assertTrue(driver instanceof InternetExplorerDriver);
+		assertThat(driver).isInstanceOf(InternetExplorerDriver.class);
 
 		PowerMockito.whenNew(ChromeDriver.class).withNoArguments().thenReturn(chromerDriver);
 		driver = WebDriverFactory.createDriver("chrome");
-		assertTrue(driver instanceof ChromeDriver);
+		assertThat(driver).isInstanceOf(ChromeDriver.class);
 
 		PowerMockito.whenNew(RemoteWebDriver.class)
 				.withArguments(new URL("http://localhost:4444/wd/hub"), DesiredCapabilities.firefox())
 				.thenReturn(remoteWebDriver);
 		driver = WebDriverFactory.createDriver("remote:localhost:4444:firefox");
-		assertTrue(driver instanceof RemoteWebDriver);
+		assertThat(driver).isInstanceOf(RemoteWebDriver.class);
 	}
 }

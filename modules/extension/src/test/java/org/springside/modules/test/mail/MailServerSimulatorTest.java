@@ -1,6 +1,6 @@
 package org.springside.modules.test.mail;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,6 @@ public class MailServerSimulatorTest extends SpringContextTestCase {
 
 	@Test
 	public void greenMail() {
-		assertEquals(3025, greenMail.getSmtp().getPort());
+		assertThat(greenMail.getSmtp().getPort()).isEqualTo(3025);
 	}
 }

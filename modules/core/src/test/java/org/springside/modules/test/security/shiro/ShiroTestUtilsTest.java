@@ -1,6 +1,6 @@
 package org.springside.modules.test.security.shiro;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.apache.shiro.SecurityUtils;
 import org.junit.Test;
@@ -10,14 +10,14 @@ public class ShiroTestUtilsTest {
 	@Test
 	public void mockSubject() {
 		ShiroTestUtils.mockSubject("foo");
-		assertTrue(SecurityUtils.getSubject().isAuthenticated());
-		assertEquals("foo", SecurityUtils.getSubject().getPrincipal());
+		assertThat(SecurityUtils.getSubject().isAuthenticated()).isTrue();
+		assertThat(SecurityUtils.getSubject().getPrincipal()).isEqualTo("foo");
 
 		ShiroTestUtils.clearSubject();
 
 		ShiroTestUtils.mockSubject("bar");
-		assertTrue(SecurityUtils.getSubject().isAuthenticated());
-		assertEquals("bar", SecurityUtils.getSubject().getPrincipal());
+		assertThat(SecurityUtils.getSubject().isAuthenticated()).isTrue();
+		assertThat(SecurityUtils.getSubject().getPrincipal()).isEqualTo("bar");
 
 	}
 

@@ -1,6 +1,6 @@
 package org.springside.modules.test.jetty;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -12,8 +12,8 @@ public class JettyFactoryTest {
 	public void createServer() {
 		Server server = JettyFactory.createServerInSource(1978, "/test");
 
-		assertEquals(1978, server.getConnectors()[0].getPort());
-		assertEquals("/test", ((WebAppContext) server.getHandler()).getContextPath());
-		assertEquals("src/main/webapp", ((WebAppContext) server.getHandler()).getWar());
+		assertThat(server.getConnectors()[0].getPort()).isEqualTo(1978);
+		assertThat(((WebAppContext) server.getHandler()).getContextPath()).isEqualTo("/test");
+		assertThat(((WebAppContext) server.getHandler()).getWar()).isEqualTo("src/main/webapp");
 	}
 }

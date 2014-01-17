@@ -44,8 +44,7 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 
 		// bulk
 		Map<String, Object> bulkResult = client.getBulk(Lists.newArrayList(key, key2));
-		assertThat(bulkResult).hasSize(2);
-		assertThat(bulkResult).contains(entry(key, value), entry(key2, value2));
+		assertThat(bulkResult).containsOnly(entry(key, value), entry(key2, value2));
 
 		// delete
 		client.delete(key);

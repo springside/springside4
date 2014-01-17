@@ -11,5 +11,4 @@ public class IdentitiesTest {
 		System.out.println("randomLong:  " + Identities.randomLong());
 		System.out.println("randomBase62:" + Identities.randomBase62(7));
 	}
-
 }
