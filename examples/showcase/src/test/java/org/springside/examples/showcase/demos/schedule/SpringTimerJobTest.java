@@ -24,7 +24,7 @@ public class SpringTimerJobTest extends SpringTransactionalTestCase {
 	public static void initLogger() {
 		// 加载测试用logger appender
 		appender = new LogbackListAppender();
-		appender.addToLogger(UserCountScanner.class);
+		appender.addToLogger(UserCountScanner.class.getName() + ".spring timer job by xml");
 	}
 
 	@AfterClass
@@ -39,6 +39,6 @@ public class SpringTimerJobTest extends SpringTransactionalTestCase {
 
 		// 验证任务已执行
 		assertEquals(1, appender.getLogsCount());
-		assertEquals("There are 6 user in database, printed by spring timer job by xml.", appender.getFirstMessage());
+		assertEquals("There are 6 user in database.", appender.getFirstMessage());
 	}
 }

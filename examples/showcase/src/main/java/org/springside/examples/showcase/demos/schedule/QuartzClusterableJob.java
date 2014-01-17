@@ -20,7 +20,8 @@ import org.springside.examples.showcase.service.AccountService;
  */
 public class QuartzClusterableJob extends QuartzJobBean {
 
-	private static Logger logger = LoggerFactory.getLogger(QuartzClusterableJob.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(QuartzClusterableJob.class.getName() + ".quartz cluster job");
 
 	private ApplicationContext applicationContext;
 
@@ -42,6 +43,6 @@ public class QuartzClusterableJob extends QuartzJobBean {
 		long userCount = accountService.getUserCount();
 		String nodeName = (String) config.get("nodeName");
 
-		logger.info("There are {} user in database, printed by quartz cluster job on node {}.", userCount, nodeName);
+		logger.info("There are {} user in database, on node {}.", userCount, nodeName);
 	}
 }

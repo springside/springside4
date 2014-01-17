@@ -29,7 +29,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 	public static void initLogger() {
 		// 加载测试用logger appender
 		appender = new LogbackListAppender();
-		appender.addToLogger(QuartzClusterableJob.class);
+		appender.addToLogger(QuartzClusterableJob.class.getName() + ".quartz cluster job");
 	}
 
 	@AfterClass
@@ -45,7 +45,6 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 		// 验证任务已执行
 		assertEquals(1, appender.getLogsCount());
 
-		assertEquals("There are 6 user in database, printed by quartz cluster job on node default.",
-				appender.getFirstMessage());
+		assertEquals("There are 6 user in database, on node default.", appender.getFirstMessage());
 	}
 }
