@@ -50,7 +50,6 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
 		<!-- Wed end -->
 
 		<!-- UTILS begin -->
