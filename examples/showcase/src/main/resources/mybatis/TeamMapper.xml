@@ -19,7 +19,7 @@
 	</resultMap>
 
 	<!-- 获取部门详细信息, 输出用resultMap关联嵌套对象 -->
-	<select id="getWithDetail" parameterType="int" resultMap="teamDetailMap">
+	<select id="getWithDetail" parameterType="long" resultMap="teamDetailMap">
 		select t.id as team_id,
 		t.name as team_name,
 		m.id as master_id,
