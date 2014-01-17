@@ -554,32 +554,6 @@
 				</plugins>
 			</build>
 		</profile>
-		
-		<!-- 执行all test -->
-		<profile>
-			<id>all-test</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<argLine>-Xmx256M -XX:MaxPermSize=128m</argLine>
-							<includes>
-								<include>**/*FT.java</include>
-								<include>**/*Test.java</include>
-							</includes>
-							<!-- 支持taglib tld文件查找的必要设置 -->
-							<useSystemClassLoader>false</useSystemClassLoader>
-							<!-- 将由mvn命令行-Dselenium.driver传到surefire的JVM中 -->
-							<systemPropertyVariables>
-								<selenium.driver>${selenium.driver}</selenium.driver>
-							</systemPropertyVariables>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 
 		<!-- 刷新开发环境数据库 -->
 		<profile>
