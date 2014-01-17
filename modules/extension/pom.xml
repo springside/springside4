@@ -112,8 +112,6 @@
 		<dependency>
 			<groupId>com.lordofthejars</groupId>
 			<artifactId>nosqlunit-redis</artifactId>
-			<version>0.7.9</version>
-			<scope>test</scope>
 		</dependency>
 
 		<!-- Mail -->
