@@ -45,6 +45,12 @@
 			<artifactId>jsp-api</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+		
 		<!-- Wed end -->
 
 		<!-- UTILS begin -->
