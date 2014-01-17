@@ -103,12 +103,12 @@ public class JedisTemplate {
 	/**
 	 * 删除key, 如果key存在返回true, 否则返回false。
 	 */
-	public boolean del(final String... key) {
+	public boolean del(final String... keys) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
 			public Boolean action(Jedis jedis) {
-				return jedis.del(key) == 1 ? true : false;
+				return jedis.del(keys) == 1 ? true : false;
 			}
 		});
 	}
@@ -205,11 +205,11 @@ public class JedisTemplate {
 	}
 
 	// ////////////// 关于List ///////////////////////////
-	public void lpush(final String key, final String value) {
+	public void lpush(final String key, final String... values) {
 		execute(new JedisActionNoResult() {
 			@Override
 			public void action(Jedis jedis) {
-				jedis.lpush(key, value);
+				jedis.lpush(key, values);
 			}
 		});
 	}

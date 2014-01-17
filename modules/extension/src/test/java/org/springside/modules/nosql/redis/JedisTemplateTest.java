@@ -54,7 +54,7 @@ public class JedisTemplateTest {
 
 	@Test
 	public void listActions() {
-		String key = "test.string.key";
+		String key = "test.list.key";
 		String value = "123";
 		String value2 = "456";
 
