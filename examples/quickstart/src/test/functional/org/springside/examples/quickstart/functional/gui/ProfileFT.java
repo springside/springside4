@@ -16,6 +16,6 @@ public class ProfileFT extends BaseSeleniumTestCase {
 		s.open("/profile");
 		s.type(By.id("name"), "Kevin");
 		s.click(By.id("submit_btn"));
-		assertThat(s.isTextPresent("Kevin")).describedAs("没有成功消息").isTrue();
+		assertThat(s.isTextPresent("Kevin")).as("没有成功消息").isTrue();
 	}
 }

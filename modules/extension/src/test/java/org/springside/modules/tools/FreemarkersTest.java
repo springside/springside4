@@ -1,6 +1,6 @@
 package org.springside.modules.tools;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,7 +23,7 @@ public class FreemarkersTest {
 		Map<String, String> model = Maps.newHashMap();
 		model.put("userName", "calvin");
 		String result = FreeMarkers.renderString(TEMPLATE, model);
-		assertEquals("hello calvin", result);
+		assertThat(result).isEqualTo("hello calvin");
 	}
 
 	@Test
@@ -34,7 +34,7 @@ public class FreemarkersTest {
 
 		model.put("friends", friends);
 		String result = FreeMarkers.renderString("hello ${friends[0]}", model);
-		assertEquals("hello a", result);
+		assertThat(result).isEqualTo("hello a");
 	}
 
 	@Test(expected = RuntimeException.class)
@@ -51,6 +51,6 @@ public class FreemarkersTest {
 		Configuration cfg = FreeMarkers.buildConfiguration("classpath:/");
 		Template template = cfg.getTemplate("testTemplate.ftl");
 		String result = FreeMarkers.renderTemplate(template, model);
-		assertEquals("hello calvin", result);
+		assertThat(result).isEqualTo("hello calvin");
 	}
 }

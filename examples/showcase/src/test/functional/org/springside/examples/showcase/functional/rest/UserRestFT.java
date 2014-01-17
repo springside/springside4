@@ -72,7 +72,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	}
 
 	@After
-	public void destoryClient() {
+	public void destoryClient() throws Exception {
 		// 退出时关闭HttpClient4连接池中的连接
 		httpClientRequestFactory.destroy();
 	}
@@ -107,7 +107,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 演示使用ClientHttpRequestInterceptor设置header
+	 * 演示使用ClientHttpRequestInterceptor设置header, see #initRestTemplate()
 	 * 演示json格式数据.
 	 * 演示使用Apache Http client4.
 	 */

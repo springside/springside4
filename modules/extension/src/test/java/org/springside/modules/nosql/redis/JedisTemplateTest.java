@@ -1,6 +1,6 @@
 package org.springside.modules.nosql.redis;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -37,18 +37,18 @@ public class JedisTemplateTest {
 		String value = "123";
 
 		jedisTemplate.set(key, value);
-		assertEquals(jedisTemplate.get(key), value);
-		assertNull(jedisTemplate.get(notExistKey));
+		assertThat(jedisTemplate.get(key)).isEqualTo(value);
+		assertThat(jedisTemplate.get(notExistKey)).isNull();
 
-		assertTrue(jedisTemplate.del(key));
-		assertFalse(jedisTemplate.del(notExistKey));
-
-		jedisTemplate.set(key, value);
-		assertEquals((int) jedisTemplate.getAsInt(key), 123);
-		assertEquals((int) jedisTemplate.getAsInt(notExistKey), 0);
+		assertThat(jedisTemplate.del(key)).isTrue();
+		assertThat(jedisTemplate.del(notExistKey)).isFalse();
 
 		jedisTemplate.set(key, value);
-		assertEquals((long) jedisTemplate.getAsLong(key), 123L);
-		assertEquals((long) jedisTemplate.getAsLong(notExistKey), 0);
+		assertThat((int) jedisTemplate.getAsInt(key)).isEqualTo(123);
+		assertThat((int) jedisTemplate.getAsInt(notExistKey)).isZero();
+
+		jedisTemplate.set(key, value);
+		assertThat((long) jedisTemplate.getAsLong(key)).isEqualTo(123L);
+		assertThat((long) jedisTemplate.getAsLong(notExistKey)).isZero();
 	}
 }

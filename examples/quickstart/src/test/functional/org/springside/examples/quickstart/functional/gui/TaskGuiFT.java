@@ -62,7 +62,7 @@ public class TaskGuiFT extends BaseSeleniumTestCase {
 
 		// delete
 		s.click(By.linkText("删除"));
-		assertThat(s.isTextPresent("删除任务成功")).describedAs("没有成功消息").isTrue();
+		assertThat(s.isTextPresent("删除任务成功")).as("没有成功消息").isTrue();
 	}
 
 	@Test

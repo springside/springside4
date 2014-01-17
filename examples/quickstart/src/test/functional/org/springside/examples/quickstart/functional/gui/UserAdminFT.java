@@ -46,7 +46,7 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 		s.type(By.id("confirmPassword"), "user2");
 		s.click(By.id("submit_btn"));
 
-		assertThat(s.isTextPresent("更新用户user成功")).describedAs("没有成功消息").isTrue();
+		assertThat(s.isTextPresent("更新用户user成功")).as("没有成功消息").isTrue();
 		WebElement table = s.findElement(By.id("contentTable"));
 		assertThat(s.getTable(table, 1, 1)).isEqualTo("Kevin");
 	}
@@ -54,6 +54,6 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 	@Test
 	public void deleteUser() {
 		s.open("/admin/user/delete/2");
-		assertThat(s.isTextPresent("删除用户user成功")).describedAs("没有成功消息").isTrue();
+		assertThat(s.isTextPresent("删除用户user成功")).as("没有成功消息").isTrue();
 	}
 }

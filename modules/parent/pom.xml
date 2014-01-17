@@ -40,6 +40,7 @@
 		<freemarker.version>2.3.20</freemarker.version>
 		<aspectj.version>1.7.3</aspectj.version>
 		<junit.version>4.11</junit.version>
+		<assertj.version>1.5.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.3</powermock.version>
 		<selenium.version>2.39.0</selenium.version>
@@ -644,6 +645,15 @@
 				<version>${junit.version}</version>
 				<scope>test</scope>
 			</dependency>
+			
+			<!-- assertj -->
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+				<scope>test</scope>
+			</dependency>
+			
 			<!-- mockito -->
 			<dependency>
 				<groupId>org.mockito</groupId>
