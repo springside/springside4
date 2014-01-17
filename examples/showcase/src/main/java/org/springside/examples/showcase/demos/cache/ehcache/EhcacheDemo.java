@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.cache.ehcache;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -43,7 +43,7 @@ public class EhcacheDemo extends SpringContextTestCase {
 		put(key, value);
 		Object result = get(key);
 
-		assertEquals(value, result);
+		assertThat(result).isEqualTo(value);
 	}
 
 	public Object get(String key) {

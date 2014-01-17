@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.web;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -30,6 +30,6 @@ public class CacheControlHeaderFilterTest {
 		filter.init(config);
 		filter.doFilter(request, response, chain);
 
-		assertEquals("private, max-age=123", response.getHeader("Cache-Control"));
+		assertThat(response.getHeader("Cache-Control")).isEqualTo("private, max-age=123");
 	}
 }

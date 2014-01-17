@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.repository.jpa;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -35,7 +35,7 @@ public class JpaMappingTest extends SpringTransactionalTestCase {
 	public void allClassMapping() throws Exception {
 		Metamodel model = em.getEntityManagerFactory().getMetamodel();
 
-		assertTrue("No entity mapping found", model.getEntities().size() > 0);
+		assertThat(model.getEntities()).as("No entity mapping found").isNotEmpty();
 
 		for (EntityType entityType : model.getEntities()) {
 			String entityName = entityType.getName();

@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.functional.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -98,9 +98,9 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		try {
 			HttpEntity<UserDTO> response = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET,
 					requestEntity, UserDTO.class, 1L);
-			assertEquals("admin", response.getBody().getLoginName());
-			assertEquals("管理员", response.getBody().getName());
-			assertEquals(new Long(1), response.getBody().getTeamId());
+			assertThat(response.getBody().getLoginName()).isEqualTo("admin");
+			assertThat(response.getBody().getName()).isEqualTo("管理员");
+			assertThat(response.getBody().getTeamId()).isEqualTo(1);
 
 			// 直接取出XML串
 			HttpEntity<String> xml = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
@@ -120,9 +120,9 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	@Category(Smoke.class)
 	public void getUserAsJson() {
 		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
-		assertEquals("admin", user.getLoginName());
-		assertEquals("管理员", user.getName());
-		assertEquals(new Long(1), user.getTeamId());
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(user.getName()).isEqualTo("管理员");
+		assertThat(user.getTeamId()).isEqualTo(1);
 
 		try {
 			// 直接取出JSON串
@@ -148,7 +148,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 			jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
 			fail("Get should fail with error username/password");
 		} catch (HttpStatusCodeException e) {
-			assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 		}
 	}
 

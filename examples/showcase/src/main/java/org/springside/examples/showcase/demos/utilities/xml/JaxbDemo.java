@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.xml;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -70,15 +70,11 @@ public class JaxbDemo {
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
-		assertEquals(Long.valueOf(1L), user.getId());
-		assertEquals(2, user.getRoles().size());
-		assertEquals("admin", user.getRoles().get(0).getName());
-
-		assertEquals(2, user.getInterests().size());
-		assertEquals("movie", user.getInterests().get(0));
-
-		assertEquals(2, user.getHouses().size());
-		assertEquals("house1", user.getHouses().get("bj"));
+		assertThat(user.getId()).isEqualTo(1);
+		assertThat(user.getRoles()).hasSize(2);
+		assertThat(user.getRoles().get(0).getName()).isEqualTo("admin");
+		assertThat(user.getInterests()).hasSize(2).containsSequence("movie");
+		assertThat(user.getHouses()).hasSize(2).contains(entry("bj", "house1"));
 	}
 
 	/**
@@ -139,17 +135,17 @@ public class JaxbDemo {
 			fail(e.getMessage());
 		}
 		Element user = doc.getRootElement();
-		assertEquals("1", user.attribute("id").getValue());
+		assertThat(user.attribute("id").getValue()).isEqualTo("1");
 
 		Element adminRole = (Element) doc.selectSingleNode("//roles/role[@id=1]");
-		assertEquals(2, adminRole.getParent().elements().size());
-		assertEquals("admin", adminRole.attribute("name").getValue());
+		assertThat(adminRole.getParent().elements()).hasSize(2);
+		assertThat(adminRole.attribute("name").getValue()).isEqualTo("admin");
 
 		Element interests = (Element) doc.selectSingleNode("//interests");
-		assertEquals(2, interests.elements().size());
-		assertEquals("movie", ((Element) interests.elements().get(0)).getText());
+		assertThat(interests.elements()).hasSize(2);
+		assertThat(((Element) interests.elements().get(0)).getText()).isEqualTo("movie");
 
 		Element house1 = (Element) doc.selectSingleNode("//houses/house[@key='bj']");
-		assertEquals("house1", house1.getText());
+		assertThat(house1.getText()).isEqualTo("house1");
 	}
 }

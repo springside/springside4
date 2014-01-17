@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -48,8 +48,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 		Threads.sleep(4000);
 
 		// 验证任务已执行
-		assertEquals(1, appender.getLogsCount());
-
-		assertEquals("There are 6 user in database, on node default.", appender.getFirstMessage());
+		assertThat(appender.getLogsCount()).isEqualTo(1);
+		assertThat(appender.getFirstMessage()).isEqualTo("There are 6 user in database, on node default.");
 	}
 }

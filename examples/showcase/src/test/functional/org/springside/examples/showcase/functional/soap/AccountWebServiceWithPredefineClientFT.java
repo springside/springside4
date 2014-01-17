@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.functional.soap;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -51,7 +51,7 @@ public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCa
 	@Category(Smoke.class)
 	public void getUser() {
 		GetUserResult response = accountWebServiceClient.getUser(1L);
-		assertEquals("admin", response.getUser().getLoginName());
+		assertThat(response.getUser().getLoginName()).isEqualTo("admin");
 	}
 
 	/**
@@ -59,11 +59,10 @@ public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCa
 	 */
 	@Test
 	public void searchUser() {
-
 		SearchUserResult response = accountWebServiceClient.searchUser(null, null);
 
-		assertTrue(response.getUserList().size() >= 4);
-		assertEquals("管理员", response.getUserList().get(0).getName());
+		assertThat(response.getUserList().size() >= 4).isTrue();
+		assertThat(response.getUserList().get(0).getName()).isEqualTo("管理员");
 	}
 
 	/**
@@ -75,9 +74,9 @@ public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCa
 		UserDTO userDTO = BeanMapper.map(user, UserDTO.class);
 
 		IdResult response = accountWebServiceClient.createUser(userDTO);
-		assertNotNull(response.getId());
+		assertThat(response.getId()).isNotNull();
 		GetUserResult response2 = accountWebServiceClient.getUser(response.getId());
-		assertEquals(user.getLoginName(), response2.getUser().getLoginName());
+		assertThat(response2.getUser().getLoginName()).isEqualTo(user.getLoginName());
 	}
 
 	/**
@@ -88,14 +87,14 @@ public class AccountWebServiceWithPredefineClientFT extends BaseFunctionalTestCa
 		User user = UserData.randomUser();
 		UserDTO userDTO = BeanMapper.map(user, UserDTO.class);
 
-		//登录名为空
+		// 登录名为空
 		userDTO.setLoginName(null);
 		IdResult response = accountWebServiceClient.createUser(userDTO);
-		assertEquals(WSResult.PARAMETER_ERROR, response.getCode());
+		assertThat(response.getCode()).isEqualTo(WSResult.PARAMETER_ERROR);
 
-		//登录名重复
+		// 登录名重复
 		userDTO.setLoginName("user");
 		response = accountWebServiceClient.createUser(userDTO);
-		assertEquals(WSResult.PARAMETER_ERROR, response.getCode());
+		assertThat(response.getCode()).isEqualTo(WSResult.PARAMETER_ERROR);
 	}
 }

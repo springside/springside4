@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.collection;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Collection;
 
@@ -33,14 +33,14 @@ public class AdvancedMapDemo {
 
 		// 取出key=1的两个值
 		Collection<String> values = multimap.get(1);
-		assertEquals(2, values.size());
+		assertThat(values).hasSize(2);
 
 		// size是4不是3
-		assertEquals(4, multimap.size());
+		assertThat(multimap.size()).isEqualTo(4);
 
 		// 删除其中一个值
 		multimap.remove(1, "a");
-		assertEquals(1, multimap.get(1).size());
+		assertThat(multimap.get(1).size()).isEqualTo(1);
 
 	}
 
@@ -54,10 +54,10 @@ public class AdvancedMapDemo {
 
 		bimap.put(1, "a");
 		bimap.put(2, "b");
-		assertEquals(Integer.valueOf(2), inverseMap.get("b"));
+		assertThat(inverseMap.get("b")).isEqualTo(2);
 
 		inverseMap.put("c", 3);
-		assertEquals("c", bimap.get(3));
+		assertThat(bimap.get(3)).isEqualTo("c");
 	}
 
 	/*
@@ -71,7 +71,7 @@ public class AdvancedMapDemo {
 		table.put(2, "a", "2a");
 		table.put(2, "b", "2b");
 
-		assertEquals("2a", table.get(2, "a"));
+		assertThat(table.get(2, "a")).isEqualTo("2a");
 	}
 
 }

@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.jms;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -55,7 +55,8 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendQueue(user);
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo(
+				"UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user");
 	}
 
 	@Test
@@ -70,7 +71,8 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendTopic(user);
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo(
+				"UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user");
 	}
 
 	@Test
@@ -90,6 +92,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		});
 
 		Threads.sleep(1000);
-		assertTrue(appender.isEmpty());
+		assertThat(appender.isEmpty()).isTrue();
 	}
 }

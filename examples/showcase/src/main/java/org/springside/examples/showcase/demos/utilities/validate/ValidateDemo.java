@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.validate;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class ValidateDemo {
 			Validate.notNull(null);
 			Assert.fail();
 		} catch (NullPointerException e) {
-			assertEquals("The validated object is null", e.getMessage());
+			assertThat(e).hasMessage("The validated object is null");
 		}
 
 		// notBlank String
@@ -43,14 +43,14 @@ public class ValidateDemo {
 			String parameter = "abc";
 			// 可选择将输入参数赋值到新变量
 			String result = Validate.notBlank(parameter);
-			assertEquals("abc", result);
+			assertThat(result).isEqualTo("abc");
 
 			// 检验not null，用自定义出错信息.
 			Validate.notBlank("", "The name must not be blank");
 			Assert.fail();
 
 		} catch (IllegalArgumentException e) {
-			assertEquals("The name must not be blank", e.getMessage());
+			assertThat(e).hasMessage("The name must not be blank");
 		}
 
 		// notEmpty Collection
@@ -59,7 +59,7 @@ public class ValidateDemo {
 			Validate.notEmpty(parameter);
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
-			assertEquals("The validated collection is empty", e.getMessage());
+			assertThat(e).hasMessage("The validated collection is empty");
 		}
 
 		// is true
@@ -68,7 +68,7 @@ public class ValidateDemo {
 			Validate.isTrue(1 == 3, "Message %s", "foo");
 			Assert.fail();
 		} catch (IllegalArgumentException e) {
-			assertEquals("Message foo", e.getMessage());
+			assertThat(e).hasMessage("Message foo");
 		}
 	}
 }

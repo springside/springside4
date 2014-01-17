@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.functional.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -33,16 +33,17 @@ public class UserJaxRsFT extends BaseFunctionalTestCase {
 	@Test
 	public void getUser() {
 		UserDTO user = restTemplate.getForObject(resoureUrl + "/{id}.xml", UserDTO.class, 1L);
-		assertEquals("admin", user.getLoginName());
-		assertEquals("管理员", user.getName());
-		assertEquals(new Long(1), user.getTeamId());
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(user.getName()).isEqualTo("管理员");
+		assertThat(user.getTeamId()).isEqualTo(1);
+
 		try {
 			user = restTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
 		} catch (HttpStatusCodeException e) {
 			fail(e.getMessage());
 		}
-		assertEquals("admin", user.getLoginName());
-		assertEquals("管理员", user.getName());
-		assertEquals(new Long(1), user.getTeamId());
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(user.getName()).isEqualTo("管理员");
+		assertThat(user.getTeamId()).isEqualTo(1);
 	}
 }

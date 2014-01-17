@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.collection;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Map;
@@ -44,22 +44,22 @@ public class CollectionsDemo {
 		List<String> list2 = Lists.newArrayList("a", "b");
 
 		// nullsafe的判断是否为空
-		assertFalse(Collections3.isEmpty(list));
+		assertThat(Collections3.isEmpty(list)).isFalse();
 
 		// 获取最后一个
-		assertEquals("c", Collections3.getLast(list));
+		assertThat(Collections3.getLast(list)).isEqualTo("c");
 
 		// list+list2的新List
 		List result = Collections3.union(list, list2);
-		assertEquals("[a, b, c, a, b]", result.toString());
+		assertThat(result).containsSequence("a", "b", "c", "a", "b");
 
 		// list-list2的新List
 		result = Collections3.subtract(list, list2);
-		assertEquals("[c]", result.toString());
+		assertThat(result).containsOnly("c");
 
 		// list与list2的交集的新List
 		result = Collections3.intersection(list, list2);
-		assertEquals("[a, b]", result.toString());
+		assertThat(result).containsOnly("a", "b");
 
 	}
 }

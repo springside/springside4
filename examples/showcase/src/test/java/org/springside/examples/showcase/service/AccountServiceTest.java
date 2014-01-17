@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.examples.showcase.service;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
