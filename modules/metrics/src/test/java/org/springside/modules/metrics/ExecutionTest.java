@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.springside.modules.metrics.Execution.ExecutionTimer;
@@ -30,11 +30,11 @@ public class ExecutionTest {
 
 		ExecutionMetric metric = execution.calculateMetric();
 
-		assertEquals(2, metric.counterMetric.totalCount);
-		assertEquals(4, metric.counterMetric.lastRate, 0);
+		assertThat(metric.counterMetric.totalCount).isEqualTo(2);
+		assertThat(metric.counterMetric.lastRate).isEqualTo(4);
 
-		assertEquals(200, metric.histogramMetric.min);
-		assertEquals(250, metric.histogramMetric.mean, 0);
-		assertEquals(300, metric.histogramMetric.pcts.get(90d), 0);
+		assertThat(metric.histogramMetric.min).isEqualTo(200);
+		assertThat(metric.histogramMetric.mean).isEqualTo(250);
+		assertThat(metric.histogramMetric.pcts.get(90d)).isEqualTo(300);
 	}
 }

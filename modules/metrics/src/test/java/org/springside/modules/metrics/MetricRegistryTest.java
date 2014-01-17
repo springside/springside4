@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Map;
 
@@ -17,34 +17,31 @@ public class MetricRegistryTest {
 	public void counter() {
 		MetricRegistry metricRegistry = new MetricRegistry();
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
-		assertNotNull(counter);
+		assertThat(counter).isNotNull();
 
 		Map<String, Counter> counters = metricRegistry.getCounters();
 
 		Counter counter2 = counters.get("UserService.getUser.counter");
-		assertNotNull(counter2);
-		assertTrue(counter == counter2);
+		assertThat(counter2).isNotNull().isSameAs(counter);
 
 		Counter counter3 = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
-		assertNotNull(counter3);
-		assertTrue(counter == counter3);
+		assertThat(counter3).isNotNull().isSameAs(counter);
 	}
 
 	@Test
 	public void histogram() {
 		MetricRegistry metricRegistry = new MetricRegistry();
 		Histogram histogram = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.latency"));
-		assertNotNull(histogram);
+		assertThat(histogram).isNotNull();
 
 		Map<String, Histogram> histograms = metricRegistry.getHistograms();
 
 		Histogram histogram2 = histograms.get("UserService.getUser.latency");
-		assertNotNull(histogram2);
-		assertTrue(histogram == histogram2);
+		assertThat(histogram2).isNotNull().isSameAs(histogram);
 
 		Histogram histogram3 = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.latency"));
-		assertNotNull(histogram3);
-		assertTrue(histogram == histogram3);
+		assertThat(histogram3).isNotNull().isSameAs(histogram);
+
 	}
 
 	@Test
@@ -52,17 +49,15 @@ public class MetricRegistryTest {
 		MetricRegistry metricRegistry = new MetricRegistry();
 
 		Execution execution = metricRegistry.execution(MetricRegistry.name("UserService", "getUser.execution"));
-		assertNotNull(execution);
+		assertThat(execution).isNotNull();
 
 		Map<String, Execution> executions = metricRegistry.getExecutions();
 
 		Execution execution2 = executions.get("UserService.getUser.execution");
-		assertNotNull(execution2);
-		assertTrue(execution == execution2);
+		assertThat(execution2).isNotNull().isSameAs(execution);
 
 		Execution execution3 = metricRegistry.execution(MetricRegistry.name("UserService", "getUser.execution"));
-		assertNotNull(execution3);
-		assertTrue(execution == execution3);
+		assertThat(execution3).isNotNull().isSameAs(execution);
 	}
 
 	@Test
@@ -79,8 +74,8 @@ public class MetricRegistryTest {
 
 		HistogramMetric metric = histogram.calculateMetric();
 
-		assertEquals(60, metric.pcts.get(60d), 0);
-		assertEquals(70, metric.pcts.get(70d), 0);
+		assertThat(metric.pcts.get(60d)).isEqualTo(60);
+		assertThat(metric.pcts.get(70d)).isEqualTo(70);
 
 		// default 90
 		Histogram histogramWithDefaultPcts = metricRegistry.histogram(MetricRegistry.name("UserService",
@@ -90,7 +85,7 @@ public class MetricRegistryTest {
 		}
 
 		metric = histogramWithDefaultPcts.calculateMetric();
-		assertEquals(90, metric.pcts.get(90d), 0);
+		assertThat(metric.pcts.get(90d)).isEqualTo(90);
 
 		// new default 50
 		metricRegistry.setDefaultPcts(new Double[] { 50d });
@@ -103,7 +98,7 @@ public class MetricRegistryTest {
 
 		metric = histogramWithNewDefaultPcts.calculateMetric();
 
-		assertEquals(50, metric.pcts.get(50d), 0);
-		assertNull(metric.pcts.get(90d));
+		assertThat(metric.pcts.get(50d)).isEqualTo(50);
+		assertThat(metric.pcts.get(90d)).isNull();
 	}
 }

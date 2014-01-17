@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,17 +30,17 @@ public class CounterTest {
 		clock.increaseTime(1000);
 
 		CounterMetric metric = counter.calculateMetric();
-		assertEquals(60, metric.totalCount);
-		assertEquals(60, metric.lastCount);
-		assertEquals(60d, metric.lastRate, 0);
+		assertThat(metric.totalCount).isEqualTo(60);
+		assertThat(metric.lastCount).isEqualTo(60);
+		assertThat(metric.lastRate).isEqualTo(60);
 
 		counter.inc(20);
 		clock.increaseTime(1000);
 		metric = counter.calculateMetric();
 
-		assertEquals(80, metric.totalCount);
-		assertEquals(20, metric.lastCount);
-		assertEquals(20d, metric.lastRate, 0);
+		assertThat(metric.totalCount).isEqualTo(80);
+		assertThat(metric.lastCount).isEqualTo(20);
+		assertThat(metric.lastRate).isEqualTo(20);
 	}
 
 	@Test
@@ -55,7 +55,7 @@ public class CounterTest {
 		clock.increaseTime(1000);
 
 		CounterMetric metric = counter.calculateMetric();
-		assertEquals(11, metric.totalCount);
+		assertThat(metric.totalCount).isEqualTo(11);
 	}
 
 	@Test
@@ -64,7 +64,7 @@ public class CounterTest {
 		clock.increaseTime(1000);
 
 		CounterMetric metric = counter.calculateMetric();
-		assertEquals(0, metric.totalCount);
-		assertEquals(0d, metric.lastRate, 0);
+		assertThat(metric.totalCount).isEqualTo(0);
+		assertThat(metric.lastRate).isEqualTo(0);
 	}
 }
