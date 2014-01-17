@@ -188,7 +188,6 @@ public class JedisTemplate {
 
 	public long incr(final String key) {
 		return execute(new JedisAction<Long>() {
-
 			@Override
 			public Long action(Jedis jedis) {
 				return jedis.incr(key);
@@ -198,7 +197,6 @@ public class JedisTemplate {
 
 	public long decr(final String key) {
 		return execute(new JedisAction<Long>() {
-
 			@Override
 			public Long action(Jedis jedis) {
 				return jedis.decr(key);
@@ -209,10 +207,19 @@ public class JedisTemplate {
 	// ////////////// 关于List ///////////////////////////
 	public void lpush(final String key, final String value) {
 		execute(new JedisActionNoResult() {
-
 			@Override
 			public void action(Jedis jedis) {
 				jedis.lpush(key, value);
+			}
+		});
+	}
+
+	public String rpop(final String key) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.rpop(key);
 			}
 		});
 	}
@@ -284,7 +291,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 返回List长度, key不存在时返回0，key类型不是sorted set时抛出异常.
+	 * 返回sorted set长度, key不存在时返回0，key类型不是sorted set时抛出异常.
 	 */
 	public long zcard(final String key) {
 		return execute(new JedisAction<Long>() {

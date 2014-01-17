@@ -51,4 +51,34 @@ public class JedisTemplateTest {
 		assertThat((long) jedisTemplate.getAsLong(key)).isEqualTo(123L);
 		assertThat((long) jedisTemplate.getAsLong(notExistKey)).isZero();
 	}
+
+	@Test
+	public void listActions() {
+		String key = "test.string.key";
+		String value = "123";
+		String value2 = "456";
+
+		// push/pop single element
+		jedisTemplate.lpush(key, value);
+		assertThat(jedisTemplate.llen(key)).isEqualTo(1);
+		assertThat(jedisTemplate.rpop(key)).isEqualTo(value);
+
+		// push/pop two elements
+		jedisTemplate.lpush(key, value);
+		jedisTemplate.lpush(key, value2);
+		assertThat(jedisTemplate.llen(key)).isEqualTo(2);
+		assertThat(jedisTemplate.rpop(key)).isEqualTo(value);
+		assertThat(jedisTemplate.rpop(key)).isEqualTo(value2);
+
+		// remove elements
+		jedisTemplate.lpush(key, value);
+		jedisTemplate.lpush(key, value);
+		jedisTemplate.lpush(key, value);
+		assertThat(jedisTemplate.llen(key)).isEqualTo(3);
+		assertThat(jedisTemplate.lremOne(key, value)).isTrue();
+		assertThat(jedisTemplate.llen(key)).isEqualTo(2);
+		assertThat(jedisTemplate.lremAll(key, value)).isTrue();
+		assertThat(jedisTemplate.llen(key)).isEqualTo(0);
+		assertThat(jedisTemplate.lremAll(key, value)).isFalse();
+	}
 }
