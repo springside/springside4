@@ -31,7 +31,7 @@ public class PropertiesLoaderTest {
 		PropertiesLoader pl = new PropertiesLoader("classpath:/notexist.properties");
 		try {
 			assertThat(pl.getProperty("notexist")).isNull();
-			fail("should fail here");
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
 		assertThat(pl.getProperty("notexist", "defaultValue")).isEqualTo("defaultValue");
@@ -44,7 +44,7 @@ public class PropertiesLoaderTest {
 		assertThat(pl.getInteger("p1")).isEqualTo(new Integer(1));
 		try {
 			pl.getInteger("notExist");
-			fail("should fail here");
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
 		assertThat(pl.getInteger("notExist", 100)).isEqualTo(new Integer(100));
@@ -54,7 +54,7 @@ public class PropertiesLoaderTest {
 
 		try {
 			pl.getBoolean("notExist");
-			fail("should fail here");
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
 		assertThat(pl.getBoolean("notExist", true)).isEqualTo(new Boolean(true));

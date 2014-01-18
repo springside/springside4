@@ -32,14 +32,14 @@ public class ReflectionsTest {
 
 		try {
 			Reflections.getFieldValue(bean, "notExist");
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
 
 		try {
 			Reflections.setFieldValue(bean, "notExist", 2);
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
@@ -73,7 +73,7 @@ public class ReflectionsTest {
 		// 函数名错
 		try {
 			Reflections.invokeMethod(bean, "notExistMethod", new Class[] { String.class }, new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
@@ -81,7 +81,7 @@ public class ReflectionsTest {
 		// 参数类型错
 		try {
 			Reflections.invokeMethod(bean, "privateMethod", new Class[] { Integer.class }, new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
 
 		}
@@ -89,7 +89,7 @@ public class ReflectionsTest {
 		// 函数名错
 		try {
 			Reflections.invokeMethodByName(bean, "notExistMethod", new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}

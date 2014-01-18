@@ -56,7 +56,7 @@ public class AccountServiceTest {
 		// 保存超级管理用户抛出异常.
 		try {
 			accountService.saveUser(admin);
-			fail("expected ServicExcepton should be thrown");
+			failBecauseExceptionWasNotThrown(ServiceException.class);
 		} catch (ServiceException e) {
 			// expected exception
 		}

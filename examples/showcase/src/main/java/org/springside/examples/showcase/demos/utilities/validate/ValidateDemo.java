@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 
 import org.apache.commons.lang3.Validate;
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -33,7 +32,7 @@ public class ValidateDemo {
 
 			// 检验not null，用默认出错信息.
 			Validate.notNull(null);
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(NullPointerException.class);
 		} catch (NullPointerException e) {
 			assertThat(e).hasMessage("The validated object is null");
 		}
@@ -47,7 +46,7 @@ public class ValidateDemo {
 
 			// 检验not null，用自定义出错信息.
 			Validate.notBlank("", "The name must not be blank");
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
 			assertThat(e).hasMessage("The name must not be blank");
@@ -57,7 +56,7 @@ public class ValidateDemo {
 		try {
 			List<String> parameter = Lists.newArrayList();
 			Validate.notEmpty(parameter);
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			assertThat(e).hasMessage("The validated collection is empty");
 		}
@@ -66,7 +65,7 @@ public class ValidateDemo {
 		try {
 			// 出錯信息可格式化參數
 			Validate.isTrue(1 == 3, "Message %s", "foo");
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 			assertThat(e).hasMessage("Message foo");
 		}

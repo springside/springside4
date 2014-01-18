@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -85,7 +84,7 @@ public class AccountServiceTest {
 		// 删除超级管理用户抛出异常, userDao没有被执行
 		try {
 			accountService.deleteUser(1L);
-			Assert.fail("expected ServiceException not be thrown");
+			failBecauseExceptionWasNotThrown(ServiceException.class);
 		} catch (ServiceException e) {
 			// expected exception
 		}

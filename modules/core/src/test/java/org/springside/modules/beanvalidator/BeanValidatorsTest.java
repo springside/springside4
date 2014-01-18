@@ -18,7 +18,6 @@ import javax.validation.Validator;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 		try {
 			BeanValidators.validateWithException(validator, customer);
-			Assert.fail("should throw excepion");
+			failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
 		} catch (ConstraintViolationException e) {
 			Map mapResult = BeanValidators.extractPropertyAndMessage(e);
 			assertThat(mapResult).contains(entry("email", "not a well-formed email address"),
