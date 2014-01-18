@@ -100,8 +100,9 @@
 				<version>${springside.version}</version>
 			</dependency>
 			<!-- SPRINGSIDE MODULES end -->
-
-			<!-- SPRING basic begin(不需要显式定义) -->
+			
+			<!-- spring-->
+			<!-- 纯粹为了exclude commons-loging -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
@@ -113,46 +114,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<!-- aop/tx -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjrt</artifactId>
-				<version>${aspectj.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjweaver</artifactId>
-				<version>${aspectj.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-tx</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!-- email/scheduler/freemarker -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!-- SPRING basic end -->
+			
 
 			<!-- PERSISTENCE begin -->
 			<!-- hibernate -->
@@ -185,6 +147,19 @@
 				</exclusions>
 			</dependency>
 
+			<!-- aop -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
 			<!-- mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
@@ -196,19 +171,7 @@
 				<artifactId>mybatis-spring</artifactId>
 				<version>1.2.1</version>
 			</dependency>
-
-			<!-- spring orm -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jdbc</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
+		
 			<!-- connection pool -->
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
@@ -219,18 +182,13 @@
 			<!-- PERSISTENCE end -->
 
 			<!-- WEB begin -->
-			<!-- spring mvc -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
+			<!-- spring -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
+			
 			<!-- sitemesh -->
 			<dependency>
 				<groupId>opensymphony</groupId>
@@ -344,12 +302,6 @@
 			<!-- JAX-RS end -->
 
 			<!-- JMS begin -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jms</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
 			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-core</artifactId>
@@ -952,7 +904,7 @@
 											<exclude>org.springframework</exclude>
 										</excludes>
 										<includes>
-											<include>org.springframework:*:3.2.*</include>
+											<include>org.springframework:*:4.0.*</include>
 										</includes>
 									</bannedDependencies>
 								</rules>

@@ -59,7 +59,7 @@
 		-->
 	</repositories>
 
-	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
+	<!-- 设定插件仓库, 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<pluginRepositories> 
 		<pluginRepository> 
 			<id>nexus</id>
@@ -81,20 +81,6 @@
 			<version>${springside.version}</version>
 		</dependency>
 
-		<!-- Spring AOP begin -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.7.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.3</version>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- Spring AOP end -->	
-
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->
 		<dependency>
@@ -115,16 +101,19 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- spring aop -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.7.3</version>
 		</dependency>
 		<dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>1.7.3</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- connection pool -->
 		<dependency>
@@ -147,7 +136,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 		
 		<dependency>
@@ -165,8 +153,8 @@
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- WEB end -->
@@ -181,16 +169,6 @@
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-ehcache</artifactId>
 			<version>${shiro.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.6</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.9</version>
 		</dependency>
 		<!-- SECURITY end -->
 		
@@ -304,7 +282,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -382,36 +359,21 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
+				<artifactId>spring-framework-bom</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.6.6</version>
 			</dependency>
 			<dependency>
-			<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>				
+				<groupId>commons-codec</groupId>
+				<artifactId>commons-codec</artifactId>
+				<version>1.9</version>
+			</dependency>			
 		</dependencies>
 	</dependencyManagement>
 
@@ -522,7 +484,7 @@
 										<exclude>org.springframework</exclude>
 									</excludes>
 									<includes>
-										<include>org.springframework:*:3.2.*</include>
+										<include>org.springframework:*:4.0.*</include>
 									</includes>
 								</bannedDependencies>
 							</rules>

@@ -83,10 +83,6 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-		</dependency>
 
 		<!-- connection pool -->
 		<dependency>
@@ -335,10 +331,6 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.activation</groupId>
-			<artifactId>activation</artifactId>
-		</dependency>
 		<!-- OTHER TOOLS end -->	
 
 		<!-- TEST begin -->		
@@ -428,6 +420,18 @@
 		</dependency>
 		<!-- TEST end -->
 	</dependencies>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>		
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
