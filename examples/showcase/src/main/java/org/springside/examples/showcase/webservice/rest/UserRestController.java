@@ -11,11 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.modules.mapper.BeanMapper;
@@ -28,7 +27,7 @@ import org.springside.modules.metrics.MetricRegistry;
  * 
  * @author calvin
  */
-@Controller
+@RestController
 @RequestMapping(value = { "/api/v1/user", "/api/secure/v1/user" })
 public class UserRestController {
 	private static Logger logger = LoggerFactory.getLogger(UserRestController.class);
@@ -50,7 +49,6 @@ public class UserRestController {
 	 * /api/v1/user/1 返回xml(why?)
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ResponseBody
 	public UserDTO getUser(@PathVariable("id") Long id) {
 		final ExecutionTimer exectuionTimer = executionMetrics.start();
 		try {
