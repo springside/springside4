@@ -418,6 +418,13 @@
 			<groupId>com.icegreen</groupId>
 			<artifactId>greenmail</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.10</artifactId>
+			<version>2.0</version>
+			<scope>test</scope>
+		</dependency>
 		<!-- TEST end -->
 	</dependencies>
 	
@@ -554,6 +561,40 @@
 								<selenium.driver>${selenium.driver}</selenium.driver>
 							</systemPropertyVariables>
 						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<!-- 执行bdd test -->
+		<profile>
+			<id>bdd-test</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.scalatest</groupId>
+						<artifactId>scalatest-maven-plugin</artifactId>
+						<version>1.0-RC2</version>
+						<configuration>
+							<reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+							<junitxml>.</junitxml>
+							<filereports>WDF TestSuite.txt</filereports>
+						</configuration>
+						<executions>
+							<execution>
+								<id>test</id>
+								<goals>
+									<goal>test</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
