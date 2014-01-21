@@ -17,12 +17,12 @@
 		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
-		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
+		<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
 		<jackson.version>2.3.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<logback.version>1.0.13</logback.version>
 		<commons-lang3.version>3.2.1</commons-lang3.version>
-		<guava.version>15.0</guava.version>
+		<guava.version>16.0</guava.version>
 		<junit.version>4.11</junit.version>
 		<assertj.version>1.5.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
