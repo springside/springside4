@@ -43,9 +43,9 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
 		</dependency>
-		<!-- SPRING basic end -->	
+		<!-- SPRING basic end -->
 		<!-- SPRING end -->
-	
+
 		<!-- AOP begin -->
 		<dependency>
 			<groupId>org.aspectj</groupId>
@@ -55,7 +55,7 @@
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjweaver</artifactId>
 		</dependency>
-		<!-- AOP end -->	
+		<!-- AOP end -->
 
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->
@@ -67,7 +67,7 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-ehcache</artifactId>
 		</dependency>
-		
+
 		<!-- mybatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -119,7 +119,7 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 		<!-- WEB end -->
-		
+
 		<!-- SECURITY begin -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -130,7 +130,7 @@
 			<artifactId>shiro-ehcache</artifactId>
 		</dependency>
 		<!-- SECURITY end -->
-		
+
 		<!-- SOAP begin -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -141,16 +141,16 @@
 			<artifactId>cxf-rt-transports-http</artifactId>
 		</dependency>
 		<!-- SOAP end -->
-		
+
 		<!-- JAX-RS begin -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
 		</dependency>
 		<dependency>
-	    	<groupId>com.fasterxml.jackson.jaxrs</groupId>
-	        <artifactId>jackson-jaxrs-json-provider</artifactId>
-	    </dependency>	
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+		</dependency>
 		<!-- JAX-RS end -->
 
 		<!-- JMS begin -->
@@ -170,13 +170,13 @@
 			<groupId>org.quartz-scheduler</groupId>
 			<artifactId>quartz</artifactId>
 		</dependency>
-  		
-  		<!-- Redis -->	
+
+		<!-- Redis -->
 		<dependency>
-		    <groupId>redis.clients</groupId>
-		    <artifactId>jedis</artifactId>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
 		</dependency>
-		
+
 		<!-- CACHE begin -->
 		<dependency>
 			<groupId>net.spy</groupId>
@@ -195,7 +195,7 @@
 			<artifactId>ehcache-core</artifactId>
 		</dependency>
 		<!-- CACHE end -->
-		
+
 		<!-- jolokia Restful JMX -->
 		<dependency>
 			<groupId>org.jolokia</groupId>
@@ -207,7 +207,7 @@
 			<groupId>com.netflix.hystrix</groupId>
 			<artifactId>hystrix-core</artifactId>
 		</dependency>
-		
+
 		<!-- MONITOR begin -->
 		<!-- javasimon -->
 		<dependency>
@@ -222,14 +222,14 @@
 			<groupId>org.javasimon</groupId>
 			<artifactId>javasimon-console-embed</artifactId>
 		</dependency>
-		<!-- MONITOR end -->	
-				
-		<!-- JSR303  BeanValidator -->
+		<!-- MONITOR end -->
+
+		<!-- JSR303 BeanValidator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
-		
+
 		<!-- JSON -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -240,10 +240,10 @@
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
 		<dependency>
-	    	<groupId>com.fasterxml.jackson.datatype</groupId>
-	        <artifactId>jackson-datatype-joda</artifactId>
-       	</dependency>
-		
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+		</dependency>
+
 		<!-- XML begin -->
 		<dependency>
 			<groupId>dom4j</groupId>
@@ -254,19 +254,19 @@
 			<groupId>jaxen</groupId>
 			<artifactId>jaxen</artifactId>
 		</dependency>
-		<!-- XML end -->	
-		
+		<!-- XML end -->
+
 		<!-- LOGGING begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
@@ -277,11 +277,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-	        <artifactId>jul-to-slf4j</artifactId>
-	    </dependency>
+			<artifactId>jul-to-slf4j</artifactId>
+		</dependency>
 
 		<dependency>
-		 	<groupId>com.googlecode.log4jdbc</groupId>
+			<groupId>com.googlecode.log4jdbc</groupId>
 			<artifactId>log4jdbc</artifactId>
 		</dependency>
 		<!-- LOGGING end -->
@@ -318,7 +318,7 @@
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
+			<artifactId>fluent-hc</artifactId>
 		</dependency>
 
 		<dependency>
@@ -331,9 +331,9 @@
 			<groupId>javax.mail</groupId>
 			<artifactId>mail</artifactId>
 		</dependency>
-		<!-- OTHER TOOLS end -->	
+		<!-- OTHER TOOLS end -->
 
-		<!-- TEST begin -->		
+		<!-- TEST begin -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -427,7 +427,7 @@
 		</dependency>
 		<!-- TEST end -->
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -436,7 +436,7 @@
 				<version>${spring.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>		
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -461,7 +461,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- test插件, 设定內存 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -504,7 +504,7 @@
 					</webAppConfig>
 				</configuration>
 			</plugin>
-			
+
 			<!-- tomcat7 插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
@@ -516,13 +516,13 @@
 					<useTestClasspath>true</useTestClasspath>
 				</configuration>
 			</plugin>
-			
+
 			<!-- enforcer插件, 规则统一定义在parent -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
 			</plugin>
-			
+
 			<!-- cxf wsdl2java 插件 -->
 			<plugin>
 				<groupId>org.apache.cxf</groupId>
@@ -565,7 +565,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 执行bdd test -->
 		<profile>
 			<id>bdd-test</id>
@@ -612,13 +612,14 @@
 							<target>
 								<property file="src/main/resources/application.development.properties" />
 								<property file="src/main/resources/application.properties" />
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue"  encoding="${project.build.sourceEncoding}">
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
+									onerror="continue" encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
-									<transaction src="src/main/resources/sql/h2/schema.sql"/>
-									<transaction src="src/test/resources/data/h2/import-data.sql"/>
+									<transaction src="src/main/resources/sql/h2/schema.sql" />
+									<transaction src="src/test/resources/data/h2/import-data.sql" />
 								</sql>
-								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"  encoding="${project.build.sourceEncoding}"
-									src="src/main/resources/sql/h2/quartz.sql" onerror="continue">
+								<sql driver="${quartz.jdbc.driver}" url="${quartz.jdbc.url}" userid="${quartz.jdbc.username}" password="${quartz.jdbc.password}"
+									encoding="${project.build.sourceEncoding}" src="src/main/resources/sql/h2/quartz.sql" onerror="continue">
 									<classpath refid="maven.test.classpath" />
 								</sql>
 							</target>
@@ -658,7 +659,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!--打包可执行war包,基于Tomcat -->
 		<profile>
 			<id>standalone-tomcat</id>
