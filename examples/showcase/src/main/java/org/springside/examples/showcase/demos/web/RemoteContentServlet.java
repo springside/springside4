@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.fluent.Executor;
 import org.apache.http.client.fluent.Request;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 演示使用多线程安全且带连接池的Apache HttpClient和 JDK两种方案获取远程静态内容并进行展示的Servlet.
  * 
- * 另外简单演示了轻量级更易用的Apache Fluent API。
+ * 另外简单演示了轻量级更易用的Apache HttpClient Fluent API。
  * 
  * 演示访问地址如下(contentUrl已经过URL编码):
  * remote-content?contentUrl=http%3A%2F%2Flocalhost%3A8080%2Fshowcase%2Fimages%2Flogo.jpg
@@ -168,19 +168,23 @@ public class RemoteContentServlet extends HttpServlet {
 
 	/**
 	 * 演示FluentAPI。
-	 * 使用默认连接池(200 total/100 per route), entity会自动获取全部并关闭。
+	 * 
 	 */
 	@SuppressWarnings("unused")
-	private void fluentAPIDemo(String contentUrl) throws ClientProtocolException, IOException {
-		// 获取文字
-		Request.Get(contentUrl).execute().returnContent().asString();
+	private void fluentAPIDemo(String contentUrl) throws IOException {
+		try {
+			// 获取文字 , 使用默认连接池(200 total/100 per route), returnContent()会自动获取全部内容后关闭inputstream。
+			String resultString = Request.Get(contentUrl).execute().returnContent().asString();
 
-		// 设置timeout, 获取图片
-		Request.Get(contentUrl).connectTimeout(TIMEOUT_SECONDS * 1000).socketTimeout(TIMEOUT_SECONDS * 1000).execute()
-				.returnContent().asBytes();
+			// 获取图片, 增加超时设定。
+			byte[] resultBytes = Request.Get(contentUrl).connectTimeout(TIMEOUT_SECONDS * 1000)
+					.socketTimeout(TIMEOUT_SECONDS * 1000).execute().returnContent().asBytes();
 
-		// 使用之前设置好了连接池与超时的httpClient
-		Executor executor = Executor.newInstance(httpClient);
-		executor.execute(Request.Get(contentUrl)).returnContent().asString();
+			// 使用之前设置好了自定义连接池与超时的httpClient, 获取图片
+			Executor executor = Executor.newInstance(httpClient);
+			resultString = executor.execute(Request.Get(contentUrl)).returnContent().asString();
+		} catch (HttpResponseException e) {
+			logger.error("Status code:" + e.getStatusCode(), e);
+		}
 	}
 }
