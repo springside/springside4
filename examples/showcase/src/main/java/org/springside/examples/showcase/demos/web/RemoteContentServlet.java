@@ -168,21 +168,20 @@ public class RemoteContentServlet extends HttpServlet {
 
 	/**
 	 * 演示FluentAPI。
-	 * 
 	 */
 	@SuppressWarnings("unused")
-	private void fluentAPIDemo(String contentUrl) throws IOException {
+	public void fluentAPIDemo(String contentUrl) throws IOException {
 		try {
-			// 获取文字 , 使用默认连接池(200 total/100 per route), returnContent()会自动获取全部内容后关闭inputstream。
+			// demo1: 获取文字 , 使用默认连接池(200 total/100 per route), returnContent()会自动获取全部内容后关闭inputstream。
 			String resultString = Request.Get(contentUrl).execute().returnContent().asString();
 
-			// 获取图片, 增加超时设定。
+			// demo2: 获取图片, 增加超时设定。
 			byte[] resultBytes = Request.Get(contentUrl).connectTimeout(TIMEOUT_SECONDS * 1000)
 					.socketTimeout(TIMEOUT_SECONDS * 1000).execute().returnContent().asBytes();
 
-			// 使用之前设置好了自定义连接池与超时的httpClient, 获取图片
+			// demo3: 获取图片，使用之前设置好了的自定义连接池与超时的httpClient
 			Executor executor = Executor.newInstance(httpClient);
-			resultString = executor.execute(Request.Get(contentUrl)).returnContent().asString();
+			String resultString2 = executor.execute(Request.Get(contentUrl)).returnContent().asString();
 		} catch (HttpResponseException e) {
 			logger.error("Status code:" + e.getStatusCode(), e);
 		}
