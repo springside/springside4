@@ -135,7 +135,7 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
@@ -184,7 +184,7 @@
 		</dependency>
 		<!-- TEST end -->
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -193,7 +193,7 @@
 				<version>${spring.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-			</dependency>		
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
