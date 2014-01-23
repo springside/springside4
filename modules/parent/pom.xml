@@ -14,7 +14,7 @@
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<hibernate.version>4.3.0.Final</hibernate.version>
 		<mybatis.version>3.2.4</mybatis.version>
-		<spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
@@ -46,7 +46,7 @@
 		<selenium.version>2.39.0</selenium.version>
 		<nosqlunit.version>0.7.9</nosqlunit.version>
 		<jetty.version>7.6.14.v20131031</jetty.version>
-		<h2.version>1.3.174</h2.version>
+		<h2.version>1.3.175</h2.version>
 
 		<!-- Plugin的属性 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -739,14 +739,6 @@
 				</exclusions>
 			</dependency>
 
-			<!-- nosqlunit -->
-			<dependency>
-				<groupId>com.lordofthejars</groupId>
-				<artifactId>nosqlunit-redis</artifactId>
-				<version>${nosqlunit.version}</version>
-				<scope>test</scope>
-			</dependency>
-
 			<!-- jetty -->
 			<dependency>
 				<groupId>org.eclipse.jetty.aggregate</groupId>
@@ -769,6 +761,14 @@
 				<scope>test</scope>
 			</dependency>
 
+			<!-- redis simulator -->
+			<dependency>
+				<groupId>com.lordofthejars</groupId>
+				<artifactId>nosqlunit-redis</artifactId>
+				<version>${nosqlunit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- memcached simulator -->
 			<dependency>
 				<groupId>com.thimbleware.jmemcached</groupId>
@@ -785,7 +785,7 @@
 				<scope>test</scope>
 			</dependency>
 
-			<!-- 定义隐式依赖的版�? -->
+			<!-- 定义隐式依赖的版本 -->
 			<dependency>
 				<groupId>org.hamcrest</groupId>
 				<artifactId>hamcrest-core</artifactId>
@@ -795,7 +795,7 @@
 			<dependency>
 				<groupId>org.objenesis</groupId>
 				<artifactId>objenesis</artifactId>
-				<version>1.2</version>
+				<version>2.1</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- TEST end -->

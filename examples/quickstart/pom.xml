@@ -13,7 +13,7 @@
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
 		<spring.version>4.0.0.RELEASE</spring.version>
 		<hibernate.version>4.3.0.Final</hibernate.version>
-		<spring-data-jpa.version>1.4.3.RELEASE</spring-data-jpa.version>
+		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
@@ -28,7 +28,7 @@
 		<mockito.version>1.9.5</mockito.version>
 		<selenium.version>2.39.0</selenium.version>
 		<jetty.version>7.6.14.v20131031</jetty.version>
-		<h2.version>1.3.174</h2.version>
+		<h2.version>1.3.175</h2.version>
 	
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
