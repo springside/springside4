@@ -55,6 +55,9 @@ public class JedisTemplateTest {
 		jedisTemplate.set(key, value);
 		assertThat(jedisTemplate.getAsLong(key)).isEqualTo(123L);
 		assertThat(jedisTemplate.getAsLong(notExistKey)).isNull();
+
+		assertThat(jedisTemplate.setnx(key, value)).isFalse();
+		assertThat(jedisTemplate.setnx(key + "nx", value)).isTrue();
 	}
 
 	@Test

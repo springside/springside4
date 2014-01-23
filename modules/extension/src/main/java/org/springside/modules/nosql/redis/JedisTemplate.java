@@ -191,6 +191,20 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * 综合setNX与setEx的效果。
+	 */
+	public Boolean setnxex(final String key, final String value, final int seconds) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				String result = jedis.set(key, value, "NX", "EX", seconds);
+				return JedisUtils.isStatusOk(result);
+			}
+		});
+	}
+
 	public Long incr(final String key) {
 		return execute(new JedisAction<Long>() {
 			@Override
