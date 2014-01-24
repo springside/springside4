@@ -3,34 +3,83 @@ package account
 import org.scalatest.GivenWhenThen
 import org.scalatest.FeatureSpec
 import org.scalatest.Matchers
+import org.openqa.selenium.WebDriver
+import org.scalatest.selenium.WebBrowser
+import org.openqa.selenium.firefox.FirefoxDriver
+import org.scalatest.BeforeAndAfter
+import org.scalatest.time.Span
+import org.scalatest.time.Seconds
+import org.scalatest.BeforeAndAfterAll
 
-class userManagerSpec extends FeatureSpec with GivenWhenThen with Matchers {
+class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with WebBrowser with BeforeAndAfterAll {
+
+  implicit val webDriver: WebDriver = new FirefoxDriver
+  val host = "http://localhost:8080/showcase"
 
   feature("Manage users") {
     info("As a administrator")
     info("i want to list and edit the current users, but i don't want to add new user")
 
     scenario("List users") {
-      Given("login as administrator")
-      When("login success and redirect to default page")
-      val a = 1
-      Then("admin user is displayed in page")
-      a should be > 0
+      Given("Go to Account Management page")
+      goToAccountManagementPage()
+      Given("Login as admin if necessary")
+      loginAsAdminIfNecessary()
+      pageTitle should be("Showcase示例:综合示例")
+
+      When("All accounts are list in the page")
+
+      Then("admin user is displayed in the page")
+      val ele: Option[Element] = find(xpath("//tr[1]/td[2]"))
+      ele.get.text should be("管理员 ")
     }
 
     scenario("Edit user1") {
-      Given("login as administrator")
+      Given("Go to Account Management page")
+      goToAccountManagementPage()
+      Given("Login as admin if necessary")
+      loginAsAdminIfNecessary()
+      pageTitle should be("Showcase示例:综合示例")
+
       When("edit user1 with new name")
-      val a = 1
+      click on id("editLink-user");
+      textField("name").value = "user_foo";
+      click on "submit_btn"
+
       Then("user1 with new name display in page")
-      a should be > 2
+      click on id("editLink-user")
+      textField("name").value should be("user_foo")
     }
 
     scenario("Edit admin") {
-      Given("login as administrator")
-      When("edit admin and update his name")
+      Given("Go to Account Management page")
+      Given("Login as admin if necessary")
+      When("edit admin with new name")
       Then("admin had update the name")
       pending
+    }
+  }
+
+  override def beforeAll() {
+    implicitlyWait(Span(10, Seconds))
+  }
+
+  override def afterAll() {
+    webDriver.close()
+  }
+
+  def goToAccountManagementPage() {
+    go to (host)
+    pageTitle should be("Showcase示例:Home")
+    click on linkText("帐号管理")
+  }
+
+  def loginAsAdminIfNecessary() {
+    if (pageTitle == "Showcase示例:登录页") {
+      textField("username").value = "admin"
+      pwdField("password").value = "admin"
+      checkbox("rememberMe").select()
+      click on "submit_btn"
     }
   }
 }
