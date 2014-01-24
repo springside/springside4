@@ -21,8 +21,8 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
     info("i want to list and edit the current users, but i don't want to add new user")
 
     scenario("List users") {
-      Given("Go to Account Management page")
-      goToAccountManagementPage()
+      Given("Go to user management page")
+      goToUserManagementPage()
       Given("Login as admin if necessary")
       loginAsAdminIfNecessary()
 
@@ -34,26 +34,26 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
     }
 
     scenario("Edit user1") {
-      Given("Go to Account Management page")
-      goToAccountManagementPage()
+      Given("Go to user management page")
+      goToUserManagementPage()
       Given("Login as admin if necessary")
       loginAsAdminIfNecessary()
 
-      When("edit user1 with new name")
+      When("Edit user1 with new name")
       click on id("editLink-user");
       textField("name").value = "user_foo";
       click on "submit_btn"
 
-      Then("user1 with new name display in page")
+      Then("user1 with new name display in user edit page")
       click on id("editLink-user")
       textField("name").value should be("user_foo")
     }
 
     scenario("Edit admin") {
-      Given("Go to Account Management page")
+      Given("Go to user management page")
       Given("Login as admin if necessary")
-      When("edit admin with new name")
-      Then("admin had update the name")
+      When("Edit admin with new name")
+      Then("admin with new name display in user edit page")
       pending
     }
   }
@@ -66,10 +66,12 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
     webDriver.close()
   }
 
-  def goToAccountManagementPage() {
+  def goToUserManagementPage() {
     go to (host)
     pageTitle should include("Home")
     click on linkText("帐号管理")
+
+    pageTitle should include("综合演示用例")
   }
 
   def loginAsAdminIfNecessary() {
@@ -78,6 +80,7 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       pwdField("password").value = "admin"
       checkbox("rememberMe").select()
       click on "submit_btn"
+
       pageTitle should include("综合演示用例")
     }
   }
