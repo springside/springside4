@@ -11,7 +11,7 @@ import org.scalatest.time.Span
 import org.scalatest.time.Seconds
 import org.scalatest.BeforeAndAfterAll
 
-class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with WebBrowser with BeforeAndAfterAll {
+class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with BeforeAndAfterAll with WebBrowser {
 
   implicit val webDriver: WebDriver = new FirefoxDriver
   val host = "http://localhost:8080/showcase"
@@ -25,9 +25,8 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       goToAccountManagementPage()
       Given("Login as admin if necessary")
       loginAsAdminIfNecessary()
-      pageTitle should be("Showcase示例:综合示例")
 
-      When("All accounts are list in the page")
+      When("All users are listed in the page")
 
       Then("admin user is displayed in the page")
       val ele: Option[Element] = find(xpath("//tr[1]/td[2]"))
@@ -39,7 +38,6 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       goToAccountManagementPage()
       Given("Login as admin if necessary")
       loginAsAdminIfNecessary()
-      pageTitle should be("Showcase示例:综合示例")
 
       When("edit user1 with new name")
       click on id("editLink-user");
@@ -70,16 +68,17 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
 
   def goToAccountManagementPage() {
     go to (host)
-    pageTitle should be("Showcase示例:Home")
+    pageTitle should include("Home")
     click on linkText("帐号管理")
   }
 
   def loginAsAdminIfNecessary() {
-    if (pageTitle == "Showcase示例:登录页") {
+    if (pageTitle contains "登录页") {
       textField("username").value = "admin"
       pwdField("password").value = "admin"
       checkbox("rememberMe").select()
       click on "submit_btn"
+      pageTitle should include("综合演示用例")
     }
   }
 }
