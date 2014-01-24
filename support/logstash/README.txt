@@ -6,5 +6,6 @@ Logstash Demo
 
 error_collector的演示流程：
 1. 下载 最新版的logstash-*.jar 放到本目录，将子目录中的shipper.conf.example 复制成 shipper.conf, 修改log日志路径。
-2. 运行 shipper 与 collector, 同时在showcase中产生错误日志(建议使用Hystrix演示来产生)
+2. 运行 子目录中的shipper.bat 与 collector.bat, 同时在showcase中产生错误日志(建议使用Hystrix演示来产生)
 3. 访问 http://localhost:9292/ 访问GUI
+4. 查看 子目录中的showcase_error_2014-xx-xx.log

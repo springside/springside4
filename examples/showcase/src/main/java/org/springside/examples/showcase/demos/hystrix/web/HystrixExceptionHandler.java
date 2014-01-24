@@ -29,8 +29,9 @@ import com.netflix.hystrix.exception.HystrixRuntimeException.FailureType;
 public class HystrixExceptionHandler extends ResponseEntityExceptionHandler {
 
 	/**
-	 * 处理Hystrix Runtime异常, 异常分为两类，一类是Command内部抛出异常，一类是Hystrix自身的保护机制.
-	 * Command内部抛出的异常返回500, 对Hystrix返回的异常返回503
+	 * 处理Hystrix Runtime异常, 分为两类:
+	 * 一类是Command内部抛出异常(返回500).
+	 * 一类是Hystrix已进入保护状态(返回503).
 	 */
 	@ExceptionHandler(value = { HystrixRuntimeException.class })
 	public final ResponseEntity<?> handleException(HystrixRuntimeException e, WebRequest request) {
@@ -53,7 +54,8 @@ public class HystrixExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	/**
-	 * 处理Hystrix ClientException异常.
+	 * 处理Hystrix ClientException异常(返回404).
+	 * ClientException表明是客户端请求参数本身的问题, 不计入异常次数统计。
 	 */
 	@ExceptionHandler(value = { HystrixBadRequestException.class })
 	public final ResponseEntity<?> handleException(HystrixBadRequestException e, WebRequest request) {
