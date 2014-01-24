@@ -11,7 +11,7 @@ input {
 output { 
 	file {
 		message_format => "%{message}" 
-		path => "showcase_full.log"
+		path => "showcase_safe.log"
 		type => "showcase"
 	}
 }

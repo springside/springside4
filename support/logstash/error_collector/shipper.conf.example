@@ -3,16 +3,16 @@ input {
     path => "[SpringSide Dir]\examples\showcase\logs\showcase.log"   # logstash要求必须是绝对路径
     type => "showcase"
     codec => multiline {                                # 将Exception Stacktrace拼接成一条日志记录
-      pattern => "(^.+Exception: .+)|(^\s+at .+)|(^\s*Caused by:.+)"|(^\s+... \d+ common frames omitted)
+      pattern => "(^.+Exception: .+)|(^\s+at .+)|(^\s*Caused by:.+)|(^\s+... \d+ common frames omitted)"
       what => "previous"
     }
-	start_position => "beginning"
+  start_position => "beginning"
   }
 }
 
 filter {
-  if [type] != "showcase" or [message] !~ /(ERROR)|(^.+Exception: .+)/{
-    drop {}                                             # 将非错误日志过滤掉
+   if [message] !~ /(ERROR)|(^.+Exception: .+)/{        # 将非错误日志过滤掉
+    drop {}                                             
   }
 }
 
@@ -21,7 +21,7 @@ output {
     host => "127.0.0.1"
     port => 6868
     codec => plain {  
-      format => "[%{host}]-%{message}"                  # 设置output的格式，输出HostName + Message内容本身
+      format => "[%{host}]-%{message}"                   # 设置output的格式，仅输出HostName + 日志内容本身,不附加Timestamp
     }
   }
 }
