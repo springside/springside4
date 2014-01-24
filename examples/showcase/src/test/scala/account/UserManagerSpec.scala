@@ -70,8 +70,6 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
     go to (host)
     pageTitle should include("Home")
     click on linkText("帐号管理")
-
-    pageTitle should include("综合演示用例")
   }
 
   def loginAsAdminIfNecessary() {
