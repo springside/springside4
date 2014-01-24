@@ -12,7 +12,7 @@
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
 		<spring.version>4.0.0.RELEASE</spring.version>
-		<hibernate.version>4.3.0.Final</hibernate.version>
+		<hibernate.version>4.3.1.Final</hibernate.version>
 		<mybatis.version>3.2.4</mybatis.version>
 		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
 		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
