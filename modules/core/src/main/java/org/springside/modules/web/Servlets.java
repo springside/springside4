@@ -5,7 +5,6 @@
  *******************************************************************************/
 package org.springside.modules.web;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.Collections3;
 import org.springside.modules.utils.Encodes;
 
+import com.google.common.base.Charsets;
 import com.google.common.net.HttpHeaders;
 
 /**
@@ -123,12 +124,10 @@ public class Servlets {
 	 * @param fileName 下载后的文件名.
 	 */
 	public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
-		try {
-			// 中文文件名支持
-			String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
-		} catch (UnsupportedEncodingException e) {
-		}
+		// 中文文件名支持
+		String encodedfileName = new String(fileName.getBytes(), Charsets.ISO_8859_1);
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
+
 	}
 
 	/**
@@ -166,7 +165,7 @@ public class Servlets {
 	 * @see #getParametersStartingWith
 	 */
 	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
-		if ((params == null) || (params.size() == 0)) {
+		if (Collections3.isEmpty(params)) {
 			return "";
 		}
 

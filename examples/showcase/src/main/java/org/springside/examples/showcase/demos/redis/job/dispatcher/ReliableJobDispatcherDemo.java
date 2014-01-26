@@ -65,7 +65,7 @@ public class ReliableJobDispatcherDemo {
 			@Override
 			public void run() {
 				System.out.printf(
-						"Scheduled job %d, Ready Job %d, Lock Job %d, Dispatch Counter %d, Retry Counter %d \n",
+						"Scheduled job %d, Ready Job %d, Lock Job %d, Dispatch Counter %d, Retry Counter %d %n",
 						statistics.getScheduledJobNumber(), statistics.getReadyJobNumber(),
 						statistics.getLockJobNumber(), statistics.getDispatchCounter(), statistics.getRetryCounter());
 			}

@@ -14,11 +14,11 @@ import java.util.Date;
  */
 public interface Clock {
 
+	static final Clock DEFAULT = new DefaultClock();
+
 	Date getCurrentDate();
 
 	long getCurrentTimeInMillis();
-
-	static final Clock DEFAULT = new DefaultClock();
 
 	/**
 	 * 默认时间提供者，返回当前的时间，线程安全。

@@ -62,7 +62,7 @@ public class SimpleJobDispatcherDemo {
 		statisticsTask = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
+				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d%n",
 						statistics.getScheduledJobNumber(), statistics.getReadyJobNumber(),
 						statistics.getDispatchCounter());
 			}

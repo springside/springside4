@@ -61,7 +61,7 @@ public class DynamicSpecifications {
 					}
 
 					// 将所有条件用 and 联合起来
-					if (predicates.size() > 0) {
+					if (!predicates.isEmpty()) {
 						return builder.and(predicates.toArray(new Predicate[predicates.size()]));
 					}
 				}

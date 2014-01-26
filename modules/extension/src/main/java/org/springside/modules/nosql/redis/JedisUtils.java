@@ -58,7 +58,6 @@ public class JedisUtils {
 				}
 				jedis.disconnect();
 			} catch (Exception e) {
-
 			}
 		}
 	}

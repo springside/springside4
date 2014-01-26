@@ -26,10 +26,10 @@ import org.springside.modules.utils.Threads;
  */
 public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 
-	private AdvancedConsumer consumer;
-
 	private static boolean reliable;
 	private static int batchSize;
+
+	private AdvancedConsumer consumer;
 
 	public static void main(String[] args) throws Exception {
 

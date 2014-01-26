@@ -88,7 +88,7 @@ public abstract class BenchmarkTask implements Runnable {
 					BigDecimal.ROUND_HALF_UP);
 
 			System.out
-					.printf("Thread %02d process %,d requests after %s seconds. Last tps/latency is %,d/%sms. Total tps/latency is %,d/%sms.\n",
+					.printf("Thread %02d process %,d requests after %s seconds. Last tps/latency is %,d/%sms. Total tps/latency is %,d/%sms.%n",
 							taskSequence, currentRequests, totalTimeSeconds, lastTps, lastLatency.toString(), totalTps,
 							totalLatency.toString());
 
@@ -106,7 +106,7 @@ public abstract class BenchmarkTask implements Runnable {
 		BigDecimal totalLatency = new BigDecimal(totalTimeMillis).divide(new BigDecimal(totalRequest), 2,
 				BigDecimal.ROUND_HALF_UP);
 
-		System.out.printf("Thread %02d finish.Total tps/latency is %,d/%sms\n", taskSequence, totalTps,
+		System.out.printf("Thread %02d finish.Total tps/latency is %,d/%sms", taskSequence, totalTps,
 				totalLatency.toString());
 	}
 

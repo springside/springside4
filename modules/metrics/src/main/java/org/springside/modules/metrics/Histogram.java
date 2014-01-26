@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Histogram {
 
-	private LinkedList<Long> measurements = new LinkedList<Long>();
+	private List<Long> measurements = new LinkedList<Long>();
 	private Double[] pcts;
 	private Object lock = new Object();
 
@@ -27,7 +27,7 @@ public class Histogram {
 	}
 
 	public HistogramMetric calculateMetric() {
-		LinkedList<Long> snapshotList = null;
+		List<Long> snapshotList = null;
 
 		synchronized (lock) {
 			snapshotList = measurements;

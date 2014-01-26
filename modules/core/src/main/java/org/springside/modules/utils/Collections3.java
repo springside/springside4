@@ -103,14 +103,21 @@ public class Collections3 {
 	 * 判断是否为空.
 	 */
 	public static boolean isEmpty(Collection collection) {
-		return ((collection == null) || collection.isEmpty());
+		return (collection == null) || collection.isEmpty();
+	}
+
+	/**
+	 * 判断是否为空.
+	 */
+	public static boolean isEmpty(Map map) {
+		return (map == null) || map.isEmpty();
 	}
 
 	/**
 	 * 判断是否为空.
 	 */
 	public static boolean isNotEmpty(Collection collection) {
-		return ((collection != null) && !(collection.isEmpty()));
+		return (collection != null) && !(collection.isEmpty());
 	}
 
 	/**

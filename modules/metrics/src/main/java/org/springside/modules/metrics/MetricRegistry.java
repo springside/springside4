@@ -89,7 +89,7 @@ public class MetricRegistry {
 	}
 
 	private <T> SortedMap<String, T> getMetrics(Class<T> klass) {
-		final TreeMap<String, T> result = new TreeMap<String, T>();
+		final SortedMap<String, T> result = new TreeMap<String, T>();
 		for (Map.Entry<String, Object> entry : metrics.entrySet()) {
 			if (klass.isInstance(entry.getValue())) {
 				result.put(entry.getKey(), (T) entry.getValue());

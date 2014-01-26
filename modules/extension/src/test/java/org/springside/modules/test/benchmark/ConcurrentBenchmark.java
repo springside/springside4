@@ -77,7 +77,7 @@ public abstract class ConcurrentBenchmark {
 		String className = this.getClass().getSimpleName();
 		long invokeTimes = threadCount * loopCount;
 
-		System.out.printf("%s started at %s.\n%d threads with %,d loops, totally %,d requests will be invoked.\n",
+		System.out.printf("%s started at %s.%n%d threads with %,d loops, totally %,d requests will be invoked.%n",
 				className, startTime.toString(), threadCount, loopCount, invokeTimes);
 	}
 
@@ -88,7 +88,7 @@ public abstract class ConcurrentBenchmark {
 		long totalTimeMillis = endTime.getTime() - startTime.getTime();
 		long tps = (invokeTimes * 1000) / totalTimeMillis;
 
-		System.out.printf("%s finished at %s.\n%d threads processed %,d requests after %,d ms, tps is %,d.\n",
+		System.out.printf("%s finished at %s.%n%d threads processed %,d requests after %,d ms, tps is %,d.%n",
 				className, endTime.toString(), threadCount, invokeTimes, totalTimeMillis, tps);
 	}
 
