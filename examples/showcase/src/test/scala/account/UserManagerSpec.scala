@@ -16,7 +16,7 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
   implicit val webDriver: WebDriver = new FirefoxDriver
   val host = "http://localhost:8080/showcase"
 
-  feature("Manage users") {
+  feature("User Managament") {
     info("As a administrator")
     info("i want to list and edit the current users, but i don't want to add new user")
 
@@ -29,7 +29,7 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       When("All users are listed in the page")
 
       Then("admin user is displayed in the page")
-      val ele: Option[Element] = find(xpath("//tr[1]/td[2]"))
+      val ele = find(xpath("//tr[1]/td[2]"))
       ele.get.text should be("管理员 ")
     }
 
@@ -41,8 +41,8 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
 
       When("Edit user1 with new name")
       click on id("editLink-user");
-      textField("name").value = "user_foo";
-      click on "submit_btn"
+      textField("name").value = "user_foo"
+      click on id("submit_btn")
 
       Then("user1 with new name display in user edit page")
       click on id("editLink-user")
@@ -77,7 +77,7 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       textField("username").value = "admin"
       pwdField("password").value = "admin"
       checkbox("rememberMe").select()
-      click on "submit_btn"
+      click on id("submit_btn")
 
       pageTitle should include("综合演示用例")
     }
