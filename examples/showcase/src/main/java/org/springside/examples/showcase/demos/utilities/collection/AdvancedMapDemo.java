@@ -21,7 +21,7 @@ import com.google.common.collect.Table;
 public class AdvancedMapDemo {
 
 	/**
-	 * Guava的同一个key可以有多个value的Map.
+	 * Guava Multimap, 同一个key可以有多个value的Map.
 	 */
 	@Test
 	public void multiMap() {
@@ -45,23 +45,29 @@ public class AdvancedMapDemo {
 	}
 
 	/**
-	 * Guava的BiMap，可随时调转Key与Value.
+	 * Guava BiMap，可随时调转Key与Value.
 	 */
 	@Test
 	public void biMap() {
-		BiMap<Integer, String> bimap = HashBiMap.create();
-		BiMap<String, Integer> inverseMap = bimap.inverse();
+		BiMap<Integer, String> biMap = HashBiMap.create();
+		BiMap<String, Integer> inverseMap = biMap.inverse();
 
-		bimap.put(1, "a");
-		bimap.put(2, "b");
+		// 在biMap这边插入，在inserserMap可以用value取到key。
+		biMap.put(1, "a");
+		biMap.put(2, "b");
 		assertThat(inverseMap.get("b")).isEqualTo(2);
 
+		// 在inverseMap这边插入，在bimap这边也能用value取到key。
 		inverseMap.put("c", 3);
-		assertThat(bimap.get(3)).isEqualTo("c");
+		assertThat(biMap.get(3)).isEqualTo("c");
+
+		// value也必须唯一，如果将key 4的value强行设为"a", 原来的key 1消失
+		biMap.forcePut(4, "a");
+		assertThat(biMap.containsKey(1)).isFalse();
 	}
 
 	/*
-	 * Guava的Table等于有兩个key的Map，可用来替代Map<String,Map<String,Object>
+	 * Guava Table, 等于有兩个key的Map，可用来替代Map<String,Map<String,Object>
 	 */
 	@Test
 	public void table() {
@@ -70,8 +76,10 @@ public class AdvancedMapDemo {
 		table.put(1, "b", "1b");
 		table.put(2, "a", "2a");
 		table.put(2, "b", "2b");
-
+		// 取单元格
 		assertThat(table.get(2, "a")).isEqualTo("2a");
+		// 取row
+		assertThat(table.row(1)).contains(entry("a", "1a"), entry("b", "1b"));
 	}
 
 }

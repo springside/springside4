@@ -19,14 +19,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 /**
- * 演示各种Collections如何简化Collection操作.
+ * 演示SpringSide Collections3(替代Apache Collections)和Guava 的Collection 如何简化Collection操作.
  * 
  * @author calvin
  */
 public class CollectionsDemo {
 
 	@Test
-	public void init() {
+	public void initCollection() {
 		// 无需在等号右边重新定义泛型的创建ArrayList
 		List<String> list = Lists.newArrayList();
 		// 创建的同时初始化数据
@@ -60,6 +60,5 @@ public class CollectionsDemo {
 		// list与list2的交集的新List
 		result = Collections3.intersection(list, list2);
 		assertThat(result).containsOnly("a", "b");
-
 	}
 }

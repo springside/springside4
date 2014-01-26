@@ -40,7 +40,7 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       loginAsAdminIfNecessary()
 
       When("Edit user1 with new name")
-      click on id("editLink-user");
+      click on id("editLink-user")
       textField("name").value = "user_foo"
       click on id("submit_btn")
 
