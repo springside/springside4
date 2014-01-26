@@ -29,8 +29,8 @@ class UserManagerSpec extends FeatureSpec with GivenWhenThen with Matchers with 
       When("All users are listed in the page")
 
       Then("admin user is displayed in the page")
-      val ele = find(xpath("//tr[1]/td[2]"))
-      ele.get.text should be("管理员 ")
+      val adminTd = find(xpath("//tr[1]/td[2]"))
+      adminTd.get.text should be("管理员 ")
     }
 
     scenario("Edit user1") {

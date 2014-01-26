@@ -56,7 +56,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 	protected static void loginAsUserIfNecessary() {
 		s.open("/task");
 
-		if ("QuickStart示例:登录页".equals(s.getTitle())) {
+		if (s.getTitle().contains("登录页")) {
 			s.type(By.name("username"), "user");
 			s.type(By.name("password"), "user");
 			s.check(By.name("rememberMe"));
