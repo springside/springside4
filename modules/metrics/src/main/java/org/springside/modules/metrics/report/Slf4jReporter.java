@@ -53,8 +53,9 @@ public class Slf4jReporter implements Reporter {
 
 	private void logExecution(String name, ExecutionMetric execution) {
 		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, min={}ms, max={}ms, mean={}ms", name,
-				execution.counterMetric.totalCount, execution.counterMetric.lastRate, execution.histogramMetric.min, execution.histogramMetric.max,
-				execution.histogramMetric.mean, buildPcts(execution.histogramMetric.pcts));
+				execution.counterMetric.totalCount, execution.counterMetric.lastRate, execution.histogramMetric.min,
+				execution.histogramMetric.max, execution.histogramMetric.mean,
+				buildPcts(execution.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {

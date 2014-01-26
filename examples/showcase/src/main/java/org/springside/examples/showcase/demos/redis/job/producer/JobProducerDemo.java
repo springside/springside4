@@ -68,8 +68,8 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 		@Override
 		public void execute(final int requestSequence) {
 			long jobId = idGenerator.getAndIncrement();
-			jobProducer.schedule("job:" + jobId, expiredMills.get() - System.currentTimeMillis(),
-					TimeUnit.MILLISECONDS);
+			jobProducer
+					.schedule("job:" + jobId, expiredMills.get() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
 
 			// 达到期望的每秒的TPS后，expireTime往后滚动一秒
 			if ((jobId % (expectTps)) == 0) {
