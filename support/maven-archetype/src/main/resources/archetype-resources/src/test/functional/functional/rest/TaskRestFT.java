@@ -1,9 +1,14 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.functional.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -50,8 +55,8 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Category(Smoke.class)
 	public void listTasks() {
 		TaskList tasks = restTemplate.getForObject(resoureUrl, TaskList.class);
-		assertEquals(5, tasks.size());
-		assertEquals("Study PlayFramework 2.0", tasks.get(0).getTitle());
+		assertThat(tasks).hasSize(5);
+		assertThat(tasks.get(0).getTitle()).isEqualTo("Study PlayFramework 2.0");
 	}
 
 	/**
@@ -61,7 +66,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Category(Smoke.class)
 	public void getTask() {
 		Task task = restTemplate.getForObject(resoureUrl + "/{id}", Task.class, 1L);
-		assertEquals("Study PlayFramework 2.0", task.getTitle());
+		assertThat(task.getTitle()).isEqualTo("Study PlayFramework 2.0");
 	}
 
 	/**
@@ -77,7 +82,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
 		System.out.println(taskUri.toString());
 		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
-		assertEquals(task.getTitle(), createdTask.getTitle());
+		assertThat(createdTask.getTitle()).isEqualTo(task.getTitle());
 
 		// update
 		String id = StringUtils.substringAfterLast(taskUri.toString(), "/");
@@ -87,7 +92,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		restTemplate.put(taskUri, task);
 
 		Task updatedTask = restTemplate.getForObject(taskUri, Task.class);
-		assertEquals(task.getTitle(), updatedTask.getTitle());
+		assertThat(updatedTask.getTitle()).isEqualTo(task.getTitle());
 
 		// delete
 		restTemplate.delete(taskUri);
@@ -96,7 +101,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			restTemplate.getForObject(taskUri, Task.class);
 			fail("Get should fail while feth a deleted task");
 		} catch (HttpStatusCodeException e) {
-			assertEquals(HttpStatus.NOT_FOUND, e.getStatusCode());
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -109,10 +114,10 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			restTemplate.postForLocation(resoureUrl, titleBlankTask);
 			fail("Create should fail while title is blank");
 		} catch (HttpStatusCodeException e) {
-			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
-			assertEquals(1, messages.size());
-			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
+			assertThat(messages).hasSize(1);
+			assertThat(messages.get("title")).isIn("may not be empty", "不能为空");
 		}
 
 		// update
@@ -121,10 +126,10 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			restTemplate.put(resoureUrl + "/1", titleBlankTask);
 			fail("Update should fail while title is blank");
 		} catch (HttpStatusCodeException e) {
-			assertEquals(HttpStatus.BAD_REQUEST, e.getStatusCode());
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 			Map messages = jsonMapper.fromJson(e.getResponseBodyAsString(), Map.class);
-			assertEquals(1, messages.size());
-			assertTrue(messages.get("title").equals("may not be empty") || messages.get("title").equals("不能为空"));
+			assertThat(messages).hasSize(1);
+			assertThat(messages.get("title")).isIn("may not be empty", "不能为空");
 		}
 	}
 }

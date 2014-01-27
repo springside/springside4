@@ -59,7 +59,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 
 	private void loginAsAdminIfNecessary() {
 		// 修改用户需要登录管理员权限
-		if ("Showcase示例:登录页".equals(s.getTitle())) {
+		if (s.getTitle().contains("登录页")) {
 			s.type(By.name("username"), "admin");
 			s.type(By.name("password"), "admin");
 			s.click(By.id("submit_btn"));

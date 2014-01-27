@@ -1,6 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.rest;
 
 import java.net.URI;
@@ -14,13 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 import ${package}.entity.Task;
 import ${package}.service.task.TaskService;
@@ -32,7 +36,7 @@ import org.springside.modules.web.MediaTypes;
  * 
  * @author calvin
  */
-@Controller
+@RestController
 @RequestMapping(value = "/api/v1/task")
 public class TaskRestController {
 
@@ -45,13 +49,11 @@ public class TaskRestController {
 	private Validator validator;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
-	@ResponseBody
 	public List<Task> list() {
 		return taskService.getAllTask();
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
-	@ResponseBody
 	public Task get(@PathVariable("id") Long id) {
 		Task task = taskService.getTask(id);
 		if (task == null) {
@@ -63,7 +65,6 @@ public class TaskRestController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaTypes.JSON)
-	@ResponseBody
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
 		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
 		BeanValidators.validateWithException(validator, task);
