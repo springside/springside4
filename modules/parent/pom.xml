@@ -11,18 +11,18 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
-		<spring.version>4.0.0.RELEASE</spring.version>
+		<spring.version>4.0.1.RELEASE</spring.version>
 		<hibernate.version>4.3.1.Final</hibernate.version>
 		<mybatis.version>3.2.4</mybatis.version>
 		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
+		<tomcat-jdbc.version>8.0.1</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
-		<cxf.version>2.7.8</cxf.version>
+		<cxf.version>2.7.9</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.2.1</quartz.version>
-		<jedis.version>2.2.1</jedis.version>
-		<ehcache.version>2.6.6</ehcache.version>
+		<jedis.version>2.3.0</jedis.version>
+		<ehcache.version>2.6.8</ehcache.version>
 		<spymemcached.version>2.10.4</spymemcached.version>
 		<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
 		<jolokia.version>1.1.5</jolokia.version>
@@ -30,10 +30,10 @@
 		<javasimon.version>3.4.0</javasimon.version>
 		<jackson.version>2.3.1</jackson.version>
 		<slf4j.version>1.7.5</slf4j.version>
-		<logback.version>1.0.13</logback.version>
+		<logback.version>1.1.0</logback.version>
 		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
-		<guava.version>16.0</guava.version>
+		<guava.version>16.0.1</guava.version>
 		<joda-time.version>2.3</joda-time.version>
 		<dozer.version>5.4.0</dozer.version>
 		<httpclient.version>4.3.2</httpclient.version>
@@ -42,7 +42,7 @@
 		<junit.version>4.11</junit.version>
 		<assertj.version>1.5.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
-		<powermock.version>1.5.3</powermock.version>
+		<powermock.version>1.5.4</powermock.version>
 		<selenium.version>2.39.0</selenium.version>
 		<nosqlunit.version>0.7.9</nosqlunit.version>
 		<jetty.version>7.6.14.v20131031</jetty.version>
@@ -169,7 +169,7 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.2.1</version>
+				<version>1.2.2</version>
 			</dependency>
 		
 			<!-- connection pool -->
@@ -607,12 +607,6 @@
 			</dependency>
 
 			<!-- commons-pool -->
-			<dependency>
-				<groupId>commons-pool</groupId>
-				<artifactId>commons-pool</artifactId>
-				<version>1.6</version>
-			</dependency>
-
 			<!-- email -->
 			<dependency>
 				<groupId>javax.mail</groupId>
