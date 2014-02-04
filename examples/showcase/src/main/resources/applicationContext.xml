@@ -92,10 +92,11 @@
 			<property name="password" value="${jdbc.password}" />
 			<property name="maxActive" value="${jdbc.pool.maxActive}" />
 			<property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+			<property name="minIdle" value="0" />
 			<property name="defaultAutoCommit" value="false" />
-			<!-- 连接Idle半个小时后超时，每15分钟检查一次 -->
-			<property name="timeBetweenEvictionRunsMillis" value="900000" />
-			<property name="minEvictableIdleTimeMillis" value="1800000" />
+			<!-- 连接Idle10分钟后超时，每1分钟检查一次 -->
+			<property name="timeBetweenEvictionRunsMillis" value="60000" />
+			<property name="minEvictableIdleTimeMillis" value="600000" />
 		</bean>
 	
 		<!-- quartz使用的数据源配置 -->
