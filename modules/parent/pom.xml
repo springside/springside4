@@ -21,16 +21,16 @@
 		<cxf.version>2.7.9</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.2.1</quartz.version>
-		<jedis.version>2.3.0</jedis.version>
+		<jedis.version>2.3.1</jedis.version>
 		<ehcache.version>2.6.8</ehcache.version>
-		<spymemcached.version>2.10.4</spymemcached.version>
+		<spymemcached.version>2.10.5</spymemcached.version>
 		<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
 		<jolokia.version>1.1.5</jolokia.version>
 		<hystrix.version>1.3.8</hystrix.version>
 		<javasimon.version>3.4.0</javasimon.version>
 		<jackson.version>2.3.1</jackson.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<logback.version>1.1.0</logback.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<logback.version>1.1.1</logback.version>
 		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
 		<guava.version>16.0.1</guava.version>
