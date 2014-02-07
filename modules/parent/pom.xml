@@ -15,7 +15,7 @@
 		<hibernate.version>4.3.1.Final</hibernate.version>
 		<mybatis.version>3.2.4</mybatis.version>
 		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>8.0.1</tomcat-jdbc.version>
+		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
 		<cxf.version>2.7.9</cxf.version>

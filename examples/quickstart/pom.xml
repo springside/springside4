@@ -14,7 +14,7 @@
 		<spring.version>4.0.1.RELEASE</spring.version>
 		<hibernate.version>4.3.1.Final</hibernate.version>
 		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>8.0.1</tomcat-jdbc.version>
+		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
 		<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>

@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpStatus;
@@ -31,19 +30,10 @@ import org.springside.modules.test.category.Smoke;
  */
 public class TaskRestFT extends BaseFunctionalTestCase {
 
+	private static String resourceUrl = baseUrl + "/api/v1/task";
+
 	private final RestTemplate restTemplate = new RestTemplate();
-
 	private final JsonMapper jsonMapper = new JsonMapper();
-
-	private static class TaskList extends ArrayList<Task> {
-	}
-
-	private static String resoureUrl;
-
-	@BeforeClass
-	public static void initUrl() {
-		resoureUrl = baseUrl + "/api/v1/task";
-	}
 
 	/**
 	 * 查看任务列表.
@@ -51,7 +41,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void listTasks() {
-		TaskList tasks = restTemplate.getForObject(resoureUrl, TaskList.class);
+		TaskList tasks = restTemplate.getForObject(resourceUrl, TaskList.class);
 		assertThat(tasks).hasSize(5);
 		assertThat(tasks.get(0).getTitle()).isEqualTo("Study PlayFramework 2.0");
 	}
@@ -62,7 +52,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 	@Test
 	@Category(Smoke.class)
 	public void getTask() {
-		Task task = restTemplate.getForObject(resoureUrl + "/{id}", Task.class, 1L);
+		Task task = restTemplate.getForObject(resourceUrl + "/{id}", Task.class, 1L);
 		assertThat(task.getTitle()).isEqualTo("Study PlayFramework 2.0");
 	}
 
@@ -76,7 +66,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		// create
 		Task task = TaskData.randomTask();
 
-		URI taskUri = restTemplate.postForLocation(resoureUrl, task);
+		URI taskUri = restTemplate.postForLocation(resourceUrl, task);
 		System.out.println(taskUri.toString());
 		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
 		assertThat(createdTask.getTitle()).isEqualTo(task.getTitle());
@@ -108,7 +98,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		// create
 		Task titleBlankTask = new Task();
 		try {
-			restTemplate.postForLocation(resoureUrl, titleBlankTask);
+			restTemplate.postForLocation(resourceUrl, titleBlankTask);
 			fail("Create should fail while title is blank");
 		} catch (HttpStatusCodeException e) {
 			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -120,7 +110,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		// update
 		titleBlankTask.setId(1L);
 		try {
-			restTemplate.put(resoureUrl + "/1", titleBlankTask);
+			restTemplate.put(resourceUrl + "/1", titleBlankTask);
 			fail("Update should fail while title is blank");
 		} catch (HttpStatusCodeException e) {
 			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -128,5 +118,8 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 			assertThat(messages).hasSize(1);
 			assertThat(messages.get("title")).isIn("may not be empty", "不能为空");
 		}
+	}
+
+	private static class TaskList extends ArrayList<Task> {
 	}
 }
