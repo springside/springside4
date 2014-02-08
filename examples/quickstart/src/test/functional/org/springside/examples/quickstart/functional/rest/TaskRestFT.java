@@ -66,26 +66,26 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		// create
 		Task task = TaskData.randomTask();
 
-		URI taskUri = restTemplate.postForLocation(resourceUrl, task);
-		System.out.println(taskUri.toString());
-		Task createdTask = restTemplate.getForObject(taskUri, Task.class);
+		URI createdTaskUri = restTemplate.postForLocation(resourceUrl, task);
+		System.out.println(createdTaskUri.toString());
+		Task createdTask = restTemplate.getForObject(createdTaskUri, Task.class);
 		assertThat(createdTask.getTitle()).isEqualTo(task.getTitle());
 
 		// update
-		String id = StringUtils.substringAfterLast(taskUri.toString(), "/");
+		String id = StringUtils.substringAfterLast(createdTaskUri.toString(), "/");
 		task.setId(new Long(id));
 		task.setTitle(TaskData.randomTitle());
 
-		restTemplate.put(taskUri, task);
+		restTemplate.put(createdTaskUri, task);
 
-		Task updatedTask = restTemplate.getForObject(taskUri, Task.class);
+		Task updatedTask = restTemplate.getForObject(createdTaskUri, Task.class);
 		assertThat(updatedTask.getTitle()).isEqualTo(task.getTitle());
 
 		// delete
-		restTemplate.delete(taskUri);
+		restTemplate.delete(createdTaskUri);
 
 		try {
-			restTemplate.getForObject(taskUri, Task.class);
+			restTemplate.getForObject(createdTaskUri, Task.class);
 			fail("Get should fail while feth a deleted task");
 		} catch (HttpStatusCodeException e) {
 			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
@@ -120,6 +120,7 @@ public class TaskRestFT extends BaseFunctionalTestCase {
 		}
 	}
 
+	// ArrayList<Task>在RestTemplate转换时不好表示，创建一个类来表达它是最简单的。
 	private static class TaskList extends ArrayList<Task> {
 	}
 }
