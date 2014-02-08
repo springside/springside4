@@ -132,14 +132,14 @@ public class JedisSentinelPool extends Pool<Jedis> {
 	 */
 	class MasterSwitchListener extends Thread {
 		public static final String THREAD_NAME_PREFIX = "RedisMasterSwitchListener-";
-		public static final int SLEEP_BEFORE_RETRY_IN_MILLS = 1000;
+		public static final int RETRY_WAIT_TIME_MILLS = 1000;
 
 		private JedisPubSub subscriber;
 		private JedisDirectPool currentSentinelPool;
 		private Jedis subscriberSentinelJedis;
 
 		private AtomicBoolean running = new AtomicBoolean(true);
-		private ConnectionInfo previousConnectionInfo;
+		private ConnectionInfo previousMasterConnectionInfo;
 
 		public MasterSwitchListener() {
 			super(THREAD_NAME_PREFIX + masterName);
@@ -154,36 +154,36 @@ public class JedisSentinelPool extends Pool<Jedis> {
 
 					if (currentSentinelPool != null) {
 
-						ConnectionInfo currentConnectionInfo = queryMasterAddress(currentSentinelPool);
+						ConnectionInfo currentMasterConnectionInfo = queryMasterAddress(currentSentinelPool);
 
-						if ((internalPool != null) && isMasterAddressChange(currentConnectionInfo)) {
+						if ((internalPool != null) && isMasterAddressChange(currentMasterConnectionInfo)) {
 							logger.info("The internalPool {} had changed, destroy it now.",
-									previousConnectionInfo.getHostAndPort());
+									previousMasterConnectionInfo.getHostAndPort());
 							destroyInternalRedisPool();
 						}
 
-						if ((internalPool == null) || isMasterAddressChange(currentConnectionInfo)) {
-							logger.info("The internalPool is not init or the address had changed, init it now.");
-							initInternalRedisPool(currentConnectionInfo);
+						if ((internalPool == null) || isMasterAddressChange(currentMasterConnectionInfo)) {
+							logger.info("The internalPool {} is not init or the address had changed, init it now.",
+									currentMasterConnectionInfo.getHostAndPort());
+							initInternalRedisPool(currentMasterConnectionInfo);
 						}
 
-						previousConnectionInfo = currentConnectionInfo;
+						previousMasterConnectionInfo = currentMasterConnectionInfo;
 
 						// blocking listening master switch until exception happen.
 						subscriber = new MasterSwitchSubscriber();
 						subscriberSentinelJedis = currentSentinelPool.getResource();
 						subscriberSentinelJedis.subscribe(subscriber, "+switch-master", "+redirect-to-master");
 					} else {
-						logger.info("All sentinels down, sleep 1 seconds and try to select again.");
+						logger.info("All sentinels down, sleep 1000ms and try to select again.");
 						// when the system startup but the sentinels not yet, init an ugly address to prevent null point
 						// exception.
-
 						if (internalPool == null) {
-							ConnectionInfo currentConnectionInfo = new ConnectionInfo(UNAVAILABLE_ADDRESS);
-							initInternalRedisPool(currentConnectionInfo);
-							previousConnectionInfo = currentConnectionInfo;
+							ConnectionInfo currentMasterConnectionInfo = new ConnectionInfo(UNAVAILABLE_ADDRESS);
+							initInternalRedisPool(currentMasterConnectionInfo);
+							previousMasterConnectionInfo = currentMasterConnectionInfo;
 						}
-						sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
+						sleep(RETRY_WAIT_TIME_MILLS);
 					}
 				} catch (JedisConnectionException e) {
 
@@ -194,14 +194,14 @@ public class JedisSentinelPool extends Pool<Jedis> {
 					if (running.get()) {
 						logger.error("Lost connection with Sentinel "
 								+ currentSentinelPool.getConnectionInfo().getHostAndPort()
-								+ ", sleep 1 seconds and try to connect other one.");
-						sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
+								+ ", sleep 1000ms and try to connect other one.");
+						sleep(RETRY_WAIT_TIME_MILLS);
 					}
 				} catch (Exception e) {
 					logger.error("Some Exception happen, current Sentinel is"
 							+ currentSentinelPool.getConnectionInfo().getHostAndPort()
-							+ ", sleep 1 seconds and try again.", e);
-					sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
+							+ ", sleep 1000ms and try again.", e);
+					sleep(RETRY_WAIT_TIME_MILLS);
 				}
 			}
 		}
@@ -283,12 +283,12 @@ public class JedisSentinelPool extends Pool<Jedis> {
 					redisAddtionalInfo.getClientName());
 		}
 
-		private boolean isMasterAddressChange(ConnectionInfo currentConnectionInfo) {
-			if (previousConnectionInfo == null) {
+		private boolean isMasterAddressChange(ConnectionInfo currentMasterConnectionInfo) {
+			if (previousMasterConnectionInfo == null) {
 				return true;
 			}
 
-			return (previousConnectionInfo.getHostAndPort().equals(currentConnectionInfo.getHostAndPort()));
+			return (previousMasterConnectionInfo.getHostAndPort().equals(currentMasterConnectionInfo.getHostAndPort()));
 		}
 
 		private void sleep(int millseconds) {
@@ -306,20 +306,20 @@ public class JedisSentinelPool extends Pool<Jedis> {
 			@Override
 			public void onMessage(String channel, String message) {
 				// message example: +switch-master: mymaster 127.0.0.1 6379 127.0.0.1 6380
-				// +redirect-to-master default 127.0.0.1 6380 127.0.0.1 6381 (if slave-master fail-over quick enough)
+				// +redirect-to-master mymaster 127.0.0.1 6380 127.0.0.1 6381 (if slave-master fail-over quick enough)
 				logger.info("Sentinel " + currentSentinelPool.getConnectionInfo().getHostAndPort() + " published: "
 						+ message);
 				String[] switchMasterMsg = message.split(" ");
-				// if the master name equals my master name, destroy the old pool and init a new pool
+				// if the switeched master name equals my master name, destroy the old pool and init a new pool
 				if (masterName.equals(switchMasterMsg[0])) {
 					destroyInternalRedisPool();
 
-					ConnectionInfo redisInfo = buildRedisConnectionInfo(switchMasterMsg[3], switchMasterMsg[4]);
-					logger.info("Switch master to " + redisInfo.getHostAndPort());
+					ConnectionInfo connectionInfo = buildRedisConnectionInfo(switchMasterMsg[3], switchMasterMsg[4]);
+					logger.info("Switch master to " + connectionInfo.getHostAndPort());
 
-					initInternalRedisPool(redisInfo);
+					initInternalRedisPool(connectionInfo);
 
-					previousConnectionInfo = redisInfo;
+					previousMasterConnectionInfo = connectionInfo;
 				}
 			}
 
