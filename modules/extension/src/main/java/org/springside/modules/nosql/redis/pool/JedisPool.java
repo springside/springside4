@@ -11,10 +11,10 @@ import redis.clients.util.Pool;
  */
 public class JedisPool extends Pool<Jedis> {
 
-	private ConnectionInfo connectionInfo;
+	private String hostAndPort;
 
 	public JedisPool(ConnectionInfo connectionInfo, JedisPoolConfig config) {
-		this.connectionInfo = connectionInfo;
+		this.hostAndPort = connectionInfo.getHostAndPort();
 
 		JedisFactory factory = new JedisFactory(connectionInfo.getHost(), connectionInfo.getPort(),
 				connectionInfo.getTimeout(), connectionInfo.getPassword(), connectionInfo.getDatabase(),
@@ -24,7 +24,7 @@ public class JedisPool extends Pool<Jedis> {
 	}
 
 	/**
-	 * Return a available jedis connection back to pool.
+	 * Return an available jedis connection back to pool.
 	 */
 	@Override
 	public void returnResource(final Jedis resource) {
@@ -32,7 +32,7 @@ public class JedisPool extends Pool<Jedis> {
 		returnResourceObject(resource);
 	}
 
-	public ConnectionInfo getConnectionInfo() {
-		return connectionInfo;
+	public String getHostAndPort() {
+		return hostAndPort;
 	}
 }

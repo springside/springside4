@@ -19,7 +19,7 @@ import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.util.Pool;
 
 /**
- * Pool which to get redis master address get from sentinel instances.
+ * Pool which to get redis master address from sentinel instances.
  */
 public class JedisSentinelPool extends Pool<Jedis> {
 
@@ -190,16 +190,15 @@ public class JedisSentinelPool extends Pool<Jedis> {
 					}
 
 					if (running.get()) {
-						logger.error("Lost connection with Sentinel "
-								+ currentSentinelPool.getConnectionInfo().getHostAndPort()
+						logger.error("Lost connection with Sentinel " + currentSentinelPool.getHostAndPort()
 								+ ", sleep 1000ms and try to connect other one.");
 						sleep(RETRY_WAIT_TIME_MILLS);
 					}
 				} catch (Exception e) {
 					if (running.get()) {
-						logger.error("Some Exception happen, current Sentinel is"
-								+ currentSentinelPool.getConnectionInfo().getHostAndPort()
-								+ ", sleep 1000ms and try again.", e);
+						logger.error(
+								"Some Exception happen, current Sentinel is" + currentSentinelPool.getHostAndPort()
+										+ ", sleep 1000ms and try again.", e);
 						sleep(RETRY_WAIT_TIME_MILLS);
 					}
 				}
@@ -307,8 +306,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 			public void onMessage(String channel, String message) {
 				// message example: +switch-master: mymaster 127.0.0.1 6379 127.0.0.1 6380
 				// +redirect-to-master mymaster 127.0.0.1 6380 127.0.0.1 6381 (if slave-master fail-over quick enough)
-				logger.info("Sentinel " + currentSentinelPool.getConnectionInfo().getHostAndPort() + " published: "
-						+ message);
+				logger.info("Sentinel " + currentSentinelPool.getHostAndPort() + " published: " + message);
 				String[] switchMasterMsg = message.split(" ");
 				// if the switeched master name equals my master name, destroy the old pool and init a new pool
 				if (masterName.equals(switchMasterMsg[0])) {
