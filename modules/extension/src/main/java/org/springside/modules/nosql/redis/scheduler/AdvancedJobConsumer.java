@@ -23,7 +23,7 @@ import com.google.common.collect.Lists;
  * 
  * @author calvin
  */
-public class AdvancedConsumer {
+public class AdvancedJobConsumer {
 	public static final String DEFAULT_BATCH_POP_LUA_FILE_PATH = "classpath:/redis/batchpop.lua";
 	public static final String DEFAULT_SINGLE_POP_LUA_FILE_PATH = "classpath:/redis/singlepop.lua";
 
@@ -45,7 +45,7 @@ public class AdvancedConsumer {
 	private String lockJobKey;
 	private List<String> keys;
 
-	public AdvancedConsumer(String jobName, JedisPool jedisPool) {
+	public AdvancedJobConsumer(String jobName, JedisPool jedisPool) {
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		lockJobKey = Keys.getLockJobKey(jobName);
 		keys = Lists.newArrayList(readyJobKey, lockJobKey);
