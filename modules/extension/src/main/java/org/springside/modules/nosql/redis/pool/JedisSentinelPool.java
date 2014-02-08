@@ -46,7 +46,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 	/**
 	 * Creates a new instance of <code>JedisSentinelPool</code>.
 	 * 
-	 * @param sentinelInfos Array of connection infomation to sentinel instances.
+	 * @param sentinelInfos Array of connection information to sentinel instances.
 	 * @param redisAddtionalInfo The master host and port would dynamic get from sentinel, and the other information
 	 *            like password, timeout store in it.
 	 * @param masterName One sentinel can monitor several redis master-slave pair, use master name to identify it.
@@ -55,71 +55,24 @@ public class JedisSentinelPool extends Pool<Jedis> {
 	public JedisSentinelPool(ConnectionInfo[] sentinelInfos, ConnectionInfo redisAddtionalInfo, String masterName,
 			JedisPoolConfig redisPoolConfig) {
 		// check and assign parameter, all parameter can't not be null or empty
-		assertArgument(((sentinelInfos == null) || (sentinelInfos.length == 0)), "seintinelInfos is not set");
+		assertArgument(((sentinelInfos != null) && (sentinelInfos.length != 0)), "seintinelInfos is not set");
 		for (ConnectionInfo sentinelInfo : sentinelInfos) {
 			JedisDirectPool sentinelPool = new JedisDirectPool(sentinelInfo, new JedisPoolConfig());
 			sentinelPools.add(sentinelPool);
 		}
 
-		assertArgument(redisAddtionalInfo == null, "redisAddtionalInfo is not set");
+		assertArgument(redisAddtionalInfo != null, "redisAddtionalInfo is not set");
 		this.redisAddtionalInfo = redisAddtionalInfo;
 
-		assertArgument(((masterName == null) || masterName.isEmpty()), "masterName is not set");
+		assertArgument(((masterName != null) && !masterName.isEmpty()), "masterName is not set");
 		this.masterName = masterName;
 
-		assertArgument(redisPoolConfig == null, "redisPoolConfig is not set");
+		assertArgument(redisPoolConfig != null, "redisPoolConfig is not set");
 		this.redisPoolConfig = redisPoolConfig;
 
-		// start switch listener, the listener will init the pool.
-		startMasterSwitchListener();
-	}
-
-	/**
-	 * Start MasterSwitchListener thread to listen the master switch message.
-	 */
-	private void startMasterSwitchListener() {
+		// Start MasterSwitchListener thread to listen the master switch message.
 		masterSwitchListener = new MasterSwitchListener();
 		masterSwitchListener.start();
-	}
-
-	/**
-	 * Pickup the first available sentinel, if all sentinel down, return null.
-	 */
-	private JedisDirectPool pickupSentinel() {
-		for (JedisDirectPool sentinelPool : sentinelPools) {
-			if (ping(sentinelPool)) {
-				return sentinelPool;
-			}
-		}
-
-		return null;
-	}
-
-	/**
-	 * Query master address from sentinel.
-	 */
-	private ConnectionInfo queryMasterAddress(JedisDirectPool sentinelPool) {
-		JedisTemplate sentinelTemplate = new JedisTemplate(sentinelPool);
-		List<String> address = sentinelTemplate.execute(new JedisAction<List<String>>() {
-			@Override
-			public List<String> action(Jedis jedis) {
-				return jedis.sentinelGetMasterAddrByName(masterName);
-			}
-		});
-
-		if ((address == null) || address.isEmpty()) {
-			throw new IllegalArgumentException("Master name " + masterName + " is not in sentinel.conf");
-		}
-
-		return buildRedisConnectionInfo(address.get(0), address.get(1));
-	}
-
-	/**
-	 * Combine the host & port with the redisAddtionalInfo which store the other properties.
-	 */
-	private ConnectionInfo buildRedisConnectionInfo(String host, String port) {
-		return new ConnectionInfo(host, Integer.valueOf(port), redisAddtionalInfo.getTimeout(),
-				redisAddtionalInfo.getPassword(), redisAddtionalInfo.getDatabase());
 	}
 
 	@Override
@@ -142,6 +95,12 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		}
 	}
 
+	@Override
+	public void returnResource(final Jedis resource) {
+		resource.resetState();
+		returnResourceObject(resource);
+	}
+
 	private void initInternalRedisPool(ConnectionInfo currentConnectionInfo) {
 		JedisFactory factory = new JedisFactory(currentConnectionInfo.getHost(), currentConnectionInfo.getPort(),
 				currentConnectionInfo.getTimeout(), currentConnectionInfo.getPassword(),
@@ -155,28 +114,10 @@ public class JedisSentinelPool extends Pool<Jedis> {
 	}
 
 	/**
-	 * Ping the jedis instance, return true is the result is PONG.
-	 */
-	public static boolean ping(JedisDirectPool pool) {
-		JedisTemplate template = new JedisTemplate(pool);
-		try {
-			String result = template.execute(new JedisAction<String>() {
-				@Override
-				public String action(Jedis jedis) {
-					return jedis.ping();
-				}
-			});
-			return (result != null) && result.equals("PONG");
-		} catch (JedisException e) {
-			return false;
-		}
-	}
-
-	/**
-	 * Assert the argurment, throw IllegalArgumentException if the expression is true.
+	 * Assert the argument, throw IllegalArgumentException if the expression is false.
 	 */
 	private static void assertArgument(boolean expression, String message) throws IllegalArgumentException {
-		if (expression) {
+		if (!expression) {
 			throw new IllegalArgumentException(message);
 		}
 	}
@@ -190,79 +131,85 @@ public class JedisSentinelPool extends Pool<Jedis> {
 	 * Listener thread to listen master switch message from sentinel.
 	 */
 	class MasterSwitchListener extends Thread {
-		public static final String THREAD_NAME = "RedisMasterSwitchListener-";
+		public static final String THREAD_NAME_PREFIX = "RedisMasterSwitchListener-";
+		public static final int SLEEP_BEFORE_RETRY_IN_MILLS = 1000;
 
 		private JedisPubSub subscriber;
-		private JedisDirectPool sentinelPool;
-		private Jedis sentinelJedis;
+		private JedisDirectPool currentSentinelPool;
+		private Jedis subscriberSentinelJedis;
 
 		private AtomicBoolean running = new AtomicBoolean(true);
 		private ConnectionInfo previousConnectionInfo;
 
 		public MasterSwitchListener() {
-			super(THREAD_NAME + masterName);
+			super(THREAD_NAME_PREFIX + masterName);
 		}
 
 		@Override
 		public void run() {
+
 			while (running.get()) {
 				try {
-					sentinelPool = pickupSentinel();
+					currentSentinelPool = selectSentinel();
 
-					if (sentinelPool != null) {
+					if (currentSentinelPool != null) {
 
-						ConnectionInfo currentConnectionInfo = queryMasterAddress(sentinelPool);
+						ConnectionInfo currentConnectionInfo = queryMasterAddress(currentSentinelPool);
 
-						if ((internalPool != null) && isAddressChange(currentConnectionInfo)) {
+						if ((internalPool != null) && isMasterAddressChange(currentConnectionInfo)) {
 							logger.info("The internalPool {} had changed, destroy it now.",
 									previousConnectionInfo.getHostAndPort());
 							destroyInternalRedisPool();
 						}
 
-						if ((internalPool == null) || isAddressChange(currentConnectionInfo)) {
+						if ((internalPool == null) || isMasterAddressChange(currentConnectionInfo)) {
 							logger.info("The internalPool is not init or the address had changed, init it now.");
 							initInternalRedisPool(currentConnectionInfo);
 						}
 
 						previousConnectionInfo = currentConnectionInfo;
 
-						sentinelJedis = sentinelPool.getResource();
+						// blocking listening master switch until exception happen.
 						subscriber = new MasterSwitchSubscriber();
-						sentinelJedis.subscribe(subscriber, "+switch-master", "+redirect-to-master");
+						subscriberSentinelJedis = currentSentinelPool.getResource();
+						subscriberSentinelJedis.subscribe(subscriber, "+switch-master", "+redirect-to-master");
 					} else {
-						logger.info("All sentinels down, sleep 1 seconds and try to connect again.");
-						// when the system startup but the sentinels not yet, init a urgly address to
-						// prevent null point exception.
+						logger.info("All sentinels down, sleep 1 seconds and try to select again.");
+						// when the system startup but the sentinels not yet, init an ugly address to prevent null point
+						// exception.
+
 						if (internalPool == null) {
 							ConnectionInfo currentConnectionInfo = new ConnectionInfo(UNAVAILABLE_ADDRESS);
 							initInternalRedisPool(currentConnectionInfo);
 							previousConnectionInfo = currentConnectionInfo;
 						}
-						sleep(1000);
+						sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
 					}
 				} catch (JedisConnectionException e) {
 
-					if (sentinelJedis != null) {
-						sentinelPool.returnBrokenResource(sentinelJedis);
+					if (subscriberSentinelJedis != null) {
+						currentSentinelPool.returnBrokenResource(subscriberSentinelJedis);
 					}
 
 					if (running.get()) {
 						logger.error("Lost connection with Sentinel "
-								+ sentinelPool.getConnectionInfo().getHostAndPort()
-								+ ", sleep 1 seconds and try to connect other one. ");
-						sleep(1000);
+								+ currentSentinelPool.getConnectionInfo().getHostAndPort()
+								+ ", sleep 1 seconds and try to connect other one.");
+						sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
 					}
 				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-					sleep(1000);
+					logger.error("Some Exception happen, current Sentinel is"
+							+ currentSentinelPool.getConnectionInfo().getHostAndPort()
+							+ ", sleep 1 seconds and try again.", e);
+					sleep(SLEEP_BEFORE_RETRY_IN_MILLS);
 				}
 			}
 		}
 
 		/**
-		 * interrupt the thread and stop the blocking subscription.
+		 * Interrupt the thread and stop the blocking subscription.
 		 */
-		public void stopListening() {
+		private void stopListening() {
 			running = new AtomicBoolean(false);
 			this.interrupt();
 
@@ -271,17 +218,72 @@ public class JedisSentinelPool extends Pool<Jedis> {
 					subscriber.unsubscribe();
 				}
 			} finally {
-				if (sentinelJedis != null) {
-					JedisUtils.closeJedis(sentinelJedis);
+				if (subscriberSentinelJedis != null) {
+					JedisUtils.closeJedis(subscriberSentinelJedis);
 				}
 			}
 		}
 
-		private boolean isAddressChange(ConnectionInfo currentConnectionInfo) {
-			if (currentConnectionInfo == null) {
-				return false;
+		/**
+		 * Pickup the first available sentinel, if all sentinel down, return null.
+		 */
+		private JedisDirectPool selectSentinel() {
+			for (JedisDirectPool sentinelPool : sentinelPools) {
+				if (ping(sentinelPool)) {
+					return sentinelPool;
+				}
 			}
 
+			return null;
+		}
+
+		/**
+		 * Ping the jedis instance, return true if the result is PONG.
+		 */
+		private boolean ping(Pool<Jedis> pool) {
+			JedisTemplate template = new JedisTemplate(pool);
+			try {
+				String result = template.execute(new JedisAction<String>() {
+					@Override
+					public String action(Jedis jedis) {
+						return jedis.ping();
+					}
+				});
+				return (result != null) && result.equals("PONG");
+			} catch (JedisException e) {
+				return false;
+			}
+		}
+
+		/**
+		 * Query master address from sentinel.
+		 */
+		private ConnectionInfo queryMasterAddress(Pool<Jedis> sentinelPool) {
+			JedisTemplate sentinelTemplate = new JedisTemplate(sentinelPool);
+			List<String> address = sentinelTemplate.execute(new JedisAction<List<String>>() {
+				@Override
+				public List<String> action(Jedis jedis) {
+					return jedis.sentinelGetMasterAddrByName(masterName);
+				}
+			});
+
+			if ((address == null) || address.isEmpty()) {
+				throw new IllegalArgumentException("Master name " + masterName + " is not in sentinel.conf");
+			}
+
+			return buildRedisConnectionInfo(address.get(0), address.get(1));
+		}
+
+		/**
+		 * Combine the host & port with the redisAddtionalInfo which store the other properties.
+		 */
+		private ConnectionInfo buildRedisConnectionInfo(String host, String port) {
+			return new ConnectionInfo(host, Integer.valueOf(port), redisAddtionalInfo.getTimeout(),
+					redisAddtionalInfo.getPassword(), redisAddtionalInfo.getDatabase(),
+					redisAddtionalInfo.getClientName());
+		}
+
+		private boolean isMasterAddressChange(ConnectionInfo currentConnectionInfo) {
 			if (previousConnectionInfo == null) {
 				return true;
 			}
@@ -305,7 +307,8 @@ public class JedisSentinelPool extends Pool<Jedis> {
 			public void onMessage(String channel, String message) {
 				// message example: +switch-master: mymaster 127.0.0.1 6379 127.0.0.1 6380
 				// +redirect-to-master default 127.0.0.1 6380 127.0.0.1 6381 (if slave-master fail-over quick enough)
-				logger.info("Sentinel " + sentinelPool.getConnectionInfo().getHostAndPort() + " published: " + message);
+				logger.info("Sentinel " + currentSentinelPool.getConnectionInfo().getHostAndPort() + " published: "
+						+ message);
 				String[] switchMasterMsg = message.split(" ");
 				// if the master name equals my master name, destroy the old pool and init a new pool
 				if (masterName.equals(switchMasterMsg[0])) {

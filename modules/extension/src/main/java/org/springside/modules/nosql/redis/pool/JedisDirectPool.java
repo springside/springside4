@@ -17,7 +17,8 @@ public class JedisDirectPool extends Pool<Jedis> {
 		this.connectionInfo = connectionInfo;
 
 		JedisFactory factory = new JedisFactory(connectionInfo.getHost(), connectionInfo.getPort(),
-				connectionInfo.getTimeout(), connectionInfo.getPassword(), connectionInfo.getDatabase());
+				connectionInfo.getTimeout(), connectionInfo.getPassword(), connectionInfo.getDatabase(),
+				connectionInfo.getClientName());
 
 		internalPool = new GenericObjectPool(factory, config);
 	}

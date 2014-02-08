@@ -18,25 +18,31 @@ public class ConnectionInfo {
 	private int timeout;
 	private String password;
 	private int database;
+	private String clientName;
 
 	public ConnectionInfo(String host) {
-		this(host, DEFAULT_PORT, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE);
+		this(host, DEFAULT_PORT, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
 	}
 
 	public ConnectionInfo(String host, int port) {
-		this(host, port, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE);
+		this(host, port, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
 	}
 
 	public ConnectionInfo(String host, int port, int timeout) {
-		this(host, port, timeout, DEFAULT_PASSWORD, DEFAULT_DATABASE);
+		this(host, port, timeout, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
 	}
 
-	public ConnectionInfo(String host, int port, int timeout, String password, int database) {
+	public ConnectionInfo(String host, int port, int timeout, String password, int database, String clientName) {
 		this.host = host;
 		this.port = port;
 		this.timeout = timeout;
 		this.password = password;
 		this.database = database;
+		this.clientName = clientName;
+	}
+
+	public String getHostAndPort() {
+		return new StringBuilder().append(host).append(":").append(port).toString();
 	}
 
 	public String getHost() {
@@ -79,13 +85,17 @@ public class ConnectionInfo {
 		this.database = database;
 	}
 
-	public String getHostAndPort() {
-		return host + ":" + port;
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 
 	@Override
 	public String toString() {
 		return "ConnectionInfo [host=" + host + ", port=" + port + ", timeout=" + timeout + ", password=" + password
-				+ ", database=" + database + "]";
+				+ ", database=" + database + ", clientName=" + clientName + "]";
 	}
 }

@@ -11,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Jedis;
+import redis.clients.util.Pool;
 
 /**
  * 任务管理，支持任务的安排与取消。
@@ -27,7 +28,7 @@ public class JobProducer {
 
 	private String readyJobKey;
 
-	public JobProducer(String jobName, JedisPool jedisPool) {
+	public JobProducer(String jobName, Pool<Jedis> jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);

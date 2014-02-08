@@ -15,7 +15,8 @@ import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
 
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Jedis;
+import redis.clients.util.Pool;
 
 import com.google.common.collect.Lists;
 
@@ -44,7 +45,7 @@ public class JobDispatcher implements Runnable {
 	private String jobName;
 	private List<String> keys;
 
-	public JobDispatcher(String jobName, JedisPool jedisPool) {
+	public JobDispatcher(String jobName, Pool<Jedis> jedisPool) {
 		this.jobName = jobName;
 
 		String scheduledJobKey = Keys.getScheduledJobKey(jobName);
