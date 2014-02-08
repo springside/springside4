@@ -9,11 +9,11 @@ import redis.clients.util.Pool;
 /**
  * Pool which connect to redis instance directly.
  */
-public class JedisDirectPool extends Pool<Jedis> {
+public class JedisPool extends Pool<Jedis> {
 
 	private ConnectionInfo connectionInfo;
 
-	public JedisDirectPool(ConnectionInfo connectionInfo, JedisPoolConfig config) {
+	public JedisPool(ConnectionInfo connectionInfo, JedisPoolConfig config) {
 		this.connectionInfo = connectionInfo;
 
 		JedisFactory factory = new JedisFactory(connectionInfo.getHost(), connectionInfo.getPort(),

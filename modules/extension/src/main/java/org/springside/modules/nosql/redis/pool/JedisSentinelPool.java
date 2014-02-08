@@ -27,7 +27,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 
 	private static Logger logger = LoggerFactory.getLogger(JedisSentinelPool.class);
 
-	private List<JedisDirectPool> sentinelPools = new ArrayList<JedisDirectPool>();
+	private List<JedisPool> sentinelPools = new ArrayList<JedisPool>();
 	private MasterSwitchListener masterSwitchListener;
 
 	private String masterName;
@@ -57,7 +57,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		// check and assign parameter, all parameter can't not be null or empty
 		assertArgument(((sentinelInfos != null) && (sentinelInfos.length != 0)), "seintinelInfos is not set");
 		for (ConnectionInfo sentinelInfo : sentinelInfos) {
-			JedisDirectPool sentinelPool = new JedisDirectPool(sentinelInfo, new JedisPoolConfig());
+			JedisPool sentinelPool = new JedisPool(sentinelInfo, new JedisPoolConfig());
 			sentinelPools.add(sentinelPool);
 		}
 
@@ -77,9 +77,9 @@ public class JedisSentinelPool extends Pool<Jedis> {
 
 	@Override
 	public void destroy() {
-		masterSwitchListener.stopListening();
+		masterSwitchListener.shutdown();
 
-		for (JedisDirectPool sentinel : sentinelPools) {
+		for (JedisPool sentinel : sentinelPools) {
 			sentinel.destroy();
 		}
 
@@ -135,7 +135,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		public static final int RETRY_WAIT_TIME_MILLS = 1000;
 
 		private JedisPubSub subscriber;
-		private JedisDirectPool currentSentinelPool;
+		private JedisPool currentSentinelPool;
 		private Jedis subscriberSentinelJedis;
 
 		private AtomicBoolean running = new AtomicBoolean(true);
@@ -209,7 +209,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		/**
 		 * Interrupt the thread and stop the blocking subscription.
 		 */
-		private void stopListening() {
+		private void shutdown() {
 			running = new AtomicBoolean(false);
 			this.interrupt();
 
@@ -227,8 +227,8 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		/**
 		 * Pickup the first available sentinel, if all sentinel down, return null.
 		 */
-		private JedisDirectPool selectSentinel() {
-			for (JedisDirectPool sentinelPool : sentinelPools) {
+		private JedisPool selectSentinel() {
+			for (JedisPool sentinelPool : sentinelPools) {
 				if (ping(sentinelPool)) {
 					return sentinelPool;
 				}
