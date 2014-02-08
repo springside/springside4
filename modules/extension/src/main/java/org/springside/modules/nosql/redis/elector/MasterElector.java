@@ -158,7 +158,7 @@ public class MasterElector implements Runnable {
 	}
 
 	// for test
-	public void setHostId(String hostId) {
+	void setHostId(String hostId) {
 		this.hostId = hostId;
 	}
 }

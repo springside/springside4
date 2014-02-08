@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisException;
+import redis.clients.util.Pool;
 
 /**
  * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
@@ -21,9 +21,9 @@ import redis.clients.jedis.exceptions.JedisException;
 public class JedisTemplate {
 	private static Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
 
-	private JedisPool jedisPool;
+	private Pool<Jedis> jedisPool;
 
-	public JedisTemplate(JedisPool jedisPool) {
+	public JedisTemplate(Pool<Jedis> jedisPool) {
 		this.jedisPool = jedisPool;
 	}
 
@@ -84,7 +84,7 @@ public class JedisTemplate {
 	/**
 	 * 获取内部的pool做进一步的动作。
 	 */
-	public JedisPool getJedisPool() {
+	public Pool<Jedis> getJedisPool() {
 		return jedisPool;
 	}
 
