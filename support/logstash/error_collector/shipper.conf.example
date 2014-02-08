@@ -20,7 +20,7 @@ output {
   tcp {
     host => "127.0.0.1"
     port => 6868
-    codec => plain {  
+    codec => line {  
       format => "[%{host}]-%{message}"                   # 设置output的格式，仅输出HostName + 日志内容本身,不附加Timestamp
     }
   }
