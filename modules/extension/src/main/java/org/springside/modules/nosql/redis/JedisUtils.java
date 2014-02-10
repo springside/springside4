@@ -49,10 +49,10 @@ public class JedisUtils {
 	}
 
 	/**
-	 * 退出然后关闭Jedis连接。
+	 * 退出然后关闭Jedis连接。如果Jedis为null则无动作。
 	 */
 	public static void closeJedis(Jedis jedis) {
-		if (jedis.isConnected()) {
+		if ((jedis != null) && jedis.isConnected()) {
 			try {
 				try {
 					jedis.quit();
