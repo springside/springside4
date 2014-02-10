@@ -20,17 +20,16 @@ import redis.clients.util.Pool;
  */
 public class JedisSentinelPool extends Pool<Jedis> {
 
-	private static final String UNAVAILABLE_ADDRESS = "All sentinel down";
+	private static final String UNAVAILABLE_MASTER_ADDRESS = "All sentinel down";
 
 	private static Logger logger = LoggerFactory.getLogger(JedisSentinelPool.class);
 
 	private String masterName;
-
 	private ConnectionInfo[] sentinelInfos;
-	private MasterSwitchListener masterSwitchListener;
-
-	private JedisPoolConfig masterPoolConfig;
 	private ConnectionInfo masterAddtionalInfo;
+	private JedisPoolConfig masterPoolConfig;
+
+	private MasterSwitchListener masterSwitchListener;
 
 	/**
 	 * see {@link #JedisSentinelPool(ConnectionInfo[], String, ConnectionInfo, JedisPoolConfig)}
@@ -64,7 +63,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		assertArgument(masterPoolConfig != null, "masterPoolConfig is not set");
 		this.masterPoolConfig = masterPoolConfig;
 
-		// Start MasterSwitchListener thread to listen the master switch message.
+		// Start MasterSwitchListener thread ,internal poll will be start in the thread
 		masterSwitchListener = new MasterSwitchListener();
 		masterSwitchListener.start();
 	}
@@ -128,6 +127,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		private JedisPubSub subscriber;
 
 		private AtomicBoolean running = new AtomicBoolean(true);
+
 		private ConnectionInfo previousMasterConnectionInfo;
 
 		public MasterSwitchListener() {
@@ -138,8 +138,8 @@ public class JedisSentinelPool extends Pool<Jedis> {
 		public void run() {
 			while (running.get()) {
 				try {
-					boolean avalibeSentinelExist = selectSentinel();
-					if (avalibeSentinelExist) {
+					boolean avalibleSentinelExist = selectSentinel();
+					if (avalibleSentinelExist) {
 						try {
 							ConnectionInfo masterConnectionInfo = queryMasterAddress();
 							if ((internalPool != null) && isMasterAddressChanged(masterConnectionInfo)) {
@@ -160,12 +160,11 @@ public class JedisSentinelPool extends Pool<Jedis> {
 							subscriber = new MasterSwitchSubscriber();
 							sentinelJedis.subscribe(subscriber, "+switch-master", "+redirect-to-master");
 						} catch (JedisConnectionException e) {
-
 							JedisUtils.closeJedis(sentinelJedis);
 
 							if (running.get()) {
 								logger.error("Lost connection with Sentinel " + sentinelInfo.getHostAndPort()
-										+ ", sleep 1000ms and try to connect other one.");
+										+ ", sleep 1000ms and try to connect another one.");
 								sleep(RETRY_WAIT_TIME_MILLS);
 							}
 						} catch (Exception e) {
@@ -183,7 +182,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 						// when the system startup but the sentinels not yet, init an ugly address to prevent null point
 						// exception.
 						if (internalPool == null) {
-							ConnectionInfo masterConnectionInfo = new ConnectionInfo(UNAVAILABLE_ADDRESS);
+							ConnectionInfo masterConnectionInfo = new ConnectionInfo(UNAVAILABLE_MASTER_ADDRESS);
 							initInternalPool(masterConnectionInfo);
 							previousMasterConnectionInfo = masterConnectionInfo;
 						}
@@ -191,6 +190,7 @@ public class JedisSentinelPool extends Pool<Jedis> {
 					}
 				} catch (Exception e) {
 					logger.error("Unexpected exception happen", e);
+					sleep(RETRY_WAIT_TIME_MILLS);
 				}
 			}
 		}
@@ -223,8 +223,6 @@ public class JedisSentinelPool extends Pool<Jedis> {
 				}
 			}
 
-			sentinelInfo = null;
-			sentinelJedis = null;
 			return false;
 		}
 
