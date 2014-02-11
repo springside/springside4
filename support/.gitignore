@@ -2,5 +2,4 @@ jmeter/*.jtl
 jmeter/*.log
 local-script/
 logstash/logstash-*-flatjar.jar
-logstash/*/shipper.conf
 logstash/*/data
