@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 	<description>导入ShowCase中的applicationContext文件列表</description>
-	
-	<!-- required  -->
+
+	<!-- required -->
 	<import resource="security/applicationContext-shiro.xml" />
 
 	<!-- optional -->
@@ -14,7 +14,8 @@
 	<import resource="jms/applicationContext-jms-simple.xml" />
 	<import resource="jms/applicationContext-jms-advanced.xml" />
 	<import resource="jmx/applicationContext-jmx.xml" />
-	<import resource="monitor/applicationContext-monitor.xml" />
+	<import resource="monitor/applicationContext-metrics.xml" />
+	<import resource="monitor/applicationContext-profiler.xml" />
 	<import resource="schedule/applicationContext-jdk-timer.xml" />
 	<import resource="schedule/applicationContext-spring-scheduler.xml" />
 	<import resource="schedule/applicationContext-quartz-cron-local.xml" />

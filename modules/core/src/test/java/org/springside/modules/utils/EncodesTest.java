@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 
@@ -10,21 +15,21 @@ public class EncodesTest {
 	public void hexEncode() {
 		String input = "haha,i am a very long message";
 		String result = Encodes.encodeHex(input.getBytes());
-		assertEquals(input, new String(Encodes.decodeHex(result)));
+		assertThat(new String(Encodes.decodeHex(result))).isEqualTo(input);
 	}
 
 	@Test
 	public void base64Encode() {
 		String input = "haha,i am a very long message";
 		String result = Encodes.encodeBase64(input.getBytes());
-		assertEquals(input, new String(Encodes.decodeBase64(result)));
+		assertThat(new String(Encodes.decodeBase64(result))).isEqualTo(input);
 	}
 
 	@Test
 	public void base64UrlSafeEncode() {
 		String input = "haha,i am a very long message";
 		String result = Encodes.encodeUrlSafeBase64(input.getBytes());
-		assertEquals(input, new String(Encodes.decodeBase64(result)));
+		assertThat(new String(Encodes.decodeBase64(result))).isEqualTo(input);
 	}
 
 	@Test
@@ -33,22 +38,22 @@ public class EncodesTest {
 		String result = Encodes.urlEncode(input);
 		System.out.println(result);
 
-		assertEquals(input, Encodes.urlDecode(result));
+		assertThat(Encodes.urlDecode(result)).isEqualTo(input);
 	}
 
 	@Test
 	public void xmlEncode() {
 		String input = "1>2";
 		String result = Encodes.escapeXml(input);
-		assertEquals("1&gt;2", result);
-		assertEquals(input, Encodes.unescapeXml(result));
+		assertThat(result).isEqualTo("1&gt;2");
+		assertThat(Encodes.unescapeXml(result)).isEqualTo(input);
 	}
 
 	@Test
 	public void html() {
 		String input = "1>2";
 		String result = Encodes.escapeHtml(input);
-		assertEquals("1&gt;2", result);
-		assertEquals(input, Encodes.unescapeHtml(result));
+		assertThat(result).isEqualTo("1&gt;2");
+		assertThat(Encodes.unescapeHtml(result)).isEqualTo(input);
 	}
 }

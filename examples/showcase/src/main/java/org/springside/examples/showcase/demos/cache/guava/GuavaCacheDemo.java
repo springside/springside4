@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.cache.guava;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -52,19 +57,19 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 		// 第一次加载会查数据库
 		User user = cache.get(1L);
-		assertEquals("admin", user.getLoginName());
-		assertFalse(appender.isEmpty());
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isFalse();
 		appender.clearLogs();
 
 		// 第二次加载时直接从缓存里取
 		User user2 = cache.get(1L);
-		assertEquals("admin", user2.getLoginName());
-		assertTrue(appender.isEmpty());
+		assertThat(user2.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isTrue();
 
 		// 第三次加载时，因为缓存已经过期所以会查数据库
 		Threads.sleep(10, TimeUnit.SECONDS);
 		User user3 = cache.get(1L);
-		assertEquals("admin", user3.getLoginName());
-		assertFalse(appender.isEmpty());
+		assertThat(user3.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isFalse();
 	}
 }

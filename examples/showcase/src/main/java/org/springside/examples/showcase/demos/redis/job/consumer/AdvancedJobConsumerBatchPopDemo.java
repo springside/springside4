@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.job.consumer;
 
 import java.util.List;
@@ -7,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.AdvancedConsumer;
+import org.springside.modules.nosql.redis.scheduler.AdvancedJobConsumer;
 import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
@@ -21,10 +26,10 @@ import org.springside.modules.utils.Threads;
  */
 public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 
-	private AdvancedConsumer consumer;
-
 	private static boolean reliable;
 	private static int batchSize;
+
+	private AdvancedJobConsumer consumer;
 
 	public static void main(String[] args) throws Exception {
 
@@ -32,9 +37,9 @@ public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 				String.valueOf(THREAD_COUNT)));
 
 		reliable = Boolean.parseBoolean(System.getProperty("reliable",
-				String.valueOf(AdvancedConsumer.DEFAULT_RELIABLE)));
+				String.valueOf(AdvancedJobConsumer.DEFAULT_RELIABLE)));
 		batchSize = Integer.parseInt(System.getProperty("batchsize",
-				String.valueOf(AdvancedConsumer.DEFAULT_BATCH_SIZE)));
+				String.valueOf(AdvancedJobConsumer.DEFAULT_BATCH_SIZE)));
 
 		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
 				JedisUtils.DEFAULT_TIMEOUT, threadCount);
@@ -69,7 +74,7 @@ public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 	}
 
 	public AdvancedJobConsumerBatchPopDemo() {
-		consumer = new AdvancedConsumer("ss", pool);
+		consumer = new AdvancedJobConsumer("ss", pool);
 		consumer.setReliable(reliable);
 		consumer.setBatchSize(batchSize);
 	}

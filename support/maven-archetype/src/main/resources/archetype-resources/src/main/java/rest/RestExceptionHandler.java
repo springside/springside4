@@ -1,6 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.rest;
 
 import java.util.Map;
@@ -30,6 +35,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	private JsonMapper jsonMapper = new JsonMapper();
 
 	/**
+	 * 处理RestException.
+	 */
+	@ExceptionHandler(value = { RestException.class })
+	public final ResponseEntity<?> handleException(RestException ex, WebRequest request) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType(MediaTypes.TEXT_PLAIN_UTF_8));
+		return handleExceptionInternal(ex, ex.getMessage(), headers, ex.status, request);
+	}
+
+	/**
 	 * 处理JSR311 Validation异常.
 	 */
 	@ExceptionHandler(value = { ConstraintViolationException.class })
@@ -39,15 +54,5 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaTypes.TEXT_PLAIN_UTF_8));
 		return handleExceptionInternal(ex, body, headers, HttpStatus.BAD_REQUEST, request);
-	}
-
-	/**
-	 * 处理RestException.
-	 */
-	@ExceptionHandler(value = { RestException.class })
-	public final ResponseEntity<?> handleException(RestException ex, WebRequest request) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.parseMediaType(MediaTypes.TEXT_PLAIN_UTF_8));
-		return handleExceptionInternal(ex, ex.getMessage(), headers, ex.status, request);
 	}
 }

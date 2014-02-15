@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.job.consumer;
 
 import java.util.concurrent.ExecutorService;
@@ -33,11 +38,11 @@ public class SimpleJobConsumerDemo implements Runnable {
 	protected static AtomicLong golbalPreviousCount = new AtomicLong(0);
 	protected static RateLimiter golbalPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
 
-	private SimpleJobConsumer consumer;
-
 	protected long localCounter = 0L;
 	protected long localPreviousCount = 0L;
 	protected RateLimiter localPrintRate = RateLimiter.create(1d / PRINT_BETWEEN_SECONDS);
+
+	private SimpleJobConsumer consumer;
 
 	public static void main(String[] args) throws Exception {
 
@@ -104,14 +109,14 @@ public class SimpleJobConsumerDemo implements Runnable {
 
 		// print global progress, 所有線程裡只有一個会在10秒內打印一次。
 		if (golbalPrintRate.tryAcquire()) {
-			System.out.printf("Total pop %,d jobs, tps is %,d\n", globalCount,
+			System.out.printf("Total pop %,d jobs, tps is %,d%n", globalCount,
 					(globalCount - golbalPreviousCount.get()) / PRINT_BETWEEN_SECONDS);
 			golbalPreviousCount.set(globalCount);
 		}
 
 		// print current thread progress，10秒內打印一次。
 		if (localPrintRate.tryAcquire()) {
-			System.out.printf("Local thread pop %,d jobs, tps is %,d\n", localCounter,
+			System.out.printf("Local thread pop %,d jobs, tps is %,d%n", localCounter,
 					(localCounter - localPreviousCount) / PRINT_BETWEEN_SECONDS);
 			localPreviousCount = localCounter;
 		}

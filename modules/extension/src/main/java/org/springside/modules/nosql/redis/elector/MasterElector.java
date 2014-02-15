@@ -1,12 +1,8 @@
-/*------------------------------------------------------------------------------
- * COPYRIGHT Ericsson 2013
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *----------------------------------------------------------------------------*/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis.elector;
 
 import java.net.InetAddress;
@@ -27,7 +23,7 @@ import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import redis.clients.util.Pool;
 
 /**
  * Master选举实现, 基于setNx()与expire()两大API.
@@ -57,7 +53,7 @@ public class MasterElector implements Runnable {
 	private String masterKey = DEFAULT_MASTER_KEY;
 	private AtomicBoolean master = new AtomicBoolean(false);
 
-	public MasterElector(JedisPool jedisPool, int intervalSecs) {
+	public MasterElector(Pool<Jedis> jedisPool, int intervalSecs) {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
 		this.intervalSecs = intervalSecs;
 		this.expireSecs = intervalSecs + (intervalSecs / 2);
@@ -162,7 +158,7 @@ public class MasterElector implements Runnable {
 	}
 
 	// for test
-	public void setHostId(String hostId) {
+	void setHostId(String hostId) {
 		this.hostId = hostId;
 	}
 }

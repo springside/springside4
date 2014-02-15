@@ -1,8 +1,8 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.utils;
 
 import java.io.UnsupportedEncodingException;
@@ -74,7 +74,7 @@ public class Encodes {
 	public static String encodeBase62(byte[] input) {
 		char[] chars = new char[input.length];
 		for (int i = 0; i < input.length; i++) {
-			chars[i] = BASE62[((input[i] & 0xFF) % BASE62.length)];
+			chars[i] = BASE62[(input[i] & 0xFF) % BASE62.length];
 		}
 		return new String(chars);
 	}

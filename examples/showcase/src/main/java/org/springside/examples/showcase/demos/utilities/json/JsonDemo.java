@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.json;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.Date;
@@ -64,7 +69,7 @@ public class JsonDemo {
 		TestBean bean = new TestBean("A");
 		String beanString = mapper.toJson(bean);
 		System.out.println("Bean:" + beanString);
-		assertEquals("{\"name\":\"A\"}", beanString);
+		assertThat(beanString).isEqualTo("{\"name\":\"A\"}");
 
 		// Map
 		Map<String, Object> map = Maps.newLinkedHashMap();
@@ -72,25 +77,25 @@ public class JsonDemo {
 		map.put("age", 2);
 		String mapString = mapper.toJson(map);
 		System.out.println("Map:" + mapString);
-		assertEquals("{\"name\":\"A\",\"age\":2}", mapString);
+		assertThat(mapString).isEqualTo("{\"name\":\"A\",\"age\":2}");
 
 		// List<String>
 		List<String> stringList = Lists.newArrayList("A", "B", "C");
 		String listString = mapper.toJson(stringList);
 		System.out.println("String List:" + listString);
-		assertEquals("[\"A\",\"B\",\"C\"]", listString);
+		assertThat(listString).isEqualTo("[\"A\",\"B\",\"C\"]");
 
 		// List<Bean>
 		List<TestBean> beanList = Lists.newArrayList(new TestBean("A"), new TestBean("B"));
 		String beanListString = mapper.toJson(beanList);
 		System.out.println("Bean List:" + beanListString);
-		assertEquals("[{\"name\":\"A\"},{\"name\":\"B\"}]", beanListString);
+		assertThat(beanListString).isEqualTo("[{\"name\":\"A\"},{\"name\":\"B\"}]");
 
 		// Bean[]
 		TestBean[] beanArray = new TestBean[] { new TestBean("A"), new TestBean("B") };
 		String beanArrayString = mapper.toJson(beanArray);
 		System.out.println("Array List:" + beanArrayString);
-		assertEquals("[{\"name\":\"A\"},{\"name\":\"B\"}]", beanArrayString);
+		assertThat(beanArrayString).isEqualTo("[{\"name\":\"A\"},{\"name\":\"B\"}]");
 	}
 
 	/**
@@ -138,15 +143,16 @@ public class JsonDemo {
 
 		// 打印全部属性
 		JsonMapper normalMapper = new JsonMapper();
-		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}", normalMapper.toJson(bean));
+		assertThat(normalMapper.toJson(bean)).isEqualTo(
+				"{\"name\":\"A\",\"defaultValue\":\"hello\",\"nullValue\":null}");
 
 		// 不打印nullValue属性
 		JsonMapper nonEmptyMapper = JsonMapper.nonEmptyMapper();
-		assertEquals("{\"name\":\"A\",\"defaultValue\":\"hello\"}", nonEmptyMapper.toJson(bean));
+		assertThat(nonEmptyMapper.toJson(bean)).isEqualTo("{\"name\":\"A\",\"defaultValue\":\"hello\"}");
 
 		// 不打印默认值未改变的nullValue与defaultValue属性
 		JsonMapper nonDefaultMaper = JsonMapper.nonDefaultMapper();
-		assertEquals("{\"name\":\"A\"}", nonDefaultMaper.toJson(bean));
+		assertThat(nonDefaultMaper.toJson(bean)).isEqualTo("{\"name\":\"A\"}");
 	}
 
 	/*
@@ -156,7 +162,7 @@ public class JsonDemo {
 	public void jacksonAnnoation() {
 		TestBean2 testBean = new TestBean2(1, "foo", 18);
 		// 结果name属性输出在前，且被改名为productName，且age属性被ignore
-		assertEquals("{\"productName\":\"foo\",\"id\":1}", mapper.toJson(testBean));
+		assertThat(mapper.toJson(testBean)).isEqualTo("{\"productName\":\"foo\",\"id\":1}");
 	}
 
 	/*
@@ -168,7 +174,7 @@ public class JsonDemo {
 		newMapper.enableJaxbAnnotation();
 		TestBean3 testBean = new TestBean3(1, "foo", 18);
 		// 结果name属性输出在前，且被改名为productName，且age属性被ignore
-		assertEquals("{\"productName\":\"foo\",\"id\":1}", newMapper.toJson(testBean));
+		assertThat(newMapper.toJson(testBean)).isEqualTo("{\"productName\":\"foo\",\"id\":1}");
 	}
 
 	// 调转顺序
@@ -232,9 +238,9 @@ public class JsonDemo {
 		mapper.update(jsonString, bean);
 
 		// name被赋值
-		assertEquals("A", bean.getName());
+		assertThat(bean.getName()).isEqualTo("A");
 		// DefaultValue不在Json串中，依然保留。
-		assertEquals("Foobar", bean.getDefaultValue());
+		assertThat(bean.getDefaultValue()).isEqualTo("Foobar");
 	}
 
 	/**
@@ -243,8 +249,7 @@ public class JsonDemo {
 	@Test
 	public void jsonp() {
 		TestBean bean = new TestBean("foo");
-		String jsonpString = mapper.toJsonP("callback", bean);
-		assertEquals("callback({\"name\":\"foo\"})", jsonpString);
+		assertThat(mapper.toJsonP("callback", bean)).isEqualTo("callback({\"name\":\"foo\"})");
 	}
 
 	/**
@@ -301,17 +306,17 @@ public class JsonDemo {
 	@Test
 	public void enumType() {
 		// toJSon默認使用enum.name()
-		assertEquals("\"One\"", mapper.toJson(TestEnum.One));
+		assertThat(mapper.toJson(TestEnum.One)).isEqualTo("\"One\"");
 		// fromJson使用enum.name()或enum.order()
-		assertEquals(TestEnum.One, mapper.fromJson("\"One\"", TestEnum.class));
-		assertEquals(TestEnum.One, mapper.fromJson("0", TestEnum.class));
+		assertThat(mapper.fromJson("\"One\"", TestEnum.class)).isEqualTo(TestEnum.One);
+		assertThat(mapper.fromJson("0", TestEnum.class)).isEqualTo(TestEnum.One);
 
 		// 使用enum.toString(), 注意配置必須在所有讀寫動作之前調用.
 		// 建议toString()使用index数字属性，比enum.name()节约了空间，比enum.order()则不会有顺序随时改变不确定的问题。
 		JsonMapper newMapper = new JsonMapper();
 		newMapper.enableEnumUseToString();
-		assertEquals("\"1\"", newMapper.toJson(TestEnum.One));
-		assertEquals(TestEnum.One, newMapper.fromJson("\"1\"", TestEnum.class));
+		assertThat(newMapper.toJson(TestEnum.One)).isEqualTo("\"1\"");
+		assertThat(newMapper.fromJson("\"1\"", TestEnum.class)).isEqualTo(TestEnum.One);
 	}
 
 	/**
@@ -355,14 +360,14 @@ public class JsonDemo {
 		// to json
 		String expectedJson = "{\"startDate\":" + timestampString + ",\"endDate\":\"" + formatedString
 				+ "\",\"dateTime\":" + timestampString + "}";
-		assertEquals(expectedJson, mapper.toJson(dateBean));
+		assertThat(mapper.toJson(dateBean)).isEqualTo(expectedJson);
 
 		// from json
 		Date expectedEndDate = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime(formatedString).toDate();
 
 		DateBean resultBean = mapper.fromJson(expectedJson, DateBean.class);
-		assertEquals(date, resultBean.startDate);
-		assertEquals(expectedEndDate, resultBean.endDate);
+		assertThat(resultBean.startDate).isEqualTo(date);
+		assertThat(resultBean.endDate).isEqualTo(expectedEndDate);
 	}
 
 	public static class DateBean {
@@ -385,31 +390,31 @@ public class JsonDemo {
 		// Null Bean
 		TestBean nullBean = null;
 		String nullBeanString = mapper.toJson(nullBean);
-		assertEquals("null", nullBeanString);
+		assertThat(nullBeanString).isEqualTo("null");
 
 		// Empty List
 		List<String> emptyList = Lists.newArrayList();
 		String emptyListString = mapper.toJson(emptyList);
-		assertEquals("[]", emptyListString);
+		assertThat(emptyListString).isEqualTo("[]");
 
 		// fromJson测试 //
 
 		// Null String for Bean
 		TestBean nullBeanResult = mapper.fromJson(null, TestBean.class);
-		assertNull(nullBeanResult);
+		assertThat(nullBeanResult).isNull();
 
 		nullBeanResult = mapper.fromJson("null", TestBean.class);
-		assertNull(nullBeanResult);
+		assertThat(nullBeanResult).isNull();
 
 		// Null/Empty String for List
 		List nullListResult = mapper.fromJson(null, List.class);
-		assertNull(nullListResult);
+		assertThat(nullListResult).isNull();
 
 		nullListResult = mapper.fromJson("null", List.class);
-		assertNull(nullListResult);
+		assertThat(nullListResult).isNull();
 
 		nullListResult = mapper.fromJson("[]", List.class);
-		assertEquals(0, nullListResult.size());
+		assertThat(nullListResult).isEmpty();
 	}
 
 	// // 高级应用 ////
@@ -431,19 +436,19 @@ public class JsonDemo {
 
 		// 序列化是, json字符串裡children中的child1/child2都不包含到parent的屬性
 		String jsonString = "{\"name\":\"parent\",\"children\":[{\"name\":\"child1\"},{\"name\":\"child2\"}]}";
-		assertEquals(jsonString, mapper.toJson(parent));
+		assertThat(mapper.toJson(parent)).isEqualTo(jsonString);
 
 		// 注意此時如果單獨序列化child1，也不會打印parent，信息將丟失。
-		assertEquals("{\"name\":\"child1\"}", mapper.toJson(child1));
+		assertThat(mapper.toJson(child1)).isEqualTo("{\"name\":\"child1\"}");
 
 		// 反向序列化时，Json已很聪明的把parent填入child1/child2中.
 		CycleReferenceBean parentResult = mapper.fromJson(jsonString, CycleReferenceBean.class);
-		assertEquals("parent", parentResult.getChildren().get(0).getParent().getName());
+		assertThat(parentResult.getChildren().get(0).getParent().getName()).isEqualTo("parent");
 
 		// 单独反序列化child1，当然parent也是空
 		CycleReferenceBean child1Result = mapper.fromJson("{\"name\":\"child1\"}", CycleReferenceBean.class);
-		assertNull(child1Result.parent);
-		assertEquals("child1", child1Result.getName());
+		assertThat(child1Result.parent).isNull();
+		assertThat(child1Result.getName()).isEqualTo("child1");
 	}
 
 	/**
@@ -504,11 +509,11 @@ public class JsonDemo {
 		String jsonString = "{\"name\" : \"Foobar\",\"age\" : 37,\"occupation\" : \"coder man\"}";
 		ExtensibleBean extensibleBean = mapper.fromJson(jsonString, ExtensibleBean.class);
 		// 固定属性
-		assertEquals("Foobar", extensibleBean.getName());
-		assertEquals(null, extensibleBean.getProperties().get("name"));
+		assertThat(extensibleBean.getName()).isEqualTo("Foobar");
+		assertThat(extensibleBean.getProperties().get("name")).isNull();
 
 		// 可扩展属性
-		assertEquals("coder man", extensibleBean.getProperties().get("occupation"));
+		assertThat(extensibleBean.getProperties().get("occupation")).isEqualTo("coder man");
 	}
 
 	/**
@@ -554,11 +559,13 @@ public class JsonDemo {
 
 		// public view
 		ObjectWriter publicWriter = mapper.getMapper().writerWithView(Views.Public.class);
-		assertEquals("{\"name\":\"Foo\",\"otherValue\":\"others\"}", publicWriter.writeValueAsString(multiViewBean));
+		assertThat(publicWriter.writeValueAsString(multiViewBean)).isEqualTo(
+				"{\"name\":\"Foo\",\"otherValue\":\"others\"}");
 
 		// internal view
 		ObjectWriter internalWriter = mapper.getMapper().writerWithView(Views.Internal.class);
-		assertEquals("{\"age\":16,\"otherValue\":\"others\"}", internalWriter.writeValueAsString(multiViewBean));
+		assertThat(internalWriter.writeValueAsString(multiViewBean))
+				.isEqualTo("{\"age\":16,\"otherValue\":\"others\"}");
 
 	}
 
@@ -627,11 +634,11 @@ public class JsonDemo {
 
 		String jsonString = newMapper.toJson(user);
 
-		assertEquals("{\"name\":\"foo\",\"salary\":\"1.2\"}", jsonString);
+		assertThat(jsonString).isEqualTo("{\"name\":\"foo\",\"salary\":\"1.2\"}");
 
 		// from
 		User resultUser = newMapper.fromJson(jsonString, User.class);
-		assertEquals(Double.valueOf(1.2), resultUser.getSalary().value);
+		assertThat(resultUser.getSalary().value).isEqualTo(1.2);
 
 	}
 
@@ -712,8 +719,7 @@ public class JsonDemo {
 		bean.setDefaultValue("bar");
 		JsonMapper newMapper = JsonMapper.nonEmptyMapper();
 		newMapper.getMapper().setPropertyNamingStrategy(new LowerCaseNaming());
-		String jsonpString = newMapper.toJson(bean);
-		assertEquals("{\"name\":\"foo\",\"defaultvalue\":\"bar\"}", jsonpString);
+		assertThat(newMapper.toJson(bean)).isEqualTo("{\"name\":\"foo\",\"defaultvalue\":\"bar\"}");
 	}
 
 	public static class LowerCaseNaming extends PropertyNamingStrategy {

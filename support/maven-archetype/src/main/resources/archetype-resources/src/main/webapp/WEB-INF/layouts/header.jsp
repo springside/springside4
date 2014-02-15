@@ -20,6 +20,7 @@
 						<li><a href="${symbol_dollar}{ctx}/admin/user">Admin Users</a></li>
 						<li class="divider"></li>
 					</shiro:hasRole>
+					<li><a href="${symbol_dollar}{ctx}/api">APIs</a></li>
 					<li><a href="${symbol_dollar}{ctx}/profile">Edit Profile</a></li>
 					<li><a href="${symbol_dollar}{ctx}/logout">Logout</a></li>
 				</ul>

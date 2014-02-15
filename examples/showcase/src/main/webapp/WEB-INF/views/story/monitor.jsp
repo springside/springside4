@@ -13,9 +13,17 @@
 </head>
 
 <body>
-	<h1>应用监控演示</h1>
-
+	<h1>Metric</h1>
 	<h2>用户故事</h2>
+	<ul>
+		<li>监控UserRestController(/api/v1/user)</li>
+		<li>可以运行JMeter压力测试脚本(support/jmeter/showcase-rest.jmx)</li>
+		<li>默认只在Console打印结果，不发送数据到Graphite, 可修改applicationContext-metrics.xml打开</li>
+	</ul>
+	
+	<h1>JavaSimon</h1>
+
+	<h2>用户故事n</h2>
 	<ul>
 		<li>监控AccountService类及两个相关类</li>
 		<li>点击综合演示页面，修改并保存用户，或者运行JMeter压力测试脚本(support/jmeter/showcase-gui.jmx)</li>

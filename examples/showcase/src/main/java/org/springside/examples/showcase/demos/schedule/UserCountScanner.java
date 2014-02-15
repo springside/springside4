@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
 import org.slf4j.Logger;
@@ -13,8 +18,6 @@ import org.springside.examples.showcase.service.AccountService;
  */
 @Component
 public class UserCountScanner {
-
-	private static Logger logger = LoggerFactory.getLogger(UserCountScanner.class);
 
 	@Autowired
 	private AccountService accountService;
@@ -46,7 +49,8 @@ public class UserCountScanner {
 	 * 定时打印当前用户数到日志.
 	 */
 	private void execute(String by) {
+		Logger logger = LoggerFactory.getLogger(UserCountScanner.class.getName() + "." + by);
 		long userCount = accountService.getUserCount();
-		logger.info("There are {} user in database, printed by {}.", userCount, by);
+		logger.info("There are {} user in database.", userCount);
 	}
 }

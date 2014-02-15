@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.job.dispatcher;
 
 import java.util.concurrent.Executors;
@@ -57,7 +62,7 @@ public class SimpleJobDispatcherDemo {
 		statisticsTask = scheduler.scheduleAtFixedRate(new Runnable() {
 			@Override
 			public void run() {
-				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d \n",
+				System.out.printf("Scheduled job %d, Ready Job %d, Dispatch Counter %d%n",
 						statistics.getScheduledJobNumber(), statistics.getReadyJobNumber(),
 						statistics.getDispatchCounter());
 			}

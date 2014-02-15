@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.persistence;
 
 import java.util.Collection;
@@ -56,7 +61,7 @@ public class DynamicSpecifications {
 					}
 
 					// 将所有条件用 and 联合起来
-					if (predicates.size() > 0) {
+					if (!predicates.isEmpty()) {
 						return builder.and(predicates.toArray(new Predicate[predicates.size()]));
 					}
 				}

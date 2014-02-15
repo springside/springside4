@@ -1,12 +1,8 @@
-/*------------------------------------------------------------------------------
- * COPYRIGHT Ericsson 2013
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *----------------------------------------------------------------------------*/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis.scheduler;
 
 import java.util.concurrent.TimeUnit;
@@ -15,7 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.Jedis;
+import redis.clients.util.Pool;
 
 /**
  * 任务管理，支持任务的安排与取消。
@@ -31,7 +28,7 @@ public class JobProducer {
 
 	private String readyJobKey;
 
-	public JobProducer(String jobName, JedisPool jedisPool) {
+	public JobProducer(String jobName, Pool<Jedis> jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);

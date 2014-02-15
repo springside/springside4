@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.time;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Locale;
 
@@ -31,13 +36,13 @@ public class JodaDemo {
 		DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 		// 第一种方法，直接构造函数,注意日期和时间之间用T分割
 		DateTime dt1 = new DateTime("1978-06-01");
-		assertEquals(1978, dt1.getYear());
+		assertThat(dt1.getYear()).isEqualTo(1978);
 		DateTime dt2 = new DateTime("1978-06-01T12:10:08");
-		assertEquals(1978, dt2.getYear());
+		assertThat(dt2.getYear()).isEqualTo(1978);
 
 		// 第二种方法，使用Formatter
 		DateTime dt3 = fmt.parseDateTime(dateString);
-		assertEquals(1978, dt3.getYear());
+		assertThat(dt3.getYear()).isEqualTo(1978);
 
 	}
 
@@ -118,9 +123,9 @@ public class JodaDemo {
 	public void daysPlusAndMinusBetweenAndBetweenx() {
 		DateTime now = new DateTime();
 		DateTime birthDate = now.minusYears(10);
-		assertEquals(10, Years.yearsBetween(birthDate, new DateTime()).getYears());
+		assertThat(Years.yearsBetween(birthDate, new DateTime()).getYears()).isEqualTo(10);
 		birthDate = now.minusYears(10).plusDays(2);
-		assertEquals(9, Years.yearsBetween(birthDate, new DateTime()).getYears());
+		assertThat(Years.yearsBetween(birthDate, new DateTime()).getYears()).isEqualTo(9);
 	}
 
 	/**

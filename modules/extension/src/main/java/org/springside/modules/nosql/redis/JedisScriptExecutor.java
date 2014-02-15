@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis;
 
 import java.io.IOException;
@@ -13,8 +18,8 @@ import org.springframework.core.io.Resource;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisDataException;
+import redis.clients.util.Pool;
 
 /**
  * 装载并执行Lua Script，如果服务器上因为集群多台服务器或重启等原因没有装载script，会自动重新装载后重试。
@@ -27,7 +32,7 @@ public class JedisScriptExecutor {
 	private String script;
 	private String sha1;
 
-	public JedisScriptExecutor(JedisPool jedisPool) {
+	public JedisScriptExecutor(Pool<Jedis> jedisPool) {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
 	}
 

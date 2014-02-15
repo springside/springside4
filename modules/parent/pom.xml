@@ -4,81 +4,81 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
 	<artifactId>springside-parent</artifactId>
-	<version>4.1.1-SNAPSHOT</version>
+	<version>4.3.0-SNAPSHOT</version>
 	<name>Springside :: Module :: Parent</name>
 	<packaging>pom</packaging>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.1.1-SNAPSHOT</springside.version>
-		<spring.version>3.2.4.RELEASE</spring.version>
-		<hibernate.version>4.2.6.Final</hibernate.version>
-		<mybatis.version>3.2.3</mybatis.version>
-		<spring-data-jpa.version>1.4.1.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>7.0.42</tomcat-jdbc.version>
+		<springside.version>4.3.0-SNAPSHOT</springside.version>
+		<spring.version>4.0.1.RELEASE</spring.version>
+		<hibernate.version>4.3.1.Final</hibernate.version>
+		<mybatis.version>3.2.4</mybatis.version>
+		<spring-data-jpa.version>1.4.2.RELEASE</spring-data-jpa.version>
+		<tomcat-jdbc.version>7.0.50</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.2</shiro.version>
-		<cxf.version>2.7.7</cxf.version>
+		<cxf.version>2.7.9</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.2.1</quartz.version>
-		<jedis.version>2.2.1</jedis.version>
-		<ehcache.version>2.6.6</ehcache.version>
-		<spymemcached.version>2.10.1</spymemcached.version>
-		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jolokia.version>1.1.4</jolokia.version>
-		<hystrix.version>1.3.7</hystrix.version>
-		<jackson.version>2.2.3</jackson.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<logback.version>1.0.13</logback.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
+		<jedis.version>2.3.1</jedis.version>
+		<ehcache.version>2.6.8</ehcache.version>
+		<spymemcached.version>2.10.5</spymemcached.version>
+		<hibernate-validator.version>5.0.2.Final</hibernate-validator.version>
+		<jolokia.version>1.1.5</jolokia.version>
+		<hystrix.version>1.3.8</hystrix.version>
+		<javasimon.version>3.4.0</javasimon.version>
+		<jackson.version>2.3.1</jackson.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<logback.version>1.1.1</logback.version>
+		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
-		<guava.version>15.0</guava.version>
+		<guava.version>16.0.1</guava.version>
 		<joda-time.version>2.3</joda-time.version>
 		<dozer.version>5.4.0</dozer.version>
-		<httpclient.version>4.3.1</httpclient.version>
+		<httpclient.version>4.3.2</httpclient.version>
 		<freemarker.version>2.3.20</freemarker.version>
-		<javasimon.version>3.4.0</javasimon.version>
 		<aspectj.version>1.7.3</aspectj.version>
 		<junit.version>4.11</junit.version>
+		<assertj.version>1.5.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
-		<powermock.version>1.5.1</powermock.version>
-		<selenium.version>2.37.1</selenium.version>
-		<jetty.version>7.6.13.v20130916</jetty.version>
-		<h2.version>1.3.174</h2.version>
+		<powermock.version>1.5.4</powermock.version>
+		<selenium.version>2.39.0</selenium.version>
+		<nosqlunit.version>0.7.9</nosqlunit.version>
+		<jetty.version>7.6.14.v20131031</jetty.version>
+		<h2.version>1.3.175</h2.version>
 
-		<!-- Plugin的属性定义 -->
+		<!-- Plugin的属性 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
+		<java.version>1.6</java.version>
 	</properties>
 
 	<prerequisites>
 		<maven>3.0.0</maven>
 	</prerequisites>
 
-	<!-- 设定除中央仓库(repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查找.如有Nexus私服, 取消注释并指向正确的服务器地址.
+	<!-- 设定除中央仓库 (repo1.maven.org/maven2/)外的其他仓库,按设定顺序进行查询，如有Nexus私服, 取消注释并指向正确的服务器地址 
 	<repositories>
 		<repository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
+			<url>http://localhost:8081/nexus/content/groups/public</url>
 		</repository>
-	</repositories>
-	-->
-		
-	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址. 
-	<pluginRepositories> 
-		<pluginRepository> 
+	</repositories>-->
+
+	<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址
+	<pluginRepositories>
+		<pluginRepository>
 			<id>nexus</id>
 			<name>Team Nexus Repository</name>
-			<url>http://localhost:8081/nexus/content/groups/public</url> 
+			<url>http://localhost:8081/nexus/content/groups/public</url>
 			<snapshots>
 				<enabled>false</enabled>
 			</snapshots>
 		</pluginRepository>
-	</pluginRepositories>
-	-->
+	</pluginRepositories> -->
 
-	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 和 artifactId 即可 -->
+	<!-- 预定义依赖项的version,scope与exclusions,子项目中只需定义groupId 与  artifactId 即可 -->
 	<dependencyManagement>
 		<dependencies>
 			<!-- SPRINGSIDE MODULES begin -->
@@ -86,15 +86,23 @@
 				<groupId>org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
+				<scope>compile</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-metrics</artifactId>
+				<version>${springside.version}</version>
 			</dependency>
 			<!-- SPRINGSIDE MODULES end -->
-
-			<!-- SPRING basic begin(一般不需要显式定义) -->
+			
+			<!-- spring-->
+			<!-- 纯粹为了exclude commons-loging -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
@@ -106,46 +114,7 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<!-- aop/tx -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjrt</artifactId>
-				<version>${aspectj.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.aspectj</groupId>
-				<artifactId>aspectjweaver</artifactId>
-				<version>${aspectj.version}</version>
-				<scope>runtime</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-tx</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!-- email/scheduler/freemarker -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<!-- SPRING basic end -->
+			
 
 			<!-- PERSISTENCE begin -->
 			<!-- hibernate -->
@@ -164,12 +133,6 @@
 				<artifactId>hibernate-ehcache</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-			<!-- 定义隐式依赖的版本 -->
-			<dependency>
-				<groupId>org.javassist</groupId>
-				<artifactId>javassist</artifactId>
-				<version>3.18.0-GA</version>
-			</dependency>
 
 			<!-- spring data jpa -->
 			<dependency>
@@ -184,6 +147,19 @@
 				</exclusions>
 			</dependency>
 
+			<!-- aop -->
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjrt</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+
 			<!-- mybatis -->
 			<dependency>
 				<groupId>org.mybatis</groupId>
@@ -193,21 +169,9 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.2.1</version>
+				<version>1.2.2</version>
 			</dependency>
-
-			<!-- spring orm -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jdbc</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
+		
 			<!-- connection pool -->
 			<dependency>
 				<groupId>org.apache.tomcat</groupId>
@@ -218,18 +182,13 @@
 			<!-- PERSISTENCE end -->
 
 			<!-- WEB begin -->
-			<!-- spring mvc -->
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-web</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
+			<!-- spring -->
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
-
+			
 			<!-- sitemesh -->
 			<dependency>
 				<groupId>opensymphony</groupId>
@@ -239,16 +198,28 @@
 			</dependency>
 
 			<!-- j2ee web spec -->
+			<!-- update to servlet 3.0 for spring 4.0 MockHttpServletRequest  -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.5</version>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.0.1</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>jstl</artifactId>
 				<version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.0</version>
+				<exclusions>
+					<exclusion>
+						<groupId>javax.servlet</groupId>
+						<artifactId>javax.servlet-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<!-- WEB end -->
 
@@ -332,12 +303,6 @@
 
 			<!-- JMS begin -->
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-jms</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-
-			<dependency>
 				<groupId>org.apache.activemq</groupId>
 				<artifactId>activemq-core</artifactId>
 				<version>${activemq.version}</version>
@@ -418,6 +383,25 @@
 				</exclusions>
 			</dependency>
 			<!-- hystrix end -->
+
+			<!-- Monitor begin -->
+			<!-- javasimon -->
+			<dependency>
+				<groupId>org.javasimon</groupId>
+				<artifactId>javasimon-spring</artifactId>
+				<version>${javasimon.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.javasimon</groupId>
+				<artifactId>javasimon-jdbc4</artifactId>
+				<version>${javasimon.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.javasimon</groupId>
+				<artifactId>javasimon-console-embed</artifactId>
+				<version>${javasimon.version}</version>
+			</dependency>
+			<!-- Monitor end -->
 
 			<!-- JSR303 Bean Validator -->
 			<dependency>
@@ -524,12 +508,12 @@
 			<dependency>
 				<groupId>commons-codec</groupId>
 				<artifactId>commons-codec</artifactId>
-				<version>1.8</version>
+				<version>1.9</version>
 			</dependency>
 			<dependency>
 				<groupId>commons-beanutils</groupId>
 				<artifactId>commons-beanutils</artifactId>
-				<version>1.8.3</version>
+				<version>1.9.1</version>
 				<exclusions>
 					<exclusion>
 						<groupId>commons-logging</groupId>
@@ -590,6 +574,30 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>fluent-hc</artifactId>
+				<version>${httpclient.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.httpcomponents</groupId>
+				<artifactId>http-core</artifactId>
+				<version>${httpclient.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
 			<!-- template engine -->
 			<dependency>
@@ -599,12 +607,6 @@
 			</dependency>
 
 			<!-- commons-pool -->
-			<dependency>
-				<groupId>commons-pool</groupId>
-				<artifactId>commons-pool</artifactId>
-				<version>1.6</version>
-			</dependency>
-
 			<!-- email -->
 			<dependency>
 				<groupId>javax.mail</groupId>
@@ -618,24 +620,6 @@
 			</dependency>
 			<!-- OTHER TOOLS end -->
 
-			<!-- Monitor begin -->
-			<dependency>
-				<groupId>org.javasimon</groupId>
-				<artifactId>javasimon-spring</artifactId>
-				<version>${javasimon.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.javasimon</groupId>
-				<artifactId>javasimon-jdbc4</artifactId>
-				<version>${javasimon.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.javasimon</groupId>
-				<artifactId>javasimon-console-embed</artifactId>
-				<version>${javasimon.version}</version>
-			</dependency>
-			<!-- Monitor end -->
-
 			<!-- TEST begin -->
 			<!-- junit -->
 			<dependency>
@@ -644,6 +628,15 @@
 				<version>${junit.version}</version>
 				<scope>test</scope>
 			</dependency>
+			
+			<!-- assertj -->
+			<dependency>
+				<groupId>org.assertj</groupId>
+				<artifactId>assertj-core</artifactId>
+				<version>${assertj.version}</version>
+				<scope>test</scope>
+			</dependency>
+			
 			<!-- mockito -->
 			<dependency>
 				<groupId>org.mockito</groupId>
@@ -673,8 +666,16 @@
 			<!-- springside -->
 			<dependency>
 				<groupId>org.springside</groupId>
-				<artifactId>springside-test</artifactId>
+				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
+				<classifier>tests</classifier>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-extension</artifactId>
+				<version>${springside.version}</version>
+				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
 
@@ -754,6 +755,14 @@
 				<scope>test</scope>
 			</dependency>
 
+			<!-- redis simulator -->
+			<dependency>
+				<groupId>com.lordofthejars</groupId>
+				<artifactId>nosqlunit-redis</artifactId>
+				<version>${nosqlunit.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<!-- memcached simulator -->
 			<dependency>
 				<groupId>com.thimbleware.jmemcached</groupId>
@@ -780,7 +789,7 @@
 			<dependency>
 				<groupId>org.objenesis</groupId>
 				<artifactId>objenesis</artifactId>
-				<version>1.2</version>
+				<version>2.1</version>
 				<scope>test</scope>
 			</dependency>
 			<!-- TEST end -->
@@ -797,8 +806,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
-						<source>${jdk.version}</source>
-						<target>${jdk.version}</target>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
 						<showWarnings>true</showWarnings>
 					</configuration>
 				</plugin>
@@ -836,7 +845,7 @@
 					<version>1.8</version>
 				</plugin>
 
-				<!-- cobertura 测试覆盖率统计插件 -->
+				<!-- cobertura 测试覆盖率统计插插件 -->
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>cobertura-maven-plugin</artifactId>
@@ -883,7 +892,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-install-plugin</artifactId>
-					<version>2.5</version>
+					<version>2.5.1</version>
 				</plugin>
 
 				<!-- enforcer插件, 避免被依赖的依赖引入过期的jar包 -->
@@ -905,16 +914,16 @@
 									<requireJavaVersion>
 										<version>1.6</version>
 									</requireJavaVersion>
-									<requireUpperBoundDeps />
 									<bannedDependencies>
 										<searchTransitive>true</searchTransitive>
 										<excludes>
 											<exclude>commons-logging</exclude>
 											<exclude>aspectj:aspectj*</exclude>
-											<exclude>org.springframework:2.*</exclude>
-											<exclude>org.springframework:3.0.*</exclude>
-											<exclude>org.springframework:3.1.*</exclude>
+											<exclude>org.springframework</exclude>
 										</excludes>
+										<includes>
+											<include>org.springframework:*:4.0.*</include>
+										</includes>
 									</bannedDependencies>
 								</rules>
 								<fail>true</fail>
@@ -928,6 +937,12 @@
 					<groupId>org.mortbay.jetty</groupId>
 					<artifactId>jetty-maven-plugin</artifactId>
 					<version>${jetty.version}</version>
+				</plugin>
+				<!-- tomcat插件  -->
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
 				</plugin>
 
 				<!-- assembly插件 -->
@@ -983,7 +998,7 @@
 			</build>
 		</profile>
 
-		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
+		<!-- 忽略@Category(UnStable.class)的TestCase -->
 		<profile>
 			<id>skip-unstable</id>
 			<build>

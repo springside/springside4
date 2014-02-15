@@ -1,6 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.service.account;
 
 import java.util.List;
@@ -18,7 +23,7 @@ import ${package}.repository.UserDao;
 import ${package}.service.ServiceException;
 import ${package}.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
-import org.springside.modules.utils.DateProvider;
+import org.springside.modules.utils.Clock;
 import org.springside.modules.utils.Encodes;
 
 /**
@@ -39,7 +44,7 @@ public class AccountService {
 
 	private UserDao userDao;
 	private TaskDao taskDao;
-	private DateProvider dateProvider = DateProvider.DEFAULT;
+	private Clock clock = Clock.DEFAULT;
 
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll();
@@ -56,7 +61,7 @@ public class AccountService {
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
-		user.setRegisterDate(dateProvider.getDate());
+		user.setRegisterDate(clock.getCurrentDate());
 
 		userDao.save(user);
 	}
@@ -114,7 +119,7 @@ public class AccountService {
 		this.taskDao = taskDao;
 	}
 
-	public void setDateProvider(DateProvider dateProvider) {
-		this.dateProvider = dateProvider;
+	public void setClock(Clock clock) {
+		this.clock = clock;
 	}
 }

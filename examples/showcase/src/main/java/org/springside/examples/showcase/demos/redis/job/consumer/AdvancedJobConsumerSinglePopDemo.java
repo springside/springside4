@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.job.consumer;
 
 import java.util.concurrent.ExecutorService;
@@ -6,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.AdvancedConsumer;
+import org.springside.modules.nosql.redis.scheduler.AdvancedJobConsumer;
 import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
@@ -20,7 +25,7 @@ import org.springside.modules.utils.Threads;
  */
 public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 
-	private AdvancedConsumer consumer;
+	private AdvancedJobConsumer consumer;
 
 	public static void main(String[] args) throws Exception {
 
@@ -60,7 +65,7 @@ public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 	}
 
 	public AdvancedJobConsumerSinglePopDemo() {
-		consumer = new AdvancedConsumer("ss", pool);
+		consumer = new AdvancedJobConsumer("ss", pool);
 		consumer.setReliable(true);
 	}
 

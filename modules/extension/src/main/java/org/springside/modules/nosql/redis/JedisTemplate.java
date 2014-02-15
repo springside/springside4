@@ -1,12 +1,17 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisException;
+import redis.clients.util.Pool;
 
 /**
  * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
@@ -16,9 +21,9 @@ import redis.clients.jedis.exceptions.JedisException;
 public class JedisTemplate {
 	private static Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
 
-	private JedisPool jedisPool;
+	private Pool<Jedis> jedisPool;
 
-	public JedisTemplate(JedisPool jedisPool) {
+	public JedisTemplate(Pool<Jedis> jedisPool) {
 		this.jedisPool = jedisPool;
 	}
 
@@ -79,7 +84,7 @@ public class JedisTemplate {
 	/**
 	 * 获取内部的pool做进一步的动作。
 	 */
-	public JedisPool getJedisPool() {
+	public Pool<Jedis> getJedisPool() {
 		return jedisPool;
 	}
 
@@ -103,12 +108,12 @@ public class JedisTemplate {
 	/**
 	 * 删除key, 如果key存在返回true, 否则返回false。
 	 */
-	public boolean del(final String key) {
+	public Boolean del(final String... keys) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
 			public Boolean action(Jedis jedis) {
-				return jedis.del(key) == 1 ? true : false;
+				return jedis.del(keys) == 1 ? true : false;
 			}
 		});
 	}
@@ -138,19 +143,19 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 如果key不存在, 返回0.
+	 * 如果key不存在, 返回null.
 	 */
 	public Long getAsLong(final String key) {
 		String result = get(key);
-		return result != null ? Long.valueOf(result) : 0;
+		return result != null ? Long.valueOf(result) : null;
 	}
 
 	/**
-	 * 如果key不存在, 返回0.
+	 * 如果key不存在, 返回null.
 	 */
 	public Integer getAsInt(final String key) {
 		String result = get(key);
-		return result != null ? Integer.valueOf(result) : 0;
+		return result != null ? Integer.valueOf(result) : null;
 	}
 
 	public void set(final String key, final String value) {
@@ -176,7 +181,7 @@ public class JedisTemplate {
 	/**
 	 * 如果key还不存在则进行设置，返回true，否则返回false.
 	 */
-	public boolean setnx(final String key, final String value) {
+	public Boolean setnx(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -186,9 +191,22 @@ public class JedisTemplate {
 		});
 	}
 
-	public long incr(final String key) {
-		return execute(new JedisAction<Long>() {
+	/**
+	 * 综合setNX与setEx的效果。
+	 */
+	public Boolean setnxex(final String key, final String value, final int seconds) {
+		return execute(new JedisAction<Boolean>() {
 
+			@Override
+			public Boolean action(Jedis jedis) {
+				String result = jedis.set(key, value, "NX", "EX", seconds);
+				return JedisUtils.isStatusOk(result);
+			}
+		});
+	}
+
+	public Long incr(final String key) {
+		return execute(new JedisAction<Long>() {
 			@Override
 			public Long action(Jedis jedis) {
 				return jedis.incr(key);
@@ -196,9 +214,8 @@ public class JedisTemplate {
 		});
 	}
 
-	public long decr(final String key) {
+	public Long decr(final String key) {
 		return execute(new JedisAction<Long>() {
-
 			@Override
 			public Long action(Jedis jedis) {
 				return jedis.decr(key);
@@ -207,12 +224,21 @@ public class JedisTemplate {
 	}
 
 	// ////////////// 关于List ///////////////////////////
-	public void lpush(final String key, final String value) {
+	public void lpush(final String key, final String... values) {
 		execute(new JedisActionNoResult() {
-
 			@Override
 			public void action(Jedis jedis) {
-				jedis.lpush(key, value);
+				jedis.lpush(key, values);
+			}
+		});
+	}
+
+	public String rpop(final String key) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.rpop(key);
 			}
 		});
 	}
@@ -220,7 +246,7 @@ public class JedisTemplate {
 	/**
 	 * 返回List长度, key不存在时返回0，key类型不是list时抛出异常.
 	 */
-	public long llen(final String key) {
+	public Long llen(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override
@@ -231,9 +257,9 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回0.
+	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回false.
 	 */
-	public boolean lremOne(final String key, final String value) {
+	public Boolean lremOne(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
 			public Boolean action(Jedis jedis) {
@@ -244,9 +270,9 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回0.
+	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回false.
 	 */
-	public boolean lremAll(final String key, final String value) {
+	public Boolean lremAll(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
 			public Boolean action(Jedis jedis) {
@@ -258,9 +284,9 @@ public class JedisTemplate {
 
 	// ////////////// 关于Sorted Set ///////////////////////////
 	/**
-	 * 加入Sorted set, 如果member在Set里已存在，只更新score并返回false,否则返回true.
+	 * 加入Sorted set, 如果member在Set里已存在, 只更新score并返回false, 否则返回true.
 	 */
-	public boolean zadd(final String key, final String member, final double score) {
+	public Boolean zadd(final String key, final String member, final double score) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -273,7 +299,7 @@ public class JedisTemplate {
 	/**
 	 * 删除sorted set中的元素，成功删除返回true，key或member不存在返回false。
 	 */
-	public boolean zrem(final String key, final String member) {
+	public Boolean zrem(final String key, final String member) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -284,9 +310,22 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 返回List长度, key不存在时返回0，key类型不是sorted set时抛出异常.
+	 * 当key不存在时返回null.
 	 */
-	public long zcard(final String key) {
+	public Double zscore(final String key, final String member) {
+		return execute(new JedisAction<Double>() {
+
+			@Override
+			public Double action(Jedis jedis) {
+				return jedis.zscore(key, member);
+			}
+		});
+	}
+
+	/**
+	 * 返回sorted set长度, key不存在时返回0.
+	 */
+	public Long zcard(final String key) {
 		return execute(new JedisAction<Long>() {
 
 			@Override

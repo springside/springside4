@@ -1,12 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.functional.rest;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.springframework.http.HttpEntity;
@@ -39,16 +43,11 @@ import com.google.common.collect.Lists;
  */
 public class UserRestFT extends BaseFunctionalTestCase {
 
+	private static String resourceUrl = baseUrl + "/api/secure/v1/user";
+
 	private RestTemplate jdkTemplate;
 	private RestTemplate httpClientRestTemplate;
 	private HttpComponentsClientHttpRequestFactory httpClientRequestFactory;
-
-	private static String resoureUrl;
-
-	@BeforeClass
-	public static void initUrl() {
-		resoureUrl = baseUrl + "/api/secure/v1/user";
-	}
 
 	@Before
 	public void initRestTemplate() {
@@ -72,7 +71,7 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	}
 
 	@After
-	public void destoryClient() {
+	public void destoryClient() throws Exception {
 		// 退出时关闭HttpClient4连接池中的连接
 		httpClientRequestFactory.destroy();
 	}
@@ -91,14 +90,14 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
 
 		try {
-			HttpEntity<UserDTO> response = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET,
+			HttpEntity<UserDTO> response = jdkTemplate.exchange(resourceUrl + "/{id}.xml", HttpMethod.GET,
 					requestEntity, UserDTO.class, 1L);
-			assertEquals("admin", response.getBody().getLoginName());
-			assertEquals("管理员", response.getBody().getName());
-			assertEquals(new Long(1), response.getBody().getTeamId());
+			assertThat(response.getBody().getLoginName()).isEqualTo("admin");
+			assertThat(response.getBody().getName()).isEqualTo("管理员");
+			assertThat(response.getBody().getTeamId()).isEqualTo(1);
 
 			// 直接取出XML串
-			HttpEntity<String> xml = jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
+			HttpEntity<String> xml = jdkTemplate.exchange(resourceUrl + "/{id}.xml", HttpMethod.GET, requestEntity,
 					String.class, 1L);
 			System.out.println("xml output is " + xml.getBody());
 		} catch (HttpStatusCodeException e) {
@@ -107,21 +106,21 @@ public class UserRestFT extends BaseFunctionalTestCase {
 	}
 
 	/**
-	 * 演示使用ClientHttpRequestInterceptor设置header
+	 * 演示使用ClientHttpRequestInterceptor设置header, see #initRestTemplate()
 	 * 演示json格式数据.
 	 * 演示使用Apache Http client4.
 	 */
 	@Test
 	@Category(Smoke.class)
 	public void getUserAsJson() {
-		UserDTO user = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", UserDTO.class, 1L);
-		assertEquals("admin", user.getLoginName());
-		assertEquals("管理员", user.getName());
-		assertEquals(new Long(1), user.getTeamId());
+		UserDTO user = httpClientRestTemplate.getForObject(resourceUrl + "/{id}.json", UserDTO.class, 1L);
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(user.getName()).isEqualTo("管理员");
+		assertThat(user.getTeamId()).isEqualTo(1);
 
 		try {
 			// 直接取出JSON串
-			String json = httpClientRestTemplate.getForObject(resoureUrl + "/{id}.json", String.class, 1L);
+			String json = httpClientRestTemplate.getForObject(resourceUrl + "/{id}.json", String.class, 1L);
 			System.out.println("json output is " + json);
 		} catch (HttpStatusCodeException e) {
 			fail(e.getMessage());
@@ -140,10 +139,10 @@ public class UserRestFT extends BaseFunctionalTestCase {
 		HttpEntity<?> requestEntity = new HttpEntity(requestHeaders);
 
 		try {
-			jdkTemplate.exchange(resoureUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
+			jdkTemplate.exchange(resourceUrl + "/{id}.xml", HttpMethod.GET, requestEntity, UserDTO.class, 1L);
 			fail("Get should fail with error username/password");
 		} catch (HttpStatusCodeException e) {
-			assertEquals(HttpStatus.UNAUTHORIZED, e.getStatusCode());
+			assertThat(e.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 		}
 	}
 
