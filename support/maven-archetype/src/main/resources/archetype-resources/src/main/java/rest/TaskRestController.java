@@ -82,14 +82,14 @@ public class TaskRestController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaTypes.JSON)
-	public ResponseEntity<?> update(@RequestBody Task task) {
+	// 按Restful风格约定，返回204状态码, 无内容. 也可以返回200状态码.
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void update(@RequestBody Task task) {
 		// 调用JSR303 Bean Validator进行校验, 异常将由RestExceptionHandler统一处理.
 		BeanValidators.validateWithException(validator, task);
-		// 保存
-		taskService.saveTask(task);
 
-		// 按Restful约定，返回204状态码, 无内容. 也可以返回200状态码.
-		return new ResponseEntity(HttpStatus.NO_CONTENT);
+		// 保存任务
+		taskService.saveTask(task);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
