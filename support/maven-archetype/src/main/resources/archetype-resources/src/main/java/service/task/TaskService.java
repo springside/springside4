@@ -25,9 +25,9 @@ import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
-//Spring Bean的标识.
+// Spring Bean的标识.
 @Component
-// 默认将类中的所有public函数纳入事务管理.
+// 类中所有public函数都纳入事务管理的标识.
 @Transactional
 public class TaskService {
 
