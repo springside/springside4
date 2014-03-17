@@ -41,6 +41,7 @@ import org.springside.modules.utils.Exceptions;
  */
 // serviceName指明WSDL中<wsdl:service>与<wsdl:binding>元素的名称, endpointInterface属性指向Interface类全称.
 @WebService(serviceName = "AccountService", endpointInterface = "org.springside.examples.showcase.webservice.soap.AccountSoapService", targetNamespace = WsConstants.NS)
+// 增加inbound/outbound SOAP内容的日志
 @Features(features = "org.apache.cxf.feature.LoggingFeature")
 public class AccountSoapServiceImpl implements AccountSoapService {
 

@@ -48,7 +48,7 @@
 	<logger name="org.springside.modules" level="INFO" />
 	
 	<!-- cxf inbound/outbound logger -->
-	<!-- <logger name="org.apache.cxf.services" level="INFO" /> -->
+	<logger name="org.apache.cxf.services" level="INFO" />
 
 	<!-- root -->
 	<root level="WARN">
