@@ -215,6 +215,12 @@
 					</exclusion>
 				</exclusions>
 			</dependency>
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>el-api</artifactId>
+                <version>2.2</version>
+                <scope>provided</scope>
+            </dependency>
 			<!-- WEB end -->
 
 			<!-- SECURITY begin -->

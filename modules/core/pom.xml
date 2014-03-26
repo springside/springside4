@@ -50,7 +50,12 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<!-- Wed end -->
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>el-api</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <!-- Wed end -->
 
 		<!-- UTILS begin -->
 		<dependency>
