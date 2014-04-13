@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.web.taglib;
 
 import java.util.Collection;
@@ -41,7 +46,7 @@ public abstract class BSAbstractMultiCheckedElementTag extends AbstractMultiChec
 				: null);
 
 		Class<?> boundType = getBindStatus().getValueType();
-		if (itemsObject == null && boundType != null && boundType.isEnum()) {
+		if ((itemsObject == null) && (boundType != null) && boundType.isEnum()) {
 			itemsObject = boundType.getEnumConstants();
 		}
 

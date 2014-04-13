@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -15,50 +20,51 @@ public class PropertiesLoaderTest {
 		Properties p = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties")
 				.getProperties();
 
-		assertEquals("1", p.getProperty("p1"));
-		//value in test2 will override the value in test1
-		assertEquals("10", p.getProperty("p2"));
-		assertEquals("3", p.getProperty("p3"));
+		assertThat(p.getProperty("p1")).isEqualTo("1");
+		// value in test2 will override the value in test1
+		assertThat(p.getProperty("p2")).isEqualTo("10");
+		assertThat(p.getProperty("p3")).isEqualTo("3");
 	}
 
 	@Test
 	public void notExistProperty() throws IOException {
 		PropertiesLoader pl = new PropertiesLoader("classpath:/notexist.properties");
 		try {
-			assertNull(pl.getProperty("notexist"));
-			fail("should fail here");
+			assertThat(pl.getProperty("notexist")).isNull();
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
-		assertEquals("defaultValue", pl.getProperty("notexist", "defaultValue"));
+		assertThat(pl.getProperty("notexist", "defaultValue")).isEqualTo("defaultValue");
 	}
 
 	@Test
 	public void integerDoubleAndBooleanProperty() {
 		PropertiesLoader pl = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties");
 
-		assertEquals(new Integer(1), pl.getInteger("p1"));
+		assertThat(pl.getInteger("p1")).isEqualTo(new Integer(1));
 		try {
 			pl.getInteger("notExist");
-			fail("should fail here");
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
-		assertEquals(new Integer(100), pl.getInteger("notExist", 100));
+		assertThat(pl.getInteger("notExist", 100)).isEqualTo(new Integer(100));
 
-		assertEquals(new Boolean(true), pl.getBoolean("p4"));
-		assertEquals(new Boolean(true), pl.getBoolean("p4", true));
+		assertThat(pl.getBoolean("p4")).isEqualTo(new Boolean(true));
+		assertThat(pl.getBoolean("p4", true)).isEqualTo(new Boolean(true));
+
 		try {
 			pl.getBoolean("notExist");
-			fail("should fail here");
+			failBecauseExceptionWasNotThrown(NoSuchElementException.class);
 		} catch (NoSuchElementException e) {
 		}
-		assertEquals(new Boolean(true), pl.getBoolean("notExist", true));
+		assertThat(pl.getBoolean("notExist", true)).isEqualTo(new Boolean(true));
 	}
 
 	@Test
 	public void systemProperty() throws IOException {
 		System.setProperty("p1", "sys");
 		PropertiesLoader pl = new PropertiesLoader("classpath:/test1.properties", "classpath:/test2.properties");
-		assertEquals("sys", pl.getProperty("p1"));
+		assertThat(pl.getProperty("p1")).isEqualTo("sys");
 		System.clearProperty("p1");
 	}
 }

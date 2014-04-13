@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
 import org.junit.Test;
@@ -11,5 +16,4 @@ public class IdentitiesTest {
 		System.out.println("randomLong:  " + Identities.randomLong());
 		System.out.println("randomBase62:" + Identities.randomBase62(7));
 	}
-
 }

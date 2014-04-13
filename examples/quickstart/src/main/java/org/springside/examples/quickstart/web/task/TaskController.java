@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.quickstart.web.task;
 
 import java.util.Map;
@@ -27,10 +32,10 @@ import com.google.common.collect.Maps;
 /**
  * Task管理的Controller, 使用Restful风格的Urls:
  * 
- * List page     : GET /task/
- * Create page   : GET /task/create
+ * List page : GET /task/
+ * Create page : GET /task/create
  * Create action : POST /task/create
- * Update page   : GET /task/update/{id}
+ * Update page : GET /task/update/{id}
  * Update action : POST /task/update
  * Delete action : GET /task/delete/{id}
  * 
@@ -51,7 +56,7 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	@RequestMapping(value = "")
+	@RequestMapping(method = RequestMethod.GET)
 	public String list(@RequestParam(value = "page", defaultValue = "1") int pageNumber,
 			@RequestParam(value = "page.size", defaultValue = PAGE_SIZE) int pageSize,
 			@RequestParam(value = "sortType", defaultValue = "auto") String sortType, Model model,
@@ -112,9 +117,9 @@ public class TaskController {
 	 * 所有RequestMapping方法调用前的Model准备方法, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出Task对象,再把Form提交的内容绑定到该对象上。
 	 * 因为仅update()方法的form中有id属性，因此仅在update时实际执行.
 	 */
-	@ModelAttribute()
-	public void getTask(@RequestParam(value = "id", required = false) Long id, Model model) {
-		if (id != null) {
+	@ModelAttribute
+	public void getTask(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+		if (id != -1) {
 			model.addAttribute("task", taskService.getTask(id));
 		}
 	}

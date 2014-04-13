@@ -1,12 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.cache.guava;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.examples.showcase.entity.User;
@@ -28,14 +31,12 @@ import com.google.common.cache.LoadingCache;
 @ContextConfiguration(locations = { "/applicationContext.xml" })
 public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
-	private static Logger logger = LoggerFactory.getLogger(GuavaCacheDemo.class);
-
 	@Autowired
 	private AccountService accountService;
 
 	@Test
 	public void demo() throws Exception {
-		////设置缓存最大个数为100，缓存过期时间为5秒
+		// 设置缓存最大个数为100，缓存过期时间为5秒
 		LoadingCache<Long, User> cache = CacheBuilder.newBuilder().maximumSize(100)
 				.expireAfterAccess(5, TimeUnit.SECONDS).build(new CacheLoader<Long, User>() {
 					@Override
@@ -46,28 +47,29 @@ public class GuavaCacheDemo extends SpringTransactionalTestCase {
 
 				});
 
-		//初始化数据
-		DataFixtures.executeScript(dataSource, "classpath:data/cleanup-data.sql", "classpath:data/import-data.sql");
+		// 初始化数据
+		DataFixtures.executeScript(dataSource, "classpath:data/h2/cleanup-data.sql",
+				"classpath:data/h2/import-data.sql");
 
-		//插入appender用于assert。
+		// 插入appender用于assert。
 		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(GuavaCacheDemo.class);
 
-		//第一次加载会查数据库
+		// 第一次加载会查数据库
 		User user = cache.get(1L);
-		assertEquals("admin", user.getLoginName());
-		assertFalse(appender.isEmpty());
+		assertThat(user.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isFalse();
 		appender.clearLogs();
 
-		//第二次加载时直接从缓存里取
+		// 第二次加载时直接从缓存里取
 		User user2 = cache.get(1L);
-		assertEquals("admin", user2.getLoginName());
-		assertTrue(appender.isEmpty());
+		assertThat(user2.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isTrue();
 
-		//第三次加载时，因为缓存已经过期所以会查数据库
+		// 第三次加载时，因为缓存已经过期所以会查数据库
 		Threads.sleep(10, TimeUnit.SECONDS);
 		User user3 = cache.get(1L);
-		assertEquals("admin", user3.getLoginName());
-		assertFalse(appender.isEmpty());
+		assertThat(user3.getLoginName()).isEqualTo("admin");
+		assertThat(appender.isEmpty()).isFalse();
 	}
 }

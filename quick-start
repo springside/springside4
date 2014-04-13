@@ -7,21 +7,18 @@ set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
 
 echo "[Step 1] Install all springside modules and archetype to local maven repository."
 cd modules
-mvn clean install -Dmaven.test.skip=true
+mvn clean install
 
 cd ../support/maven-archetype
 mvn clean install
 cd ../../
 
-echo "[Step 2] Generate Eclipse project files for all projects."	
-mvn eclipse:clean eclipse:eclipse 
-
-echo "[Step 3] Initialize schema and data for all example projects."
+echo "[Step 2] Initialize schema and data for all example projects."
 cd examples
 mvn antrun:run -Prefresh-db
 cd ..
 
-echo "[Step 4] Start all example projects."
+echo "[Step 3] Start all example projects."
 cd  examples/quickstart
 mvn clean jetty:run &
 cd  ../showcase

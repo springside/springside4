@@ -1,9 +1,13 @@
+# Eclipse project files
 .classpath
 .project
-.springBeans
 .settings/
+
+
+# Intellij project files
+*.iml
+.idea/
+
+# Others
 target/
 logs/
-eclipse-local.bat
-/examples/showcase/bin/yuicompressor-2.4.7.jar
-/support/local-script/

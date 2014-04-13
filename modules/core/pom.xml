@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.1.0-SNAPSHOT</version>
+		<version>4.2.2.GA</version>
 		<relativePath>../parent/</relativePath>
 	</parent>
 	<artifactId>springside-core</artifactId>
@@ -13,13 +13,6 @@
 	<name>Springside :: Module :: Core</name>
 
 	<dependencies>
-		<!-- SPRING begin -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<!-- SPRING end -->
 		<!-- PERSISTENCE begin -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -32,18 +25,11 @@
 			<optional>true</optional>
 		</dependency>
 		<!-- PERSISTENCE end -->
-		
+
 		<!-- Security begin -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
 			<artifactId>shiro-web</artifactId>
-			<optional>true</optional>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.jetty</groupId>
-			<artifactId>jetty-jsp</artifactId>
-			<scope>compile</scope>
 			<optional>true</optional>
 		</dependency>
 		<!-- Security end -->
@@ -51,17 +37,21 @@
 		<!-- Web begin -->
 		<dependency>
 			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<optional>true</optional>
-		</dependency>		
-		<dependency>
-			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jsp-api</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<!-- Wed end -->
-		
-		
+
 		<!-- UTILS begin -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -94,9 +84,9 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
-		  <groupId>com.fasterxml.jackson.module</groupId>
-		  <artifactId>jackson-module-jaxb-annotations</artifactId>
-		  <optional>true</optional>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
@@ -124,16 +114,33 @@
 		</dependency>
 		<!-- LOGGING end -->
 
-		<!-- TEST begin -->
+		<!-- TEST MODULE begin -->
 		<dependency>
-			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
+			<groupId>org.eclipse.jetty.aggregate</groupId>
+			<artifactId>jetty-webapp</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+		</dependency>
+		<!-- TEST MODULE end -->
+
+		<!-- TEST begin -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-	
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -143,15 +150,19 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<scope>test</scope>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-module-junit4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.powermock</groupId>
+			<artifactId>powermock-api-mockito</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>dom4j</groupId>
-			<artifactId>dom4j</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -159,17 +170,35 @@
 			<artifactId>jaxen</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<!-- TEST end -->
 	</dependencies>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-framework-bom</artifactId>
+				<version>${spring.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<build>
 		<plugins>
-			<!-- eclipse plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-			</plugin>
-
 			<!-- source attach plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -183,7 +212,28 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
+			<!-- 打包测试用的jar包，classfier为tests -->
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>org/springside/modules/test/**/*.class</include>
+								<include>jetty/webdefault-windows.xml</include>
+							</includes>
+							<excludes>
+								<exclude>org/springside/modules/test/**/*Test.class</exclude>
+							</excludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- enforcer, 规则统一定义在parent -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,7 +29,7 @@ public class SpringTimerJobTest extends SpringTransactionalTestCase {
 	public static void initLogger() {
 		// 加载测试用logger appender
 		appender = new LogbackListAppender();
-		appender.addToLogger(UserCountScanner.class);
+		appender.addToLogger(UserCountScanner.class.getName() + ".spring timer job by xml");
 	}
 
 	@AfterClass
@@ -38,7 +43,7 @@ public class SpringTimerJobTest extends SpringTransactionalTestCase {
 		Threads.sleep(2000);
 
 		// 验证任务已执行
-		assertEquals(1, appender.getLogsCount());
-		assertEquals("There are 6 user in database, printed by spring timer job by xml.", appender.getFirstMessage());
+		assertThat(appender.getLogsCount()).isEqualTo(1);
+		assertThat(appender.getFirstMessage()).isEqualTo("There are 6 user in database.");
 	}
 }

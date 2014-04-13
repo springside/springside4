@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.beanvalidator;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Locale;
@@ -13,7 +18,6 @@ import javax.validation.Validator;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +28,11 @@ import org.springside.modules.test.spring.SpringContextTestCase;
 public class BeanValidatorsTest extends SpringContextTestCase {
 
 	@Autowired
-	Validator validator;
+	private Validator validator;
 
 	@BeforeClass
 	public static void beforeClass() {
-		//To avoid the non-English environment test failure on message asserts.
+		// To avoid the non-English environment test failure on message asserts.
 		Locale.setDefault(Locale.ENGLISH);
 	}
 
@@ -39,22 +43,20 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 		customer.setEmail("aaa");
 
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
-		assertEquals(2, violations.size());
+		assertThat(violations).hasSize(2);
 
-		//extract message as list
+		// extract message as list
 		List<String> result = BeanValidators.extractMessage(violations);
-		assertTrue(result.contains("not a well-formed email address"));
-		assertTrue(result.contains("may not be empty"));
+		assertThat(result).containsOnly("not a well-formed email address", "may not be empty");
 
-		//extract propertyPath and message as map;
+		// extract propertyPath and message as map;
 		Map mapResult = BeanValidators.extractPropertyAndMessage(violations);
-		assertEquals("not a well-formed email address", mapResult.get("email"));
-		assertEquals("may not be empty", mapResult.get("name"));
+		assertThat(mapResult).containsOnly(entry("email", "not a well-formed email address"),
+				entry("name", "may not be empty"));
 
-		//extract propertyPath and message as map;
+		// extract propertyPath and message as map;
 		result = BeanValidators.extractPropertyAndMessageAsList(violations);
-		assertTrue(result.contains("email not a well-formed email address"));
-		assertTrue(result.contains("name may not be empty"));
+		assertThat(result).containsOnly("email not a well-formed email address", "name may not be empty");
 	}
 
 	@Test
@@ -64,11 +66,11 @@ public class BeanValidatorsTest extends SpringContextTestCase {
 
 		try {
 			BeanValidators.validateWithException(validator, customer);
-			Assert.fail("should throw excepion");
+			failBecauseExceptionWasNotThrown(ConstraintViolationException.class);
 		} catch (ConstraintViolationException e) {
 			Map mapResult = BeanValidators.extractPropertyAndMessage(e);
-			assertEquals("not a well-formed email address", mapResult.get("email"));
-			assertEquals("may not be empty", mapResult.get("name"));
+			assertThat(mapResult).contains(entry("email", "not a well-formed email address"),
+					entry("name", "may not be empty"));
 		}
 	}
 

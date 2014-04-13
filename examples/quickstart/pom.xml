@@ -4,35 +4,37 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside.examples</groupId>
 	<artifactId>quickstart</artifactId>
-	<version>4.1.0-SNAPSHOT</version>
+	<version>4.2.2.GA</version>
 	<packaging>war</packaging>
 	<name>Springside :: Example :: QuickStart</name>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.1.0-SNAPSHOT</springside.version>
-		<spring.version>3.2.2.RELEASE</spring.version>
-		<hibernate.version>4.2.1.Final</hibernate.version>
-		<spring-data-jpa.version>1.3.0.RELEASE</spring-data-jpa.version>
-		<commons-dbcp.version>1.4</commons-dbcp.version>
+		<springside.version>4.2.2.GA</springside.version>
+		<spring.version>4.0.2.RELEASE</spring.version>
+		<hibernate.version>4.3.4.Final</hibernate.version>
+		<spring-data-jpa.version>1.5.1.RELEASE</spring-data-jpa.version>
+		<tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
-		<shiro.version>1.2.1</shiro.version>
-		<hibernate-validator.version>4.3.1.Final</hibernate-validator.version>
-		<jackson.version>2.2.0</jackson.version>
-		<slf4j.version>1.7.5</slf4j.version>
-		<logback.version>1.0.12</logback.version>
-		<commons-lang3.version>3.1</commons-lang3.version>
-		<guava.version>14.0.1</guava.version>
+		<shiro.version>1.2.3</shiro.version>
+		<hibernate-validator.version>5.1.0.Final</hibernate-validator.version>
+		<jackson.version>2.3.2</jackson.version>
+		<aspectj.version>1.7.4</aspectj.version>
+		<slf4j.version>1.7.6</slf4j.version>
+		<logback.version>1.1.1</logback.version>
+		<commons-lang3.version>3.3</commons-lang3.version>
+		<guava.version>16.0.1</guava.version>
 		<junit.version>4.11</junit.version>
+		<assertj.version>1.6.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
-		<selenium.version>2.32.0</selenium.version>
-		<jetty.version>7.6.10.v20130312</jetty.version>
-		<h2.version>1.3.171</h2.version>
-
+		<selenium.version>2.40.0</selenium.version>
+		<jetty.version>7.6.14.v20131031</jetty.version>
+		<h2.version>1.3.175</h2.version>
+	
 		<!-- Plugin的属性定义 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jdk.version>1.6</jdk.version>
-
+		<java.version>1.6</java.version>
+	
 		<!-- 项目属性 -->
 		<jdbc.driver.groupId>com.h2database</jdbc.driver.groupId>
 		<jdbc.driver.artifactId>h2</jdbc.driver.artifactId>
@@ -40,9 +42,13 @@
 		<!--
 			<jdbc.driver.groupId>mysql</jdbc.driver.groupId>
 			<jdbc.driver.artifactId>mysql-connector-java</jdbc.driver.artifactId>
-			<jdbc.driver.version>5.1.21</jdbc.driver.version>
+			<jdbc.driver.version>5.1.22</jdbc.driver.version>
 		-->	
 	</properties>
+
+	<prerequisites>
+  		<maven>3.0.0</maven>
+	</prerequisites>
 	
 	<repositories>
 		<!-- 如有Nexus私服, 取消注释并指向正确的服务器地址.
@@ -52,17 +58,9 @@
 			<url>http://localhost:8081/nexus/content/groups/public</url> 
 		</repository>
 		-->
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>http://repo.maven.apache.org/maven2</url>	
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
 	</repositories>
 
-	<!-- 设定插件仓库 如有Nexus私服, 取消注释并指向正确的服务器地址. 
+	<!-- 设定插件仓库, 如有Nexus私服, 取消注释并指向正确的服务器地址. 
 	<pluginRepositories> 
 		<pluginRepository> 
 			<id>nexus</id>
@@ -84,20 +82,6 @@
 			<version>${springside.version}</version>
 		</dependency>
 
-		<!-- AOP begin -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>1.7.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>1.7.2</version>
-			<scope>runtime</scope>
-		</dependency>
-		<!-- AOP end -->
-
 		<!-- PERSISTENCE begin -->
 		<!-- hibernate -->
 		<dependency>
@@ -111,29 +95,26 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-jpa</artifactId>
 			<version>${spring-data-jpa.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>junit</groupId>
-					<artifactId>junit-dep</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-orm</artifactId>
-			<version>${spring.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
 
-		<!-- dbcp connection pool -->
+		<!-- spring aop -->
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>${commons-dbcp.version}</version>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${aspectj.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjweaver</artifactId>
+			<version>${aspectj.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<!-- connection pool -->
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-jdbc</artifactId>
+			<version>${tomcat-jdbc.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -150,9 +131,8 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>opensymphony</groupId>
 			<artifactId>sitemesh</artifactId>
@@ -168,12 +148,12 @@
 
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<!-- WEB end -->
-		
+
 		<!-- SECURITY begin -->
 		<dependency>
 			<groupId>org.apache.shiro</groupId>
@@ -185,31 +165,16 @@
 			<artifactId>shiro-ehcache</artifactId>
 			<version>${shiro.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>net.sf.ehcache</groupId>
-			<artifactId>ehcache-core</artifactId>
-			<version>2.6.5</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>1.8</version>
-		</dependency>
 		<!-- SECURITY end -->
-		
-		<!-- JSR303  BeanValidator -->
+
+		<!-- JSR303 BeanValidator -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>${hibernate-validator.version}</version>
 		</dependency>
-		
+
 		<!-- JSON begin -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -221,7 +186,7 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<!-- JSON end -->
-		
+
 		<!-- LOGGING begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -235,33 +200,33 @@
 			<version>${logback.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		
-		<!-- log4j 实际调用slf4j -->
+
+		<!-- 代码直接调用log4j会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>log4j-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- common-logging 实际调用slf4j -->
+		<!-- 代码直接调用common-logging会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<version>${slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
-		<!-- java.util.logging 实际调用slf4j -->
+		<!-- 代码直接调用java.util.logging会被桥接到slf4j -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-	        <artifactId>jul-to-slf4j</artifactId>
-	        <version>${slf4j.version}</version>
-	        <scope>runtime</scope>
-	    </dependency>
-	      	
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
 		<dependency>
-			<groupId>org.lazyluke</groupId>
-			<artifactId>log4jdbc-remix</artifactId>
-			<version>0.2.7</version>
+			<groupId>com.googlecode.log4jdbc</groupId>
+			<artifactId>log4jdbc</artifactId>
+			<version>1.2</version>
 			<scope>runtime</scope>
 		</dependency>
 		<!-- LOGGING end -->
@@ -282,8 +247,9 @@
 		<!-- TEST begin -->
 		<dependency>
 			<groupId>org.springside</groupId>
-			<artifactId>springside-test</artifactId>
+			<artifactId>springside-core</artifactId>
 			<version>${springside.version}</version>
+			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 
@@ -291,6 +257,13 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -304,7 +277,6 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -317,11 +289,19 @@
 			<exclusions>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium</groupId>
+					<artifactId>selenium-htmlunit-driver</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.seleniumhq.selenium</groupId>
 					<artifactId>selenium-android-driver</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>org.seleniumhq.selenium</groupId>
 					<artifactId>selenium-iphone-driver</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.seleniumhq.selenium</groupId>
+					<artifactId>selenium-safari-driver</artifactId>
 				</exclusion>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -346,13 +326,13 @@
 			</exclusions>
 		</dependency>
 
-		<!-- h2 -->
+		<!-- h2  如果生产数据库不是H2，解开下面的注释
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<version>${h2.version}</version>
-			<scope>test</scope>
 		</dependency>
+		-->
 
 		<!-- jetty -->
 		<dependency>
@@ -369,41 +349,21 @@
 		</dependency>
 		<!-- TEST end -->
 	</dependencies>
-	
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-core</artifactId>
+				<artifactId>spring-framework-bom</artifactId>
 				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-beans</artifactId>
-				<version>${spring.version}</version>
+				<groupId>net.sf.ehcache</groupId>
+				<artifactId>ehcache-core</artifactId>
+				<version>2.6.8</version>
 			</dependency>
-			<dependency>
-			<groupId>org.springframework</groupId>
-				<artifactId>spring-context</artifactId>
-				<version>${spring.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-aop</artifactId>
-				<version>${spring.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>commons-logging</groupId>
-						<artifactId>commons-logging</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>				
 		</dependencies>
 	</dependencyManagement>
 
@@ -413,10 +373,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
+				<version>3.1</version>
 				<configuration>
-					<source>${jdk.version}</source>
-					<target>${jdk.version}</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
@@ -425,7 +385,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.3</version>
+				<version>2.4</version>
 				<configuration>
 					<warName>${project.artifactId}</warName>
 				</configuration>
@@ -435,7 +395,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.13</version>
+				<version>2.16</version>
 				<configuration>
 					<includes>
 						<include>**/*Test.java</include>
@@ -446,7 +406,7 @@
 					<dependency>
 						<groupId>org.apache.maven.surefire</groupId>
 						<artifactId>surefire-junit47</artifactId>
-						<version>2.12.4</version>
+						<version>2.16</version>
 					</dependency>
 				</dependencies>
 			</plugin>
@@ -455,7 +415,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.7</version>
+				<version>1.8</version>
 				<executions>
 					<execution>
 						<id>add-functional-source</id>
@@ -476,7 +436,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.5.1</version>
+				<version>2.6</version>
 				<configuration>
 					<instrumentation>
 						<excludes>
@@ -487,32 +447,11 @@
 				</configuration>
 			</plugin>
 
-			<!-- eclipse插件, 设定wtp版本 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>false</downloadJavadocs>
-					<wtpversion>2.0</wtpversion>
-					<!-- 增加设置项目encoding的文件 -->
-					<additionalConfig>
-						<file>
-							<name>.settings/org.eclipse.core.resources.prefs</name>
-							<content>
-					                <![CDATA[eclipse.preferences.version=1${line.separator}encoding/<project>=${project.build.sourceEncoding}${line.separator}]]>
-							</content>
-						</file>
-					</additionalConfig>
-				</configuration>
-			</plugin>
-			
-			<!-- enforcer插件, 设定环境与依赖的规则 -->
+			<!-- enforcer插件, 避免被依赖的依赖引入过期的jar�? -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.2</version>
+				<version>1.3.1</version>
 				<executions>
 					<execution>
 						<id>enforce-banned-dependencies</id>
@@ -522,20 +461,21 @@
 						<configuration>
 							<rules>
 								<requireMavenVersion>
-                  					<version>3.0.3</version>
-                				</requireMavenVersion>
-                				<requireJavaVersion>
-                  					<version>1.6</version>
-                				</requireJavaVersion>
+									<version>3.0.3</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>1.6</version>
+								</requireJavaVersion>
 								<bannedDependencies>
 									<searchTransitive>true</searchTransitive>
-									<!-- 避免引入过期的jar包 -->
 									<excludes>
 										<exclude>commons-logging</exclude>
 										<exclude>aspectj:aspectj*</exclude>
-										<exclude>org.springframework:2.*</exclude>
-										<exclude>org.springframework:3.0.*</exclude>
+										<exclude>org.springframework</exclude>
 									</excludes>
+									<includes>
+										<include>org.springframework:*:4.0.*</include>
+									</includes>
 								</bannedDependencies>
 							</rules>
 							<fail>true</fail>
@@ -543,7 +483,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
 			<!-- jetty插件, 设定context path与spring profile -->
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
@@ -557,46 +497,32 @@
 						</systemProperty>
 					</systemProperties>
 					<useTestClasspath>true</useTestClasspath>
-				
+
 					<webAppConfig>
 						<contextPath>/${project.artifactId}</contextPath>
 					</webAppConfig>
 				</configuration>
 			</plugin>
 
-			<!-- resource插件 -->
+			<!-- resources插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>
 			</plugin>
-			
+
 			<!-- install插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-install-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.5.1</version>
 			</plugin>
 
-			<!-- clean插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
-			</plugin>
-			
 			<!-- ant插件 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.7</version>
-			</plugin>
-			
-			<!-- dependency插件 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.6</version>
 			</plugin>
 		</plugins>
 	</build>
@@ -626,7 +552,7 @@
 				</plugins>
 			</build>
 		</profile>
-		
+
 		<!-- 执行@Category(Smoke.class)的TestCase -->
 		<profile>
 			<id>run-smoke</id>
@@ -638,27 +564,11 @@
 						<configuration>
 							<groups>org.springside.modules.test.category.Smoke</groups>
 						</configuration>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
-		
-		<!-- 忽略所有@Category(UnStable.class)的TestCase -->
-		<profile>
-			<id>skip-unstable</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludedGroups>org.springside.modules.test.category.UnStable</excludedGroups>
-						</configuration>
-					</plugin>				
-				</plugins>
-			</build>
-		</profile>
-		
+
 		<!-- 刷新开发环境数据库 -->
 		<profile>
 			<id>refresh-db</id>
@@ -671,10 +581,11 @@
 							<target>
 								<property file="src/main/resources/application.development.properties" />
 								<property file="src/main/resources/application.properties" />
-								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}" onerror="continue" encoding="${project.build.sourceEncoding}">
+								<sql driver="${jdbc.driver}" url="${jdbc.url}" userid="${jdbc.username}" password="${jdbc.password}"
+									onerror="continue" encoding="${project.build.sourceEncoding}">
 									<classpath refid="maven.test.classpath" />
-									<transaction src="src/main/resources/sql/h2/schema.sql"/>
-									<transaction src="src/test/resources/data/h2/import-data.sql"/>
+									<transaction src="src/main/resources/sql/h2/schema.sql" />
+									<transaction src="src/test/resources/data/h2/import-data.sql" />
 								</sql>
 							</target>
 						</configuration>

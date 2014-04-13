@@ -6,7 +6,7 @@
 	<!--
 		获取用户: 输出直接映射到对象, login_name列要"as loginName"以方便映射 ,team_id as "team.id"创建team对象并赋值
 	-->
-	<select id="get" parameterType="int" resultType="User">
+	<select id="get" parameterType="long" resultType="User">
 		select id, name, email,
 		login_name as loginName,
 		team_id as "team.id"
@@ -40,7 +40,7 @@
 	</insert>
 	
 	<!-- 删除用户 -->
-	<delete id="delete" parameterType="int">
+	<delete id="delete" parameterType="long">
 	     delete from ss_user where id=#{id}
 	</delete>
 </mapper> 

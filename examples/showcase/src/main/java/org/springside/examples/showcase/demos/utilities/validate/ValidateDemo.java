@@ -1,11 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.validate;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
 import org.apache.commons.lang3.Validate;
-import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.collect.Lists;
@@ -14,57 +18,56 @@ import com.google.common.collect.Lists;
  * 演示用Apache Commons3的Validate，在代码中进行防御性校验.
  * 
  * @author calvin
- *
  */
 public class ValidateDemo {
 
 	@Test
 	public void asserts() {
 
-		//not null Object
+		// not null Object
 		try {
 			String parameter = "abc";
 
 			Validate.notNull(parameter);
 
-			//检验not null，用默认出错信息.
+			// 检验not null，用默认出错信息.
 			Validate.notNull(null);
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(NullPointerException.class);
 		} catch (NullPointerException e) {
-			assertEquals("The validated object is null", e.getMessage());
+			assertThat(e).hasMessage("The validated object is null");
 		}
 
-		//notBlank String
+		// notBlank String
 		try {
 			String parameter = "abc";
-			//可选择将输入参数赋值到新变量
+			// 可选择将输入参数赋值到新变量
 			String result = Validate.notBlank(parameter);
-			assertEquals("abc", result);
+			assertThat(result).isEqualTo("abc");
 
-			//检验not null，用自定义出错信息.
+			// 检验not null，用自定义出错信息.
 			Validate.notBlank("", "The name must not be blank");
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 
 		} catch (IllegalArgumentException e) {
-			assertEquals("The name must not be blank", e.getMessage());
+			assertThat(e).hasMessage("The name must not be blank");
 		}
 
-		//notEmpty Collection
+		// notEmpty Collection
 		try {
 			List<String> parameter = Lists.newArrayList();
 			Validate.notEmpty(parameter);
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			assertEquals("The validated collection is empty", e.getMessage());
+			assertThat(e).hasMessage("The validated collection is empty");
 		}
 
-		//is true
+		// is true
 		try {
-			//出錯信息可格式化參數
+			// 出錯信息可格式化參數
 			Validate.isTrue(1 == 3, "Message %s", "foo");
-			Assert.fail();
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
-			assertEquals("Message foo", e.getMessage());
+			assertThat(e).hasMessage("Message foo");
 		}
 	}
 }

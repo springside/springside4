@@ -8,11 +8,6 @@
 <html>
 <head>
 	<title>登录页</title>
-	<script>
-		$(document).ready(function() {
-			$("#loginForm").validate();
-		});
-	</script>
 </head>
 
 <body>
@@ -48,5 +43,11 @@
 			</div>
 		</div>
 	</form>
+
+	<script>
+		$(document).ready(function() {
+			$("#loginForm").validate();
+		});
+	</script>
 </body>
 </html>

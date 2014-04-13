@@ -1,6 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.web.account;
 
 import java.util.List;
@@ -46,7 +51,7 @@ public class UserAdminController {
 	}
 
 	@RequestMapping(value = "update", method = RequestMethod.POST)
-	public String update(@Valid @ModelAttribute("preloadUser") User user, RedirectAttributes redirectAttributes) {
+	public String update(@Valid @ModelAttribute("user") User user, RedirectAttributes redirectAttributes) {
 		accountService.updateUser(user);
 		redirectAttributes.addFlashAttribute("message", "更新用户" + user.getLoginName() + "成功");
 		return "redirect:/admin/user";
@@ -61,14 +66,13 @@ public class UserAdminController {
 	}
 
 	/**
-	 * 使用@ModelAttribute, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
-	 * 因为仅update()方法的form中有id属性，因此本方法在该方法中执行.
+	 * 所有RequestMapping方法调用前的Model准备方法, 实现Struts2 Preparable二次部分绑定的效果,先根据form的id从数据库查出User对象,再把Form提交的内容绑定到该对象上。
+	 * 因为仅update()方法的form中有id属性，因此仅在update时实际执行.
 	 */
-	@ModelAttribute("preloadUser")
-	public User getUser(@RequestParam(value = "id", required = false) Long id) {
-		if (id != null) {
-			return accountService.getUser(id);
+	@ModelAttribute
+	public void getUser(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+		if (id != -1) {
+			model.addAttribute("user", accountService.getUser(id));
 		}
-		return null;
 	}
 }

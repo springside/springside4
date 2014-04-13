@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.jms;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -37,7 +42,7 @@ public class JmsSimpleTest extends SpringContextTestCase {
 		logger.info("sended message");
 
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo("UserName:calvin, Email:calvin@sringside.org.cn");
 	}
 
 	@Test
@@ -54,6 +59,6 @@ public class JmsSimpleTest extends SpringContextTestCase {
 		logger.info("sended message");
 
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo("UserName:calvin, Email:calvin@sringside.org.cn");
 	}
 }

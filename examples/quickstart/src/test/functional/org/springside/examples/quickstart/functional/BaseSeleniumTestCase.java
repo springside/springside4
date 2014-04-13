@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.quickstart.functional;
 
 import org.junit.BeforeClass;
@@ -20,12 +25,12 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
 
-	//出错时截屏的规则
+	// 出错时截屏的规则
 	@Rule
-	public TestRule snapshotrule = new SeleniumSnapshotRule(s);
+	public TestRule snapshotRule = new SeleniumSnapshotRule(s);
 
 	@BeforeClass
-	public static void init() throws Exception {
+	public static void initSelenium() throws Exception {
 		createSeleniumOnce();
 		loginAsUserIfNecessary();
 	}
@@ -35,7 +40,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 	 */
 	protected static void createSeleniumOnce() throws Exception {
 		if (s == null) {
-			//根据配置创建Selenium driver.
+			// 根据配置创建Selenium driver.
 			String driverName = propertiesLoader.getProperty("selenium.driver");
 
 			WebDriver driver = WebDriverFactory.createDriver(driverName);
@@ -51,7 +56,7 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 	protected static void loginAsUserIfNecessary() {
 		s.open("/task");
 
-		if ("QuickStart示例:登录页".equals(s.getTitle())) {
+		if (s.getTitle().contains("登录页")) {
 			s.type(By.name("username"), "user");
 			s.type(By.name("password"), "user");
 			s.check(By.name("rememberMe"));
@@ -59,5 +64,4 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 			s.waitForTitleContains("任务管理");
 		}
 	}
-
 }

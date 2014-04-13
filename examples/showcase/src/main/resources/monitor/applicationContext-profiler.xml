@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<description>JavaSimon监控配置</description>
+
+	<!-- 调用StopWatch计时的Interceptor -->
+	<bean id="monitoringInterceptor" class="org.javasimon.spring.MonitoringInterceptor" />
+
+	<!-- way1.监控定义了@Monitored的方法 -->
+	<bean id="monitoringAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="advice" ref="monitoringInterceptor" />
+		<property name="pointcut">
+			<bean class="org.javasimon.spring.MonitoredMeasuringPointcut" />
+		</property>
+	</bean>
+
+	<!-- way2.额外不修改代码临时增加监听 -->
+	<aop:config>
+		<aop:advisor advice-ref="monitoringInterceptor" pointcut="execution(public * org.springside..NotifyMessageProducer.*(..)) 
+		|| execution(public * org.springside..BusinessLogger.*(..))" />
+	</aop:config>
+</beans>

@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.quickstart.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -18,11 +23,11 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	 */
 	@Test
 	public void anonymousUserAccessSystem() {
-		//访问退出登录页面,退出之前的登录
+		// 访问退出登录页面,退出之前的登录
 		s.open("/logout");
 		s.waitForTitleContains("登录页");
 
-		//访问任意页面会跳转到登录界面
+		// 访问任意页面会跳转到登录界面
 		s.open("/task");
 		s.waitForTitleContains("登录页");
 	}
@@ -34,7 +39,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	public void userTryToManageUsers() {
 		loginAsUserIfNecessary();
 		s.open("/admin/user");
-		assertEquals("Error 401 Unauthorized", s.getTitle());
+		assertThat(s.getTitle()).isEqualTo("Error 401 Unauthorized");
 	}
 
 	/**
@@ -49,6 +54,6 @@ public class SecurityFT extends BaseSeleniumTestCase {
 		s.click(By.id("submit_btn"));
 
 		s.waitForTitleContains("登录页");
-		assertTrue(s.isTextPresent("登录失败，请重试."));
+		assertThat(s.isTextPresent("登录失败，请重试.")).isTrue();
 	}
 }

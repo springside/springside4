@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.jmx;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,7 +32,7 @@ public class ApplicationStatistics {
 		updateUserTimes.incrementAndGet();
 	}
 
-	@ManagedAttribute(description = "Times of all users be listed")
+	@ManagedAttribute(description = "Times of users be listed")
 	public int getListUserTimes() {
 		return listUserTimes.get();
 	}
@@ -42,5 +47,4 @@ public class ApplicationStatistics {
 		listUserTimes.set(0);
 		updateUserTimes.set(0);
 	}
-
 }

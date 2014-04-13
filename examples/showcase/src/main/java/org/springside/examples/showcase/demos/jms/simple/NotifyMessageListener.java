@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.jms.simple;
 
 import javax.jms.MapMessage;
@@ -15,7 +20,6 @@ import org.springside.examples.showcase.demos.utilities.email.SimpleMailService;
  * 使用Spring的MessageListenerContainer侦听消息并调用本Listener进行处理.
  * 
  * @author calvin
- *
  */
 public class NotifyMessageListener implements MessageListener {
 
@@ -31,10 +35,10 @@ public class NotifyMessageListener implements MessageListener {
 	public void onMessage(Message message) {
 		try {
 			MapMessage mapMessage = (MapMessage) message;
-			//打印消息详情
+			// 打印消息详情
 			logger.info("UserName:{}, Email:{}", mapMessage.getString("userName"), mapMessage.getString("email"));
 
-			//发送邮件
+			// 发送邮件
 			if (simpleMailService != null) {
 				simpleMailService.sendNotificationMail(mapMessage.getString("userName"));
 			}

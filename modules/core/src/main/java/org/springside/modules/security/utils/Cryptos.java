@@ -1,8 +1,8 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.security.utils;
 
 import java.security.GeneralSecurityException;
@@ -31,13 +31,13 @@ public class Cryptos {
 	private static final String AES_CBC = "AES/CBC/PKCS5Padding";
 	private static final String HMACSHA1 = "HmacSHA1";
 
-	private static final int DEFAULT_HMACSHA1_KEYSIZE = 160; //RFC2401
+	private static final int DEFAULT_HMACSHA1_KEYSIZE = 160; // RFC2401
 	private static final int DEFAULT_AES_KEYSIZE = 128;
 	private static final int DEFAULT_IVSIZE = 16;
 
 	private static SecureRandom random = new SecureRandom();
 
-	//-- HMAC-SHA1 funciton --//
+	// -- HMAC-SHA1 funciton --//
 	/**
 	 * 使用HMAC-SHA1进行消息签名, 返回字节数组,长度为20字节.
 	 * 
@@ -82,7 +82,7 @@ public class Cryptos {
 		}
 	}
 
-	//-- AES funciton --//
+	// -- AES funciton --//
 	/**
 	 * 使用AES加密原始字符串.
 	 * 

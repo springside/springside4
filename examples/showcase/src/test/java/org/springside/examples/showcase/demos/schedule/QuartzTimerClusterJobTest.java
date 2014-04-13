@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -29,7 +34,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 	public static void initLogger() {
 		// 加载测试用logger appender
 		appender = new LogbackListAppender();
-		appender.addToLogger(QuartzClusterableJob.class);
+		appender.addToLogger(QuartzClusterableJob.class.getName() + ".quartz cluster job");
 	}
 
 	@AfterClass
@@ -43,9 +48,7 @@ public class QuartzTimerClusterJobTest extends SpringTransactionalTestCase {
 		Threads.sleep(4000);
 
 		// 验证任务已执行
-		assertEquals(1, appender.getLogsCount());
-
-		assertEquals("There are 6 user in database, printed by quartz cluster job on node default.",
-				appender.getFirstMessage());
+		assertThat(appender.getLogsCount()).isEqualTo(1);
+		assertThat(appender.getFirstMessage()).isEqualTo("There are 6 user in database, on node default.");
 	}
 }

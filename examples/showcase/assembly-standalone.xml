@@ -33,10 +33,10 @@
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/target/classes</directory>
+			<outputDirectory>/</outputDirectory>
 			<includes>
 				<include>**/*/Main.class</include>
 			</includes>
-			<outputDirectory>/</outputDirectory>
 		</fileSet>
 	</fileSets>
 </assembly>

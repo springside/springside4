@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.io;
 
 import java.io.File;
@@ -17,6 +22,11 @@ import org.springside.modules.utils.Exceptions;
 
 import com.google.common.base.Charsets;
 
+/**
+ * 演示各种IO操作.
+ * 
+ * @author calvin
+ */
 public class IODemo {
 
 	@Test
@@ -24,26 +34,26 @@ public class IODemo {
 		File file = new File("woop.txt");
 		File destFile = new File("bar.txt");
 		try {
-			//text -> file, 类似的还有Collection<String>, byte[] ->file 
+			// text -> file, 类似的还有Collection<String>, byte[] ->file
 			FileUtils.writeStringToFile(file, "Hey sailor!\nHaha\n", "UTF-8");
 
-			// inputstream  -> file，
+			// inputstream -> file，
 			InputStream source = IOUtils.toInputStream("Hej", "UTF-8");
 			FileUtils.copyInputStreamToFile(source, file);
 
-			/////////////////////////////
-			//file -> outputstream
+			// ///////////////////////////
+			// file -> outputstream
 			System.out.println("copy File to outputstream:");
 			FileUtils.copyFile(file, System.out);
 
-			//file -> file
+			// file -> file
 			FileUtils.copyFile(file, destFile);
 
-			//file -> string
+			// file -> string
 			System.out.println("File to String:");
 			System.out.println(FileUtils.readFileToString(file, "UTF-8"));
 
-			//file -> list<string>
+			// file -> list<string>
 			System.out.println("File to List<String>:");
 			List<String> lines = FileUtils.readLines(file, "UTF-8");
 			for (String string : lines) {
@@ -63,36 +73,36 @@ public class IODemo {
 		try {
 			String content = "Stream testing";
 
-			//String - > InputStream.
+			// String - > InputStream.
 			in = IOUtils.toInputStream(content, "UTF-8");
 
-			//String - > OutputStream
+			// String - > OutputStream
 			System.out.println("String to OutputStram:");
 			IOUtils.write(content, System.out, "UTF-8");
 
-			////////////////////
-			//InputStream/Reader -> String
+			// //////////////////
+			// InputStream/Reader -> String
 			System.out.println("\nInputStram to String:");
 			System.out.println(IOUtils.toString(in, "UTF-8"));
 
-			//InputStream/Reader -> OutputStream/Writer， 四者间可任意组合.
-			InputStream in2 = IOUtils.toInputStream(content); //重新准备inputSteam
+			// InputStream/Reader -> OutputStream/Writer， 四者间可任意组合.
+			InputStream in2 = IOUtils.toInputStream(content); // 重新准备inputSteam
 			System.out.println("InputStream to OutputStream:");
 			IOUtils.copy(in2, System.out);
 
-			///////////////////
-			//InputStream ->Reader
+			// /////////////////
+			// InputStream ->Reader
 			InputStreamReader reader = new InputStreamReader(in, Charsets.UTF_8);
-			//Reader->InputStream
+			// Reader->InputStream
 			ReaderInputStream in3 = new ReaderInputStream(reader, Charsets.UTF_8);
 
-			//OutputStream ->Writer
+			// OutputStream ->Writer
 			OutputStreamWriter writer = new OutputStreamWriter(System.out, Charsets.UTF_8);
-			//Writer->OutputStream
+			// Writer->OutputStream
 			WriterOutputStream out2 = new WriterOutputStream(writer, Charsets.UTF_8);
 
-			//////////////////////
-			//收集Writer的输出内容到String.
+			// ////////////////////
+			// 收集Writer的输出内容到String.
 			StringWriter sw = new StringWriter();
 			sw.write("I am String writer");
 			System.out.println("\nCollect writer content:");
@@ -101,13 +111,13 @@ public class IODemo {
 		} catch (IOException e) {
 			Exceptions.unchecked(e);
 		} finally {
-			//安静的关闭Stream
+			// 安静的关闭Stream
 			IOUtils.closeQuietly(in);
 		}
 	}
 
 	@Test
 	public void workWithFileAndDir() {
-		//看FileUtils的JavaDoc即可
+		// 看FileUtils的JavaDoc即可
 	}
 }

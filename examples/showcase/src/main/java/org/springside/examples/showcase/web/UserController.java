@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.web;
 
 import java.util.List;
@@ -103,8 +108,8 @@ public class UserController {
 	 * 因为仅update()方法的form中有id属性，因此仅在update时实际执行.
 	 */
 	@ModelAttribute
-	public void getUser(@RequestParam(value = "id", required = false) Long id, Model model) {
-		if (id != null) {
+	public void getUser(@RequestParam(value = "id", defaultValue = "-1") Long id, Model model) {
+		if (id != -1) {
 			model.addAttribute("user", accountService.getUser(id));
 		}
 	}

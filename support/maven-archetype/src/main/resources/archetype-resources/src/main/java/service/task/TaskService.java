@@ -1,6 +1,11 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package ${package}.service.task;
 
 import java.util.List;
@@ -20,10 +25,10 @@ import org.springside.modules.persistence.DynamicSpecifications;
 import org.springside.modules.persistence.SearchFilter;
 import org.springside.modules.persistence.SearchFilter.Operator;
 
-//Spring Bean的标识.
+// Spring Bean的标识.
 @Component
-// 默认将类中的所有public函数纳入事务管理.
-@Transactional(readOnly = true)
+// 类中所有public函数都纳入事务管理的标识.
+@Transactional
 public class TaskService {
 
 	private TaskDao taskDao;
@@ -32,12 +37,10 @@ public class TaskService {
 		return taskDao.findOne(id);
 	}
 
-	@Transactional(readOnly = false)
 	public void saveTask(Task entity) {
 		taskDao.save(entity);
 	}
 
-	@Transactional(readOnly = false)
 	public void deleteTask(Long id) {
 		taskDao.delete(id);
 	}

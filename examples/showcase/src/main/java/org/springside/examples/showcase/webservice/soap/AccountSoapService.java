@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.webservice.soap;
 
 import javax.jws.WebParam;
@@ -18,7 +23,7 @@ import org.springside.examples.showcase.webservice.soap.response.dto.UserDTO;
  * 
  * @author calvin
  */
-//name 指明wsdl中<wsdl:portType>元素的名称
+// name 指明wsdl中<wsdl:portType>元素的名称
 @WebService(name = "AccountService", targetNamespace = WsConstants.NS)
 public interface AccountSoapService {
 	/**
