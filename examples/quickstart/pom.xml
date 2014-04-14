@@ -17,7 +17,7 @@
 		<tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.3</shiro.version>
-		<hibernate-validator.version>5.1.0.Final</hibernate-validator.version>
+		<hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
 		<jackson.version>2.3.2</jackson.version>
 		<aspectj.version>1.7.4</aspectj.version>
 		<slf4j.version>1.7.6</slf4j.version>
