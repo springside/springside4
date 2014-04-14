@@ -11,27 +11,27 @@
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
 		<springside.version>4.2.2.GA</springside.version>
-		<spring.version>4.0.2.RELEASE</spring.version>
-		<hibernate.version>4.3.4.Final</hibernate.version>
-		<mybatis.version>3.2.5</mybatis.version>
+		<spring.version>4.0.3.RELEASE</spring.version>
+		<hibernate.version>4.3.5.Final</hibernate.version>
+		<mybatis.version>3.2.7</mybatis.version>
 		<spring-data-jpa.version>1.5.1.RELEASE</spring-data-jpa.version>
-		<tomcat-jdbc.version>7.0.52</tomcat-jdbc.version>
+		<tomcat-jdbc.version>7.0.53</tomcat-jdbc.version>
 		<sitemesh.version>2.4.2</sitemesh.version>
 		<shiro.version>1.2.3</shiro.version>
-		<cxf.version>2.7.10</cxf.version>
+		<cxf.version>2.7.11</cxf.version>
 		<activemq.version>5.7.0</activemq.version>
 		<quartz.version>2.2.1</quartz.version>
 		<jedis.version>2.4.2</jedis.version>
 		<ehcache.version>2.6.8</ehcache.version>
-		<spymemcached.version>2.10.6</spymemcached.version>
+		<spymemcached.version>2.11.0</spymemcached.version>
 		<hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
 		<jolokia.version>1.2.0</jolokia.version>
 		<hystrix.version>1.3.13</hystrix.version>
 		<javasimon.version>3.4.0</javasimon.version>
-		<jackson.version>2.3.2</jackson.version>
-		<slf4j.version>1.7.6</slf4j.version>
-		<logback.version>1.1.1</logback.version>
-		<commons-lang3.version>3.3</commons-lang3.version>
+		<jackson.version>2.3.3</jackson.version>
+		<slf4j.version>1.7.7</slf4j.version>
+		<logback.version>1.1.2</logback.version>
+		<commons-lang3.version>3.3.2</commons-lang3.version>
 		<commons-io.version>2.4</commons-io.version>
 		<guava.version>16.0.1</guava.version>
 		<joda-time.version>2.3</joda-time.version>
@@ -43,7 +43,7 @@
 		<assertj.version>1.6.0</assertj.version>
 		<mockito.version>1.9.5</mockito.version>
 		<powermock.version>1.5.4</powermock.version>
-		<selenium.version>2.40.0</selenium.version>
+		<selenium.version>2.41.0</selenium.version>
 		<nosqlunit.version>0.7.9</nosqlunit.version>
 		<jetty.version>7.6.14.v20131031</jetty.version>
 		<h2.version>1.3.175</h2.version>
