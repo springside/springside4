@@ -31,6 +31,8 @@ public class ExecutionTest {
 		ExecutionMetric metric = execution.calculateMetric();
 
 		assertThat(metric.counterMetric.totalCount).isEqualTo(2);
+		assertThat(metric.counterMetric.meanRate).isEqualTo(4);
+		assertThat(metric.counterMetric.lastCount).isEqualTo(2);
 		assertThat(metric.counterMetric.lastRate).isEqualTo(4);
 
 		assertThat(metric.histogramMetric.min).isEqualTo(200);

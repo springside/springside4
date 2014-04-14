@@ -11,6 +11,12 @@ import org.springside.modules.metrics.CounterMetric;
 import org.springside.modules.metrics.ExecutionMetric;
 import org.springside.modules.metrics.HistogramMetric;
 
+/**
+ * Reporter的公共接口，被ReportScheduler定时调用。
+ * 
+ * @author Calvin
+ * 
+ */
 public interface Reporter {
 	void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
 			Map<String, ExecutionMetric> executions);

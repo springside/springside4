@@ -7,6 +7,29 @@ package org.springside.modules.metrics;
 
 import org.springside.modules.metrics.utils.Clock;
 
+/**
+ * Execution类型，兼具Counter和Histogram的简便写法.
+ * 
+ * 有两种用法：
+ * 1. 使用timer
+ * 
+ * <pre>
+ * ExecutionTimer timer = execution.start();
+ * ...
+ * timer.stop();
+ * </pre>
+ * 
+ * 2. 自行计算
+ * 
+ * <pre>
+ * long start = System.currentTimeMillis();
+ * ....
+ * execution.update(System.currentTimeMillis()-start);
+ * </pre>
+ * 
+ * 
+ * @author Calvin
+ */
 public class Execution {
 	public static Clock clock = Clock.DEFAULT;
 	private Counter counter;
@@ -17,11 +40,16 @@ public class Execution {
 		histogram = new Histogram(pcts);
 	}
 
+	public void update(long elapsed) {
+		histogram.update(elapsed);
+		counter.inc();
+	}
+
 	public ExecutionTimer start() {
 		return new ExecutionTimer(this, clock.getCurrentTime());
 	}
 
-	private void update(long startTime) {
+	private void stopTimer(long startTime) {
 		final long elapsed = clock.getCurrentTime() - startTime;
 		histogram.update(elapsed);
 		counter.inc();
@@ -39,6 +67,9 @@ public class Execution {
 		return "Execution [counter=" + counter + ", histogram=" + histogram + "]";
 	}
 
+	/**
+	 * 保存某一次请求的初始时间与Execution实例.
+	 */
 	public static class ExecutionTimer {
 		private final Execution execution;
 		private final long startTime;
@@ -49,7 +80,7 @@ public class Execution {
 		}
 
 		public void stop() {
-			execution.update(startTime);
+			execution.stopTimer(startTime);
 		}
 	}
 }

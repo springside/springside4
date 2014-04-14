@@ -5,21 +5,30 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * 注册中心, 用户创建Metrics的入口.
+ * 支持多线程并发的取得或创建metrics.
+ * 在报告时，返回按name排序的metrics map.
+ */
 public class MetricRegistry {
 
 	public static final MetricRegistry INSTANCE = new MetricRegistry();
 
 	private Double[] defaultPcts = new Double[] { 90d };
 
-	private ConcurrentMap<String, Object> metrics = new ConcurrentHashMap<String, Object>();
+	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
+	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
+	private ConcurrentMap<String, Execution> executions = new ConcurrentHashMap<String, Execution>();
 
+	/**
+	 * 格式化以"."分割的Metrics Name的辅助函数.
+	 */
 	public static String name(String name, String... subNames) {
 		final StringBuilder builder = new StringBuilder(name);
 		if (subNames != null) {
@@ -32,43 +41,58 @@ public class MetricRegistry {
 		return builder.toString();
 	}
 
+	/**
+	 * 在注册中心获取或创建Counter.
+	 */
 	public Counter counter(String name) {
-		if (metrics.containsKey(name)) {
-			return (Counter) metrics.get(name);
+		if (counters.containsKey(name)) {
+			return counters.get(name);
 		} else {
 			Counter counter = new Counter();
-			return (Counter) register(name, counter);
+			return register(counters, name, counter);
 		}
 	}
 
+	/**
+	 * 在注册中心获取或创建Histogram, 使用默认的百分比计算设置(90%).
+	 */
 	public Histogram histogram(String name) {
 		return histogram(name, defaultPcts);
 	}
 
+	/**
+	 * 在注册中心获取或创建Histogram, 并设置所需的百分比计算.
+	 */
 	public Histogram histogram(String name, Double... pcts) {
-		if (metrics.containsKey(name)) {
-			return (Histogram) metrics.get(name);
+		if (histograms.containsKey(name)) {
+			return histograms.get(name);
 		} else {
 			Histogram histogram = new Histogram(pcts);
-			return (Histogram) register(name, histogram);
+			return register(histograms, name, histogram);
 		}
 	}
 
+	/**
+	 * 在注册中心获取或创建Execution, 使用默认的百分比计算设置(90%).
+	 */
 	public Execution execution(String name) {
 		return execution(name, defaultPcts);
 	}
 
+	/**
+	 * 在注册中心获取或创建Execution, 并设置所需的百分比计算.
+	 */
 	public Execution execution(String name, Double... pcts) {
-		if (metrics.containsKey(name)) {
-			return (Execution) metrics.get(name);
+		if (executions.containsKey(name)) {
+			return executions.get(name);
 		} else {
 			Execution execution = new Execution(pcts);
-			return (Execution) register(name, execution);
+			return register(executions, name, execution);
 		}
 	}
 
-	public Object register(String name, Object newMetric) {
-		Object existingMetric = metrics.putIfAbsent(name, newMetric);
+	private <T> T register(ConcurrentMap<String, T> metrics, String name, T newMetric) {
+		T existingMetric = metrics.putIfAbsent(name, newMetric);
 		if (existingMetric != null) {
 			return existingMetric;
 		} else {
@@ -77,27 +101,29 @@ public class MetricRegistry {
 	}
 
 	public SortedMap<String, Counter> getCounters() {
-		return getMetrics(Counter.class);
+		return getMetrics(counters);
 	}
 
 	public SortedMap<String, Histogram> getHistograms() {
-		return getMetrics(Histogram.class);
+		return getMetrics(histograms);
 	}
 
 	public SortedMap<String, Execution> getExecutions() {
-		return getMetrics(Execution.class);
+		return getMetrics(executions);
 	}
 
-	private <T> SortedMap<String, T> getMetrics(Class<T> klass) {
-		final SortedMap<String, T> result = new TreeMap<String, T>();
-		for (Map.Entry<String, Object> entry : metrics.entrySet()) {
-			if (klass.isInstance(entry.getValue())) {
-				result.put(entry.getKey(), (T) entry.getValue());
-			}
-		}
-		return Collections.unmodifiableSortedMap(result);
+	/**
+	 * 返回按metrics name排序的Map.
+	 * 
+	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次报告时需要用TreeMap重新排序.
+	 */
+	private <T> SortedMap<String, T> getMetrics(Map<String, T> metrics) {
+		return new TreeMap<String, T>(metrics);
 	}
 
+	/**
+	 * 重新设置默认的百分比设置.
+	 */
 	public void setDefaultPcts(Double[] defaultPcts) {
 		this.defaultPcts = defaultPcts;
 	}
