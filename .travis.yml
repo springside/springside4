@@ -11,3 +11,4 @@ before_install:
 notifications:
   email:
     - manisha@shippable.com
+    - manishas@qhode.com
