@@ -36,7 +36,7 @@
 		<guava.version>17.0</guava.version>
 		<joda-time.version>2.3</joda-time.version>
 		<dozer.version>5.5.1</dozer.version>
-		<httpclient.version>4.3.3</httpclient.version>
+		<httpclient.version>4.3.2</httpclient.version>
 		<freemarker.version>2.3.20</freemarker.version>
 		<aspectj.version>1.7.4</aspectj.version>
 		<junit.version>4.11</junit.version>
@@ -583,7 +583,7 @@
 			
 			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>http-core</artifactId>
+				<artifactId>httpcore</artifactId>
 				<version>${httpclient.version}</version>
 				<exclusions>
 					<exclusion>
