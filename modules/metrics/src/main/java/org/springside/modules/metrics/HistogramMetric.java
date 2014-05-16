@@ -13,4 +13,9 @@ public class HistogramMetric {
 	public long max;
 	public double mean;
 	public Map<Double, Long> pcts = new LinkedHashMap<Double, Long>();
+
+	@Override
+	public String toString() {
+		return "HistogramMetric [min=" + min + ", max=" + max + ", mean=" + mean + ", pcts=" + pcts + "]";
+	}
 }

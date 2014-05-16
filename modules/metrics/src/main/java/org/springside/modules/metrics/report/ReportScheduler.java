@@ -27,11 +27,17 @@ import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
 
+/**
+ * Reporter线程.由用户负责初始化reporter及管理起停。
+ * 
+ * @author calvin
+ */
 public class ReportScheduler {
 	private static final String SCHEDULER_NAME = "metrics-reporter";
 	private static Logger logger = LoggerFactory.getLogger(ReportScheduler.class);
-	private List<Reporter> reporters;
+
 	private MetricRegistry metricRegistry;
+	private List<Reporter> reporters;
 	private ScheduledExecutorService executor;
 
 	public ReportScheduler(MetricRegistry metricRegistry, Reporter... reporters) {
@@ -46,6 +52,33 @@ public class ReportScheduler {
 
 	public void addReporter(Reporter reporter) {
 		reporters.add(reporter);
+	}
+
+	public void start(long period, TimeUnit unit) {
+		executor.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					report();
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}, period, period, unit);
+		logger.info("metric reporters started.");
+	}
+
+	public void stop() {
+		executor.shutdownNow();
+		try {
+			if (executor.awaitTermination(2, TimeUnit.SECONDS)) {
+				logger.info("metric reporters stopped.");
+			} else {
+				logger.info("metric reporters can't stop in 2 seconds, force stopped.");
+			}
+		} catch (InterruptedException ignored) {
+			// do nothing
+		}
 	}
 
 	public void report() {
@@ -70,33 +103,6 @@ public class ReportScheduler {
 
 		for (Reporter reporter : reporters) {
 			reporter.report(counterMetricMap, histogramMetricMap, executionMetricMap);
-		}
-	}
-
-	public void start(long period, TimeUnit unit) {
-		executor.scheduleAtFixedRate(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					report();
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-				}
-			}
-		}, period, period, unit);
-		logger.info("metric reporters started.");
-	}
-
-	public void stop() {
-		executor.shutdownNow();
-		try {
-			if (executor.awaitTermination(1, TimeUnit.SECONDS)) {
-				logger.info("metric reporters stopped.");
-			} else {
-				logger.info("metric reporters can't stopped in 1 seconds, force stopped");
-			}
-		} catch (InterruptedException ignored) {
-			// do nothing
 		}
 	}
 
