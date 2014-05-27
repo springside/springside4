@@ -20,13 +20,13 @@ import redis.clients.jedis.JedisPool;
 /**
  * 测试Redis用于Session管理的setEx()与get()方法性能, 使用JSON格式存储数据.
  * 
- * 可用系统参数重置相关变量，@see RedisCounterBenchmark
+ * 可用系统参数重置变量改变测试规模与连接参数， @see RedisCounterBenchmark
  * 
  * @author calvin
  */
 public class RedisSessionBenchmark extends ConcurrentBenchmark {
-	private static final int DEFAULT_THREAD_COUNT = 50;
-	private static final long DEFAULT_LOOP_COUNT = 20000;
+	private static final int DEFAULT_THREAD_COUNT = 20;
+	private static final long DEFAULT_TOTAL_COUNT = 100000;
 
 	private String keyPrefix = "ss.session:";
 	private JsonMapper jsonMapper = new JsonMapper();
@@ -39,7 +39,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 	}
 
 	public RedisSessionBenchmark() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_TOTAL_COUNT);
 	}
 
 	@Override

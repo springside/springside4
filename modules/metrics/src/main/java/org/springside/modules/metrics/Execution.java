@@ -19,12 +19,12 @@ import org.springside.modules.metrics.utils.Clock;
  * timer.stop();
  * </pre>
  * 
- * 2. 自行计算
+ * 2. 自行计算，更吝啬一点
  * 
  * <pre>
  * long start = System.currentTimeMillis();
  * ....
- * execution.update(System.currentTimeMillis()-start);
+ * execution.update(start);
  * </pre>
  * 
  * 
@@ -40,8 +40,8 @@ public class Execution {
 		histogram = new Histogram(pcts);
 	}
 
-	public void update(long elapsed) {
-		histogram.update(elapsed);
+	public void update(long start) {
+		histogram.update(System.currentTimeMillis() - start);
 		counter.inc();
 	}
 

@@ -18,15 +18,15 @@ import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import redis.clients.jedis.JedisPool;
 
 /**
- * 运行JobManager产生新的Job。
+ * 运行JobProducer产生新的Job。
  * 
- * 可用系统参数重置相关变量，@see RedisCounterBenchmark
+ * 可用系统参数重置测试规模，@see RedisCounterBenchmark
  * 
  * @author calvin
  */
 public class JobProducerDemo extends ConcurrentBenchmark {
 	private static final int DEFAULT_THREAD_COUNT = 5;
-	private static final long DEFAULT_LOOP_COUNT = 100000;
+	private static final long DEFAULT_TOTAL_COUNT = 500000;
 
 	private static AtomicLong expiredMills = new AtomicLong(System.currentTimeMillis()
 			+ (SimpleJobDispatcherDemo.DELAY_SECONDS * 1000));
@@ -42,7 +42,7 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 	}
 
 	public JobProducerDemo() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_TOTAL_COUNT);
 		this.expectTps = Long.parseLong(System.getProperty("benchmark.tps",
 				String.valueOf(SimpleJobDispatcherDemo.EXPECT_TPS)));
 	}

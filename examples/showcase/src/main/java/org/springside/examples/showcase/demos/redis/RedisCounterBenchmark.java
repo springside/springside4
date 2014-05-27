@@ -15,14 +15,14 @@ import redis.clients.jedis.JedisPool;
 /**
  * 测试Redis用于计数器时incr()方法的性能.
  * 
- * 可用-Dbenchmark.thread.count, -Dbenchmark.loop.count 重置测试规模
- * 可用-Dbenchmark.host,-Dbenchmark.port,-Dbenchmark.timeout 重置连接参数
+ * 可用-Dthread.count, -Dtotal.count 重置测试规模
+ * 可用-Dredis.host,-Dredis.port,-Dredis.timeout 重置连接参数
  * 
  * @author calvin
  */
 public class RedisCounterBenchmark extends ConcurrentBenchmark {
-	private static final int DEFAULT_THREAD_COUNT = 50;
-	private static final long DEFAULT_LOOP_COUNT = 20000;
+	private static final int DEFAULT_THREAD_COUNT = 20;
+	private static final long DEFAULT_TOTAL_COUNT = 100000;
 
 	private String counterKey = "ss.counter";
 	private JedisPool pool;
@@ -34,7 +34,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	}
 
 	public RedisCounterBenchmark() {
-		super(DEFAULT_THREAD_COUNT, DEFAULT_LOOP_COUNT);
+		super(DEFAULT_THREAD_COUNT, DEFAULT_TOTAL_COUNT);
 	}
 
 	@Override

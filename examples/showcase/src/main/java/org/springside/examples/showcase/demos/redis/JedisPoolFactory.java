@@ -14,9 +14,9 @@ public class JedisPoolFactory {
 
 	public static JedisPool createJedisPool(String defaultHost, int defaultPort, int defaultTimeout, int threadCount) {
 		// 合并命令行传入的系统变量与默认值
-		String host = System.getProperty("benchmark.host", defaultHost);
-		String port = System.getProperty("benchmark.port", String.valueOf(defaultPort));
-		String timeout = System.getProperty("benchmark.timeout", String.valueOf(defaultTimeout));
+		String host = System.getProperty("redis.host", defaultHost);
+		String port = System.getProperty("redis.port", String.valueOf(defaultPort));
+		String timeout = System.getProperty("redis.timeout", String.valueOf(defaultTimeout));
 
 		// 设置Pool大小，设为与线程数等大，并屏蔽掉idle checking
 		JedisPoolConfig poolConfig = JedisUtils.createPoolConfig(threadCount, threadCount);
