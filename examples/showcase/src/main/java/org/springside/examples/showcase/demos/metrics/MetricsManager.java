@@ -12,10 +12,15 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springside.modules.metrics.MetricRegistry;
-import org.springside.modules.metrics.report.ConsoleReporter;
 import org.springside.modules.metrics.report.GraphiteReporter;
 import org.springside.modules.metrics.report.ReportScheduler;
+import org.springside.modules.metrics.report.Slf4jReporter;
 
+/**
+ * 控制多个Reporter
+ * 
+ * @author Administrator
+ */
 public class MetricsManager {
 
 	private ReportScheduler scheduler;
@@ -24,8 +29,8 @@ public class MetricsManager {
 
 	@PostConstruct
 	public void start() {
-		ConsoleReporter consoleReporter = new ConsoleReporter();
-		scheduler = new ReportScheduler(MetricRegistry.INSTANCE, consoleReporter);
+		Slf4jReporter slf4jReporter = new Slf4jReporter();
+		scheduler = new ReportScheduler(MetricRegistry.INSTANCE, slf4jReporter);
 
 		if (graphiteEnabled) {
 			GraphiteReporter graphiteReporter = new GraphiteReporter(new InetSocketAddress("localhost", 2003));

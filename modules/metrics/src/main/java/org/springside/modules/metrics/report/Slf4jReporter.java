@@ -14,6 +14,11 @@ import org.springside.modules.metrics.CounterMetric;
 import org.springside.modules.metrics.ExecutionMetric;
 import org.springside.modules.metrics.HistogramMetric;
 
+/**
+ * 使用Slf4j将Metrics打印到日志，默认logger name是"metrics"，可在构造函数中设定。
+ * 
+ * @author calvin
+ */
 public class Slf4jReporter implements Reporter {
 	private Logger reportLogger;
 
@@ -43,7 +48,8 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
-		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}", name, counter.totalCount, counter.lastRate);
+		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}, meanRate={}", name, counter.totalCount,
+				counter.lastRate, counter.meanRate);
 	}
 
 	private void logHistogram(String name, HistogramMetric histogram) {
@@ -52,10 +58,10 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logExecution(String name, ExecutionMetric execution) {
-		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, min={}ms, max={}ms, mean={}ms", name,
-				execution.counterMetric.totalCount, execution.counterMetric.lastRate, execution.histogramMetric.min,
-				execution.histogramMetric.max, execution.histogramMetric.mean,
-				buildPcts(execution.histogramMetric.pcts));
+		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, meanRate={}, min={}ms, max={}ms, mean={}ms",
+				name, execution.counterMetric.totalCount, execution.counterMetric.lastRate,
+				execution.counterMetric.meanRate, execution.histogramMetric.min, execution.histogramMetric.max,
+				execution.histogramMetric.mean, buildPcts(execution.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {
