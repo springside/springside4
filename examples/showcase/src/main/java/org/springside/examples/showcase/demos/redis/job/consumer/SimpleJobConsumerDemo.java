@@ -93,7 +93,7 @@ public class SimpleJobConsumerDemo implements Runnable {
 				if (job != null) {
 					handleJob(job);
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

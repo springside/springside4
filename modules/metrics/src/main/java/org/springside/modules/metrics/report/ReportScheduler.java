@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics.report;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +41,10 @@ public class ReportScheduler {
 	private ScheduledExecutorService executor;
 
 	public ReportScheduler(MetricRegistry metricRegistry, Reporter... reporters) {
-		this(metricRegistry, Arrays.asList(reporters));
+		this(metricRegistry, new ArrayList<Reporter>());
+		for (Reporter reporter : reporters) {
+			this.addReporter(reporter);
+		}
 	}
 
 	public ReportScheduler(MetricRegistry metricRegistry, List<Reporter> reporters) {
@@ -60,7 +63,7 @@ public class ReportScheduler {
 			public void run() {
 				try {
 					report();
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					logger.error(e.getMessage(), e);
 				}
 			}
@@ -82,10 +85,13 @@ public class ReportScheduler {
 	}
 
 	public void report() {
+
+		// 取出所有Metrics,已按名称排序
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
 		SortedMap<String, Execution> executionMap = metricRegistry.getExecutions();
 
+		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值，按顺序放入有序Map中
 		Map<String, CounterMetric> counterMetricMap = new LinkedHashMap<String, CounterMetric>();
 		for (Entry<String, Counter> entry : counterMap.entrySet()) {
 			counterMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
@@ -101,6 +107,7 @@ public class ReportScheduler {
 			executionMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
+		// 调度所有Reporters 输出 metrics值
 		for (Reporter reporter : reporters) {
 			reporter.report(counterMetricMap, histogramMetricMap, executionMetricMap);
 		}

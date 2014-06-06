@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
 	<artifactId>springside-project</artifactId>
-	<version>4.2.2.GA</version>
+	<version>4.2.3-SNAPSHOT</version>
 	<name>Springside :: Project</name>
 	<packaging>pom</packaging>
 

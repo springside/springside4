@@ -100,14 +100,24 @@ public class MetricRegistry {
 		}
 	}
 
+	/**
+	 * 返回所有Counter, 按名称排序.
+	 */
 	public SortedMap<String, Counter> getCounters() {
 		return getMetrics(counters);
 	}
+
+	/**
+	 * 返回所有Histogram, 按名称排序.
+	 */
 
 	public SortedMap<String, Histogram> getHistograms() {
 		return getMetrics(histograms);
 	}
 
+	/**
+	 * 返回所有Execution, 按名称排序.
+	 */
 	public SortedMap<String, Execution> getExecutions() {
 		return getMetrics(executions);
 	}

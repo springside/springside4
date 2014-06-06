@@ -119,35 +119,40 @@ public class MasterElector implements Runnable {
 
 	@Override
 	public void run() {
-		jedisTemplate.execute(new JedisActionNoResult() {
-			@Override
-			public void action(Jedis jedis) {
-				String masterFromRedis = jedis.get(masterKey);
+		try {
+			jedisTemplate.execute(new JedisActionNoResult() {
+				@Override
+				public void action(Jedis jedis) {
+					String masterFromRedis = jedis.get(masterKey);
 
-				logger.debug("master {} is {}", masterKey, masterFromRedis);
+					logger.debug("master {} is {}", masterKey, masterFromRedis);
 
-				// 如果masterKey返回值为空，证明集群刚重启 或master已crash，尝试注册为Master.
-				if (masterFromRedis == null) {
-					// 使用setnx，保证只有一个Client能注册为Master.
-					if (JedisUtils.isStatusOk(jedis.set(masterKey, hostId, "NX", "EX", expireSecs))) {
+					// 如果masterKey返回值为空，证明集群刚重启 或master已crash，尝试注册为Master.
+					if (masterFromRedis == null) {
+						// 使用setnx，保证只有一个Client能注册为Master.
+						if (JedisUtils.isStatusOk(jedis.set(masterKey, hostId, "NX", "EX", expireSecs))) {
+							master.set(true);
+							logger.info("master {} is changed to {}.", masterKey, hostId);
+							return;
+						} else {
+							master.set(false);
+							return;
+						}
+					}
+
+					// 如果我已是master，更新key的超时时间
+					if (hostId.equals(masterFromRedis)) {
+						jedis.expire(masterKey, expireSecs);
 						master.set(true);
-						logger.info("master {} is changed to {}.", masterKey, hostId);
-						return;
 					} else {
 						master.set(false);
-						return;
 					}
 				}
-
-				// 如果我已是master，更新key的超时时间
-				if (hostId.equals(masterFromRedis)) {
-					jedis.expire(masterKey, expireSecs);
-					master.set(true);
-				} else {
-					master.set(false);
-				}
-			}
-		});
+			});
+		} catch (Throwable e) {
+			// catch any exception, because the scheduled thread will break if the exception thrown outside.
+			logger.error("Unexpected error occurred in task", e);
+		}
 	}
 
 	/**

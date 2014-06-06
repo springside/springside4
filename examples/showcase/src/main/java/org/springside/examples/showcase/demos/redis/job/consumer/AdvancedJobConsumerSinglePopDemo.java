@@ -79,7 +79,7 @@ public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 				} else {
 					Threads.sleep(100);
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

@@ -11,6 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
@@ -32,6 +34,8 @@ public class JobDispatcher implements Runnable {
 	public static final long DEFAULT_INTERVAL_MILLIS = 1000;
 	public static final boolean DEFAULT_RELIABLE = false;
 	public static final long DEFAULT_JOB_TIMEOUT_SECONDS = 60;
+
+	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
 	private ScheduledExecutorService internalScheduledThreadPool;
 	private ScheduledFuture dispatchJob;
@@ -96,10 +100,15 @@ public class JobDispatcher implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long currTime = System.currentTimeMillis();
-		List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
-				String.valueOf(jobTimeoutSecs));
-		scriptExecutor.execute(keys, args);
+		try {
+			long currTime = System.currentTimeMillis();
+			List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
+					String.valueOf(jobTimeoutSecs));
+			scriptExecutor.execute(keys, args);
+		} catch (Throwable e) {
+			// catch any exception, because the scheduled thread will break if the exception thrown outside.
+			logger.error("Unexpected error occurred in task", e);
+		}
 	}
 
 	/**
