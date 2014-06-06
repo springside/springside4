@@ -1,3 +1,1 @@
-java -jar ../logstash-*.jar agent -f shipper.conf
-
-pause;
+logstash agent -f shipper.conf
