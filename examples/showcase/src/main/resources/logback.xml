@@ -11,10 +11,10 @@
 	
 	<!-- 演示按时间滚动的策略 -->
 	<appender name="defaultlogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/showcase.log</file>
+		<file>/tmp/logs/showcase.log</file>
 		
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/showcase.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<fileNamePattern>/tmp/logs/showcase.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<!-- 保留 30天数据，默认无限-->
 			<maxHistory>30</maxHistory>
 		</rollingPolicy>
@@ -26,10 +26,10 @@
 	
 	<!-- 按文件大小滚动的策略 -->
 	<appender name="metricsLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/metrics.log</file>
+		<file>/tmp/logs/metrics.log</file>
 		
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>logs/metrics.%i.log</fileNamePattern>
+			<fileNamePattern>/tmp/logs/metrics.%i.log</fileNamePattern>
 			<!-- 最多保留10个文件，默认是7 -->
       		<maxIndex>10</maxIndex>
 		</rollingPolicy>
@@ -45,10 +45,10 @@
 	
 	<!-- 综合时间与大小的滚动策略，先按小时滚动，小时内的文件大于10mb时再按大小滚动 -->
 	<appender name="businessLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/business.log</file>
+		<file>/tmp/logs/business.log</file>
 		
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>logs/business-%d{yyyy-MM-dd_HH}.%i.zip</fileNamePattern>
+			<fileNamePattern>/tmp/logs/business-%d{yyyy-MM-dd_HH}.%i.zip</fileNamePattern>
 			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>10MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
