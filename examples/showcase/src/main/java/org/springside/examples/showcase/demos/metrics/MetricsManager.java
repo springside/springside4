@@ -12,9 +12,9 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springside.modules.metrics.MetricRegistry;
-import org.springside.modules.metrics.report.GraphiteReporter;
-import org.springside.modules.metrics.report.ReportScheduler;
-import org.springside.modules.metrics.report.Slf4jReporter;
+import org.springside.modules.metrics.reporter.GraphiteReporter;
+import org.springside.modules.metrics.reporter.ReportScheduler;
+import org.springside.modules.metrics.reporter.Slf4jReporter;
 
 /**
  * 控制多个Reporter

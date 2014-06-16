@@ -14,7 +14,7 @@ import org.springside.modules.metrics.utils.Clock;
  * 1. 使用timer
  * 
  * <pre>
- * TimerContext timerContext = execution.start();
+ * TimerContext timerContext = timer.start();
  * ...
  * timerContext.stop();
  * </pre>
@@ -24,7 +24,7 @@ import org.springside.modules.metrics.utils.Clock;
  * <pre>
  * long start = System.currentTimeMillis();
  * ....
- * execution.update(start);
+ * timer.update(start);
  * </pre>
  * 
  * 
@@ -74,8 +74,8 @@ public class Timer {
 		private final Timer timer;
 		private final long startTime;
 
-		private TimerContext(Timer execution, long startTime) {
-			this.timer = execution;
+		private TimerContext(Timer timer, long startTime) {
+			this.timer = timer;
 			this.startTime = startTime;
 		}
 
