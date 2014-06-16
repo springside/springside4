@@ -11,8 +11,8 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.ExecutionMetric;
 import org.springside.modules.metrics.HistogramMetric;
+import org.springside.modules.metrics.TimerMetric;
 
 /**
  * 使用Slf4j将Metrics打印到日志，默认logger name是"metrics"，可在构造函数中设定。
@@ -32,7 +32,7 @@ public class Slf4jReporter implements Reporter {
 
 	@Override
 	public void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, ExecutionMetric> executions) {
+			Map<String, TimerMetric> timers) {
 		for (Entry<String, CounterMetric> entry : counters.entrySet()) {
 			logCounter(entry.getKey(), entry.getValue());
 		}
@@ -41,8 +41,8 @@ public class Slf4jReporter implements Reporter {
 			logHistogram(entry.getKey(), entry.getValue());
 		}
 
-		for (Entry<String, ExecutionMetric> entry : executions.entrySet()) {
-			logExecution(entry.getKey(), entry.getValue());
+		for (Entry<String, TimerMetric> entry : timers.entrySet()) {
+			logTimer(entry.getKey(), entry.getValue());
 		}
 
 	}
@@ -57,11 +57,11 @@ public class Slf4jReporter implements Reporter {
 				histogram.mean, buildPcts(histogram.pcts));
 	}
 
-	private void logExecution(String name, ExecutionMetric execution) {
-		reportLogger.info("type=EXECUTION, name={}, count={}, lastRate={}, meanRate={}, min={}ms, max={}ms, mean={}ms",
-				name, execution.counterMetric.totalCount, execution.counterMetric.lastRate,
-				execution.counterMetric.meanRate, execution.histogramMetric.min, execution.histogramMetric.max,
-				execution.histogramMetric.mean, buildPcts(execution.histogramMetric.pcts));
+	private void logTimer(String name, TimerMetric timer) {
+		reportLogger.info("type=TIMER, name={}, count={}, lastRate={}, meanRate={}, min={}ms, max={}ms, mean={}ms",
+				name, timer.counterMetric.totalCount, timer.counterMetric.lastRate,
+				timer.counterMetric.meanRate, timer.histogramMetric.min, timer.histogramMetric.max,
+				timer.histogramMetric.mean, buildPcts(timer.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springside.modules.metrics.Execution.ExecutionTimer;
+import org.springside.modules.metrics.Timer.TimerContext;
 import org.springside.modules.metrics.report.ConsoleReporter;
 import org.springside.modules.metrics.report.GraphiteReporter;
 import org.springside.modules.metrics.report.ReportScheduler;
@@ -48,7 +48,7 @@ public class ReporterTest {
 		MetricRegistry metricRegistry = new MetricRegistry();
 		MockClock clock = new MockClock();
 		Counter.clock = clock;
-		Execution.clock = clock;
+		Timer.clock = clock;
 
 		// counter
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
@@ -67,18 +67,18 @@ public class ReporterTest {
 			histogram2.update(i * 2);
 		}
 
-		// execution
-		Execution execution = metricRegistry.execution(MetricRegistry.name("UserService", "getUser.timer"));
+		// timer
+		Timer timer = metricRegistry.timer(MetricRegistry.name("UserService", "getUser.timer"));
 		for (int i = 1; i <= 10; i++) {
-			ExecutionTimer timer = execution.start();
+			TimerContext timerContext = timer.start();
 			clock.increaseTime(25);
-			timer.stop();
+			timerContext.stop();
 		}
-		Execution execution2 = metricRegistry.execution(MetricRegistry.name("UserService", "setUser.timer"));
+		Timer timer2 = metricRegistry.timer(MetricRegistry.name("UserService", "setUser.timer"));
 		for (int i = 1; i <= 10; i++) {
-			ExecutionTimer timer = execution2.start();
+			TimerContext timerContext = timer2.start();
 			clock.increaseTime(75);
-			timer.stop();
+			timerContext.stop();
 		}
 
 		// totally 2 seconds past

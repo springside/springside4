@@ -24,7 +24,7 @@ public class MetricRegistry {
 
 	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
 	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
-	private ConcurrentMap<String, Execution> executions = new ConcurrentHashMap<String, Execution>();
+	private ConcurrentMap<String, Timer> timers = new ConcurrentHashMap<String, Timer>();
 
 	/**
 	 * 格式化以"."分割的Metrics Name的辅助函数.
@@ -73,21 +73,21 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 在注册中心获取或创建Execution, 使用默认的百分比计算设置(90%).
+	 * 在注册中心获取或创建Timer, 使用默认的百分比计算设置(90%).
 	 */
-	public Execution execution(String name) {
-		return execution(name, defaultPcts);
+	public Timer timer(String name) {
+		return timer(name, defaultPcts);
 	}
 
 	/**
-	 * 在注册中心获取或创建Execution, 并设置所需的百分比计算.
+	 * 在注册中心获取或创建Timer, 并设置所需的百分比计算.
 	 */
-	public Execution execution(String name, Double... pcts) {
-		if (executions.containsKey(name)) {
-			return executions.get(name);
+	public Timer timer(String name, Double... pcts) {
+		if (timers.containsKey(name)) {
+			return timers.get(name);
 		} else {
-			Execution execution = new Execution(pcts);
-			return register(executions, name, execution);
+			Timer timer = new Timer(pcts);
+			return register(timers, name, timer);
 		}
 	}
 
@@ -116,10 +116,10 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 返回所有Execution, 按名称排序.
+	 * 返回所有Timer, 按名称排序.
 	 */
-	public SortedMap<String, Execution> getExecutions() {
-		return getMetrics(executions);
+	public SortedMap<String, Timer> getTimers() {
+		return getMetrics(timers);
 	}
 
 	/**

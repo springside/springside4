@@ -11,8 +11,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.ExecutionMetric;
 import org.springside.modules.metrics.HistogramMetric;
+import org.springside.modules.metrics.TimerMetric;
 
 public class ConsoleReporter implements Reporter {
 
@@ -21,7 +21,7 @@ public class ConsoleReporter implements Reporter {
 
 	@Override
 	public void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, ExecutionMetric> executions) {
+			Map<String, TimerMetric> timers) {
 
 		printWithBanner(new Date().toString(), '=');
 		output.println();
@@ -44,11 +44,11 @@ public class ConsoleReporter implements Reporter {
 			output.println();
 		}
 
-		if (!executions.isEmpty()) {
-			printWithBanner("-- Executions", '-');
-			for (Map.Entry<String, ExecutionMetric> entry : executions.entrySet()) {
+		if (!timers.isEmpty()) {
+			printWithBanner("-- Timers", '-');
+			for (Map.Entry<String, TimerMetric> entry : timers.entrySet()) {
 				output.println(entry.getKey());
-				printExecution(entry.getValue());
+				printTimer(entry.getValue());
 			}
 			output.println();
 		}
@@ -78,14 +78,14 @@ public class ConsoleReporter implements Reporter {
 		}
 	}
 
-	private void printExecution(ExecutionMetric execution) {
-		output.printf("             count = %d%n", execution.counterMetric.totalCount);
-		output.printf("         last rate = %2.2f/s%n", execution.counterMetric.lastRate);
-		output.printf("         mean rate = %2.2f/s%n", execution.counterMetric.meanRate);
-		output.printf("               min = %d ms%n", execution.histogramMetric.min);
-		output.printf("               max = %d ms%n", execution.histogramMetric.max);
-		output.printf("              mean = %2.2f ms%n", execution.histogramMetric.mean);
-		for (Entry<Double, Long> pct : execution.histogramMetric.pcts.entrySet()) {
+	private void printTimer(TimerMetric timer) {
+		output.printf("             count = %d%n", timer.counterMetric.totalCount);
+		output.printf("         last rate = %2.2f/s%n", timer.counterMetric.lastRate);
+		output.printf("         mean rate = %2.2f/s%n", timer.counterMetric.meanRate);
+		output.printf("               min = %d ms%n", timer.histogramMetric.min);
+		output.printf("               max = %d ms%n", timer.histogramMetric.max);
+		output.printf("              mean = %2.2f ms%n", timer.histogramMetric.mean);
+		for (Entry<Double, Long> pct : timer.histogramMetric.pcts.entrySet()) {
 			output.printf("           %2.2f%% <= %d ms%n", pct.getKey(), pct.getValue());
 		}
 	}

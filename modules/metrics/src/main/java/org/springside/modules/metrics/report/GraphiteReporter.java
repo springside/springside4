@@ -22,7 +22,7 @@ import javax.net.SocketFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.ExecutionMetric;
+import org.springside.modules.metrics.TimerMetric;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
 
@@ -52,7 +52,7 @@ public class GraphiteReporter implements Reporter {
 
 	@Override
 	public void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, ExecutionMetric> executions) {
+			Map<String, TimerMetric> timers) {
 		try {
 			connect();
 			long timestamp = System.currentTimeMillis() / 1000;
@@ -65,8 +65,8 @@ public class GraphiteReporter implements Reporter {
 				reportHistogram(entry.getKey(), entry.getValue(), timestamp);
 			}
 
-			for (Map.Entry<String, ExecutionMetric> entry : executions.entrySet()) {
-				reportExecution(entry.getKey(), entry.getValue(), timestamp);
+			for (Map.Entry<String, TimerMetric> entry : timers.entrySet()) {
+				reportTimer(entry.getKey(), entry.getValue(), timestamp);
 			}
 
 			flush();
@@ -95,13 +95,13 @@ public class GraphiteReporter implements Reporter {
 		}
 	}
 
-	private void reportExecution(String name, ExecutionMetric execution, long timestamp) throws IOException {
-		send(MetricRegistry.name(prefix, name, "count"), format(execution.counterMetric.lastCount), timestamp);
+	private void reportTimer(String name, TimerMetric timer, long timestamp) throws IOException {
+		send(MetricRegistry.name(prefix, name, "count"), format(timer.counterMetric.lastCount), timestamp);
 
-		send(MetricRegistry.name(prefix, name, "min"), format(execution.histogramMetric.min), timestamp);
-		send(MetricRegistry.name(prefix, name, "max"), format(execution.histogramMetric.max), timestamp);
-		send(MetricRegistry.name(prefix, name, "mean"), format(execution.histogramMetric.mean), timestamp);
-		for (Entry<Double, Long> pct : execution.histogramMetric.pcts.entrySet()) {
+		send(MetricRegistry.name(prefix, name, "min"), format(timer.histogramMetric.min), timestamp);
+		send(MetricRegistry.name(prefix, name, "max"), format(timer.histogramMetric.max), timestamp);
+		send(MetricRegistry.name(prefix, name, "mean"), format(timer.histogramMetric.mean), timestamp);
+		for (Entry<Double, Long> pct : timer.histogramMetric.pcts.entrySet()) {
 			send(MetricRegistry.name(prefix, name, format(pct.getKey()).replace('.', '_')), format(pct.getValue()),
 					timestamp);
 		}

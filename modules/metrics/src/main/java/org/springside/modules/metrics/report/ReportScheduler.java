@@ -21,8 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.Execution;
-import org.springside.modules.metrics.ExecutionMetric;
+import org.springside.modules.metrics.Timer;
+import org.springside.modules.metrics.TimerMetric;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
@@ -89,7 +89,7 @@ public class ReportScheduler {
 		// 取出所有Metrics,已按名称排序
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
-		SortedMap<String, Execution> executionMap = metricRegistry.getExecutions();
+		SortedMap<String, Timer> timerMap = metricRegistry.getTimers();
 
 		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值，按顺序放入有序Map中
 		Map<String, CounterMetric> counterMetricMap = new LinkedHashMap<String, CounterMetric>();
@@ -102,14 +102,14 @@ public class ReportScheduler {
 			histogramMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
-		Map<String, ExecutionMetric> executionMetricMap = new LinkedHashMap<String, ExecutionMetric>();
-		for (Entry<String, Execution> entry : executionMap.entrySet()) {
-			executionMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
+		Map<String, TimerMetric> timerMetricMap = new LinkedHashMap<String, TimerMetric>();
+		for (Entry<String, Timer> entry : timerMap.entrySet()) {
+			timerMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
 		// 调度所有Reporters 输出 metrics值
 		for (Reporter reporter : reporters) {
-			reporter.report(counterMetricMap, histogramMetricMap, executionMetricMap);
+			reporter.report(counterMetricMap, histogramMetricMap, timerMetricMap);
 		}
 	}
 

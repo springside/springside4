@@ -8,7 +8,7 @@ package org.springside.modules.metrics;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.metrics.Execution.ExecutionTimer;
+import org.springside.modules.metrics.Timer.TimerContext;
 import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class ExecutionTest {
@@ -16,19 +16,19 @@ public class ExecutionTest {
 	@Test
 	public void normal() {
 		MockClock clock = new MockClock();
-		Execution.clock = clock;
+		Timer.clock = clock;
 		Counter.clock = clock;
-		Execution execution = new Execution(new Double[] { 90d });
+		Timer timer = new Timer(new Double[] { 90d });
 
-		ExecutionTimer timer = execution.start();
+		TimerContext timerContext = timer.start();
 		clock.increaseTime(200);
-		timer.stop();
+		timerContext.stop();
 
-		ExecutionTimer timer2 = execution.start();
+		TimerContext timer2 = timer.start();
 		clock.increaseTime(300);
 		timer2.stop();
 
-		ExecutionMetric metric = execution.calculateMetric();
+		TimerMetric metric = timer.calculateMetric();
 
 		assertThat(metric.counterMetric.totalCount).isEqualTo(2);
 		assertThat(metric.counterMetric.meanRate).isEqualTo(4);
