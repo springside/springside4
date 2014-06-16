@@ -12,18 +12,21 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import org.springside.modules.metrics.MetricRegistry;
+import org.springside.modules.metrics.exporter.JmxExporter;
 import org.springside.modules.metrics.reporter.GraphiteReporter;
 import org.springside.modules.metrics.reporter.ReportScheduler;
 import org.springside.modules.metrics.reporter.Slf4jReporter;
 
 /**
- * 控制多个Reporter
+ * 注册多个Reporter
  * 
  * @author Administrator
  */
 public class MetricsManager {
 
 	private ReportScheduler scheduler;
+
+	private JmxExporter exporter;
 
 	private boolean graphiteEnabled = false;
 
@@ -38,6 +41,8 @@ public class MetricsManager {
 		}
 
 		scheduler.start(10, TimeUnit.SECONDS);
+
+		exporter = new JmxExporter("metrics", MetricRegistry.INSTANCE);
 	}
 
 	@PreDestroy

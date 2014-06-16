@@ -5,11 +5,15 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import org.springside.modules.metrics.exporter.MetricRegistryListener;
 
 /**
  * 注册中心, 用户创建Metrics的入口.
@@ -25,6 +29,8 @@ public class MetricRegistry {
 	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
 	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
 	private ConcurrentMap<String, Timer> timers = new ConcurrentHashMap<String, Timer>();
+
+	private List<MetricRegistryListener> listeners = new ArrayList<MetricRegistryListener>();
 
 	/**
 	 * 格式化以"."分割的Metrics Name的辅助函数.
@@ -96,7 +102,23 @@ public class MetricRegistry {
 		if (existingMetric != null) {
 			return existingMetric;
 		} else {
+			notifyNewMetric(name, newMetric);
 			return newMetric;
+		}
+	}
+
+	private void notifyNewMetric(String name, Object newMetric) {
+		for (MetricRegistryListener listener : listeners) {
+			if (newMetric instanceof Counter) {
+				listener.onCounterAdded(name, (Counter) newMetric);
+			}
+			if (newMetric instanceof Histogram) {
+				listener.onHistogramAdded(name, (Histogram) newMetric);
+			}
+			if (newMetric instanceof Timer) {
+				listener.onTimerAdded(name, (Timer) newMetric);
+			}
+
 		}
 	}
 
@@ -136,5 +158,12 @@ public class MetricRegistry {
 	 */
 	public void setDefaultPcts(Double[] defaultPcts) {
 		this.defaultPcts = defaultPcts;
+	}
+
+	/**
+	 * Exporter将自己加为Listener.
+	 */
+	public void addListener(MetricRegistryListener listener) {
+		listeners.add(listener);
 	}
 }

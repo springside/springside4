@@ -6,10 +6,7 @@
 package org.springside.modules.metrics.reporter;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -20,12 +17,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
-import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.Timer;
-import org.springside.modules.metrics.TimerMetric;
 import org.springside.modules.metrics.Histogram;
-import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
+import org.springside.modules.metrics.Timer;
 
 /**
  * Reporter线程.由用户负责初始化reporter及管理起停。
@@ -86,30 +80,27 @@ public class ReportScheduler {
 
 	public void report() {
 
-		// 取出所有Metrics,已按名称排序
+		// 取出所有Metrics,已按名称排序.
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
 		SortedMap<String, Timer> timerMap = metricRegistry.getTimers();
 
-		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值，按顺序放入有序Map中
-		Map<String, CounterMetric> counterMetricMap = new LinkedHashMap<String, CounterMetric>();
-		for (Entry<String, Counter> entry : counterMap.entrySet()) {
-			counterMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
+		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值
+		for (Counter counter : counterMap.values()) {
+			counter.calculateMetric();
 		}
 
-		Map<String, HistogramMetric> histogramMetricMap = new LinkedHashMap<String, HistogramMetric>();
-		for (Entry<String, Histogram> entry : histogramMap.entrySet()) {
-			histogramMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
+		for (Histogram histogram : histogramMap.values()) {
+			histogram.calculateMetric();
 		}
 
-		Map<String, TimerMetric> timerMetricMap = new LinkedHashMap<String, TimerMetric>();
-		for (Entry<String, Timer> entry : timerMap.entrySet()) {
-			timerMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
+		for (Timer timer : timerMap.values()) {
+			timer.calculateMetric();
 		}
 
 		// 调度所有Reporters 输出 metrics值
 		for (Reporter reporter : reporters) {
-			reporter.report(counterMetricMap, histogramMetricMap, timerMetricMap);
+			reporter.report(counterMap, histogramMap, timerMap);
 		}
 	}
 

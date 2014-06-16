@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Histogram {
 
+	public HistogramMetric snapshot = new HistogramMetric();
+
 	private List<Long> measurements = new LinkedList<Long>();
 	private Double[] pcts;
 	private Object lock = new Object();
@@ -64,6 +66,7 @@ public class Histogram {
 			metric.pcts.put(pct, getPercent(snapshotList, count, pct));
 		}
 
+		snapshot = metric;
 		return metric;
 	}
 

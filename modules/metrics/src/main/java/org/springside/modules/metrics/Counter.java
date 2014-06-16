@@ -18,6 +18,8 @@ import org.springside.modules.metrics.utils.Clock;
 public class Counter {
 	public static Clock clock = Clock.DEFAULT;
 
+	public CounterMetric snapshot = new CounterMetric();
+
 	private AtomicLong counter = new AtomicLong(0);
 
 	private long totalCount = 0L;
@@ -63,6 +65,9 @@ public class Counter {
 		}
 
 		lastReportTime = currentTime;
+
+		snapshot = metric;
+
 		return metric;
 	}
 

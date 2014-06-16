@@ -31,7 +31,11 @@ import org.springside.modules.metrics.utils.Clock;
  * @author Calvin
  */
 public class Timer {
+
 	public static Clock clock = Clock.DEFAULT;
+
+	public TimerMetric snapshot = new TimerMetric();
+
 	private Counter counter;
 	private Histogram histogram;
 
@@ -59,6 +63,7 @@ public class Timer {
 		TimerMetric metric = new TimerMetric();
 		metric.counterMetric = counter.calculateMetric();
 		metric.histogramMetric = histogram.calculateMetric();
+		snapshot = metric;
 		return metric;
 	}
 

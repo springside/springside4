@@ -21,10 +21,13 @@ import javax.net.SocketFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.TimerMetric;
+import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
+import org.springside.modules.metrics.Timer;
+import org.springside.modules.metrics.TimerMetric;
 
 public class GraphiteReporter implements Reporter {
 
@@ -51,22 +54,21 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	@Override
-	public void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, TimerMetric> timers) {
+	public void report(Map<String, Counter> counters, Map<String, Histogram> histograms, Map<String, Timer> timers) {
 		try {
 			connect();
 			long timestamp = System.currentTimeMillis() / 1000;
 
-			for (Map.Entry<String, CounterMetric> entry : counters.entrySet()) {
-				reportCounter(entry.getKey(), entry.getValue(), timestamp);
+			for (Map.Entry<String, Counter> entry : counters.entrySet()) {
+				reportCounter(entry.getKey(), entry.getValue().snapshot, timestamp);
 			}
 
-			for (Map.Entry<String, HistogramMetric> entry : histograms.entrySet()) {
-				reportHistogram(entry.getKey(), entry.getValue(), timestamp);
+			for (Map.Entry<String, Histogram> entry : histograms.entrySet()) {
+				reportHistogram(entry.getKey(), entry.getValue().snapshot, timestamp);
 			}
 
-			for (Map.Entry<String, TimerMetric> entry : timers.entrySet()) {
-				reportTimer(entry.getKey(), entry.getValue(), timestamp);
+			for (Map.Entry<String, Timer> entry : timers.entrySet()) {
+				reportTimer(entry.getKey(), entry.getValue().snapshot, timestamp);
 			}
 
 			flush();

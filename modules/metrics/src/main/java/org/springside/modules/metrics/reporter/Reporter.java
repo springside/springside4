@@ -7,9 +7,9 @@ package org.springside.modules.metrics.reporter;
 
 import java.util.Map;
 
-import org.springside.modules.metrics.CounterMetric;
-import org.springside.modules.metrics.TimerMetric;
-import org.springside.modules.metrics.HistogramMetric;
+import org.springside.modules.metrics.Counter;
+import org.springside.modules.metrics.Histogram;
+import org.springside.modules.metrics.Timer;
 
 /**
  * Reporter的公共接口，被ReportScheduler定时调用。
@@ -18,6 +18,5 @@ import org.springside.modules.metrics.HistogramMetric;
  * 
  */
 public interface Reporter {
-	void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, TimerMetric> timers);
+	void report(Map<String, Counter> counters, Map<String, Histogram> histograms, Map<String, Timer> timers);
 }

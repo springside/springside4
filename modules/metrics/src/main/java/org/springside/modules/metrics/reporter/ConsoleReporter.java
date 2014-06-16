@@ -10,8 +10,11 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
+import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
+import org.springside.modules.metrics.Timer;
 import org.springside.modules.metrics.TimerMetric;
 
 public class ConsoleReporter implements Reporter {
@@ -20,35 +23,34 @@ public class ConsoleReporter implements Reporter {
 	private PrintStream output = System.out;
 
 	@Override
-	public void report(Map<String, CounterMetric> counters, Map<String, HistogramMetric> histograms,
-			Map<String, TimerMetric> timers) {
+	public void report(Map<String, Counter> counters, Map<String, Histogram> histograms, Map<String, Timer> timers) {
 
 		printWithBanner(new Date().toString(), '=');
 		output.println();
 
 		if (!counters.isEmpty()) {
 			printWithBanner("-- Counters", '-');
-			for (Map.Entry<String, CounterMetric> entry : counters.entrySet()) {
+			for (Map.Entry<String, Counter> entry : counters.entrySet()) {
 				output.println(entry.getKey());
-				printCounter(entry.getValue());
+				printCounter(entry.getValue().snapshot);
 			}
 			output.println();
 		}
 
 		if (!histograms.isEmpty()) {
 			printWithBanner("-- Histograms", '-');
-			for (Map.Entry<String, HistogramMetric> entry : histograms.entrySet()) {
+			for (Map.Entry<String, Histogram> entry : histograms.entrySet()) {
 				output.println(entry.getKey());
-				printHistogram(entry.getValue());
+				printHistogram(entry.getValue().snapshot);
 			}
 			output.println();
 		}
 
 		if (!timers.isEmpty()) {
 			printWithBanner("-- Timers", '-');
-			for (Map.Entry<String, TimerMetric> entry : timers.entrySet()) {
+			for (Map.Entry<String, Timer> entry : timers.entrySet()) {
 				output.println(entry.getKey());
-				printTimer(entry.getValue());
+				printTimer(entry.getValue().snapshot);
 			}
 			output.println();
 		}
