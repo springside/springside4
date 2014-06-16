@@ -45,7 +45,7 @@ public class Threads {
 
 	/**
 	 * 创建ThreadFactory，使得创建的线程有自己的名字而不是默认的"pool-x-thread-y"，
-	 * 在用threaddump查看线程时特别有用。 格式如"mythread-%d"
+	 * 在用threaddump查看线程时特别有用。 格式如"mythread-%d"，使用了Guava的工具类
 	 */
 	public static ThreadFactory buildJobFactory(String nameFormat) {
 		return new ThreadFactoryBuilder().setNameFormat(nameFormat).build();
@@ -109,7 +109,7 @@ public class Threads {
 		public void run() {
 			try {
 				runnable.run();
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				// catch any exception, because the scheduled thread will break if the exception thrown outside.
 				logger.error("Unexpected error occurred in task", e);
 			}

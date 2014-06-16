@@ -9,7 +9,7 @@
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.2.2.GA</springside.version>
+		<springside.version>4.2.3-SNAPSHOT</springside.version>
 		<spring.version>4.0.2.RELEASE</spring.version>
 		<hibernate.version>4.3.1.Final</hibernate.version>
 		<spring-data-jpa.version>1.4.4.RELEASE</spring-data-jpa.version>

@@ -11,6 +11,8 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
@@ -21,7 +23,8 @@ import redis.clients.util.Pool;
 import com.google.common.collect.Lists;
 
 /**
- * 定时分发任务的线程，定时从scheduled job sorted set 中取出到期的任务放入ready job list，并在高可靠模式下，将lock job 中 已超时的任务重新放入 ready job.
+ * 定时分发任务的管理器。
+ * 定时从scheduled job sorted set中取出到期的任务放入ready job list，并在高可靠模式下，将lock job 中 已超时的任务重新放入 ready job.
  * 线程池可自行创建，也可以从外部传入共用。
  * 
  * @author calvin
@@ -31,6 +34,8 @@ public class JobDispatcher implements Runnable {
 	public static final long DEFAULT_INTERVAL_MILLIS = 1000;
 	public static final boolean DEFAULT_RELIABLE = false;
 	public static final long DEFAULT_JOB_TIMEOUT_SECONDS = 60;
+
+	private static Logger logger = LoggerFactory.getLogger(JobDispatcher.class);
 
 	private ScheduledExecutorService internalScheduledThreadPool;
 	private ScheduledFuture dispatchJob;
@@ -95,10 +100,15 @@ public class JobDispatcher implements Runnable {
 	 */
 	@Override
 	public void run() {
-		long currTime = System.currentTimeMillis();
-		List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
-				String.valueOf(jobTimeoutSecs));
-		scriptExecutor.execute(keys, args);
+		try {
+			long currTime = System.currentTimeMillis();
+			List<String> args = Lists.newArrayList(String.valueOf(currTime), String.valueOf(reliable),
+					String.valueOf(jobTimeoutSecs));
+			scriptExecutor.execute(keys, args);
+		} catch (Throwable e) {
+			// catch any exception, because the scheduled thread will break if the exception thrown outside.
+			logger.error("Unexpected error occurred in task", e);
+		}
 	}
 
 	/**

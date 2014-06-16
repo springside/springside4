@@ -17,9 +17,9 @@ import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
 
 /**
- * 多线程运行ReliableJobConsumer，从"ss.job:ready" list中popup job进行处理。
+ * 多线程运行reliable的JobConsumer，从"ss.job:ready" list中popup job进行处理。
  * 
- * 可用系统参数benchmark.thread.count 改变线程数.
+ * 可用系统参数-Dthread.count 改变线程数.
  * 
  * @author calvin
  */
@@ -37,7 +37,7 @@ public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		for (int i = 0; i < threadCount; i++) {
-			SimpleJobConsumerDemo demo = new SimpleJobConsumerDemo();
+			AdvancedJobConsumerSinglePopDemo demo = new AdvancedJobConsumerSinglePopDemo();
 			threadPool.execute(demo);
 		}
 
@@ -79,7 +79,7 @@ public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 				} else {
 					Threads.sleep(100);
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

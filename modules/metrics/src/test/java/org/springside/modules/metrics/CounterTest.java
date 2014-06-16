@@ -31,6 +31,7 @@ public class CounterTest {
 
 		CounterMetric metric = counter.calculateMetric();
 		assertThat(metric.totalCount).isEqualTo(60);
+		assertThat(metric.meanRate).isEqualTo(60);
 		assertThat(metric.lastCount).isEqualTo(60);
 		assertThat(metric.lastRate).isEqualTo(60);
 
@@ -39,6 +40,7 @@ public class CounterTest {
 		metric = counter.calculateMetric();
 
 		assertThat(metric.totalCount).isEqualTo(80);
+		assertThat(metric.meanRate).isEqualTo(40);
 		assertThat(metric.lastCount).isEqualTo(20);
 		assertThat(metric.lastRate).isEqualTo(20);
 	}

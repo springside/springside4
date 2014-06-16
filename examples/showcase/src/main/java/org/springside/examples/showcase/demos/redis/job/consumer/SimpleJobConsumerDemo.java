@@ -22,7 +22,7 @@ import com.google.common.util.concurrent.RateLimiter;
 /**
  * 多线程运行JobConsumer，从"ss.job:ready" list中popup job进行处理。
  * 
- * 可用系统参数重置变量改变线程数，@see RedisCounterBenchmark
+ * 可用系统参数-Dthread.count 改变线程数
  * 
  * @author calvin
  */
@@ -93,7 +93,7 @@ public class SimpleJobConsumerDemo implements Runnable {
 				if (job != null) {
 					handleJob(job);
 				}
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				e.printStackTrace();
 			}
 		}

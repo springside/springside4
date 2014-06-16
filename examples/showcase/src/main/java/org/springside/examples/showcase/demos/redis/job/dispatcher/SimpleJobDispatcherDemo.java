@@ -20,8 +20,6 @@ import redis.clients.jedis.JedisPool;
 /**
  * 运行JobDispatcher，每秒将Job从"job:ss:scheduled" sorted set 发布到"job:ss:ready" list.
  * 
- * 可用系统参数重置相关变量，@see RedisCounterBenchmark
- * 
  * @author calvin
  */
 public class SimpleJobDispatcherDemo {

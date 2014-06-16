@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics.report;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,15 +27,24 @@ import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.MetricRegistry;
 
+/**
+ * Reporter线程.由用户负责初始化reporter及管理起停。
+ * 
+ * @author calvin
+ */
 public class ReportScheduler {
 	private static final String SCHEDULER_NAME = "metrics-reporter";
 	private static Logger logger = LoggerFactory.getLogger(ReportScheduler.class);
-	private List<Reporter> reporters;
+
 	private MetricRegistry metricRegistry;
+	private List<Reporter> reporters;
 	private ScheduledExecutorService executor;
 
 	public ReportScheduler(MetricRegistry metricRegistry, Reporter... reporters) {
-		this(metricRegistry, Arrays.asList(reporters));
+		this(metricRegistry, new ArrayList<Reporter>());
+		for (Reporter reporter : reporters) {
+			this.addReporter(reporter);
+		}
 	}
 
 	public ReportScheduler(MetricRegistry metricRegistry, List<Reporter> reporters) {
@@ -48,11 +57,41 @@ public class ReportScheduler {
 		reporters.add(reporter);
 	}
 
+	public void start(long period, TimeUnit unit) {
+		executor.scheduleAtFixedRate(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					report();
+				} catch (Throwable e) {
+					logger.error(e.getMessage(), e);
+				}
+			}
+		}, period, period, unit);
+		logger.info("metric reporters started.");
+	}
+
+	public void stop() {
+		executor.shutdownNow();
+		try {
+			if (executor.awaitTermination(2, TimeUnit.SECONDS)) {
+				logger.info("metric reporters stopped.");
+			} else {
+				logger.info("metric reporters can't stop in 2 seconds, force stopped.");
+			}
+		} catch (InterruptedException ignored) {
+			// do nothing
+		}
+	}
+
 	public void report() {
+
+		// 取出所有Metrics,已按名称排序
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
 		SortedMap<String, Execution> executionMap = metricRegistry.getExecutions();
 
+		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值，按顺序放入有序Map中
 		Map<String, CounterMetric> counterMetricMap = new LinkedHashMap<String, CounterMetric>();
 		for (Entry<String, Counter> entry : counterMap.entrySet()) {
 			counterMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
@@ -68,35 +107,9 @@ public class ReportScheduler {
 			executionMetricMap.put(entry.getKey(), entry.getValue().calculateMetric());
 		}
 
+		// 调度所有Reporters 输出 metrics值
 		for (Reporter reporter : reporters) {
 			reporter.report(counterMetricMap, histogramMetricMap, executionMetricMap);
-		}
-	}
-
-	public void start(long period, TimeUnit unit) {
-		executor.scheduleAtFixedRate(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					report();
-				} catch (Exception e) {
-					logger.error(e.getMessage(), e);
-				}
-			}
-		}, period, period, unit);
-		logger.info("metric reporters started.");
-	}
-
-	public void stop() {
-		executor.shutdownNow();
-		try {
-			if (executor.awaitTermination(1, TimeUnit.SECONDS)) {
-				logger.info("metric reporters stopped.");
-			} else {
-				logger.info("metric reporters can't stopped in 1 seconds, force stopped");
-			}
-		} catch (InterruptedException ignored) {
-			// do nothing
 		}
 	}
 
