@@ -7,6 +7,9 @@ package org.springside.modules.nosql.redis;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -58,6 +61,28 @@ public class JedisTemplateTest {
 
 		assertThat(jedisTemplate.setnx(key, value)).isFalse();
 		assertThat(jedisTemplate.setnx(key + "nx", value)).isTrue();
+	}
+
+	@Test
+	public void hashActions() {
+		String key = "test.string.key";
+		String field1 = "aa";
+		String field2 = "bb";
+		String notExistField = field1 + "not.exist";
+		String value1 = "123";
+		String value2 = "456";
+
+		jedisTemplate.hset(key, field1, value1);
+		assertThat(jedisTemplate.hget(key, field1)).isEqualTo(value1);
+		assertThat(jedisTemplate.hget(key, notExistField)).isNull();
+
+		Map<String, String> map = new HashMap<String, String>();
+		map.put(field1, value1);
+		map.put(field2, value2);
+		jedisTemplate.hmset(key, map);
+
+		assertThat(jedisTemplate.hmget(key, new String[] { field1, field2 })).containsSequence(value1, value2);
+
 	}
 
 	@Test

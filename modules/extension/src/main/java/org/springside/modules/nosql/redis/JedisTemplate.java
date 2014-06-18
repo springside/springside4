@@ -5,6 +5,10 @@
  *******************************************************************************/
 package org.springside.modules.nosql.redis;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,7 +20,7 @@ import redis.clients.util.Pool;
 /**
  * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
  * JedisAction<T> 和 JedisActionNoResult两种回调接口，适用于有无返回值两种情况。
- * 同时提供一些最常用函数的封装, 如get/set/zadd等。
+ * 同时提供一些JedisOperation中定义的 最常用函数的封装, 如get/set/zadd等。
  */
 public class JedisTemplate {
 	private static Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
@@ -108,7 +112,8 @@ public class JedisTemplate {
 	/**
 	 * 删除key, 如果key存在返回true, 否则返回false。
 	 */
-	public Boolean del(final String... keys) {
+
+	public Boolean del(final String keys) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -132,6 +137,7 @@ public class JedisTemplate {
 	/**
 	 * 如果key不存在, 返回null.
 	 */
+
 	public String get(final String key) {
 		return execute(new JedisAction<String>() {
 
@@ -181,6 +187,7 @@ public class JedisTemplate {
 	/**
 	 * 如果key还不存在则进行设置，返回true，否则返回false.
 	 */
+
 	public Boolean setnx(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 
@@ -194,6 +201,7 @@ public class JedisTemplate {
 	/**
 	 * 综合setNX与setEx的效果。
 	 */
+
 	public Boolean setnxex(final String key, final String value, final int seconds) {
 		return execute(new JedisAction<Boolean>() {
 
@@ -219,6 +227,64 @@ public class JedisTemplate {
 			@Override
 			public Long action(Jedis jedis) {
 				return jedis.decr(key);
+			}
+		});
+	}
+
+	// ////////////// 关于Hash ///////////////////////////
+
+	public String hget(final String key, final String field) {
+		return execute(new JedisAction<String>() {
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.hget(key, field);
+			}
+		});
+	}
+
+	public void hset(final String key, final String field, final String value) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.hset(key, field, value);
+			}
+		});
+	}
+
+	public List<String> hmget(final String key, final String[] fields) {
+		return execute(new JedisAction<List<String>>() {
+			@Override
+			public List<String> action(Jedis jedis) {
+				return jedis.hmget(key, fields);
+			}
+		});
+	}
+
+	public void hmset(final String key, final Map<String, String> map) {
+		execute(new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.hmset(key, map);
+			}
+		});
+	}
+
+	public Long hdel(final String key, final String... fieldsName) {
+		return execute(new JedisAction<Long>() {
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.hdel(key, fieldsName);
+			}
+		});
+	}
+
+	public Set<String> hkeys(final String key) {
+		return execute(new JedisAction<Set<String>>() {
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.hkeys(key);
 			}
 		});
 	}
