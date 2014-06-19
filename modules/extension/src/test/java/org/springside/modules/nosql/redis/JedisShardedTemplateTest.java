@@ -14,17 +14,19 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
+import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import com.lordofthejars.nosqlunit.redis.EmbeddedRedis;
 import com.lordofthejars.nosqlunit.redis.EmbeddedRedis.EmbeddedRedisRuleBuilder;
 import com.lordofthejars.nosqlunit.redis.EmbeddedRedisInstances;
 
-public class JedisTemplateTest {
+public class JedisShardedTemplateTest {
 
-	private JedisTemplate jedisTemplate;
+	private JedisShardedTemplate jedisTemplate;
 
 	@ClassRule
 	public static EmbeddedRedis embeddedRedisRule = EmbeddedRedisRuleBuilder.newEmbeddedRedisRule().build();
@@ -32,10 +34,13 @@ public class JedisTemplateTest {
 	@Before
 	public void setup() {
 		Jedis embeddedRedis = EmbeddedRedisInstances.getInstance().getDefaultJedis();
-		JedisPool jedisPool = Mockito.mock(JedisPool.class);
-		Mockito.when(jedisPool.getResource()).thenReturn(embeddedRedis);
+		JedisPool jedisPool1 = Mockito.mock(JedisPool.class);
+		Mockito.when(jedisPool1.getResource()).thenReturn(embeddedRedis);
 
-		jedisTemplate = new JedisTemplate(jedisPool);
+		JedisPool jedisPool2 = Mockito.mock(JedisPool.class);
+		Mockito.when(jedisPool2.getResource()).thenReturn(embeddedRedis);
+
+		jedisTemplate = new JedisShardedTemplate(new JedisPool[] { jedisPool1, jedisPool2 });
 	}
 
 	@Test
@@ -49,15 +54,6 @@ public class JedisTemplateTest {
 		assertThat(jedisTemplate.get(key)).isEqualTo(value);
 		assertThat(jedisTemplate.get(notExistKey)).isNull();
 
-		// getAsInt/getAsLong
-		jedisTemplate.set(key, value);
-		assertThat(jedisTemplate.getAsInt(key)).isEqualTo(123);
-		assertThat(jedisTemplate.getAsInt(notExistKey)).isNull();
-
-		jedisTemplate.set(key, value);
-		assertThat(jedisTemplate.getAsLong(key)).isEqualTo(123L);
-		assertThat(jedisTemplate.getAsLong(notExistKey)).isNull();
-
 		// setnx
 		assertThat(jedisTemplate.setnx(key, value)).isFalse();
 		assertThat(jedisTemplate.setnx(key + "nx", value)).isTrue();
@@ -67,10 +63,6 @@ public class JedisTemplateTest {
 		assertThat(jedisTemplate.get(key)).isEqualTo("124");
 		jedisTemplate.decr(key);
 		assertThat(jedisTemplate.get(key)).isEqualTo("123");
-
-		// del
-		assertThat(jedisTemplate.del(key)).isTrue();
-		assertThat(jedisTemplate.del(notExistKey)).isFalse();
 	}
 
 	@Test
@@ -161,5 +153,34 @@ public class JedisTemplateTest {
 		assertThat(jedisTemplate.zcard(key)).isEqualTo(1);
 		assertThat(jedisTemplate.zscore(key, member)).isEqualTo(score11);
 		assertThat(jedisTemplate.zscore(key, member + "not.exist")).isNull();
+	}
+
+	@Test
+	public void execute() {
+
+		final String key = "test.string.key";
+
+		final String value = "123";
+
+		jedisTemplate.execute(key, new JedisActionNoResult() {
+
+			@Override
+			public void action(Jedis jedis) {
+				jedis.set(key, value);
+			}
+		});
+
+		assertThat(jedisTemplate.get(key)).isEqualTo(value);
+
+		String result = jedisTemplate.execute(key, new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.get(key);
+			}
+
+		});
+
+		assertThat(result).isEqualTo(value);
 	}
 }
