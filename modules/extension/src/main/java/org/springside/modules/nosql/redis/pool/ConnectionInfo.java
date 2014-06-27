@@ -7,11 +7,7 @@ import redis.clients.jedis.Protocol;
  */
 public class ConnectionInfo {
 
-	public static final int DEFAULT_PORT = Protocol.DEFAULT_PORT;
-	public static final int DEFAULT_SENTINEL_PORT = 26379;
 	public static final String DEFAULT_PASSWORD = null;
-	public static final int DEFAULT_TIMEOUT = Protocol.DEFAULT_TIMEOUT;
-	public static final int DEFAULT_DATABASE = Protocol.DEFAULT_DATABASE;
 
 	private String host;
 	private int port;
@@ -21,15 +17,15 @@ public class ConnectionInfo {
 	private String clientName;
 
 	public ConnectionInfo(String host) {
-		this(host, DEFAULT_PORT, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
+		this(host, Protocol.DEFAULT_PORT, Protocol.DEFAULT_TIMEOUT, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
 	}
 
 	public ConnectionInfo(String host, int port) {
-		this(host, port, DEFAULT_TIMEOUT, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
+		this(host, port, Protocol.DEFAULT_TIMEOUT, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
 	}
 
 	public ConnectionInfo(String host, int port, int timeout) {
-		this(host, port, timeout, DEFAULT_PASSWORD, DEFAULT_DATABASE, null);
+		this(host, port, timeout, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
 	}
 
 	public ConnectionInfo(String host, int port, int timeout, String password, int database, String clientName) {

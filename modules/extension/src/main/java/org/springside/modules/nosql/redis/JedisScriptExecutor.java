@@ -22,7 +22,9 @@ import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.util.Pool;
 
 /**
- * 装载并执行Lua Script，如果服务器上因为集群多台服务器或重启等原因没有装载script，会自动重新装载后重试。
+ * 装载并执行Lua Script，
+ * 
+ * 如果服务器上因为集群多台服务器或重启等原因没有装载script，会自动重新装载后重试。
  */
 public class JedisScriptExecutor {
 	private static Logger logger = LoggerFactory.getLogger(JedisScriptExecutor.class);
