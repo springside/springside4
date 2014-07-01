@@ -67,7 +67,7 @@ public class JedisShardedTemplateTest {
 
 	@Test
 	public void hashActions() {
-		String key = "test.string.key";
+		String key = "test.hash.key";
 		String field1 = "aa";
 		String field2 = "bb";
 		String notExistField = field1 + "not.exist";
