@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <ehcache updateCheck="false" name="demoCache">
-
+	<!-- http://ehcache.org/ehcache.xml -->
+	
 	<diskStore path="java.io.tmpdir/ehcache/showcase/demo" />
 
 	<!-- DefaultCache setting. -->
