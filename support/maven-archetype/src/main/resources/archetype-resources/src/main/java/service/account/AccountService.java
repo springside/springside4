@@ -1,7 +1,12 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.service.account;
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
+package ${package}.service.account;
 
 import java.util.List;
 
@@ -12,13 +17,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import ${groupId}.${artifactId}.entity.User;
-import ${groupId}.${artifactId}.repository.TaskDao;
-import ${groupId}.${artifactId}.repository.UserDao;
-import ${groupId}.${artifactId}.service.ServiceException;
-import ${groupId}.${artifactId}.service.account.ShiroDbRealm.ShiroUser;
+import ${package}.entity.User;
+import ${package}.repository.TaskDao;
+import ${package}.repository.UserDao;
+import ${package}.service.ServiceException;
+import ${package}.service.account.ShiroDbRealm.ShiroUser;
 import org.springside.modules.security.utils.Digests;
-import org.springside.modules.utils.DateProvider;
+import org.springside.modules.utils.Clock;
 import org.springside.modules.utils.Encodes;
 
 /**
@@ -28,7 +33,7 @@ import org.springside.modules.utils.Encodes;
  */
 // Spring Service Bean的标识.
 @Component
-@Transactional(readOnly = true)
+@Transactional
 public class AccountService {
 
 	public static final String HASH_ALGORITHM = "SHA-1";
@@ -39,7 +44,7 @@ public class AccountService {
 
 	private UserDao userDao;
 	private TaskDao taskDao;
-	private DateProvider dateProvider = DateProvider.DEFAULT;
+	private Clock clock = Clock.DEFAULT;
 
 	public List<User> getAllUser() {
 		return (List<User>) userDao.findAll();
@@ -53,16 +58,14 @@ public class AccountService {
 		return userDao.findByLoginName(loginName);
 	}
 
-	@Transactional(readOnly = false)
 	public void registerUser(User user) {
 		entryptPassword(user);
 		user.setRoles("user");
-		user.setRegisterDate(dateProvider.getDate());
+		user.setRegisterDate(clock.getCurrentDate());
 
 		userDao.save(user);
 	}
 
-	@Transactional(readOnly = false)
 	public void updateUser(User user) {
 		if (StringUtils.isNotBlank(user.getPlainPassword())) {
 			entryptPassword(user);
@@ -70,7 +73,6 @@ public class AccountService {
 		userDao.save(user);
 	}
 
-	@Transactional(readOnly = false)
 	public void deleteUser(Long id) {
 		if (isSupervisor(id)) {
 			logger.warn("操作员{}尝试删除超级管理员用户", getCurrentUserName());
@@ -117,7 +119,7 @@ public class AccountService {
 		this.taskDao = taskDao;
 	}
 
-	public void setDateProvider(DateProvider dateProvider) {
-		this.dateProvider = dateProvider;
+	public void setClock(Clock clock) {
+		this.clock = clock;
 	}
 }

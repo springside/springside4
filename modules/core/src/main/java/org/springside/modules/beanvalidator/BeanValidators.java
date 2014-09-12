@@ -1,8 +1,8 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.beanvalidator;
 
 import java.util.List;
@@ -26,12 +26,13 @@ import com.google.common.collect.Maps;
  * 3. Map<propertyPath, message>
  * 
  * 详情见wiki: https://github.com/springside/springside4/wiki/HibernateValidator
+ * 
  * @author calvin
  */
 public class BeanValidators {
 
 	/**
-	 * 调用JSR303的validate方法, 验证失败时抛出ConstraintViolationException.
+	 * 调用JSR303的validate方法, 验证失败时抛出ConstraintViolationException, 而不是返回constraintViolations.
 	 */
 	public static void validateWithException(Validator validator, Object object, Class<?>... groups)
 			throws ConstraintViolationException {
@@ -92,14 +93,14 @@ public class BeanValidators {
 	}
 
 	/**
-	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath +separator+ message>.
+	 * 辅助方法, 转换ConstraintViolationException中的Set<ConstraintViolations>为List<propertyPath + separator + message>.
 	 */
 	public static List<String> extractPropertyAndMessageAsList(ConstraintViolationException e, String separator) {
 		return extractPropertyAndMessageAsList(e.getConstraintViolations(), separator);
 	}
 
 	/**
-	 * 辅助方法, 转换Set<ConstraintViolation>为List<propertyPath +separator+ message>.
+	 * 辅助方法, 转换Set<ConstraintViolation>为List<propertyPath + separator + message>.
 	 */
 	public static List<String> extractPropertyAndMessageAsList(Set<? extends ConstraintViolation> constraintViolations,
 			String separator) {

@@ -1,32 +1,17 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
-package ${groupId}.${artifactId}.service.account;
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
+package ${package}.service.account;
 
 import java.io.Serializable;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -38,9 +23,10 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import ${groupId}.${artifactId}.entity.User;
+import ${package}.entity.User;
 import org.springside.modules.utils.Encodes;
+
+import com.google.common.base.Objects;
 
 public class ShiroDbRealm extends AuthorizingRealm {
 
@@ -85,7 +71,6 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		setCredentialsMatcher(matcher);
 	}
 
-	@Autowired
 	public void setAccountService(AccountService accountService) {
 		this.accountService = accountService;
 	}
@@ -118,19 +103,36 @@ public class ShiroDbRealm extends AuthorizingRealm {
 		}
 
 		/**
-		 * 重载equals,只计算loginName;
+		 * 重载hashCode,只计算loginName;
 		 */
 		@Override
 		public int hashCode() {
-			return HashCodeBuilder.reflectionHashCode(this, "loginName");
+			return Objects.hashCode(loginName);
 		}
 
 		/**
-		 * 重载equals,只比较loginName
+		 * 重载equals,只计算loginName;
 		 */
 		@Override
 		public boolean equals(Object obj) {
-			return EqualsBuilder.reflectionEquals(this, obj, "loginName");
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			ShiroUser other = (ShiroUser) obj;
+			if (loginName == null) {
+				if (other.loginName != null) {
+					return false;
+				}
+			} else if (!loginName.equals(other.loginName)) {
+				return false;
+			}
+			return true;
 		}
 	}
 }

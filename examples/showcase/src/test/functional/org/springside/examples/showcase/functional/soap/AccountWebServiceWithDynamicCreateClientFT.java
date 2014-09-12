@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.functional.soap;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import javax.xml.ws.BindingProvider;
 
@@ -35,11 +40,11 @@ public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTe
 		proxyFactory.setServiceClass(AccountSoapService.class);
 		AccountSoapService accountWebServiceProxy = (AccountSoapService) proxyFactory.create();
 
-		//(可选)演示重新设定endpoint address.
+		// (可选)演示重新设定endpoint address.
 		((BindingProvider) accountWebServiceProxy).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
 				address);
 
-		//(可选)演示重新设定Timeout时间
+		// (可选)演示重新设定Timeout时间
 		Client client = ClientProxy.getClient(accountWebServiceProxy);
 		HTTPConduit conduit = (HTTPConduit) client.getConduit();
 		HTTPClientPolicy policy = conduit.getClient();
@@ -57,7 +62,7 @@ public class AccountWebServiceWithDynamicCreateClientFT extends BaseFunctionalTe
 		AccountSoapService accountWebService = creatClient();
 
 		GetTeamDetailResult result = accountWebService.getTeamDetail(1L);
-		assertEquals("Dolphin", result.getTeam().getName());
-		assertEquals("Admin", result.getTeam().getMaster().getName());
+		assertThat(result.getTeam().getName()).isEqualTo("Dolphin");
+		assertThat(result.getTeam().getMaster().getName()).isEqualTo("管理员");
 	}
 }

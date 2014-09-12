@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
-	  					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	  					http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
 	<description>JMX服务端配置</description>
 
 	<!-- 配置MBean自动注册 -->
 	<context:mbean-export default-domain="showcase" registration="replaceExisting" />
-
-	<!-- Log4j控制的 MBean -->
-	<bean class="org.springside.modules.log.Log4jManager">
-		<property name="projectLoggerName" value="org.springside.examples.showcase"/>
-	</bean>
 	
 	<!-- 应用使用情况統計的MBean -->
 	<bean class="org.springside.examples.showcase.demos.jmx.ApplicationStatistics"/>

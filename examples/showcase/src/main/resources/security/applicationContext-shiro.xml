@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
 	default-lazy-init="true">
 
 	<description>Shiro安全配置</description>
@@ -12,7 +12,7 @@
 	</bean>
 
 	<!-- 項目自定义的Realm -->
-	<bean id="shiroDbRealm" class="org.springside.examples.showcase.service.ShiroDbRealm" depends-on="userDao,roleDao">
+	<bean id="shiroDbRealm" class="org.springside.examples.showcase.service.ShiroDbRealm">
 		<property name="accountService" ref="accountService"/>
 	</bean>
 	
@@ -26,7 +26,7 @@
 				/login = authc
 				/logout = logout
 				/account/** = user
-				/api/** = authcBasic
+				/api/secure/** = authcBasic
 			</value>
 		</property>
 	</bean>

@@ -1,9 +1,14 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
+package ${package}.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -11,7 +16,7 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 import org.springside.modules.test.category.Smoke;
 
 public class UserAdminFT extends BaseSeleniumTestCase {
@@ -37,8 +42,8 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 	public void viewUserList() {
 		s.open("/admin/user");
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("admin", s.getTable(table, 0, 0));
-		assertEquals("user", s.getTable(table, 1, 0));
+		assertThat(s.getTable(table, 0, 0)).isEqualTo("admin");
+		assertThat(s.getTable(table, 1, 0)).isEqualTo("user");
 	}
 
 	@Test
@@ -49,14 +54,14 @@ public class UserAdminFT extends BaseSeleniumTestCase {
 		s.type(By.id("confirmPassword"), "user2");
 		s.click(By.id("submit_btn"));
 
-		assertTrue("没有成功消息", s.isTextPresent("更新用户user成功"));
+		assertThat(s.isTextPresent("更新用户user成功")).as("没有成功消息").isTrue();
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("Kevin", s.getTable(table, 1, 1));
+		assertThat(s.getTable(table, 1, 1)).isEqualTo("Kevin");
 	}
 
 	@Test
 	public void deleteUser() {
 		s.open("/admin/user/delete/2");
-		assertTrue("没有成功消息", s.isTextPresent("删除用户user成功"));
+		assertThat(s.isTextPresent("删除用户user成功")).as("没有成功消息").isTrue();
 	}
 }

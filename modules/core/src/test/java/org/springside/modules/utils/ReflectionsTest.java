@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -11,31 +16,30 @@ public class ReflectionsTest {
 	@Test
 	public void getAndSetFieldValue() {
 		TestBean bean = new TestBean();
-		//无需getter函数, 直接读取privateField
-		assertEquals(1, Reflections.getFieldValue(bean, "privateField"));
-		//绕过将publicField+1的getter函数,直接读取publicField的原始值
-		assertEquals(1, Reflections.getFieldValue(bean, "publicField"));
+		// 无需getter函数, 直接读取privateField
+		assertThat(Reflections.getFieldValue(bean, "privateField")).isEqualTo(1);
+		// 绕过将publicField+1的getter函数,直接读取publicField的原始值
+		assertThat(Reflections.getFieldValue(bean, "publicField")).isEqualTo(1);
 
 		bean = new TestBean();
-		//无需setter函数, 直接设置privateField
+		// 无需setter函数, 直接设置privateField
 		Reflections.setFieldValue(bean, "privateField", 2);
-		assertEquals(2, bean.inspectPrivateField());
+		assertThat(bean.inspectPrivateField()).isEqualTo(2);
 
-		//绕过将publicField+1的setter函数,直接设置publicField的原始值
+		// 绕过将publicField+1的setter函数,直接设置publicField的原始值
 		Reflections.setFieldValue(bean, "publicField", 2);
-
-		assertEquals(2, bean.inspectPublicField());
+		assertThat(bean.inspectPublicField()).isEqualTo(2);
 
 		try {
 			Reflections.getFieldValue(bean, "notExist");
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
 
 		try {
 			Reflections.setFieldValue(bean, "notExist", 2);
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
@@ -45,44 +49,47 @@ public class ReflectionsTest {
 	@Test
 	public void invokeGetterAndSetter() {
 		TestBean bean = new TestBean();
-		assertEquals(bean.inspectPublicField() + 1, Reflections.invokeGetter(bean, "publicField"));
+		assertThat(Reflections.invokeGetter(bean, "publicField")).isEqualTo(bean.inspectPublicField() + 1);
 
 		bean = new TestBean();
-		//通过setter的函数将+1
+		// 通过setter的函数将+1
 		Reflections.invokeSetter(bean, "publicField", 10);
-		assertEquals(10 + 1, bean.inspectPublicField());
+		assertThat(bean.inspectPublicField()).isEqualTo(10 + 1);
 	}
 
 	@Test
 	public void invokeMethod() {
 		TestBean bean = new TestBean();
-		//使用函数名+参数类型的匹配
-		assertEquals("hello calvin", Reflections.invokeMethod(bean, "privateMethod", new Class[] { String.class },
-				new Object[] { "calvin" }));
+		// 使用函数名+参数类型的匹配
+		assertThat(
+				Reflections
+						.invokeMethod(bean, "privateMethod", new Class[] { String.class }, new Object[] { "calvin" }))
+				.isEqualTo("hello calvin");
 
-		//仅匹配函数名
-		assertEquals("hello calvin", Reflections.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" }));
+		// 仅匹配函数名
+		assertThat(Reflections.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" })).isEqualTo(
+				"hello calvin");
 
-		//函数名错
+		// 函数名错
 		try {
 			Reflections.invokeMethod(bean, "notExistMethod", new Class[] { String.class }, new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
 
-		//参数类型错
+		// 参数类型错
 		try {
 			Reflections.invokeMethod(bean, "privateMethod", new Class[] { Integer.class }, new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
 
 		}
 
-		//函数名错
+		// 函数名错
 		try {
 			Reflections.invokeMethodByName(bean, "notExistMethod", new Object[] { "calvin" });
-			fail("should throw exception here");
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
@@ -91,55 +98,54 @@ public class ReflectionsTest {
 
 	@Test
 	public void getSuperClassGenricType() {
-		//获取第1，2个泛型类型
-		assertEquals(String.class, Reflections.getClassGenricType(TestBean.class));
-		assertEquals(Long.class, Reflections.getClassGenricType(TestBean.class, 1));
+		// 获取第1，2个泛型类型
+		assertThat(Reflections.getClassGenricType(TestBean.class)).isEqualTo(String.class);
+		assertThat(Reflections.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
 
-		//定义父类时无泛型定义
-		assertEquals(Object.class, Reflections.getClassGenricType(TestBean2.class));
+		// 定义父类时无泛型定义
+		assertThat(Reflections.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
 
-		//无父类定义
-		assertEquals(Object.class, Reflections.getClassGenricType(TestBean3.class));
+		// 无父类定义
+		assertThat(Reflections.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
 	}
 
 	@Test
 	public void convertReflectionExceptionToUnchecked() {
 		IllegalArgumentException iae = new IllegalArgumentException();
-		//ReflectionException,normal
+		// ReflectionException,normal
 		RuntimeException e = Reflections.convertReflectionExceptionToUnchecked(iae);
-		assertEquals(iae, e.getCause());
+		assertThat(e.getCause()).isEqualTo(iae);
 
-		//InvocationTargetException,extract it's target exception.
+		// InvocationTargetException,extract it's target exception.
 		Exception ex = new Exception();
 		e = Reflections.convertReflectionExceptionToUnchecked(new InvocationTargetException(ex));
-		assertEquals(ex, e.getCause());
+		assertThat(e.getCause()).isEqualTo(ex);
 
-		//UncheckedException, ignore it.
+		// UncheckedException, ignore it.
 		RuntimeException re = new RuntimeException("abc");
 		e = Reflections.convertReflectionExceptionToUnchecked(re);
-		assertEquals("abc", e.getMessage());
+		assertThat(e).hasMessage("abc");
 
-		//Unexcepted Checked exception.
+		// Unexcepted Checked exception.
 		e = Reflections.convertReflectionExceptionToUnchecked(ex);
-		assertEquals("Unexpected Checked Exception.", e.getMessage());
-
+		assertThat(e).hasMessage("Unexpected Checked Exception.");
 	}
 
 	public static class ParentBean<T, ID> {
 	}
 
 	public static class TestBean extends ParentBean<String, Long> {
-		/** 没有getter/setter的field*/
+		/** 没有getter/setter的field */
 		private int privateField = 1;
 		/** 有getter/setter的field */
 		private int publicField = 1;
 
-		//通過getter函數會比屬性值+1
+		// 通過getter函數會比屬性值+1
 		public int getPublicField() {
 			return publicField + 1;
 		}
 
-		//通過setter函數會被比輸入值加1
+		// 通過setter函數會被比輸入值加1
 		public void setPublicField(int publicField) {
 			this.publicField = publicField + 1;
 		}

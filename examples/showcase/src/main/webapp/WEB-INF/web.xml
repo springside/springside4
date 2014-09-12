@@ -49,7 +49,7 @@
 		<url-pattern>/cxf/*</url-pattern>
 	</servlet-mapping>
 	
-	<!-- JMX JSON Agent servlet-->
+	<!-- JMX JSON Agent Servlet-->
 	<servlet>
       <servlet-name>jolokia-agent</servlet-name>
       <servlet-class>org.jolokia.http.AgentServlet</servlet-class>
@@ -60,6 +60,20 @@
       <servlet-name>jolokia-agent</servlet-name>
       <url-pattern>/jolokia/*</url-pattern>
     </servlet-mapping>
+
+	<!-- Java Simple Monitoring Console Servlet -->
+	<servlet>
+		<servlet-name>SimonConsoleServlet</servlet-name>
+		<servlet-class>org.javasimon.console.SimonConsoleServlet</servlet-class>
+		<init-param>
+			<param-name>url-prefix</param-name>
+			<param-value>/javasimon</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SimonConsoleServlet</servlet-name>
+		<url-pattern>/javasimon/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- Content Servlet 配置 -->
 	<servlet>

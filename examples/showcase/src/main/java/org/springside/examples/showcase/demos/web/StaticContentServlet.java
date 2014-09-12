@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.web;
 
 import java.io.File;
@@ -23,7 +28,7 @@ import org.springside.modules.web.Servlets;
  * 
  * 演示文件高效读取,客户端缓存控制及Gzip压缩传输.
  * 可使用org.springside.examples.showcase.cache包下的Ehcache或本地Map缓存静态内容基本信息(未演示).
- *  
+ * 
  * 演示访问地址为：
  * static-content?contentPath=static/images/logo.jpg
  * static-content?contentPath=static/images/logo.jpg&download=true
@@ -47,47 +52,47 @@ public class StaticContentServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//取得参数
+		// 取得参数
 		String contentPath = request.getParameter("contentPath");
 		if (StringUtils.isBlank(contentPath)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "contentPath parameter is required.");
 			return;
 		}
 
-		//获取请求内容的基本信息.
+		// 获取请求内容的基本信息.
 		ContentInfo contentInfo = getContentInfo(contentPath);
 
-		//根据Etag或ModifiedSince Header判断客户端的缓存文件是否有效, 如仍有效则设置返回码为304,直接返回.
+		// 根据Etag或ModifiedSince Header判断客户端的缓存文件是否有效, 如仍有效则设置返回码为304,直接返回.
 		if (!Servlets.checkIfModifiedSince(request, response, contentInfo.lastModified)
 				|| !Servlets.checkIfNoneMatchEtag(request, response, contentInfo.etag)) {
 			return;
 		}
 
-		//设置Etag/过期时间
+		// 设置Etag/过期时间
 		Servlets.setExpiresHeader(response, Servlets.ONE_YEAR_SECONDS);
 		Servlets.setLastModifiedHeader(response, contentInfo.lastModified);
 		Servlets.setEtag(response, contentInfo.etag);
 
-		//设置MIME类型
+		// 设置MIME类型
 		response.setContentType(contentInfo.mimeType);
 
-		//设置弹出下载文件请求窗口的Header
+		// 设置弹出下载文件请求窗口的Header
 		if (request.getParameter("download") != null) {
-			Servlets.setFileDownloadHeader(response, contentInfo.fileName);
+			Servlets.setFileDownloadHeader(request, response, contentInfo.fileName);
 		}
 
-		//构造OutputStream
+		// 构造OutputStream
 		OutputStream output;
 		if (checkAccetptGzip(request) && contentInfo.needGzip) {
-			//使用压缩传输的outputstream, 使用http1.1 trunked编码不设置content-length.
+			// 使用压缩传输的outputstream, 使用http1.1 trunked编码不设置content-length.
 			output = buildGzipOutputStream(response);
 		} else {
-			//使用普通outputstream, 设置content-length.
+			// 使用普通outputstream, 设置content-length.
 			response.setContentLength(contentInfo.length);
 			output = response.getOutputStream();
 		}
 
-		//高效读取文件内容并输出,然后关闭input file
+		// 高效读取文件内容并输出,然后关闭input file
 		FileUtils.copyFile(contentInfo.file, output);
 		output.flush();
 	}
@@ -96,7 +101,7 @@ public class StaticContentServlet extends HttpServlet {
 	 * 检查浏览器客户端是否支持gzip编码.
 	 */
 	private static boolean checkAccetptGzip(HttpServletRequest request) {
-		//Http1.1 header
+		// Http1.1 header
 		String acceptEncoding = request.getHeader("Accept-Encoding");
 
 		return StringUtils.contains(acceptEncoding, "gzip");
@@ -116,10 +121,10 @@ public class StaticContentServlet extends HttpServlet {
 	 */
 	@Override
 	public void init() throws ServletException {
-		//保存applicationContext以备后用，纯演示.
+		// 保存applicationContext以备后用，纯演示.
 		applicationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 
-		//初始化mimeTypes, 默认缺少css的定义,添加之.
+		// 初始化mimeTypes, 默认缺少css的定义,添加之.
 		mimetypesFileTypeMap = new MimetypesFileTypeMap();
 		mimetypesFileTypeMap.addMimeTypes("text/css css");
 	}
@@ -143,7 +148,7 @@ public class StaticContentServlet extends HttpServlet {
 
 		contentInfo.mimeType = mimetypesFileTypeMap.getContentType(contentInfo.fileName);
 
-		if (contentInfo.length >= GZIP_MINI_LENGTH && ArrayUtils.contains(GZIP_MIME_TYPES, contentInfo.mimeType)) {
+		if ((contentInfo.length >= GZIP_MINI_LENGTH) && ArrayUtils.contains(GZIP_MIME_TYPES, contentInfo.mimeType)) {
 			contentInfo.needGzip = true;
 		} else {
 			contentInfo.needGzip = false;

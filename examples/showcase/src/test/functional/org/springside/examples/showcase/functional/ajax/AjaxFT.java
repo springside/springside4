@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.functional.ajax;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -20,7 +25,7 @@ public class AjaxFT extends BaseSeleniumTestCase {
 		s.click(By.linkText("跨域名Mashup演示"));
 
 		s.click(By.xpath("//input[@value='获取内容']"));
-		s.waitForVisible(By.id("mashupContent"), 5000);
-		assertEquals("Hello World!", s.getText(By.id("mashupContent")));
+		s.waitForVisible(By.id("mashupContent"));
+		assertThat(s.getText(By.id("mashupContent"))).isEqualTo("你好，世界！");
 	}
 }

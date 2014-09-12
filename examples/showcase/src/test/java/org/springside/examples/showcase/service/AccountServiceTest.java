@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.service;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,6 +27,9 @@ public class AccountServiceTest {
 	@Mock
 	private UserDao mockUserDao;
 
+	@Mock
+	private BusinessLogger businessLogger;
+
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
@@ -42,15 +50,15 @@ public class AccountServiceTest {
 		user.setId(2L);
 		user.setPlainPassword("123");
 
-		//正常保存用户.
+		// 正常保存用户.
 		accountService.saveUser(user);
 
-		//保存超级管理用户抛出异常.
+		// 保存超级管理用户抛出异常.
 		try {
 			accountService.saveUser(admin);
-			fail("expected ServicExcepton should be thrown");
+			failBecauseExceptionWasNotThrown(ServiceException.class);
 		} catch (ServiceException e) {
-			//expected exception
+			// expected exception
 		}
 		Mockito.verify(mockUserDao, Mockito.never()).delete(1L);
 	}

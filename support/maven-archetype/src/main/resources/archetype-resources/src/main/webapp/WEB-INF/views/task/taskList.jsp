@@ -18,12 +18,13 @@
 	<div class="row">
 		<div class="span4 offset7">
 			<form class="form-search" action="${symbol_pound}">
-			 	<label>名称：</label> <input type="text" name="search_LIKE_title" class="input-medium" value="${symbol_dollar}{param.search_LIKE_title}"> 
-			    <button type="submit" class="btn">Search</button>
+				<label>名称：</label> <input type="text" name="search_LIKE_title" class="input-medium" value="${symbol_dollar}{param.search_LIKE_title}"> 
+				<button type="submit" class="btn" id="search_btn">Search</button>
 		    </form>
 	    </div>
 	    <tags:sort/>
 	</div>
+	
 	<table id="contentTable" class="table table-striped table-bordered table-condensed">
 		<thead><tr><th>任务</th><th>管理</th></tr></thead>
 		<tbody>

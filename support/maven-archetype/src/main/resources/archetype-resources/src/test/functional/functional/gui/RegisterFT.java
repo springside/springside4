@@ -1,21 +1,27 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
+package ${package}.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 
 public class RegisterFT extends BaseSeleniumTestCase {
 
 	@Test
 	public void register() {
-		//注册用户
+		// 注册用户
 		s.open("/logout");
-		s.open("/register");
+		s.click(By.linkText("注册"));
+
 		s.type(By.id("loginName"), "user2");
 		s.type(By.id("name"), "Kevin");
 		s.type(By.id("plainPassword"), "user2");
@@ -23,17 +29,17 @@ public class RegisterFT extends BaseSeleniumTestCase {
 
 		s.click(By.id("submit_btn"));
 
-		//跳转到登录页
-		assertEquals("${projectName}示例:登录页", s.getTitle());
-		assertEquals("user2", s.getValue(By.name("username")));
+		// 跳转到登录页
+		s.waitForTitleContains("登录页");
+		assertThat(s.getValue(By.name("username"))).isEqualTo("user2");
 
 		s.type(By.name("password"), "user2");
 		s.click(By.id("submit_btn"));
 
-		//登陆成功
-		assertEquals("${projectName}示例:任务管理", s.getTitle());
+		// 登陆成功
+		s.waitForTitleContains("任务管理");
 
-		//退出用户
+		// 退出用户
 		s.open("/logout");
 	}
 
@@ -42,7 +48,7 @@ public class RegisterFT extends BaseSeleniumTestCase {
 		s.open("/register");
 		s.click(By.id("submit_btn"));
 
-		assertEquals("必选字段", s.getText(By.xpath("//fieldset/div/div/span")));
+		assertThat(s.getText(By.xpath("//fieldset/div/div/span"))).isEqualTo("必选字段");
 	}
 
 }

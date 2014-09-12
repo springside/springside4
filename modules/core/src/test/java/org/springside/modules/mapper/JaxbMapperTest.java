@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.mapper;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -23,10 +28,9 @@ import com.google.common.collect.Lists;
 /**
  * 演示基于JAXB2.0的Java对象-XML转换及Dom4j的使用.
  * 
- * @author calvin
- * 
  * 演示用xml如下:
  * 
+ * <pre>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <user id="1">
  * 	<name>calvin</name>
@@ -35,6 +39,7 @@ import com.google.common.collect.Lists;
  * 		<interest>sports</interest>
  * 	</interests>
  * </user>
+ * </pre>
  */
 public class JaxbMapperTest {
 
@@ -59,9 +64,8 @@ public class JaxbMapperTest {
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
-		assertEquals(Long.valueOf(1L), user.getId());
-		assertEquals(2, user.getInterests().size());
-		assertEquals("movie", user.getInterests().get(0));
+		assertThat(user.getId()).isEqualTo(1L);
+		assertThat(user.getInterests()).containsOnly("movie", "sports");
 	}
 
 	/**
@@ -93,7 +97,7 @@ public class JaxbMapperTest {
 
 		root.addElement("name").setText("calvin");
 
-		//List<String>
+		// List<String>
 		Element interests = root.addElement("interests");
 		interests.addElement("interest").addText("movie");
 		interests.addElement("interest").addText("sports");
@@ -112,15 +116,15 @@ public class JaxbMapperTest {
 			fail(e.getMessage());
 		}
 		Element user = doc.getRootElement();
-		assertEquals("1", user.attribute("id").getValue());
+		assertThat(user.attribute("id").getValue()).isEqualTo("1");
 
 		Element interests = (Element) doc.selectSingleNode("//interests");
-		assertEquals(2, interests.elements().size());
-		assertEquals("movie", ((Element) interests.elements().get(0)).getText());
+		assertThat(interests.elements()).hasSize(2);
+		assertThat(((Element) interests.elements().get(0)).getText()).isEqualTo("movie");
 	}
 
 	@XmlRootElement
-	//指定子节点的顺序
+	// 指定子节点的顺序
 	@XmlType(propOrder = { "name", "interests" })
 	private static class User {
 
@@ -130,7 +134,7 @@ public class JaxbMapperTest {
 
 		private List<String> interests = Lists.newArrayList();
 
-		//设置转换为xml节点中的属性
+		// 设置转换为xml节点中的属性
 		@XmlAttribute
 		public Long getId() {
 			return id;
@@ -148,7 +152,7 @@ public class JaxbMapperTest {
 			this.name = name;
 		}
 
-		//设置不转换为xml
+		// 设置不转换为xml
 		@XmlTransient
 		public String getPassword() {
 			return password;
@@ -158,7 +162,7 @@ public class JaxbMapperTest {
 			this.password = password;
 		}
 
-		//设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
+		// 设置对List<String>的映射, xml为<interests><interest>movie</interest></interests>
 		@XmlElementWrapper(name = "interests")
 		@XmlElement(name = "interest")
 		public List<String> getInterests() {

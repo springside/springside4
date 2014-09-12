@@ -1,8 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.functional;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
+import org.junit.rules.TestRule;
 import org.openqa.selenium.WebDriver;
 import org.springside.modules.test.selenium.Selenium2;
+import org.springside.modules.test.selenium.SeleniumSnapshotRule;
 import org.springside.modules.test.selenium.WebDriverFactory;
 
 /**
@@ -16,10 +24,14 @@ public class BaseSeleniumTestCase extends BaseFunctionalTestCase {
 
 	protected static Selenium2 s;
 
+	// 出错时截屏的规则
+	@Rule
+	public TestRule snapshotRule = new SeleniumSnapshotRule(s);
+
 	@BeforeClass
 	public static void createSeleniumOnce() throws Exception {
 		if (s == null) {
-			//根据配置创建Selenium driver.
+			// 根据配置创建Selenium driver.
 			String driverName = propertiesLoader.getProperty("selenium.driver");
 
 			WebDriver driver = WebDriverFactory.createDriver(driverName);

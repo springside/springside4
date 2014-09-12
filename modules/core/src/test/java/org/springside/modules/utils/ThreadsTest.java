@@ -1,12 +1,11 @@
-/*
- * $HeadURL: https://springside.googlecode.com/svn/springside4/trunk/modules/core/src/test/java/org/springside/modules/utils/ThreadsTest.java $
- * $Id: ThreadsTest.java 1680 2012-02-11 12:58:02Z calvinxiu $
- * Copyright (c) 2010 by Ericsson, all rights reserved.
- */
-
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +17,7 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 
 @Category(UnStable.class)
 public class ThreadsTest {
@@ -27,27 +26,27 @@ public class ThreadsTest {
 	public void gracefulShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time enough to shutdown
+		// time enough to shutdown
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 500, 0);
 		pool.execute(task);
 		Threads.gracefulShutdown(pool, 1000, 1000, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertNull(appender.getFirstLog());
+		assertThat(pool.isTerminated()).isTrue();
+		assertThat(appender.getFirstLog()).isNull();
 
-		//time not enough to shutdown,call shutdownNow
+		// time not enough to shutdown,call shutdownNow
 		appender.clearLogs();
 		pool = Executors.newSingleThreadExecutor();
 		task = new Task(logger, 1000, 0);
 		pool.execute(task);
 		Threads.gracefulShutdown(pool, 500, 1000, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+		assertThat(pool.isTerminated()).isTrue();
+		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
 
-		//self thread interrupt while calling gracefulShutdown
+		// self thread interrupt while calling gracefulShutdown
 		appender.clearLogs();
 
 		final ExecutorService self = Executors.newSingleThreadExecutor();
@@ -67,32 +66,32 @@ public class ThreadsTest {
 		lock.await();
 		thread.interrupt();
 		Threads.sleep(500);
-		assertEquals("InterruptedException", appender.getFirstLog().getMessage());
+		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
 	}
 
 	@Test
 	public void normalShutdown() throws InterruptedException {
 
 		Logger logger = LoggerFactory.getLogger("test");
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger("test");
 
-		//time not enough to shutdown,write error log.
+		// time not enough to shutdown,write error log.
 		appender.clearLogs();
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 1000, 0);
 		pool.execute(task);
 		Threads.normalShutdown(pool, 500, TimeUnit.MILLISECONDS);
-		assertTrue(pool.isTerminated());
-		assertEquals("InterruptedException", appender.getFirstMessage());
+		assertThat(pool.isTerminated()).isTrue();
+		assertThat(appender.getFirstMessage()).isEqualTo("InterruptedException");
 	}
 
 	static class Task implements Runnable {
-		private Logger logger;
+		private final Logger logger;
 
 		private int runTime = 0;
 
-		private int sleepTime;
+		private final int sleepTime;
 
 		Task(Logger logger, int sleepTime, int runTime) {
 			this.logger = logger;
@@ -105,7 +104,7 @@ public class ThreadsTest {
 			System.out.println("start task");
 			if (runTime > 0) {
 				long start = System.currentTimeMillis();
-				while (System.currentTimeMillis() - start < runTime) {
+				while ((System.currentTimeMillis() - start) < runTime) {
 				}
 			}
 

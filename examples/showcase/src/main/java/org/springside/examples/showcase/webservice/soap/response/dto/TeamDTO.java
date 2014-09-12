@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.webservice.soap.response.dto;
 
 import java.util.List;
@@ -36,7 +41,7 @@ public class TeamDTO {
 		this.master = master;
 	}
 
-	//配置输出xml为<userList><user><id>1</id></user></userList>
+	// 配置输出xml为<userList><user><id>1</id></user></userList>
 	@XmlElementWrapper(name = "userList")
 	@XmlElement(name = "user")
 	public List<UserDTO> getUserList() {

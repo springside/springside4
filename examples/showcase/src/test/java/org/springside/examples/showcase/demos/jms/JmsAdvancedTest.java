@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.jms;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import javax.annotation.Resource;
 import javax.jms.Destination;
@@ -20,7 +25,7 @@ import org.springside.examples.showcase.demos.jms.advanced.AdvancedNotifyMessage
 import org.springside.examples.showcase.demos.jms.advanced.AdvancedNotifyMessageProducer;
 import org.springside.examples.showcase.entity.User;
 import org.springside.modules.test.category.UnStable;
-import org.springside.modules.test.log.Log4jMockAppender;
+import org.springside.modules.test.log.LogbackListAppender;
 import org.springside.modules.test.spring.SpringContextTestCase;
 import org.springside.modules.utils.Threads;
 
@@ -41,7 +46,7 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 	@Test
 	public void queueMessage() {
 		Threads.sleep(1000);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -50,13 +55,14 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendQueue(user);
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo(
+				"UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user");
 	}
 
 	@Test
 	public void topicMessage() {
 		Threads.sleep(1000);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		User user = new User();
@@ -65,13 +71,14 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 
 		notifyMessageProducer.sendTopic(user);
 		Threads.sleep(1000);
-		assertEquals("UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user", appender.getFirstMessage());
+		assertThat(appender.getFirstMessage()).isEqualTo(
+				"UserName:calvin, Email:calvin@sringside.org.cn, ObjectType:user");
 	}
 
 	@Test
 	public void topicMessageWithWrongType() {
 		Threads.sleep(1000);
-		Log4jMockAppender appender = new Log4jMockAppender();
+		LogbackListAppender appender = new LogbackListAppender();
 		appender.addToLogger(AdvancedNotifyMessageListener.class);
 
 		advancedJmsTemplate.send(advancedNotifyTopic, new MessageCreator() {
@@ -85,6 +92,6 @@ public class JmsAdvancedTest extends SpringContextTestCase {
 		});
 
 		Threads.sleep(1000);
-		assertTrue(appender.isEmpty());
+		assertThat(appender.isEmpty()).isTrue();
 	}
 }

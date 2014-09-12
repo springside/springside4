@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.security.utils;
 
 import java.io.IOException;
@@ -27,7 +32,7 @@ public class DigestsTest {
 
 	@Test
 	public void digestFile() throws IOException {
-		Resource resource = new ClassPathResource("/log4j.properties");
+		Resource resource = new ClassPathResource("/logback.xml");
 		byte[] md5result = Digests.md5(resource.getInputStream());
 		byte[] sha1result = Digests.sha1(resource.getInputStream());
 		System.out.println("md5: " + Encodes.encodeHex(md5result));

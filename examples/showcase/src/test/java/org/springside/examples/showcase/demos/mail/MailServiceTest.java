@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.mail;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -43,12 +48,11 @@ public class MailServiceTest extends SpringContextTestCase {
 		MimeMessage[] messages = greenMail.getReceivedMessages();
 		MimeMessage message = messages[messages.length - 1];
 
-		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("用户修改通知", message.getSubject());
-		//text格式内容
+		assertThat(message.getFrom()[0].toString()).isEqualTo("springside3.demo@gmail.com");
+		assertThat(message.getSubject()).isEqualTo("用户修改通知");
+		// text格式内容
 		System.out.println(message.getContent());
-		assertTrue(((String) message.getContent()).contains("被修改"));
-
+		assertThat(((String) message.getContent())).contains("被修改");
 	}
 
 	@Test
@@ -59,21 +63,20 @@ public class MailServiceTest extends SpringContextTestCase {
 		MimeMessage[] messages = greenMail.getReceivedMessages();
 		MimeMessage message = messages[messages.length - 1];
 
-		assertEquals("springside3.demo@gmail.com", message.getFrom()[0].toString());
-		assertEquals("用户修改通知", message.getSubject());
+		assertThat(message.getFrom()[0].toString()).isEqualTo("springside3.demo@gmail.com");
+		assertThat(message.getSubject()).isEqualTo("用户修改通知");
 
 		MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
 
-		assertEquals(2, mimeMultipart.getCount());
+		assertThat(mimeMultipart.getCount()).isEqualTo(2);
 
-		//Html格式的主邮件
+		// Html格式的主邮件
 		String mainPartText = getMainPartText(mimeMultipart.getBodyPart(0));
 		System.out.println(mainPartText);
-		assertTrue(mainPartText.contains("<h1>用户calvin被修改.</h1>"));
+		assertThat(mainPartText).contains("<h1>用户calvin被修改.</h1>");
 
-		//附件
-		assertEquals("Hello,i am a attachment.", GreenMailUtil.getBody(mimeMultipart.getBodyPart(1)).trim());
-
+		// 附件
+		assertThat(GreenMailUtil.getBody(mimeMultipart.getBodyPart(1)).trim()).isEqualTo("Hello,i am a attachment.");
 	}
 
 	private String getMainPartText(Part mainPart) throws MessagingException, IOException {

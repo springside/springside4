@@ -1,13 +1,18 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-package ${groupId}.${artifactId}.functional.gui;
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
+package ${package}.functional.gui;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import ${groupId}.${artifactId}.functional.BaseSeleniumTestCase;
+import ${package}.functional.BaseSeleniumTestCase;
 
 /**
  * 系统安全控制的功能测试, 测试主要用户故事.
@@ -21,13 +26,13 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	 */
 	@Test
 	public void anonymousUserAccessSystem() {
-		//访问退出登录页面,退出之前的登录
+		// 访问退出登录页面,退出之前的登录
 		s.open("/logout");
-		assertEquals("${projectName}示例:登录页", s.getTitle());
+		s.waitForTitleContains("登录页");
 
-		//访问任意页面会跳转到登录界面
+		// 访问任意页面会跳转到登录界面
 		s.open("/task");
-		assertEquals("${projectName}示例:登录页", s.getTitle());
+		s.waitForTitleContains("登录页");
 	}
 
 	/**
@@ -37,7 +42,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 	public void userTryToManageUsers() {
 		loginAsUserIfNecessary();
 		s.open("/admin/user");
-		assertEquals("Error 401 Unauthorized", s.getTitle());
+		assertThat(s.getTitle()).isEqualTo("Error 401 Unauthorized");
 	}
 
 	/**
@@ -51,7 +56,7 @@ public class SecurityFT extends BaseSeleniumTestCase {
 		s.check(By.name("rememberMe"));
 		s.click(By.id("submit_btn"));
 
-		assertEquals("${projectName}示例:登录页", s.getTitle());
-		assertTrue(s.isTextPresent("登录失败，请重试."));
+		s.waitForTitleContains("登录页");
+		assertThat(s.isTextPresent("登录失败，请重试.")).isTrue();
 	}
 }

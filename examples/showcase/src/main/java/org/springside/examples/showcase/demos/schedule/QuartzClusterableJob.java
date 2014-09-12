@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
 import java.util.Map;
@@ -13,12 +18,15 @@ import org.springside.examples.showcase.service.AccountService;
 /**
  * 被Spring的Quartz JobDetailBean定时执行的Job类, 支持持久化到数据库实现Quartz集群.
  * 
- * 因为需要被持久化, 不能有用XXService等不能被持久化的成员变量, 
+ * 因为需要被持久化, 不能有用XXService等不能被持久化的成员变量,
  * 只能在每次调度时从QuartzJobBean注入的applicationContext中动态取出.
+ * 
+ * @author calvin
  */
 public class QuartzClusterableJob extends QuartzJobBean {
 
-	private static Logger logger = LoggerFactory.getLogger(QuartzClusterableJob.class);
+	private static Logger logger = LoggerFactory
+			.getLogger(QuartzClusterableJob.class.getName() + ".quartz cluster job");
 
 	private ApplicationContext applicationContext;
 
@@ -40,6 +48,6 @@ public class QuartzClusterableJob extends QuartzJobBean {
 		long userCount = accountService.getUserCount();
 		String nodeName = (String) config.get("nodeName");
 
-		logger.info("There are {} user in database, printed by quartz cluster job on node {}.", userCount, nodeName);
+		logger.info("There are {} user in database, on node {}.", userCount, nodeName);
 	}
 }

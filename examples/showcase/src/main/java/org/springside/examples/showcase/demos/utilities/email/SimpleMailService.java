@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.email;
 
 import java.util.Date;
@@ -28,7 +33,7 @@ public class SimpleMailService {
 		msg.setTo("springside3.demo@gmail.com");
 		msg.setSubject("用户修改通知");
 
-		//将用户名与当期日期格式化到邮件内容的字符串模板
+		// 将用户名与当期日期格式化到邮件内容的字符串模板
 		String content = String.format(textTemplate, userName, new Date());
 		msg.setText(content);
 

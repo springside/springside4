@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.persistence;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Map;
 
@@ -21,14 +26,14 @@ public class SearchFilterTest {
 		Map<String, SearchFilter> filters = SearchFilter.parse(params);
 
 		SearchFilter nameFilter = filters.get("EQ_name");
-		assertEquals(Operator.EQ, nameFilter.operator);
-		assertEquals("name", nameFilter.fieldName);
-		assertEquals("foo", nameFilter.value);
+		assertThat(nameFilter.operator).isEqualTo(Operator.EQ);
+		assertThat(nameFilter.fieldName).isEqualTo("name");
+		assertThat(nameFilter.value).isEqualTo("foo");
 
 		SearchFilter ageFilter = filters.get("LT_age");
-		assertEquals(Operator.LT, ageFilter.operator);
-		assertEquals("age", ageFilter.fieldName);
-		assertEquals("1", ageFilter.value);
+		assertThat(ageFilter.operator).isEqualTo(Operator.LT);
+		assertThat(ageFilter.fieldName).isEqualTo("age");
+		assertThat(ageFilter.value).isEqualTo("1");
 	}
 
 	@Test
@@ -40,7 +45,7 @@ public class SearchFilterTest {
 		params.put("LT_mail", "");
 
 		Map<String, SearchFilter> filters = SearchFilter.parse(params);
-		assertEquals(1, filters.size());
+		assertThat(filters).hasSize(1).containsKey("EQ_name");
 	}
 
 	@Test

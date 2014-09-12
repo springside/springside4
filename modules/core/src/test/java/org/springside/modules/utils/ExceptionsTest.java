@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.utils;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
@@ -10,12 +15,14 @@ public class ExceptionsTest {
 
 	@Test
 	public void unchecked() {
+		// convert Exception to RuntimeException with cause
 		Exception exception = new Exception("my exception");
 		RuntimeException runtimeException = Exceptions.unchecked(exception);
-		assertEquals(exception, runtimeException.getCause());
+		assertThat(runtimeException.getCause()).isEqualTo(exception);
 
+		// do nothing of RuntimeException
 		RuntimeException runtimeException2 = Exceptions.unchecked(runtimeException);
-		assertEquals(runtimeException, runtimeException2);
+		assertThat(runtimeException2).isSameAs(runtimeException);
 	}
 
 	@Test
@@ -33,11 +40,10 @@ public class ExceptionsTest {
 		IllegalStateException illegalStateException = new IllegalStateException(ioexception);
 		RuntimeException runtimeException = new RuntimeException(illegalStateException);
 
-		assertTrue(Exceptions.isCausedBy(runtimeException, IOException.class));
-		assertTrue(Exceptions.isCausedBy(runtimeException, IllegalStateException.class, IOException.class));
-		assertTrue(Exceptions.isCausedBy(runtimeException, Exception.class));
-		assertFalse(Exceptions.isCausedBy(runtimeException, IllegalAccessException.class));
-
+		assertThat(Exceptions.isCausedBy(runtimeException, IOException.class)).isTrue();
+		assertThat(Exceptions.isCausedBy(runtimeException, IllegalStateException.class, IOException.class)).isTrue();
+		assertThat(Exceptions.isCausedBy(runtimeException, Exception.class)).isTrue();
+		assertThat(Exceptions.isCausedBy(runtimeException, IllegalAccessException.class)).isFalse();
 	}
 
 }

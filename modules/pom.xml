@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.0.1.GA</version>
+		<version>4.2.3-SNAPSHOT</version>
 		<relativePath>../modules/parent/</relativePath>
 	</parent>	
 	<artifactId>springside-modules</artifactId>
@@ -16,6 +16,6 @@
 		<module>parent</module>
 		<module>core</module>
 		<module>extension</module>
-		<module>test</module>
+		<module>metrics</module>
 	</modules>
 </project>

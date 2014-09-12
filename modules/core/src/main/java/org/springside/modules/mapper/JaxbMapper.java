@@ -1,8 +1,8 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.mapper;
 
 import java.io.StringReader;
@@ -20,8 +20,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.converter.HttpMessageConversionException;
-import org.springframework.util.Assert;
+import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.Exceptions;
 import org.springside.modules.utils.Reflections;
 
@@ -141,15 +140,15 @@ public class JaxbMapper {
 	}
 
 	protected static JAXBContext getJaxbContext(Class clazz) {
-		Assert.notNull(clazz, "'clazz' must not be null");
+		Validate.notNull(clazz, "'clazz' must not be null");
 		JAXBContext jaxbContext = jaxbContexts.get(clazz);
 		if (jaxbContext == null) {
 			try {
 				jaxbContext = JAXBContext.newInstance(clazz, CollectionWrapper.class);
 				jaxbContexts.putIfAbsent(clazz, jaxbContext);
 			} catch (JAXBException ex) {
-				throw new HttpMessageConversionException("Could not instantiate JAXBContext for class [" + clazz
-						+ "]: " + ex.getMessage(), ex);
+				throw new RuntimeException("Could not instantiate JAXBContext for class [" + clazz + "]: "
+						+ ex.getMessage(), ex);
 			}
 		}
 		return jaxbContext;

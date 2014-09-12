@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.schedule;
 
 import java.util.concurrent.Executors;
@@ -17,6 +22,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 /**
  * 用JDKScheduledThreadPoolExecutor定时执行的任务。
  * 相比Spring的Task NameSpace配置方, 不需要反射調用，并强化了退出超时控制.
+ * 
+ * @author calvin
  */
 public class JdkTimerJob implements Runnable {
 
@@ -35,15 +42,15 @@ public class JdkTimerJob implements Runnable {
 	public void start() throws Exception {
 		Validate.isTrue(period > 0);
 
-		//任何异常不会中断schedule执行, 由Spring TaskUtils的LOG_AND_SUPPRESS_ERROR_HANDLER進行处理
+		// 任何异常不会中断schedule执行, 由Spring TaskUtils的LOG_AND_SUPPRESS_ERROR_HANDLER進行处理
 		Runnable task = TaskUtils.decorateTaskWithErrorHandler(this, null, true);
 
-		//创建单线程的SechdulerExecutor,并用guava的ThreadFactoryBuilder设定生成线程的名称
+		// 创建单线程的SechdulerExecutor,并用guava的ThreadFactoryBuilder设定生成线程的名称
 		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(new ThreadFactoryBuilder().setNameFormat(
 				"JdkTimerJob-%1$d").build());
 
-		//scheduleAtFixedRatefixRate() 固定任务两次启动之间的时间间隔.
-		//scheduleAtFixedDelay()      固定任务结束后到下一次启动间的时间间隔.
+		// scheduleAtFixedRatefixRate() 固定任务两次启动之间的时间间隔.
+		// scheduleAtFixedDelay() 固定任务结束后到下一次启动间的时间间隔.
 		scheduledExecutorService.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
 	}
 

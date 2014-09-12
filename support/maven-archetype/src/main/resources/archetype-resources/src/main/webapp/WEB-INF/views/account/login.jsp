@@ -11,11 +11,6 @@
 <html>
 <head>
 	<title>登录页</title>
-	<script>
-		${symbol_dollar}(document).ready(function() {
-			${symbol_dollar}("${symbol_pound}loginForm").validate();
-		});
-	</script>
 </head>
 
 <body>
@@ -51,5 +46,11 @@
 			</div>
 		</div>
 	</form>
+
+	<script>
+		${symbol_dollar}(document).ready(function() {
+			${symbol_dollar}("${symbol_pound}loginForm").validate();
+		});
+	</script>
 </body>
 </html>

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.demos.utilities.xml;
 
 import java.util.ArrayList;
@@ -18,10 +23,13 @@ import com.google.common.collect.Maps;
  * 为使Map<String,String> houses转化为有业务意义的xml的巨大努力,
  * 分别定义了一个Adapter--HouseMapAdapter, 一个List<HouseEntry> Wrapper类--HouseMap, 一个MapEntry表达类--HouseEntry.
  * 最后的劳动成果是：
+ * 
+ * <pre>
  * <houses>
  * 		<house key="bj">house1</item>
  * 		<hosue key="gz">house2</item>
  * </houses>
+ * </pre>
  * 
  * @author calvin
  */
@@ -47,6 +55,7 @@ public class HouseMapAdapter extends XmlAdapter<HouseMapAdapter.HouseMap, Map<St
 
 	/**
 	 * List<HouseEntry>的Adapter类.
+	 * 
 	 * @author calvin
 	 */
 	@XmlType(name = "houses")

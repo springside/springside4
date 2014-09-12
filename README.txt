@@ -8,5 +8,6 @@
   2. Showcase -- demonstrate many other interesting technologies.
  
 -------------------------------
-Offical Site: http://www.springside.org.cn
+Offical Site: http://springside.github.io
 Document: https://github.com/springside/springside4/wiki
+CI Status: [![Build Status](https://travis-ci.org/springside/springside4.svg?branch=master)](https://travis-ci.org/springside/springside4)

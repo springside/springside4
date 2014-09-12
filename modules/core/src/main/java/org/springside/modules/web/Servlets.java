@@ -1,11 +1,10 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.web;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Map;
@@ -18,8 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.Collections3;
 import org.springside.modules.utils.Encodes;
 
+import com.google.common.base.Charsets;
 import com.google.common.net.HttpHeaders;
 
 /**
@@ -37,7 +38,7 @@ public class Servlets {
 	 */
 	public static void setExpiresHeader(HttpServletResponse response, long expiresSeconds) {
 		// Http 1.0 header, set a fix expires date.
-		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + expiresSeconds * 1000);
+		response.setDateHeader(HttpHeaders.EXPIRES, System.currentTimeMillis() + (expiresSeconds * 1000));
 		// Http 1.1 header, set a time after now.
 		response.setHeader(HttpHeaders.CACHE_CONTROL, "private, max-age=" + expiresSeconds);
 	}
@@ -77,7 +78,7 @@ public class Servlets {
 	public static boolean checkIfModifiedSince(HttpServletRequest request, HttpServletResponse response,
 			long lastModified) {
 		long ifModifiedSince = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
-		if ((ifModifiedSince != -1) && (lastModified < ifModifiedSince + 1000)) {
+		if ((ifModifiedSince != -1) && (lastModified < (ifModifiedSince + 1000))) {
 			response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
 			return false;
 		}
@@ -122,13 +123,21 @@ public class Servlets {
 	 * 
 	 * @param fileName 下载后的文件名.
 	 */
-	public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
-		try {
-			// 中文文件名支持
-			String encodedfileName = new String(fileName.getBytes(), "ISO8859-1");
-			response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
-		} catch (UnsupportedEncodingException e) {
+	public static void setFileDownloadHeader(HttpServletRequest request, HttpServletResponse response, String fileName) {
+		// 中文文件名支持
+		String encodedfileName = null;
+		// 替换空格，否则firefox下有空格文件名会被截断,其他浏览器会将空格替换成+号
+		encodedfileName = fileName.trim().replaceAll(" ", "_");
+		String agent = request.getHeader("User-Agent");
+		boolean isMSIE = (agent != null && agent.toUpperCase().indexOf("MSIE") != -1);
+		if (isMSIE) {
+			encodedfileName = Encodes.urlEncode(fileName);
+		} else {
+			encodedfileName = new String(fileName.getBytes(), Charsets.ISO_8859_1);
 		}
+
+		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
+
 	}
 
 	/**
@@ -143,12 +152,12 @@ public class Servlets {
 		if (prefix == null) {
 			prefix = "";
 		}
-		while (paramNames != null && paramNames.hasMoreElements()) {
+		while ((paramNames != null) && paramNames.hasMoreElements()) {
 			String paramName = (String) paramNames.nextElement();
 			if ("".equals(prefix) || paramName.startsWith(prefix)) {
 				String unprefixed = paramName.substring(prefix.length());
 				String[] values = request.getParameterValues(paramName);
-				if (values == null || values.length == 0) {
+				if ((values == null) || (values.length == 0)) {
 					// Do nothing, no values found at all.
 				} else if (values.length > 1) {
 					params.put(unprefixed, values);
@@ -166,7 +175,7 @@ public class Servlets {
 	 * @see #getParametersStartingWith
 	 */
 	public static String encodeParameterStringWithPrefix(Map<String, Object> params, String prefix) {
-		if (params == null || params.size() == 0) {
+		if (Collections3.isEmpty(params)) {
 			return "";
 		}
 

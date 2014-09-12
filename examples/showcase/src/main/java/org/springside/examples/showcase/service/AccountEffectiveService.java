@@ -1,8 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.service;
 
 import java.util.List;
 import java.util.Map;
 
+import org.javasimon.aop.Monitored;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,15 +28,15 @@ import com.google.common.collect.Maps;
  * @author calvin
  */
 @Component
-@Transactional(readOnly = true)
+@Transactional
+@Monitored
 public class AccountEffectiveService {
-
 	@Autowired
 	private UserMybatisDao userDao;
 	@Autowired
 	private TeamMybatisDao teamDao;
 
-	@Autowired
+	@Autowired(required = false)
 	private SpyMemcachedClient memcachedClient;
 
 	private final JsonMapper jsonMapper = JsonMapper.nonDefaultMapper();
@@ -39,25 +45,32 @@ public class AccountEffectiveService {
 		return teamDao.getWithDetail(id);
 	}
 
+	public User getUser(Long id) {
+		if (memcachedClient != null) {
+			return getUserWithMemcached(id);
+		} else {
+			return userDao.get(id);
+		}
+	}
+
 	/**
 	 * 先访问Memcached, 使用JSON字符串存放对象以节约空间.
 	 */
-	public User getUser(Long id) {
+	private User getUserWithMemcached(Long id) {
 		String key = MemcachedObjectType.USER.getPrefix() + id;
 
-		User user = null;
 		String jsonString = memcachedClient.get(key);
 
-		if (jsonString == null) {
-			user = userDao.get(id);
+		if (jsonString != null) {
+			return jsonMapper.fromJson(jsonString, User.class);
+		} else {
+			User user = userDao.get(id);
 			if (user != null) {
 				jsonString = jsonMapper.toJson(user);
 				memcachedClient.set(key, MemcachedObjectType.USER.getExpiredTime(), jsonString);
 			}
-		} else {
-			user = jsonMapper.fromJson(jsonString, User.class);
+			return user;
 		}
-		return user;
 	}
 
 	public List<User> searchUser(String loginName, String name) {
@@ -67,12 +80,10 @@ public class AccountEffectiveService {
 		return userDao.search(parameters);
 	}
 
-	@Transactional
 	public void saveUser(User user) {
 		userDao.save(user);
 	}
 
-	@Transactional
 	public void deleteUser(Long id) {
 		userDao.delete(id);
 	}
