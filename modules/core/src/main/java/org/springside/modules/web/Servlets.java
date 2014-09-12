@@ -123,9 +123,19 @@ public class Servlets {
 	 * 
 	 * @param fileName 下载后的文件名.
 	 */
-	public static void setFileDownloadHeader(HttpServletResponse response, String fileName) {
+	public static void setFileDownloadHeader(HttpServletRequest request, HttpServletResponse response, String fileName) {
 		// 中文文件名支持
-		String encodedfileName = new String(fileName.getBytes(), Charsets.ISO_8859_1);
+		String encodedfileName = null;
+		// 替换空格，否则firefox下有空格文件名会被截断,其他浏览器会将空格替换成+号
+		encodedfileName = fileName.trim().replaceAll(" ", "_");
+		String agent = request.getHeader("User-Agent");
+		boolean isMSIE = (agent != null && agent.toUpperCase().indexOf("MSIE") != -1);
+		if (isMSIE) {
+			encodedfileName = Encodes.urlEncode(fileName);
+		} else {
+			encodedfileName = new String(fileName.getBytes(), Charsets.ISO_8859_1);
+		}
+
 		response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + encodedfileName + "\"");
 
 	}
