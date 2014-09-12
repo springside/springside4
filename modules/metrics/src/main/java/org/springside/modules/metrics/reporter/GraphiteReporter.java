@@ -43,6 +43,9 @@ public class GraphiteReporter implements Reporter {
 	private Socket socket;
 	private Writer writer;
 
+	// use to only print connection error message once.
+	private GraphiteConnStatus graphiteConnStatus = GraphiteConnStatus.CONN_OK;
+
 	public GraphiteReporter(InetSocketAddress address) {
 		this(address, "metrics");
 	}
@@ -72,8 +75,10 @@ public class GraphiteReporter implements Reporter {
 			}
 
 			flush();
+
+			onConnSuccess();
 		} catch (IOException e) {
-			logger.warn("Unable to report to Graphite", e);
+			onConnFail(e);
 		} finally {
 			try {
 				close();
@@ -136,6 +141,10 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	private void close() throws IOException {
+		if (writer != null) {
+			writer.flush();
+		}
+
 		if (socket != null) {
 			socket.close();
 		}
@@ -153,5 +162,23 @@ public class GraphiteReporter implements Reporter {
 
 	private String sanitize(String s) {
 		return WHITESPACE.matcher(s).replaceAll("-");
+	}
+
+	private void onConnFail(Exception exception) {
+		if (graphiteConnStatus != GraphiteConnStatus.CONN_NOK) {
+			logger.warn("Unable to report to Graphite", exception);
+			graphiteConnStatus = GraphiteConnStatus.CONN_NOK;
+		}
+	}
+
+	private void onConnSuccess() {
+		if (graphiteConnStatus != GraphiteConnStatus.CONN_OK) {
+			logger.info("Graphite connection is recovered.");
+			graphiteConnStatus = GraphiteConnStatus.CONN_OK;
+		}
+	}
+
+	private enum GraphiteConnStatus {
+		CONN_OK, CONN_NOK
 	}
 }
