@@ -78,7 +78,7 @@ public class StaticContentServlet extends HttpServlet {
 
 		// 设置弹出下载文件请求窗口的Header
 		if (request.getParameter("download") != null) {
-			Servlets.setFileDownloadHeader(response, contentInfo.fileName);
+			Servlets.setFileDownloadHeader(request, response, contentInfo.fileName);
 		}
 
 		// 构造OutputStream
