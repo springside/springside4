@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisDataException;
-import redis.clients.util.Pool;
 
 /**
  * 装载并执行Lua Script，
@@ -34,7 +34,7 @@ public class JedisScriptExecutor {
 	private String script;
 	private String sha1;
 
-	public JedisScriptExecutor(Pool<Jedis> jedisPool) {
+	public JedisScriptExecutor(JedisPool jedisPool) {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
 	}
 

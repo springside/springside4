@@ -6,9 +6,7 @@
 package org.springside.modules.nosql.redis.service.scheduler;
 
 import org.springside.modules.nosql.redis.JedisTemplate;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 /**
  * 支持对当前任务池情况的状态数据查询.
@@ -25,7 +23,7 @@ public class JobStatistics {
 	private String dispatchCounterKey;
 	private String retryCounterKey;
 
-	public JobStatistics(String jobName, Pool<Jedis> jedisPool) {
+	public JobStatistics(String jobName, JedisPool jedisPool) {
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 		lockJobKey = Keys.getLockJobKey(jobName);

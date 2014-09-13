@@ -1,12 +1,8 @@
-/*------------------------------------------------------------------------------
- * COPYRIGHT Ericsson 2013
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
- * The copyright to the computer program(s) herein is the property of
- * Ericsson Inc. The programs may be used and/or copied only with written
- * permission from Ericsson Inc. or in accordance with the terms and
- * conditions stipulated in the agreement/contract under which the
- * program(s) have been supplied.
- *----------------------------------------------------------------------------*/
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis;
 
 import java.util.List;
@@ -19,12 +15,20 @@ import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
 import org.springside.modules.nosql.redis.pool.JedisPool;
 
+import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisException;
 import redis.clients.util.Hashing;
 
 /**
- * JedisShardTemplate, 在JedisTemplate的基础上支持按key进行sharding分区，
- * 如果只传入一个JedisPool，则会退化到JedisTemplate, 不会进行sharding运算。
+ * JedisShardTemplate is the JedisTemplate, which has key sharding feature.
+ * 
+ * Pass more than one JedisPool to the it, it will calculate which jedisPool will handle the key. If
+ * only one jedisPool passed, it won't do the calculation, so please use JedisShardedTemplate by default.
+ * 
+ * Limitation: JedisShardedTemplate donen't support multi-key actions like:
+ * 1. Lua Script
+ * 2. Pipelined and Transaction process multi-key
+ * 3. Methods in @redis.clients.jedis.MultiKeyCommands like mget, rpoplpush....
  */
 public class JedisShardedTemplate {
 
@@ -32,7 +36,7 @@ public class JedisShardedTemplate {
 	private TreeMap<Long, JedisTemplate> nodes = new TreeMap<Long, JedisTemplate>();
 	private JedisTemplate singleTemplate = null;
 
-	public JedisShardedTemplate(JedisPool[] jedisPools) {
+	public JedisShardedTemplate(JedisPool... jedisPools) {
 		if (jedisPools.length == 1) {
 			singleTemplate = new JedisTemplate(jedisPools[0]);
 		} else {
@@ -40,10 +44,14 @@ public class JedisShardedTemplate {
 		}
 	}
 
+	public JedisShardedTemplate(List<JedisPool> jedisPools) {
+		this(jedisPools.toArray(new JedisPool[jedisPools.size()]));
+	}
+
 	private void initNodes(JedisPool... jedisPools) {
 		for (int i = 0; i != jedisPools.length; i++) {
-			// 环上更多的点让负载更均衡
-			for (int n = 0; n < 5; n++) {
+			// more entry the make the hash ring be more balance
+			for (int n = 0; n < 128; n++) {
 				final JedisPool jedisPool = jedisPools[i];
 				nodes.put(this.algo.hash("SHARD-" + i + "-NODE-" + n), new JedisTemplate(jedisPool));
 			}
@@ -51,34 +59,31 @@ public class JedisShardedTemplate {
 	}
 
 	/**
-	 * 对Key进行哈希并返回哈希环上对应的节点。
-	 * 参考了Jedis的Sharded.java
+	 * Hash the key and get the jedisTemplate from the hash ring. Get idea from Jedis's Sharded.java
 	 */
 	public JedisTemplate getShard(String key) {
-
 		if (singleTemplate != null) {
 			return singleTemplate;
 		}
 
 		SortedMap<Long, JedisTemplate> tail = nodes.tailMap(algo.hash(key));
-		// 已到最后，返回第一个点.
 		if (tail.isEmpty()) {
+			// the last node, back to first.
 			return nodes.get(nodes.firstKey());
 		}
-
 		return tail.get(tail.firstKey());
 	}
 
-	/**
-	 * 包含key以帮助sharding的execute 版本.
+	/*
+	 * Execute the action, the action must process only one key.
 	 */
 	public <T> T execute(String key, JedisAction<T> jedisAction) throws JedisException {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.execute(jedisAction);
 	}
 
-	/**
-	 * 包含key以帮助sharding的execute 版本.
+	/*
+	 * Execute the action, the action must process only one key.
 	 */
 	public void execute(String key, JedisActionNoResult jedisAction) throws JedisException {
 		JedisTemplate jedisTemplate = getShard(key);
@@ -97,6 +102,16 @@ public class JedisShardedTemplate {
 	public String get(final String key) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.get(key);
+	}
+
+	public Long getAsLong(final String key) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.getAsLong(key);
+	}
+
+	public Integer getAsInt(final String key) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.getAsInt(key);
 	}
 
 	public void set(final String key, final String value) {
@@ -119,14 +134,34 @@ public class JedisShardedTemplate {
 		return jedisTemplate.setnxex(key, value, seconds);
 	}
 
+	public String getSet(String key, String value) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.getSet(key, value);
+	}
+
 	public Long incr(String key) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.incr(key);
 	}
 
+	public Long incrBy(String key, Long increment) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.incrBy(key, increment);
+	}
+
+	public Double incrByFloat(final String key, final double increment) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.incrByFloat(key, increment);
+	}
+
 	public Long decr(String key) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.decr(key);
+	}
+
+	public Long decrBy(String key, Long decrement) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.decrBy(key, decrement);
 	}
 
 	// / Hash Actions ///
@@ -136,14 +171,19 @@ public class JedisShardedTemplate {
 		return jedisTemplate.hget(key, field);
 	}
 
-	public void hset(final String key, final String field, final String value) {
-		JedisTemplate jedisTemplate = getShard(key);
-		jedisTemplate.hset(key, field, value);
-	}
-
 	public List<String> hmget(String key, String[] fields) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.hmget(key, fields);
+	}
+
+	public Map<String, String> hgetAll(final String key) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.hgetAll(key);
+	}
+
+	public void hset(final String key, final String field, final String value) {
+		JedisTemplate jedisTemplate = getShard(key);
+		jedisTemplate.hset(key, field, value);
 	}
 
 	public void hmset(String key, Map<String, String> map) {
@@ -151,9 +191,29 @@ public class JedisShardedTemplate {
 		jedisTemplate.hmset(key, map);
 	}
 
+	public Boolean hsetnx(final String key, final String fieldName, final String value) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.hsetnx(key, fieldName, value);
+	}
+
+	public Long hincrBy(final String key, final String fieldName, final long increment) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.hincrBy(key, fieldName, increment);
+	}
+
+	public Double hincrByFloat(final String key, final String fieldName, final double increment) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.hincrByFloat(key, fieldName, increment);
+	}
+
 	public Long hdel(final String key, final String... fieldsName) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.hdel(key, fieldsName);
+	}
+
+	public Boolean hexists(final String key, final String fieldName) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.hexists(key, fieldName);
 	}
 
 	public Set<String> hkeys(final String key) {
@@ -161,10 +221,16 @@ public class JedisShardedTemplate {
 		return jedisTemplate.hkeys(key);
 	}
 
-	// ////////////// 关于List ///////////////////////////
-	public void lpush(final String key, final String... values) {
+	public Long hlen(final String key) {
 		JedisTemplate jedisTemplate = getShard(key);
-		jedisTemplate.lpush(key, values);
+		return jedisTemplate.hlen(key);
+	}
+
+	// / List Actions ///
+
+	public Long lpush(final String key, final String... values) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.lpush(key, values);
 	}
 
 	public String rpop(final String key) {
@@ -172,58 +238,133 @@ public class JedisShardedTemplate {
 		return jedisTemplate.rpop(key);
 	}
 
-	/**
-	 * 返回List长度, key不存在时返回0，key类型不是list时抛出异常.
-	 */
+	public String brpop(final String key) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.brpop(key);
+	}
+
+	public String brpop(final int timeout, final String key) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.brpop(timeout, key);
+	}
+
 	public Long llen(final String key) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.llen(key);
 	}
 
-	/**
-	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回false.
-	 */
-	public Boolean lremOne(final String key, final String value) {
+	public String lindex(final String key, final long index) {
 		JedisTemplate jedisTemplate = getShard(key);
-		return jedisTemplate.lremOne(key, value);
+		return jedisTemplate.lindex(key, index);
 	}
 
-	/**
-	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回false.
-	 */
+	public List<String> lrange(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.lrange(key, start, end);
+	}
+
+	public void ltrim(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		jedisTemplate.ltrim(key, start, end);
+	}
+
+	public void ltrimFromLeft(final String key, final int size) {
+		JedisTemplate jedisTemplate = getShard(key);
+		jedisTemplate.ltrimFromLeft(key, size);
+	}
+
+	public Boolean lremFirst(final String key, final String value) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.lremFirst(key, value);
+	}
+
 	public Boolean lremAll(final String key, final String value) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.lremAll(key, value);
 	}
 
-	// ////////////// 关于Sorted Set ///////////////////////////
-	/**
-	 * 加入Sorted set, 如果member在Set里已存在, 只更新score并返回false, 否则返回true.
-	 */
-	public Boolean zadd(final String key, final String member, final double score) {
+	// / Sorted Set Actions ///
+
+	public Boolean zadd(final String key, final double score, final String member) {
 		JedisTemplate jedisTemplate = getShard(key);
-		return jedisTemplate.zadd(key, member, score);
+		return jedisTemplate.zadd(key, score, member);
 	}
 
-	/**
-	 * 删除sorted set中的元素，成功删除返回true，key或member不存在返回false。
-	 */
-	public Boolean zrem(final String key, final String member) {
-		JedisTemplate jedisTemplate = getShard(key);
-		return jedisTemplate.zrem(key, member);
-	}
-
-	/**
-	 * 当key不存在时返回null.
-	 */
 	public Double zscore(final String key, final String member) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.zscore(key, member);
 	}
 
-	/**
-	 * 返回sorted set长度, key不存在时返回0.
-	 */
+	public Long zrank(final String key, final String member) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrank(key, member);
+	}
+
+	public Long zrevrank(final String key, final String member) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrevrank(key, member);
+	}
+
+	public Long zcount(final String key, final double start, final double end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zcount(key, start, end);
+	}
+
+	public Set<String> zrange(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrange(key, start, end);
+	}
+
+	public Set<Tuple> zrangeWithScores(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrangeWithScores(key, start, end);
+	}
+
+	public Set<String> zrevrange(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrevrange(key, start, end);
+	}
+
+	public Set<Tuple> zrevrangeWithScores(final String key, final int start, final int end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrevrangeWithScores(key, start, end);
+	}
+
+	public Set<String> zrangeByScore(final String key, final double min, final double max) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrangeByScore(key, min, max);
+	}
+
+	public Set<Tuple> zrangeByScoreWithScores(final String key, final double min, final double max) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrangeByScoreWithScores(key, min, max);
+	}
+
+	public Set<String> zrevrangeByScore(final String key, final double max, final double min) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrevrangeByScore(key, max, min);
+	}
+
+	public Set<Tuple> zrevrangeByScoreWithScores(final String key, final double max, final double min) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrevrangeByScoreWithScores(key, max, min);
+	}
+
+	public Boolean zrem(final String key, final String member) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zrem(key, member);
+	}
+
+	public Long zremByScore(final String key, final double min, final double max) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zremByScore(key, min, max);
+	}
+
+	public Long zremByRank(final String key, final long start, final long end) {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.zremByRank(key, start, end);
+	}
+
 	public Long zcard(final String key) {
 		JedisTemplate jedisTemplate = getShard(key);
 		return jedisTemplate.zcard(key);

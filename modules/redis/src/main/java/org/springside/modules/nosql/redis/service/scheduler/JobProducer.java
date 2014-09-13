@@ -10,9 +10,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
-
-import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 /**
  * 任务生成的管理器，支持任务的安排与取消。
@@ -28,7 +26,7 @@ public class JobProducer {
 
 	private String readyJobKey;
 
-	public JobProducer(String jobName, Pool<Jedis> jedisPool) {
+	public JobProducer(String jobName, JedisPool jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 		scheduledJobKey = Keys.getScheduledJobKey(jobName);
 		readyJobKey = Keys.getReadyJobKey(jobName);
@@ -46,7 +44,7 @@ public class JobProducer {
 	 */
 	public void schedule(final String job, final long delay, final TimeUnit timeUnit) {
 		final long delayTimeMillis = System.currentTimeMillis() + timeUnit.toMillis(delay);
-		jedisTemplate.zadd(scheduledJobKey, job, delayTimeMillis);
+		jedisTemplate.zadd(scheduledJobKey, delayTimeMillis, job);
 	}
 
 	/**

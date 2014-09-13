@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis.pool;
 
 import java.util.ArrayList;
@@ -154,7 +159,7 @@ public class JedisPoolBuilder {
 		logger.info("Building JedisDirectPool, on redis server " + hostPort[0] + " ,sentinelPort is " + hostPort[1]);
 
 		HostAndPort masterAddress = new HostAndPort(hostPort[0], Integer.parseInt(hostPort[1]));
-		return new JedisPool(masterAddress, config);
+		return new JedisDirectPool(masterAddress, config);
 	}
 
 	private JedisPool buildSentinelPool(String sentinelMasterName, ConnectionInfo connectionInfo, JedisPoolConfig config) {

@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis.pool;
 
 import org.apache.commons.pool2.impl.GenericObjectPool;
@@ -10,7 +15,7 @@ import redis.clients.util.Pool;
 /**
  * Jedis Pool base class.
  */
-public class JedisPool extends Pool<Jedis> {
+public abstract class JedisPool extends Pool<Jedis> {
 
 	protected HostAndPort address;
 
@@ -32,18 +37,6 @@ public class JedisPool extends Pool<Jedis> {
 		return config;
 	}
 
-	protected JedisPool() {
-
-	}
-
-	public JedisPool(HostAndPort address, JedisPoolConfig config) {
-		initInternalPool(address, new ConnectionInfo(), config);
-	}
-
-	public JedisPool(HostAndPort address, ConnectionInfo connectionInfo, JedisPoolConfig config) {
-		initInternalPool(address, connectionInfo, config);
-	}
-
 	/**
 	 * Initialize the internal pool with connection info and pool config.
 	 */
@@ -61,7 +54,9 @@ public class JedisPool extends Pool<Jedis> {
 	 */
 	@Override
 	public void returnBrokenResource(final Jedis resource) {
-		returnBrokenResourceObject(resource);
+		if (resource != null) {
+			returnBrokenResourceObject(resource);
+		}
 	}
 
 	/**
@@ -69,8 +64,10 @@ public class JedisPool extends Pool<Jedis> {
 	 */
 	@Override
 	public void returnResource(final Jedis resource) {
-		resource.resetState();
-		returnResourceObject(resource);
+		if (resource != null) {
+			resource.resetState();
+			returnResourceObject(resource);
+		}
 	}
 
 	public HostAndPort getAddress() {

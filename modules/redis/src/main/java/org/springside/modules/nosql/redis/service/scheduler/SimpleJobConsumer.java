@@ -11,11 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.utils.Threads;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
-import redis.clients.util.Pool;
 
 /*
  * 简单的基于brpop()API, 阻塞的取出任务。
@@ -32,7 +32,7 @@ public class SimpleJobConsumer {
 	private String readyJobKey;
 	private int popupTimeoutSecs = DEFAULT_POPUP_TIMEOUT_SECONDS;
 
-	public SimpleJobConsumer(String jobName, Pool<Jedis> jedisPool) {
+	public SimpleJobConsumer(String jobName, JedisPool jedisPool) {
 		jedisTemplate = new JedisTemplate(jedisPool);
 		readyJobKey = Keys.getReadyJobKey(jobName);
 	}

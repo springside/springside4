@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.nosql.redis.pool;
 
 import java.util.ArrayList;
@@ -51,7 +56,7 @@ public final class JedisSentinelPool extends JedisPool {
 		assertArgument(((sentinelAddresses == null) || (sentinelAddresses.length == 0)), "seintinelInfos is not set");
 
 		for (HostAndPort sentinelInfo : sentinelAddresses) {
-			JedisPool sentinelPool = new JedisPool(sentinelInfo, new JedisPoolConfig());
+			JedisPool sentinelPool = new JedisDirectPool(sentinelInfo, new JedisPoolConfig());
 			sentinelPools.add(sentinelPool);
 		}
 

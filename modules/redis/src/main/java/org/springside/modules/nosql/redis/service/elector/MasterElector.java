@@ -19,11 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
 import org.springside.modules.nosql.redis.JedisUtils;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.utils.Threads;
 import org.springside.modules.utils.Threads.WrapExceptionRunnable;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.util.Pool;
 
 /**
  * Master选举实现, 基于setNx()与expire()两大API.
@@ -53,7 +53,7 @@ public class MasterElector implements Runnable {
 	private String masterKey = DEFAULT_MASTER_KEY;
 	private AtomicBoolean master = new AtomicBoolean(false);
 
-	public MasterElector(Pool<Jedis> jedisPool, int intervalSecs) {
+	public MasterElector(JedisPool jedisPool, int intervalSecs) {
 		this.jedisTemplate = new JedisTemplate(jedisPool);
 		this.intervalSecs = intervalSecs;
 		this.expireSecs = intervalSecs + (intervalSecs / 2);

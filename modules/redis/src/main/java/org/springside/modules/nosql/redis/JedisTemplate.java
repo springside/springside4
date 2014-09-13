@@ -11,28 +11,35 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import redis.clients.jedis.exceptions.JedisDataException;
 import redis.clients.jedis.exceptions.JedisException;
-import redis.clients.util.Pool;
 
 /**
  * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
  * JedisAction<T> 和 JedisActionNoResult两种回调接口，适用于有无返回值两种情况。
  * 同时提供一些JedisOperation中定义的 最常用函数的封装, 如get/set/zadd等。
  */
+
+/**
+ * JedisTemplate is the template to execute jedis actions, fetch and return the connection from the pool correctly.
+ */
 public class JedisTemplate {
+
 	private static Logger logger = LoggerFactory.getLogger(JedisTemplate.class);
 
-	private Pool<Jedis> jedisPool;
+	private JedisPool jedisPool;
 
-	public JedisTemplate(Pool<Jedis> jedisPool) {
+	public JedisTemplate(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
 	}
 
 	/**
-	 * 执行有返回结果的action。
+	 * Execute with a call back action with result.
 	 */
 	public <T> T execute(JedisAction<T> jedisAction) throws JedisException {
 		Jedis jedis = null;
@@ -40,9 +47,8 @@ public class JedisTemplate {
 		try {
 			jedis = jedisPool.getResource();
 			return jedisAction.action(jedis);
-		} catch (JedisConnectionException e) {
-			logger.error("Redis connection lost.", e);
-			broken = true;
+		} catch (JedisException e) {
+			broken = handleJedisException(e);
 			throw e;
 		} finally {
 			closeResource(jedis, broken);
@@ -50,7 +56,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 执行无返回结果的action。
+	 * Execute with a call back action without result.
 	 */
 	public void execute(JedisActionNoResult jedisAction) throws JedisException {
 		Jedis jedis = null;
@@ -58,9 +64,8 @@ public class JedisTemplate {
 		try {
 			jedis = jedisPool.getResource();
 			jedisAction.action(jedis);
-		} catch (JedisConnectionException e) {
-			logger.error("Redis connection lost.", e);
-			broken = true;
+		} catch (JedisException e) {
+			broken = handleJedisException(e);
 			throw e;
 		} finally {
 			closeResource(jedis, broken);
@@ -68,56 +73,76 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 根据连接是否已中断的标志，分别调用returnBrokenResource或returnResource。
+	 * Return the internal JedisPool.
 	 */
-	protected void closeResource(Jedis jedis, boolean connectionBroken) {
-		if (jedis != null) {
-			try {
-				if (connectionBroken) {
-					jedisPool.returnBrokenResource(jedis);
-				} else {
-					jedisPool.returnResource(jedis);
-				}
-			} catch (Exception e) {
-				logger.error("Error happen when return jedis to pool, try to close it directly.", e);
-				JedisUtils.destroyJedis(jedis);
-			}
-		}
-	}
-
-	/**
-	 * 获取内部的pool做进一步的动作。
-	 */
-	public Pool<Jedis> getJedisPool() {
+	public JedisPool getJedisPool() {
 		return jedisPool;
 	}
 
 	/**
-	 * 有返回结果的回调接口定义。
+	 * Handle jedisException, write log and return whether the connection is broken.
+	 */
+	protected boolean handleJedisException(JedisException jedisException) {
+		if (jedisException instanceof JedisConnectionException) {
+			logger.error("Redis connection " + jedisPool.getAddress() + " lost.", jedisException);
+		} else if (jedisException instanceof JedisDataException) {
+			if ((jedisException.getMessage() != null) && (jedisException.getMessage().indexOf("READONLY") != -1)) {
+				logger.error("Redis connection " + jedisPool.getAddress() + " are read-only slave.", jedisException);
+			} else {
+				// dataException, isBroken=false
+				return false;
+			}
+		} else {
+			logger.error("Jedis exception happen.", jedisException);
+		}
+		return true;
+	}
+
+	/**
+	 * Return jedis connection to the pool, call different return methods depends on the conectionBroken status.
+	 */
+	protected void closeResource(Jedis jedis, boolean conectionBroken) {
+		try {
+			if (conectionBroken) {
+				jedisPool.returnBrokenResource(jedis);
+			} else {
+				jedisPool.returnResource(jedis);
+			}
+		} catch (Exception e) {
+			logger.error("return back jedis failed, will fore close the jedis.", e);
+			JedisUtils.destroyJedis(jedis);
+		}
+
+	}
+
+	/**
+	 * Callback interface for template.
 	 */
 	public interface JedisAction<T> {
 		T action(Jedis jedis);
 	}
 
 	/**
-	 * 无返回结果的回调接口定义。
+	 * Callback interface for template without result.
 	 */
 	public interface JedisActionNoResult {
 		void action(Jedis jedis);
 	}
 
-	// ////////////// 常用方法的封装 ///////////////////////// //
+	// / Common Actions ///
 
-	// ////////////// 公共 ///////////////////////////
 	/**
-	 * 删除key, 如果key存在返回true, 否则返回false。
+	 * Remove the specified keys. If a given key does not exist no operation is
+	 * performed for this key.
+	 * 
+	 * return false if one of the key is not exist.
 	 */
 	public Boolean del(final String... keys) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
 			public Boolean action(Jedis jedis) {
-				return jedis.del(keys) == 1 ? true : false;
+				return jedis.del(keys) == keys.length ? true : false;
 			}
 		});
 	}
@@ -132,11 +157,13 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// 关于String ///////////////////////////
-	/**
-	 * 如果key不存在, 返回null.
-	 */
+	// / String Actions ///
 
+	/**
+	 * Get the value of the specified key. If the key does not exist null is
+	 * returned. If the value stored at key is not a string an error is returned
+	 * because GET can only handle string values.
+	 */
 	public String get(final String key) {
 		return execute(new JedisAction<String>() {
 
@@ -148,7 +175,7 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 如果key不存在, 返回null.
+	 * Get the value of the specified key as Long.If the key does not exist null is returned.
 	 */
 	public Long getAsLong(final String key) {
 		String result = get(key);
@@ -156,13 +183,32 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 如果key不存在, 返回null.
+	 * Get the value of the specified key as Integer.If the key does not exist null is returned.
 	 */
 	public Integer getAsInt(final String key) {
 		String result = get(key);
 		return result != null ? Integer.valueOf(result) : null;
 	}
 
+	/**
+	 * Get the values of all the specified keys. If one or more keys dont exist
+	 * or is not of type String, a 'nil' value is returned instead of the value
+	 * of the specified key, but the operation never fails.
+	 */
+	public List<String> mget(final String... keys) {
+		return execute(new JedisAction<List<String>>() {
+
+			@Override
+			public List<String> action(Jedis jedis) {
+				return jedis.mget(keys);
+			}
+		});
+	}
+
+	/**
+	 * Set the string value as value of the key. The string can't be longer than
+	 * 1073741824 bytes (1 GB).
+	 */
 	public void set(final String key, final String value) {
 		execute(new JedisActionNoResult() {
 
@@ -173,6 +219,11 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * The command is exactly equivalent to the following group of commands: {@link #set(String, String) SET} +
+	 * {@link #expire(String, int) EXPIRE}.
+	 * The operation is atomic.
+	 */
 	public void setex(final String key, final String value, final int seconds) {
 		execute(new JedisActionNoResult() {
 
@@ -184,9 +235,12 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 如果key还不存在则进行设置，返回true，否则返回false.
+	 * SETNX works exactly like {@link #setNX(String, String) SET} with the only
+	 * difference that if the key already exists no operation is performed.
+	 * SETNX actually means "SET if Not eXists".
+	 * 
+	 * return true if the key was set.
 	 */
-
 	public Boolean setnx(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 
@@ -198,9 +252,10 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * 综合setNX与setEx的效果。
+	 * The command is exactly equivalent to the following group of commands: {@link #setex(String, String, int) SETEX} +
+	 * {@link #sexnx(String, String) SETNX}.
+	 * The operation is atomic.
 	 */
-
 	public Boolean setnxex(final String key, final String value, final int seconds) {
 		return execute(new JedisAction<Boolean>() {
 
@@ -212,6 +267,34 @@ public class JedisTemplate {
 		});
 	}
 
+	/**
+	 * GETSET is an atomic set this value and return the old value command. Set
+	 * key to the string value and return the old value stored at key. The
+	 * string can't be longer than 1073741824 bytes (1 GB).
+	 */
+	public String getSet(final String key, final String value) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.getSet(key, value);
+			}
+		});
+	}
+
+	/**
+	 * Increment the number stored at key by one. If the key does not exist or
+	 * contains a value of a wrong type, set the key to the value of "0" before
+	 * to perform the increment operation.
+	 * <p>
+	 * INCR commands are limited to 64 bit signed integers.
+	 * <p>
+	 * Note: this is actually a string operation, that is, in Redis there are not "integer" types. Simply the string
+	 * stored at the key is parsed as a base 10 64 bit signed integer, incremented, and then converted back as a string.
+	 * 
+	 * @return Integer reply, this commands will reply with the new value of key
+	 *         after the increment.
+	 */
 	public Long incr(final String key) {
 		return execute(new JedisAction<Long>() {
 			@Override
@@ -221,6 +304,29 @@ public class JedisTemplate {
 		});
 	}
 
+	public Long incrBy(final String key, final long increment) {
+		return execute(new JedisAction<Long>() {
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.incrBy(key, increment);
+			}
+		});
+	}
+
+	public Double incrByFloat(final String key, final double increment) {
+		return execute(new JedisAction<Double>() {
+			@Override
+			public Double action(Jedis jedis) {
+				return jedis.incrByFloat(key, increment);
+			}
+		});
+	}
+
+	/**
+	 * Decrement the number stored at key by one. If the key does not exist or
+	 * contains a value of a wrong type, set the key to the value of "0" before
+	 * to perform the decrement operation.
+	 */
 	public Long decr(final String key) {
 		return execute(new JedisAction<Long>() {
 			@Override
@@ -230,32 +336,55 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// 关于Hash ///////////////////////////
-
-	public String hget(final String key, final String field) {
-		return execute(new JedisAction<String>() {
+	public Long decrBy(final String key, final long decrement) {
+		return execute(new JedisAction<Long>() {
 			@Override
-			public String action(Jedis jedis) {
-				return jedis.hget(key, field);
+			public Long action(Jedis jedis) {
+				return jedis.decrBy(key, decrement);
 			}
 		});
 	}
 
-	public void hset(final String key, final String field, final String value) {
+	// / Hash Actions ///
+	/**
+	 * If key holds a hash, retrieve the value associated to the specified
+	 * field.
+	 * <p>
+	 * If the field is not found or the key does not exist, a special 'nil' value is returned.
+	 */
+	public String hget(final String key, final String fieldName) {
+		return execute(new JedisAction<String>() {
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.hget(key, fieldName);
+			}
+		});
+	}
+
+	public List<String> hmget(final String key, final String[] fieldsName) {
+		return execute(new JedisAction<List<String>>() {
+			@Override
+			public List<String> action(Jedis jedis) {
+				return jedis.hmget(key, fieldsName);
+			}
+		});
+	}
+
+	public Map<String, String> hgetAll(final String key) {
+		return execute(new JedisAction<Map<String, String>>() {
+			@Override
+			public Map<String, String> action(Jedis jedis) {
+				return jedis.hgetAll(key);
+			}
+		});
+	}
+
+	public void hset(final String key, final String fieldName, final String value) {
 		execute(new JedisActionNoResult() {
 
 			@Override
 			public void action(Jedis jedis) {
-				jedis.hset(key, field, value);
-			}
-		});
-	}
-
-	public List<String> hmget(final String key, final String[] fields) {
-		return execute(new JedisAction<List<String>>() {
-			@Override
-			public List<String> action(Jedis jedis) {
-				return jedis.hmget(key, fields);
+				jedis.hset(key, fieldName, value);
 			}
 		});
 	}
@@ -266,6 +395,35 @@ public class JedisTemplate {
 			@Override
 			public void action(Jedis jedis) {
 				jedis.hmset(key, map);
+			}
+		});
+
+	}
+
+	public Boolean hsetnx(final String key, final String fieldName, final String value) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.hsetnx(key, fieldName, value) == 1 ? true : false;
+			}
+		});
+	}
+
+	public Long hincrBy(final String key, final String fieldName, final long increment) {
+		return execute(new JedisAction<Long>() {
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.hincrBy(key, fieldName, increment);
+			}
+		});
+	}
+
+	public Double hincrByFloat(final String key, final String fieldName, final double increment) {
+		return execute(new JedisAction<Double>() {
+			@Override
+			public Double action(Jedis jedis) {
+				return jedis.hincrByFloat(key, fieldName, increment);
 			}
 		});
 	}
@@ -279,6 +437,15 @@ public class JedisTemplate {
 		});
 	}
 
+	public Boolean hexists(final String key, final String fieldName) {
+		return execute(new JedisAction<Boolean>() {
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.hexists(key, fieldName);
+			}
+		});
+	}
+
 	public Set<String> hkeys(final String key) {
 		return execute(new JedisAction<Set<String>>() {
 			@Override
@@ -288,12 +455,22 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// 关于List ///////////////////////////
-	public void lpush(final String key, final String... values) {
-		execute(new JedisActionNoResult() {
+	public Long hlen(final String key) {
+		return execute(new JedisAction<Long>() {
 			@Override
-			public void action(Jedis jedis) {
-				jedis.lpush(key, values);
+			public Long action(Jedis jedis) {
+				return jedis.hlen(key);
+			}
+		});
+	}
+
+	// / List Actions ///
+
+	public Long lpush(final String key, final String... values) {
+		return execute(new JedisAction<Long>() {
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.lpush(key, values);
 			}
 		});
 	}
@@ -308,9 +485,62 @@ public class JedisTemplate {
 		});
 	}
 
+	public String brpop(final String key) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				List<String> nameValuePair = jedis.brpop(key);
+				if (nameValuePair != null) {
+					return nameValuePair.get(1);
+				} else {
+					return null;
+				}
+			}
+		});
+	}
+
+	public String brpop(final int timeout, final String key) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				List<String> nameValuePair = jedis.brpop(timeout, key);
+				if (nameValuePair != null) {
+					return nameValuePair.get(1);
+				} else {
+					return null;
+				}
+			}
+		});
+	}
+
 	/**
-	 * 返回List长度, key不存在时返回0，key类型不是list时抛出异常.
+	 * Not support for sharding.
 	 */
+	public String rpoplpush(final String sourceKey, final String destinationKey) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.rpoplpush(sourceKey, destinationKey);
+			}
+		});
+	}
+
+	/**
+	 * Not support for sharding.
+	 */
+	public String brpoplpush(final String source, final String destination, final int timeout) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.brpoplpush(source, destination, timeout);
+			}
+		});
+	}
+
 	public Long llen(final String key) {
 		return execute(new JedisAction<Long>() {
 
@@ -321,10 +551,45 @@ public class JedisTemplate {
 		});
 	}
 
-	/**
-	 * 删除List中的第一个等于value的元素，value不存在或key不存在时返回false.
-	 */
-	public Boolean lremOne(final String key, final String value) {
+	public String lindex(final String key, final long index) {
+		return execute(new JedisAction<String>() {
+
+			@Override
+			public String action(Jedis jedis) {
+				return jedis.lindex(key, index);
+			}
+		});
+	}
+
+	public List<String> lrange(final String key, final int start, final int end) {
+		return execute(new JedisAction<List<String>>() {
+
+			@Override
+			public List<String> action(Jedis jedis) {
+				return jedis.lrange(key, start, end);
+			}
+		});
+	}
+
+	public void ltrim(final String key, final int start, final int end) {
+		execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				jedis.ltrim(key, start, end);
+			}
+		});
+	}
+
+	public void ltrimFromLeft(final String key, final int size) {
+		execute(new JedisActionNoResult() {
+			@Override
+			public void action(Jedis jedis) {
+				jedis.ltrim(key, 0, size - 1);
+			}
+		});
+	}
+
+	public Boolean lremFirst(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
 			public Boolean action(Jedis jedis) {
@@ -334,9 +599,6 @@ public class JedisTemplate {
 		});
 	}
 
-	/**
-	 * 删除List中的所有等于value的元素，value不存在或key不存在时返回false.
-	 */
 	public Boolean lremAll(final String key, final String value) {
 		return execute(new JedisAction<Boolean>() {
 			@Override
@@ -347,11 +609,37 @@ public class JedisTemplate {
 		});
 	}
 
-	// ////////////// 关于Sorted Set ///////////////////////////
+	// / Set Actions ///
 	/**
-	 * 加入Sorted set, 如果member在Set里已存在, 只更新score并返回false, 否则返回true.
+	 * @param key
+	 * @param member
+	 * @return true for add new element, false for only update the score.
 	 */
-	public Boolean zadd(final String key, final String member, final double score) {
+	public Boolean sadd(final String key, final String member) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.sadd(key, member) == 1 ? true : false;
+			}
+		});
+	}
+
+	public Set<String> smembers(final String key) {
+		return execute(new JedisAction<Set<String>>() {
+
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.smembers(key);
+			}
+		});
+	}
+
+	// / Ordered Set Actions ///
+	/**
+	 * return true for add new element, false for only update the score.
+	 */
+	public Boolean zadd(final String key, final double score, final String member) {
 		return execute(new JedisAction<Boolean>() {
 
 			@Override
@@ -361,22 +649,6 @@ public class JedisTemplate {
 		});
 	}
 
-	/**
-	 * 删除sorted set中的元素，成功删除返回true，key或member不存在返回false。
-	 */
-	public Boolean zrem(final String key, final String member) {
-		return execute(new JedisAction<Boolean>() {
-
-			@Override
-			public Boolean action(Jedis jedis) {
-				return jedis.zrem(key, member) == 1 ? true : false;
-			}
-		});
-	}
-
-	/**
-	 * 当key不存在时返回null.
-	 */
 	public Double zscore(final String key, final String member) {
 		return execute(new JedisAction<Double>() {
 
@@ -387,9 +659,146 @@ public class JedisTemplate {
 		});
 	}
 
-	/**
-	 * 返回sorted set长度, key不存在时返回0.
-	 */
+	public Long zrank(final String key, final String member) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zrank(key, member);
+			}
+		});
+	}
+
+	public Long zrevrank(final String key, final String member) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zrevrank(key, member);
+			}
+		});
+	}
+
+	public Long zcount(final String key, final double min, final double max) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zcount(key, min, max);
+			}
+		});
+	}
+
+	public Set<String> zrange(final String key, final int start, final int end) {
+		return execute(new JedisAction<Set<String>>() {
+
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.zrange(key, start, end);
+			}
+		});
+	}
+
+	public Set<Tuple> zrangeWithScores(final String key, final int start, final int end) {
+		return execute(new JedisAction<Set<Tuple>>() {
+
+			@Override
+			public Set<Tuple> action(Jedis jedis) {
+				return jedis.zrangeWithScores(key, start, end);
+			}
+		});
+	}
+
+	public Set<String> zrevrange(final String key, final int start, final int end) {
+		return execute(new JedisAction<Set<String>>() {
+
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.zrevrange(key, start, end);
+			}
+		});
+	}
+
+	public Set<Tuple> zrevrangeWithScores(final String key, final int start, final int end) {
+		return execute(new JedisAction<Set<Tuple>>() {
+
+			@Override
+			public Set<Tuple> action(Jedis jedis) {
+				return jedis.zrevrangeWithScores(key, start, end);
+			}
+		});
+	}
+
+	public Set<String> zrangeByScore(final String key, final double min, final double max) {
+		return execute(new JedisAction<Set<String>>() {
+
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.zrangeByScore(key, min, max);
+			}
+		});
+	}
+
+	public Set<Tuple> zrangeByScoreWithScores(final String key, final double min, final double max) {
+		return execute(new JedisAction<Set<Tuple>>() {
+
+			@Override
+			public Set<Tuple> action(Jedis jedis) {
+				return jedis.zrangeByScoreWithScores(key, min, max);
+			}
+		});
+	}
+
+	public Set<String> zrevrangeByScore(final String key, final double max, final double min) {
+		return execute(new JedisAction<Set<String>>() {
+
+			@Override
+			public Set<String> action(Jedis jedis) {
+				return jedis.zrevrangeByScore(key, max, min);
+			}
+		});
+	}
+
+	public Set<Tuple> zrevrangeByScoreWithScores(final String key, final double max, final double min) {
+		return execute(new JedisAction<Set<Tuple>>() {
+
+			@Override
+			public Set<Tuple> action(Jedis jedis) {
+				return jedis.zrevrangeByScoreWithScores(key, max, min);
+			}
+		});
+	}
+
+	public Boolean zrem(final String key, final String member) {
+		return execute(new JedisAction<Boolean>() {
+
+			@Override
+			public Boolean action(Jedis jedis) {
+				return jedis.zrem(key, member) == 1 ? true : false;
+			}
+		});
+	}
+
+	public Long zremByScore(final String key, final double start, final double end) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zremrangeByScore(key, start, end);
+			}
+		});
+	}
+
+	public Long zremByRank(final String key, final long start, final long end) {
+		return execute(new JedisAction<Long>() {
+
+			@Override
+			public Long action(Jedis jedis) {
+				return jedis.zremrangeByRank(key, start, end);
+			}
+		});
+	}
+
 	public Long zcard(final String key) {
 		return execute(new JedisAction<Long>() {
 

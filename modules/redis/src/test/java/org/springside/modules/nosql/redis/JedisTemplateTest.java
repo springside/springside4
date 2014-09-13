@@ -14,9 +14,9 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import com.lordofthejars.nosqlunit.redis.EmbeddedRedis;
 import com.lordofthejars.nosqlunit.redis.EmbeddedRedis.EmbeddedRedisRuleBuilder;
@@ -127,7 +127,7 @@ public class JedisTemplateTest {
 		jedisTemplate.lpush(key, value);
 		jedisTemplate.lpush(key, value);
 		assertThat(jedisTemplate.llen(key)).isEqualTo(3);
-		assertThat(jedisTemplate.lremOne(key, value)).isTrue();
+		assertThat(jedisTemplate.lremFirst(key, value)).isTrue();
 		assertThat(jedisTemplate.llen(key)).isEqualTo(2);
 		assertThat(jedisTemplate.lremAll(key, value)).isTrue();
 		assertThat(jedisTemplate.llen(key)).isEqualTo(0);
@@ -144,8 +144,8 @@ public class JedisTemplateTest {
 		double score2 = 2;
 
 		// zadd
-		assertThat(jedisTemplate.zadd(key, member, score1)).isTrue();
-		assertThat(jedisTemplate.zadd(key, member2, score2)).isTrue();
+		assertThat(jedisTemplate.zadd(key, score1, member)).isTrue();
+		assertThat(jedisTemplate.zadd(key, score2, member2)).isTrue();
 
 		// zcard
 		assertThat(jedisTemplate.zcard(key)).isEqualTo(2);
@@ -157,7 +157,7 @@ public class JedisTemplateTest {
 		assertThat(jedisTemplate.zrem(key, member2 + "not.exist")).isFalse();
 
 		// unique & zscore
-		assertThat(jedisTemplate.zadd(key, member, score11)).isFalse();
+		assertThat(jedisTemplate.zadd(key, score11, member)).isFalse();
 		assertThat(jedisTemplate.zcard(key)).isEqualTo(1);
 		assertThat(jedisTemplate.zscore(key, member)).isEqualTo(score11);
 		assertThat(jedisTemplate.zscore(key, member + "not.exist")).isNull();
