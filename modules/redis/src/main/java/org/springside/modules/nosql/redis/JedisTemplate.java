@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Pipeline;
 import redis.clients.jedis.Tuple;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import redis.clients.jedis.exceptions.JedisDataException;
@@ -22,11 +23,9 @@ import redis.clients.jedis.exceptions.JedisException;
 /**
  * JedisTemplate 提供了一个template方法，负责对Jedis连接的获取与归还。
  * JedisAction<T> 和 JedisActionNoResult两种回调接口，适用于有无返回值两种情况。
+ * PipelineAction 与 PipelineActionResult两种接口，适合于pipeline中批量传输命令的情况。
+ * 
  * 同时提供一些JedisOperation中定义的 最常用函数的封装, 如get/set/zadd等。
- */
-
-/**
- * JedisTemplate is the template to execute jedis actions, fetch and return the connection from the pool correctly.
  */
 public class JedisTemplate {
 
@@ -36,6 +35,34 @@ public class JedisTemplate {
 
 	public JedisTemplate(JedisPool jedisPool) {
 		this.jedisPool = jedisPool;
+	}
+
+	/**
+	 * Callback interface for template.
+	 */
+	public interface JedisAction<T> {
+		T action(Jedis jedis);
+	}
+
+	/**
+	 * Callback interface for template without result.
+	 */
+	public interface JedisActionNoResult {
+		void action(Jedis jedis);
+	}
+
+	/**
+	 * Callback interface for template.
+	 */
+	public interface PipelineAction {
+		List<Object> action(Pipeline Pipeline);
+	}
+
+	/**
+	 * Callback interface for template without result.
+	 */
+	public interface PipelineActionNoResult {
+		void action(Pipeline Pipeline);
 	}
 
 	/**
@@ -64,6 +91,44 @@ public class JedisTemplate {
 		try {
 			jedis = jedisPool.getResource();
 			jedisAction.action(jedis);
+		} catch (JedisException e) {
+			broken = handleJedisException(e);
+			throw e;
+		} finally {
+			closeResource(jedis, broken);
+		}
+	}
+
+	/**
+	 * Execute with a call back action with result in pipeline.
+	 */
+	public List<Object> execute(PipelineAction pipelineAction) throws JedisException {
+		Jedis jedis = null;
+		boolean broken = false;
+		try {
+			jedis = jedisPool.getResource();
+			Pipeline pipeline = jedis.pipelined();
+			pipelineAction.action(pipeline);
+			return pipeline.syncAndReturnAll();
+		} catch (JedisException e) {
+			broken = handleJedisException(e);
+			throw e;
+		} finally {
+			closeResource(jedis, broken);
+		}
+	}
+
+	/**
+	 * Execute with a call back action without result in pipeline.
+	 */
+	public void execute(PipelineActionNoResult pipelineAction) throws JedisException {
+		Jedis jedis = null;
+		boolean broken = false;
+		try {
+			jedis = jedisPool.getResource();
+			Pipeline pipeline = jedis.pipelined();
+			pipelineAction.action(pipeline);
+			pipeline.sync();
 		} catch (JedisException e) {
 			broken = handleJedisException(e);
 			throw e;
@@ -113,20 +178,6 @@ public class JedisTemplate {
 			JedisUtils.destroyJedis(jedis);
 		}
 
-	}
-
-	/**
-	 * Callback interface for template.
-	 */
-	public interface JedisAction<T> {
-		T action(Jedis jedis);
-	}
-
-	/**
-	 * Callback interface for template without result.
-	 */
-	public interface JedisActionNoResult {
-		void action(Jedis jedis);
 	}
 
 	// / Common Actions ///

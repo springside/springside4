@@ -13,6 +13,8 @@ import java.util.TreeMap;
 
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
+import org.springside.modules.nosql.redis.JedisTemplate.PipelineAction;
+import org.springside.modules.nosql.redis.JedisTemplate.PipelineActionNoResult;
 import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Tuple;
@@ -88,6 +90,22 @@ public class JedisShardedTemplate {
 	public void execute(String key, JedisActionNoResult jedisAction) throws JedisException {
 		JedisTemplate jedisTemplate = getShard(key);
 		jedisTemplate.execute(jedisAction);
+	}
+
+	/*
+	 * Execute the action, the action must process only one key.
+	 */
+	public List<Object> execute(String key, PipelineAction pipelineAction) throws JedisException {
+		JedisTemplate jedisTemplate = getShard(key);
+		return jedisTemplate.execute(pipelineAction);
+	}
+
+	/*
+	 * Execute the action, the action must process only one key.
+	 */
+	public void execute(String key, PipelineActionNoResult pipelineAction) throws JedisException {
+		JedisTemplate jedisTemplate = getShard(key);
+		jedisTemplate.execute(pipelineAction);
 	}
 
 	// / Common Actions ///
