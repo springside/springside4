@@ -32,18 +32,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- NOSQL -->
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- freemarker -->
 		<dependency>
 			<groupId>org.freemarker</groupId>
@@ -107,11 +95,6 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.lordofthejars</groupId>
-			<artifactId>nosqlunit-redis</artifactId>
 		</dependency>
 
 		<!-- Mail -->
