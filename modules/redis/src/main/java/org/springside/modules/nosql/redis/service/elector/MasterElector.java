@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.nosql.redis.elector;
+package org.springside.modules.nosql.redis.service.elector;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

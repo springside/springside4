@@ -5,9 +5,9 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.elector;
 
-import org.springside.modules.nosql.redis.elector.MasterElector;
 import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
+import org.springside.modules.nosql.redis.service.elector.MasterElector;
 
 public class MasterElectorDemo {
 

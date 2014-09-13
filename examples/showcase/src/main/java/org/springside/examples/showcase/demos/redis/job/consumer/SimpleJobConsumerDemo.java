@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
-import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
+import org.springside.modules.nosql.redis.service.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import com.google.common.util.concurrent.RateLimiter;

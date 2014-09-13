@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.nosql.redis.scheduler;
+package org.springside.modules.nosql.redis.service.scheduler;
 
 import java.util.List;
 import java.util.concurrent.Executors;

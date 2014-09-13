@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
-import org.springside.modules.nosql.redis.scheduler.AdvancedJobConsumer;
-import org.springside.modules.nosql.redis.scheduler.SimpleJobConsumer;
+import org.springside.modules.nosql.redis.service.scheduler.AdvancedJobConsumer;
+import org.springside.modules.nosql.redis.service.scheduler.SimpleJobConsumer;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 import org.springside.modules.utils.Threads;
 

@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springside.examples.showcase.demos.redis.job.dispatcher.SimpleJobDispatcherDemo;
 import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
-import org.springside.modules.nosql.redis.scheduler.JobProducer;
+import org.springside.modules.nosql.redis.service.scheduler.JobProducer;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 

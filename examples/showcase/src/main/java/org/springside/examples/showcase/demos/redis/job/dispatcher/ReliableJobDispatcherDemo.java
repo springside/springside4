@@ -12,8 +12,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
-import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
-import org.springside.modules.nosql.redis.scheduler.JobStatistics;
+import org.springside.modules.nosql.redis.service.scheduler.JobDispatcher;
+import org.springside.modules.nosql.redis.service.scheduler.JobStatistics;
 
 /**
  * 运行JobDispatcher，每秒将Job从"job:ss:scheduled" sorted set 发布到"job:ss:ready" list.
