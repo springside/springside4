@@ -9,68 +9,17 @@ public class ConnectionInfo {
 
 	public static final String DEFAULT_PASSWORD = null;
 
-	private String host;
-	private int port;
-	private int timeout;
-	private String password;
-	private int database;
-	private String clientName;
+	private int database = Protocol.DEFAULT_DATABASE;
+	private String password = DEFAULT_PASSWORD;
+	private int timeout = Protocol.DEFAULT_TIMEOUT;
 
-	public ConnectionInfo(String host) {
-		this(host, Protocol.DEFAULT_PORT, Protocol.DEFAULT_TIMEOUT, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
+	public ConnectionInfo() {
 	}
 
-	public ConnectionInfo(String host, int port) {
-		this(host, port, Protocol.DEFAULT_TIMEOUT, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
-	}
-
-	public ConnectionInfo(String host, int port, int timeout) {
-		this(host, port, timeout, DEFAULT_PASSWORD, Protocol.DEFAULT_DATABASE, null);
-	}
-
-	public ConnectionInfo(String host, int port, int timeout, String password, int database, String clientName) {
-		this.host = host;
-		this.port = port;
+	public ConnectionInfo(int database, String password, int timeout) {
 		this.timeout = timeout;
 		this.password = password;
 		this.database = database;
-		this.clientName = clientName;
-	}
-
-	public String getHostAndPort() {
-		return new StringBuilder().append(host).append(":").append(port).toString();
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public void setHost(String host) {
-		this.host = host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	public int getTimeout() {
-		return timeout;
-	}
-
-	public void setTimeout(int timeout) {
-		this.timeout = timeout;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
 	}
 
 	public int getDatabase() {
@@ -81,17 +30,24 @@ public class ConnectionInfo {
 		this.database = database;
 	}
 
-	public String getClientName() {
-		return clientName;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
 	}
 
 	@Override
 	public String toString() {
-		return "ConnectionInfo [host=" + host + ", port=" + port + ", timeout=" + timeout + ", password=" + password
-				+ ", database=" + database + ", clientName=" + clientName + "]";
+		return "ConnectionInfo [database=" + database + ", password=" + password + ", timeout=" + timeout + "]";
 	}
 }

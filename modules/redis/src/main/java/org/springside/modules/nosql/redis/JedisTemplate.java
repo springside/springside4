@@ -80,7 +80,7 @@ public class JedisTemplate {
 				}
 			} catch (Exception e) {
 				logger.error("Error happen when return jedis to pool, try to close it directly.", e);
-				JedisUtils.closeJedis(jedis);
+				JedisUtils.destroyJedis(jedis);
 			}
 		}
 	}

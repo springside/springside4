@@ -10,12 +10,12 @@ import java.security.SecureRandom;
 import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisActionNoResult;
-import org.springside.modules.nosql.redis.JedisUtils;
+import org.springside.modules.nosql.redis.pool.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 /**
  * 测试Redis用于Session管理的setEx()与get()方法性能, 使用JSON格式存储数据.
@@ -44,8 +44,7 @@ public class RedisSessionBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
-				JedisUtils.DEFAULT_TIMEOUT, threadCount);
+		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
 		jedisTemplate = new JedisTemplate(pool);
 
 		// 清空数据库

@@ -6,11 +6,10 @@
 package org.springside.examples.showcase.demos.redis;
 
 import org.springside.modules.nosql.redis.JedisTemplate;
-import org.springside.modules.nosql.redis.JedisUtils;
+import org.springside.modules.nosql.redis.pool.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
 import org.springside.modules.test.benchmark.BenchmarkTask;
 import org.springside.modules.test.benchmark.ConcurrentBenchmark;
-
-import redis.clients.jedis.JedisPool;
 
 /**
  * 测试Redis用于计数器时incr()方法的性能.
@@ -39,8 +38,8 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
-				JedisUtils.DEFAULT_TIMEOUT, threadCount);
+
+		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
 		jedisTemplate = new JedisTemplate(pool);
 
 		// 重置Counter

@@ -9,9 +9,9 @@ import java.util.List;
 
 import org.springside.modules.nosql.redis.JedisScriptExecutor;
 import org.springside.modules.nosql.redis.JedisTemplate;
+import org.springside.modules.nosql.redis.pool.JedisPool;
 import org.springside.modules.utils.Threads;
 
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import com.google.common.collect.Lists;

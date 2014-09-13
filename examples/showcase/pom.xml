@@ -35,6 +35,10 @@
 			<groupId>org.springside</groupId>
 			<artifactId>springside-metrics</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springside</groupId>
+			<artifactId>springside-redis</artifactId>
+		</dependency>
 		<!-- SPRINGSIDE end -->
 
 		<!-- SPRING basic begin -->
