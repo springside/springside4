@@ -7,6 +7,8 @@ package org.springside.modules.nosql.redis.pool;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.slf4j.Logger;
@@ -14,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springside.modules.nosql.redis.JedisTemplate;
 import org.springside.modules.nosql.redis.JedisTemplate.JedisAction;
 import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.utils.Threads;
 
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
@@ -22,6 +23,9 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.JedisPubSub;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
+/**
+ * Pool which to get redis master address get from sentinel instances.
+ */
 /**
  * Pool which to get redis master address get from sentinel instances.
  */
@@ -37,7 +41,7 @@ public final class JedisSentinelPool extends JedisPool {
 	private String masterName;
 	private JedisPoolConfig masterPoolConfig;
 	private ConnectionInfo masterConnectionInfo;
-	private AtomicBoolean poolInit = new AtomicBoolean(false);
+	private CountDownLatch poolInit = new CountDownLatch(1);
 
 	/**
 	 * Creates a new instance of <code>JedisSentinelPool</code>.
@@ -76,29 +80,17 @@ public final class JedisSentinelPool extends JedisPool {
 		masterSwitchListener = new MasterSwitchListener();
 		masterSwitchListener.start();
 
-		waitForPoolInit(5000);
+		try {
+			if (!poolInit.await(5, TimeUnit.SECONDS)) {
+				logger.warn("the sentiel pool can't not init in 5 seconds");
+			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	public JedisSentinelPool(HostAndPort[] sentinelAddresses, String masterName, JedisPoolConfig masterPoolConfig) {
 		this(sentinelAddresses, masterName, new ConnectionInfo(), masterPoolConfig);
-	}
-
-	@Override
-	public Jedis getResource() {
-		if (!poolInit.get()) {
-			waitForPoolInit(1000);
-		}
-		return super.getResource();
-	}
-
-	private void waitForPoolInit(long mills) {
-		long startTime = System.currentTimeMillis();
-		while (!poolInit.get() && ((System.currentTimeMillis() - startTime) < mills)) {
-			Threads.sleep(100);
-		}
-		if (!poolInit.get()) {
-			logger.warn("Wait for pool init but timeout");
-		}
 	}
 
 	@Override
@@ -190,7 +182,6 @@ public final class JedisSentinelPool extends JedisPool {
 
 						if ((internalPool != null) && isAddressChange(masterAddress)) {
 							logger.info("The internalPool {} had changed, destroy it now.", previousMasterAddress);
-							poolInit.set(false);
 							destroyInternelPool();
 						}
 
@@ -198,7 +189,7 @@ public final class JedisSentinelPool extends JedisPool {
 							logger.info("The internalPool {} is not init or the address had changed, init it now.",
 									masterAddress);
 							initInternalPool(masterAddress, masterConnectionInfo, masterPoolConfig);
-							poolInit.set(true);
+							poolInit.countDown();
 						}
 
 						previousMasterAddress = masterAddress;
@@ -303,10 +294,8 @@ public final class JedisSentinelPool extends JedisPool {
 					HostAndPort masterAddress = new HostAndPort(switchMasterMsg[3],
 							Integer.parseInt(switchMasterMsg[4]));
 					logger.info("Switch master to " + masterAddress);
-					poolInit.set(false);
 					destroyInternelPool();
 					initInternalPool(masterAddress, masterConnectionInfo, masterPoolConfig);
-					poolInit.set(true);
 					previousMasterAddress = masterAddress;
 				}
 			}
