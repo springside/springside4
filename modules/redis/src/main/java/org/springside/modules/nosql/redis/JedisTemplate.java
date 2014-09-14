@@ -257,8 +257,8 @@ public class JedisTemplate {
 	}
 
 	/**
-	 * Set the string value as value of the key. The string can't be longer than
-	 * 1073741824 bytes (1 GB).
+	 * Set the string value as value of the key.
+	 * The string can't be longer than 1073741824 bytes (1 GB).
 	 */
 	public void set(final String key, final String value) {
 		execute(new JedisActionNoResult() {
@@ -412,7 +412,7 @@ public class JedisTemplate {
 		});
 	}
 
-	public List<String> hmget(final String key, final String[] fieldsName) {
+	public List<String> hmget(final String key, final String... fieldsName) {
 		return execute(new JedisAction<List<String>>() {
 			@Override
 			public List<String> action(Jedis jedis) {
@@ -479,11 +479,11 @@ public class JedisTemplate {
 		});
 	}
 
-	public Long hdel(final String key, final String... fieldsName) {
+	public Long hdel(final String key, final String... fieldsNames) {
 		return execute(new JedisAction<Long>() {
 			@Override
 			public Long action(Jedis jedis) {
-				return jedis.hdel(key, fieldsName);
+				return jedis.hdel(key, fieldsNames);
 			}
 		});
 	}
@@ -661,11 +661,6 @@ public class JedisTemplate {
 	}
 
 	// / Set Actions ///
-	/**
-	 * @param key
-	 * @param member
-	 * @return true for add new element, false for only update the score.
-	 */
 	public Boolean sadd(final String key, final String member) {
 		return execute(new JedisAction<Boolean>() {
 
