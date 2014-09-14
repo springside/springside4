@@ -412,11 +412,11 @@ public class JedisTemplate {
 		});
 	}
 
-	public List<String> hmget(final String key, final String... fieldsName) {
+	public List<String> hmget(final String key, final String... fieldsNames) {
 		return execute(new JedisAction<List<String>>() {
 			@Override
 			public List<String> action(Jedis jedis) {
-				return jedis.hmget(key, fieldsName);
+				return jedis.hmget(key, fieldsNames);
 			}
 		});
 	}
