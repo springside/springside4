@@ -66,7 +66,8 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printCounter(CounterMetric counter) {
-		output.printf("             count = %d%n", counter.totalCount);
+		output.printf("        last count = %d%n", counter.lastCount);
+		output.printf("       total count = %d%n", counter.totalCount);
 		output.printf("         last rate = %2.2f/s%n", counter.lastRate);
 		output.printf("         mean rate = %2.2f/s%n", counter.meanRate);
 	}

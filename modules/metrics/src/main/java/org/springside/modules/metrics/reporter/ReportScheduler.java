@@ -51,6 +51,10 @@ public class ReportScheduler {
 		reporters.add(reporter);
 	}
 
+	public void removeReporter(Reporter reporter) {
+		reporters.remove(reporter);
+	}
+
 	public void start(long period, TimeUnit unit) {
 		executor.scheduleAtFixedRate(new Runnable() {
 			@Override

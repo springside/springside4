@@ -97,6 +97,12 @@ public class MetricRegistry {
 		}
 	}
 
+	public void clearAll() {
+		counters.clear();
+		histograms.clear();
+		timers.clear();
+	}
+
 	private <T> T register(ConcurrentMap<String, T> metrics, String name, T newMetric) {
 		T existingMetric = metrics.putIfAbsent(name, newMetric);
 		if (existingMetric != null) {
