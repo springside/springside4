@@ -11,6 +11,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
+import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
 
@@ -47,6 +49,41 @@ public class JettyFactory {
 
 		return server;
 	}
+	
+	/**
+     * 创建支持SSL的，用于开发运行调试的Jetty Server, 以src/main/webapp为Web应用目录.
+     * 
+     * @param port  同{@link JettyFactory#createServerInSource}
+     * @param contextPath 同{@link JettyFactory#createServerInSource}
+     * @param keystore java keystore的绝对地址
+     * @param storePwd java keystore的秘钥
+     * @param keyMgrPwd java keystore的key phrase
+     */
+    public static Server createSSLServerInSource(int port, String contextPath,
+            String keystore, String storePwd, String keyMgrPwd) {
+                
+        SslSelectChannelConnector ssl_connector = new SslSelectChannelConnector();        
+        ssl_connector.setPort(port);        
+        // 解决Windows下重复启动Jetty居然不报告端口冲突的问题.
+        ssl_connector.setReuseAddress(false);
+        
+        SslContextFactory cf = ssl_connector.getSslContextFactory();
+        cf.setKeyStorePath(keystore);
+        cf.setKeyStorePassword(storePwd);
+        cf.setKeyManagerPassword(keyMgrPwd);
+        
+        Server server = new Server();
+        // 设置在JVM退出时关闭Jetty的钩子。
+        server.setStopAtShutdown(true);
+        server.setConnectors(new Connector[] { ssl_connector });
+
+        WebAppContext webContext = new WebAppContext(DEFAULT_WEBAPP_PATH, contextPath);
+        // 修改webdefault.xml，解决Windows下Jetty Lock住静态文件的问题.
+        webContext.setDefaultsDescriptor(WINDOWS_WEBDEFAULT_PATH);
+        server.setHandler(webContext);
+
+        return server;
+    }
 
 	/**
 	 * 设置除jstl-*.jar外其他含tld文件的jar包的名称.
