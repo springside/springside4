@@ -45,6 +45,12 @@
 			<artifactId>slf4j-api</artifactId>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- google java library -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
 
 		<!-- TEST -->
 		<dependency>

@@ -17,5 +17,6 @@
 		<module>core</module>
 		<module>extension</module>
 		<module>metrics</module>
+		<module>redis</module>
 	</modules>
 </project>
