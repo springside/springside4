@@ -71,7 +71,13 @@
 			<artifactId>logback-classic</artifactId>
 			<optional>true</optional>
 		</dependency>
-	</dependencies>
+
+		<dependency>
+    			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+		</dependency>
+
+</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
