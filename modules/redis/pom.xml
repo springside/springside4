@@ -45,7 +45,13 @@
 			<artifactId>slf4j-api</artifactId>
 			<optional>true</optional>
 		</dependency>
-
+		
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava-collections</artifactId>
+		  <version>r03</version>
+		</dependency>
+		
 		<!-- TEST -->
 		<dependency>
 			<groupId>junit</groupId>
