@@ -330,6 +330,12 @@
 			<artifactId>dozer</artifactId>
 		</dependency>
 
+		<dependency>
+		  <groupId>com.google.guava</groupId>
+		  <artifactId>guava-base</artifactId>
+		  <version>r03</version>
+		</dependency>
+		
 		<!-- email -->
 		<dependency>
 			<groupId>javax.mail</groupId>
