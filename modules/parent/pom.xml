@@ -99,6 +99,11 @@
 				<artifactId>springside-metrics</artifactId>
 				<version>${springside.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-redis</artifactId>
+				<version>${springside.version}</version>
+			</dependency>			
 			<!-- SPRINGSIDE MODULES end -->
 			
 			<!-- spring-->
