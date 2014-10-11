@@ -16,10 +16,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.test.category.UnStable;
 import org.springside.modules.test.log.LogbackListAppender;
 
-@Category(UnStable.class)
 public class ThreadsTest {
 
 	@Test

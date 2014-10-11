@@ -84,6 +84,12 @@
 			<!-- SPRINGSIDE MODULES begin -->
 			<dependency>
 				<groupId>org.springside</groupId>
+				<artifactId>springside-utils</artifactId>
+				<version>${springside.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
