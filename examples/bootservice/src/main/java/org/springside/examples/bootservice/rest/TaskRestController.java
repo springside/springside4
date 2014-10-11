@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,20 +25,26 @@ import org.springside.modules.web.MediaTypes;
 public class TaskRestController {
 
 	@Autowired
+	private CounterService counterService;
+
+	@Autowired
 	private TaskService taskService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	public List<Task> list() {
+		counterService.increment("task.list");
 		return taskService.getAllTask();
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	public Task get(@PathVariable("id") Long id) {
+		counterService.increment("task.get");
 		return taskService.getTask(id);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaTypes.JSON)
 	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
+		counterService.increment("task.create");
 		// 保存任务
 		taskService.saveTask(task);
 
@@ -59,12 +66,14 @@ public class TaskRestController {
 	// 按Restful风格约定，返回204状态码, 无内容. 也可以返回200状态码.
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@RequestBody Task task) {
+		counterService.increment("task.update");
 		taskService.saveTask(task);
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable("id") Long id) {
+		counterService.increment("task.delete");
 		taskService.deleteTask(id);
 	}
 }
