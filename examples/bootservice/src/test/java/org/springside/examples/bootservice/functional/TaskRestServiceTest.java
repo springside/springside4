@@ -20,46 +20,41 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.IntegrationTest;
+import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootservice.BootServiceApplication;
 import org.springside.examples.bootservice.domain.Task;
 import org.springside.examples.bootservice.domain.User;
 import org.springside.modules.test.data.RandomData;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@SpringApplicationConfiguration(classes = BootServiceApplication.class)
+@WebAppConfiguration
+@IntegrationTest("server.port=0")
+@DirtiesContext
 public class TaskRestServiceTest {
-	private static ConfigurableApplicationContext context;
 
-	private RestTemplate restTemplate = new RestTemplate();
-	private String resourceUrl = "http://localhost:8080/task";
+	@Value("${local.server.port}")
+	private int port;
 
-	@BeforeClass
-	public static void start() throws Exception {
-		Future<ConfigurableApplicationContext> future = Executors.newSingleThreadExecutor().submit(
-				new Callable<ConfigurableApplicationContext>() {
+	private RestTemplate restTemplate;
+	private String resourceUrl;
 
-					public ConfigurableApplicationContext call() throws Exception {
-						return SpringApplication.run(BootServiceApplication.class);
-					}
-				});
-		context = future.get(60, TimeUnit.SECONDS);
-	}
-
-	@AfterClass
-	public static void stop() {
-		if (context != null) {
-			context.close();
-		}
+	@Before
+	public void setup() {
+		restTemplate = new TestRestTemplate();
+		resourceUrl = "http://localhost:" + port + "/task";
 	}
 
 	@Test

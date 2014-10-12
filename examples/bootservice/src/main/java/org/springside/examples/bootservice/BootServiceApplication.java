@@ -7,7 +7,8 @@ import org.springframework.context.annotation.Configuration;
 
 // Spring Java Config的标识
 @Configuration
-@ComponentScan("org.springside.examples.bootservice")
+// Spring 默认扫描ClassPath中的Component，以本类所在地package为起点。
+@ComponentScan
 // Spring Boot的AutoConfig
 @EnableAutoConfiguration
 public class BootServiceApplication {
