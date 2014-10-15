@@ -32,7 +32,7 @@ public class TaskRestController {
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	public List<Task> list() {
-		counterService.increment("task.list");
+		counterService.increment("web.task.list");
 		return taskService.getAllTask();
 	}
 

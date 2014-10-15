@@ -9,6 +9,21 @@ Things not in demo
 
 2. use Jetty instead of Tomcat
 
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+
 3. disable  web in junit test use spring context
 
 	setWebEnvironment(false)
@@ -56,11 +71,21 @@ ServletRegistrationBean or FilterRegistrationBean
 
 11. configure web
 
-add context path
-server.contextPath
+1. add context path
+   server.contextPath
 
-set tomcat threads
+2. set tomcat threads
 
 12. JMX
 
-@ManagedResource, @ManagedAttribute, @ManagedOperation
+    1. add new jmx 
+    @ManagedResource, @ManagedAttribute, @ManagedOperation
+    
+    2. change jmx default domian name
+    endpoints.jmx.domain=myapp
+	endpoints.jmx.uniqueNames=true
+    
+
+13. APP id
+
+14. Custom Health information

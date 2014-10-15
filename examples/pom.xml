@@ -16,5 +16,7 @@
 	<modules>
 		<module>quickstart</module>
 		<module>showcase</module>
+		<module>boot-service</module>
+		<module>boot-more</module>
 	</modules>
 </project>

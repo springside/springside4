@@ -22,7 +22,7 @@ public class IndexRestController {
 
 	@RequestMapping(value = "/", produces = "text/html")
 	public String index() {
-		counterService.increment("index");
+		counterService.increment("web.index");
 		return "<html><body>"
 				+ "<p>Access below management endpoint:"
 				+ "<ul>"
