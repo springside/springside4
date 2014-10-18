@@ -5,11 +5,15 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import org.springside.modules.metrics.exporter.MetricRegistryListener;
 
 /**
  * 注册中心, 用户创建Metrics的入口.
@@ -24,7 +28,9 @@ public class MetricRegistry {
 
 	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
 	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
-	private ConcurrentMap<String, Execution> executions = new ConcurrentHashMap<String, Execution>();
+	private ConcurrentMap<String, Timer> timers = new ConcurrentHashMap<String, Timer>();
+
+	private List<MetricRegistryListener> listeners = new ArrayList<MetricRegistryListener>();
 
 	/**
 	 * 格式化以"."分割的Metrics Name的辅助函数.
@@ -73,22 +79,28 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 在注册中心获取或创建Execution, 使用默认的百分比计算设置(90%).
+	 * 在注册中心获取或创建Timer, 使用默认的百分比计算设置(90%).
 	 */
-	public Execution execution(String name) {
-		return execution(name, defaultPcts);
+	public Timer timer(String name) {
+		return timer(name, defaultPcts);
 	}
 
 	/**
-	 * 在注册中心获取或创建Execution, 并设置所需的百分比计算.
+	 * 在注册中心获取或创建Timer, 并设置所需的百分比计算.
 	 */
-	public Execution execution(String name, Double... pcts) {
-		if (executions.containsKey(name)) {
-			return executions.get(name);
+	public Timer timer(String name, Double... pcts) {
+		if (timers.containsKey(name)) {
+			return timers.get(name);
 		} else {
-			Execution execution = new Execution(pcts);
-			return register(executions, name, execution);
+			Timer timer = new Timer(pcts);
+			return register(timers, name, timer);
 		}
+	}
+
+	public void clearAll() {
+		counters.clear();
+		histograms.clear();
+		timers.clear();
 	}
 
 	private <T> T register(ConcurrentMap<String, T> metrics, String name, T newMetric) {
@@ -96,20 +108,46 @@ public class MetricRegistry {
 		if (existingMetric != null) {
 			return existingMetric;
 		} else {
+			notifyNewMetric(name, newMetric);
 			return newMetric;
 		}
 	}
 
+	private void notifyNewMetric(String name, Object newMetric) {
+		for (MetricRegistryListener listener : listeners) {
+			if (newMetric instanceof Counter) {
+				listener.onCounterAdded(name, (Counter) newMetric);
+			}
+			if (newMetric instanceof Histogram) {
+				listener.onHistogramAdded(name, (Histogram) newMetric);
+			}
+			if (newMetric instanceof Timer) {
+				listener.onTimerAdded(name, (Timer) newMetric);
+			}
+
+		}
+	}
+
+	/**
+	 * 返回所有Counter, 按名称排序.
+	 */
 	public SortedMap<String, Counter> getCounters() {
 		return getMetrics(counters);
 	}
+
+	/**
+	 * 返回所有Histogram, 按名称排序.
+	 */
 
 	public SortedMap<String, Histogram> getHistograms() {
 		return getMetrics(histograms);
 	}
 
-	public SortedMap<String, Execution> getExecutions() {
-		return getMetrics(executions);
+	/**
+	 * 返回所有Timer, 按名称排序.
+	 */
+	public SortedMap<String, Timer> getTimers() {
+		return getMetrics(timers);
 	}
 
 	/**
@@ -126,5 +164,12 @@ public class MetricRegistry {
 	 */
 	public void setDefaultPcts(Double[] defaultPcts) {
 		this.defaultPcts = defaultPcts;
+	}
+
+	/**
+	 * Exporter将自己加为Listener.
+	 */
+	public void addListener(MetricRegistryListener listener) {
+		listeners.add(listener);
 	}
 }

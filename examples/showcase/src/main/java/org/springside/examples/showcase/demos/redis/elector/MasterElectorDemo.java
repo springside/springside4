@@ -5,18 +5,15 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.redis.elector;
 
-import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
-import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.elector.MasterElector;
-
-import redis.clients.jedis.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
+import org.springside.modules.nosql.redis.service.elector.MasterElector;
 
 public class MasterElectorDemo {
 
 	public static void main(String[] args) throws Exception {
 
-		JedisPool pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
-				JedisUtils.DEFAULT_TIMEOUT, 1);
+		JedisPool pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(1).buildPool();
 		try {
 			MasterElector masterElector = new MasterElector(pool, 5);
 

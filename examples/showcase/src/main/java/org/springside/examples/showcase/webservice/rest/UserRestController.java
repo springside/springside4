@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springside.examples.showcase.entity.User;
 import org.springside.examples.showcase.service.AccountEffectiveService;
 import org.springside.modules.mapper.BeanMapper;
-import org.springside.modules.metrics.Execution;
-import org.springside.modules.metrics.Execution.ExecutionTimer;
+import org.springside.modules.metrics.Timer;
+import org.springside.modules.metrics.Timer.TimerContext;
 import org.springside.modules.metrics.MetricRegistry;
 
 /**
@@ -35,11 +35,11 @@ public class UserRestController {
 	@Autowired
 	private AccountEffectiveService accountService;
 
-	private Execution executionMetrics;
+	private Timer executionMetrics;
 
 	@PostConstruct
 	public void register() {
-		executionMetrics = MetricRegistry.INSTANCE.execution("REST.GetUser");
+		executionMetrics = MetricRegistry.INSTANCE.timer("REST.GetUser");
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class UserRestController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	public UserDTO getUser(@PathVariable("id") Long id) {
-		final ExecutionTimer exectuionTimer = executionMetrics.start();
+		final TimerContext exectuionTimer = executionMetrics.start();
 		try {
 			User user = accountService.getUser(id);
 
