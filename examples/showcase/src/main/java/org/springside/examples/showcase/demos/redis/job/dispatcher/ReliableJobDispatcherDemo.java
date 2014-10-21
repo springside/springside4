@@ -10,12 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.springside.examples.showcase.demos.redis.JedisPoolFactory;
-import org.springside.modules.nosql.redis.JedisUtils;
-import org.springside.modules.nosql.redis.scheduler.JobDispatcher;
-import org.springside.modules.nosql.redis.scheduler.JobStatistics;
-
-import redis.clients.jedis.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPool;
+import org.springside.modules.nosql.redis.pool.JedisPoolBuilder;
+import org.springside.modules.nosql.redis.service.scheduler.JobDispatcher;
+import org.springside.modules.nosql.redis.service.scheduler.JobStatistics;
 
 /**
  * 运行JobDispatcher，每秒将Job从"job:ss:scheduled" sorted set 发布到"job:ss:ready" list.
@@ -31,8 +29,7 @@ public class ReliableJobDispatcherDemo {
 
 	public static void main(String[] args) throws Exception {
 
-		JedisPool pool = JedisPoolFactory.createJedisPool(JedisUtils.DEFAULT_HOST, JedisUtils.DEFAULT_PORT,
-				JedisUtils.DEFAULT_TIMEOUT, 1);
+		JedisPool pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(1).buildPool();
 		try {
 			JobDispatcher dispatcher = new JobDispatcher("ss", pool);
 			dispatcher.setReliable(true);

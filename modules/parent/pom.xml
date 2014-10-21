@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.springside</groupId>
 	<artifactId>springside-parent</artifactId>
-	<version>4.2.3-SNAPSHOT</version>
+	<version>4.3.0-SNAPSHOT</version>
 	<name>Springside :: Module :: Parent</name>
 	<packaging>pom</packaging>
 
 	<properties>
 		<!-- 主要依赖库的版本定义 -->
-		<springside.version>4.2.3-SNAPSHOT</springside.version>
+		<springside.version>4.3.0-SNAPSHOT</springside.version>
 		<spring.version>4.0.5.RELEASE</spring.version>
 		<hibernate.version>4.3.5.Final</hibernate.version>
 		<mybatis.version>3.2.7</mybatis.version>
@@ -84,6 +84,12 @@
 			<!-- SPRINGSIDE MODULES begin -->
 			<dependency>
 				<groupId>org.springside</groupId>
+				<artifactId>springside-utils</artifactId>
+				<version>${springside.version}</version>
+				<scope>compile</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
@@ -99,6 +105,11 @@
 				<artifactId>springside-metrics</artifactId>
 				<version>${springside.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.springside</groupId>
+				<artifactId>springside-redis</artifactId>
+				<version>${springside.version}</version>
+			</dependency>			
 			<!-- SPRINGSIDE MODULES end -->
 			
 			<!-- spring-->

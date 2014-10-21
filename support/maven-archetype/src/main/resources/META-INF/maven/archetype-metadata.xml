@@ -61,6 +61,7 @@
       <directory>bin</directory>
       <includes>
         <include>**/*.bat</include>
+        <include>**/*.sh</include>
       </includes>
     </fileSet>
   </fileSets>
