@@ -5,7 +5,10 @@
  *******************************************************************************/
 package org.springside.examples.showcase.demos.cache.ehcache;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.List;
+
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -14,6 +17,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springside.modules.test.spring.SpringContextTestCase;
+
+import com.google.common.collect.Lists;
 
 /**
  * 演示Ehcache的配置.
@@ -39,16 +44,25 @@ public class EhcacheDemo extends SpringContextTestCase {
 
 		String key = "foo";
 		String value = "boo";
+		
+		List<Element> list = Lists.newArrayList(new Element(key, value), new Element("foo1", "value1"));  
 
 		put(key, value);
 		Object result = get(key);
 
 		assertThat(result).isEqualTo(value);
+		
+		cache.remove(key);
+		result = get(key);
+		assertThat(result).isNull();
+	
+		cache.putAll(list);
+		assertThat(cache.getSize()).isEqualTo(2);
 	}
 
 	public Object get(String key) {
 		Element element = cache.get(key);
-		return element.getObjectValue();
+		return null == element ? null : element.getObjectValue();
 	}
 
 	public void put(String key, Object value) {
