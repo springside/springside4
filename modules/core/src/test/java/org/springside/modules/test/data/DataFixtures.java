@@ -5,6 +5,8 @@
  *******************************************************************************/
 package org.springside.modules.test.data;
 
+import java.sql.SQLException;
+
 import javax.sql.DataSource;
 
 import org.springframework.core.io.DefaultResourceLoader;
@@ -13,7 +15,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.test.jdbc.JdbcTestUtils;
+import org.springframework.jdbc.datasource.init.ScriptUtils;
 
 /**
  * SQL数据文件导入工具类。
@@ -26,11 +28,12 @@ public class DataFixtures {
 
 	private static ResourceLoader resourceLoader = new DefaultResourceLoader();
 
-	public static void executeScript(DataSource dataSource, String... sqlResourcePaths) throws DataAccessException {
+	public static void executeScript(DataSource dataSource, String... sqlResourcePaths) throws DataAccessException, SQLException {
 		JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		for (String sqlResourcePath : sqlResourcePaths) {
 			Resource resource = resourceLoader.getResource(sqlResourcePath);
-			JdbcTestUtils.executeSqlScript(jdbcTemplate, new EncodedResource(resource, DEFAULT_ENCODING), true);
+			//JdbcTestUtils.executeSqlScript(jdbcTemplate, new EncodedResource(resource, DEFAULT_ENCODING), true);
+			ScriptUtils.executeSqlScript(jdbcTemplate.getDataSource().getConnection(), new EncodedResource(resource, DEFAULT_ENCODING));
 		}
 	}
 }
