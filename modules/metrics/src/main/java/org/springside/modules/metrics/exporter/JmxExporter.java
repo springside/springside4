@@ -17,6 +17,7 @@ import javax.management.ObjectName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
+import org.springside.modules.metrics.Gauge;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.MetricRegistry;
 import org.springside.modules.metrics.Timer;
@@ -40,6 +41,12 @@ public class JmxExporter implements MetricRegistryListener {
 	}
 
 	private void initMBeans() {
+
+		Map<String, Gauge> gauges = registry.getGauges();
+		for (Entry<String, Gauge> entry : gauges.entrySet()) {
+			onGaugeAdded(entry.getKey(), entry.getValue());
+		}
+
 		Map<String, Counter> counters = registry.getCounters();
 		for (Entry<String, Counter> entry : counters.entrySet()) {
 			onCounterAdded(entry.getKey(), entry.getValue());
@@ -91,6 +98,18 @@ public class JmxExporter implements MetricRegistryListener {
 	}
 
 	@Override
+	public void onGaugeAdded(String name, Gauge gauge) {
+		try {
+			final ObjectName objectName = createName("gauges", name);
+			registerMBean(new JmxGauge(gauge, objectName), objectName);
+		} catch (InstanceAlreadyExistsException e) {
+			logger.debug("Unable to register gauge", e);
+		} catch (JMException e) {
+			logger.warn("Unable to register gauge", e);
+		}
+	}
+
+	@Override
 	public void onCounterAdded(String name, Counter counter) {
 		try {
 			final ObjectName objectName = createName("counters", name);
@@ -109,9 +128,9 @@ public class JmxExporter implements MetricRegistryListener {
 			final ObjectName objectName = createName("histograms", name);
 			registerMBean(new JmxHistogram(histogram, objectName), objectName);
 		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register counter", e);
+			logger.debug("Unable to register histogram", e);
 		} catch (JMException e) {
-			logger.warn("Unable to register counter", e);
+			logger.warn("Unable to register histogram", e);
 		}
 
 	}
@@ -122,15 +141,19 @@ public class JmxExporter implements MetricRegistryListener {
 			final ObjectName objectName = createName("timers", name);
 			registerMBean(new JmxTimer(timer, objectName), objectName);
 		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register counter", e);
+			logger.debug("Unable to register timer", e);
 		} catch (JMException e) {
-			logger.warn("Unable to register counter", e);
+			logger.warn("Unable to register timer", e);
 		}
 
 	}
 
 	public interface MetricMBean {
 		ObjectName objectName();
+	}
+
+	public interface JmxGaugeMBean extends MetricMBean {
+		Number getValue();
 	}
 
 	public interface JmxCounterMBean extends MetricMBean {
@@ -141,7 +164,6 @@ public class JmxExporter implements MetricRegistryListener {
 		long getTotalCount();
 
 		double getTotalRate();
-
 	}
 
 	public interface JmxHistogramMBean extends MetricMBean {
@@ -151,7 +173,6 @@ public class JmxExporter implements MetricRegistryListener {
 		long getMax();
 
 		double getMean();
-
 	}
 
 	public interface JmxTimerMBean extends MetricMBean {
@@ -180,6 +201,21 @@ public class JmxExporter implements MetricRegistryListener {
 		@Override
 		public ObjectName objectName() {
 			return objectName;
+		}
+	}
+
+	private static class JmxGauge extends AbstractBean implements JmxGaugeMBean {
+
+		private final Gauge metric;
+
+		public JmxGauge(Gauge gauge, ObjectName objectName) {
+			super(objectName);
+			this.metric = gauge;
+		}
+
+		@Override
+		public Number getValue() {
+			return metric.snapshot;
 		}
 	}
 

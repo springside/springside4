@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 
 import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
+import org.springside.modules.metrics.Gauge;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.Timer;
@@ -23,10 +24,20 @@ public class ConsoleReporter implements Reporter {
 	private PrintStream output = System.out;
 
 	@Override
-	public void report(Map<String, Counter> counters, Map<String, Histogram> histograms, Map<String, Timer> timers) {
+	public void report(Map<String, Gauge> gauges, Map<String, Counter> counters, Map<String, Histogram> histograms,
+			Map<String, Timer> timers) {
 
 		printWithBanner(new Date().toString(), '=');
 		output.println();
+
+		if (!gauges.isEmpty()) {
+			printWithBanner("-- Gaugues", '-');
+			for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
+				output.println(entry.getKey());
+				printGauge(entry.getValue());
+			}
+			output.println();
+		}
 
 		if (!counters.isEmpty()) {
 			printWithBanner("-- Counters", '-');
@@ -63,6 +74,10 @@ public class ConsoleReporter implements Reporter {
 			output.print(c);
 		}
 		output.println();
+	}
+
+	private void printGauge(Gauge gauge) {
+		output.printf("             value = %s%n", gauge.snapshot);
 	}
 
 	private void printCounter(CounterMetric counter) {

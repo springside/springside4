@@ -17,6 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
+import org.springside.modules.metrics.Gauge;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.MetricRegistry;
 import org.springside.modules.metrics.Timer;
@@ -85,11 +86,16 @@ public class ReportScheduler {
 	public void report() {
 
 		// 取出所有Metrics,已按名称排序.
+		SortedMap<String, Gauge> gaugeMap = metricRegistry.getGauges();
 		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
 		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
 		SortedMap<String, Timer> timerMap = metricRegistry.getTimers();
 
 		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值
+		for (Gauge gauge : gaugeMap.values()) {
+			gauge.calculateMetric();
+		}
+
 		for (Counter counter : counterMap.values()) {
 			counter.calculateMetric();
 		}
@@ -104,7 +110,7 @@ public class ReportScheduler {
 
 		// 调度所有Reporters 输出 metrics值
 		for (Reporter reporter : reporters) {
-			reporter.report(counterMap, histogramMap, timerMap);
+			reporter.report(gaugeMap, counterMap, histogramMap, timerMap);
 		}
 	}
 

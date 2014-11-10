@@ -1,10 +1,13 @@
 package org.springside.modules.metrics.exporter;
 
 import org.springside.modules.metrics.Counter;
+import org.springside.modules.metrics.Gauge;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.Timer;
 
 public interface MetricRegistryListener {
+
+	void onGaugeAdded(String name, Gauge gauge);
 
 	void onCounterAdded(String name, Counter counter);
 

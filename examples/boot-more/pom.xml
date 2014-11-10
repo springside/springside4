@@ -4,14 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.springside.examples</groupId>
-	<artifactId>bootplus</artifactId>
+	<artifactId>boot-more</artifactId>
 	<version>4.3.0-SNAPSHOT</version>
 	<packaging>war</packaging>
-	<name>Springside :: Example :: SpringBoot WebService</name>
+	<name>Springside :: Example :: SpringBoot More demo</name>
 
 	<properties>
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
 		<spring-boot.version>1.1.8.RELEASE</spring-boot.version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.6</java.version>
 		<maven.compiler.source>${java.version}</maven.compiler.source>
@@ -23,6 +24,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -82,6 +89,12 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>

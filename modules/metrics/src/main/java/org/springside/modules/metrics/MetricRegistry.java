@@ -24,8 +24,9 @@ public class MetricRegistry {
 
 	public static final MetricRegistry INSTANCE = new MetricRegistry();
 
-	private Double[] defaultPcts = new Double[] { 90d };
+	private Double[] defaultPcts = new Double[] {};
 
+	private ConcurrentMap<String, Gauge> gauges = new ConcurrentHashMap<String, Gauge>();
 	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
 	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
 	private ConcurrentMap<String, Timer> timers = new ConcurrentHashMap<String, Timer>();
@@ -45,6 +46,13 @@ public class MetricRegistry {
 			}
 		}
 		return builder.toString();
+	}
+
+	/**
+	 * 在注册中心注册Gauge.
+	 */
+	public void registerGauge(String name, Gauge gauge) {
+		gauges.put(name, gauge);
 	}
 
 	/**
@@ -79,7 +87,7 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 在注册中心获取或创建Timer, 使用默认的百分比计算设置(90%).
+	 * 在注册中心获取或创建Timer, 使用默认的百分比计算设置().
 	 */
 	public Timer timer(String name) {
 		return timer(name, defaultPcts);
@@ -115,6 +123,9 @@ public class MetricRegistry {
 
 	private void notifyNewMetric(String name, Object newMetric) {
 		for (MetricRegistryListener listener : listeners) {
+			if (newMetric instanceof Gauge) {
+				listener.onGaugeAdded(name, (Gauge) newMetric);
+			}
 			if (newMetric instanceof Counter) {
 				listener.onCounterAdded(name, (Counter) newMetric);
 			}
@@ -124,15 +135,21 @@ public class MetricRegistry {
 			if (newMetric instanceof Timer) {
 				listener.onTimerAdded(name, (Timer) newMetric);
 			}
-
 		}
+	}
+
+	/**
+	 * 返回所有Gauge, 按名称排序.
+	 */
+	public SortedMap<String, Gauge> getGauges() {
+		return getSortedMetrics(gauges);
 	}
 
 	/**
 	 * 返回所有Counter, 按名称排序.
 	 */
 	public SortedMap<String, Counter> getCounters() {
-		return getMetrics(counters);
+		return getSortedMetrics(counters);
 	}
 
 	/**
@@ -140,14 +157,14 @@ public class MetricRegistry {
 	 */
 
 	public SortedMap<String, Histogram> getHistograms() {
-		return getMetrics(histograms);
+		return getSortedMetrics(histograms);
 	}
 
 	/**
 	 * 返回所有Timer, 按名称排序.
 	 */
 	public SortedMap<String, Timer> getTimers() {
-		return getMetrics(timers);
+		return getSortedMetrics(timers);
 	}
 
 	/**
@@ -155,7 +172,7 @@ public class MetricRegistry {
 	 * 
 	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次报告时需要用TreeMap重新排序.
 	 */
-	private <T> SortedMap<String, T> getMetrics(Map<String, T> metrics) {
+	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
 		return new TreeMap<String, T>(metrics);
 	}
 

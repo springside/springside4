@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.springside.modules.metrics.Timer.TimerContext;
 import org.springside.modules.metrics.utils.Clock.MockClock;
 
-public class ExecutionTest {
+public class TimerTest {
 
 	@Test
 	public void normal() {

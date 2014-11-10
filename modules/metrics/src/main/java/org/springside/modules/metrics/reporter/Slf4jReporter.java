@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
+import org.springside.modules.metrics.Gauge;
 import org.springside.modules.metrics.Histogram;
 import org.springside.modules.metrics.HistogramMetric;
 import org.springside.modules.metrics.Timer;
@@ -34,7 +35,13 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	@Override
-	public void report(Map<String, Counter> counters, Map<String, Histogram> histograms, Map<String, Timer> timers) {
+	public void report(Map<String, Gauge> gauges, Map<String, Counter> counters, Map<String, Histogram> histograms,
+			Map<String, Timer> timers) {
+
+		for (Entry<String, Gauge> entry : gauges.entrySet()) {
+			logGauge(entry.getKey(), entry.getValue().snapshot);
+		}
+
 		for (Entry<String, Counter> entry : counters.entrySet()) {
 			logCounter(entry.getKey(), entry.getValue().snapshot);
 		}
@@ -47,6 +54,10 @@ public class Slf4jReporter implements Reporter {
 			logTimer(entry.getKey(), entry.getValue().snapshot);
 		}
 
+	}
+
+	private void logGauge(String name, Number gauge) {
+		reportLogger.info("type=GAUGE, name={}, value={}", name, gauge);
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
