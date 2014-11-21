@@ -32,8 +32,8 @@ public class TimerTest {
 
 		assertThat(metric.counterMetric.totalCount).isEqualTo(2);
 		assertThat(metric.counterMetric.meanRate).isEqualTo(4);
-		assertThat(metric.counterMetric.lastCount).isEqualTo(2);
-		assertThat(metric.counterMetric.lastRate).isEqualTo(4);
+		assertThat(metric.counterMetric.latestCount).isEqualTo(2);
+		assertThat(metric.counterMetric.latestRate).isEqualTo(4);
 
 		assertThat(metric.histogramMetric.min).isEqualTo(200);
 		assertThat(metric.histogramMetric.mean).isEqualTo(250);

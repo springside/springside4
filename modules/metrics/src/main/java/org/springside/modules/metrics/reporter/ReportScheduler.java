@@ -7,7 +7,7 @@ package org.springside.modules.metrics.reporter;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -86,10 +86,10 @@ public class ReportScheduler {
 	public void report() {
 
 		// 取出所有Metrics,已按名称排序.
-		SortedMap<String, Gauge> gaugeMap = metricRegistry.getGauges();
-		SortedMap<String, Counter> counterMap = metricRegistry.getCounters();
-		SortedMap<String, Histogram> histogramMap = metricRegistry.getHistograms();
-		SortedMap<String, Timer> timerMap = metricRegistry.getTimers();
+		Map<String, Gauge> gaugeMap = metricRegistry.getGauges();
+		Map<String, Counter> counterMap = metricRegistry.getCounters();
+		Map<String, Histogram> histogramMap = metricRegistry.getHistograms();
+		Map<String, Timer> timerMap = metricRegistry.getTimers();
 
 		// 调度每个Metrics的caculateMetrics()方法，计算单位时间内的metrics值
 		for (Gauge gauge : gaugeMap.values()) {

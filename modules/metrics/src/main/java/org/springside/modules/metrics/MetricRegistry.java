@@ -8,8 +8,6 @@ package org.springside.modules.metrics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -68,29 +66,15 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 在注册中心获取或创建Histogram, 使用默认的百分比计算设置(90%).
-	 */
-	public Histogram histogram(String name) {
-		return histogram(name, defaultPcts);
-	}
-
-	/**
 	 * 在注册中心获取或创建Histogram, 并设置所需的百分比计算.
 	 */
 	public Histogram histogram(String name, Double... pcts) {
 		if (histograms.containsKey(name)) {
 			return histograms.get(name);
 		} else {
-			Histogram histogram = new Histogram(pcts);
+			Histogram histogram = new Histogram(((pcts != null) && (pcts.length > 0)) ? pcts : defaultPcts);
 			return register(histograms, name, histogram);
 		}
-	}
-
-	/**
-	 * 在注册中心获取或创建Timer, 使用默认的百分比计算设置().
-	 */
-	public Timer timer(String name) {
-		return timer(name, defaultPcts);
 	}
 
 	/**
@@ -100,11 +84,14 @@ public class MetricRegistry {
 		if (timers.containsKey(name)) {
 			return timers.get(name);
 		} else {
-			Timer timer = new Timer(pcts);
+			Timer timer = new Timer(((pcts != null) && (pcts.length > 0) ? pcts : defaultPcts));
 			return register(timers, name, timer);
 		}
 	}
 
+	/**
+	 * 快速清理注册表中全部Metrics.
+	 */
 	public void clearAll() {
 		for (MetricRegistryListener listener : listeners) {
 			for (String key : gauges.keySet()) {
@@ -160,39 +147,30 @@ public class MetricRegistry {
 	/**
 	 * 返回所有Gauge, 按名称排序.
 	 */
-	public SortedMap<String, Gauge> getGauges() {
-		return getSortedMetrics(gauges);
+	public Map<String, Gauge> getGauges() {
+		return gauges;
 	}
 
 	/**
 	 * 返回所有Counter, 按名称排序.
 	 */
-	public SortedMap<String, Counter> getCounters() {
-		return getSortedMetrics(counters);
+	public Map<String, Counter> getCounters() {
+		return counters;
 	}
 
 	/**
 	 * 返回所有Histogram, 按名称排序.
 	 */
 
-	public SortedMap<String, Histogram> getHistograms() {
-		return getSortedMetrics(histograms);
+	public Map<String, Histogram> getHistograms() {
+		return histograms;
 	}
 
 	/**
 	 * 返回所有Timer, 按名称排序.
 	 */
-	public SortedMap<String, Timer> getTimers() {
-		return getSortedMetrics(timers);
-	}
-
-	/**
-	 * 返回按metrics name排序的Map.
-	 * 
-	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次报告时需要用TreeMap重新排序.
-	 */
-	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
-		return new TreeMap<String, T>(metrics);
+	public Map<String, Timer> getTimers() {
+		return timers;
 	}
 
 	/**

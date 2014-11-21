@@ -11,6 +11,6 @@ public class TimerMetric {
 
 	@Override
 	public String toString() {
-		return "IimerMetric [counterMetric=" + counterMetric + ", histogramMetric=" + histogramMetric + "]";
+		return "TimerMetric [counterMetric=" + counterMetric + ", histogramMetric=" + histogramMetric + "]";
 	}
 }

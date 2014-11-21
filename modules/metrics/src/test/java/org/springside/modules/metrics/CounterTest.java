@@ -32,8 +32,8 @@ public class CounterTest {
 		CounterMetric metric = counter.calculateMetric();
 		assertThat(metric.totalCount).isEqualTo(60);
 		assertThat(metric.meanRate).isEqualTo(60);
-		assertThat(metric.lastCount).isEqualTo(60);
-		assertThat(metric.lastRate).isEqualTo(60);
+		assertThat(metric.latestCount).isEqualTo(60);
+		assertThat(metric.latestRate).isEqualTo(60);
 
 		counter.inc(20);
 		clock.increaseTime(1000);
@@ -41,8 +41,8 @@ public class CounterTest {
 
 		assertThat(metric.totalCount).isEqualTo(80);
 		assertThat(metric.meanRate).isEqualTo(40);
-		assertThat(metric.lastCount).isEqualTo(20);
-		assertThat(metric.lastRate).isEqualTo(20);
+		assertThat(metric.latestCount).isEqualTo(20);
+		assertThat(metric.latestRate).isEqualTo(20);
 	}
 
 	@Test
@@ -67,6 +67,6 @@ public class CounterTest {
 
 		CounterMetric metric = counter.calculateMetric();
 		assertThat(metric.totalCount).isEqualTo(0);
-		assertThat(metric.lastRate).isEqualTo(0);
+		assertThat(metric.latestRate).isEqualTo(0);
 	}
 }

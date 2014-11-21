@@ -9,6 +9,8 @@ import java.io.PrintStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.springside.modules.metrics.Counter;
 import org.springside.modules.metrics.CounterMetric;
@@ -32,7 +34,7 @@ public class ConsoleReporter implements Reporter {
 
 		if (!gauges.isEmpty()) {
 			printWithBanner("-- Gaugues", '-');
-			for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
+			for (Map.Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
 				output.println(entry.getKey());
 				printGauge(entry.getValue());
 			}
@@ -41,27 +43,27 @@ public class ConsoleReporter implements Reporter {
 
 		if (!counters.isEmpty()) {
 			printWithBanner("-- Counters", '-');
-			for (Map.Entry<String, Counter> entry : counters.entrySet()) {
+			for (Map.Entry<String, Counter> entry : getSortedMetrics(counters).entrySet()) {
 				output.println(entry.getKey());
-				printCounter(entry.getValue().snapshot);
+				printCounter(entry.getValue().latestMetric);
 			}
 			output.println();
 		}
 
 		if (!histograms.isEmpty()) {
 			printWithBanner("-- Histograms", '-');
-			for (Map.Entry<String, Histogram> entry : histograms.entrySet()) {
+			for (Map.Entry<String, Histogram> entry : getSortedMetrics(histograms).entrySet()) {
 				output.println(entry.getKey());
-				printHistogram(entry.getValue().snapshot);
+				printHistogram(entry.getValue().latestMetric);
 			}
 			output.println();
 		}
 
 		if (!timers.isEmpty()) {
 			printWithBanner("-- Timers", '-');
-			for (Map.Entry<String, Timer> entry : timers.entrySet()) {
+			for (Map.Entry<String, Timer> entry : getSortedMetrics(timers).entrySet()) {
 				output.println(entry.getKey());
-				printTimer(entry.getValue().snapshot);
+				printTimer(entry.getValue().latestMetric);
 			}
 			output.println();
 		}
@@ -81,9 +83,9 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printCounter(CounterMetric counter) {
-		output.printf("        last count = %d%n", counter.lastCount);
+		output.printf("      latest count = %d%n", counter.latestCount);
 		output.printf("       total count = %d%n", counter.totalCount);
-		output.printf("         last rate = %d%n", counter.lastRate);
+		output.printf("       latest rate = %d%n", counter.latestRate);
 		output.printf("         mean rate = %d%n", counter.meanRate);
 	}
 
@@ -97,14 +99,25 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printTimer(TimerMetric timer) {
-		output.printf("             count = %d%n", timer.counterMetric.totalCount);
-		output.printf("         last rate = %d%n", timer.counterMetric.lastRate);
+		output.printf("      latest count = %d%n", timer.counterMetric.latestCount);
+		output.printf("       total count = %d%n", timer.counterMetric.totalCount);
+		output.printf("       latest rate = %d%n", timer.counterMetric.latestRate);
 		output.printf("         mean rate = %d%n", timer.counterMetric.meanRate);
-		output.printf("               min = %d ms%n", timer.histogramMetric.min);
-		output.printf("               max = %d ms%n", timer.histogramMetric.max);
-		output.printf("              mean = %2.2f ms%n", timer.histogramMetric.mean);
+		output.printf("       min latency = %d ms%n", timer.histogramMetric.min);
+		output.printf("       max latency = %d ms%n", timer.histogramMetric.max);
+		output.printf("      mean latency = %2.2f ms%n", timer.histogramMetric.mean);
 		for (Entry<Double, Long> pct : timer.histogramMetric.pcts.entrySet()) {
-			output.printf("           %2.2f%% <= %d ms%n", pct.getKey(), pct.getValue());
+			output.printf("    %2.2f%% latency <= %d ms%n", pct.getKey(), pct.getValue());
 		}
 	}
+
+	/**
+	 * 返回按metrics name排序的Map.
+	 * 
+	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次报告时需要用TreeMap重新排序.
+	 */
+	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
+		return new TreeMap<String, T>(metrics);
+	}
+
 }

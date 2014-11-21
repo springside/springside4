@@ -84,24 +84,36 @@ public class JmxExporter implements MetricRegistryListener {
 		}
 	}
 
-	private void registerMBean(Object mBean, ObjectName objectName) throws InstanceAlreadyExistsException, JMException {
-		ObjectInstance objectInstance = mBeanServer.registerMBean(mBean, objectName);
-		if (objectInstance != null) {
-			// the websphere mbeanserver rewrites the objectname to include cell, node & server info
-			// make sure we capture the new objectName for unregistration
-			registered.put(objectName, objectInstance.getObjectName());
-		} else {
-			registered.put(objectName, objectName);
+	private void registerMBean(Object mBean, ObjectName objectName) {
+		try {
+			ObjectInstance objectInstance = mBeanServer.registerMBean(mBean, objectName);
+			if (objectInstance != null) {
+				// the websphere mbeanserver rewrites the objectname to include cell, node & server info
+				// make sure we capture the new objectName for unregistration
+				registered.put(objectName, objectInstance.getObjectName());
+			} else {
+				registered.put(objectName, objectName);
+			}
+		} catch (InstanceAlreadyExistsException e) {
+			logger.debug("Unable to register:" + objectName, e);
+		} catch (JMException e) {
+			logger.warn("Unable to register:" + objectName, e);
 		}
 	}
 
-	private void unregisterMBean(ObjectName originalObjectName) throws InstanceNotFoundException,
-			MBeanRegistrationException {
+	private void unregisterMBean(ObjectName originalObjectName) {
 		ObjectName storedObjectName = registered.remove(originalObjectName);
-		if (storedObjectName != null) {
-			mBeanServer.unregisterMBean(storedObjectName);
-		} else {
-			mBeanServer.unregisterMBean(originalObjectName);
+		try {
+			if (storedObjectName != null) {
+				mBeanServer.unregisterMBean(storedObjectName);
+
+			} else {
+				mBeanServer.unregisterMBean(originalObjectName);
+			}
+		} catch (InstanceNotFoundException e) {
+			logger.debug("Unable to unregister:" + originalObjectName, e);
+		} catch (MBeanRegistrationException e) {
+			logger.warn("Unable to unregister:" + originalObjectName, e);
 		}
 	}
 
@@ -120,95 +132,50 @@ public class JmxExporter implements MetricRegistryListener {
 
 	@Override
 	public void onGaugeAdded(String name, Gauge gauge) {
-		try {
-			final ObjectName objectName = createName("gauges", name);
-			registerMBean(new JmxGauge(gauge, objectName), objectName);
-		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register gauge", e);
-		} catch (JMException e) {
-			logger.warn("Unable to register gauge", e);
-		}
+		final ObjectName objectName = createName("gauges", name);
+		registerMBean(new JmxGauge(gauge, objectName), objectName);
 	}
 
 	@Override
 	public void onCounterAdded(String name, Counter counter) {
-		try {
-			final ObjectName objectName = createName("counters", name);
-			registerMBean(new JmxCounter(counter, objectName), objectName);
-		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register counter", e);
-		} catch (JMException e) {
-			logger.warn("Unable to register counter", e);
-		}
-
+		final ObjectName objectName = createName("counters", name);
+		registerMBean(new JmxCounter(counter, objectName), objectName);
 	}
 
 	@Override
 	public void onHistogramAdded(String name, Histogram histogram) {
-		try {
-			final ObjectName objectName = createName("histograms", name);
-			registerMBean(new JmxHistogram(histogram, objectName), objectName);
-		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register histogram", e);
-		} catch (JMException e) {
-			logger.warn("Unable to register histogram", e);
-		}
-
+		final ObjectName objectName = createName("histograms", name);
+		registerMBean(new JmxHistogram(histogram, objectName), objectName);
 	}
 
 	@Override
 	public void onTimerAdded(String name, Timer timer) {
-		try {
-			final ObjectName objectName = createName("timers", name);
-			registerMBean(new JmxTimer(timer, objectName), objectName);
-		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register timer", e);
-		} catch (JMException e) {
-			logger.warn("Unable to register timer", e);
-		}
-
+		final ObjectName objectName = createName("timers", name);
+		registerMBean(new JmxTimer(timer, objectName), objectName);
 	}
 
 	@Override
 	public void onGaugeRemoved(String name) {
-		try {
-			final ObjectName objectName = createName("guages", name);
-			unregisterMBean(objectName);
-		} catch (JMException e) {
-			logger.warn("Unable to register guage", e);
-		}
+		final ObjectName objectName = createName("guages", name);
+		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onCounterRemoved(String name) {
-		try {
-			final ObjectName objectName = createName("counters", name);
-			unregisterMBean(objectName);
-		} catch (JMException e) {
-			logger.warn("Unable to register counter", e);
-		}
-
+		final ObjectName objectName = createName("counters", name);
+		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onHistogramRemoved(String name) {
-		try {
-			final ObjectName objectName = createName("histograms", name);
-			unregisterMBean(objectName);
-		} catch (JMException e) {
-			logger.warn("Unable to register histogram", e);
-		}
-
+		final ObjectName objectName = createName("histograms", name);
+		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onTimerRemoved(String name) {
-		try {
-			final ObjectName objectName = createName("timers", name);
-			unregisterMBean(objectName);
-		} catch (JMException e) {
-			logger.warn("Unable to register timer", e);
-		}
+		final ObjectName objectName = createName("timers", name);
+		unregisterMBean(objectName);
 	}
 
 	public interface MetricMBean {
@@ -220,13 +187,13 @@ public class JmxExporter implements MetricRegistryListener {
 	}
 
 	public interface JmxCounterMBean extends MetricMBean {
-		long getLastCount();
+		long getLatestCount();
 
-		double getLastRate();
+		long getLatestRate();
 
 		long getTotalCount();
 
-		double getTotalRate();
+		long getMeanRate();
 	}
 
 	public interface JmxHistogramMBean extends MetricMBean {
@@ -236,22 +203,26 @@ public class JmxExporter implements MetricRegistryListener {
 		long getMax();
 
 		double getMean();
+
+		// TODO: add pcts
 	}
 
 	public interface JmxTimerMBean extends MetricMBean {
-		long getLastCount();
+		long getLatestCount();
 
-		double getLastRate();
+		long getLatestRate();
 
 		long getTotalCount();
 
-		double getTotalRate();
+		long getMeanRate();
 
-		long getMin();
+		long getMinLatency();
 
-		long getMax();
+		long getMaxLatency();
 
-		double getMean();
+		double getMeanLatency();
+
+		// TODO: add pcts
 	}
 
 	private abstract static class AbstractBean implements MetricMBean {
@@ -291,23 +262,23 @@ public class JmxExporter implements MetricRegistryListener {
 		}
 
 		@Override
-		public long getLastCount() {
-			return metric.snapshot.lastCount;
+		public long getLatestCount() {
+			return metric.latestMetric.latestCount;
 		}
 
 		@Override
-		public double getLastRate() {
-			return metric.snapshot.lastRate;
+		public long getLatestRate() {
+			return metric.latestMetric.latestRate;
 		}
 
 		@Override
 		public long getTotalCount() {
-			return metric.snapshot.totalCount;
+			return metric.latestMetric.totalCount;
 		}
 
 		@Override
-		public double getTotalRate() {
-			return metric.snapshot.meanRate;
+		public long getMeanRate() {
+			return metric.latestMetric.meanRate;
 		}
 
 	}
@@ -322,17 +293,17 @@ public class JmxExporter implements MetricRegistryListener {
 
 		@Override
 		public long getMin() {
-			return metric.snapshot.min;
+			return metric.latestMetric.min;
 		}
 
 		@Override
 		public long getMax() {
-			return metric.snapshot.max;
+			return metric.latestMetric.max;
 		}
 
 		@Override
 		public double getMean() {
-			return metric.snapshot.mean;
+			return metric.latestMetric.mean;
 		}
 	}
 
@@ -344,41 +315,39 @@ public class JmxExporter implements MetricRegistryListener {
 			this.metric = metric;
 		}
 
-		// TODO: other data
 		@Override
-		public long getLastCount() {
-			return metric.snapshot.counterMetric.lastCount;
+		public long getLatestCount() {
+			return metric.latestMetric.counterMetric.latestCount;
 		}
 
 		@Override
-		public double getLastRate() {
-			return metric.snapshot.counterMetric.lastRate;
+		public long getLatestRate() {
+			return metric.latestMetric.counterMetric.latestRate;
 		}
 
 		@Override
 		public long getTotalCount() {
-			return metric.snapshot.counterMetric.totalCount;
+			return metric.latestMetric.counterMetric.totalCount;
 		}
 
 		@Override
-		public double getTotalRate() {
-			return metric.snapshot.counterMetric.meanRate;
+		public long getMeanRate() {
+			return metric.latestMetric.counterMetric.meanRate;
 		}
 
 		@Override
-		public long getMin() {
-			return metric.snapshot.histogramMetric.min;
+		public long getMinLatency() {
+			return metric.latestMetric.histogramMetric.min;
 		}
 
 		@Override
-		public long getMax() {
-			return metric.snapshot.histogramMetric.max;
+		public long getMaxLatency() {
+			return metric.latestMetric.histogramMetric.max;
 		}
 
 		@Override
-		public double getMean() {
-			return metric.snapshot.histogramMetric.mean;
+		public double getMeanLatency() {
+			return metric.latestMetric.histogramMetric.mean;
 		}
 	}
-
 }

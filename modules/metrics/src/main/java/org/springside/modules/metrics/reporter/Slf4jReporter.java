@@ -7,6 +7,8 @@ package org.springside.modules.metrics.reporter;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,22 +40,21 @@ public class Slf4jReporter implements Reporter {
 	public void report(Map<String, Gauge> gauges, Map<String, Counter> counters, Map<String, Histogram> histograms,
 			Map<String, Timer> timers) {
 
-		for (Entry<String, Gauge> entry : gauges.entrySet()) {
+		for (Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
 			logGauge(entry.getKey(), entry.getValue().snapshot);
 		}
 
-		for (Entry<String, Counter> entry : counters.entrySet()) {
-			logCounter(entry.getKey(), entry.getValue().snapshot);
+		for (Entry<String, Counter> entry : getSortedMetrics(counters).entrySet()) {
+			logCounter(entry.getKey(), entry.getValue().latestMetric);
 		}
 
-		for (Entry<String, Histogram> entry : histograms.entrySet()) {
-			logHistogram(entry.getKey(), entry.getValue().snapshot);
+		for (Entry<String, Histogram> entry : getSortedMetrics(histograms).entrySet()) {
+			logHistogram(entry.getKey(), entry.getValue().latestMetric);
 		}
 
-		for (Entry<String, Timer> entry : timers.entrySet()) {
-			logTimer(entry.getKey(), entry.getValue().snapshot);
+		for (Entry<String, Timer> entry : getSortedMetrics(timers).entrySet()) {
+			logTimer(entry.getKey(), entry.getValue().latestMetric);
 		}
-
 	}
 
 	private void logGauge(String name, Number gauge) {
@@ -61,8 +62,8 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
-		reportLogger.info("type=COUNTER, name={}, count={}, lastRate={}, meanRate={}", name, counter.totalCount,
-				counter.lastRate, counter.meanRate);
+		reportLogger.info("type=COUNTER, name={}, totalCount={}, meanRate={}, latestRate={}", name, counter.totalCount,
+				counter.meanRate, counter.latestRate);
 	}
 
 	private void logHistogram(String name, HistogramMetric histogram) {
@@ -71,10 +72,11 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logTimer(String name, TimerMetric timer) {
-		reportLogger.info("type=TIMER, name={}, count={}, lastRate={}, meanRate={}, min={}ms, max={}ms, mean={}ms",
-				name, timer.counterMetric.totalCount, timer.counterMetric.lastRate, timer.counterMetric.meanRate,
-				timer.histogramMetric.min, timer.histogramMetric.max, timer.histogramMetric.mean,
-				buildPcts(timer.histogramMetric.pcts));
+		reportLogger
+				.info("type=TIMER, name={}, totalCount={}, meanRate={}, latestRate={}, minLatency={}ms, maxLatency={}ms, meanLatency={}ms{}",
+						name, timer.counterMetric.totalCount, timer.counterMetric.meanRate,
+						timer.counterMetric.latestRate, timer.histogramMetric.min, timer.histogramMetric.max,
+						timer.histogramMetric.mean, buildPcts(timer.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {
@@ -85,5 +87,14 @@ public class Slf4jReporter implements Reporter {
 		}
 
 		return builder.toString();
+	}
+
+	/**
+	 * 返回按metrics name排序的Map.
+	 * 
+	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次顺序报告时需要用TreeMap重新排序.
+	 */
+	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
+		return new TreeMap<String, T>(metrics);
 	}
 }

@@ -71,15 +71,15 @@ public class GraphiteReporter implements Reporter {
 			}
 
 			for (Map.Entry<String, Counter> entry : counters.entrySet()) {
-				reportCounter(entry.getKey(), entry.getValue().snapshot, timestamp);
+				reportCounter(entry.getKey(), entry.getValue().latestMetric, timestamp);
 			}
 
 			for (Map.Entry<String, Histogram> entry : histograms.entrySet()) {
-				reportHistogram(entry.getKey(), entry.getValue().snapshot, timestamp);
+				reportHistogram(entry.getKey(), entry.getValue().latestMetric, timestamp);
 			}
 
 			for (Map.Entry<String, Timer> entry : timers.entrySet()) {
-				reportTimer(entry.getKey(), entry.getValue().snapshot, timestamp);
+				reportTimer(entry.getKey(), entry.getValue().latestMetric, timestamp);
 			}
 
 			flush();
@@ -101,7 +101,7 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	private void reportCounter(String name, CounterMetric counter, long timestamp) throws IOException {
-		send(MetricRegistry.name(prefix, name, "count"), format(counter.lastCount), timestamp);
+		send(MetricRegistry.name(prefix, name, "count"), format(counter.latestCount), timestamp);
 	}
 
 	private void reportHistogram(String name, HistogramMetric histogram, long timestamp) throws IOException {
@@ -115,7 +115,7 @@ public class GraphiteReporter implements Reporter {
 	}
 
 	private void reportTimer(String name, TimerMetric timer, long timestamp) throws IOException {
-		send(MetricRegistry.name(prefix, name, "count"), format(timer.counterMetric.lastCount), timestamp);
+		send(MetricRegistry.name(prefix, name, "count"), format(timer.counterMetric.latestCount), timestamp);
 
 		send(MetricRegistry.name(prefix, name, "min"), format(timer.histogramMetric.min), timestamp);
 		send(MetricRegistry.name(prefix, name, "max"), format(timer.histogramMetric.max), timestamp);

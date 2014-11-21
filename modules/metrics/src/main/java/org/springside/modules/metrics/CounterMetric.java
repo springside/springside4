@@ -8,12 +8,12 @@ package org.springside.modules.metrics;
 public class CounterMetric {
 	public long totalCount;
 	public long meanRate;
-	public long lastCount;
-	public long lastRate;
+	public long latestCount;
+	public long latestRate;
 
 	@Override
 	public String toString() {
-		return "CounterMetric [totalCount=" + totalCount + ", meanRate=" + meanRate + ", lastCount=" + lastCount
-				+ ", lastRate=" + lastRate + "]";
+		return "CounterMetric [totalCount=" + totalCount + ", meanRate=" + meanRate + ", latestCount=" + latestCount
+				+ ", latestRate=" + latestRate + "]";
 	}
 }
