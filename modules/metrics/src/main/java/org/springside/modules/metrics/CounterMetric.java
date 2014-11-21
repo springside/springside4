@@ -7,9 +7,9 @@ package org.springside.modules.metrics;
 
 public class CounterMetric {
 	public long totalCount;
-	public double meanRate;
+	public long meanRate;
 	public long lastCount;
-	public double lastRate;
+	public long lastRate;
 
 	@Override
 	public String toString() {
