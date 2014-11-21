@@ -7,6 +7,7 @@ package org.springside.examples.showcase.functional.account;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
@@ -19,6 +20,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
+@Ignore("Ignore the GUI test first")
 public class UserManagerFT extends BaseSeleniumTestCase {
 
 	@Test

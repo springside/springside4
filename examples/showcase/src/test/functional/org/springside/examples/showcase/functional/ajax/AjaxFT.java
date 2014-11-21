@@ -7,6 +7,7 @@ package org.springside.examples.showcase.functional.ajax;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
@@ -16,6 +17,7 @@ import org.springside.examples.showcase.functional.BaseSeleniumTestCase;
  * 
  * @calvin
  */
+@Ignore("Ignore the GUI test first")
 public class AjaxFT extends BaseSeleniumTestCase {
 
 	@Test
