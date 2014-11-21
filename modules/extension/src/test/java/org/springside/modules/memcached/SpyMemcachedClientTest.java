@@ -68,12 +68,12 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 
 		assertThat(client.incr(key, 1, 1)).isEqualTo(1);
 		// 注意counter的实际类型是String
-		assertThat(client.get(key)).isEqualTo("1");
+		assertThat((String) client.get(key)).isEqualTo("1");
 
 		assertThat(client.incr(key, 1, 1)).isEqualTo(2);
-		assertThat(client.get(key)).isEqualTo("2");
+		assertThat((String) client.get(key)).isEqualTo("2");
 
 		assertThat(client.decr(key, 2, 1)).isEqualTo(0);
-		assertThat(client.get(key)).isEqualTo("0");
+		assertThat((String) client.get(key)).isEqualTo("0");
 	}
 }

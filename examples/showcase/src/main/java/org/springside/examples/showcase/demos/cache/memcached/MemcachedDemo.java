@@ -75,10 +75,10 @@ public class MemcachedDemo extends SpringContextTestCase {
 		long result = spyMemcachedClient.incr(key, 2, 1);
 		assertThat(result).isEqualTo(1);
 		// 注意,get返回的数值使用字符串表达
-		assertThat(spyMemcachedClient.get(key)).isEqualTo("1");
+		assertThat((String) spyMemcachedClient.get(key)).isEqualTo("1");
 
 		assertThat(spyMemcachedClient.incr(key, 2, 1)).isEqualTo(3);
-		assertThat(spyMemcachedClient.get(key)).isEqualTo("3");
+		assertThat((String) spyMemcachedClient.get(key)).isEqualTo("3");
 
 		key = "set_and_incr_key";
 		// 注意,set中的数值必须使用字符串,后面的incr操作结果才会正确.

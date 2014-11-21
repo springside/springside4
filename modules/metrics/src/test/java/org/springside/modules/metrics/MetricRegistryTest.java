@@ -77,16 +77,6 @@ public class MetricRegistryTest {
 		assertThat(metric.pcts.get(60d)).isEqualTo(60);
 		assertThat(metric.pcts.get(70d)).isEqualTo(70);
 
-		// default 90
-		Histogram histogramWithDefaultPcts = metricRegistry.histogram(MetricRegistry.name("UserService",
-				"getUser.histogram.default"));
-		for (int i = 1; i <= 100; i++) {
-			histogramWithDefaultPcts.update(i);
-		}
-
-		metric = histogramWithDefaultPcts.calculateMetric();
-		assertThat(metric.pcts.get(90d)).isEqualTo(90);
-
 		// new default 50
 		metricRegistry.setDefaultPcts(new Double[] { 50d });
 		Histogram histogramWithNewDefaultPcts = metricRegistry.histogram(MetricRegistry.name("UserService",
