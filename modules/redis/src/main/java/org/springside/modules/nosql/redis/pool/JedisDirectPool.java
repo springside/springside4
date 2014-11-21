@@ -13,11 +13,12 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class JedisDirectPool extends JedisPool {
 
-	public JedisDirectPool(HostAndPort address, JedisPoolConfig config) {
-		initInternalPool(address, new ConnectionInfo(), config);
+	public JedisDirectPool(String poolName, HostAndPort address, JedisPoolConfig config) {
+		this(poolName, address, new ConnectionInfo(), config);
 	}
 
-	public JedisDirectPool(HostAndPort address, ConnectionInfo connectionInfo, JedisPoolConfig config) {
+	public JedisDirectPool(String poolName, HostAndPort address, ConnectionInfo connectionInfo, JedisPoolConfig config) {
 		initInternalPool(address, connectionInfo, config);
+		this.poolName = poolName;
 	}
 }

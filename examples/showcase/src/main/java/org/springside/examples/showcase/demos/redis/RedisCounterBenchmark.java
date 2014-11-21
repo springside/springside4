@@ -39,7 +39,7 @@ public class RedisCounterBenchmark extends ConcurrentBenchmark {
 	@Override
 	protected void setUp() {
 
-		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
+		pool = new JedisPoolBuilder().setUrl("direct://localhost:6379?poolSize=" + threadCount).buildPool();
 		jedisTemplate = new JedisTemplate(pool);
 
 		// 重置Counter

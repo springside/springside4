@@ -13,7 +13,7 @@ public class MasterElectorDemo {
 
 	public static void main(String[] args) throws Exception {
 
-		JedisPool pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(1).buildPool();
+		JedisPool pool = new JedisPoolBuilder().setUrl("direct://localhost:6379").setPoolSize(1).buildPool();
 		try {
 			MasterElector masterElector = new MasterElector(pool, 5);
 

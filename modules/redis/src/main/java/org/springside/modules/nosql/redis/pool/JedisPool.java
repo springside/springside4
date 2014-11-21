@@ -17,6 +17,8 @@ import redis.clients.util.Pool;
  */
 public abstract class JedisPool extends Pool<Jedis> {
 
+	protected String poolName;
+
 	protected HostAndPort address;
 
 	protected ConnectionInfo connectionInfo;
@@ -41,6 +43,7 @@ public abstract class JedisPool extends Pool<Jedis> {
 	 * Initialize the internal pool with connection info and pool config.
 	 */
 	protected void initInternalPool(HostAndPort address, ConnectionInfo connectionInfo, JedisPoolConfig config) {
+		this.poolName = poolName;
 		this.address = address;
 		this.connectionInfo = connectionInfo;
 		JedisFactory factory = new JedisFactory(address.getHost(), address.getPort(), connectionInfo.getTimeout(),

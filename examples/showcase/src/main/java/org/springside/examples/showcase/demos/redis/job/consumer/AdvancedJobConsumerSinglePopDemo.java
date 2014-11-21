@@ -31,7 +31,7 @@ public class AdvancedJobConsumerSinglePopDemo extends SimpleJobConsumerDemo {
 		threadCount = Integer.parseInt(System.getProperty(ConcurrentBenchmark.THREAD_COUNT_NAME,
 				String.valueOf(THREAD_COUNT)));
 
-		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
+		pool = new JedisPoolBuilder().setUrl("direct://localhost:6379?poolSize=" + threadCount).buildPool();
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		for (int i = 0; i < threadCount; i++) {

@@ -29,7 +29,7 @@ public class ReliableJobDispatcherDemo {
 
 	public static void main(String[] args) throws Exception {
 
-		JedisPool pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(1).buildPool();
+		JedisPool pool = new JedisPoolBuilder().setUrl("direct://localhost:6379?poolSize=1").buildPool();
 		try {
 			JobDispatcher dispatcher = new JobDispatcher("ss", pool);
 			dispatcher.setReliable(true);

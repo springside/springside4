@@ -54,13 +54,15 @@ public final class JedisSentinelPool extends JedisPool {
 	 * @param masterPoolConfig Configuration of redis pool.
 	 * 
 	 */
-	public JedisSentinelPool(HostAndPort[] sentinelAddresses, String masterName, ConnectionInfo masterConnectionInfo,
-			JedisPoolConfig masterPoolConfig) {
+	public JedisSentinelPool(String poolName, HostAndPort[] sentinelAddresses, String masterName,
+			ConnectionInfo masterConnectionInfo, JedisPoolConfig masterPoolConfig) {
+
+		this.poolName = poolName;
 		// sentinelAddresses
 		assertArgument(((sentinelAddresses == null) || (sentinelAddresses.length == 0)), "seintinelInfos is not set");
 
-		for (HostAndPort sentinelInfo : sentinelAddresses) {
-			JedisPool sentinelPool = new JedisDirectPool(sentinelInfo, new JedisPoolConfig());
+		for (HostAndPort sentinelAddress : sentinelAddresses) {
+			JedisPool sentinelPool = new JedisDirectPool(poolName + "-sentinel", sentinelAddress, new JedisPoolConfig());
 			sentinelPools.add(sentinelPool);
 		}
 
@@ -89,8 +91,9 @@ public final class JedisSentinelPool extends JedisPool {
 		}
 	}
 
-	public JedisSentinelPool(HostAndPort[] sentinelAddresses, String masterName, JedisPoolConfig masterPoolConfig) {
-		this(sentinelAddresses, masterName, new ConnectionInfo(), masterPoolConfig);
+	public JedisSentinelPool(String poolName, HostAndPort[] sentinelAddresses, String masterName,
+			JedisPoolConfig masterPoolConfig) {
+		this(poolName, sentinelAddresses, masterName, new ConnectionInfo(), masterPoolConfig);
 	}
 
 	@Override

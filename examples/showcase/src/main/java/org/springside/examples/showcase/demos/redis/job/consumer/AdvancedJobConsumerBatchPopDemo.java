@@ -40,7 +40,7 @@ public class AdvancedJobConsumerBatchPopDemo extends SimpleJobConsumerDemo {
 		batchSize = Integer.parseInt(System.getProperty("batchsize",
 				String.valueOf(AdvancedJobConsumer.DEFAULT_BATCH_SIZE)));
 
-		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
+		pool = new JedisPoolBuilder().setUrl("direct://localhost:6379?poolSize=" + threadCount).buildPool();
 
 		ExecutorService threadPool = Executors.newFixedThreadPool(threadCount);
 		for (int i = 0; i < threadCount; i++) {

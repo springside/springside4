@@ -47,7 +47,7 @@ public class JobProducerDemo extends ConcurrentBenchmark {
 
 	@Override
 	protected void setUp() {
-		pool = new JedisPoolBuilder().setDirectHostAndPort("localhost", "6379").setPoolSize(threadCount).buildPool();
+		pool = new JedisPoolBuilder().setUrl("direct://localhost:6379?poolSize=" + threadCount).buildPool();
 		jobProducer = new JobProducer("ss", pool);
 	}
 
