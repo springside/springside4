@@ -14,4 +14,12 @@ public interface MetricRegistryListener {
 	void onHistogramAdded(String name, Histogram histogram);
 
 	void onTimerAdded(String name, Timer timer);
+
+	void onGaugeRemoved(String name);
+
+	void onCounterRemoved(String name);
+
+	void onHistogramRemoved(String name);
+
+	void onTimerRemoved(String name);
 }

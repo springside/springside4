@@ -43,10 +43,13 @@ public class MetricsManager {
 		scheduler.start(10, TimeUnit.SECONDS);
 
 		exporter = new JmxExporter("metrics", MetricRegistry.INSTANCE);
+		exporter.initMBeans();
+
 	}
 
 	@PreDestroy
 	public void stop() {
+		exporter.destroyMBeans();
 		scheduler.stop();
 	}
 

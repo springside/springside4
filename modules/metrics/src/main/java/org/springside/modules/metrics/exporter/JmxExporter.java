@@ -37,10 +37,9 @@ public class JmxExporter implements MetricRegistryListener {
 		this.registered = new ConcurrentHashMap<ObjectName, ObjectName>();
 
 		registry.addListener(this);
-		initMBeans();
 	}
 
-	private void initMBeans() {
+	public void initMBeans() {
 
 		Map<String, Gauge> gauges = registry.getGauges();
 		for (Entry<String, Gauge> entry : gauges.entrySet()) {
@@ -60,6 +59,28 @@ public class JmxExporter implements MetricRegistryListener {
 		Map<String, Timer> timers = registry.getTimers();
 		for (Entry<String, Timer> entry : timers.entrySet()) {
 			onTimerAdded(entry.getKey(), entry.getValue());
+		}
+	}
+
+	public void destroyMBeans() {
+		Map<String, Gauge> gauges = registry.getGauges();
+		for (String key : gauges.keySet()) {
+			onGaugeRemoved(key);
+		}
+
+		Map<String, Counter> counters = registry.getCounters();
+		for (String key : counters.keySet()) {
+			onCounterRemoved(key);
+		}
+
+		Map<String, Histogram> histograms = registry.getHistograms();
+		for (String key : histograms.keySet()) {
+			onHistogramRemoved(key);
+		}
+
+		Map<String, Timer> timers = registry.getTimers();
+		for (String key : timers.keySet()) {
+			onTimerRemoved(key);
 		}
 	}
 
@@ -146,6 +167,48 @@ public class JmxExporter implements MetricRegistryListener {
 			logger.warn("Unable to register timer", e);
 		}
 
+	}
+
+	@Override
+	public void onGaugeRemoved(String name) {
+		try {
+			final ObjectName objectName = createName("guages", name);
+			unregisterMBean(objectName);
+		} catch (JMException e) {
+			logger.warn("Unable to register guage", e);
+		}
+	}
+
+	@Override
+	public void onCounterRemoved(String name) {
+		try {
+			final ObjectName objectName = createName("counters", name);
+			unregisterMBean(objectName);
+		} catch (JMException e) {
+			logger.warn("Unable to register counter", e);
+		}
+
+	}
+
+	@Override
+	public void onHistogramRemoved(String name) {
+		try {
+			final ObjectName objectName = createName("histograms", name);
+			unregisterMBean(objectName);
+		} catch (JMException e) {
+			logger.warn("Unable to register histogram", e);
+		}
+
+	}
+
+	@Override
+	public void onTimerRemoved(String name) {
+		try {
+			final ObjectName objectName = createName("timers", name);
+			unregisterMBean(objectName);
+		} catch (JMException e) {
+			logger.warn("Unable to register timer", e);
+		}
 	}
 
 	public interface MetricMBean {
@@ -317,4 +380,5 @@ public class JmxExporter implements MetricRegistryListener {
 			return metric.snapshot.histogramMetric.mean;
 		}
 	}
+
 }

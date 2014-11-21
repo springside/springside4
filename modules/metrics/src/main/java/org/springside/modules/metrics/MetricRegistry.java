@@ -106,6 +106,25 @@ public class MetricRegistry {
 	}
 
 	public void clearAll() {
+		for (MetricRegistryListener listener : listeners) {
+			for (String key : gauges.keySet()) {
+				listener.onGaugeRemoved(key);
+			}
+
+			for (String key : counters.keySet()) {
+				listener.onCounterRemoved(key);
+			}
+
+			for (String key : histograms.keySet()) {
+				listener.onHistogramRemoved(key);
+			}
+
+			for (String key : timers.keySet()) {
+				listener.onTimerRemoved(key);
+			}
+		}
+
+		gauges.clear();
 		counters.clear();
 		histograms.clear();
 		timers.clear();
