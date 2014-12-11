@@ -41,7 +41,7 @@ public class Slf4jReporter implements Reporter {
 			Map<String, Timer> timers) {
 
 		for (Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
-			logGauge(entry.getKey(), entry.getValue().snapshot);
+			logGauge(entry.getKey(), entry.getValue().latestMetric);
 		}
 
 		for (Entry<String, Counter> entry : getSortedMetrics(counters).entrySet()) {

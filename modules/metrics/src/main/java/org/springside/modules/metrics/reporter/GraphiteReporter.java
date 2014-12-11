@@ -67,7 +67,7 @@ public class GraphiteReporter implements Reporter {
 			long timestamp = System.currentTimeMillis() / 1000;
 
 			for (Map.Entry<String, Gauge> entry : gauges.entrySet()) {
-				reportGauge(entry.getKey(), entry.getValue().snapshot, timestamp);
+				reportGauge(entry.getKey(), entry.getValue().latestMetric, timestamp);
 			}
 
 			for (Map.Entry<String, Counter> entry : counters.entrySet()) {

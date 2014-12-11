@@ -76,12 +76,12 @@ public class Counter {
 		counter = new AtomicLong(0);
 		totalCount = 0L;
 		startTime = clock.getCurrentTime();
-		lastReportTime = 0L;
+		lastReportTime = startTime;
 	}
 
 	@Override
 	public String toString() {
-		return "Counter [counter=" + counter + ", totalCount=" + totalCount + ", startTime=" + startTime
-				+ ", lastReportTime=" + lastReportTime + "]";
+		return "Counter [latestMetric=" + latestMetric + ", counter=" + counter + ", totalCount=" + totalCount
+				+ ", startTime=" + startTime + ", lastReportTime=" + lastReportTime + "]";
 	}
 }

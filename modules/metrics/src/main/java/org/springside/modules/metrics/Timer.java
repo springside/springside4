@@ -69,7 +69,7 @@ public class Timer {
 
 	@Override
 	public String toString() {
-		return "Timer [counter=" + counter + ", histogram=" + histogram + "]";
+		return "Timer [latestMetric=" + latestMetric + ", counter=" + counter + ", histogram=" + histogram + "]";
 	}
 
 	/**

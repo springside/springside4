@@ -79,7 +79,7 @@ public class ConsoleReporter implements Reporter {
 	}
 
 	private void printGauge(Gauge gauge) {
-		output.printf("             value = %s%n", gauge.snapshot);
+		output.printf("             value = %s%n", gauge.latestMetric);
 	}
 
 	private void printCounter(CounterMetric counter) {

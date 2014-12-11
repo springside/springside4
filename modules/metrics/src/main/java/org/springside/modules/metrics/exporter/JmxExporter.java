@@ -249,7 +249,7 @@ public class JmxExporter implements MetricRegistryListener {
 
 		@Override
 		public Number getValue() {
-			return metric.snapshot;
+			return metric.latestMetric;
 		}
 	}
 

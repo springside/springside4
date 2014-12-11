@@ -41,25 +41,41 @@ public class Histogram {
 			return createEmptyMetric();
 		}
 
-		// 按数值大小排序，以快速支持百分比过滤
-		Collections.sort(snapshotList);
-
-		int count = snapshotList.size();
-
 		HistogramMetric metric = new HistogramMetric();
-		metric.min = snapshotList.get(0);
-		metric.max = snapshotList.get(count - 1);
-
+		int count = snapshotList.size();
 		double sum = 0;
-		for (long value : snapshotList) {
-			sum += value;
+
+		if ((pcts != null) && (pcts.length > 0)) {
+			// 按数值大小排序，以快速支持百分比过滤
+			Collections.sort(snapshotList);
+
+			metric.min = snapshotList.get(0);
+			metric.max = snapshotList.get(count - 1);
+
+			for (long value : snapshotList) {
+				sum += value;
+			}
+
+			for (Double pct : pcts) {
+				metric.pcts.put(pct, getPercent(snapshotList, count, pct));
+			}
+		} else {
+			// 不排序的算法，因为不需要支持百分比过滤
+			metric.min = snapshotList.get(0);
+			metric.max = snapshotList.get(0);
+
+			for (long value : snapshotList) {
+				if (value < metric.min) {
+					metric.min = value;
+				}
+				if (value > metric.max) {
+					metric.max = value;
+				}
+				sum += value;
+			}
 		}
+
 		metric.mean = sum / count;
-
-		for (Double pct : pcts) {
-			metric.pcts.put(pct, getPercent(snapshotList, count, pct));
-		}
-
 		latestMetric = metric;
 		return metric;
 	}
@@ -93,6 +109,7 @@ public class Histogram {
 
 	@Override
 	public String toString() {
-		return "Histogram [measurements=" + measurements + ", pcts=" + Arrays.toString(pcts) + "]";
+		return "Histogram [latestMetric=" + latestMetric + ", measurements=" + measurements + ", pcts="
+				+ Arrays.toString(pcts) + "]";
 	}
 }

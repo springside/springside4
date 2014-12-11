@@ -10,17 +10,17 @@
 package org.springside.modules.metrics;
 
 public abstract class Gauge {
-    
-    public Number snapshot;
-    
-    public void calculateMetric(){
-        snapshot = getValue();
-    }
-    
-    protected abstract Number getValue();
 
-    @Override
-    public String toString() {
-        return "Gauge [snapshot=" + snapshot + "]";
-    }
+	public Number latestMetric;
+
+	public void calculateMetric() {
+		latestMetric = getValue();
+	}
+
+	protected abstract Number getValue();
+
+	@Override
+	public String toString() {
+		return "Gauge [latestMetric=" + latestMetric + "]";
+	}
 }
