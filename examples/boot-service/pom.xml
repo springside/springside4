@@ -36,7 +36,7 @@
 
 		<!-- springside -->
 		<dependency>
-			<groupId>org.springside</groupId>
+			<groupId>cn.org.springside</groupId>
 			<artifactId>springside-utils</artifactId>
 			<version>${springside.version}</version>
 		</dependency>
@@ -76,7 +76,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.springside</groupId>
+			<groupId>cn.org.springside</groupId>
 			<artifactId>springside-utils</artifactId>
 			<version>${springside.version}</version>
 			<classifier>tests</classifier>

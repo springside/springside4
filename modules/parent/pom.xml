@@ -2,7 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.springside</groupId>
+	<parent>
+	    <groupId>org.sonatype.oss</groupId>
+	    <artifactId>oss-parent</artifactId>
+	    <version>7</version>
+	</parent>
+	<groupId>cn.org.springside</groupId>
 	<artifactId>springside-parent</artifactId>
 	<version>4.3.0-SNAPSHOT</version>
 	<name>Springside :: Module :: Parent</name>
@@ -83,30 +88,30 @@
 		<dependencies>
 			<!-- SPRINGSIDE MODULES begin -->
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-utils</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-metrics</artifactId>
 				<version>${springside.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-redis</artifactId>
 				<version>${springside.version}</version>
 			</dependency>			
@@ -115,7 +120,7 @@
 			<!-- spring-->
 			<!-- 纯粹为了exclude commons-loging -->
 			<dependency>
-				<groupId>org.springframework</groupId>
+				<groupId>cn.org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
 				<version>${spring.version}</version>
 				<exclusions>
@@ -670,14 +675,14 @@
 
 			<!-- springside -->
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.springside</groupId>
+				<groupId>cn.org.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
 				<classifier>tests</classifier>
