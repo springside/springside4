@@ -19,7 +19,7 @@ import static org.springside.modules.persistence.SearchFilter.Type.DATETIME;
 public class SearchFilter {
 
     public enum Operator {
-        EQ, LIKE, GT, LT, GTE, LTE
+        EQ, NEQ, LIKE, GT, LT, GTE, LTE
     }
 
     public enum Type {
