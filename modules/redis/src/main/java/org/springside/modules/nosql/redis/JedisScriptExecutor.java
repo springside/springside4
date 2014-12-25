@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
@@ -20,6 +19,8 @@ import org.springside.modules.nosql.redis.pool.JedisPool;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisDataException;
+
+import com.google.common.base.Preconditions;
 
 /**
  * 装载并执行Lua Script，
@@ -80,8 +81,8 @@ public class JedisScriptExecutor {
 	 * keys与args不允许为null.
 	 */
 	public Object execute(final String[] keys, final String[] args) throws IllegalArgumentException {
-		Validate.notNull(keys, "keys can't be null.");
-		Validate.notNull(args, "args can't be null.");
+		Preconditions.checkNotNull(keys, "keys can't be null.");
+		Preconditions.checkNotNull(args, "args can't be null.");
 		return execute(Arrays.asList(keys), Arrays.asList(args));
 	}
 
@@ -90,8 +91,8 @@ public class JedisScriptExecutor {
 	 * keys与args不允许为null.
 	 */
 	public Object execute(final List<String> keys, final List<String> args) throws IllegalArgumentException {
-		Validate.notNull(keys, "keys can't be null.");
-		Validate.notNull(args, "args can't be null.");
+		Preconditions.checkNotNull(keys, "keys can't be null.");
+		Preconditions.checkNotNull(args, "args can't be null.");
 
 		return jedisTemplate.execute(new JedisAction<Object>() {
 			@Override

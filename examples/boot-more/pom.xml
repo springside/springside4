@@ -11,7 +11,10 @@
 
 	<properties>
 		<springside.version>4.3.0-SNAPSHOT</springside.version>
-		<spring-boot.version>1.1.8.RELEASE</spring-boot.version>
+		<spring-boot.version>1.1.10.RELEASE</spring-boot.version>
+		<commons-lang3.version>3.2.1</commons-lang3.version>
+		<javasimon.version>3.5.2</javasimon.version>
+		<assertj.version>1.7.0</assertj.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.6</java.version>
@@ -28,6 +31,17 @@
 				<exclusion>
 					<groupId>org.springframework.boot</groupId>
 					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jetty</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty.websocket</groupId>
+					<artifactId>*</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -58,13 +72,25 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>3.2.1</version>
+			<version>${commons-lang3.version}</version>
 		</dependency>
 
 		<!-- jmx -->
 		<dependency>
 			<groupId>org.jolokia</groupId>
 			<artifactId>jolokia-core</artifactId>
+		</dependency>
+
+		<!-- javasimon -->
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-spring</artifactId>
+			<version>${javasimon.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.javasimon</groupId>
+			<artifactId>javasimon-console-embed</artifactId>
+			<version>${javasimon.version}</version>
 		</dependency>
 
 		<!-- test -->
@@ -77,7 +103,7 @@
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>1.6.1</version>
+			<version>${assertj.version}</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -89,12 +115,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<profiles>
-		<profile>
-			
-		</profile>
-	</profiles>
 
 	<build>
 		<plugins>
