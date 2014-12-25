@@ -7,8 +7,8 @@
   1. Quickstart -- a minimal CRUD Todo-List web application.
   2. Showcase -- demonstrate many other interesting technologies.
   3. BootService -- a Spring Boot based WebService application.
-  4. BootWeb -- a Spring Boot based Web application(TODO).
+  4. BootMore -- a Spring Boot based WebService application with more samle.
  
 -------------------------------
-Offical Site: http://springside.github.io
+Offical Site: http://springside.io
 Document: https://github.com/springside/springside4/wiki

@@ -7,7 +7,7 @@
 	    <artifactId>oss-parent</artifactId>
 	    <version>7</version>
 	</parent>
-	<groupId>cn.org.springside</groupId>
+	<groupId>io.springside</groupId>
 	<artifactId>springside-parent</artifactId>
 	<version>4.3.0-SNAPSHOT</version>
 	<name>Springside :: Module :: Parent</name>
@@ -44,9 +44,9 @@
 		<dozer.version>5.5.1</dozer.version>
 		<freemarker.version>2.3.21</freemarker.version>
 		<aspectj.version>1.8.4</aspectj.version>
-		<junit.version>4.12</junit.version>
+		<junit.version>4.11</junit.version>
 		<assertj.version>1.7.0</assertj.version>
-		<mockito.version>1.10.16</mockito.version>
+		<mockito.version>1.10.8</mockito.version>
 		<powermock.version>1.6.0</powermock.version>
 		<selenium.version>2.42.2</selenium.version>
 		<nosqlunit.version>0.8.0</nosqlunit.version>
@@ -88,30 +88,30 @@
 		<dependencies>
 			<!-- SPRINGSIDE MODULES begin -->
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-utils</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
 				<scope>compile</scope>
 			</dependency>
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-metrics</artifactId>
 				<version>${springside.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-redis</artifactId>
 				<version>${springside.version}</version>
 			</dependency>			
@@ -686,14 +686,14 @@
 
 			<!-- springside -->
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-core</artifactId>
 				<version>${springside.version}</version>
 				<classifier>tests</classifier>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>cn.org.springside</groupId>
+				<groupId>io.springside</groupId>
 				<artifactId>springside-extension</artifactId>
 				<version>${springside.version}</version>
 				<classifier>tests</classifier>
@@ -971,6 +971,20 @@
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
 					<version>1.3.2</version>
+				</plugin>
+
+				<!-- jetty -->
+				<plugin>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-maven-plugin</artifactId>
+					<version>${jetty.version}</version>
+				</plugin>
+				
+				<!-- tomcat  -->
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>2.2</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>

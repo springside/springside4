@@ -3,12 +3,11 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.springside</groupId>
+		<groupId>io.springside</groupId>
 		<artifactId>springside-parent</artifactId>
 		<version>4.3.0-SNAPSHOT</version>
 		<relativePath>../../modules/parent/</relativePath>
 	</parent>
-	<groupId>org.springside</groupId>
 	<artifactId>h2-console</artifactId>
 	<name>H2 Console</name>
 	<packaging>pom</packaging>

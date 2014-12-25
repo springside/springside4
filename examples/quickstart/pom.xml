@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>cn.org.springside.examples</groupId>
+	<groupId>io.springside.examples</groupId>
 	<artifactId>quickstart</artifactId>
 	<version>4.3.0-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -78,7 +78,7 @@
 	<dependencies>
 		<!-- SPRINGSIDE -->
 		<dependency>
-			<groupId>cn.org.springside</groupId>
+			<groupId>io.springside</groupId>
 			<artifactId>springside-core</artifactId>
 			<version>${springside.version}</version>
 		</dependency>
@@ -252,7 +252,7 @@
 
 		<!-- TEST begin -->
 		<dependency>
-			<groupId>cn.org.springside</groupId>
+			<groupId>io.springside</groupId>
 			<artifactId>springside-core</artifactId>
 			<version>${springside.version}</version>
 			<classifier>tests</classifier>
@@ -509,6 +509,26 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.7</version>
+			</plugin>
+
+			<!--jetty插件-->
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>${jetty.version}</version>
+				<configuration>
+					<systemProperties>
+						<systemProperty>
+							<name>spring.profiles.active</name>
+							<value>development</value>
+						</systemProperty>
+					</systemProperties>
+					<useTestClasspath>true</useTestClasspath>
+
+					<webAppConfig>
+						<contextPath>/${project.artifactId}</contextPath>
+					</webAppConfig>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

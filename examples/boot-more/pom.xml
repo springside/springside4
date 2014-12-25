@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.springside.examples</groupId>
+	<groupId>io.springside.examples</groupId>
 	<artifactId>boot-more</artifactId>
 	<version>4.3.0-SNAPSHOT</version>
 	<packaging>war</packaging>
@@ -56,7 +56,7 @@
 
 		<!-- springside -->
 		<dependency>
-			<groupId>cn.org.springside</groupId>
+			<groupId>io.springside</groupId>
 			<artifactId>springside-utils</artifactId>
 			<version>${springside.version}</version>
 		</dependency>
@@ -108,7 +108,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>cn.org.springside</groupId>
+			<groupId>io.springside</groupId>
 			<artifactId>springside-utils</artifactId>
 			<version>${springside.version}</version>
 			<classifier>tests</classifier>
