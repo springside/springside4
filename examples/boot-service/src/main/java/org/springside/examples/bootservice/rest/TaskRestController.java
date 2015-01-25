@@ -32,7 +32,7 @@ public class TaskRestController {
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	public List<Task> list() {
-		counterService.increment("task.list");
+		counterService.increment("web.task.list");
 		return taskService.getAllTask();
 	}
 
@@ -43,20 +43,19 @@ public class TaskRestController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaTypes.JSON)
-	public ResponseEntity<?> create(@RequestBody Task task,
-			UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<?> create(@RequestBody Task task, UriComponentsBuilder uriBuilder) {
 		counterService.increment("task.create");
 		// 保存任务
 		taskService.saveTask(task);
 
-		// 按照Restful风格约定, 创建指向新任务的url, 也可以直接返回id或对象.
-		HttpHeaders headers = createLocation(uriBuilder, "/task/" + task.id);
+		// 按照Restful风格约定，创建指向新任务的url, 也可以直接返回id或对象.
+		Long id = task.getId();
+		HttpHeaders headers = createLocation(uriBuilder, "/task/" + id);
 
 		return new ResponseEntity(headers, HttpStatus.CREATED);
 	}
 
-	private HttpHeaders createLocation(UriComponentsBuilder uriBuilder,
-			String path) {
+	private HttpHeaders createLocation(UriComponentsBuilder uriBuilder, String path) {
 		URI uri = uriBuilder.path(path).build().toUri();
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(uri);
@@ -64,7 +63,7 @@ public class TaskRestController {
 	}
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = MediaTypes.JSON)
-	// 按Restful风格约定, 返回204状态码, 无内容, 也可以返回200状态码.
+	// 按Restful风格约定，返回204状态码, 无内容. 也可以返回200状态码.
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void update(@RequestBody Task task) {
 		counterService.increment("task.update");

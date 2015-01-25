@@ -25,6 +25,6 @@ public class TaskDaoTest {
 	public void findByUserId() {
 		List<Task> tasks = taskDao.findByUserId(2L);
 		assertThat(tasks).hasSize(5);
-		assertThat(tasks.get(0).title).isEqualTo("Spring Boot");
+		assertThat(tasks.get(0).getTitle()).isEqualTo("Spring Boot");
 	}
 }
