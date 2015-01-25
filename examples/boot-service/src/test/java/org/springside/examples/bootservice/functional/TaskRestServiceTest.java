@@ -63,15 +63,15 @@ public class TaskRestServiceTest {
 		assertThat(tasks).hasSize(5);
 		Task firstTask = tasks.get(0);
 
-		assertThat(firstTask.title).isEqualTo("Spring Boot");
-		assertThat(firstTask.user.name).isEqualTo("Calvin");
+		assertThat(firstTask.getTitle()).isEqualTo("Spring Boot");
+		assertThat(firstTask.getUser().getName()).isEqualTo("Calvin");
 	}
 
 	@Test
 	public void getTask() {
 		Task task = restTemplate.getForObject(resourceUrl + "/{id}", Task.class, 1L);
-		assertThat(task.title).isEqualTo("Spring Boot");
-		assertThat(task.user.name).isEqualTo("Calvin");
+		assertThat(task.getTitle()).isEqualTo("Spring Boot");
+		assertThat(task.getUser().getName()).isEqualTo("Calvin");
 	}
 
 	@Test
@@ -83,17 +83,17 @@ public class TaskRestServiceTest {
 		URI createdTaskUri = restTemplate.postForLocation(resourceUrl, task);
 		System.out.println(createdTaskUri.toString());
 		Task createdTask = restTemplate.getForObject(createdTaskUri, Task.class);
-		assertThat(createdTask.title).isEqualTo(task.title);
+		assertThat(createdTask.getTitle()).isEqualTo(task.getTitle());
 
 		// update
 		String id = StringUtils.substringAfterLast(createdTaskUri.toString(), "/");
-		task.id = new Long(id);
-		task.title = RandomData.randomName("Task");
+		task.setId(new Long(id));
+		task.setTitle(RandomData.randomName("Task"));
 
 		restTemplate.put(createdTaskUri, task);
 
 		Task updatedTask = restTemplate.getForObject(createdTaskUri, Task.class);
-		assertThat(updatedTask.title).isEqualTo(task.title);
+		assertThat(updatedTask.getTitle()).isEqualTo(task.getTitle());
 
 		// delete
 		restTemplate.delete(createdTaskUri);
@@ -103,9 +103,9 @@ public class TaskRestServiceTest {
 
 	public static Task randomTask() {
 		Task task = new Task();
-		task.title = RandomData.randomName("Task");
+		task.setTitle(RandomData.randomName("Task"));
 		User user = new User(1L);
-		task.user = user;
+		task.setUser(user);
 		return task;
 	}
 
