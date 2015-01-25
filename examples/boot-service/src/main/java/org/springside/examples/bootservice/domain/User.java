@@ -10,13 +10,21 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Table(name = "ss_user")
 public class User extends IdEntity {
 
-	public String name;
+	private String name;
 
 	public User() {
 	}
 
 	public User(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
