@@ -44,7 +44,7 @@ public interface Clock {
 		private long time;
 
 		public MockClock() {
-			this(0);
+			this(0);   
 		}
 
 		public MockClock(Date date) {
