@@ -33,7 +33,7 @@ public class Encodes {
 	 * Hex编码.
 	 */
 	public static String encodeHex(byte[] input) {
-		return Hex.encodeHexString(input);
+		return Hex.encodeHexString(input);   
 	}
 
 	/**
