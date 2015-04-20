@@ -57,7 +57,7 @@ public interface Clock {
 
 		@Override
 		public Date getCurrentDate() {
-			return new Date(time);
+			return new Date(time);   
 		}
 
 		@Override
