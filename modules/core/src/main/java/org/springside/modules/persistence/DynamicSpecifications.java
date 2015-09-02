@@ -42,6 +42,9 @@ public class DynamicSpecifications {
 						case EQ:
 							predicates.add(builder.equal(expression, filter.value));
 							break;
+						case NEQ:
+							predicates.add(builder.notEqual(expression, filter.value));
+							break;
 						case LIKE:
 							predicates.add(builder.like(expression, "%" + filter.value + "%"));
 							break;
@@ -56,6 +59,12 @@ public class DynamicSpecifications {
 							break;
 						case LTE:
 							predicates.add(builder.lessThanOrEqualTo(expression, (Comparable) filter.value));
+							break;
+						case ISNULL:
+							predicates.add(builder.isNull(expression));
+							break;
+						case ISNOTNULL:
+							predicates.add(builder.isNotNull(expression));
 							break;
 						}
 					}
