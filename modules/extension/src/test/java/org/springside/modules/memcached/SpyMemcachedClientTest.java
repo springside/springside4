@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.memcached;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Map;
 
@@ -35,42 +40,40 @@ public class SpyMemcachedClientTest extends SpringContextTestCase {
 		client.set(key, 60 * 60 * 1, value);
 		Threads.sleep(1000);
 		String result = client.get(key);
-		assertEquals(value, result);
+		assertThat(result).isEqualTo(value);
 
 		// safeSet
 		client.safeSet(key2, 60 * 60 * 1, value2);
 		result = client.get(key2);
-		assertEquals(value2, result);
+		assertThat(result).isEqualTo(value2);
 
 		// bulk
 		Map<String, Object> bulkResult = client.getBulk(Lists.newArrayList(key, key2));
-		assertEquals(2, bulkResult.size());
-		assertEquals(value, bulkResult.get(key));
+		assertThat(bulkResult).containsOnly(entry(key, value), entry(key2, value2));
 
 		// delete
 		client.delete(key);
 		Threads.sleep(1000);
 		result = client.get(key);
-		assertNull(result);
+		assertThat(result).isNull();
 
 		client.safeDelete(key);
 		result = client.get(key);
-		assertNull(result);
+		assertThat(result).isNull();
 	}
 
 	@Test
 	public void incr() {
 		String key = "counter";
 
-		assertEquals(1, client.incr(key, 1, 1));
+		assertThat(client.incr(key, 1, 1)).isEqualTo(1);
 		// 注意counter的实际类型是String
-		assertEquals("1", client.get(key));
+		assertThat((String) client.get(key)).isEqualTo("1");
 
-		assertEquals(2, client.incr(key, 1, 1));
-		assertEquals("2", client.get(key));
+		assertThat(client.incr(key, 1, 1)).isEqualTo(2);
+		assertThat((String) client.get(key)).isEqualTo("2");
 
-		assertEquals(0, client.decr(key, 2, 1));
-		assertEquals("0", client.get(key));
-
+		assertThat(client.decr(key, 2, 1)).isEqualTo(0);
+		assertThat((String) client.get(key)).isEqualTo("0");
 	}
 }

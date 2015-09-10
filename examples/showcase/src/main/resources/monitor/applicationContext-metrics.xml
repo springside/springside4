@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<description>Metrics监控配置</description>
+	<bean id="metricsManager" class="org.springside.examples.showcase.demos.metrics.MetricsManager">
+		<property name="graphiteEnabled" value="false" />
+	</bean>
+</beans>

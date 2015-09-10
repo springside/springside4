@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.repository.mybatis;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Map;
@@ -25,8 +30,8 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 	@Test
 	public void getUser() throws Exception {
 		User user = userDao.get(1L);
-		assertNotNull("User not found", user);
-		assertEquals("admin", user.getLoginName());
+		assertThat(user).as("User not found").isNotNull();
+		assertThat(user.getLoginName()).isEqualTo("admin");
 	}
 
 	@Test
@@ -34,8 +39,8 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 		Map<String, Object> parameter = Maps.newHashMap();
 		parameter.put("name", "管理员");
 		List<User> result = userDao.search(parameter);
-		assertEquals(1, result.size());
-		assertEquals("admin", result.get(0).getLoginName());
+		assertThat(result).hasSize(1);
+		assertThat(result.get(0).getLoginName()).isEqualTo("admin");
 	}
 
 	@Test
@@ -46,14 +51,14 @@ public class UserMybatisDaoTest extends SpringTransactionalTestCase {
 		userDao.save(user);
 		Long id = user.getId();
 
-		assertEquals(count + 1, countRowsInTable("ss_user"));
+		assertThat(countRowsInTable("ss_user")).isEqualTo(count + 1);
 		User result = userDao.get(id);
-		assertEquals(user.getLoginName(), result.getLoginName());
+		assertThat(result.getLoginName()).isEqualTo(user.getLoginName());
 
 		// delete
 		userDao.delete(id);
-		assertEquals(count, countRowsInTable("ss_user"));
-		assertNull(userDao.get(id));
+		assertThat(countRowsInTable("ss_user")).isEqualTo(count);
+		assertThat(userDao.get(id)).isNull();
 	}
 
 }

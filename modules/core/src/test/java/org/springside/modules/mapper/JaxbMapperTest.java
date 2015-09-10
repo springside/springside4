@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.modules.mapper;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -59,9 +64,8 @@ public class JaxbMapperTest {
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
-		assertEquals(Long.valueOf(1L), user.getId());
-		assertEquals(2, user.getInterests().size());
-		assertEquals("movie", user.getInterests().get(0));
+		assertThat(user.getId()).isEqualTo(1L);
+		assertThat(user.getInterests()).containsOnly("movie", "sports");
 	}
 
 	/**
@@ -112,11 +116,11 @@ public class JaxbMapperTest {
 			fail(e.getMessage());
 		}
 		Element user = doc.getRootElement();
-		assertEquals("1", user.attribute("id").getValue());
+		assertThat(user.attribute("id").getValue()).isEqualTo("1");
 
 		Element interests = (Element) doc.selectSingleNode("//interests");
-		assertEquals(2, interests.elements().size());
-		assertEquals("movie", ((Element) interests.elements().get(0)).getText());
+		assertThat(interests.elements()).hasSize(2);
+		assertThat(((Element) interests.elements().get(0)).getText()).isEqualTo("movie");
 	}
 
 	@XmlRootElement

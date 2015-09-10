@@ -7,7 +7,7 @@ set MAVEN_OPTS=%MAVEN_OPTS% -XX:MaxPermSize=128m
 
 echo [Step 1] Install all springside modules and archetype to local maven repository.
 cd modules
-call %MVN% clean install -Dmaven.test.skip=true
+call %MVN% clean install
 if errorlevel 1 goto error
 
 cd ..\support\maven-archetype 

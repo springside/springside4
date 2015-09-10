@@ -3,12 +3,11 @@
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
 		version="2.0">
-
-	<description>Spring Framework JSP Form Tag Library extend the radio/checkbox for Twitter BootStrap</description>
+	<description>Spring Framework JSP Form Tag Library extends the radio/checkbox for Twitter BootStrap CSS</description>
 	<tlib-version>3.0</tlib-version>
 	<short-name>form</short-name>
 	<uri>http://www.springside.org.cn/tags/form</uri>
-
+	
 	<tag>
 		<description>Renders an HTML 'form' tag and exposes a binding path to inner tags for binding.</description>
 		<name>form</name>
@@ -2407,7 +2406,7 @@
 		</attribute>
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
-	
+	<!-- SpringSide additional tag -->
 	<tag>
 		<description>Renders multiple HTML 'input' tags with type 'radio', follow Twitter BootStrap style.</description>
 		<name>bsradiobuttons</name>
@@ -2602,6 +2601,7 @@
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 	
+	 <!-- SpringSide additional tag -->
 	<tag>
 		<description>Renders multiple HTML 'input' tags with type 'checkbox',follow Twitter BootStrap styles.</description>
 		<name>bscheckboxes</name>

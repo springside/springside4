@@ -1,11 +1,13 @@
-/**
- * Copyright (c) 2005-2012 springside.org.cn
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
- */
+ *******************************************************************************/
 package org.springside.modules.mapper;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -82,7 +84,7 @@ public class JsonMapper {
 	 * 如果JSON字符串为Null或"null"字符串, 返回Null.
 	 * 如果JSON字符串为"[]", 返回空集合.
 	 * 
-	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
+	 * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String, JavaType)
 	 * 
 	 * @see #fromJson(String, JavaType)
 	 */
@@ -100,7 +102,7 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 反序列化复杂Collection如List<Bean>, 先使用函數createCollectionType构造类型,然后调用本函数.
+	 * 反序列化复杂Collection如List<Bean>, 先使用createCollectionType()或contructMapType()构造类型, 然后调用本函数.
 	 * 
 	 * @see #createCollectionType(Class, Class...)
 	 */
@@ -118,26 +120,30 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 構造泛型的Collection Type如:
-	 * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
-	 * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
+	 * 构造Collection类型.
 	 */
-	public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
-		return mapper.getTypeFactory().constructParametricType(collectionClass, elementClasses);
+	public JavaType contructCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
+		return mapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
 	}
 
 	/**
-	 * 當JSON裡只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+	 * 构造Map类型.
 	 */
-	public <T> T update(String jsonString, T object) {
+	public JavaType contructMapType(Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
+		return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
+	}
+
+	/**
+	 * 当JSON里只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+	 */
+	public void update(String jsonString, Object object) {
 		try {
-			return mapper.readerForUpdating(object).readValue(jsonString);
+			mapper.readerForUpdating(object).readValue(jsonString);
 		} catch (JsonProcessingException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		} catch (IOException e) {
 			logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
 		}
-		return null;
 	}
 
 	/**

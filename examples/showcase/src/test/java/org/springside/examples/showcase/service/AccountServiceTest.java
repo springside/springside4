@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.service;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -21,6 +26,9 @@ public class AccountServiceTest {
 
 	@Mock
 	private UserDao mockUserDao;
+
+	@Mock
+	private BusinessLogger businessLogger;
 
 	@Before
 	public void setUp() {
@@ -48,7 +56,7 @@ public class AccountServiceTest {
 		// 保存超级管理用户抛出异常.
 		try {
 			accountService.saveUser(admin);
-			fail("expected ServicExcepton should be thrown");
+			failBecauseExceptionWasNotThrown(ServiceException.class);
 		} catch (ServiceException e) {
 			// expected exception
 		}

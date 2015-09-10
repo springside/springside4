@@ -2,5 +2,5 @@
 echo [INFO] Install jar to local repository.
 
 cd %~dp0
-call mvn clean install -Dmaven.test.skip=true
+call mvn clean install
 pause

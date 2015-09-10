@@ -8,8 +8,8 @@ create table ${tablePrefix}task (
 	id number(19,0),
 	title varchar2(128) not null,
 	description varchar2(255),
-	user_id bigint not null,
-    primary key (id)
+	user_id number(19,0) not null,
+	primary key (id)
 );
 
 create table ${tablePrefix}user (
@@ -19,7 +19,7 @@ create table ${tablePrefix}user (
 	password varchar2(255) not null,
 	salt varchar2(64) not null,
 	roles varchar2(255) not null,
-	regiser_date date not null,
+	register_date date not null,
 	primary key (id)
 );
 

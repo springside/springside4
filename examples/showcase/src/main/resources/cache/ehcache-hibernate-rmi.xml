@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <ehcache updateCheck="false" name="hibernateCache">
-
+	<!-- http://ehcache.org/ehcache.xml -->
 	<diskStore path="java.io.tmpdir/ehcache/showcase/hibernate" />
 
 	<cacheManagerPeerProviderFactory class="net.sf.ehcache.distribution.RMICacheManagerPeerProviderFactory"

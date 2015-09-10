@@ -1,6 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.quickstart.repository;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +25,11 @@ public class TaskDaoTest extends SpringTransactionalTestCase {
 	@Test
 	public void findTasksByUserId() throws Exception {
 		Page<Task> tasks = taskDao.findByUserId(2L, new PageRequest(0, 100, Direction.ASC, "id"));
-		assertEquals(5, tasks.getContent().size());
-		assertEquals(new Long(1), tasks.getContent().get(0).getId());
+		assertThat(tasks.getContent()).hasSize(5);
+		assertThat(tasks.getContent().get(0).getId()).isEqualTo(1);
 
 		tasks = taskDao.findByUserId(99999L, new PageRequest(0, 100, Direction.ASC, "id"));
-		assertEquals(0, tasks.getContent().size());
+		assertThat(tasks.getContent()).isEmpty();
+		assertThat(tasks.getContent()).isEmpty();
 	}
 }

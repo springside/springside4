@@ -1,7 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase.functional.account;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.openqa.selenium.By;
@@ -14,6 +20,7 @@ import org.springside.modules.test.category.Smoke;
  * 
  * @author calvin
  */
+@Ignore("Ignore the GUI test first")
 public class UserManagerFT extends BaseSeleniumTestCase {
 
 	@Test
@@ -24,7 +31,7 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 		loginAsAdminIfNecessary();
 		s.waitForTitleContains("综合演示用例");
 		WebElement table = s.findElement(By.id("contentTable"));
-		assertEquals("管理员 ", s.getTable(table, 0, 1));
+		assertThat(s.getTable(table, 0, 1)).isEqualTo("管理员 ");
 	}
 
 	@Test
@@ -36,25 +43,25 @@ public class UserManagerFT extends BaseSeleniumTestCase {
 
 		s.click(By.id("editLink-user"));
 
-		//点击提交按钮
+		// 点击提交按钮
 		s.type(By.name("name"), "user_foo");
 		s.check(By.id("status2"));
 		s.click(By.id("submit_btn"));
 
-		//重新进入用户修改页面, 检查最后修改者
+		// 重新进入用户修改页面, 检查最后修改者
 		s.click(By.id("editLink-user"));
-		assertEquals("user_foo", s.getValue(By.name("name")));
-		assertTrue(s.isChecked(By.id("status2")));
+		assertThat(s.getValue(By.name("name"))).isEqualTo("user_foo");
+		assertThat(s.isChecked(By.id("status2"))).isTrue();
 
-		//恢复原有值
+		// 恢复原有值
 		s.type(By.name("name"), "user");
 		s.check(By.id("status1"));
 		s.click(By.id("submit_btn"));
 	}
 
 	private void loginAsAdminIfNecessary() {
-		//修改用户需要登录管理员权限
-		if ("Showcase示例:登录页".equals(s.getTitle())) {
+		// 修改用户需要登录管理员权限
+		if (s.getTitle().contains("登录页")) {
 			s.type(By.name("username"), "admin");
 			s.type(By.name("password"), "admin");
 			s.click(By.id("submit_btn"));

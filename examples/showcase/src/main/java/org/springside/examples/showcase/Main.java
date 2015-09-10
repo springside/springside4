@@ -1,3 +1,8 @@
+/*******************************************************************************
+ * Copyright (c) 2005, 2014 springside.github.io
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ *******************************************************************************/
 package org.springside.examples.showcase;
 
 import java.io.File;
@@ -39,8 +44,8 @@ public class Main {
 
 		ProtectionDomain protectionDomain = Main.class.getProtectionDomain();
 		URL location = protectionDomain.getCodeSource().getLocation();
-
 		String warFile = location.toExternalForm();
+
 		WebAppContext context = new WebAppContext(warFile, contextPath);
 		context.setServer(server);
 

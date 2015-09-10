@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spring Boot Web Service Example</title>
+</head>
+<body>
+<p>Access below management endpoint:
+<ul>
+<li><a href="http://localhost:7002/health">http://localhost:7002/health</a></li>
+<li><a href="http://localhost:7002/info">http://localhost:7002/info</a></li>
+<li><a href="http://localhost:7002/dump">http://localhost:7002/dump</a></li>
+<li><a href="http://localhost:7002/metrics">http://localhost:7002/metrics</a></li>
+<li><a href="http://localhost:7002/env">http://localhost:7002/env</a></li>
+<li>shutdown(disable by default, POST method)</li></ul>
+</p>
+
+<p>JMX expose as Restful by jolokia. e.g. Tomcat's MBean:
+<ul>
+<li><a href="http://localhost:7002/jolokia/read/Tomcat:type=Connector,port=8080">http://localhost:7002/jolokia/read/Tomcat:type=Connector,port=8080</a></li>
+</ul>
+</p>
+
+<p>H2 Console in development profile:
+<ul>
+<li><a href="http://localhost:8080/h2">http://localhost:8080/h2/</a></li>
+</ul>
+</p>
+
+</body>
+</html>
