@@ -79,6 +79,7 @@ public class SearchFilter {
      */
     public static SearchFilter parseBetweenFilter(String key, String[] names, String filedName,
                                                   Object value, Map<String, SearchFilter> filters) {
+
         SearchFilter filter = null;
         filter = filters.get(key);
         if (filter == null) {
