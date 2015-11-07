@@ -1,1 +1,0 @@
-logstash agent -f shipper.conf

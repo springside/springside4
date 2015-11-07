@@ -4,10 +4,10 @@
   
   It has 4 major examples:
   
-  1. Quickstart -- a minimal CRUD Todo-List web application.
-  2. Showcase -- demonstrate many other interesting technologies.
-  3. BootService -- a Spring Boot based WebService application.
-  4. BootMore -- a Spring Boot based WebService application with more samle.
+  1. BootApi -- a Spring Boot based WebService application.
+  2. BootApiAdvanced -- a Spring Boot based WebService application with more settings.
+  3. BootWeb — a Spring Boot base Web Application
+  3. Showcase — Other Examples
  
 -------------------------------
 Offical Site: http://springside.io
