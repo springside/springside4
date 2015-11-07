@@ -31,7 +31,7 @@ public class DigestsTest {
 	@Test
 	public void digestFile() throws IOException {
 
-		InputStream is = this.getClass().getClassLoader().getResourceAsStream("/test.txt");
+		InputStream is = this.getClass().getClassLoader().getResourceAsStream("test.txt");
 		byte[] md5result = Digests.md5(is);
 		byte[] sha1result = Digests.sha1(is);
 		System.out.println("md5: " + Encodes.encodeHex(md5result));

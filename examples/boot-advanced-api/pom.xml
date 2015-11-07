@@ -10,11 +10,11 @@
 	<name>Springside :: Example :: SpringBoot WebService Advanced Demo</name>
 
 	<properties>
-		<springside.version>5.5.0-SNAPSHOT</springside.version>
+		<springside.version>5.0.0-SNAPSHOT</springside.version>
 		<spring-boot.version>1.2.7.RELEASE</spring-boot.version>
 		<commons-lang3.version>3.2.1</commons-lang3.version>
 		<javasimon.version>3.5.2</javasimon.version>
-		<assertj.version>1.7.0</assertj.version>
+		<assertj.version>2.2.0</assertj.version>
 
 		<java.version>1.7</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,7 +45,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -119,6 +119,13 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -142,12 +149,7 @@
 			</plugin>
 		</plugins>
 
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-		</resources>
+
 	</build>
 
 	<dependencyManagement>

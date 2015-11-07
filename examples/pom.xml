@@ -15,6 +15,6 @@
 
 	<modules>
 		<module>boot-api</module>
-		<module>boot-api-advanced</module>
+		<module>boot-advanced-api</module>
 	</modules>
 </project>
