@@ -1,4 +1,4 @@
-package org.springside.examples.bootservice.common;
+package org.springside.examples.showcase.common;
 
 import org.javasimon.console.SimonConsoleServlet;
 import org.javasimon.spring.MonitoredMeasuringPointcut;
