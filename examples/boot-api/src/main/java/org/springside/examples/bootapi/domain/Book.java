@@ -23,9 +23,13 @@ public class Book {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
-	public String bookId;
+
+	public String doubanId;
+
 	public String title;
+
 	public String url;
+
 	public String status;
 
 	@ManyToOne

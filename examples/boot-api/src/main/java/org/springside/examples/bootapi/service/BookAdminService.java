@@ -28,6 +28,7 @@ public class BookAdminService {
 		return bookDao.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Book findOne(Long id) {
 		return bookDao.findOne(id);
 	}
@@ -38,7 +39,7 @@ public class BookAdminService {
 	}
 
 	@Transactional
-	public void save(Book book, Account owner) {
+	public void saveBook(Book book, Account owner) {
 
 		book.owner = owner;
 		book.status = Book.STATUS_IDLE;
@@ -69,5 +70,4 @@ public class BookAdminService {
 
 		bookDao.delete(id);
 	}
-
 }

@@ -75,7 +75,7 @@ public class AccountService {
 		accountDao.save(account);
 	}
 
-	public static String hashPassword(String password) {
+	private static String hashPassword(String password) {
 		return Encodes.encodeBase64(Digests.sha1(password));
 	}
 

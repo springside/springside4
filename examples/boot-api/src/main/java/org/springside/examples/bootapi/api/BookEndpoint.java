@@ -27,13 +27,13 @@ public class BookEndpoint {
 	private static Logger logger = LoggerFactory.getLogger(BookEndpoint.class);
 
 	@Autowired
+	private AccountService accountService;
+
+	@Autowired
 	private BookAdminService adminService;
 
 	@Autowired
 	private BookBorrowService borrowService;
-
-	@Autowired
-	private AccountService accountService;
 
 	@RequestMapping(value = "/api/books", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
 	public List<BookDto> listAllBook() {
@@ -52,15 +52,23 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void createBook(@RequestBody BookDto bookDto,
 			@RequestHeader(value = "token", required = false) String token) {
+
+		// 使用Header中的Token，查找登录用户
 		Account currentUser = accountService.getLoginUser(token);
-		adminService.save(BeanMapper.map(bookDto, Book.class), currentUser);
+
+		// 使用BeanMapper, 将与外部交互的BookDto对象复制为应用内部的Book对象
+		Book book = BeanMapper.map(bookDto, Book.class);
+
+		// 保存Book对象
+		adminService.saveBook(book, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/modify", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void modifyBook(@RequestBody BookDto bookDto,
 			@RequestHeader(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
-		adminService.modifyBook(BeanMapper.map(bookDto, Book.class), currentUser.id);
+		Book book = BeanMapper.map(bookDto, Book.class);
+		adminService.modifyBook(book, currentUser.id);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/delete")
@@ -95,7 +103,6 @@ public class BookEndpoint {
 	public void rejectBorrowRequest(@PathVariable("id") Long id,
 			@RequestHeader(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
-
 		borrowService.rejectBorrowRequest(id, currentUser);
 	}
 
@@ -119,5 +126,4 @@ public class BookEndpoint {
 		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id);
 		return BeanMapper.mapList(books, BookDto.class);
 	}
-
 }

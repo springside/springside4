@@ -70,7 +70,6 @@ public class BookBorrowService {
 				String.format("Cancel book <%s> request by %s", book.title, borrower.name));
 
 		messageDao.save(message);
-
 	}
 
 	@Transactional
@@ -114,7 +113,6 @@ public class BookBorrowService {
 		Message message = new Message(book.borrower,
 				String.format("Reject book <%s> request by %s", book.title, owner.name));
 		messageDao.save(message);
-
 	}
 
 	@Transactional

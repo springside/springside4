@@ -13,6 +13,7 @@ import org.springside.examples.bootapi.api.support.RestException;
 import org.springside.examples.bootapi.service.AccountService;
 import org.springside.modules.web.MediaTypes;
 
+// Spring Restful MVC Controller的标识, 直接输出内容，不调用template引擎.
 @RestController
 public class AccountEndPoint {
 
