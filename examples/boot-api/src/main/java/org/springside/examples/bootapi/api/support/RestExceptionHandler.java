@@ -14,6 +14,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(value = { RestException.class })
 	public final ResponseEntity<?> handleException(RestException ex, WebRequest request) {
+		logger.error(ex.getMessage(), ex);
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaTypes.TEXT_PLAIN_UTF_8));
 		return new ResponseEntity<Object>(ex.getMessage(), headers, ex.status);

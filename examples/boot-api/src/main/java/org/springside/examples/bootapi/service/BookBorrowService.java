@@ -3,6 +3,8 @@ package org.springside.examples.bootapi.service;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,8 @@ import org.springside.examples.bootapi.repository.MessageDao;
 // Spring Bean的标识.
 @Service
 public class BookBorrowService {
+
+	private static Logger logger = LoggerFactory.getLogger(BookBorrowService.class);
 
 	@Autowired
 	private BookDao bookDao;
@@ -33,7 +37,7 @@ public class BookBorrowService {
 		}
 
 		if (borrower.id.equals(book.owner.id)) {
-			throw new RestException("User shouldn't borrower the book which is himeself", HttpStatus.FORBIDDEN);
+			throw new RestException("User shouldn't borrower the book which is himeself", HttpStatus.BAD_REQUEST);
 		}
 
 		book.status = Book.STATUS_REQUEST;

@@ -3,6 +3,8 @@ package org.springside.examples.bootapi.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,6 +17,7 @@ public class Message {
 
 	// JPA 主键标识
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 
 	@ManyToOne
@@ -23,12 +26,12 @@ public class Message {
 
 	public String message;
 
-	public Date recieveDate;
+	public Date receiveDate;
 
 	public Message(Account receiver, String message) {
 		this.receiver = receiver;
 		this.message = message;
-		this.recieveDate = new Date();
+		this.receiveDate = new Date();
 	}
 
 	@Override

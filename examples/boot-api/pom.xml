@@ -17,9 +17,10 @@
 
 	<properties>
 		<springside.version>5.0.0-SNAPSHOT</springside.version>
-		<commons-lang3.version>3.2.1</commons-lang3.version>
+		<commons-lang3.version>3.4</commons-lang3.version>
 		<guava.version>18.0</guava.version>
 		<orika.version>1.4.6</orika.version>
+		<commons-codec.version>1.10</commons-codec.version>
 		<assertj.version>2.2.0</assertj.version>
 
 		<java.version>1.7</java.version>
@@ -76,6 +77,11 @@
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>
 			<version>${orika.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>${commons-codec.version}</version>
 		</dependency>
 
 		<!-- jmx -->

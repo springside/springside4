@@ -7,6 +7,7 @@ package org.springside.modules.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -16,12 +17,13 @@ import org.apache.commons.lang3.Validate;
 /**
  * 支持SHA-1/MD5消息摘要的工具类.
  * 
- * 返回ByteSource，可进一步被编码为Hex, Base64或UrlSafeBase64
+ * 返回ByteSource，可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64
  * 
  * @author calvin
  */
 public class Digests {
 
+	private static final Charset UTF8 = Charset.forName("UTF-8");
 	private static final String SHA1 = "SHA-1";
 	private static final String MD5 = "MD5";
 
@@ -34,12 +36,24 @@ public class Digests {
 		return digest(input, SHA1, null, 1);
 	}
 
+	public static byte[] sha1(String input) {
+		return digest(input.getBytes(UTF8), SHA1, null, 1);
+	}
+
 	public static byte[] sha1(byte[] input, byte[] salt) {
 		return digest(input, SHA1, salt, 1);
 	}
 
+	public static byte[] sha1(String input, byte[] salt) {
+		return digest(input.getBytes(UTF8), SHA1, salt, 1);
+	}
+
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
 		return digest(input, SHA1, salt, iterations);
+	}
+
+	public static byte[] sha1(String input, byte[] salt, int iterations) {
+		return digest(input.getBytes(UTF8), SHA1, salt, iterations);
 	}
 
 	/**
@@ -68,7 +82,7 @@ public class Digests {
 	/**
 	 * 生成随机的Byte[]作为salt.
 	 * 
-	 * @param numBytes byte数组的大小
+	 * @param numBytes salt数组的大小
 	 */
 	public static byte[] generateSalt(int numBytes) {
 		Validate.isTrue(numBytes > 0, "numBytes argument must be a positive integer (1 or larger)", numBytes);
@@ -109,5 +123,4 @@ public class Digests {
 			throw Exceptions.unchecked(e);
 		}
 	}
-
 }

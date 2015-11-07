@@ -4,10 +4,9 @@
   
   It has 4 major examples:
   
-  1. BootApi -- a Spring Boot based WebService application.
-  2. BootApiAdvanced -- a Spring Boot based WebService application with more settings.
+  1. BootApi -- a Spring Boot based WebService application， use a P2P book library as user story.
   3. BootWeb — a Spring Boot base Web Application
-  3. Showcase — Other Examples
+  3. Showcase — Other Advanced Examples
  
 -------------------------------
 Offical Site: http://springside.io

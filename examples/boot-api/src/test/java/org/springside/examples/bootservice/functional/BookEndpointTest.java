@@ -16,6 +16,7 @@ package org.springside.examples.bootservice.functional;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -31,6 +37,8 @@ import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootapi.BootApiApplication;
 import org.springside.examples.bootapi.dto.BookDto;
 import org.springside.modules.test.data.RandomData;
+
+import com.google.common.collect.Maps;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BootApiApplication.class)
@@ -44,11 +52,15 @@ public class BookEndpointTest {
 
 	private RestTemplate restTemplate;
 	private String resourceUrl;
+	private String loginUrl;
+	private String logoutUrl;
 
 	@Before
 	public void setup() {
 		restTemplate = new TestRestTemplate();
 		resourceUrl = "http://localhost:" + port + "/api/books";
+		loginUrl = "http://localhost:" + port + "/api/accounts/login";
+		logoutUrl = "http://localhost:" + port + "/api/accounts/logout";
 	}
 
 	@Test
@@ -68,7 +80,62 @@ public class BookEndpointTest {
 		assertThat(book.owner.name).isEqualTo("Calvin");
 	}
 
-	public static BookDto randomBook() {
+	@Test
+	public void applyRequest() {
+		String token = login();
+		HttpEntity request = buildRequest(token);
+
+		ResponseEntity response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request,
+				String.class, 3L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		logout(token);
+
+	}
+
+	@Test
+	public void applyRequestError() {
+		// 未设置token
+		ResponseEntity response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+
+		// 设置错误token
+		HttpEntity request = buildRequest("abc");
+		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+
+		// 自己借自己的书
+		String token = login();
+		request = buildRequest(token);
+
+		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+	}
+
+	private String login() {
+		Map<String, String> map = Maps.newHashMap();
+		map.put("email", "calvin.xiao@vipshop.com");
+		map.put("password", "springside");
+
+		ResponseEntity<String> response = restTemplate.getForEntity(loginUrl + "?email={email}&password={password}",
+				String.class, "calvin.xiao@vipshop.com", "springside");
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		return response.getBody();
+	}
+
+	private HttpEntity buildRequest(String token) {
+		HttpHeaders requestHeaders = new HttpHeaders();
+		requestHeaders.add("token", token);
+		HttpEntity request = new HttpEntity(requestHeaders);
+		return request;
+	}
+
+	public void logout(String token) {
+		HttpEntity request = buildRequest(token);
+		restTemplate.exchange(logoutUrl, HttpMethod.GET, request, String.class);
+	}
+
+	private static BookDto randomBook() {
 		BookDto book = new BookDto();
 		book.title = RandomData.randomName("Book");
 

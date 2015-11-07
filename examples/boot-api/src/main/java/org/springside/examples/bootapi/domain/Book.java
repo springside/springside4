@@ -3,6 +3,8 @@ package org.springside.examples.bootapi.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,6 +21,7 @@ public class Book {
 
 	// JPA 主键标识
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;
 	public String bookId;
 	public String title;
