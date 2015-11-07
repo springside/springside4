@@ -56,8 +56,8 @@ public class ApacheStringUtilsDemo {
 	@Test
 	public void joinSplit() {
 		// join
-		List<String> inputList = Lists.newArrayList("a", "b", "c");
-		String result = StringUtils.join(inputList, ",");
+		List<String> list = Lists.newArrayList("a", "b", "c");
+		String result = StringUtils.join(list, ",");
 		assertThat(result).isEqualTo("a,b,c");
 
 		// split

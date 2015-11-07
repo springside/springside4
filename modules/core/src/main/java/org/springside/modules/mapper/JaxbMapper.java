@@ -57,9 +57,9 @@ public class JaxbMapper {
 	 */
 	public static String toXml(Object root, Class clazz, String encoding) {
 		try {
-			StringWriter writer = new StringWriter();
-			createMarshaller(clazz, encoding).marshal(root, writer);
-			return writer.toString();
+			StringWriter result = new StringWriter();
+			createMarshaller(clazz, encoding).marshal(root, result);
+			return result.toString();
 		} catch (JAXBException e) {
 			throw Exceptions.unchecked(e);
 		}
@@ -83,10 +83,10 @@ public class JaxbMapper {
 			JAXBElement<CollectionWrapper> wrapperElement = new JAXBElement<CollectionWrapper>(new QName(rootName),
 					CollectionWrapper.class, wrapper);
 
-			StringWriter writer = new StringWriter();
-			createMarshaller(clazz, encoding).marshal(wrapperElement, writer);
+			StringWriter result = new StringWriter();
+			createMarshaller(clazz, encoding).marshal(wrapperElement, result);
 
-			return writer.toString();
+			return result.toString();
 		} catch (JAXBException e) {
 			throw Exceptions.unchecked(e);
 		}
