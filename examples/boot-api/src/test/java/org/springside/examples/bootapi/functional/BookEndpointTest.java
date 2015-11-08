@@ -23,10 +23,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -54,7 +52,8 @@ public class BookEndpointTest {
 
 	@Before
 	public void setup() {
-		restTemplate = new RestTemplate();
+		// TestRestTemplate与RestTemplate, 服务端返回非200返回码时，不会抛异常.
+		restTemplate = new TestRestTemplate();
 		resourceUrl = "http://localhost:" + port + "/api/books";
 		loginUrl = "http://localhost:" + port + "/api/accounts/login";
 		logoutUrl = "http://localhost:" + port + "/api/accounts/logout";
@@ -77,10 +76,9 @@ public class BookEndpointTest {
 	@Test
 	public void applyRequest() {
 		String token = login("calvin.xiao@vipshop.com");
-		HttpEntity request = buildRequest(token);
 
-		ResponseEntity response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request,
-				String.class, 3L);
+		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}",
+				String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
@@ -89,35 +87,32 @@ public class BookEndpointTest {
 	@Test
 	public void applyRequestWithError() {
 		// 未设置token
-		ResponseEntity response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
+		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
 		// 设置错误token
-		HttpEntity request = buildRequest("abc");
-		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 1L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, "abc");
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
 		// 自己借自己的书
 		String token = login("calvin.xiao@vipshop.com");
-		request = buildRequest(token);
 
-		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 1L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
 		logout(token);
 
 		// 借一本已被申请借出的书
 		token = login("calvin.xiao@vipshop.com");
-		request = buildRequest(token);
 
-		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 3L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 3L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 
 		// 回退操作
-		response = restTemplate.exchange(resourceUrl + "/{id}/cancel", HttpMethod.GET, request, String.class, 3L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/cancel?token={token}", String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
@@ -128,23 +123,21 @@ public class BookEndpointTest {
 	public void fullBorrowProcess() {
 		// 发起请求
 		String token = login("david02.wang@vipshop.com");
-		HttpEntity request = buildRequest(token);
 
-		ResponseEntity response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request,
-				String.class, 1L);
+		ResponseEntity response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class,
+				1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
 
 		// 确认借出
 		token = login("calvin.xiao@vipshop.com");
-		request = buildRequest(token);
 
-		response = restTemplate.exchange(resourceUrl + "/{id}/confirm", HttpMethod.GET, request, String.class, 1L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/confirm?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		// 确认归还
-		response = restTemplate.exchange(resourceUrl + "/{id}/return", HttpMethod.GET, request, String.class, 1L);
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/return?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
@@ -159,16 +152,8 @@ public class BookEndpointTest {
 		return response.getBody();
 	}
 
-	private HttpEntity buildRequest(String token) {
-		HttpHeaders requestHeaders = new HttpHeaders();
-		requestHeaders.add("token", token);
-		HttpEntity request = new HttpEntity(requestHeaders);
-		return request;
-	}
-
 	public void logout(String token) {
-		HttpEntity request = buildRequest(token);
-		restTemplate.exchange(logoutUrl, HttpMethod.GET, request, String.class);
+		restTemplate.getForEntity(logoutUrl + "?token={token}", String.class, token);
 	}
 
 	private static BookDto randomBook() {

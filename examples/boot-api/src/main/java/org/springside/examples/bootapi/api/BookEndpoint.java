@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.domain.Book;
@@ -52,7 +52,7 @@ public class BookEndpoint {
 
 	@RequestMapping(value = "/api/books", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void createBook(@RequestBody BookDto bookDto,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 
 		// 使用Header中的Token，查找登录用户
 		Account currentUser = accountService.getLoginUser(token);
@@ -66,63 +66,62 @@ public class BookEndpoint {
 
 	@RequestMapping(value = "/api/books/{id}/modify", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void modifyBook(@RequestBody BookDto bookDto,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		Book book = BeanMapper.map(bookDto, Book.class);
 		adminService.modifyBook(book, currentUser.id);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/delete")
-	public void deleteBook(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+	public void deleteBook(@PathVariable("id") Long id, @RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		adminService.deleteBook(id, currentUser.id);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/request")
 	public void applyBorrowRequest(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.applyBorrowRequest(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/cancel")
 	public void cancelBorrowRequest(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.cancelBorrowRequest(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/confirm")
 	public void markBookBorrowed(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.markBookBorrowed(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/reject")
 	public void rejectBorrowRequest(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.rejectBorrowRequest(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/return")
 	public void markBookReturned(@PathVariable("id") Long id,
-			@RequestHeader(value = "token", required = false) String token) {
+			@RequestParam(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.markBookReturned(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/mybook", produces = MediaTypes.JSON_UTF_8)
-	public List<BookDto> listMyBook(@RequestHeader(value = "token", required = false) String token, Pageable pageable) {
+	public List<BookDto> listMyBook(@RequestParam(value = "token", required = false) String token, Pageable pageable) {
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = adminService.listMyBook(currentUser.id, pageable);
 		return BeanMapper.mapList(books, BookDto.class);
 	}
 
 	@RequestMapping(value = "/api/myborrowedbook", produces = MediaTypes.JSON_UTF_8)
-	public List<BookDto> listMyBorrowedBook(@RequestHeader(value = "token", required = false) String token,
+	public List<BookDto> listMyBorrowedBook(@RequestParam(value = "token", required = false) String token,
 			Pageable pageable) {
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id, pageable);
