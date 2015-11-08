@@ -4,10 +4,9 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
+import org.springframework.context.annotation.Profile;
 
 /**
  * 在非生产环境里，初始化H2Console管理嵌入式H2.
@@ -15,16 +14,12 @@ import org.springframework.core.env.Environment;
  * @author calvin
  */
 @Configuration
+@Profile(Profiles.NOT_PRODUCTION)
 public class H2ConsoleStarter implements ServletContextInitializer {
-
-	@Autowired
-	private Environment env;
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		if (!env.acceptsProfiles(Profiles.PRODUCTION)) {
-			initH2Console(servletContext);
-		}
+		initH2Console(servletContext);
 	}
 
 	private void initH2Console(ServletContext servletContext) {

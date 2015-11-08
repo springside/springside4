@@ -22,9 +22,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,7 +31,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootapi.BootApiApplication;
 import org.springside.examples.bootapi.dto.BookDto;
@@ -42,8 +40,7 @@ import com.google.common.collect.Maps;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = BootApiApplication.class)
-@WebAppConfiguration
-@IntegrationTest("server.port=0")
+@WebIntegrationTest("server.port=0")
 @DirtiesContext
 public class BookEndpointTest {
 
@@ -57,7 +54,7 @@ public class BookEndpointTest {
 
 	@Before
 	public void setup() {
-		restTemplate = new TestRestTemplate();
+		restTemplate = new RestTemplate();
 		resourceUrl = "http://localhost:" + port + "/api/books";
 		loginUrl = "http://localhost:" + port + "/api/accounts/login";
 		logoutUrl = "http://localhost:" + port + "/api/accounts/logout";

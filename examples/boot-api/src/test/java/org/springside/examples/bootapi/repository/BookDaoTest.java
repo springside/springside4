@@ -24,8 +24,8 @@ public class BookDaoTest {
 
 	@Test
 	public void findByUserId() {
-		List<Book> books = bookDao.findByOwnerId(1L, new PageRequest(1, 10));
-		assertThat(books).hasSize(1);
+		List<Book> books = bookDao.findByOwnerId(1L, new PageRequest(0, 10));
+		assertThat(books).hasSize(2);
 		assertThat(books.get(0).title).isEqualTo("Big Data日知录");
 	}
 }

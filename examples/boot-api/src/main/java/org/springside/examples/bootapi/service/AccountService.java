@@ -2,9 +2,13 @@ package org.springside.examples.bootapi.service;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.metrics.CounterService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,11 +28,25 @@ public class AccountService {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
 
-	private Cache<String, Account> loginUsers = CacheBuilder.newBuilder().maximumSize(1000)
-			.expireAfterAccess(10, TimeUnit.MINUTES).build();
-
 	@Autowired
 	private AccountDao accountDao;
+
+	// 注入配置值
+	@Value("${app.loginTimeoutSecs}")
+	private int loginTimeoutSecs;
+
+	// codehale metrics
+	@Autowired
+	private CounterService counterService;
+
+	// guava cache
+	private Cache<String, Account> loginUsers;
+
+	@PostConstruct
+	public void init() {
+		loginUsers = CacheBuilder.newBuilder().maximumSize(1000).expireAfterAccess(loginTimeoutSecs, TimeUnit.SECONDS)
+				.build();
+	}
 
 	@Transactional(readOnly = true)
 	public String login(String email, String password) {
@@ -44,6 +62,7 @@ public class AccountService {
 
 		String token = Identities.uuid2();
 		loginUsers.put(token, account);
+		counterService.increment("loginUser");
 		return token;
 	}
 
@@ -53,6 +72,7 @@ public class AccountService {
 			logger.error("logout an alreay logout token:" + token);
 		} else {
 			loginUsers.invalidate(token);
+			counterService.decrement("loginUser");
 		}
 	}
 
@@ -80,11 +100,7 @@ public class AccountService {
 		accountDao.save(account);
 	}
 
-	private static String hashPassword(String password) {
+	protected static String hashPassword(String password) {
 		return Encodes.encodeBase64(Digests.sha1(password));
-	}
-
-	public static void main(String[] args) throws Exception {
-		System.out.println("hashPassword:" + hashPassword("springside"));
 	}
 }

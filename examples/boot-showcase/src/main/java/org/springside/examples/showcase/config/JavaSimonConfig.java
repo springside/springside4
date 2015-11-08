@@ -1,4 +1,4 @@
-package org.springside.examples.showcase.common;
+package org.springside.examples.showcase.config;
 
 import org.javasimon.console.SimonConsoleServlet;
 import org.javasimon.spring.MonitoredMeasuringPointcut;

@@ -15,7 +15,7 @@ public class BootApiApplication {
 	 * 1. 扫描当前package下的class设置自动注入的Bean<br/>
 	 * 2. 也支持用@Bean标注的类配置Bean <br/>
 	 * 3. 根据classpath中的三方包Class及集中的application.properties条件配置三方包，如线程池 <br/>
-	 * 4. 也支持用@Configuration标注的类配置三方包，如线程池,Servlet.
+	 * 4. 也支持用@Configuration标注的类配置三方包.
 	 */
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(BootApiApplication.class, args);
