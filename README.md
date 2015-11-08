@@ -40,8 +40,7 @@
 2. 访问 http://localhost:8080/
 
 
-
-
 -------------------------------
 Offical Site: http://springside.io
+
 Document: https://github.com/springside/springside4/wiki
