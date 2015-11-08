@@ -13,7 +13,7 @@ import java.util.UUID;
  * 
  * @author calvin
  */
-public class Identities {
+public class Ids {
 
 	private static SecureRandom random = new SecureRandom();
 

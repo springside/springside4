@@ -17,7 +17,7 @@ import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.repository.AccountDao;
 import org.springside.modules.utils.Digests;
 import org.springside.modules.utils.Encodes;
-import org.springside.modules.utils.Identities;
+import org.springside.modules.utils.Ids;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -60,7 +60,7 @@ public class AccountService {
 			throw new RestException("Password wrong", HttpStatus.UNAUTHORIZED);
 		}
 
-		String token = Identities.uuid2();
+		String token = Ids.uuid2();
 		loginUsers.put(token, account);
 		counterService.increment("loginUser");
 		return token;
