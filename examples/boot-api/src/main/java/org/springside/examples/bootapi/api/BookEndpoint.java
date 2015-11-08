@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -35,14 +36,14 @@ public class BookEndpoint {
 	@Autowired
 	private BookBorrowService borrowService;
 
-	@RequestMapping(value = "/api/books", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
-	public List<BookDto> listAllBook() {
-		Iterable<Book> books = adminService.findAll();
+	@RequestMapping(value = "/api/books", produces = MediaTypes.JSON_UTF_8)
+	public List<BookDto> listAllBook(Pageable pageable) {
+		Iterable<Book> books = adminService.findAll(pageable);
 
 		return BeanMapper.mapList(books, BookDto.class);
 	}
 
-	@RequestMapping(value = "/api/books/{id}", method = RequestMethod.GET, produces = MediaTypes.JSON_UTF_8)
+	@RequestMapping(value = "/api/books/{id}", produces = MediaTypes.JSON_UTF_8)
 	public BookDto listOneBook(@PathVariable("id") Long id) {
 		Book book = adminService.findOne(id);
 
