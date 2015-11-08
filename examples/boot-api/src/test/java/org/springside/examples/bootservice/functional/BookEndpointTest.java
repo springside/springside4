@@ -71,10 +71,7 @@ public class BookEndpointTest {
 
 		assertThat(firstBook.title).isEqualTo("Big Data日知录");
 		assertThat(firstBook.owner.name).isEqualTo("Calvin");
-	}
 
-	@Test
-	public void getTask() {
 		BookDto book = restTemplate.getForObject(resourceUrl + "/{id}", BookDto.class, 1L);
 		assertThat(book.title).isEqualTo("Big Data日知录");
 		assertThat(book.owner.name).isEqualTo("Calvin");
@@ -82,7 +79,7 @@ public class BookEndpointTest {
 
 	@Test
 	public void applyRequest() {
-		String token = login();
+		String token = login("calvin.xiao@vipshop.com");
 		HttpEntity request = buildRequest(token);
 
 		ResponseEntity response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request,
@@ -90,11 +87,10 @@ public class BookEndpointTest {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
-
 	}
 
 	@Test
-	public void applyRequestError() {
+	public void applyRequestWithError() {
 		// 未设置token
 		ResponseEntity response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
@@ -105,20 +101,63 @@ public class BookEndpointTest {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
 		// 自己借自己的书
-		String token = login();
+		String token = login("calvin.xiao@vipshop.com");
 		request = buildRequest(token);
 
 		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 1L);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+		logout(token);
+
+		// 借一本已被申请借出的书
+		token = login("calvin.xiao@vipshop.com");
+		request = buildRequest(token);
+
+		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 3L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request, String.class, 3L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+		// 回退操作
+		response = restTemplate.exchange(resourceUrl + "/{id}/cancel", HttpMethod.GET, request, String.class, 3L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		logout(token);
+
 	}
 
-	private String login() {
+	@Test
+	public void fullBorrowProcess() {
+		// 发起请求
+		String token = login("david02.wang@vipshop.com");
+		HttpEntity request = buildRequest(token);
+
+		ResponseEntity response = restTemplate.exchange(resourceUrl + "/{id}/request", HttpMethod.GET, request,
+				String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		logout(token);
+
+		// 确认借出
+		token = login("calvin.xiao@vipshop.com");
+		request = buildRequest(token);
+
+		response = restTemplate.exchange(resourceUrl + "/{id}/confirm", HttpMethod.GET, request, String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		// 确认归还
+		response = restTemplate.exchange(resourceUrl + "/{id}/return", HttpMethod.GET, request, String.class, 1L);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+	}
+
+	private String login(String user) {
 		Map<String, String> map = Maps.newHashMap();
-		map.put("email", "calvin.xiao@vipshop.com");
+		map.put("email", user);
 		map.put("password", "springside");
 
 		ResponseEntity<String> response = restTemplate.getForEntity(loginUrl + "?email={email}&password={password}",
-				String.class, "calvin.xiao@vipshop.com", "springside");
+				String.class, map);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		return response.getBody();
 	}
