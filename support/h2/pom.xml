@@ -36,6 +36,8 @@
 						<argument>-webPort</argument>
 						<argument>8090</argument>
 						<argument>-browser</argument>
+						<argument>-properties</argument>
+						<argument>.</argument>
 					</arguments>
 				</configuration>
 			</plugin>

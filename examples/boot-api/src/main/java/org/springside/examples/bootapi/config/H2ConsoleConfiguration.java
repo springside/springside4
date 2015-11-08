@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 @Profile(Profiles.NOT_PRODUCTION)
-public class H2ConsoleStarter implements ServletContextInitializer {
+public class H2ConsoleConfiguration implements ServletContextInitializer {
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
