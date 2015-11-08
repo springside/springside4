@@ -1,6 +1,6 @@
 package org.springside.examples.bootapi.service;
 
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +15,17 @@ import org.springside.modules.utils.Digests;
 import org.springside.modules.utils.Encodes;
 import org.springside.modules.utils.Identities;
 
-import com.google.common.collect.Maps;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 // Spring Bean的标识.
 @Service
 public class AccountService {
 
 	private static Logger logger = LoggerFactory.getLogger(AccountService.class);
-	private Map<String, Account> loginUsers = Maps.newConcurrentMap();
+
+	private Cache<String, Account> loginUsers = CacheBuilder.newBuilder().maximumSize(1000)
+			.expireAfterAccess(10, TimeUnit.MINUTES).build();
 
 	@Autowired
 	private AccountDao accountDao;
@@ -45,9 +48,11 @@ public class AccountService {
 	}
 
 	public void logout(String token) {
-		Account account = loginUsers.remove(token);
+		Account account = loginUsers.getIfPresent(token);
 		if (account == null) {
-			logger.error("logout a alreay logout token:" + token);
+			logger.error("logout an alreay logout token:" + token);
+		} else {
+			loginUsers.invalidate(token);
 		}
 	}
 
@@ -57,7 +62,7 @@ public class AccountService {
 			throw new RestException("User doesn't login", HttpStatus.UNAUTHORIZED);
 		}
 
-		Account account = loginUsers.get(token);
+		Account account = loginUsers.getIfPresent(token);
 
 		if (account == null) {
 			throw new RestException("User doesn't login", HttpStatus.UNAUTHORIZED);
