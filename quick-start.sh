@@ -13,8 +13,11 @@ if [ $? -ne 0 ];then
   exit -1
 fi
 
-echo "[Step 2] run boot-api project."
+echo "[Step 2] init db for production mode."
 cd ../examples/boot-api
+mvn antrun:run -Prefresh-db
+
+echo "[Step 3] run boot-api project in dev mode."
 mvn spring-boot:run
 
 
