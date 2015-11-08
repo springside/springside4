@@ -90,7 +90,7 @@ public class BookEndpoint {
 	public void cancelBorrowRequest(@PathVariable("id") Long id,
 			@RequestHeader(value = "token", required = false) String token) {
 		Account currentUser = accountService.getLoginUser(token);
-		borrowService.cancleBorrowRequest(id, currentUser);
+		borrowService.cancelBorrowRequest(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/books/{id}/confirm")
@@ -115,16 +115,17 @@ public class BookEndpoint {
 	}
 
 	@RequestMapping(value = "/api/mybook", produces = MediaTypes.JSON_UTF_8)
-	public List<BookDto> listMyBook(@RequestHeader(value = "token", required = false) String token) {
+	public List<BookDto> listMyBook(@RequestHeader(value = "token", required = false) String token, Pageable pageable) {
 		Account currentUser = accountService.getLoginUser(token);
-		List<Book> books = adminService.listMyBook(currentUser.id);
+		List<Book> books = adminService.listMyBook(currentUser.id, pageable);
 		return BeanMapper.mapList(books, BookDto.class);
 	}
 
 	@RequestMapping(value = "/api/myborrowedbook", produces = MediaTypes.JSON_UTF_8)
-	public List<BookDto> listMyBorrowedBook(@RequestHeader(value = "token", required = false) String token) {
+	public List<BookDto> listMyBorrowedBook(@RequestHeader(value = "token", required = false) String token,
+			Pageable pageable) {
 		Account currentUser = accountService.getLoginUser(token);
-		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id);
+		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id, pageable);
 		return BeanMapper.mapList(books, BookDto.class);
 	}
 }

@@ -19,6 +19,14 @@ public class Account {
 	public String name;
 	public String hashPassword;
 
+	public Account() {
+
+	}
+
+	public Account(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

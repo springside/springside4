@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,20 +24,23 @@ public class BookBorrowService {
 	private static Logger logger = LoggerFactory.getLogger(BookBorrowService.class);
 
 	@Autowired
-	private BookDao bookDao;
+	protected BookDao bookDao;
 
 	@Autowired
-	private MessageDao messageDao;
+	protected MessageDao messageDao;
 
 	@Transactional
 	public void applyBorrowRequest(Long id, Account borrower) {
 		Book book = bookDao.findOne(id);
 
 		if (!book.status.equals(Book.STATUS_IDLE)) {
+			logger.error("User request the book not idle, user id:" + borrower.id + ",book id:" + id + ",status:"
+					+ book.status);
 			throw new RestException("The book is not idle", HttpStatus.BAD_REQUEST);
 		}
 
 		if (borrower.id.equals(book.owner.id)) {
+			logger.error("User borrow the book himself, user id:" + borrower.id + ",book id:" + id);
 			throw new RestException("User shouldn't borrower the book which is himeself", HttpStatus.BAD_REQUEST);
 		}
 
@@ -51,14 +55,18 @@ public class BookBorrowService {
 	}
 
 	@Transactional
-	public void cancleBorrowRequest(Long id, Account borrower) {
+	public void cancelBorrowRequest(Long id, Account borrower) {
 		Book book = bookDao.findOne(id);
 
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
+			logger.error("User cancel the book not reqesting, user id:" + borrower.id + ",book id:" + id + ",status:"
+					+ book.status);
 			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
 		}
 
 		if (!borrower.id.equals(book.borrower.id)) {
+			logger.error("User cancel the book not request by him, user id:" + borrower.id + ",book id:" + id
+					+ ",borrower id" + book.borrower.id);
 			throw new RestException("User can't cancel other ones request", HttpStatus.FORBIDDEN);
 		}
 
@@ -77,10 +85,14 @@ public class BookBorrowService {
 		Book book = bookDao.findOne(id);
 
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
+			logger.error("User confirm the book not reqesting, user id:" + owner.id + ",book id:" + id + ",status:"
+					+ book.status);
 			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
+			logger.error("User confirm the book not himself, user id:" + owner.id + ",book id:" + id + ",owner id"
+					+ book.owner.id);
 			throw new RestException("User can't cofirm others book", HttpStatus.FORBIDDEN);
 		}
 
@@ -98,10 +110,15 @@ public class BookBorrowService {
 		Book book = bookDao.findOne(id);
 
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
+			logger.error("User reject the book not reqesting, user id:" + owner.id + ",book id:" + id + ",status:"
+					+ book.status);
 			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
+
+			logger.error("User reject the book not himself, user id:" + owner.id + ",book id:" + id + ",owener id"
+					+ book.owner.id);
 			throw new RestException("User can't reject others book", HttpStatus.FORBIDDEN);
 		}
 
@@ -120,10 +137,14 @@ public class BookBorrowService {
 		Book book = bookDao.findOne(id);
 
 		if (!book.status.equals(Book.STATUS_OUT)) {
+			logger.error(
+					"User return the book not out, user id:" + owner.id + ",book id:" + id + ",status:" + book.status);
 			throw new RestException("The book is not borrowing", HttpStatus.BAD_REQUEST);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
+			logger.error("User return the book not himself, user id:" + owner.id + ",book id:" + id + ",owner id"
+					+ book.owner.id);
 			throw new RestException("User can't make others book returned", HttpStatus.FORBIDDEN);
 		}
 
@@ -138,7 +159,7 @@ public class BookBorrowService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Book> listMyBorrowedBook(Long borrowerId) {
-		return bookDao.findByBorrowerId(borrowerId);
+	public List<Book> listMyBorrowedBook(Long borrowerId, Pageable pageable) {
+		return bookDao.findByBorrowerId(borrowerId, pageable);
 	}
 }

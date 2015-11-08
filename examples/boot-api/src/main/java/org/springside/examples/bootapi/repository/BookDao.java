@@ -2,6 +2,7 @@ package org.springside.examples.bootapi.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springside.examples.bootapi.domain.Book;
 
@@ -14,7 +15,7 @@ import org.springside.examples.bootapi.domain.Book;
  */
 public interface BookDao extends PagingAndSortingRepository<Book, Long> {
 
-	List<Book> findByOwnerId(Long ownerId);
+	List<Book> findByOwnerId(Long ownerId, Pageable pageable);
 
-	List<Book> findByBorrowerId(Long borrowerId);
+	List<Book> findByBorrowerId(Long borrowerId, Pageable pageable);
 }

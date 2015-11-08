@@ -35,8 +35,8 @@ public class BookAdminService {
 	}
 
 	@Transactional(readOnly = true)
-	public List<Book> listMyBook(Long ownerId) {
-		return bookDao.findByOwnerId(ownerId);
+	public List<Book> listMyBook(Long ownerId, Pageable pageable) {
+		return bookDao.findByOwnerId(ownerId, pageable);
 	}
 
 	@Transactional

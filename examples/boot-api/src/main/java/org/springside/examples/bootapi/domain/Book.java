@@ -44,6 +44,13 @@ public class Book {
 
 	public Date borrowDate;
 
+	public Book() {
+	}
+
+	public Book(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);

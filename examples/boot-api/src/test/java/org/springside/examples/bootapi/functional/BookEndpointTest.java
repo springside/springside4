@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-package org.springside.examples.bootservice.functional;
+package org.springside.examples.bootapi.functional;
 
 import static org.assertj.core.api.Assertions.*;
 
