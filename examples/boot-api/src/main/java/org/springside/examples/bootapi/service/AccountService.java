@@ -69,7 +69,7 @@ public class AccountService {
 	public void logout(String token) {
 		Account account = loginUsers.getIfPresent(token);
 		if (account == null) {
-			logger.error("logout an alreay logout token:" + token);
+			logger.warn("logout an alreay logout token:" + token);
 		} else {
 			loginUsers.invalidate(token);
 			counterService.decrement("loginUser");
@@ -79,6 +79,7 @@ public class AccountService {
 	public Account getLoginUser(String token) {
 
 		if (token == null) {
+			logger.error("no token");
 			throw new RestException("User doesn't login", HttpStatus.UNAUTHORIZED);
 		}
 

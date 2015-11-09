@@ -21,6 +21,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
@@ -31,7 +32,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootapi.BootApiApplication;
+import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.dto.BookDto;
+import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.modules.test.data.RandomData;
 
 import com.google.common.collect.Maps;
@@ -41,9 +44,13 @@ import com.google.common.collect.Maps;
 @WebIntegrationTest("server.port=0")
 @DirtiesContext
 public class BookEndpointTest {
-
+	// 注入启动server后的实际端口号
 	@Value("${local.server.port}")
 	private int port;
+
+	// 注入Spring Context中的BookDao，实现白盒查询数据库实际情况
+	@Autowired
+	private BookDao bookDao;
 
 	private RestTemplate restTemplate;
 	private String resourceUrl;
@@ -82,6 +89,11 @@ public class BookEndpointTest {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
+
+		// 查询数据库状态
+		Book book = bookDao.findOne(3L);
+		assertThat(book.borrower.id).isEqualTo(1L);
+		assertThat(book.status).isEqualTo(Book.STATUS_REQUEST);
 	}
 
 	@Test
@@ -90,15 +102,24 @@ public class BookEndpointTest {
 		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
+		Book book = bookDao.findOne(1L);
+		assertThat(book.borrower).isNull();
+
 		// 设置错误token
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, "abc");
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+
+		book = bookDao.findOne(1L);
+		assertThat(book.borrower).isNull();
 
 		// 自己借自己的书
 		String token = login("calvin.xiao@vipshop.com");
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+
+		book = bookDao.findOne(1L);
+		assertThat(book.borrower).isNull();
 
 		logout(token);
 

@@ -28,6 +28,10 @@ public class Message {
 
 	public Date receiveDate;
 
+	public Message() {
+
+	}
+
 	public Message(Account receiver, String message) {
 		this.receiver = receiver;
 		this.message = message;
