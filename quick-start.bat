@@ -10,13 +10,8 @@ cd modules
 call %MVN% clean install
 if errorlevel 1 goto error
 
-
-echo [Step 2] init db for production mode..
+echo [Step 2] run boot-api project in dev mode.
 cd ..\examples\boot-api
-call %MVN% antrun:run -Prefresh-db
-if errorlevel 1 goto error
-
-echo [Step 3] run boot-api project in dev mode.
 call %MVN% spring-boot:run
 if errorlevel 1 goto error
 
