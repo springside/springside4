@@ -1,10 +1,8 @@
-  SpringSide is a Spring Framework based JavaEE application reference architecture. 
+SpringSide是以Spring Framework为核心的，Pragmatic风格的JavaEE应用参考示例，是JavaEE世界中的主流技术选型，最佳实践的总结与演示。
   
-  It shows the mainstream technologies and pragmatic practice in JavaEE world.  
-  
-  1. BootApi - a Spring Boot based WebService application, it can be used as SOA or the backend of Ajax application.
-  3. BootWeb — a Spring Boot base Web application, an simple CRUD web application.
-  3. Showcase - Other Advanced Examples
+  1. BootApi - 基于Spring Boot的Web Service应用, 可以用于服务化项目，或Ajax页面的后台.
+  3. BootWeb — 基于Spring Boot的Web应用, 简单的增删改查处理.
+  3. Showcase -  更多的示例.
  
 
 ## 主要用例
