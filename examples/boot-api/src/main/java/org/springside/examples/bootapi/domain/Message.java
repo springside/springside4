@@ -32,10 +32,10 @@ public class Message {
 
 	}
 
-	public Message(Account receiver, String message) {
+	public Message(Account receiver, String message, Date receiveDate) {
 		this.receiver = receiver;
 		this.message = message;
-		this.receiveDate = new Date();
+		this.receiveDate = receiveDate;
 	}
 
 	@Override

@@ -9,12 +9,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.metrics.CounterService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.examples.bootapi.api.support.RestException;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.repository.AccountDao;
+import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.modules.utils.Digests;
 import org.springside.modules.utils.Encodes;
 import org.springside.modules.utils.Ids;
@@ -53,11 +52,11 @@ public class AccountService {
 		Account account = accountDao.findByEmail(email);
 
 		if (account == null) {
-			throw new RestException("User not exist", HttpStatus.UNAUTHORIZED);
+			throw new ServiceException("User not exist", ErrorCode.UNAUTHORIZED);
 		}
 
 		if (!account.hashPassword.equals(hashPassword(password))) {
-			throw new RestException("Password wrong", HttpStatus.UNAUTHORIZED);
+			throw new ServiceException("Password wrong", ErrorCode.UNAUTHORIZED);
 		}
 
 		String token = Ids.uuid2();
@@ -78,15 +77,10 @@ public class AccountService {
 
 	public Account getLoginUser(String token) {
 
-		if (token == null) {
-			logger.error("no token");
-			throw new RestException("User doesn't login", HttpStatus.UNAUTHORIZED);
-		}
-
 		Account account = loginUsers.getIfPresent(token);
 
 		if (account == null) {
-			throw new RestException("User doesn't login", HttpStatus.UNAUTHORIZED);
+			throw new ServiceException("User doesn't login", ErrorCode.UNAUTHORIZED);
 		}
 
 		return account;

@@ -1,19 +1,18 @@
 package org.springside.examples.bootapi.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.examples.bootapi.api.support.RestException;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.repository.BookDao;
+import org.springside.examples.bootapi.service.exception.ErrorCode;
+import org.springside.modules.utils.Clock;
 
 // Spring Bean的标识.
 @Service
@@ -23,6 +22,9 @@ public class BookAdminService {
 
 	@Autowired
 	private BookDao bookDao;
+
+	// 可注入的Clock，方便测试时控制日期
+	protected Clock clock = Clock.DEFAULT;
 
 	@Transactional(readOnly = true)
 	public Iterable<Book> findAll(Pageable pageable) {
@@ -44,7 +46,7 @@ public class BookAdminService {
 
 		book.owner = owner;
 		book.status = Book.STATUS_IDLE;
-		book.onboardDate = new Date();
+		book.onboardDate = clock.getCurrentDate();
 
 		bookDao.save(book);
 	}
@@ -52,7 +54,7 @@ public class BookAdminService {
 	@Transactional
 	public void modifyBook(Book book, Long currentAccountId) {
 		if (!currentAccountId.equals(book.owner.id)) {
-			throw new RestException("User can't modify others book", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't modify others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		Book orginalBook = bookDao.findOne(book.id);
@@ -66,7 +68,7 @@ public class BookAdminService {
 		Book book = bookDao.findOne(id);
 
 		if (!currentAccountId.equals(book.owner.id)) {
-			throw new RestException("User can't delete others book", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't delete others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		bookDao.delete(id);

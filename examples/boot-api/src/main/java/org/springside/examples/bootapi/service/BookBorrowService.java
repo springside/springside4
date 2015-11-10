@@ -1,21 +1,20 @@
 package org.springside.examples.bootapi.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springside.examples.bootapi.api.support.RestException;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.domain.Message;
 import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.repository.MessageDao;
+import org.springside.examples.bootapi.service.exception.ErrorCode;
+import org.springside.modules.utils.Clock;
 
 // Spring Bean的标识.
 @Service
@@ -29,6 +28,9 @@ public class BookBorrowService {
 	@Autowired
 	protected MessageDao messageDao;
 
+	// 可注入的Clock，方便测试时控制日期
+	protected Clock clock = Clock.DEFAULT;
+
 	@Transactional
 	public void applyBorrowRequest(Long id, Account borrower) {
 		Book book = bookDao.findOne(id);
@@ -36,12 +38,13 @@ public class BookBorrowService {
 		if (!book.status.equals(Book.STATUS_IDLE)) {
 			logger.error("User request the book not idle, user id:" + borrower.id + ",book id:" + id + ",status:"
 					+ book.status);
-			throw new RestException("The book is not idle", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("The book is not idle", ErrorCode.BOOK_STATUS_WRONG);
 		}
 
 		if (borrower.id.equals(book.owner.id)) {
 			logger.error("User borrow the book himself, user id:" + borrower.id + ",book id:" + id);
-			throw new RestException("User shouldn't borrower the book which is himeself", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("User shouldn't borrower the book which is himeself",
+					ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		book.status = Book.STATUS_REQUEST;
@@ -49,7 +52,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Apply book <%s> request by %s", book.title, borrower.name));
+				String.format("Apply book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
 
 		messageDao.save(message);
 	}
@@ -61,13 +64,13 @@ public class BookBorrowService {
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
 			logger.error("User cancel the book not reqesting, user id:" + borrower.id + ",book id:" + id + ",status:"
 					+ book.status);
-			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("The book is not requesting", ErrorCode.BOOK_STATUS_WRONG);
 		}
 
 		if (!borrower.id.equals(book.borrower.id)) {
 			logger.error("User cancel the book not request by him, user id:" + borrower.id + ",book id:" + id
 					+ ",borrower id" + book.borrower.id);
-			throw new RestException("User can't cancel other ones request", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't cancel other ones request", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		book.status = Book.STATUS_IDLE;
@@ -75,7 +78,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Cancel book <%s> request by %s", book.title, borrower.name));
+				String.format("Cancel book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
 
 		messageDao.save(message);
 	}
@@ -87,21 +90,21 @@ public class BookBorrowService {
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
 			logger.error("User confirm the book not reqesting, user id:" + owner.id + ",book id:" + id + ",status:"
 					+ book.status);
-			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("The book is not requesting", ErrorCode.BOOK_STATUS_WRONG);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
 			logger.error("User confirm the book not himself, user id:" + owner.id + ",book id:" + id + ",owner id"
 					+ book.owner.id);
-			throw new RestException("User can't cofirm others book", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't cofirm others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		book.status = Book.STATUS_OUT;
-		book.borrowDate = new Date();
+		book.borrowDate = clock.getCurrentDate();
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Confirm book <%s> request by %s", book.title, owner.name));
+				String.format("Confirm book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
 		messageDao.save(message);
 	}
 
@@ -112,14 +115,14 @@ public class BookBorrowService {
 		if (!book.status.equals(Book.STATUS_REQUEST)) {
 			logger.error("User reject the book not reqesting, user id:" + owner.id + ",book id:" + id + ",status:"
 					+ book.status);
-			throw new RestException("The book is not requesting", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("The book is not requesting", ErrorCode.BOOK_STATUS_WRONG);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
 
 			logger.error("User reject the book not himself, user id:" + owner.id + ",book id:" + id + ",owener id"
 					+ book.owner.id);
-			throw new RestException("User can't reject others book", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't reject others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		book.status = Book.STATUS_IDLE;
@@ -128,7 +131,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Reject book <%s> request by %s", book.title, owner.name));
+				String.format("Reject book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
 		messageDao.save(message);
 	}
 
@@ -139,13 +142,13 @@ public class BookBorrowService {
 		if (!book.status.equals(Book.STATUS_OUT)) {
 			logger.error(
 					"User return the book not out, user id:" + owner.id + ",book id:" + id + ",status:" + book.status);
-			throw new RestException("The book is not borrowing", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("The book is not borrowing", ErrorCode.BOOK_STATUS_WRONG);
 		}
 
 		if (!owner.id.equals(book.owner.id)) {
 			logger.error("User return the book not himself, user id:" + owner.id + ",book id:" + id + ",owner id"
 					+ book.owner.id);
-			throw new RestException("User can't make others book returned", HttpStatus.FORBIDDEN);
+			throw new ServiceException("User can't make others book returned", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		book.status = Book.STATUS_IDLE;
@@ -154,7 +157,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Mark book <%s> returned by %s", book.title, owner.name));
+				String.format("Mark book <%s> returned by %s", book.title, owner.name), clock.getCurrentDate());
 		messageDao.save(message);
 	}
 

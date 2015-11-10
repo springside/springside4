@@ -32,9 +32,12 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootapi.BootApiApplication;
+import org.springside.examples.bootapi.api.support.ServiceExceptionHandler.ErrorResult;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.dto.BookDto;
 import org.springside.examples.bootapi.repository.BookDao;
+import org.springside.examples.bootapi.service.exception.ErrorCode;
+import org.springside.modules.mapper.JsonMapper;
 import org.springside.modules.test.data.RandomData;
 
 import com.google.common.collect.Maps;
@@ -53,6 +56,8 @@ public class BookEndpointTest {
 	private BookDao bookDao;
 
 	private RestTemplate restTemplate;
+	private JsonMapper jsonMapper = new JsonMapper();
+
 	private String resourceUrl;
 	private String loginUrl;
 	private String logoutUrl;
@@ -101,6 +106,8 @@ public class BookEndpointTest {
 		// 未设置token
 		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request", String.class, 1L);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+		ErrorResult errorResult = jsonMapper.fromJson(response.getBody(), ErrorResult.class);
+		assertThat(errorResult.code).isEqualTo(ErrorCode.NO_TOKEN.code);
 
 		Book book = bookDao.findOne(1L);
 		assertThat(book.borrower).isNull();
@@ -108,6 +115,8 @@ public class BookEndpointTest {
 		// 设置错误token
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, "abc");
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+		errorResult = jsonMapper.fromJson(response.getBody(), ErrorResult.class);
+		assertThat(errorResult.code).isEqualTo(ErrorCode.UNAUTHORIZED.code);
 
 		book = bookDao.findOne(1L);
 		assertThat(book.borrower).isNull();
@@ -116,7 +125,9 @@ public class BookEndpointTest {
 		String token = login("calvin.xiao@vipshop.com");
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, token);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+		errorResult = jsonMapper.fromJson(response.getBody(), ErrorResult.class);
+		assertThat(errorResult.code).isEqualTo(ErrorCode.BOOK_OWNERSHIP_WRONG.code);
 
 		book = bookDao.findOne(1L);
 		assertThat(book.borrower).isNull();
@@ -131,6 +142,8 @@ public class BookEndpointTest {
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+		errorResult = jsonMapper.fromJson(response.getBody(), ErrorResult.class);
+		assertThat(errorResult.code).isEqualTo(ErrorCode.BOOK_STATUS_WRONG.code);
 
 		// 回退操作
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/cancel?token={token}", String.class, 3L, token);
@@ -145,8 +158,8 @@ public class BookEndpointTest {
 		// 发起请求
 		String token = login("david02.wang@vipshop.com");
 
-		ResponseEntity response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class,
-				1L, token);
+		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}",
+				String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
@@ -167,10 +180,10 @@ public class BookEndpointTest {
 		map.put("email", user);
 		map.put("password", "springside");
 
-		ResponseEntity<String> response = restTemplate.getForEntity(loginUrl + "?email={email}&password={password}",
-				String.class, map);
+		ResponseEntity<Map> response = restTemplate.getForEntity(loginUrl + "?email={email}&password={password}",
+				Map.class, map);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		return response.getBody();
+		return (String) response.getBody().get("token");
 	}
 
 	public void logout(String token) {

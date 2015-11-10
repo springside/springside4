@@ -18,6 +18,8 @@ import org.springside.examples.bootapi.dto.BookDto;
 import org.springside.examples.bootapi.service.AccountService;
 import org.springside.examples.bootapi.service.BookAdminService;
 import org.springside.examples.bootapi.service.BookBorrowService;
+import org.springside.examples.bootapi.service.ServiceException;
+import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.modules.mapper.BeanMapper;
 import org.springside.modules.web.MediaTypes;
 
@@ -53,7 +55,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void createBook(@RequestBody BookDto bookDto,
 			@RequestParam(value = "token", required = false) String token) {
-
+		checkToken(token);
 		// 使用Header中的Token，查找登录用户
 		Account currentUser = accountService.getLoginUser(token);
 
@@ -67,6 +69,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/modify", method = RequestMethod.POST, consumes = MediaTypes.JSON_UTF_8)
 	public void modifyBook(@RequestBody BookDto bookDto,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		Book book = BeanMapper.map(bookDto, Book.class);
 		adminService.modifyBook(book, currentUser.id);
@@ -74,6 +77,7 @@ public class BookEndpoint {
 
 	@RequestMapping(value = "/api/books/{id}/delete")
 	public void deleteBook(@PathVariable("id") Long id, @RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		adminService.deleteBook(id, currentUser.id);
 	}
@@ -81,6 +85,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/request")
 	public void applyBorrowRequest(@PathVariable("id") Long id,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.applyBorrowRequest(id, currentUser);
 	}
@@ -88,6 +93,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/cancel")
 	public void cancelBorrowRequest(@PathVariable("id") Long id,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.cancelBorrowRequest(id, currentUser);
 	}
@@ -95,6 +101,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/confirm")
 	public void markBookBorrowed(@PathVariable("id") Long id,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.markBookBorrowed(id, currentUser);
 	}
@@ -102,6 +109,7 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/reject")
 	public void rejectBorrowRequest(@PathVariable("id") Long id,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.rejectBorrowRequest(id, currentUser);
 	}
@@ -109,12 +117,14 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/books/{id}/return")
 	public void markBookReturned(@PathVariable("id") Long id,
 			@RequestParam(value = "token", required = false) String token) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		borrowService.markBookReturned(id, currentUser);
 	}
 
 	@RequestMapping(value = "/api/mybook", produces = MediaTypes.JSON_UTF_8)
 	public List<BookDto> listMyBook(@RequestParam(value = "token", required = false) String token, Pageable pageable) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = adminService.listMyBook(currentUser.id, pageable);
 		return BeanMapper.mapList(books, BookDto.class);
@@ -123,8 +133,15 @@ public class BookEndpoint {
 	@RequestMapping(value = "/api/myborrowedbook", produces = MediaTypes.JSON_UTF_8)
 	public List<BookDto> listMyBorrowedBook(@RequestParam(value = "token", required = false) String token,
 			Pageable pageable) {
+		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id, pageable);
 		return BeanMapper.mapList(books, BookDto.class);
+	}
+
+	private void checkToken(String token) {
+		if (token == null) {
+			throw new ServiceException("No token in request", ErrorCode.NO_TOKEN);
+		}
 	}
 }
