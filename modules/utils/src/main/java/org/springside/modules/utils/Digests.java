@@ -14,8 +14,10 @@ import java.security.SecureRandom;
 
 import org.apache.commons.lang3.Validate;
 
+import com.google.common.hash.Hashing;
+
 /**
- * 支持SHA-1/MD5消息摘要的工具类.
+ * 支持SHA-1/MD5/CRC32消息摘要的工具类.
  * 
  * 返回ByteSource，可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64
  * 
@@ -122,5 +124,13 @@ public class Digests {
 		} catch (GeneralSecurityException e) {
 			throw Exceptions.unchecked(e);
 		}
+	}
+
+	public int crc32(byte[] input) {
+		return Hashing.crc32().hashBytes(input).asInt();
+	}
+
+	public int crc32(String input) {
+		return Hashing.crc32().hashString(input, UTF8).asInt();
 	}
 }
