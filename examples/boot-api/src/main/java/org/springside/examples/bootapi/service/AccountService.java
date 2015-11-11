@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,11 @@ public class AccountService {
 
 	@Transactional
 	public void register(String email, String name, String password) {
+
+		if (StringUtils.isBlank(email) || StringUtils.isBlank(password)) {
+			throw new ServiceException("Invalid parameter", ErrorCode.BAD_REQUEST);
+		}
+
 		Account account = new Account();
 		account.email = email;
 		account.name = name;

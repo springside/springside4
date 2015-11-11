@@ -55,10 +55,17 @@ public class BookAdminService {
 	@Transactional
 	public void modifyBook(Book book, Long currentAccountId) {
 		if (!currentAccountId.equals(book.owner.id)) {
+			logger.error("user:" + currentAccountId + " try to modified a book:" + book.id + " which is not him");
 			throw new ServiceException("User can't modify others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 
 		Book orginalBook = bookDao.findOne(book.id);
+
+		if (orginalBook == null) {
+			logger.error("user:" + currentAccountId + " try to modified a book:" + book.id + " which is not exist");
+			throw new ServiceException("The Book is not exist", ErrorCode.BAD_REQUEST);
+		}
+
 		orginalBook.title = book.title;
 		orginalBook.url = book.url;
 		bookDao.save(orginalBook);
@@ -68,7 +75,13 @@ public class BookAdminService {
 	public void deleteBook(Long id, Long currentAccountId) {
 		Book book = bookDao.findOne(id);
 
+		if (book == null) {
+			logger.error("user:" + currentAccountId + " try to delete a book:" + id + " which is not exist");
+			throw new ServiceException("The Book is not exist", ErrorCode.BAD_REQUEST);
+		}
+
 		if (!currentAccountId.equals(book.owner.id)) {
+			logger.error("user:" + currentAccountId + " try to delete a book:" + book.id + " which is not him");
 			throw new ServiceException("User can't delete others book", ErrorCode.BOOK_OWNERSHIP_WRONG);
 		}
 

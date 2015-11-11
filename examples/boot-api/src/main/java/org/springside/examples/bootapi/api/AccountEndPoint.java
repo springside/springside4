@@ -42,8 +42,8 @@ public class AccountEndPoint {
 	}
 
 	@RequestMapping(value = "/api/accounts/register")
-	public void register(@RequestParam("email") String email, @RequestParam("name") String name,
-			@RequestParam("password") String password) {
+	public void register(@RequestParam("email") String email,
+			@RequestParam(value = "name", required = false) String name, @RequestParam("password") String password) {
 
 		if (StringUtils.isEmpty(email) || StringUtils.isEmpty(name) || StringUtils.isEmpty(password)) {
 			throw new ServiceException("User or name or password empty", ErrorCode.BAD_REQUEST);

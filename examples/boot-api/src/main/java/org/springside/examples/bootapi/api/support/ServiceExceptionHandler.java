@@ -17,7 +17,9 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(value = { ServiceException.class })
 	public final ResponseEntity<?> handleException(ServiceException ex, HttpServletRequest request) {
+		// 注入servletRequest，用于出错时打印请求来源地址
 		logger.error(ex.getMessage() + ", request from " + request.getRemoteAddr(), ex);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.parseMediaType(MediaTypes.JSON_UTF_8));
 		ErrorResult result = new ErrorResult(ex.code.code, ex.getMessage());
@@ -30,13 +32,11 @@ public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
 		public String message;
 
 		public ErrorResult() {
-
 		}
 
 		public ErrorResult(int code, String message) {
 			this.code = code;
 			this.message = message;
 		}
-
 	}
 }
