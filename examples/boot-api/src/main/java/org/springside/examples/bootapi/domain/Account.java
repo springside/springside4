@@ -10,7 +10,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 // JPA实体类的标识
 @Entity
 public class Account {
-	// JPA 主键标识
+
+	// JPA 主键标识, 策略为由数据库生成主键
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;

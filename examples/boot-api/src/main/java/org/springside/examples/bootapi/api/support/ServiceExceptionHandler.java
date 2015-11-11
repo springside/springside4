@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import org.springside.examples.bootapi.service.ServiceException;
+import org.springside.examples.bootapi.service.exception.ServiceException;
 import org.springside.modules.web.MediaTypes;
 
 @ControllerAdvice

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.repository.AccountDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
+import org.springside.examples.bootapi.service.exception.ServiceException;
 import org.springside.modules.utils.Digests;
 import org.springside.modules.utils.Encodes;
 import org.springside.modules.utils.Ids;

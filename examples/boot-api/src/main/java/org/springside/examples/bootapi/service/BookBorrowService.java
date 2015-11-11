@@ -14,6 +14,7 @@ import org.springside.examples.bootapi.domain.Message;
 import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.repository.MessageDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
+import org.springside.examples.bootapi.service.exception.ServiceException;
 import org.springside.modules.utils.Clock;
 
 // Spring Bean的标识.

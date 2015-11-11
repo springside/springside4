@@ -15,7 +15,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Entity
 public class Message {
 
-	// JPA 主键标识
+	// JPA 主键标识, 策略为由数据库生成主键
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long id;

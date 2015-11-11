@@ -1,6 +1,4 @@
-package org.springside.examples.bootapi.service;
-
-import org.springside.examples.bootapi.service.exception.ErrorCode;
+package org.springside.examples.bootapi.service.exception;
 
 public class ServiceException extends RuntimeException {
 
