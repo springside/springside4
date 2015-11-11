@@ -87,7 +87,7 @@ public class BookEndpointTest {
 
 	@Test
 	public void applyRequest() {
-		String token = login("calvin.xiao@vipshop.com");
+		String token = login("calvin.xiao@springside.io");
 
 		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}",
 				String.class, 3L, token);
@@ -122,7 +122,7 @@ public class BookEndpointTest {
 		assertThat(book.borrower).isNull();
 
 		// 自己借自己的书
-		String token = login("calvin.xiao@vipshop.com");
+		String token = login("calvin.xiao@springside.io");
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
@@ -135,7 +135,7 @@ public class BookEndpointTest {
 		logout(token);
 
 		// 借一本已被申请借出的书
-		token = login("calvin.xiao@vipshop.com");
+		token = login("calvin.xiao@springside.io");
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}", String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -156,7 +156,7 @@ public class BookEndpointTest {
 	@Test
 	public void fullBorrowProcess() {
 		// 发起请求
-		String token = login("david02.wang@vipshop.com");
+		String token = login("david.wang@springside.io");
 
 		ResponseEntity<String> response = restTemplate.getForEntity(resourceUrl + "/{id}/request?token={token}",
 				String.class, 1L, token);
@@ -165,7 +165,7 @@ public class BookEndpointTest {
 		logout(token);
 
 		// 确认借出
-		token = login("calvin.xiao@vipshop.com");
+		token = login("calvin.xiao@springside.io");
 
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/confirm?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
