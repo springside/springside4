@@ -32,7 +32,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 import org.springside.examples.bootapi.BootApiApplication;
-import org.springside.examples.bootapi.api.support.ServiceExceptionHandler.ErrorResult;
+import org.springside.examples.bootapi.api.support.CustomExceptionHandler.ErrorResult;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.dto.BookDto;
 import org.springside.examples.bootapi.repository.BookDao;
