@@ -17,9 +17,11 @@ import org.apache.commons.lang3.Validate;
 import com.google.common.hash.Hashing;
 
 /**
- * 支持SHA-1/MD5/CRC32消息摘要的工具类.
+ * 消息摘要的工具类.
  * 
- * 返回ByteSource，可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64
+ * 支持SHA-1/MD5这些安全性较高，返回byte[]的(可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64).
+ * 
+ * 也支持crc32，murmur32这些不追求安全性，性能较高，返回int的.
  * 
  * @author calvin
  */
@@ -126,11 +128,27 @@ public class Digests {
 		}
 	}
 
-	public int crc32(byte[] input) {
+	public static int crc32(byte[] input) {
 		return Hashing.crc32().hashBytes(input).asInt();
 	}
 
-	public int crc32(String input) {
+	public static int crc32(String input) {
 		return Hashing.crc32().hashString(input, UTF8).asInt();
+	}
+
+	public static int murmur32(byte[] input) {
+		return Hashing.murmur3_32().hashBytes(input).asInt();
+	}
+
+	public static int murmur32(String input) {
+		return Hashing.murmur3_32().hashString(input, UTF8).asInt();
+	}
+
+	public static int murmur32(byte[] input, int seed) {
+		return Hashing.murmur3_32(seed).hashBytes(input).asInt();
+	}
+
+	public static int murmur32(String input, int seed) {
+		return Hashing.murmur3_32(seed).hashString(input, UTF8).asInt();
 	}
 }

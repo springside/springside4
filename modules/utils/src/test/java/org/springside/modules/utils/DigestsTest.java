@@ -37,4 +37,36 @@ public class DigestsTest {
 		System.out.println("md5: " + Encodes.encodeHex(md5result));
 		System.out.println("sha1:" + Encodes.encodeHex(sha1result));
 	}
+
+	@Test
+	public void crc32String() {
+
+		String input = "user1";
+		int result = Digests.crc32(input);
+		System.out.println("crc32 for user1:" + result);
+
+		input = "user2";
+		result = Digests.crc32(input);
+		System.out.println("crc32 for user2:" + result);
+	}
+
+	@Test
+	public void murmurString() {
+
+		String input1 = "user1";
+		int result = Digests.murmur32(input1);
+		System.out.println("murmur32 for user1:" + result);
+
+		String input2 = "user2";
+		result = Digests.murmur32(input2);
+		System.out.println("murmur32 for user2:" + result);
+
+		int seed = (int) System.currentTimeMillis();
+		result = Digests.murmur32(input1, seed);
+		System.out.println("murmur32 with seed for user1:" + result);
+
+		result = Digests.murmur32(input2, seed);
+		System.out.println("murmur32 with seed for user2:" + result);
+
+	}
 }
