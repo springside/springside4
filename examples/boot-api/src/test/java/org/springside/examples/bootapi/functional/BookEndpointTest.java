@@ -19,19 +19,14 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
-import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
-import org.springside.examples.bootapi.BootApiApplication;
 import org.springside.examples.bootapi.api.support.ErrorResult;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.dto.BookDto;
@@ -42,14 +37,9 @@ import org.springside.modules.test.data.RandomData;
 
 import com.google.common.collect.Maps;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = BootApiApplication.class)
-@WebIntegrationTest("server.port=0")
-@DirtiesContext
-public class BookEndpointTest {
-	// 注入启动server后的实际端口号
-	@Value("${local.server.port}")
-	private int port;
+// 测试方法的执行顺序在不同JVM里是不固定的，此处设为按方法名排序，避免方法间数据影响的不确定性
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+public class BookEndpointTest extends BaseFunctionalTest {
 
 	// 注入Spring Context中的BookDao，实现白盒查询数据库实际情况
 	@Autowired
@@ -93,12 +83,16 @@ public class BookEndpointTest {
 				String.class, 3L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-		logout(token);
-
 		// 查询数据库状态
 		Book book = bookDao.findOne(3L);
 		assertThat(book.borrower.id).isEqualTo(1L);
 		assertThat(book.status).isEqualTo(Book.STATUS_REQUEST);
+
+		// 回退操作
+		response = restTemplate.getForEntity(resourceUrl + "/{id}/cancel?token={token}", String.class, 3L, token);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		logout(token);
 	}
 
 	@Test
@@ -150,7 +144,6 @@ public class BookEndpointTest {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 
 		logout(token);
-
 	}
 
 	@Test
@@ -173,6 +166,8 @@ public class BookEndpointTest {
 		// 确认归还
 		response = restTemplate.getForEntity(resourceUrl + "/{id}/return?token={token}", String.class, 1L, token);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+		logout(token);
 	}
 
 	private String login(String user) {
