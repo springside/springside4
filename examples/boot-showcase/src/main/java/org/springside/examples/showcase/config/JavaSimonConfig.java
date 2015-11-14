@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class JavaSimonConfig {
 
-	// 定义AOP
+	// 定义AOP, 对标注了@Monitored的方法进行监控
 	@Bean(name = "monitoringAdvisor")
 	public DefaultPointcutAdvisor monitoringAdvisor() {
 		DefaultPointcutAdvisor monitoringAdvisor = new DefaultPointcutAdvisor();
