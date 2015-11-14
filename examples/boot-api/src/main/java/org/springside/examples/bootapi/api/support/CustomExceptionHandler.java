@@ -77,7 +77,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		map.put("message", ex.getMessage());
 		map.put("from", request.getRemoteAddr());
 		String queryString = request.getQueryString();
-		map.put("uri", queryString != null ? (request.getRequestURI() + "?" + queryString) : request.getRequestURI());
+		map.put("path", queryString != null ? (request.getRequestURI() + "?" + queryString) : request.getRequestURI());
 
 		logger.error(jsonMapper.toJson(map), ex);
 	}
