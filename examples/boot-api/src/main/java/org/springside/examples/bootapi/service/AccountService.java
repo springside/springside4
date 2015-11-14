@@ -33,7 +33,7 @@ public class AccountService {
 	private AccountDao accountDao;
 
 	// 注入配置值
-	@Value("${app.loginTimeoutSecs}")
+	@Value("${app.loginTimeoutSecs:600}")
 	private int loginTimeoutSecs;
 
 	// codehale metrics
