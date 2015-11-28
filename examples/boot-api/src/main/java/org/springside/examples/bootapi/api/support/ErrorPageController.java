@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springside.modules.constants.MediaTypes;
 import org.springside.modules.mapper.JsonMapper;
-import org.springside.modules.web.MediaTypes;
 
 /**
  * 重载替换Spring Boot默认的BasicErrorController, 增加日志并让错误返回方式统一.

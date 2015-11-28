@@ -4,7 +4,7 @@ import org.javasimon.aop.Monitored;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springside.modules.web.MediaTypes;
+import org.springside.modules.constants.MediaTypes;
 
 @RestController
 public class HelloController {

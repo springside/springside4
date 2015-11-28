@@ -7,12 +7,12 @@ package org.springside.modules.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.constants.CharSets;
 
 import com.google.common.hash.Hashing;
 
@@ -27,7 +27,6 @@ import com.google.common.hash.Hashing;
  */
 public class Digests {
 
-	private static final Charset UTF8 = Charset.forName("UTF-8");
 	private static final String SHA1 = "SHA-1";
 	private static final String MD5 = "MD5";
 
@@ -41,7 +40,7 @@ public class Digests {
 	}
 
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(UTF8), SHA1, null, 1);
+		return digest(input.getBytes(CharSets.UTF8), SHA1, null, 1);
 	}
 
 	public static byte[] sha1(byte[] input, byte[] salt) {
@@ -49,7 +48,7 @@ public class Digests {
 	}
 
 	public static byte[] sha1(String input, byte[] salt) {
-		return digest(input.getBytes(UTF8), SHA1, salt, 1);
+		return digest(input.getBytes(CharSets.UTF8), SHA1, salt, 1);
 	}
 
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
@@ -57,7 +56,7 @@ public class Digests {
 	}
 
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
-		return digest(input.getBytes(UTF8), SHA1, salt, iterations);
+		return digest(input.getBytes(CharSets.UTF8), SHA1, salt, iterations);
 	}
 
 	/**
@@ -133,7 +132,7 @@ public class Digests {
 	}
 
 	public static int crc32(String input) {
-		return Hashing.crc32().hashString(input, UTF8).asInt();
+		return Hashing.crc32().hashString(input, CharSets.UTF8).asInt();
 	}
 
 	public static int murmur32(byte[] input) {
@@ -141,7 +140,7 @@ public class Digests {
 	}
 
 	public static int murmur32(String input) {
-		return Hashing.murmur3_32().hashString(input, UTF8).asInt();
+		return Hashing.murmur3_32().hashString(input, CharSets.UTF8).asInt();
 	}
 
 	public static int murmur32(byte[] input, int seed) {
@@ -149,6 +148,6 @@ public class Digests {
 	}
 
 	public static int murmur32(String input, int seed) {
-		return Hashing.murmur3_32(seed).hashString(input, UTF8).asInt();
+		return Hashing.murmur3_32(seed).hashString(input, CharSets.UTF8).asInt();
 	}
 }
