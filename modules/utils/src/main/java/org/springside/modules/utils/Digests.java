@@ -7,19 +7,21 @@ package org.springside.modules.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.constants.CharSets;
+import org.springside.modules.constants.Charsets;
 
 import com.google.common.hash.Hashing;
 
 /**
  * 消息摘要的工具类.
  * 
- * 支持SHA-1/MD5这些安全性较高，返回byte[]的(可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64).
+ * 支持SHA-1/MD5这些安全性较高，返回byte[]的(可用Encodes进一步被编码为Hex, Base64或UrlSafeBase64),支持带salt达到更高的安全性.
  * 
  * 也支持crc32，murmur32这些不追求安全性，性能较高，返回int的.
  * 
@@ -39,24 +41,60 @@ public class Digests {
 		return digest(input, SHA1, null, 1);
 	}
 
+	/**
+	 * 对输入字符串进行sha1散列.
+	 */
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(CharSets.UTF8), SHA1, null, 1);
+		return digest(input.getBytes(Charsets.UTF8), SHA1, null, 1);
 	}
 
+	/**
+	 * 对输入字符串进行sha1散列.
+	 */
+	public static byte[] sha1(String input, Charset charset) {
+		return digest(input.getBytes(charset), SHA1, null, 1);
+	}
+
+	/**
+	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
+	 */
 	public static byte[] sha1(byte[] input, byte[] salt) {
 		return digest(input, SHA1, salt, 1);
 	}
 
+	/**
+	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
+	 */
 	public static byte[] sha1(String input, byte[] salt) {
-		return digest(input.getBytes(CharSets.UTF8), SHA1, salt, 1);
+		return digest(input.getBytes(Charsets.UTF8), SHA1, salt, 1);
 	}
 
+	/**
+	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
+	 */
+	public static byte[] sha1(String input, Charset charset, byte[] salt) {
+		return digest(input.getBytes(charset), SHA1, salt, 1);
+	}
+
+	/**
+	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
+	 */
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
 		return digest(input, SHA1, salt, iterations);
 	}
 
+	/**
+	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
+	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
-		return digest(input.getBytes(CharSets.UTF8), SHA1, salt, iterations);
+		return digest(input.getBytes(Charsets.UTF8), SHA1, salt, iterations);
+	}
+
+	/**
+	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
+	 */
+	public static byte[] sha1(String input, Charset charset, byte[] salt, int iterations) {
+		return digest(input.getBytes(charset), SHA1, salt, iterations);
 	}
 
 	/**
@@ -127,27 +165,99 @@ public class Digests {
 		}
 	}
 
+	/**
+	 * 对输入字符串进行crc32散列.
+	 */
 	public static int crc32(byte[] input) {
-		return Hashing.crc32().hashBytes(input).asInt();
+		CRC32 crc32 = new CRC32();
+		crc32.update(input);
+		return (int) crc32.getValue();
 	}
 
+	/**
+	 * 对输入字符串进行crc32散列.
+	 */
 	public static int crc32(String input) {
-		return Hashing.crc32().hashString(input, CharSets.UTF8).asInt();
+		CRC32 crc32 = new CRC32();
+		crc32.update(input.getBytes(Charsets.UTF8));
+		return (int) crc32.getValue();
 	}
 
+	/**
+	 * 对输入字符串进行crc32散列.
+	 */
+	public static int crc32(String input, Charset charset) {
+		CRC32 crc32 = new CRC32();
+		crc32.update(input.getBytes(charset));
+		return (int) crc32.getValue();
+	}
+
+	/**
+	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
+	 */
+	public static long crc32AsLong(byte[] input) {
+		CRC32 crc32 = new CRC32();
+		crc32.update(input);
+		return crc32.getValue();
+	}
+
+	/**
+	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
+	 */
+	public static long crc32AsLong(String input) {
+		CRC32 crc32 = new CRC32();
+		crc32.update(input.getBytes(Charsets.UTF8));
+		return crc32.getValue();
+	}
+
+	/**
+	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
+	 */
+	public static long crc32AsLong(String input, Charset charset) {
+		CRC32 crc32 = new CRC32();
+		crc32.update(input.getBytes(charset));
+		return crc32.getValue();
+	}
+
+	/**
+	 * 对输入字符串进行murmur32散列
+	 */
 	public static int murmur32(byte[] input) {
 		return Hashing.murmur3_32().hashBytes(input).asInt();
 	}
 
+	/**
+	 * 对输入字符串进行murmur32散列
+	 */
 	public static int murmur32(String input) {
-		return Hashing.murmur3_32().hashString(input, CharSets.UTF8).asInt();
+		return Hashing.murmur3_32().hashString(input, Charsets.UTF8).asInt();
 	}
 
+	/**
+	 * 对输入字符串进行murmur32散列
+	 */
+	public static int murmur32(String input, Charset charset) {
+		return Hashing.murmur3_32().hashString(input, charset).asInt();
+	}
+
+	/**
+	 * 对输入字符串进行murmur32散列，带有seed
+	 */
 	public static int murmur32(byte[] input, int seed) {
 		return Hashing.murmur3_32(seed).hashBytes(input).asInt();
 	}
 
+	/**
+	 * 对输入字符串进行murmur32散列，带有seed
+	 */
 	public static int murmur32(String input, int seed) {
-		return Hashing.murmur3_32(seed).hashString(input, CharSets.UTF8).asInt();
+		return Hashing.murmur3_32(seed).hashString(input, Charsets.UTF8).asInt();
+	}
+
+	/**
+	 * 对输入字符串进行murmur32散列，带有seed
+	 */
+	public static int murmur32(String input, Charset charset, int seed) {
+		return Hashing.murmur3_32(seed).hashString(input, charset).asInt();
 	}
 }
