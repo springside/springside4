@@ -3,7 +3,7 @@ package org.springside.modules.constants;
 import java.nio.charset.Charset;
 
 /**
- * JDK7可使用java.nio.charset.StandardCharsets
+ * JDK7可直接使用java.nio.charset.StandardCharsets.
  * 
  * @author calvin
  *

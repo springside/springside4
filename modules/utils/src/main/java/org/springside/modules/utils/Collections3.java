@@ -22,6 +22,12 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * 函数主要由两部分组成，一是自反射提取元素的功能，二是源自Apache Commons Collection, 争取不用在项目里引入它。
  * 
+ * 另请直接使用:
+ * 
+ * JDK Collections的SingletonMap/SingletonList/EmptyMap/EmptyList/EmptyMap
+ * 
+ * Guava Lists/Maps的newArrayLists(Element...elements)等函数
+ * 
  * @author calvin
  */
 public class Collections3 {
@@ -76,7 +82,8 @@ public class Collections3 {
 	 * @param propertyName 要提取的属性名.
 	 * @param separator 分隔符.
 	 */
-	public static String extractToString(final Collection collection, final String propertyName, final String separator) {
+	public static String extractToString(final Collection collection, final String propertyName,
+			final String separator) {
 		List list = extractToList(collection, propertyName);
 		return StringUtils.join(list, separator);
 	}
