@@ -15,22 +15,28 @@ import java.util.Map;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import com.google.common.primitives.Doubles;
+import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
+
 /**
  * Collections工具集.
  * 
  * 主要由三部分组成：
  * 
- * 1. 是否Empty的最常用函数
+ * 1. 是否Empty的最常用函数.
  * 
- * 2. 源自Apache Commons Collection, 争取不用在项目里引入它。
+ * 2. 支持以原始类型存储的List，节约存储空间, 基于Guava.
  * 
- * 3. 反射提取集合种元素及其属性的功能
+ * 2. 源自Apache Commons Collection, 争取不用在项目里引入它.
  * 
- * 在JDK的Collections和Guava的Collections2后, 命名为Collections3.
+ * 3. 反射提取集合种元素及其属性的功能.
+ * 
+ * 在JDK的Collections和Guava的Collections2/Iterables后, 命名为Collections3.
  * 
  * 另请直接使用:
  * 
- * 1. JDK Collections的SingletonMap/SingletonList/EmptyMap/EmptyList/EmptyMap
+ * 1. JDK Collections的singletonList()/singletonMap()/emptyList()/emptyMap()
  * 
  * 2. Guava Lists/Maps的newArrayLists(Element...elements)等函数
  * 
@@ -79,15 +85,15 @@ public class Collections3 {
 	}
 
 	/**
-	 * 获取Collection的最后一个元素 ，如果collection为空返回null.
+	 * 获取Collection的最后一个元素，如果collection为空返回null.
 	 */
 	public static <T> T getLast(Collection<T> collection) {
 		if (isEmpty(collection)) {
 			return null;
 		}
 
-		// 当类型为array[]做内部结构的类型时，直接取得最后一个元素.
-		if (collection instanceof ArrayList) {
+		// 当类型List时，直接取得最后一个元素.
+		if (collection instanceof List) {
 			List<T> list = (List<T>) collection;
 			return list.get(list.size() - 1);
 		}
@@ -135,6 +141,27 @@ public class Collections3 {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 返回一个底层由原始类型long保存的List, 与保存Long相比节约空间.
+	 */
+	public static List<Long> asList(long... backingArray) {
+		return Longs.asList(backingArray);
+	}
+
+	/**
+	 * 返回一个底层由原始类型int保存的List, 与保存Integer相比节约空间.
+	 */
+	public static List<Integer> asList(int... backingArray) {
+		return Ints.asList(backingArray);
+	}
+
+	/**
+	 * 返回一个底层由原始类型double保存的Double, 与保存Double相比节约空间.
+	 */
+	public static List<Double> asList(double... backingArray) {
+		return Doubles.asList(backingArray);
 	}
 
 	/**
@@ -210,5 +237,4 @@ public class Collections3 {
 		}
 		return builder.toString();
 	}
-
 }
