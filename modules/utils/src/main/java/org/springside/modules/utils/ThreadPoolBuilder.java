@@ -16,7 +16,12 @@ import java.util.concurrent.TimeUnit;
  * ThreadPool创建的工具类.
  * 
  * 对比JDK Executors中的newFixedThreadPool()和newCachedThreadPool()函数，提供更多有用的配置项.
- *
+ * 
+ * 使用示例：
+ * 
+ * <pre>
+ * ExecutorService ExecutorService = new FixedThreadPoolBuilder().setPoolSize(10).build();
+ * </pre>
  */
 public class ThreadPoolBuilder {
 
