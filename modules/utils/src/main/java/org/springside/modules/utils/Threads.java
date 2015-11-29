@@ -5,13 +5,8 @@
  *******************************************************************************/
 package org.springside.modules.utils;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
-import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -92,121 +87,7 @@ public class Threads {
 	}
 
 	/**
-	 * 创建FixedThreadPool, 等价Executors的默认实现.
-	 * 
-	 * 任务提交时, 如果线程数还没达到nThreads即创建新线程(即n次提交后线程总数必达到n)
-	 * 
-	 * 线程不会空闲回收.
-	 * 
-	 * 当所有线程繁忙时, 放入无限长的LinkedBlockingQueue中等待.
-	 */
-	public static ExecutorService newFixedThreadPool(int nThreads) {
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
-				new LinkedBlockingQueue<Runnable>());
-	}
-
-	/**
-	 * @see #newFixedThreadPool(int)
-	 */
-	public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
-				new LinkedBlockingQueue<Runnable>(), threadFactory);
-	}
-
-	/**
-	 * 创建Queue长度受限的FixedThreadPool.
-	 * 
-	 * 当到达maxQueue时，调用RejectHandler，默认为AbortPolicy，抛出RejectedExecutionException异常.
-	 * 其他可选的Policy包括静默放弃当前任务(Discard)，放弃Queue里最老的任务，或由主线程来直接执行(CallerRuns).
-	 * 
-	 * @see #newFixedThreadPool(int)
-	 */
-	public static ExecutorService newFixedThreadPool(int nThreads, int maxQueueSize) {
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(maxQueueSize));
-	}
-
-	/**
-	 * @see #newFixedThreadPool(int, int)
-	 */
-	public static ExecutorService newFixedThreadPool(int nThreads, int maxQueueSize, ThreadFactory threadFactory) {
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(maxQueueSize), threadFactory);
-	}
-
-	/**
-	 * @see #newFixedThreadPool(int, int)
-	 */
-	public static ExecutorService newFixedThreadPool(int nThreads, int maxQueueSize, ThreadFactory threadFactory,
-			RejectedExecutionHandler rejectHanlder) {
-		return new ThreadPoolExecutor(nThreads, nThreads, 0L, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(maxQueueSize), threadFactory, rejectHanlder);
-	}
-
-	/**
-	 * 创建CachedThreadPool,等价Executors的默认实现.
-	 * 
-	 * 任务提交时, 如果没有空闲线程, 立刻创建新线程, 总线程数无上限.
-	 * 
-	 * 如果线程空闲超过一分钟, 进行回收.
-	 */
-	public static ExecutorService newCachedThreadPool() {
-		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
-	}
-
-	/**
-	 * @see #newCachedThreadPool()
-	 */
-	public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
-		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-				threadFactory);
-	}
-
-	/**
-	 * 创建CachedThreadPool，与Executors的默认实现相比, 线程总数依然无上限，但可设置KeepAlive时间(默认1分钟).
-	 */
-	public static ExecutorService newCachedThreadPool(long keepAliveSecs) {
-		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, keepAliveSecs, TimeUnit.SECONDS,
-				new SynchronousQueue<Runnable>());
-	}
-
-	/**
-	 * @see #newCachedThreadPool(long)
-	 */
-	public static ExecutorService newCachedThreadPool(long keepAliveSecs, ThreadFactory threadFactory) {
-		return new ThreadPoolExecutor(0, Integer.MAX_VALUE, keepAliveSecs, TimeUnit.SECONDS,
-				new SynchronousQueue<Runnable>(), threadFactory);
-	}
-
-	/**
-	 * 创建CachedThreadPool，与Executors的默认实现相比, 可设置maxThreads(默认无限)与keepAlive时间(默认1分钟).
-	 * 
-	 * 当到达maxThreads时，调用RejectHandler，默认为AbortPolicy，抛出RejectedExecutionException异常,
-	 * 其他可选的Policy包括静默放弃任务(Discard)或由主线程来直接执行(CallerRuns).
-	 */
-	public static ExecutorService newCachedThreadPool(int maxThreads, long keepAliveSecs) {
-		return new ThreadPoolExecutor(0, maxThreads, keepAliveSecs, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
-	}
-
-	/**
-	 * @see #newCachedThreadPool(int, long)
-	 */
-	public static ExecutorService newCachedThreadPool(int maxThreads, long keepAliveSecs, ThreadFactory threadFactory) {
-		return new ThreadPoolExecutor(0, maxThreads, keepAliveSecs, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-				threadFactory);
-	}
-
-	/**
-	 * @see #newCachedThreadPool(int, long)
-	 */
-	public static ExecutorService newCachedThreadPool(int maxThreads, long keepAliveSecs, ThreadFactory threadFactory,
-			RejectedExecutionHandler rejectHanlder) {
-		return new ThreadPoolExecutor(0, maxThreads, keepAliveSecs, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),
-				threadFactory, rejectHanlder);
-	}
-
-	/**
-	 * 保证不会有Exception抛出到线程池的Runnable，防止用户没有捕捉异常导致中断了线程池中的线程。
+	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
 	 */
 	public static class WrapExceptionRunnable implements Runnable {
 
