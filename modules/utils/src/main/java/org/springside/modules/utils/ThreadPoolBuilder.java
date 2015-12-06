@@ -80,7 +80,7 @@ public class ThreadPoolBuilder {
 			if (queueSize == 0) {
 				queue = new LinkedBlockingQueue<Runnable>();
 			} else {
-				new ArrayBlockingQueue<Runnable>(queueSize);
+				queue = new ArrayBlockingQueue<Runnable>(queueSize);
 			}
 
 			if (threadFactory == null) {
