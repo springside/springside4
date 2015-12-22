@@ -12,3 +12,5 @@
 -------------------------------
 Offical Site: http://springside.io
 Document: https://github.com/springside/springside4/wiki
+
+江南白衣 在最近大幅删减了 所以这是没有引入spring boot的版本 里边有一些 代码 很有参考意义！
