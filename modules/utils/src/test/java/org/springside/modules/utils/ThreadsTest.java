@@ -13,7 +13,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
@@ -31,7 +30,7 @@ public class ThreadsTest {
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 500, 0);
 		pool.execute(task);
-		Threads.gracefulShutdown(pool, 1000, 1000, TimeUnit.MILLISECONDS);
+		Threads.gracefulShutdown(pool, 1000, TimeUnit.MILLISECONDS);
 		assertThat(pool.isTerminated()).isTrue();
 		assertThat(appender.getFirstLog()).isNull();
 
@@ -40,7 +39,7 @@ public class ThreadsTest {
 		pool = Executors.newSingleThreadExecutor();
 		task = new Task(logger, 1000, 0);
 		pool.execute(task);
-		Threads.gracefulShutdown(pool, 500, 1000, TimeUnit.MILLISECONDS);
+		Threads.gracefulShutdown(pool, 500, TimeUnit.MILLISECONDS);
 		assertThat(pool.isTerminated()).isTrue();
 		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
 
@@ -57,7 +56,7 @@ public class ThreadsTest {
 			@Override
 			public void run() {
 				lock.countDown();
-				Threads.gracefulShutdown(self, 200000, 200000, TimeUnit.MILLISECONDS);
+				Threads.gracefulShutdown(self, 200000, TimeUnit.MILLISECONDS);
 			}
 		});
 		thread.start();
@@ -65,23 +64,6 @@ public class ThreadsTest {
 		thread.interrupt();
 		Threads.sleep(500);
 		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
-	}
-
-	@Test
-	public void normalShutdown() throws InterruptedException {
-
-		Logger logger = LoggerFactory.getLogger("test");
-		LogbackListAppender appender = new LogbackListAppender();
-		appender.addToLogger("test");
-
-		// time not enough to shutdown,write error log.
-		appender.clearLogs();
-		ExecutorService pool = Executors.newSingleThreadExecutor();
-		Runnable task = new Task(logger, 1000, 0);
-		pool.execute(task);
-		Threads.normalShutdown(pool, 500, TimeUnit.MILLISECONDS);
-		assertThat(pool.isTerminated()).isTrue();
-		assertThat(appender.getFirstMessage()).isEqualTo("InterruptedException");
 	}
 
 	static class Task implements Runnable {
