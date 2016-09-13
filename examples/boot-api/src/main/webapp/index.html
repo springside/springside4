@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Spring Boot Web Service示例</title>
+</head>
+<body>
+
+<h4>1. 顺序访问P2P图书馆 API:</h4>
+
+step1:
+<ul>
+<li><a href="http://localhost:8080/api/books?page=0&size=10">列出第一页图书(每页10项)</a></li>
+<li><a href="http://localhost:8080/api/books?page=1&size=2">列出第二页图书(每页2项)</a></li>
+</ul>
+
+step2:
+
+<ul>
+<li><a href="http://localhost:8080/api/accounts/login?email=calvin.xiao@springside.io&password=springside">登录为Calvin(注意保存Token)</a></li>
+<li> <a href="http://localhost:8080/api/books/3/request?token=replaceme">Calvin请求借阅David的书 (手工替换URL中的Token为前一步保存的值)</a></li>
+<li> <a href="http://localhost:8080/api/myborrowedbook?token=replaceme">列出Cavlin借阅的图书(替换token)</a></li>
+</ul>
+
+step3:
+
+<ul>
+<li><a href="http://localhost:8080/api/accounts/login?email=david.wang@springside.io&password=springside">登录为David</a></li>
+<li><a href="http://localhost:8080/api/books/3/confirm?token=replaceme">David 确认图书借出</a></li>
+<li><a href="http://localhost:8080/api/mybook?token=replaceme">列出David拥有的图书</a></li>
+</ul>
+
+step4:
+
+<ul>
+<li><a href="http://localhost:8080/api/books/3/return?token=replaceme">David 确认图书归还，其他人可以借阅本书</a></li>
+<li><a href="http://localhost:8080/api/books/3">列出此书当前状态</a></li>
+</ul>
+
+other flow:
+
+<ul>
+<li><a href="http://localhost:8080/api/books/3/cancel?token=replaceme">Calvin cancel the apply, replace the token</a></li>
+<li><a href="http://localhost:8080/api/books/3/reject?token=replaceme">David reject the apply, replace the token</a></li>
+</ul>
+
+
+<h4>2. 访问下列应用管理Endpoint:</h4>
+<ul>
+<li><a href="http://localhost:7002/health">http://localhost:7002/health</a></li>
+<li><a href="http://localhost:7002/info">http://localhost:7002/info</a></li>
+<li><a href="http://localhost:7002/dump">http://localhost:7002/dump</a></li>
+<li><a href="http://localhost:7002/metrics">http://localhost:7002/metrics</a></li>
+<li><a href="http://localhost:7002/env">http://localhost:7002/env</a></li>
+<li>shutdown(disable by default, POST method)</li>
+</ul>
+
+
+<h4>3. JMX通过Restful的jolokia访问:</h4>
+<ul>
+<li><a href="http://localhost:7002/jolokia/read/Tomcat:type=Connector,port=8080">Tomcat MBean</a></li>
+</ul>
+
+
+<h4>4. 在开发Profile下的H2 Console，用于查看内存中数据库的内容:</h4>
+<ul>
+<li><a href="http://localhost:8080/h2">http://localhost:8080/h2/</a></li>
+</ul>
+</body>
+</html>
