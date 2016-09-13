@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.springside</groupId>
 	<artifactId>springside-project</artifactId>
-	<version>4.3.0-SNAPSHOT</version>
+	<version>5.0.0-SNAPSHOT</version>
 	<name>Springside :: Project</name>
 	<packaging>pom</packaging>
 
@@ -20,7 +20,6 @@
 			<id>calvin</id>
 			<name>Calvin Xiao</name>
 			<email>calvinxiu at gmail.com</email>
-			<organization>Ericsson</organization>
 			<roles>
 				<role>Project leader</role>
 			</roles>
