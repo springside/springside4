@@ -5,18 +5,16 @@
 	<parent>
 		<groupId>io.springside</groupId>
 		<artifactId>springside-parent</artifactId>
-		<version>4.3.0-SNAPSHOT</version>
+		<version>5.0.0-SNAPSHOT</version>
 		<relativePath>../modules/parent/</relativePath>
 	</parent>	
 	<groupId>io.springside.examples</groupId>
 	<artifactId>springside-examples</artifactId>
-	<name>Springside :: Example</name>
+	<name>Springside :: Examples</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>quickstart</module>
-		<module>showcase</module>
-		<module>boot-service</module>
-		<module>boot-more</module>
+		<module>boot-api</module>
+		<module>boot-showcase</module>
 	</modules>
 </project>

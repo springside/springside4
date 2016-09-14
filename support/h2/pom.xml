@@ -2,13 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.springside</groupId>
-		<artifactId>springside-parent</artifactId>
-		<version>4.3.0-SNAPSHOT</version>
-		<relativePath>../../modules/parent/</relativePath>
-	</parent>
+	<groupId>io.springside</groupId>
 	<artifactId>h2-console</artifactId>
+	<version>5.0.0-SNAPSHOT</version>
 	<name>H2 Console</name>
 	<packaging>pom</packaging>
 
@@ -16,7 +12,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>${h2.version}</version>
+			<version>1.4.190</version>
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
@@ -30,7 +26,7 @@
 					<execution>
 						<goals>
 							<goal>java</goal>
-							</goals>
+						</goals>
 					</execution>
 				</executions>
 				<configuration>
@@ -40,6 +36,8 @@
 						<argument>-webPort</argument>
 						<argument>8090</argument>
 						<argument>-browser</argument>
+						<argument>-properties</argument>
+						<argument>.</argument>
 					</arguments>
 				</configuration>
 			</plugin>
