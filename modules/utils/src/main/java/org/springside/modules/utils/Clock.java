@@ -44,7 +44,7 @@ public interface Clock {
 		private long time;
 
 		public MockClock() {
-			this(0);
+			this(0);   
 		}
 
 		public MockClock(Date date) {
@@ -57,7 +57,7 @@ public interface Clock {
 
 		@Override
 		public Date getCurrentDate() {
-			return new Date(time);
+			return new Date(time);  
 		}
 
 		@Override
