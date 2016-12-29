@@ -34,5 +34,6 @@
 	<modules>
 		<module>utils</module>
 		<module>core</module>
+		<module>metrics</module>
 	</modules>
 </project>
