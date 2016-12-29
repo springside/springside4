@@ -1,4 +1,4 @@
-package org.springside.modules.utils;
+package org.springside.modules.utils.thread;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;

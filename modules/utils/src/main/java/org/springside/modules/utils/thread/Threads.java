@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.thread;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -17,8 +17,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * 线程相关工具类.
- * 
- * @author calvin
  */
 public class Threads {
 

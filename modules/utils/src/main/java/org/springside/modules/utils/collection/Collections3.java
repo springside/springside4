@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.collection;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springside.modules.utils.Reflections;
 
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
@@ -22,15 +23,15 @@ import com.google.common.primitives.Longs;
 /**
  * Collections工具集.
  * 
- * 主要由三部分组成：
+ * 主要由几部分组成：
  * 
  * 1. 是否Empty的最常用函数.
  * 
- * 2. 支持以原始类型存储的List，节约存储空间, 基于Guava.
+ * 2. 支持转换原始类型数组为的原始类型数组的List，节约存储空间, 基于Guava.
  * 
- * 2. 源自Apache Commons Collection, 争取不用在项目里引入它.
+ * 3. 源自Apache Commons Collection, 争取不用在项目里引入它.
  * 
- * 3. 反射提取集合种元素及其属性的功能.
+ * 4. 反射提取集合种元素及其属性的功能.
  * 
  * 在JDK的Collections和Guava的Collections2/Iterables后, 命名为Collections3.
  * 

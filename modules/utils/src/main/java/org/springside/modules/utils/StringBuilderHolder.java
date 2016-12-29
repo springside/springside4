@@ -16,8 +16,6 @@ package org.springside.modules.utils;
  * StringBuilder sb = threadLocalStringBuilderHolder.get().resetAndGetStringBuilder();
  * 
  * </pre>
- * 
- * @author calvin
  *
  */
 public class StringBuilderHolder {

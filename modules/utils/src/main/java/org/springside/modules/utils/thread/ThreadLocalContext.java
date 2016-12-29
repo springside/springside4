@@ -1,14 +1,14 @@
-package org.springside.modules.utils;
+package org.springside.modules.utils.thread;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 存储于ThreadLocal的上下文信息.
+ * 存储于ThreadLocal的Map, 用于存储上下文.
  */
 public class ThreadLocalContext {
 
-	private static ThreadLocal<Map<String, Object>> context = new ThreadLocal<Map<String, Object>>() {
+	private static ThreadLocal<Map<String, Object>> contextMap = new ThreadLocal<Map<String, Object>>() {
 		@Override
 		protected Map<String, Object> initialValue() {
 			return new HashMap<String, Object>();
@@ -16,24 +16,24 @@ public class ThreadLocalContext {
 	};
 
 	/**
-	 * 放入ThreadLocal的Context.
+	 * 放入ThreadLocal.
 	 */
 	public static void put(String key, Object value) {
-		context.get().put(key, value);
+		contextMap.get().put(key, value);
 	}
 
 	/**
-	 * 取出ThreadLocal的Context.
+	 * 取出ThreadLocal.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T get(String key) {
-		return (T) (context.get().get(key));
+		return (T) (contextMap.get().get(key));
 	}
 
 	/**
 	 * 清理ThreadLocal的Context内容.
 	 */
 	public static void reset() {
-		context.get().clear();
+		contextMap.get().clear();
 	}
 }

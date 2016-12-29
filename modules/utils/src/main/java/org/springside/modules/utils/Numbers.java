@@ -7,7 +7,6 @@ import com.google.common.primitives.Longs;
  * 数字的工具类
  * 
  * 1.基于Guava的原始类型与byte[]的转换.
- *
  */
 public class Numbers {
 

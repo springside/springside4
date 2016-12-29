@@ -7,7 +7,7 @@ package org.springside.modules.utils;
 
 import org.junit.Test;
 
-public class IdentitiesTest {
+public class IdsTest {
 
 	@Test
 	public void demo() {
