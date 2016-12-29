@@ -22,28 +22,35 @@ public class Histogram {
 
 	private Double[] pcts; // 配置需要计算的百分位，如99, 99.99.
 
-	private int sampleRate = 1; // 采样率，1代表100%， 2代表50%， 10 代表10%
-	private AtomicInteger sampleCounter = new AtomicInteger(0); // 采样率取模用的计数器
+	private int sampleRate; // 采样率，1代表100%， 2代表50%， 10 代表10%
+	private AtomicInteger sampleCounter; // 采样率取模用的计数器
 
-	private LinkedList<Long> measurements; // 统计周期内的原始数据
+	private volatile LinkedList<Long> measurements; // 统计周期内的原始数据
 
 	/**
 	 * @param pcts 设定百分位数，可选值如99, 99.99.
 	 */
 	public Histogram(Double... pcts) {
-		measurements = new LinkedList<Long>();
+		this(1, pcts);
+	}
 
+	/**
+	 * @param sampleRate 采样率，1代表100%， 2代表50%， 10 代表10%
+	 * @param pcts 百分位数，可选值如99, 99.99.
+	 */
+	public Histogram(Integer sampleRate, Double... pcts) {
+		this.sampleRate = sampleRate;
 		this.pcts = pcts;
-		latestMetric = createEmptyMetric();
+		reset();
 	}
 
 	public void update(long value) {
 		if (sampleRate == 1) {
-			synchronized (measurements) {
+			synchronized (this) {
 				measurements.add(value);
 			}
 		} else if (sampleCounter.incrementAndGet() % sampleRate == 0) {
-			synchronized (measurements) {
+			synchronized (this) {
 				measurements.add(value);
 			}
 		}
@@ -54,8 +61,11 @@ public class Histogram {
 	 */
 	public HistogramMetric calculateMetric() {
 		// 快照当前的数据，在计算时不阻塞新的metrics update.
-		List<Long> snapshotList = measurements;
-		measurements = new LinkedList<Long>();
+		List<Long> snapshotList = null;
+		synchronized (this) {
+			snapshotList = measurements;
+			measurements = new LinkedList<Long>();
+		}
 
 		if (snapshotList.isEmpty()) {
 			return createEmptyMetric();
@@ -124,6 +134,14 @@ public class Histogram {
 		}
 
 		return snapshotList.get((int) pos - 1);
+	}
+
+	public void reset() {
+		synchronized (this) {
+			this.measurements = new LinkedList<Long>();
+		}
+		this.sampleCounter = new AtomicInteger(0);
+		this.latestMetric = createEmptyMetric();
 	}
 
 	public void setPcts(Double[] pcts) {

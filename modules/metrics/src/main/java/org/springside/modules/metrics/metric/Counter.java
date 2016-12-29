@@ -73,6 +73,9 @@ public class Counter {
 		return metric;
 	}
 
+	/**
+	 * 重设counter，可清除历史的totalCount和avgRate
+	 */
 	public void reset() {
 		latestMetric = new CounterMetric();
 		counter = new AtomicLong(0);

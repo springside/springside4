@@ -10,8 +10,9 @@ import org.springside.modules.metrics.utils.Clock;
 /**
  * Timer类型，兼具Counter和Histogram的简便写法.
  * 
- * 有两种用法：
- * 1. 使用timer
+ * 有两种用法： 
+ * 
+ * 1. 使用timerContext
  * 
  * <pre>
  * TimerContext timerContext = timer.start();
@@ -31,29 +32,29 @@ public class Timer {
 
 	public static Clock clock = Clock.DEFAULT;
 
-	public TimerMetric latestMetric; //snapshot值
+	public TimerMetric latestMetric; // snapshot值
 
 	private Counter counter;
 	private Histogram histogram;
 
 	public Timer(Double... pcts) {
+		this(1, pcts);
+	}
+
+	public Timer(Integer sampleRate, Double... pcts) {
 		counter = new Counter();
-		histogram = new Histogram(pcts);
+		histogram = new Histogram(sampleRate, pcts);
 		latestMetric = new TimerMetric();
 	}
 
-	public void update(long start) {
-		histogram.update(clock.getCurrentTime() - start);
-		counter.inc();
-	}
-
+	//使用方法1
 	public TimerContext start() {
 		return new TimerContext(this, clock.getCurrentTime());
 	}
-
-	private void stopTimer(long startTime) {
-		long elapsed = clock.getCurrentTime() - startTime;
-		histogram.update(elapsed);
+	
+	//使用方法2
+	public void update(long start) {
+		histogram.update(clock.getCurrentTime() - start);
 		counter.inc();
 	}
 
@@ -66,6 +67,14 @@ public class Timer {
 		metric.histogramMetric = histogram.calculateMetric();
 		latestMetric = metric;
 		return metric;
+	}
+	
+	/**
+	 * 重设counter与histogram
+	 */
+	public void reset(){
+		counter.reset();
+		histogram.reset();
 	}
 
 	@Override
@@ -86,7 +95,7 @@ public class Timer {
 		}
 
 		public void stop() {
-			timer.stopTimer(startTime);
+			timer.update(startTime);
 		}
 	}
 }
