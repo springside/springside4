@@ -25,7 +25,7 @@ import org.springside.modules.metrics.metric.TimerMetric;
  * 
  * 默认logger name是"metrics"，可在构造函数中设定.用户需要在日志的配置文件中对该logger进行正确配置.
  * 
- * TODO: 1.输出为JSON的选项
+ * TODO: 另一个输出为JSON的实现
  */
 public class Slf4jReporter implements Reporter {
 	

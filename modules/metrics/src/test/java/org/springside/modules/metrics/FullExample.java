@@ -132,7 +132,6 @@ public class FullExample {
 		metricRegistry.registerGauge(MetricRegistry.name("JVM", "usedMemory"), usedMemoryGague);
 		metricRegistry.registerGauge(MetricRegistry.name("JVM", "cachedUsedMemory"), cachedUsedMemoryGague);
 
-
 		ReportScheduler scheduler = new ReportScheduler(metricRegistry, consoleReporter);
 		scheduler.start(1, TimeUnit.SECONDS);
 
@@ -140,7 +139,7 @@ public class FullExample {
 		// use some memory
 		List<Integer> list = new ArrayList<Integer>(200000);
 		list.add(1);
-		
+
 		Thread.sleep(1050);
 		scheduler.stop();
 
@@ -151,17 +150,24 @@ public class FullExample {
 
 		MetricRegistry metricRegistry = new MetricRegistry();
 
-		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUserWithJmx.counter"));
+		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
+		Timer timer = metricRegistry.timer(MetricRegistry.name("UserService", "getUser.timer"),
+				new Double[] { 0.99d, 0.999d });
 
 		// 无reporter，only exporter
-		JmxExporter jmxExporter = new JmxExporter("example", metricRegistry);
+		JmxExporter jmxExporter = new JmxExporter("metrics-example", metricRegistry);
 		jmxExporter.initMBeans();
 
 		ReportScheduler scheduler = new ReportScheduler(metricRegistry);
 		scheduler.start(1, TimeUnit.SECONDS);
 
 		counter.inc();
-		Thread.sleep(1050);
+		
+		TimerContext timerContext = timer.start();
+		Thread.sleep(100);
+		timerContext.stop();
+		
+		Thread.sleep(950);
 
 		counter.inc(2);
 		Thread.sleep(1050);
@@ -170,9 +176,8 @@ public class FullExample {
 		// 校验MBean中的值
 		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
 		System.out.println("TotalCount from MBean:" + mBeanServer
-				.getAttribute(new ObjectName("example", "name", "UserService.getUserWithJmx.counter"), "TotalCount")
+				.getAttribute(new ObjectName("metrics-example", "name", "UserService.getUser.counter"), "TotalCount")
 				.toString());
-
 	}
 
 }

@@ -32,7 +32,7 @@ import org.springside.modules.metrics.metric.Timer;
  * MBean名字为 ${dommianName}:name=${metriceName}
  * 属性名见JmxGauge， JmxCounter， JmxHistogram，JmxTimer四个类的Getter函数名.
  * 
- * TODO: 实现一个将所有Metrics暴露成一个总的JSON字符串的选项.
+ * TODO: 另一个将所有Metrics暴露成一个JSON字符串的实现.
  */
 public class JmxExporter implements Exporter, MetricRegistryListener {
 
@@ -52,7 +52,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 	}
 
 	/**
-	 * 从Registry中生成MBean
+	 * 将Registry中所有的Metrics注册为独立的MBean
 	 */
 	public void initMBeans() {
 
@@ -77,6 +77,9 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
+	/**
+	 * 将Registry中所有的Metrics取消MBean注册
+	 */
 	public void destroyMBeans() {
 		Map<String, Gauge> gauges = registry.getGauges();
 		for (String key : gauges.keySet()) {
@@ -193,6 +196,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		unregisterMBean(objectName);
 	}
 
+	
+	
 	public interface MetricMBean {
 		ObjectName objectName();
 	}
@@ -219,7 +224,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 		double getAvg();
 
-		// TODO: add pcts
+		Map<Double,Long> getPcts();
 	}
 
 	public interface JmxTimerMBean extends MetricMBean {
@@ -236,8 +241,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		long getMaxLatency();
 
 		double getAvgLatency();
-
-		// TODO: add pcts
+		
+		Map<Double,Long> getPcts();
 	}
 
 	private abstract static class AbstractBean implements MetricMBean {
@@ -328,6 +333,11 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		public double getAvg() {
 			return metric.latestMetric.avg;
 		}
+
+		@Override
+		public Map<Double, Long> getPcts() {
+			return metric.latestMetric.pcts;
+		}
 	}
 
 	/**
@@ -374,6 +384,11 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		@Override
 		public double getAvgLatency() {
 			return metric.latestMetric.histogramMetric.avg;
+		}
+
+		@Override
+		public Map<Double, Long> getPcts() {
+			return metric.latestMetric.histogramMetric.pcts;
 		}
 	}
 }
