@@ -16,14 +16,14 @@ public class ThreadLocalContext {
 	};
 
 	/**
-	 * 放入ThreadLocal.
+	 * 放入ThreadLocal的上下文信息.
 	 */
 	public static void put(String key, Object value) {
 		contextMap.get().put(key, value);
 	}
 
 	/**
-	 * 取出ThreadLocal.
+	 * 取出ThreadLocal的上下文信息.
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T get(String key) {

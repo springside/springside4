@@ -49,6 +49,9 @@ public class ThreadPoolBuilder {
 		private int queueSize = 0;
 
 		private ThreadFactory threadFactory = null;
+		private String threadNamePrefix = null;
+		private Boolean daemon = null;
+
 		private RejectedExecutionHandler rejectHandler;
 
 		public FixedThreadPoolBuilder setPoolSize(int poolSize) {
@@ -61,8 +64,21 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * 与threadNamePrefix互斥, 优先使用ThreadFactory
+		 */
 		public FixedThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
 			this.threadFactory = threadFactory;
+			return this;
+		}
+
+		public FixedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
+			this.threadNamePrefix = threadNamePrefix;
+			return this;
+		}
+
+		public FixedThreadPoolBuilder setdaemon(Boolean daemon) {
+			this.daemon = daemon;
 			return this;
 		}
 
@@ -84,7 +100,7 @@ public class ThreadPoolBuilder {
 			}
 
 			if (threadFactory == null) {
-				threadFactory = Executors.defaultThreadFactory();
+				threadFactory = createThreadFactory(threadNamePrefix, daemon);
 			}
 
 			if (rejectHandler == null) {
@@ -110,15 +126,19 @@ public class ThreadPoolBuilder {
 	 * 2.b 如果设置了maxSize, 当总线程数达到上限, 会调用RejectHandler进行处理, 默认为AbortPolicy, 抛出RejectedExecutionException异常.
 	 * 其他可选的Policy包括静默放弃当前任务(Discard)，或由主线程来直接执行(CallerRuns).
 	 * 
-	 * 3. minSize以上, maxSize以下的线程, 如果在keepAliveTime中都poll不到任务执行将会被结束掉, keeAliveTime默认为60秒, 可设置.
+	 * 3. minSize以上, maxSize以下的线程, 如果在keepAliveTime中都poll不到任务执行将会被结束掉, keeAliveTimeJDK默认为10秒.
+	 * JDK默认值60秒太高，如高达1000线程，低于16QPS时才会回收开始回收.
 	 */
 	public static class CachedThreadPoolBuilder {
 
 		private int minSize = 0;
 		private int maxSize = Integer.MAX_VALUE;
-		private int keepAliveSecs = 60;
+		private int keepAliveSecs = 10;
 
 		private ThreadFactory threadFactory = null;
+		private String threadNamePrefix = null;
+		private Boolean daemon = null;
+
 		private RejectedExecutionHandler rejectHandler;
 
 		public CachedThreadPoolBuilder setMinSize(int minSize) {
@@ -136,8 +156,21 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * 与threadNamePrefix互斥, 优先使用ThreadFactory
+		 */
 		public CachedThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
 			this.threadFactory = threadFactory;
+			return this;
+		}
+
+		public CachedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
+			this.threadNamePrefix = threadNamePrefix;
+			return this;
+		}
+
+		public CachedThreadPoolBuilder setdaemon(Boolean daemon) {
+			this.daemon = daemon;
 			return this;
 		}
 
@@ -149,7 +182,7 @@ public class ThreadPoolBuilder {
 		public ExecutorService build() {
 
 			if (threadFactory == null) {
-				threadFactory = Executors.defaultThreadFactory();
+				threadFactory = createThreadFactory(threadNamePrefix, daemon);
 			}
 
 			if (rejectHandler == null) {
@@ -161,73 +194,15 @@ public class ThreadPoolBuilder {
 		}
 	}
 
-	/**
-	 * 可同时设置min/max/queue Size的线程池, 仅用于特殊场景.
-	 * 
-	 * 比如并发要求非常高，觉得SynchronousQueue的性能太差.
-	 * 
-	 * 比如平常使用Core线程工作，如果满了先放queue，queue满再开临时线程，此时queue的长度一定要按项目需求设好.
-	 */
-	public static class ConfigurableThreadPoolBuilder {
-
-		private int minSize = 0;
-		private int maxSize = Integer.MAX_VALUE;
-		private int queueSize = 0;
-		private int keepAliveSecs = 60;
-
-		private ThreadFactory threadFactory = null;
-		private RejectedExecutionHandler rejectHandler;
-
-		public ConfigurableThreadPoolBuilder setMinSize(int minSize) {
-			this.minSize = minSize;
-			return this;
-		}
-
-		public ConfigurableThreadPoolBuilder setMaxSize(int maxSize) {
-			this.maxSize = maxSize;
-			return this;
-		}
-
-		public ConfigurableThreadPoolBuilder setQueueSize(int queueSize) {
-			this.queueSize = queueSize;
-			return this;
-		}
-
-		public ConfigurableThreadPoolBuilder setKeepAliveSecs(int keepAliveSecs) {
-			this.keepAliveSecs = keepAliveSecs;
-			return this;
-		}
-
-		public ConfigurableThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
-			this.threadFactory = threadFactory;
-			return this;
-		}
-
-		public ConfigurableThreadPoolBuilder setRejectHanlder(RejectedExecutionHandler rejectHandler) {
-			this.rejectHandler = rejectHandler;
-			return this;
-		}
-
-		public ExecutorService build() {
-
-			BlockingQueue<Runnable> queue = null;
-			if (queueSize == 0) {
-				queue = new LinkedBlockingQueue<Runnable>();
+	private static ThreadFactory createThreadFactory(String threadNamePrefix, Boolean daemon) {
+		if (threadNamePrefix != null) {
+			if (daemon != null) {
+				return Threads.buildThreadFactory(threadNamePrefix + "-%d", daemon);
 			} else {
-				queue = new ArrayBlockingQueue<Runnable>(queueSize);
+				return Threads.buildThreadFactory(threadNamePrefix + "-%d");
 			}
-
-			if (threadFactory == null) {
-				threadFactory = Executors.defaultThreadFactory();
-			}
-
-			if (rejectHandler == null) {
-				rejectHandler = defaultRejectHandler;
-			}
-
-			return new ThreadPoolExecutor(minSize, maxSize, keepAliveSecs, TimeUnit.SECONDS, queue, threadFactory,
-					rejectHandler);
 		}
+		return Executors.defaultThreadFactory();
 	}
 
 }
