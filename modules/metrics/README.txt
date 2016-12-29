@@ -1,0 +1,1 @@
+see src/test/java/org/springside/modules/metrics/FullExampleTest.java for Usage

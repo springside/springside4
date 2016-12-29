@@ -24,8 +24,9 @@ public class Histogram {
 	private LinkedList<Long> measurements; //统计周期内的原始数据
 	
 	public Histogram(Double... pcts) {
-		this.pcts = pcts;
 		measurements = new LinkedList<Long>();
+		
+		this.pcts = pcts;
 		latestMetric = createEmptyMetric();
 	}
 
@@ -108,6 +109,10 @@ public class Histogram {
 		}
 
 		return snapshotList.get((int) pos - 1);
+	}
+
+	public void setPcts(Double[] pcts) {
+		this.pcts = pcts;
 	}
 
 	@Override
