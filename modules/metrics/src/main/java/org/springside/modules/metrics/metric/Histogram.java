@@ -23,7 +23,7 @@ public class Histogram {
 	private Double[] pcts; // 配置需要计算的百分位，如99, 99.99.
 
 	private int sampleRate; // 采样率，1代表100%， 2代表50%， 10 代表10%
-	private AtomicInteger sampleCounter; // 采样率取模用的计数器
+	private AtomicInteger sampleCounter = new AtomicInteger(0); // 采样率取模用的计数器
 
 	private volatile LinkedList<Long> measurements; // 统计周期内的原始数据
 
@@ -140,7 +140,7 @@ public class Histogram {
 		synchronized (this) {
 			this.measurements = new LinkedList<Long>();
 		}
-		this.sampleCounter = new AtomicInteger(0);
+		this.sampleCounter.set(0);
 		this.latestMetric = createEmptyMetric();
 	}
 

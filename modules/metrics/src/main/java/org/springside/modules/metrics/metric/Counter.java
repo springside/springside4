@@ -19,7 +19,7 @@ public class Counter {
 
 	public CounterMetric latestMetric; // Snapshot值
 
-	private AtomicLong counter; // 统计周期内的计数器
+	private AtomicLong counter = new AtomicLong(0); // 统计周期内的计数器
 
 	private long startTime; // 启动时间
 	private long lastReportTime; // 上一次报告的时间
@@ -78,7 +78,7 @@ public class Counter {
 	 */
 	public void reset() {
 		latestMetric = new CounterMetric();
-		counter = new AtomicLong(0);
+		counter.set(0);
 		totalCount = 0L;
 		startTime = clock.getCurrentTime();
 		lastReportTime = startTime;
