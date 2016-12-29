@@ -5,7 +5,7 @@
  *******************************************************************************/
 package org.springside.modules.metrics;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
@@ -33,12 +33,15 @@ public class ReportScheduler {
 
 	private MetricRegistry metricRegistry;
 	private List<Reporter> reporters;
-	
+
 	private ScheduledExecutorService executor;
 	private volatile boolean started;
 
 	public ReportScheduler(MetricRegistry metricRegistry, Reporter... reporters) {
-		this(metricRegistry, Arrays.asList(reporters));
+		this(metricRegistry, new ArrayList<Reporter>());
+		for (Reporter reporter : reporters) {
+			this.addReporter(reporter);
+		}
 	}
 
 	public ReportScheduler(MetricRegistry metricRegistry, List<Reporter> reporters) {
@@ -93,7 +96,7 @@ public class ReportScheduler {
 			started = false;
 		} catch (InterruptedException ignored) {
 			// do nothing
-		}	
+		}
 	}
 
 	/**

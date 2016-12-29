@@ -20,16 +20,17 @@ public class FullExampleTest {
 		MetricRegistry metricRegistry = new MetricRegistry();
 
 		ConsoleReporter consoleReporter = new ConsoleReporter();
-
+		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
+		
 		ReportScheduler scheduler = new ReportScheduler(metricRegistry, consoleReporter);
 		scheduler.start(1, TimeUnit.SECONDS);
 
-		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
 		counter.inc();
+		Thread.sleep(1050);
 
-		Thread.sleep(1000);
 		counter.inc(2);
-		Thread.sleep(1000);
+		Thread.sleep(1050);
+		scheduler.stop();
 	}
 
 	@Test
@@ -44,12 +45,13 @@ public class FullExampleTest {
 		histogram.update(1);
 		histogram.update(100);
 
-		Thread.sleep(1000);
+		Thread.sleep(1050);
 		// 增加百分位
 		histogram.setPcts(new Double[] { 0.99d, 0.999d });
 		histogram.update(2);
 		histogram.update(200);
-		Thread.sleep(1000);
+		Thread.sleep(1050);
+		scheduler.stop();
 	}
 
 	@Test
@@ -57,7 +59,9 @@ public class FullExampleTest {
 		MetricRegistry metricRegistry = new MetricRegistry();
 		Slf4jReporter slf4jReporter = new Slf4jReporter();
 
-		ReportScheduler scheduler = new ReportScheduler(metricRegistry, slf4jReporter);
+		ReportScheduler scheduler = new ReportScheduler(metricRegistry);
+		scheduler.addReporter(slf4jReporter);
+		
 		scheduler.start(1, TimeUnit.SECONDS);
 
 		Timer timer = metricRegistry.timer(MetricRegistry.name("UserService", "getUser.timer"),
@@ -72,7 +76,7 @@ public class FullExampleTest {
 		Thread.sleep(200);
 		timerContext.stop();
 
-		Thread.sleep(700);
+		Thread.sleep(750);
 
 		// 用法2
 		long start = System.currentTimeMillis();
@@ -83,7 +87,8 @@ public class FullExampleTest {
 		Thread.sleep(250);
 		timer.update(start);
 		
-		Thread.sleep(700);
+		Thread.sleep(650);
+		scheduler.stop();
 	}
 
 }
