@@ -208,7 +208,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 		long getTotalCount();
 
-		long getMeanRate();
+		long getAvgRate();
 	}
 
 	public interface JmxHistogramMBean extends MetricMBean {
@@ -217,7 +217,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 		long getMax();
 
-		double getMean();
+		double getAvg();
 
 		// TODO: add pcts
 	}
@@ -229,13 +229,13 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 		long getTotalCount();
 
-		long getMeanRate();
+		long getAvgRate();
 
 		long getMinLatency();
 
 		long getMaxLatency();
 
-		double getMeanLatency();
+		double getAvgLatency();
 
 		// TODO: add pcts
 	}
@@ -298,8 +298,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 
 		@Override
-		public long getMeanRate() {
-			return metric.latestMetric.meanRate;
+		public long getAvgRate() {
+			return metric.latestMetric.avgRate;
 		}
 	}
 
@@ -325,8 +325,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 
 		@Override
-		public double getMean() {
-			return metric.latestMetric.mean;
+		public double getAvg() {
+			return metric.latestMetric.avg;
 		}
 	}
 
@@ -357,8 +357,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 
 		@Override
-		public long getMeanRate() {
-			return metric.latestMetric.counterMetric.meanRate;
+		public long getAvgRate() {
+			return metric.latestMetric.counterMetric.avgRate;
 		}
 
 		@Override
@@ -372,8 +372,8 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 
 		@Override
-		public double getMeanLatency() {
-			return metric.latestMetric.histogramMetric.mean;
+		public double getAvgLatency() {
+			return metric.latestMetric.histogramMetric.avg;
 		}
 	}
 }

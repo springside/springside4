@@ -1,6 +1,9 @@
 package org.springside.modules.metrics;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.management.MBeanServer;
@@ -8,7 +11,9 @@ import javax.management.ObjectName;
 
 import org.junit.Test;
 import org.springside.modules.metrics.exporter.JmxExporter;
+import org.springside.modules.metrics.metric.CachedGauge;
 import org.springside.modules.metrics.metric.Counter;
+import org.springside.modules.metrics.metric.Gauge;
 import org.springside.modules.metrics.metric.Histogram;
 import org.springside.modules.metrics.metric.Timer;
 import org.springside.modules.metrics.metric.Timer.TimerContext;
@@ -20,7 +25,7 @@ import org.springside.modules.metrics.reporter.Slf4jReporter;
  * 
  * src/test/resources/logback.xml中已对Slf4jReporter进行配置
  */
-public class FullExampleTest {
+public class FullExample {
 
 	@Test
 	public void counterExample() throws InterruptedException {
@@ -100,17 +105,55 @@ public class FullExampleTest {
 
 		Thread.sleep(650);
 		scheduler.stop();
+	}
+
+	@Test
+	public void gaugeExample() throws InterruptedException {
+
+		MetricRegistry metricRegistry = new MetricRegistry();
+
+		// 使用ConsoleReporter
+		ConsoleReporter consoleReporter = new ConsoleReporter();
+
+		final MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+
+		Gauge<Long> usedMemoryGague = new Gauge<Long>() {
+			public Long getValue() {
+				return memoryMXBean.getHeapMemoryUsage().getUsed();
+			}
+		};
+
+		Gauge<Long> cachedUsedMemoryGague = new CachedGauge<Long>(10, TimeUnit.SECONDS) {
+			public Long loadValue() {
+				return memoryMXBean.getHeapMemoryUsage().getUsed();
+			}
+		};
+
+		metricRegistry.registerGauge(MetricRegistry.name("JVM", "usedMemory"), usedMemoryGague);
+		metricRegistry.registerGauge(MetricRegistry.name("JVM", "cachedUsedMemory"), cachedUsedMemoryGague);
+
+
+		ReportScheduler scheduler = new ReportScheduler(metricRegistry, consoleReporter);
+		scheduler.start(1, TimeUnit.SECONDS);
+
+		Thread.sleep(1050);
+		// use some memory
+		List<Integer> list = new ArrayList<Integer>(200000);
+		list.add(1);
+		
+		Thread.sleep(1050);
+		scheduler.stop();
 
 	}
 
 	@Test
-	public void testJmx() throws InterruptedException, Exception {
+	public void jmxExample() throws InterruptedException, Exception {
 
 		MetricRegistry metricRegistry = new MetricRegistry();
 
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUserWithJmx.counter"));
 
-		//无reporter，only exporter
+		// 无reporter，only exporter
 		JmxExporter jmxExporter = new JmxExporter("example", metricRegistry);
 		jmxExporter.initMBeans();
 

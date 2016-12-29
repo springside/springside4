@@ -9,15 +9,15 @@
  *----------------------------------------------------------------------------*/
 package org.springside.modules.metrics.metric;
 
-public abstract class Gauge {
+public abstract class Gauge<T extends Number> {
 
-	public Number latestMetric;
+	public T latestMetric;
 
 	public void calculateMetric() {
 		latestMetric = getValue();
 	}
 
-	protected abstract Number getValue();
+	protected abstract T getValue();
 
 	@Override
 	public String toString() {

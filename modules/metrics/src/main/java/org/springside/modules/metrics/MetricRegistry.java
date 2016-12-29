@@ -8,6 +8,8 @@ package org.springside.modules.metrics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -190,5 +192,14 @@ public class MetricRegistry {
 	 */
 	public void addListener(MetricRegistryListener listener) {
 		listeners.add(listener);
+	}
+
+	/**
+	 * 返回按metrics name排序的Map.
+	 * 
+	 * 从get的性能考虑，没有使用ConcurrentSkipListMap，而某些Reporter可能需要固定的顺序
+	 */
+	public static <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
+		return new TreeMap<String, T>(metrics);
 	}
 }

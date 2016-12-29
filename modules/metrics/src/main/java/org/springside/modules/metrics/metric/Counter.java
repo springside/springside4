@@ -56,7 +56,7 @@ public class Counter {
 
 		totalCount += latestCount;
 		long totalElapsed = currentTime - startTime;
-		metric.meanRate = (totalCount * 1000) / totalElapsed;
+		metric.avgRate = (totalCount * 1000) / totalElapsed;
 
 		metric.latestCount = latestCount;
 		metric.totalCount = totalCount;

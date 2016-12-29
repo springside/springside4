@@ -82,7 +82,7 @@ public class Histogram {
 			}
 		}
 
-		metric.mean = sum / count;
+		metric.avg = sum / count;
 		
 		latestMetric = metric;
 		return metric;

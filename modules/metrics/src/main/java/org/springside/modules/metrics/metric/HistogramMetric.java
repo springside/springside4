@@ -14,11 +14,11 @@ import java.util.TreeMap;
 public class HistogramMetric {
 	public long min;     //最小
 	public long max;     //最大
-	public double mean;  //平均
+	public double avg;  //平均
 	public Map<Double, Long> pcts = new TreeMap<Double, Long>(); //百分位数
 
 	@Override
 	public String toString() {
-		return "HistogramMetric [min=" + min + ", max=" + max + ", mean=" + mean + ", pcts=" + pcts + "]";
+		return "HistogramMetric [min=" + min + ", max=" + max + ", avg=" + avg + ", pcts=" + pcts + "]";
 	}
 }

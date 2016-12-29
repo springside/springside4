@@ -7,11 +7,10 @@ package org.springside.modules.metrics.reporter;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.metrics.MetricRegistry;
 import org.springside.modules.metrics.Reporter;
 import org.springside.modules.metrics.metric.Counter;
 import org.springside.modules.metrics.metric.CounterMetric;
@@ -53,19 +52,19 @@ public class Slf4jReporter implements Reporter {
 			return;
 		}
 
-		for (Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
+		for (Entry<String, Gauge> entry : MetricRegistry.getSortedMetrics(gauges).entrySet()) {
 			logGauge(entry.getKey(), entry.getValue().latestMetric);
 		}
 
-		for (Entry<String, Counter> entry : getSortedMetrics(counters).entrySet()) {
+		for (Entry<String, Counter> entry : MetricRegistry.getSortedMetrics(counters).entrySet()) {
 			logCounter(entry.getKey(), entry.getValue().latestMetric);
 		}
 
-		for (Entry<String, Histogram> entry : getSortedMetrics(histograms).entrySet()) {
+		for (Entry<String, Histogram> entry : MetricRegistry.getSortedMetrics(histograms).entrySet()) {
 			logHistogram(entry.getKey(), entry.getValue().latestMetric);
 		}
 
-		for (Entry<String, Timer> entry : getSortedMetrics(timers).entrySet()) {
+		for (Entry<String, Timer> entry : MetricRegistry.getSortedMetrics(timers).entrySet()) {
 			logTimer(entry.getKey(), entry.getValue().latestMetric);
 		}
 	}
@@ -75,20 +74,20 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logCounter(String name, CounterMetric counter) {
-		reportLogger.info("type=COUNTER, name={}, totalCount={}, meanRate={}, latestRate={}", name, counter.totalCount,
-				counter.meanRate, counter.latestRate);
+		reportLogger.info("type=COUNTER, name={}, totalCount={}, avgRate={}, latestRate={}", name, counter.totalCount,
+				counter.avgRate, counter.latestRate);
 	}
 
 	private void logHistogram(String name, HistogramMetric histogram) {
-		reportLogger.info("type=HISTOGRAM, name={}, min={}, max={}, mean={}{}", name, histogram.min, histogram.max,
-				histogram.mean, buildPcts(histogram.pcts));
+		reportLogger.info("type=HISTOGRAM, name={}, min={}, max={}, avg={}{}", name, histogram.min, histogram.max,
+				histogram.avg, buildPcts(histogram.pcts));
 	}
 
 	private void logTimer(String name, TimerMetric timer) {
 		reportLogger.info(
-				"type=TIMER, name={}, totalCount={}, meanRate={}, latestRate={}, minLatency={}ms, maxLatency={}ms, meanLatency={}ms{}",
-				name, timer.counterMetric.totalCount, timer.counterMetric.meanRate, timer.counterMetric.latestRate,
-				timer.histogramMetric.min, timer.histogramMetric.max, timer.histogramMetric.mean,
+				"type=TIMER, name={}, totalCount={}, avgRate={}, latestRate={}, minLatency={}ms, maxLatency={}ms, avgLatency={}ms{}",
+				name, timer.counterMetric.totalCount, timer.counterMetric.avgRate, timer.counterMetric.latestRate,
+				timer.histogramMetric.min, timer.histogramMetric.max, timer.histogramMetric.avg,
 				buildPcts(timer.histogramMetric.pcts));
 	}
 
@@ -100,12 +99,5 @@ public class Slf4jReporter implements Reporter {
 		}
 
 		return builder.toString();
-	}
-
-	/**
-	 * 返回按metrics name排序的Map.
-	 */
-	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
-		return new TreeMap<String, T>(metrics);
 	}
 }

@@ -9,14 +9,14 @@ package org.springside.modules.metrics.metric;
  * Counter的统计值
  */
 public class CounterMetric {
-	public long totalCount; //从启动到目前到调用次数
-	public long meanRate;   //从启动到目前到平均QPS
+	public long totalCount; //从启动到目前的调用次数
+	public long avgRate;    //从启动到目前的平均QPS
 	public long latestCount;//最后一个报告周期的调用次数
 	public long latestRate; //最后一个报告周期的QPS
 
 	@Override
 	public String toString() {
-		return "CounterMetric [totalCount=" + totalCount + ", meanRate=" + meanRate + ", latestCount=" + latestCount
+		return "CounterMetric [totalCount=" + totalCount + ", avgRate=" + avgRate + ", latestCount=" + latestCount
 				+ ", latestRate=" + latestRate + "]";
 	}
 }

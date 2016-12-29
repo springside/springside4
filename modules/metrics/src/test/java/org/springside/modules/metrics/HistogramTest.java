@@ -25,7 +25,7 @@ public class HistogramTest {
 
 		assertThat(metric.min).isEqualTo(1);
 		assertThat(metric.max).isEqualTo(100);
-		assertThat(metric.mean).isEqualTo(50.5);
+		assertThat(metric.avg).isEqualTo(50.5);
 		assertThat(metric.pcts.get(90d)).isEqualTo(90);
 		assertThat(metric.pcts.get(95d)).isEqualTo(95);
 
@@ -37,7 +37,7 @@ public class HistogramTest {
 
 		assertThat(metric.min).isEqualTo(2);
 		assertThat(metric.max).isEqualTo(200);
-		assertThat(metric.mean).isEqualTo(101);
+		assertThat(metric.avg).isEqualTo(101);
 		assertThat(metric.pcts.get(90d)).isEqualTo(180);
 		assertThat(metric.pcts.get(95d)).isEqualTo(190);
 	}
@@ -58,7 +58,7 @@ public class HistogramTest {
 
 		assertThat(metric.min).isEqualTo(1);
 		assertThat(metric.max).isEqualTo(3);
-		assertThat(metric.mean).isEqualTo(2);
+		assertThat(metric.avg).isEqualTo(2);
 		assertThat(metric.pcts.get(90d)).isEqualTo(3);
 		assertThat(metric.pcts.get(95d)).isEqualTo(3);
 	}
@@ -71,7 +71,7 @@ public class HistogramTest {
 
 		assertThat(metric.min).isZero();
 		assertThat(metric.max).isZero();
-		assertThat(metric.mean).isZero();
+		assertThat(metric.avg).isZero();
 		assertThat(metric.pcts.get(90d)).isZero();
 	}
 

@@ -9,9 +9,8 @@ import java.io.PrintStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.SortedMap;
-import java.util.TreeMap;
 
+import org.springside.modules.metrics.MetricRegistry;
 import org.springside.modules.metrics.Reporter;
 import org.springside.modules.metrics.metric.Counter;
 import org.springside.modules.metrics.metric.CounterMetric;
@@ -38,7 +37,7 @@ public class ConsoleReporter implements Reporter {
 
 		if (!gauges.isEmpty()) {
 			printWithBanner("-- Gaugues", '-');
-			for (Map.Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
+			for (Map.Entry<String, Gauge> entry : MetricRegistry.getSortedMetrics(gauges).entrySet()) {
 				output.println(entry.getKey());
 				printGauge(entry.getValue());
 			}
@@ -47,7 +46,7 @@ public class ConsoleReporter implements Reporter {
 
 		if (!counters.isEmpty()) {
 			printWithBanner("-- Counters", '-');
-			for (Map.Entry<String, Counter> entry : getSortedMetrics(counters).entrySet()) {
+			for (Map.Entry<String, Counter> entry : MetricRegistry.getSortedMetrics(counters).entrySet()) {
 				output.println(entry.getKey());
 				printCounter(entry.getValue().latestMetric);
 			}
@@ -56,7 +55,7 @@ public class ConsoleReporter implements Reporter {
 
 		if (!histograms.isEmpty()) {
 			printWithBanner("-- Histograms", '-');
-			for (Map.Entry<String, Histogram> entry : getSortedMetrics(histograms).entrySet()) {
+			for (Map.Entry<String, Histogram> entry : MetricRegistry.getSortedMetrics(histograms).entrySet()) {
 				output.println(entry.getKey());
 				printHistogram(entry.getValue().latestMetric);
 			}
@@ -65,7 +64,7 @@ public class ConsoleReporter implements Reporter {
 
 		if (!timers.isEmpty()) {
 			printWithBanner("-- Timers", '-');
-			for (Map.Entry<String, Timer> entry : getSortedMetrics(timers).entrySet()) {
+			for (Map.Entry<String, Timer> entry : MetricRegistry.getSortedMetrics(timers).entrySet()) {
 				output.println(entry.getKey());
 				printTimer(entry.getValue().latestMetric);
 			}
@@ -90,13 +89,13 @@ public class ConsoleReporter implements Reporter {
 		output.printf("      latest count = %d%n", counter.latestCount);
 		output.printf("       total count = %d%n", counter.totalCount);
 		output.printf("       latest rate = %d%n", counter.latestRate);
-		output.printf("         mean rate = %d%n", counter.meanRate);
+		output.printf("          avg rate = %d%n", counter.avgRate);
 	}
 
 	private void printHistogram(HistogramMetric histogram) {
 		output.printf("               min = %d%n", histogram.min);
 		output.printf("               max = %d%n", histogram.max);
-		output.printf("              mean = %2.2f%n", histogram.mean);
+		output.printf("               avg = %2.2f%n", histogram.avg);
 		for (Entry<Double, Long> pct : histogram.pcts.entrySet()) {
 			output.printf("           %2.2f%% <= %d %n", pct.getKey(), pct.getValue());
 		}
@@ -106,21 +105,12 @@ public class ConsoleReporter implements Reporter {
 		output.printf("      latest count = %d%n", timer.counterMetric.latestCount);
 		output.printf("       total count = %d%n", timer.counterMetric.totalCount);
 		output.printf("       latest rate = %d%n", timer.counterMetric.latestRate);
-		output.printf("         mean rate = %d%n", timer.counterMetric.meanRate);
+		output.printf("          avg rate = %d%n", timer.counterMetric.avgRate);
 		output.printf("       min latency = %d ms%n", timer.histogramMetric.min);
 		output.printf("       max latency = %d ms%n", timer.histogramMetric.max);
-		output.printf("      mean latency = %2.2f ms%n", timer.histogramMetric.mean);
+		output.printf("       avg latency = %2.2f ms%n", timer.histogramMetric.avg);
 		for (Entry<Double, Long> pct : timer.histogramMetric.pcts.entrySet()) {
 			output.printf("    %2.2f%% latency <= %d ms%n", pct.getKey(), pct.getValue());
 		}
-	}
-
-	/**
-	 * 返回按metrics name排序的Map.
-	 * 
-	 * 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap，因此每次报告时需要用TreeMap重新排序.
-	 */
-	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
-		return new TreeMap<String, T>(metrics);
 	}
 }

@@ -111,7 +111,7 @@ public class GraphiteReporter implements Reporter {
 	private void reportHistogram(String name, HistogramMetric histogram, long timestamp) throws IOException {
 		send(MetricRegistry.name(prefix, name, "min"), format(histogram.min), timestamp);
 		send(MetricRegistry.name(prefix, name, "max"), format(histogram.max), timestamp);
-		send(MetricRegistry.name(prefix, name, "mean"), format(histogram.mean), timestamp);
+		send(MetricRegistry.name(prefix, name, "avg"), format(histogram.avg), timestamp);
 		for (Entry<Double, Long> pct : histogram.pcts.entrySet()) {
 			send(MetricRegistry.name(prefix, name, format(pct.getKey()).replace('.', '_')), format(pct.getValue()),
 					timestamp);
@@ -123,7 +123,7 @@ public class GraphiteReporter implements Reporter {
 
 		send(MetricRegistry.name(prefix, name, "min"), format(timer.histogramMetric.min), timestamp);
 		send(MetricRegistry.name(prefix, name, "max"), format(timer.histogramMetric.max), timestamp);
-		send(MetricRegistry.name(prefix, name, "mean"), format(timer.histogramMetric.mean), timestamp);
+		send(MetricRegistry.name(prefix, name, "avg"), format(timer.histogramMetric.avg), timestamp);
 		for (Entry<Double, Long> pct : timer.histogramMetric.pcts.entrySet()) {
 			send(MetricRegistry.name(prefix, name, format(pct.getKey()).replace('.', '_')), format(pct.getValue()),
 					timestamp);
