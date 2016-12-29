@@ -19,7 +19,8 @@ import org.springside.modules.metrics.metric.Histogram;
 import org.springside.modules.metrics.metric.Timer;
 
 /**
- * 注册中心, 用户创建Metrics的入口.
+ * 注册中心, 用户创建Metrics的入口. 
+ * 
  * 支持多线程并发的取得或创建metrics.
  */
 public class MetricRegistry {
@@ -28,28 +29,13 @@ public class MetricRegistry {
 
 	private Double[] defaultPcts = new Double[] {};
 
-	 //从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap.
+	// 从get的性能考虑，没有使用ConcurrentSkipListMap而是仍然使用ConcurrentHashMap.
 	private ConcurrentMap<String, Gauge> gauges = new ConcurrentHashMap<String, Gauge>();
 	private ConcurrentMap<String, Counter> counters = new ConcurrentHashMap<String, Counter>();
 	private ConcurrentMap<String, Histogram> histograms = new ConcurrentHashMap<String, Histogram>();
 	private ConcurrentMap<String, Timer> timers = new ConcurrentHashMap<String, Timer>();
 
 	private List<MetricRegistryListener> listeners = new ArrayList<MetricRegistryListener>();
-
-	/**
-	 * 格式化以"."分割的Metrics Name的辅助函数.
-	 */
-	public static String name(String name, String... subNames) {
-		final StringBuilder builder = new StringBuilder(name);
-		if (subNames != null) {
-			for (String s : subNames) {
-				if ((s != null) && !s.isEmpty()) {
-					builder.append('.').append(s);
-				}
-			}
-		}
-		return builder.toString();
-	}
 
 	/**
 	 * 在注册中心注册Gauge.
@@ -72,6 +58,8 @@ public class MetricRegistry {
 
 	/**
 	 * 在注册中心获取或创建Histogram, 并设置所需的百分比计算.
+	 * 
+	 * @param pcts 设定百分位数，可选值如99, 99.99，为空时使用MetricRegistry的默认值
 	 */
 	public Histogram histogram(String name, Double... pcts) {
 		if (histograms.containsKey(name)) {
@@ -84,6 +72,8 @@ public class MetricRegistry {
 
 	/**
 	 * 在注册中心获取或创建Timer, 并设置所需的百分比计算.
+	 * 
+	 * @param pcts 设定百分位数，可选值如99, 99.99，为空时使用MetricRegistry的默认值
 	 */
 	public Timer timer(String name, Double... pcts) {
 		if (timers.containsKey(name)) {
@@ -98,6 +88,7 @@ public class MetricRegistry {
 	 * 快速清理注册表中全部Metrics.
 	 */
 	public void clearAll() {
+		//通知Listener
 		for (MetricRegistryListener listener : listeners) {
 			for (String key : gauges.keySet()) {
 				listener.onGaugeRemoved(key);
@@ -116,6 +107,7 @@ public class MetricRegistry {
 			}
 		}
 
+		//清空注册
 		gauges.clear();
 		counters.clear();
 		histograms.clear();
@@ -124,6 +116,7 @@ public class MetricRegistry {
 
 	private <T> T register(ConcurrentMap<String, T> metrics, String name, T newMetric) {
 		T existingMetric = metrics.putIfAbsent(name, newMetric);
+		
 		if (existingMetric != null) {
 			return existingMetric;
 		} else {
@@ -181,21 +174,36 @@ public class MetricRegistry {
 	}
 
 	/**
-	 * 重新设置默认的百分比设置.
+	 * 重新设置默认的百分位数.
 	 */
 	public void setDefaultPcts(Double[] defaultPcts) {
 		this.defaultPcts = defaultPcts;
 	}
 
 	/**
-	 * Exporter需要将自己加为Listener.
+	 * 加入Listener，侦听Metrics的增删变化
 	 */
 	public void addListener(MetricRegistryListener listener) {
 		listeners.add(listener);
 	}
 
 	/**
-	 * 返回按metrics name排序的Map.
+	 * 格式化以"."分割的Metrics Name的辅助函数.
+	 */
+	public static String name(String name, String... subNames) {
+		StringBuilder builder = new StringBuilder(name);
+		if (subNames != null) {
+			for (String s : subNames) {
+				if ((s != null) && !s.isEmpty()) {
+					builder.append('.').append(s);
+				}
+			}
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * 返回按metrics name排序的Map的辅助函数.
 	 * 
 	 * 从get的性能考虑，没有使用ConcurrentSkipListMap，而某些Reporter可能需要固定的顺序
 	 */

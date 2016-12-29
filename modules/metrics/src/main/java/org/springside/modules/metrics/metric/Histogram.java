@@ -23,6 +23,9 @@ public class Histogram {
 	
 	private LinkedList<Long> measurements; //统计周期内的原始数据
 	
+	/**
+	 * @param pcts 设定百分位数，可选值如99, 99.99.
+	 */
 	public Histogram(Double... pcts) {
 		measurements = new LinkedList<Long>();
 		
@@ -53,7 +56,7 @@ public class Histogram {
 		double sum = 0;
 
 		if ((pcts != null) && (pcts.length > 0)) {
-			// 按数值大小排序，以快速支持百分比过滤
+			// 按数值大小排序，以快速支持百分比
 			Collections.sort(snapshotList);
 
 			metric.min = snapshotList.get(0);
@@ -69,7 +72,7 @@ public class Histogram {
 		} else {
 			// 不排序的算法，因为不需要支持百分比过滤
 			metric.min = snapshotList.get(0);
-			metric.max = snapshotList.get(0);
+			metric.max = metric.min;
 
 			for (long value : snapshotList) {
 				if (value < metric.min) {
@@ -96,16 +99,18 @@ public class Histogram {
 		return metric;
 	}
 
-	private Long getPercent(List<Long> snapshotList, int count, double pct) {
-
-		final double pos = (pct * (count + 1)) / 100;
+	/**
+	 * 在已排序的List中，取出百分位数上的值
+	 */
+	private static Long getPercent(List<Long> snapshotList, int listCount, double pct) {
+		double pos = (pct * (listCount + 1)) / 100;
 
 		if (pos < 1) {
 			return snapshotList.get(0);
 		}
 
-		if (pos >= count) {
-			return snapshotList.get(count - 1);
+		if (pos >= listCount) {
+			return snapshotList.get(listCount - 1);
 		}
 
 		return snapshotList.get((int) pos - 1);

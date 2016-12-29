@@ -150,54 +150,53 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 	@Override
 	public void onGaugeAdded(String name, Gauge gauge) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		registerMBean(objectName, new JmxGauge(gauge, objectName));
 	}
 
 	@Override
 	public void onCounterAdded(String name, Counter counter) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		registerMBean(objectName, new JmxCounter(counter, objectName));
 	}
 
 	@Override
 	public void onHistogramAdded(String name, Histogram histogram) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		registerMBean(objectName, new JmxHistogram(histogram, objectName));
 	}
 
 	@Override
 	public void onTimerAdded(String name, Timer timer) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		registerMBean(objectName, new JmxTimer(timer, objectName));
 	}
 
 	@Override
 	public void onGaugeRemoved(String name) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onCounterRemoved(String name) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onHistogramRemoved(String name) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onTimerRemoved(String name) {
-		final ObjectName objectName = createObjectName(name);
+		ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
-
 	
-	
+	///////// MBean定义///////
 	public interface MetricMBean {
 		ObjectName objectName();
 	}

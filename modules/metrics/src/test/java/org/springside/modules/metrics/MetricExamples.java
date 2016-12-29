@@ -25,7 +25,7 @@ import org.springside.modules.metrics.reporter.Slf4jReporter;
  * 
  * src/test/resources/logback.xml中已对Slf4jReporter进行配置
  */
-public class FullExample {
+public class MetricExamples {
 
 	@Test
 	public void counterExample() throws InterruptedException {
@@ -62,7 +62,7 @@ public class FullExample {
 
 		Thread.sleep(1050);
 		// 增加百分位
-		histogram.setPcts(new Double[] { 0.99d, 0.999d });
+		histogram.setPcts(new Double[] { 99d, 99.95d });
 		histogram.update(2);
 		histogram.update(200);
 		Thread.sleep(1050);
@@ -81,7 +81,7 @@ public class FullExample {
 		scheduler.start(1, TimeUnit.SECONDS);
 
 		Timer timer = metricRegistry.timer(MetricRegistry.name("UserService", "getUser.timer"),
-				new Double[] { 0.99d, 0.999d });
+				new Double[] { 99d, 99.99d });
 
 		// 写法1
 		TimerContext timerContext = timer.start();

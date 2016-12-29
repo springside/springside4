@@ -91,7 +91,7 @@ public class Slf4jReporter implements Reporter {
 				buildPcts(timer.histogramMetric.pcts));
 	}
 
-	private String buildPcts(Map<Double, Long> pcts) {
+	private static String buildPcts(Map<Double, Long> pcts) {
 		StringBuilder builder = new StringBuilder();
 
 		for (Entry<Double, Long> entry : pcts.entrySet()) {

@@ -1,1 +1,1 @@
-see src/test/java/org/springside/modules/metrics/FullExampleTest.java for Usage
+see src/test/java/org/springside/modules/metrics/MetricExamples.java for Usage.
