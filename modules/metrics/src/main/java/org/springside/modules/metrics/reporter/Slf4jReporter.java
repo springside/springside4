@@ -26,12 +26,12 @@ import org.springside.modules.metrics.metric.TimerMetric;
  * 
  * 默认logger name是"metrics"，可在构造函数中设定.用户需要在日志的配置文件中对该logger进行正确配置.
  * 
- * TODO: 
- * 1.输出为JSON的选项
- * 2.日志字符串的性能调优
+ * TODO: 1.输出为JSON的选项
  */
 public class Slf4jReporter implements Reporter {
+	
 	private static final String DEFAULT_LOGGER_NAME = "metrics";
+	
 	private Logger reportLogger;
 
 	public Slf4jReporter() {
@@ -40,11 +40,18 @@ public class Slf4jReporter implements Reporter {
 
 	public Slf4jReporter(String loggerName) {
 		reportLogger = LoggerFactory.getLogger(loggerName);
+		if (!reportLogger.isInfoEnabled()) {
+			System.out.println("metrics logger " + loggerName + " is not config correctly");
+		}
 	}
 
 	@Override
 	public void report(Map<String, Gauge> gauges, Map<String, Counter> counters, Map<String, Histogram> histograms,
 			Map<String, Timer> timers) {
+
+		if (!reportLogger.isInfoEnabled()) {
+			return;
+		}
 
 		for (Entry<String, Gauge> entry : getSortedMetrics(gauges).entrySet()) {
 			logGauge(entry.getKey(), entry.getValue().latestMetric);
@@ -78,11 +85,11 @@ public class Slf4jReporter implements Reporter {
 	}
 
 	private void logTimer(String name, TimerMetric timer) {
-		reportLogger
-				.info("type=TIMER, name={}, totalCount={}, meanRate={}, latestRate={}, minLatency={}ms, maxLatency={}ms, meanLatency={}ms{}",
-						name, timer.counterMetric.totalCount, timer.counterMetric.meanRate,
-						timer.counterMetric.latestRate, timer.histogramMetric.min, timer.histogramMetric.max,
-						timer.histogramMetric.mean, buildPcts(timer.histogramMetric.pcts));
+		reportLogger.info(
+				"type=TIMER, name={}, totalCount={}, meanRate={}, latestRate={}, minLatency={}ms, maxLatency={}ms, meanLatency={}ms{}",
+				name, timer.counterMetric.totalCount, timer.counterMetric.meanRate, timer.counterMetric.latestRate,
+				timer.histogramMetric.min, timer.histogramMetric.max, timer.histogramMetric.mean,
+				buildPcts(timer.histogramMetric.pcts));
 	}
 
 	private String buildPcts(Map<Double, Long> pcts) {
@@ -97,7 +104,6 @@ public class Slf4jReporter implements Reporter {
 
 	/**
 	 * 返回按metrics name排序的Map.
-	 * 
 	 */
 	private <T> SortedMap<String, T> getSortedMetrics(Map<String, T> metrics) {
 		return new TreeMap<String, T>(metrics);
