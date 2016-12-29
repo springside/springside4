@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Histogram数据类型, 主要用于计算Latency.
@@ -19,23 +20,32 @@ public class Histogram {
 
 	public HistogramMetric latestMetric;// Snapshot值
 
-	private Double[] pcts; //配置需要计算的百分位
-	
-	private LinkedList<Long> measurements; //统计周期内的原始数据
-	
+	private Double[] pcts; // 配置需要计算的百分位，如99, 99.99.
+
+	private int sampleRate = 1; // 采样率，1代表100%， 2代表50%， 10 代表10%
+	private AtomicInteger sampleCounter = new AtomicInteger(0); // 采样率取模用的计数器
+
+	private LinkedList<Long> measurements; // 统计周期内的原始数据
+
 	/**
 	 * @param pcts 设定百分位数，可选值如99, 99.99.
 	 */
 	public Histogram(Double... pcts) {
 		measurements = new LinkedList<Long>();
-		
+
 		this.pcts = pcts;
 		latestMetric = createEmptyMetric();
 	}
 
 	public void update(long value) {
-		synchronized (measurements) {
-			measurements.add(value);
+		if (sampleRate == 1) {
+			synchronized (measurements) {
+				measurements.add(value);
+			}
+		} else if (sampleCounter.incrementAndGet() % sampleRate == 0) {
+			synchronized (measurements) {
+				measurements.add(value);
+			}
 		}
 	}
 
@@ -86,7 +96,7 @@ public class Histogram {
 		}
 
 		metric.avg = sum / count;
-		
+
 		latestMetric = metric;
 		return metric;
 	}
@@ -118,6 +128,17 @@ public class Histogram {
 
 	public void setPcts(Double[] pcts) {
 		this.pcts = pcts;
+	}
+
+	/**
+	 * 采样率，1代表100%，2代表50%，10 代表10%
+	 */
+	public void setSampleRate(int sampleRate) {
+		if (sampleRate <= 0) {
+			sampleRate = 1;
+		} else {
+			this.sampleRate = sampleRate;
+		}
 	}
 
 	@Override
