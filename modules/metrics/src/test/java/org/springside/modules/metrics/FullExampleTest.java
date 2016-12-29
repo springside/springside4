@@ -1,8 +1,13 @@
 package org.springside.modules.metrics;
 
+import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+
 import org.junit.Test;
+import org.springside.modules.metrics.exporter.JmxExporter;
 import org.springside.modules.metrics.metric.Counter;
 import org.springside.modules.metrics.metric.Histogram;
 import org.springside.modules.metrics.metric.Timer;
@@ -12,6 +17,8 @@ import org.springside.modules.metrics.reporter.Slf4jReporter;
 
 /**
  * 示例分别使用ConsoleReporter与Slf4jReporter, 演示Counter, Histogram 和 Timer的用法.
+ * 
+ * src/test/resources/logback.xml中已对Slf4jReporter进行配置
  */
 public class FullExampleTest {
 
@@ -19,9 +26,10 @@ public class FullExampleTest {
 	public void counterExample() throws InterruptedException {
 		MetricRegistry metricRegistry = new MetricRegistry();
 
+		// 使用ConsoleReporter
 		ConsoleReporter consoleReporter = new ConsoleReporter();
 		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUser.counter"));
-		
+
 		ReportScheduler scheduler = new ReportScheduler(metricRegistry, consoleReporter);
 		scheduler.start(1, TimeUnit.SECONDS);
 
@@ -36,9 +44,11 @@ public class FullExampleTest {
 	@Test
 	public void histogramExample() throws InterruptedException {
 		MetricRegistry metricRegistry = new MetricRegistry();
-		ConsoleReporter consoleReporter = new ConsoleReporter();
 
-		ReportScheduler scheduler = new ReportScheduler(metricRegistry, consoleReporter);
+		// 使用slf4j reporter,并使用默认logger名字
+		Slf4jReporter slf4jReporter = new Slf4jReporter();
+
+		ReportScheduler scheduler = new ReportScheduler(metricRegistry, slf4jReporter);
 		scheduler.start(1, TimeUnit.SECONDS);
 
 		Histogram histogram = metricRegistry.histogram(MetricRegistry.name("UserService", "getUser.latency"));
@@ -57,11 +67,12 @@ public class FullExampleTest {
 	@Test
 	public void timerExample() throws InterruptedException {
 		MetricRegistry metricRegistry = new MetricRegistry();
-		Slf4jReporter slf4jReporter = new Slf4jReporter();
+		// 使用slf4j reporter,并使用自定义logger名字
+		Slf4jReporter slf4jReporter = new Slf4jReporter("mymetrics");
 
 		ReportScheduler scheduler = new ReportScheduler(metricRegistry);
 		scheduler.addReporter(slf4jReporter);
-		
+
 		scheduler.start(1, TimeUnit.SECONDS);
 
 		Timer timer = metricRegistry.timer(MetricRegistry.name("UserService", "getUser.timer"),
@@ -86,9 +97,39 @@ public class FullExampleTest {
 		start = System.currentTimeMillis();
 		Thread.sleep(250);
 		timer.update(start);
-		
+
 		Thread.sleep(650);
 		scheduler.stop();
+
+	}
+
+	@Test
+	public void testJmx() throws InterruptedException, Exception {
+
+		MetricRegistry metricRegistry = new MetricRegistry();
+
+		Counter counter = metricRegistry.counter(MetricRegistry.name("UserService", "getUserWithJmx.counter"));
+
+		//无reporter，only exporter
+		JmxExporter jmxExporter = new JmxExporter("example", metricRegistry);
+		jmxExporter.initMBeans();
+
+		ReportScheduler scheduler = new ReportScheduler(metricRegistry);
+		scheduler.start(1, TimeUnit.SECONDS);
+
+		counter.inc();
+		Thread.sleep(1050);
+
+		counter.inc(2);
+		Thread.sleep(1050);
+		scheduler.stop();
+
+		// 校验MBean中的值
+		MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+		System.out.println("TotalCount from MBean:" + mBeanServer
+				.getAttribute(new ObjectName("example", "name", "UserService.getUserWithJmx.counter"), "TotalCount")
+				.toString());
+
 	}
 
 }

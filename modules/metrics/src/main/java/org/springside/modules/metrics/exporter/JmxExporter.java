@@ -29,6 +29,9 @@ import org.springside.modules.metrics.metric.Timer;
  * 
  * 为每一个Metrics注册一个MBean, 实现MetricRegistryListener接口感知Metrics的变化.
  * 
+ * MBean名字为 ${dommianName}:name=${metriceName}
+ * 属性名见JmxGauge， JmxCounter， JmxHistogram，JmxTimer四个类的Getter函数名.
+ * 
  * TODO: 实现一个将所有Metrics暴露成一个总的JSON字符串的选项.
  */
 public class JmxExporter implements Exporter, MetricRegistryListener {
@@ -48,6 +51,9 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		registry.addListener(this);
 	}
 
+	/**
+	 * 从Registry中生成MBean
+	 */
 	public void initMBeans() {
 
 		Map<String, Gauge> gauges = registry.getGauges();
@@ -93,7 +99,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
-	private void registerMBean(Object mBean, ObjectName objectName) {
+	private void registerMBean(ObjectName objectName, Object mBean) {
 		try {
 			ObjectInstance objectInstance = mBeanServer.registerMBean(mBean, objectName);
 			if (objectInstance != null) {
@@ -104,7 +110,7 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 				registered.put(objectName, objectName);
 			}
 		} catch (InstanceAlreadyExistsException e) {
-			logger.debug("Unable to register:" + objectName, e);
+			logger.debug("Unable to register already exist mbean:" + objectName, e);
 		} catch (JMException e) {
 			logger.warn("Unable to register:" + objectName, e);
 		}
@@ -126,14 +132,14 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
-	private ObjectName createName(String type, String name) {
+	private ObjectName createObjectName(String name) {
 		try {
 			return new ObjectName(this.domain, "name", name);
 		} catch (MalformedObjectNameException e) {
 			try {
 				return new ObjectName(this.domain, "name", ObjectName.quote(name));
 			} catch (MalformedObjectNameException e1) {
-				logger.warn("Unable to register {} {}", type, name, e1);
+				logger.warn("Unable to register {}", name, e1);
 				throw new RuntimeException(e1);
 			}
 		}
@@ -141,49 +147,49 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 
 	@Override
 	public void onGaugeAdded(String name, Gauge gauge) {
-		final ObjectName objectName = createName("gauges", name);
-		registerMBean(new JmxGauge(gauge, objectName), objectName);
+		final ObjectName objectName = createObjectName(name);
+		registerMBean(objectName, new JmxGauge(gauge, objectName));
 	}
 
 	@Override
 	public void onCounterAdded(String name, Counter counter) {
-		final ObjectName objectName = createName("counters", name);
-		registerMBean(new JmxCounter(counter, objectName), objectName);
+		final ObjectName objectName = createObjectName(name);
+		registerMBean(objectName, new JmxCounter(counter, objectName));
 	}
 
 	@Override
 	public void onHistogramAdded(String name, Histogram histogram) {
-		final ObjectName objectName = createName("histograms", name);
-		registerMBean(new JmxHistogram(histogram, objectName), objectName);
+		final ObjectName objectName = createObjectName(name);
+		registerMBean(objectName, new JmxHistogram(histogram, objectName));
 	}
 
 	@Override
 	public void onTimerAdded(String name, Timer timer) {
-		final ObjectName objectName = createName("timers", name);
-		registerMBean(new JmxTimer(timer, objectName), objectName);
+		final ObjectName objectName = createObjectName(name);
+		registerMBean(objectName, new JmxTimer(timer, objectName));
 	}
 
 	@Override
 	public void onGaugeRemoved(String name) {
-		final ObjectName objectName = createName("guages", name);
+		final ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onCounterRemoved(String name) {
-		final ObjectName objectName = createName("counters", name);
+		final ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onHistogramRemoved(String name) {
-		final ObjectName objectName = createName("histograms", name);
+		final ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
 	@Override
 	public void onTimerRemoved(String name) {
-		final ObjectName objectName = createName("timers", name);
+		final ObjectName objectName = createObjectName(name);
 		unregisterMBean(objectName);
 	}
 
@@ -247,6 +253,9 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
+	/**
+	 * Gauge类型的JmxMbean, JMX属性名见getter函数名.
+	 */
 	private static class JmxGauge extends AbstractBean implements JmxGaugeMBean {
 
 		private final Gauge metric;
@@ -262,6 +271,9 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
+	/**
+	 * Counter类型的JmxMbean, JMX属性名见getter函数名.
+	 */
 	private static class JmxCounter extends AbstractBean implements JmxCounterMBean {
 		private final Counter metric;
 
@@ -289,9 +301,11 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		public long getMeanRate() {
 			return metric.latestMetric.meanRate;
 		}
-
 	}
 
+	/**
+	 * Histogram类型的JmxMbean, JMX属性名见getter函数名.
+	 */
 	private static class JmxHistogram extends AbstractBean implements JmxHistogramMBean {
 		private final Histogram metric;
 
@@ -316,6 +330,9 @@ public class JmxExporter implements Exporter, MetricRegistryListener {
 		}
 	}
 
+	/**
+	 * Timer类型的JmxMbean, JMX属性名见getter函数名.
+	 */
 	private static class JmxTimer extends AbstractBean implements JmxTimerMBean {
 		private final Timer metric;
 
