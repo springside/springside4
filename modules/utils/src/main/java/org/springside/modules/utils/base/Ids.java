@@ -1,12 +1,14 @@
 /*******************************************************************************
- * Copyright (c) 2005, 2014 springside.github.io
+ * Copyright (c) 2005, 2017 springside.github.io
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.base;
 
 import java.security.SecureRandom;
 import java.util.UUID;
+
+import org.springside.modules.utils.text.Encodes;
 
 /**
  * 封装各种生成唯一性ID算法的工具类.
@@ -37,11 +39,11 @@ public class Ids {
 	}
 
 	/**
-	 * 基于Base62编码的SecureRandom随机生成bytes.
+	 * 基于URLSafeBase64编码的SecureRandom随机生成bytes.
 	 */
-	public static String randomBase62(int length) {
+	public static String randomBase64(int length) {
 		byte[] randomBytes = new byte[length];
 		random.nextBytes(randomBytes);
-		return Encodes.encodeBase62(randomBytes);
+		return Encodes.encodeUrlSafeBase64(randomBytes);
 	}
 }

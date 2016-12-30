@@ -13,7 +13,7 @@ import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.utils.Clock;
+import org.springside.modules.utils.time.Clock;
 
 // Spring Bean的标识.
 @Service

@@ -1,4 +1,4 @@
-package org.springside.modules.utils;
+package org.springside.modules.utils.text;
 
 /**
  * 参考BigDecimal, 可重用的StringBuilder, 节约StringBuilder内部的char[]

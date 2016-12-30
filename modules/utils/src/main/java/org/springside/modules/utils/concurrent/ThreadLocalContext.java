@@ -1,4 +1,4 @@
-package org.springside.modules.utils.thread;
+package org.springside.modules.utils.concurrent;
 
 import java.util.HashMap;
 import java.util.Map;

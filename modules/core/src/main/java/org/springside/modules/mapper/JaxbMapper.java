@@ -21,8 +21,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.Exceptions;
-import org.springside.modules.utils.Reflections;
+import org.springside.modules.utils.base.Exceptions;
+import org.springside.modules.utils.base.Reflections;
 
 /**
  * 使用Jaxb2.0实现XML<->Java Object的Mapper.

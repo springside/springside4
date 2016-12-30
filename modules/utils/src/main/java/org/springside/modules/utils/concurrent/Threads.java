@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.thread;
+package org.springside.modules.utils.concurrent;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
@@ -86,6 +86,7 @@ public class Threads {
 
 	/**
 	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
+	 * 在无法控制第三方包的Runnalbe实现时，使用本类进行包裹.
 	 */
 	public static class WrapExceptionRunnable implements Runnable {
 

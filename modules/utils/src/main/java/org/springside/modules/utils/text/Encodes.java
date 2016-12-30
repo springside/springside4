@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.text;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -13,19 +13,20 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.springside.modules.utils.base.Exceptions;
 
 /**
  * 封装各种格式的编码解码工具类.
  * 
- * 1.Commons-Codec的 hex/base64 编码
- * 2.自制的base62 编码
- * 3.Commons-Lang的xml/html escape
- * 4.JDK提供的URLEncoder
+ * 1.Commons-Codec的 hex/base64 编解码 
+ * 
+ * 2.Commons-Lang的json/xml/html 编解码 
+ * 
+ * 3.JDK提供的URL 编解码
  */
 public class Encodes {
 
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";
-	private static final char[] BASE62 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
 
 	/**
 	 * Hex编码.
@@ -67,42 +68,48 @@ public class Encodes {
 	}
 
 	/**
-	 * Base62编码。
+	 * Json转码，将字符串转码为符合JSON格式的字符串.
+	 * 
+	 * 比如 "Stop!" 转化为\"Stop!\"
 	 */
-	public static String encodeBase62(byte[] input) {
-		char[] chars = new char[input.length];
-		for (int i = 0; i < input.length; i++) {
-			chars[i] = BASE62[(input[i] & 0xFF) % BASE62.length];
-		}
-		return new String(chars);
+	public static String escapeJson(String json) {
+		return StringEscapeUtils.escapeJson(json);
 	}
 
 	/**
-	 * Html 转码.
+	 * Xml转码，将字符串转码为符合XML1.1格式的字符串.
+	 * 
+	 * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
+	 */
+	public static String escapeXml(String xml) {
+		return StringEscapeUtils.escapeXml11(xml);
+	}
+
+	/**
+	 * Xml转码，XML格式的字符串解码为普通字符串.
+	 * 
+	 * 比如 &quot;bread&quot; &amp; &quot;butter&quot; 转化为"bread" & "butter"
+	 */
+	public static String unescapeXml(String xml) {
+		return StringEscapeUtils.unescapeXml(xml);
+	}
+
+	/**
+	 * Html转码，将字符串转码为符合HTML4格式的字符串.
+	 * 
+	 * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
 	 */
 	public static String escapeHtml(String html) {
 		return StringEscapeUtils.escapeHtml4(html);
 	}
 
 	/**
-	 * Html 解码.
+	 * Html解码，将HTML4格式的字符串转码解码为普通字符串.
+	 * 
+	 * 比如 &quot;bread&quot; &amp; &quot;butter&quot;转化为"bread" & "butter"
 	 */
-	public static String unescapeHtml(String htmlEscaped) {
-		return StringEscapeUtils.unescapeHtml4(htmlEscaped);
-	}
-
-	/**
-	 * Xml 转码.
-	 */
-	public static String escapeXml(String xml) {
-		return StringEscapeUtils.escapeXml(xml);
-	}
-
-	/**
-	 * Xml 解码.
-	 */
-	public static String unescapeXml(String xmlEscaped) {
-		return StringEscapeUtils.unescapeXml(xmlEscaped);
+	public static String unescapeHtml(String html) {
+		return StringEscapeUtils.unescapeHtml4(html);
 	}
 
 	/**
@@ -111,8 +118,8 @@ public class Encodes {
 	public static String urlEncode(String part) {
 		try {
 			return URLEncoder.encode(part, DEFAULT_URL_ENCODING);
-		} catch (UnsupportedEncodingException e) {
-			throw Exceptions.unchecked(e);
+		} catch (UnsupportedEncodingException ignored) {
+			return null;
 		}
 	}
 
@@ -120,11 +127,10 @@ public class Encodes {
 	 * URL 解码, Encode默认为UTF-8.
 	 */
 	public static String urlDecode(String part) {
-
 		try {
 			return URLDecoder.decode(part, DEFAULT_URL_ENCODING);
 		} catch (UnsupportedEncodingException e) {
-			throw Exceptions.unchecked(e);
+			return null;
 		}
 	}
 }

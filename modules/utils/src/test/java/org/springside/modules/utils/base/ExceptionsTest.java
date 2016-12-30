@@ -3,13 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.base;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.Exceptions;
 
 public class ExceptionsTest {
 
@@ -30,7 +31,7 @@ public class ExceptionsTest {
 		Exception exception = new Exception("my exception");
 		RuntimeException runtimeException = new RuntimeException(exception);
 
-		String stack = Exceptions.getStackTraceAsString(runtimeException);
+		String stack = Exceptions.stackTraceText(runtimeException);
 		System.out.println(stack);
 	}
 

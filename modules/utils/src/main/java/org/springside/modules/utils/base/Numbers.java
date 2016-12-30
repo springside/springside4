@@ -1,4 +1,4 @@
-package org.springside.modules.utils;
+package org.springside.modules.utils.base;
 
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;

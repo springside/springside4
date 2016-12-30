@@ -20,7 +20,7 @@ public class Histogram {
 
 	public HistogramMetric latestMetric;// Snapshot值
 
-	private Double[] pcts; // 配置需要计算的百分位，如99, 99.99.
+	private Double[] pcts; // 配置需要计算的百分位，如99, 99.99
 
 	private int sampleRate; // 采样率，1代表100%， 2代表50%， 10 代表10%
 	private AtomicInteger sampleCounter = new AtomicInteger(0); // 采样率取模用的计数器
@@ -46,10 +46,12 @@ public class Histogram {
 
 	public void update(long value) {
 		if (sampleRate == 1) {
+			//没有采样率
 			synchronized (this) {
 				measurements.add(value);
 			}
 		} else if (sampleCounter.incrementAndGet() % sampleRate == 0) {
+			//有采样率且命中采样
 			synchronized (this) {
 				measurements.add(value);
 			}
@@ -90,7 +92,7 @@ public class Histogram {
 				metric.pcts.put(pct, getPercent(snapshotList, count, pct));
 			}
 		} else {
-			// 不排序的算法，因为不需要支持百分比过滤
+			// 不排序的算法，因为不需要支持百分位数
 			metric.min = snapshotList.get(0);
 			metric.max = metric.min;
 
@@ -144,6 +146,9 @@ public class Histogram {
 		this.latestMetric = createEmptyMetric();
 	}
 
+	/**
+	 * 配置需要计算的百分位，如99, 99.99
+	 */
 	public void setPcts(Double[] pcts) {
 		this.pcts = pcts;
 	}

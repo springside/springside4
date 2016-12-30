@@ -3,11 +3,12 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils;
+package org.springside.modules.utils.text;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
+import org.springside.modules.utils.text.Encodes;
 
 public class EncodesTest {
 

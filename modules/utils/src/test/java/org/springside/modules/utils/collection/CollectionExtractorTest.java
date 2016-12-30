@@ -10,11 +10,11 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.springside.modules.utils.collection.Collections3;
+import org.springside.modules.utils.collection.Collections;
 
 import com.google.common.collect.Lists;
 
-public class Collecitons3Test {
+public class CollectionExtractorTest {
 
 	@Test
 	public void convertElementPropertyToString() {
@@ -25,7 +25,7 @@ public class Collecitons3Test {
 
 		List list = Lists.newArrayList(bean1, bean2);
 
-		assertThat(Collections3.extractToString(list, "id", ",")).isEqualTo("1,2");
+		assertThat(CollectionExtractor.extractToString(list, "id", ",")).isEqualTo("1,2");
 	}
 
 	@Test
@@ -36,17 +36,17 @@ public class Collecitons3Test {
 		bean2.setId(2);
 
 		List list = Lists.newArrayList(bean1, bean2);
-		List result = Collections3.extractToList(list, "id");
+		List result = CollectionExtractor.extractToList(list, "id");
 		assertThat(result).containsOnly(1, 2);
 	}
 
 	@Test
 	public void convertCollectionToString() {
 		List<String> list = Lists.newArrayList("aa", "bb");
-		String result = Collections3.convertToString(list, ",");
+		String result = CollectionExtractor.convertToString(list, ",");
 		assertThat(result).isEqualTo("aa,bb");
 
-		result = Collections3.convertToString(list, "<li>", "</li>");
+		result = CollectionExtractor.convertToString(list, "<li>", "</li>");
 		assertThat(result).isEqualTo("<li>aa</li><li>bb</li>");
 	}
 

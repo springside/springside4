@@ -1,4 +1,4 @@
-package org.springside.modules.utils.thread;
+package org.springside.modules.utils.concurrent;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -197,9 +197,9 @@ public class ThreadPoolBuilder {
 	private static ThreadFactory createThreadFactory(String threadNamePrefix, Boolean daemon) {
 		if (threadNamePrefix != null) {
 			if (daemon != null) {
-				return Threads.buildThreadFactory(threadNamePrefix + "-%d", daemon);
+				return Threads.buildThreadFactory(threadNamePrefix , daemon);
 			} else {
-				return Threads.buildThreadFactory(threadNamePrefix + "-%d");
+				return Threads.buildThreadFactory(threadNamePrefix);
 			}
 		}
 		return Executors.defaultThreadFactory();
