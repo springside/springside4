@@ -6,10 +6,10 @@ package org.springside.modules.utils;
  * 参考下面的示例代码将其保存为ThreadLocal.
  * 
  * <pre>
- * private static final ThreadLocal<StringBuilderHelper> threadLocalStringBuilderHolder = new ThreadLocal<StringBuilderHelper>() {
+ * private static final ThreadLocal<StringBuilderHolder> threadLocalStringBuilderHolder = new ThreadLocal<StringBuilderHolder>() {
  * 	&#64;Override
- * 	protected StringBuilderHelper initialValue() {
- * 		return new StringBuilderHelper(256);
+ * 	protected StringBuilderHolder initialValue() {
+ * 		return new StringBuilderHolder(256);
  * 	}
  * };
  * 
