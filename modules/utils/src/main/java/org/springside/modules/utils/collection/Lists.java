@@ -228,7 +228,9 @@ public class Lists {
 	}
 
 	/**
-	 * Arrays.asList()的加强版, 返回一个底层由原始类型int保存的List, 与保存Integer相比节约空间.
+	 * Arrays.asList()的加强版, 返回一个底层为原始类型int的List
+	 * 
+	 * 与保存Integer相比节约空间，同时也避免了AutoBoxing.
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Ints#asList(int...)
@@ -239,7 +241,9 @@ public class Lists {
 	}
 
 	/**
-	 * Arrays.asList()的加强版, 返回一个底层由原始类型long保存的List, 与保存Long相比节约空间.
+	 * Arrays.asList()的加强版, 返回一个底层为原始类型long的List
+	 * 
+	 * 与保存Long相比节约空间，同时也避免了AutoBoxing.
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Longs#asList(long...)
@@ -249,7 +253,9 @@ public class Lists {
 	}
 
 	/**
-	 * Arrays.asList()的加强版, 返回一个底层由原始类型double保存的Double, 与保存Double相比节约空间.
+	 * Arrays.asList()的加强版, 返回一个底层为原始类型double的List
+	 * 
+	 * 与保存Double相比节约空间，同时也避免了AutoBoxing.
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Doubles#asList(double...)
@@ -263,7 +269,7 @@ public class Lists {
 	/**
 	 * 比较两个List中的每个元素是否相等.
 	 * 
-	 * from Apache Common Collections4
+	 * from Apache Common Collections4 ListUtils
 	 */
 	public static boolean isEqual(final List<?> list1, final List<?> list2) {
 		if (list1 == list2) {
@@ -316,7 +322,7 @@ public class Lists {
 	/**
 	 * 返回a与b的交集的新List.
 	 * 
-	 * 针对List作了优化，from Apache Common Collection4
+	 * 针对List作了优化，from Apache Common Collection4 ListUtils
 	 */
 	public static <T> List<T> intersection(List<T> list1, List<T> list2) {
 		final List<T> result = new ArrayList<T>();

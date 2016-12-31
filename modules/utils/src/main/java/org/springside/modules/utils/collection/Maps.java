@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * 关于Map的工具集合，
@@ -34,6 +35,16 @@ public class Maps {
 		return (map != null) && !map.isEmpty();
 	}
 
+	/**
+	 * ConcurrentMap的putIfAbsent()返回之前的Value，此函数封装返回最终存储在Map中的Value
+	 * 
+	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#putIfAbsent(ConcurrentMap, Object, Object)
+	 */
+	public static <K, V> V putIfAbsentWithFinalValue(final ConcurrentMap<K, V> map, final K key, final V value) {
+		final V result = map.putIfAbsent(key, value);
+		return result != null ? result : value;
+	}
+	
 	///////////////// from Guava的构造函数///////////////////
 
 	/**
