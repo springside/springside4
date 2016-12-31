@@ -1,19 +1,21 @@
 package org.springside.modules.utils.text;
 
 /**
- * 参考BigDecimal, threadLocal重用的StringBuilder, 节约StringBuilder内部的char[]
+ * 参考Netty的InternalThreadLocalMap 与 BigDecimal, 放在threadLocal中重用的StringBuilder, 节约StringBuilder内部的char[]
  * 
- * 考虑从ThreadLocal中国年hu
+ * 参考文章：《StringBuilder在高性能场景下的正确用法》http://calvin1978.blogcn.com/articles/stringbuilder.html
+ * 
+ * 不过仅在String对象较大时才有明显效果，否则抵不上访问ThreadLocal的消耗.
  * 
  * <pre>
- * private static final ThreadLocal<StringBuilderHelper> threadLocalStringBuilderHolder = new ThreadLocal<StringBuilderHelper>() {
+ * private static ThreadLocal<StringBuilderHolder> stringBuilderHolder = new ThreadLocal<StringBuilderHolder>() {
  * 	&#64;Override
- * 	protected StringBuilderHelper initialValue() {
- * 		return new StringBuilderHelper(256);
+ * 	protected StringBuilderHolder initialValue() {
+ * 		return new StringBuilderHolder(512);
  * 	}
  * };
  * 
- * StringBuilder sb = threadLocalStringBuilderHolder.get().getStringBuilder();
+ * StringBuilder sb = stringBuilderHolder.get().stringBuilder();
  * 
  * </pre>
  *
@@ -29,7 +31,7 @@ public class StringBuilderHolder {
 	/**
 	 * 重置StringBuilder内部的writerIndex, 而char[]保留不动.
 	 */
-	public StringBuilder getStringBuilder() {
+	public StringBuilder stringBuilder() {
 		sb.setLength(0);
 		return sb;
 	}

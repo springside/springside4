@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -15,13 +16,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * ThreadPool创建的工具类.
  * 
- * 对比JDK Executors中的newFixedThreadPool()和newCachedThreadPool()函数，提供更多有用的配置项.
- * 
- * 使用示例：
+ * 对比JDK Executors中的newFixedThreadPool(), newCachedThreadPool(),newScheduledThreadPool, 提供更多有用的配置项. 使用示例：
  * 
  * <pre>
  * ExecutorService ExecutorService = new FixedThreadPoolBuilder().setPoolSize(10).build();
  * </pre>
+ * 
+ * 参考文章 《Java ThreadPool的正确打开方式》http://calvin1978.blogcn.com/articles/java-threadpool.html
  */
 public class ThreadPoolBuilder {
 
@@ -99,9 +100,7 @@ public class ThreadPoolBuilder {
 				queue = new ArrayBlockingQueue<Runnable>(queueSize);
 			}
 
-			if (threadFactory == null) {
-				threadFactory = createThreadFactory(threadNamePrefix, daemon);
-			}
+			threadFactory = createThreadFactory(threadFactory, threadNamePrefix, daemon);
 
 			if (rejectHandler == null) {
 				rejectHandler = defaultRejectHandler;
@@ -127,7 +126,8 @@ public class ThreadPoolBuilder {
 	 * 其他可选的Policy包括静默放弃当前任务(Discard)，或由主线程来直接执行(CallerRuns).
 	 * 
 	 * 3. minSize以上, maxSize以下的线程, 如果在keepAliveTime中都poll不到任务执行将会被结束掉, keeAliveTimeJDK默认为10秒.
-	 * JDK默认值60秒太高，如高达1000线程，低于16QPS时才会回收开始回收.
+	 * 
+	 * JDK默认值60秒太高，如高达1000线程时，要低于16QPS时才会开始回收线程, 因此改为默认10秒.
 	 */
 	public static class CachedThreadPoolBuilder {
 
@@ -181,9 +181,7 @@ public class ThreadPoolBuilder {
 
 		public ExecutorService build() {
 
-			if (threadFactory == null) {
-				threadFactory = createThreadFactory(threadNamePrefix, daemon);
-			}
+			threadFactory = createThreadFactory(threadFactory, threadNamePrefix, daemon);
 
 			if (rejectHandler == null) {
 				rejectHandler = defaultRejectHandler;
@@ -194,14 +192,49 @@ public class ThreadPoolBuilder {
 		}
 	}
 
-	private static ThreadFactory createThreadFactory(String threadNamePrefix, Boolean daemon) {
-		if (threadNamePrefix != null) {
-			if (daemon != null) {
-				return Threads.buildThreadFactory(threadNamePrefix , daemon);
-			} else {
-				return Threads.buildThreadFactory(threadNamePrefix);
-			}
+	/*
+	 * 创建ScheduledPool.
+	 */
+	public static class ScheduledThreadPoolBuilder {
+
+		private int poolSize = 1;
+		private ThreadFactory threadFactory = null;
+		private String threadNamePrefix = null;
+
+		public ScheduledThreadPoolBuilder setPoolSize(int poolSize) {
+			this.poolSize = poolSize;
+			return this;
 		}
+
+		/**
+		 * 与threadNamePrefix互斥, 优先使用ThreadFactory
+		 */
+		public ScheduledThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
+			this.threadFactory = threadFactory;
+			return this;
+		}
+
+		public ScheduledThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
+			this.threadNamePrefix = threadNamePrefix;
+			return this;
+		}
+
+		public ExecutorService build() {
+			threadFactory = createThreadFactory(threadFactory, threadNamePrefix, Boolean.TRUE);
+			return new ScheduledThreadPoolExecutor(poolSize, threadFactory);
+		}
+	}
+
+	private static ThreadFactory createThreadFactory(ThreadFactory threadFactory, String threadNamePrefix,
+			Boolean daemon) {
+		if (threadFactory != null) {
+			return threadFactory;
+		}
+
+		if (threadNamePrefix != null) {
+			return Threads.buildThreadFactory(threadNamePrefix, daemon);
+		}
+
 		return Executors.defaultThreadFactory();
 	}
 

@@ -127,15 +127,6 @@ public class Lists {
 	}
 
 	/**
-	 * 返回一个只含一个元素但结构特殊的List，节约空间. 注意List不可写.
-	 * 
-	 * @see java.util.Collections#singleton(Object)
-	 */
-	public static <T> List<T> singletonList(T o) {
-		return Collections.singletonList(o);
-	}
-
-	/**
 	 * 如果list为null，转化为一个安全的空List. 注意List不可写.
 	 * 
 	 * @see java.util.Collections#emptyList()
@@ -145,7 +136,18 @@ public class Lists {
 	}
 	
 	/**
-	 * 返回包装后不可修改的List
+	 * 返回一个只含一个元素但结构特殊的List，节约空间. 注意List不可写.
+	 * 
+	 * @see java.util.Collections#singleton(Object)
+	 */
+	public static <T> List<T> singletonList(T o) {
+		return Collections.singletonList(o);
+	}
+
+
+	
+	/**
+	 * 返回包装后不可修改的List.
 	 */
 	 public static <T> List<T> unmodifiableList(List<? extends T> list) {
 		 return Collections.unmodifiableList(list);

@@ -18,20 +18,22 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
-			<optional>true</optional>
 		</dependency>
+		
+		<!-- for Encodes.java -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>${commons-codec.version}</version>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- for CollectionExtractor.java -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
@@ -45,8 +47,8 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
-			<optional>true</optional>
 		</dependency>
+		
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -104,10 +106,6 @@
 							<goal>test-jar</goal>
 						</goals>
 						<configuration>
-							<includes>
-								<include>org/springside/modules/test/**/*.class</include>
-								<include>jetty/webdefault-windows.xml</include>
-							</includes>
 							<excludes>
 								<exclude>org/springside/modules/test/**/*Test.class</exclude>
 							</excludes>

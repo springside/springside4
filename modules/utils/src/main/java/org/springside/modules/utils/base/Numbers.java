@@ -1,5 +1,6 @@
 package org.springside.modules.utils.base;
 
+import com.google.common.annotations.Beta;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
@@ -8,6 +9,7 @@ import com.google.common.primitives.Longs;
  * 
  * 1.基于Guava的原始类型与byte[]的转换.
  */
+@Beta
 public class Numbers {
 
 	public static byte[] longToBytes(long value) {

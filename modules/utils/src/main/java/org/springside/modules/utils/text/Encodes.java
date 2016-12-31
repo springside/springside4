@@ -11,7 +11,9 @@ import org.apache.commons.codec.binary.Hex;
 import org.springside.modules.utils.base.Exceptions;
 
 /**
- * hex/base64 编解码工具集，依赖Commons-Codes(考虑取消依赖)
+ * hex/base64 编解码工具集，依赖Commons-Codes
+ * 
+ * JDK8有内置的BASE64类.
  */
 public class Encodes {
 

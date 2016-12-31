@@ -17,14 +17,12 @@ import java.util.concurrent.ConcurrentMap;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-
 public class Maps {
 
 	/**
 	 * 判断是否为空.
 	 */
-	@SuppressWarnings("rawtypes")
-	public static boolean isEmpty(Map map) {
+	public static boolean isEmpty(Map<?, ?> map) {
 		return (map == null) || map.isEmpty();
 	}
 
@@ -54,6 +52,40 @@ public class Maps {
 	 */
 	public static <K, V> HashMap<K, V> newHashMap() {
 		return new HashMap<K, V>();
+	}
+	
+	/**
+	 * 根据等号左边的类型, 构造类型正确的HashMap. 
+	 * 
+	 * 同时初始化第一个元素
+	 * 
+	 * @see com.google.common.collect.Maps#newHashMap()
+	 */
+	public static <K, V> HashMap<K, V> newHashMap(K key, V value) {
+		HashMap<K, V> map =  new HashMap<K, V>();
+		map.put(key, value);
+		return map;
+	}
+	
+	/**
+	 * 根据等号左边的类型, 构造类型正确的HashMap. 
+	 * 
+	 * 同时初始化元素
+	 * 
+	 * @see com.google.common.collect.Maps#newHashMap()
+	 */
+	public static <K, V> HashMap<K, V> newHashMap(K[] keys, V[] values) {
+		if(keys.length!=values.length){
+			throw new IllegalArgumentException("keys.length is "+ keys.length +" but values.length is " + values.length);
+		}
+		
+		HashMap<K, V> map =  new HashMap<K, V>();
+		
+		for(int i=0;i<keys.length;i++){
+			map.put(keys[i], values[i]);
+		}
+		
+		return map;
 	}
 
 	/**
@@ -87,6 +119,15 @@ public class Maps {
 	public static final <K, V> Map<K, V> emptyMap() {
 		return Collections.EMPTY_MAP;
 	}
+	
+	/**
+	 * 如果map为null，转化为一个安全的空Map，注意Map不可写.
+	 * 
+	 * @see java.util.Collections#emptyMap()
+	 */
+	public static <K, V> Map<K, V> emptyMapIfNull(final Map<K, V> map) {
+		return map == null ? (Map<K, V>) Collections.EMPTY_MAP : map;
+	}
 
 	/**
 	 * 返回一个只含一个元素但结构特殊的Map，节约空间. 注意Map不可写.
@@ -97,14 +138,7 @@ public class Maps {
 		return Collections.singletonMap(key, value);
 	}
 
-	/**
-	 * 如果map为null，转化为一个安全的空Map，注意Map不可写.
-	 * 
-	 * @see java.util.Collections#emptyMap()
-	 */
-	public static <K, V> Map<K, V> emptyMapIfNull(final Map<K, V> map) {
-		return map == null ? (Map<K, V>) Collections.EMPTY_MAP : map;
-	}
+	
 
 	/**
 	 * 返回包装后不可修改的Map
