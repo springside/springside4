@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.io.IOException;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.Exceptions;
 
 public class ExceptionsTest {
 

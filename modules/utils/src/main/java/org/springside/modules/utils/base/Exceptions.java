@@ -5,57 +5,58 @@
  *******************************************************************************/
 package org.springside.modules.utils.base;
 
+import java.lang.reflect.UndeclaredThrowableException;
+
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.google.common.base.Throwables;
 
 /**
  * 关于异常的工具类.
+ * 
+ * @author calvin
  */
 public class Exceptions {
 
 	private static final StackTraceElement[] EMPTY_STACK_TRACE = new StackTraceElement[0];
 
 	/**
-	 * 将CheckedException转换为RuntimeException, Error则不变. 可减少CheckExcetpion造成的函数定义污染.
+	 * 将CheckedException转换为RuntimeException重新抛出, 可以减少函数签名中的CheckExcetpion定义.
+	 * 
+	 * CheckedException会用UndeclaredThrowableException包裹，Error则不会被转变.
+	 * 
+	 * from Commons Lange 3.5 ExceptionUtils, 但依赖包可能没有这么新，因此复制下来.
+	 * 
+	 * @see ExceptionUtils#wrapAndThrow(Throwable)
 	 */
 	public static RuntimeException unchecked(Throwable t) {
-		if (t instanceof RuntimeException)
-			throw ((RuntimeException) t);
-		if (t instanceof Error)
-			throw ((Error) t);
-		else
-			throw new RuntimeException(t);
+		if (t instanceof RuntimeException) {
+			throw (RuntimeException) t;
+		}
+		if (t instanceof Error) {
+			throw (Error) t;
+		}
+		throw new UndeclaredThrowableException(t);
 	}
 
 	/**
-	 * 参考Netty, 为静态异常设置StackTrace.
+	 * 如果是ExecutionException 或InvocationTargetException，从cause中获得真正异常.
 	 * 
-	 * 对某些已知且经常抛出的异常, 不需要每次创建异常类并很消耗性能的并生成完整的StackTrace. 此时可使用静态声明的异常.
+	 * Future中使用的ExecutionException 与 反射时定义的InvocationTargetException， 真正的异常都封装在Cause中
 	 * 
-	 * 如果异常可能在多个地方抛出，使用本函数设置抛出的类名和方法名.
-	 * 
-	 * <pre>
-	 * private static TimeoutException TIMEOUT_EXCEPTION = staticStackTrace(new TimeOutException(), MyClass.class,
-	 * 		"hello");
-	 * </pre>
+	 * from Quasar and Tomcat's ExceptionUtils
 	 */
-	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
-		exception.setStackTrace(
-				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
-		return exception;
+	public static Throwable unwrap(Throwable t) {
+		if (t instanceof java.util.concurrent.ExecutionException
+				|| t instanceof java.lang.reflect.InvocationTargetException
+				|| t instanceof java.lang.reflect.UndeclaredThrowableException) {
+			return t.getCause();
+		}
+		return t;
 	}
 
 	/**
-	 * 清除StackTrace
-	 */
-	public static <T extends Throwable> T clearStackTrace(T exception) {
-		exception.setStackTrace(EMPTY_STACK_TRACE);
-		return exception;
-	}
-
-	/**
-	 * 将StackTrace[]转换为String.
+	 * 将StackTrace[]转换为String, 供Logger或e.printStackTrace()外的其他地方使用.
 	 * 
 	 * @see Throwables#getStackTraceAsString(Throwable)
 	 */
@@ -90,7 +91,7 @@ public class Exceptions {
 	}
 
 	/**
-	 * 拼装异常类名与异常信息的信息
+	 * 拼装异常类名与异常信息
 	 * 
 	 * @see ExceptionUtils#getMessage(Throwable)
 	 */
@@ -99,25 +100,71 @@ public class Exceptions {
 	}
 
 	/**
-	 * 重载fillInStackTrace()方法，不生成StackTrace. 
+	 * from Netty, 为静态异常设置StackTrace.
 	 * 
-	 * 适用于Message经常变更，不能使用静态异常时.
+	 * 对某些已知且经常抛出的异常, 不需要每次创建异常类并很消耗性能的并生成完整的StackTrace. 此时可使用静态声明的异常.
+	 * 
+	 * 如果异常可能在多个地方抛出，使用本函数设置抛出的类名和方法名.
+	 * 
+	 * <pre>
+	 * private static TimeoutException TIMEOUT_EXCEPTION = staticStackTrace(new TimeOutException(), MyClass.class,
+	 * 		"hello");
+	 * </pre>
 	 */
-	public static class EmptyStackStraceException extends Exception {
+	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
+		exception.setStackTrace(
+				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
+		return exception;
+	}
+
+	/**
+	 * 清除StackTrace. 假设StackTrace已生成, 但把它打印出来也有不小的消耗. 如果不能控制打印端(如logger)，可用此方法暴力清除Trace.
+	 */
+	public static <T extends Throwable> T clearStackTrace(T exception) {
+		exception.setStackTrace(EMPTY_STACK_TRACE);
+		return exception;
+	}
+
+	/**
+	 * 适用于Message经常变更的异常, 可通过clone()不经过构造函数的构造异常再设定新的异常信息
+	 */
+	public static class CloneableException extends Exception implements Cloneable {
 
 		private static final long serialVersionUID = -6270471689928560417L;
+		private String message;
 
-		public EmptyStackStraceException(String message) {
-			super(message);
+		public CloneableException() {
+			super();
 		}
 
-		public EmptyStackStraceException(String message, Throwable cause) {
-			super(message, cause);
+		public CloneableException(String message) {
+			super();
+			this.message = message;
+		}
+
+		public CloneableException(String message, Throwable cause) {
+			super(cause);
+			this.message = message;
 		}
 
 		@Override
-		public Throwable fillInStackTrace() {
-			return this;
+		public CloneableException clone() {
+			return this.clone();
+		}
+
+		public CloneableException clone(String message) {
+			CloneableException newException = this.clone();
+			newException.setMessage(message);
+			return newException;
+		}
+
+		@Override
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
 		}
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
@@ -131,21 +178,44 @@ public class Exceptions {
 	 * 
 	 * 适用于Message经常变更，不能使用静态异常时
 	 */
-	public static class EmptyStackStraceRunTimeException extends RuntimeException {
+	public static class CloneableRuntimeException extends RuntimeException implements Cloneable {
 
-		private static final long serialVersionUID = 4702426016231026020L;
+		private static final long serialVersionUID = 3984796576627959400L;
 
-		public EmptyStackStraceRunTimeException(String message) {
-			super(message);
+		private String message;
+
+		public CloneableRuntimeException() {
+			super();
 		}
 
-		public EmptyStackStraceRunTimeException(String message, Throwable cause) {
-			super(message, cause);
+		public CloneableRuntimeException(String message) {
+			super();
+			this.message = message;
+		}
+
+		public CloneableRuntimeException(String message, Throwable cause) {
+			super(cause);
+			this.message = message;
 		}
 
 		@Override
-		public Throwable fillInStackTrace() {
-			return this;
+		public CloneableRuntimeException clone() {
+			return this.clone();
+		}
+
+		public CloneableRuntimeException clone(String message) {
+			CloneableRuntimeException newException = this.clone();
+			newException.setMessage(message);
+			return newException;
+		}
+
+		@Override
+		public String getMessage() {
+			return message;
+		}
+
+		public void setMessage(String message) {
+			this.message = message;
 		}
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {

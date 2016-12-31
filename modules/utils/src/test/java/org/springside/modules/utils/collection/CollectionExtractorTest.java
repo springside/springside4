@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 
 import org.junit.Test;
-import org.springside.modules.utils.collection.Collections;
 
 import com.google.common.collect.Lists;
 

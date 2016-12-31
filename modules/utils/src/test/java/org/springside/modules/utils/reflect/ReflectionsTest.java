@@ -3,14 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.base;
+package org.springside.modules.utils.reflect;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.Reflections;
+import org.springside.modules.utils.reflect.Reflections;
 
 public class ReflectionsTest {
 

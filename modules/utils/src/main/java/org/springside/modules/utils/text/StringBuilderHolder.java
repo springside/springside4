@@ -1,9 +1,9 @@
 package org.springside.modules.utils.text;
 
 /**
- * 参考BigDecimal, 可重用的StringBuilder, 节约StringBuilder内部的char[]
+ * 参考BigDecimal, threadLocal重用的StringBuilder, 节约StringBuilder内部的char[]
  * 
- * 参考下面的示例代码将其保存为ThreadLocal.
+ * 考虑从ThreadLocal中国年hu
  * 
  * <pre>
  * private static final ThreadLocal<StringBuilderHelper> threadLocalStringBuilderHolder = new ThreadLocal<StringBuilderHelper>() {
@@ -13,7 +13,7 @@ package org.springside.modules.utils.text;
  * 	}
  * };
  * 
- * StringBuilder sb = threadLocalStringBuilderHolder.get().resetAndGetStringBuilder();
+ * StringBuilder sb = threadLocalStringBuilderHolder.get().getStringBuilder();
  * 
  * </pre>
  *
@@ -29,7 +29,7 @@ public class StringBuilderHolder {
 	/**
 	 * 重置StringBuilder内部的writerIndex, 而char[]保留不动.
 	 */
-	public StringBuilder resetAndGetStringBuilder() {
+	public StringBuilder getStringBuilder() {
 		sb.setLength(0);
 		return sb;
 	}

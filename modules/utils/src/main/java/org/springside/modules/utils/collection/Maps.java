@@ -3,6 +3,7 @@ package org.springside.modules.utils.collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
@@ -73,7 +74,7 @@ public class Maps {
 	 * @see java.util.Collections#emptyMap()
 	 */
 	public static final <K, V> Map<K, V> emptyMap() {
-		return (Map<K, V>) Collections.EMPTY_MAP;
+		return Collections.EMPTY_MAP;
 	}
 
 	/**
@@ -94,4 +95,17 @@ public class Maps {
 		return map == null ? (Map<K, V>) Collections.EMPTY_MAP : map;
 	}
 
+	/**
+	 * 返回包装后不可修改的Map
+	 */
+	public static <K, V> Map<K, V> unmodifiableMap(Map<? extends K, ? extends V> m) {
+		return Collections.unmodifiableMap(m);
+	}
+
+	/**
+	 * 返回包装后不可修改的Map
+	 */
+	public static <K, V> SortedMap<K, V> unmodifiableSortedMap(SortedMap<K, ? extends V> m) {
+		return Collections.unmodifiableSortedMap(m);
+	}
 }

@@ -17,7 +17,6 @@ import java.util.Iterator;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.constants.Charsets;
 import org.springside.modules.utils.base.Exceptions;
 
 import com.google.common.hash.Hashing;
@@ -77,7 +76,7 @@ public class Hashs {
 	 * 对输入字符串进行sha1散列.
 	 */
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(Charsets.UTF8), SHA1, null, 1);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1, null, 1);
 	}
 
 	/**
@@ -98,7 +97,7 @@ public class Hashs {
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
 	public static byte[] sha1(String input, byte[] salt) {
-		return digest(input.getBytes(Charsets.UTF8), SHA1, salt, 1);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1, salt, 1);
 	}
 
 	/**
@@ -119,7 +118,7 @@ public class Hashs {
 	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
 	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
-		return digest(input.getBytes(Charsets.UTF8), SHA1, salt, iterations);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1, salt, iterations);
 	}
 
 	/**
@@ -213,7 +212,7 @@ public class Hashs {
 	 */
 	public static int crc32(String input) {
 		CRC32 crc32 = new CRC32();
-		crc32.update(input.getBytes(Charsets.UTF8));
+		crc32.update(input.getBytes(Charsets.UTF_8));
 		return (int) crc32.getValue();
 	}
 
@@ -240,7 +239,7 @@ public class Hashs {
 	 */
 	public static long crc32AsLong(String input) {
 		CRC32 crc32 = new CRC32();
-		crc32.update(input.getBytes(Charsets.UTF8));
+		crc32.update(input.getBytes(Charsets.UTF_8));
 		return crc32.getValue();
 	}
 
@@ -265,7 +264,7 @@ public class Hashs {
 	 * 对输入字符串进行murmur32散列
 	 */
 	public static int murmur32(String input) {
-		return Hashing.murmur3_32().hashString(input, Charsets.UTF8).asInt();
+		return Hashing.murmur3_32().hashString(input, Charsets.UTF_8).asInt();
 	}
 
 	/**
@@ -286,7 +285,7 @@ public class Hashs {
 	 * 对输入字符串进行murmur32散列，带有seed
 	 */
 	public static int murmur32(String input, int seed) {
-		return Hashing.murmur3_32(seed).hashString(input, Charsets.UTF8).asInt();
+		return Hashing.murmur3_32(seed).hashString(input, Charsets.UTF_8).asInt();
 	}
 
 	/**

@@ -8,7 +8,6 @@ package org.springside.modules.utils.text;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.utils.text.Encodes;
 
 public class EncodesTest {
 

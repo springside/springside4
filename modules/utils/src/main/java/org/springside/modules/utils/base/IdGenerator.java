@@ -13,7 +13,7 @@ import org.springside.modules.utils.text.Encodes;
 /**
  * 封装各种生成唯一性ID算法的工具类.
  */
-public class Ids {
+public class IdGenerator {
 
 	private static SecureRandom random = new SecureRandom();
 

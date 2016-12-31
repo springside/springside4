@@ -3,38 +3,39 @@ package org.springside.modules.utils.concurrent;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * 打印线程栈.
+ * 由程序触发的ThreadDump，打印到日志中.
  * 
- * 为避免打印过于频繁, 需要设置最小时间间隔, 默认一小时.
+ * 因为ThreadDump本身会造成JVM停顿，所以加上了开关和最少间隔时间的选项(默认不限制)
  * 
- * 可设置StackTrace的深度，默认为8.
+ * 因为ThreadInfo的toString()最多只会打印8层的StackTrace，所以加上了最大打印层数的选项.(默认为8)
+ * 
+ * @author calvin
+ *
  */
-public class ThreadDumper {
+public class ThreadDumpper {
 
-	private static final int DEFAULT_LEAST_INTERVAL = 3600000; // 1小时
 	private static final int DEFAULT_MAX_STACK_LEVEL = 8;
-	private static final String DEFAULT_DUMP_REASON = "unknown reason";
 
-	private static Logger logger = LoggerFactory.getLogger(ThreadDumper.class);
+	private static Logger logger = LoggerFactory.getLogger(ThreadDumpper.class);
 
 	private boolean enable = true; // 快速关闭该功能
-	private int leastInterval = DEFAULT_LEAST_INTERVAL; // 每次打印ThreadDump的最小时间间隔
+	private long leastIntervalMills = 0; // 每次打印ThreadDump的最小时间间隔，单位为毫秒
 	private int maxStackLevel = DEFAULT_MAX_STACK_LEVEL; // 打印StackTrace的最大深度
 
 	private ThreadMXBean threadMBean = ManagementFactory.getThreadMXBean();
-	private AtomicLong lastThreadDumpTime = new AtomicLong(0);
+	private volatile Long lastThreadDumpTime = 0L;
 
 	/**
 	 * 符合条件则打印线程栈.
 	 */
 	public void threadDumpIfNeed() {
-		threadDumpIfNeed(DEFAULT_DUMP_REASON);
+		threadDumpIfNeed(null);
 	}
 
 	/**
@@ -48,10 +49,10 @@ public class ThreadDumper {
 		}
 
 		synchronized (lastThreadDumpTime) {
-			if (System.currentTimeMillis() - lastThreadDumpTime.get() < leastInterval) {
+			if (System.currentTimeMillis() - lastThreadDumpTime < leastIntervalMills) {
 				return;
 			} else {
-				lastThreadDumpTime.set(System.currentTimeMillis());
+				lastThreadDumpTime = System.currentTimeMillis();
 			}
 		}
 
@@ -63,7 +64,7 @@ public class ThreadDumper {
 		for (int i = 0; i < threadInfos.length; i++) {
 			b.append(dumpThreadInfo(threadInfos[i])).append(", ");
 		}
-		logger.info("Dump thread info for {}", reasonMsg);
+		logger.info("Thread dump by ThreadDumpper" + reasonMsg != null ? " for " + reasonMsg : "");
 		logger.info(b.toString());
 	}
 
@@ -118,14 +119,23 @@ public class ThreadDumper {
 		return sb.toString();
 	}
 
+	/**
+	 * 快速关闭打印
+	 */
 	public void setEnable(boolean enable) {
 		this.enable = enable;
 	}
 
-	public void setLeastInterval(int leastInterval) {
-		this.leastInterval = leastInterval;
+	/**
+	 * 打印ThreadDump的最小时间间隔，单位为秒，默认为0不限制.
+	 */
+	public void setLeastInterval(int leastIntervalSeconds) {
+		this.leastIntervalMills = TimeUnit.SECONDS.toMillis(leastIntervalSeconds);
 	}
 
+	/**
+	 * 打印StackTrace的最大深度, 默认为8
+	 */
 	public void setMaxStackLevel(int maxStackLevel) {
 		this.maxStackLevel = maxStackLevel;
 	}

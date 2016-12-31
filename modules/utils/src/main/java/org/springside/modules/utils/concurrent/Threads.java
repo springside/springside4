@@ -20,6 +20,8 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public class Threads {
 
+	/////////// 线程相关功能//////////
+
 	/**
 	 * sleep等待, 单位为毫秒, 已捕捉并处理InterruptedException.
 	 */
@@ -41,6 +43,8 @@ public class Threads {
 			Thread.currentThread().interrupt();
 		}
 	}
+
+	/////////// 线程池相关功能//////////
 
 	/**
 	 * 按照ExecutorService JavaDoc示例代码编写的Graceful Shutdown方法.
@@ -77,7 +81,7 @@ public class Threads {
 	 * @see ThreadFactoryBuilder#build()
 	 */
 	public static ThreadFactory buildThreadFactory(String threadNamePrefix) {
-		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix+"-%d").build();
+		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").build();
 	}
 
 	/**
@@ -86,20 +90,18 @@ public class Threads {
 	 * @see #buildThreadFactory(String)
 	 */
 	public static ThreadFactory buildThreadFactory(String threadNamePrefix, boolean daemon) {
-		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix+"-%d").setDaemon(daemon).build();
+		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(daemon).build();
 	}
-	
+
 	/**
-	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
-	 * 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
+	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
 	 */
-	public static Runnable wrapExceptionRunnable(Runnable runnable){
+	public static Runnable wrapExceptionRunnable(Runnable runnable) {
 		return new WrapExceptionRunnable(runnable);
 	}
 
 	/**
-	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
-	 * 在无法控制第三方包的Runnalbe实现时，使用本类进行包裹.
+	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，使用本类进行包裹.
 	 */
 	public static class WrapExceptionRunnable implements Runnable {
 

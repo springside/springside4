@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
-import org.springside.modules.utils.concurrent.Threads;
 
 public class ThreadsTest {
 

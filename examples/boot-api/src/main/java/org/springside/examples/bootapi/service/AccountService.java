@@ -17,7 +17,7 @@ import org.springside.examples.bootapi.repository.AccountDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
 import org.springside.modules.utils.text.Hashs;
-import org.springside.modules.utils.base.Ids;
+import org.springside.modules.utils.base.IdGenerator;
 import org.springside.modules.utils.text.Encodes;
 
 import com.google.common.cache.Cache;
@@ -61,7 +61,7 @@ public class AccountService {
 			throw new ServiceException("Password wrong", ErrorCode.UNAUTHORIZED);
 		}
 
-		String token = Ids.uuid2();
+		String token = IdGenerator.uuid2();
 		loginUsers.put(token, account);
 		counterService.increment("loginUser");
 		return token;

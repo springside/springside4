@@ -6,15 +6,14 @@
 package org.springside.modules.utils.base;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.Ids;
 
-public class IdsTest {
+public class IdGeneratorTest {
 
 	@Test
 	public void demo() {
-		System.out.println("uuid: " + Ids.uuid());
-		System.out.println("uuid2:" + Ids.uuid2());
-		System.out.println("randomLong:  " + Ids.randomLong());
-		System.out.println("randomBase64:" + Ids.randomBase64(7));
+		System.out.println("uuid: " + IdGenerator.uuid());
+		System.out.println("uuid2:" + IdGenerator.uuid2());
+		System.out.println("randomLong:  " + IdGenerator.randomLong());
+		System.out.println("randomBase64:" + IdGenerator.randomBase64(7));
 	}
 }

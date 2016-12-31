@@ -123,7 +123,7 @@ public class Lists {
 	 * @see java.util.Collections#emptyList()
 	 */
 	public static final <T> List<T> emptyList() {
-		return (List<T>) Collections.EMPTY_LIST;
+		return Collections.EMPTY_LIST;
 	}
 
 	/**
@@ -143,6 +143,13 @@ public class Lists {
 	public static <T> List<T> emptyListIfNull(final List<T> list) {
 		return list == null ? (List<T>) Collections.EMPTY_LIST : list;
 	}
+	
+	/**
+	 * 返回包装后不可修改的List
+	 */
+	 public static <T> List<T> unmodifiableList(List<? extends T> list) {
+		 return Collections.unmodifiableList(list);
+	 }
 
 	/**
 	 * 排序, 采用JDK认为最优的排序算法.
