@@ -11,28 +11,28 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Collections工具集.
+ * 通用Collection的工具集.
  * 
- * 其中Apache Common Collections的函数直接封装，避免引入APC.
+ * 其中Apache Common Collections的函数直接复制移植，避免引入.
+ * 
+ * 关于List与Map的特殊工具集，另见Lists与Maps.
  */
-@SuppressWarnings("rawtypes")
 public class Collections {
 
 	/**
 	 * 判断是否为空.
 	 */
-	public static boolean isEmpty(Collection collection) {
+	public static boolean isEmpty(Collection<?> collection) {
 		return (collection == null) || collection.isEmpty();
 	}
 
 	/**
 	 * 判断是否不为空.
 	 */
-	public static boolean isNotEmpty(Collection collection) {
+	public static boolean isNotEmpty(Collection<?> collection) {
 		return (collection != null) && !(collection.isEmpty());
 	}
 
-	///////////////// from Apache Common Collection ///////////////////
 	/**
 	 * 取得Collection的第一个元素，如果collection为空返回null.
 	 */
@@ -70,6 +70,9 @@ public class Collections {
 		}
 	}
 
+	///////////// 集合运算//////////////
+
+	
 	/**
 	 * 返回a+b的新List.
 	 */

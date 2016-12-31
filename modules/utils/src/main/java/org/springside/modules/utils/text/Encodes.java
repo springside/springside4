@@ -5,28 +5,15 @@
  *******************************************************************************/
 package org.springside.modules.utils.text;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.springside.modules.utils.base.Exceptions;
 
 /**
- * 封装各种格式的编码解码工具类.
- * 
- * 1.Commons-Codec的 hex/base64 编解码 
- * 
- * 2.Commons-Lang的json/xml/html 编解码 
- * 
- * 3.JDK提供的URL 编解码
+ * hex/base64 编解码工具集，依赖Commons-Codes(考虑取消依赖)
  */
 public class Encodes {
-
-	private static final String DEFAULT_URL_ENCODING = "UTF-8";
 
 	/**
 	 * Hex编码.
@@ -67,70 +54,5 @@ public class Encodes {
 		return Base64.decodeBase64(input);
 	}
 
-	/**
-	 * Json转码，将字符串转码为符合JSON格式的字符串.
-	 * 
-	 * 比如 "Stop!" 转化为\"Stop!\"
-	 */
-	public static String escapeJson(String json) {
-		return StringEscapeUtils.escapeJson(json);
-	}
-
-	/**
-	 * Xml转码，将字符串转码为符合XML1.1格式的字符串.
-	 * 
-	 * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
-	 */
-	public static String escapeXml(String xml) {
-		return StringEscapeUtils.escapeXml11(xml);
-	}
-
-	/**
-	 * Xml转码，XML格式的字符串解码为普通字符串.
-	 * 
-	 * 比如 &quot;bread&quot; &amp; &quot;butter&quot; 转化为"bread" & "butter"
-	 */
-	public static String unescapeXml(String xml) {
-		return StringEscapeUtils.unescapeXml(xml);
-	}
-
-	/**
-	 * Html转码，将字符串转码为符合HTML4格式的字符串.
-	 * 
-	 * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
-	 */
-	public static String escapeHtml(String html) {
-		return StringEscapeUtils.escapeHtml4(html);
-	}
-
-	/**
-	 * Html解码，将HTML4格式的字符串转码解码为普通字符串.
-	 * 
-	 * 比如 &quot;bread&quot; &amp; &quot;butter&quot;转化为"bread" & "butter"
-	 */
-	public static String unescapeHtml(String html) {
-		return StringEscapeUtils.unescapeHtml4(html);
-	}
-
-	/**
-	 * URL 编码, Encode默认为UTF-8.
-	 */
-	public static String urlEncode(String part) {
-		try {
-			return URLEncoder.encode(part, DEFAULT_URL_ENCODING);
-		} catch (UnsupportedEncodingException ignored) {
-			return null;
-		}
-	}
-
-	/**
-	 * URL 解码, Encode默认为UTF-8.
-	 */
-	public static String urlDecode(String part) {
-		try {
-			return URLDecoder.decode(part, DEFAULT_URL_ENCODING);
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
-	}
+	
 }

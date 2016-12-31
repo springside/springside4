@@ -12,6 +12,8 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
@@ -23,9 +25,11 @@ import com.google.common.hash.Hashing;
 /**
  * 封装各种Hash算法的工具类.
  * 
- * 1.SHA-1/MD5这些安全性较高，返回byte[](可用Encodes进一步被编码为Hex, Base64), 支持带salt达到更高的安全性.
+ * 1.集合类的HashCode
  * 
- * 2.crc32，murmur32这些不追求安全性，性能较高，返回int.
+ * 2.SHA-1,安全性较高，返回byte[](可用Encodes进一步被编码为Hex, Base64), 支持带salt达到更高的安全性.
+ * 
+ * 3.crc32，murmur32这些不追求安全性，性能较高，返回int. 其中murmurhash基于guava
  * 
  * @author calvin
  */
@@ -36,13 +40,32 @@ public class Hashs {
 
 	private static SecureRandom random = new SecureRandom();
 
+	////////////////// HashCode //////////////////
 	/**
-	 * 多个对象的Hash值串连
+	 * 多个对象的HashCode串联
 	 */
 	public static int hashCode(Object... objects) {
 		return Arrays.hashCode(objects);
 	}
 
+	/**
+	 * 集合的HashCode串联
+	 */
+	public static int hashCode(final Collection<?> list) {
+		if (list == null) {
+			return 0;
+		}
+		int hashCode = 1;
+		final Iterator<?> it = list.iterator();
+
+		while (it.hasNext()) {
+			final Object obj = it.next();
+			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
+		}
+		return hashCode;
+	}
+
+	////////////////// SHA1 ///////////////////
 	/**
 	 * 对输入字符串进行sha1散列.
 	 */
@@ -143,13 +166,6 @@ public class Hashs {
 	}
 
 	/**
-	 * 对文件进行md5散列.
-	 */
-	public static byte[] md5(InputStream input) throws IOException {
-		return digest(input, MD5);
-	}
-
-	/**
 	 * 对文件进行sha1散列.
 	 */
 	public static byte[] sha1(InputStream input) throws IOException {
@@ -174,6 +190,15 @@ public class Hashs {
 		}
 	}
 
+	////////////////// MD5 ///////////////////
+	/**
+	 * 对文件进行md5散列，被破解后MD5已较少人用.
+	 */
+	public static byte[] md5(InputStream input) throws IOException {
+		return digest(input, MD5);
+	}
+
+	////////////////// CRC32 ///////////////////
 	/**
 	 * 对输入字符串进行crc32散列.
 	 */
@@ -228,6 +253,7 @@ public class Hashs {
 		return crc32.getValue();
 	}
 
+	////////////////// 基于Guava的MurMurHash ///////////////////
 	/**
 	 * 对输入字符串进行murmur32散列
 	 */

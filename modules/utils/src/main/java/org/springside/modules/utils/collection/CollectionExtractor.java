@@ -10,10 +10,11 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.Reflections;
 
+/**
+ * 提取集合内元素的内容，依赖BeanUtils(考虑取消依赖)
+ */
 @SuppressWarnings("rawtypes")
 public class CollectionExtractor {
-
-	///////////////// 提取集合内的内容 ///////////////////
 
 	/**
 	 * 提取集合中的对象的两个属性(通过Getter函数), 组合成Map.
@@ -74,7 +75,6 @@ public class CollectionExtractor {
 	/**
 	 * 转换Collection所有元素(通过toString())为String, 中间以 separator分隔。
 	 */
-	
 	public static String convertToString(final Collection collection, final String separator) {
 		return StringUtils.join(collection, separator);
 	}

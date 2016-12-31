@@ -54,6 +54,9 @@ public class Threads {
 	 * 另对在shutdown时线程本身被调用中断做了处理.
 	 * 
 	 * 返回线程最后是否被中断.
+	 * 
+	 * 使用了Guava的工具类
+	 * @see MoreExecutors#shutdownAndAwaitTermination(ExecutorService, long, TimeUnit)
 	 */
 	public static boolean gracefulShutdown(ExecutorService threadPool, int shutdownTimeoutMills) {
 		return MoreExecutors.shutdownAndAwaitTermination(threadPool, shutdownTimeoutMills, TimeUnit.MILLISECONDS);
@@ -69,10 +72,12 @@ public class Threads {
 	/**
 	 * 创建ThreadFactory，使得创建的线程有自己的名字而不是默认的"pool-x-thread-y"
 	 * 
-	 * 格式如"mythread-%d"，使用了Guava的工具类
+	 * 使用了Guava的工具类
+	 * 
+	 * @see ThreadFactoryBuilder#build()
 	 */
-	public static ThreadFactory buildThreadFactory(String nameFormat) {
-		return new ThreadFactoryBuilder().setNameFormat(nameFormat).build();
+	public static ThreadFactory buildThreadFactory(String threadNamePrefix) {
+		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix+"-%d").build();
 	}
 
 	/**
@@ -80,8 +85,16 @@ public class Threads {
 	 * 
 	 * @see #buildThreadFactory(String)
 	 */
-	public static ThreadFactory buildThreadFactory(String nameFormat, boolean daemon) {
-		return new ThreadFactoryBuilder().setNameFormat(nameFormat).setDaemon(daemon).build();
+	public static ThreadFactory buildThreadFactory(String threadNamePrefix, boolean daemon) {
+		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix+"-%d").setDaemon(daemon).build();
+	}
+	
+	/**
+	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
+	 * 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
+	 */
+	public static Runnable wrapExceptionRunnable(Runnable runnable){
+		return new WrapExceptionRunnable(runnable);
 	}
 
 	/**

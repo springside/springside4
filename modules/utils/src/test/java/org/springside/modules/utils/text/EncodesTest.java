@@ -32,29 +32,4 @@ public class EncodesTest {
 		String result = Encodes.encodeUrlSafeBase64(input.getBytes());
 		assertThat(new String(Encodes.decodeBase64(result))).isEqualTo(input);
 	}
-
-	@Test
-	public void urlEncode() {
-		String input = "http://locahost/?q=中文&t=1";
-		String result = Encodes.urlEncode(input);
-		System.out.println(result);
-
-		assertThat(Encodes.urlDecode(result)).isEqualTo(input);
-	}
-
-	@Test
-	public void xmlEncode() {
-		String input = "1>2";
-		String result = Encodes.escapeXml(input);
-		assertThat(result).isEqualTo("1&gt;2");
-		assertThat(Encodes.unescapeXml(result)).isEqualTo(input);
-	}
-
-	@Test
-	public void html() {
-		String input = "1>2";
-		String result = Encodes.escapeHtml(input);
-		assertThat(result).isEqualTo("1&gt;2");
-		assertThat(Encodes.unescapeHtml(result)).isEqualTo(input);
-	}
 }
