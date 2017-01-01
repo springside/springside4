@@ -3,9 +3,10 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.base;
+package org.springside.modules.utils.misc;
 
 import org.junit.Test;
+import org.springside.modules.utils.misc.IdGenerator;
 
 public class IdGeneratorTest {
 

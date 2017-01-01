@@ -1,5 +1,13 @@
 package org.springside.modules.utils.reflect;
 
+import com.google.common.annotations.Beta;
+
+/**
+ * Class加载相关的工具类
+ * 
+ * @author calvin
+ */
+@Beta
 public class ClassLoaders {
 
 	private static final String CLASS_FILE_NAME_EXTENSION = ".class";

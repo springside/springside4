@@ -7,15 +7,15 @@ import org.apache.commons.lang3.SystemUtils;
 public class Platforms {
 
 	// 文件路径分隔符
-	public static final String FILE_SEPARATOR = File.separator;
-	public static final char FILE_SEPARATOR_CHAR = File.separatorChar;
-
-	// 换行符 JDK7可使用System.lineSeparator()
-	public static final String LINE_SEPARATOR = SystemUtils.LINE_SEPARATOR;
-
+	public static final String FILE_PATH_SEPARATOR = File.separator;
+	public static final char FILE_PATH_SEPARATOR_CHAR = File.separatorChar;
+	
 	// ClassPath分隔符
-	public static final String PATH_SEPARATOR = File.pathSeparator;
-	public static final char PATH_SEPARATOR_CHAR = File.pathSeparatorChar;
+	public static final String CLASS_PATH_SEPARATOR = File.pathSeparator;
+	public static final char CLASS_PATH_SEPARATOR_CHAR = File.pathSeparatorChar;
+	
+	// 换行符, JDK7可使用System.lineSeparator()
+	public static final String LINE_SEPARATOR = SystemUtils.LINE_SEPARATOR;
 
 	// 临时目录
 	public static final String TMP_DIR = SystemUtils.JAVA_IO_TMPDIR;

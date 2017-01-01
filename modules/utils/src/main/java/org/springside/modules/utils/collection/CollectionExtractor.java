@@ -10,10 +10,13 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.reflect.Reflections;
 
+import com.google.common.annotations.Beta;
+
 /**
  * 提取集合内元素的内容，依赖BeanUtils(考虑取消依赖)
  */
 @SuppressWarnings("rawtypes")
+@Beta
 public class CollectionExtractor {
 
 	/**
