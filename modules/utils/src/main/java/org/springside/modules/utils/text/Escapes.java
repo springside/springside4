@@ -18,7 +18,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * @author calvin
  */
 public class Escapes {
-	private static final String DEFAULT_URL_ENCODING = "UTF-8";
 	/**
 	 * Json转码，将字符串转码为符合JSON格式的字符串.
 	 * 
@@ -69,7 +68,7 @@ public class Escapes {
 	 */
 	public static String urlEncode(String part) {
 		try {
-			return URLEncoder.encode(part, DEFAULT_URL_ENCODING);
+			return URLEncoder.encode(part, Charsets.UTF_8_NAME);
 		} catch (UnsupportedEncodingException ignored) {
 			return null;
 		}
@@ -80,7 +79,7 @@ public class Escapes {
 	 */
 	public static String urlDecode(String part) {
 		try {
-			return URLDecoder.decode(part, DEFAULT_URL_ENCODING);
+			return URLDecoder.decode(part, Charsets.UTF_8_NAME);
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}

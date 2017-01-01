@@ -6,7 +6,22 @@ import java.util.Map;
 import com.google.common.annotations.Beta;
 
 /**
- * 存储于ThreadLocal的Map, 用于存储上下文.
+ * 存储于ThreadLocal的Map, 用于存储上下文.<br/>
+ * 
+ * 但HashMap<String,Object>的存储其实较为低效，在高性能场景下可改为EnumMap<br/>
+ * 
+ * 1.先定义枚举类，列举所有可能的Key<br/>
+ * 2.替换contextMap的创建语句，见下例<br/>
+ * 3.修改put()/get()中key的类型<br/>
+ * 
+ * <pre>
+ * private static ThreadLocal<Map<MyEnum, Object>> contextMap = new ThreadLocal<Map<MyEnum, Object>>() {
+ * 	&#64;Override
+ * 	protected Map<MyEnum, Object> initialValue() {
+ * 		return new EnumMap<MyEnum, Object>(MyEnum.class);
+ * 	}
+ * };
+ * </pre>
  */
 @Beta
 public class ThreadLocalContext {
