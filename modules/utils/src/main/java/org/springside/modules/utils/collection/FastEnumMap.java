@@ -10,9 +10,20 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import com.google.common.annotations.Beta;
+
 import sun.misc.SharedSecrets;
 
-	
+/**
+ * EnumMap 在Key是枚举时，性能与内容占用都比HashMap少.
+ * 
+ * 唯一遗憾是继承于无泛型的Map接口, get(Object key) 这样的接口，迫使EnumMap每次都要对Key进行类型校验.
+ * 
+ * 增加泛型接口，并在内部类型肯定正确的函数中去除类型检验.
+ * 
+ * @author calvin
+ */
+@Beta
 public class FastEnumMap<K extends Enum<K>, V> extends AbstractMap<K, V>
     implements java.io.Serializable, Cloneable
 {
@@ -161,10 +172,20 @@ public class FastEnumMap<K extends Enum<K>, V> extends AbstractMap<K, V>
     public boolean containsKey(Object key) {
         return isValidKey(key) && vals[((Enum)key).ordinal()] != null;
     }
+    
+    /**
+     * SpringSide新增泛型接口，取消isValidKey判断
+     * @see #containsKey(Object)
+     */
+    public boolean containsKey(K key) {
+        return vals[key.ordinal()] != null;
+    }
 
+    /**
+     * SpringSide改动接口，取消isValidKey判断
+     */
     private boolean containsMapping(Object key, Object value) {
-        return isValidKey(key) &&
-            maskNull(value).equals(vals[((Enum)key).ordinal()]);
+        return maskNull(value).equals(vals[((Enum)key).ordinal()]);
     }
 
     /**
@@ -186,6 +207,14 @@ public class FastEnumMap<K extends Enum<K>, V> extends AbstractMap<K, V>
         return (isValidKey(key) ?
                 unmaskNull(vals[((Enum)key).ordinal()]) : null);
     }
+    
+    /**
+     * SpringSide新增泛型接口，取消isValidKey判断
+     * @see #get(Object)
+     */
+    public V get(K key) {
+        return unmaskNull(vals[key.ordinal()]) ;
+    }
 
     // Modification Operations
 
@@ -204,7 +233,8 @@ public class FastEnumMap<K extends Enum<K>, V> extends AbstractMap<K, V>
      * @throws NullPointerException if the specified key is null
      */
     public V put(K key, V value) {
-        typeCheck(key);
+        //SpringSide改动接口，不做类型检查
+    	//typeCheck(key);
 
         int index = key.ordinal();
         Object oldValue = vals[index];
@@ -233,10 +263,24 @@ public class FastEnumMap<K extends Enum<K>, V> extends AbstractMap<K, V>
             size--;
         return unmaskNull(oldValue);
     }
+    
+    /**
+     * SpringSide新增泛型接口，取消isValidKey判断
+     * @see #remove(Object)
+     */
+    public V remove(K key) {
+        int index = key.ordinal();
+        Object oldValue = vals[index];
+        vals[index] = null;
+        if (oldValue != null)
+            size--;
+        return unmaskNull(oldValue);
+    }
 
+    /**
+     * SpringSide改动接口，取消isValidKey判断
+     */
     private boolean removeMapping(Object key, Object value) {
-        if (!isValidKey(key))
-            return false;
         int index = ((Enum)key).ordinal();
         if (maskNull(value).equals(vals[index])) {
             vals[index] = null;
