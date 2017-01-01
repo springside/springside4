@@ -19,7 +19,11 @@ import org.springside.modules.utils.concurrent.threadpool.QueableCachedThreadPoo
 /**
  * ThreadPool创建的工具类.
  * 
- * 对比JDK Executors中的newFixedThreadPool(), newCachedThreadPool(),newScheduledThreadPool, 提供更多有用的配置项. 使用示例：
+ * 对比JDK Executors中的newFixedThreadPool(), newCachedThreadPool(),newScheduledThreadPool, 提供更多有用的配置项. 
+ * 
+ * 另包含了移植自Tomcat的QueuableCachedPool.
+ * 
+ * 使用示例如下：
  * 
  * <pre>
  * ExecutorService ExecutorService = new FixedThreadPoolBuilder().setPoolSize(10).build();
@@ -30,6 +34,34 @@ import org.springside.modules.utils.concurrent.threadpool.QueableCachedThreadPoo
 public class ThreadPoolBuilder {
 
 	private static RejectedExecutionHandler defaultRejectHandler = new AbortPolicy();
+
+	/**
+	 * @see FixedThreadPoolBuilder
+	 */
+	public static FixedThreadPoolBuilder fixedPool() {
+		return new FixedThreadPoolBuilder();
+	}
+
+	/**
+	 * @see CacheedThreadPoolBuilder
+	 */
+	public static CachedThreadPoolBuilder cachedPool() {
+		return new CachedThreadPoolBuilder();
+	}
+
+	/**
+	 * @see ScheduledThreadPoolBuilder
+	 */
+	public static ScheduledThreadPoolBuilder scheduledPool() {
+		return new ScheduledThreadPoolBuilder();
+	}
+
+	/**
+	 * @see QueableCachedThreadPoolBuilder
+	 */
+	public static QueableCachedThreadPoolBuilder queableCachedPool() {
+		return new QueableCachedThreadPoolBuilder();
+	}
 
 	/**
 	 * 创建FixedThreadPool.
@@ -227,7 +259,7 @@ public class ThreadPoolBuilder {
 			return new ScheduledThreadPoolExecutor(poolSize, threadFactory);
 		}
 	}
-	
+
 	/**
 	 * 从Tomcat移植过来的可扩展可用Queue缓存任务的ThreadPool
 	 * 
@@ -255,7 +287,7 @@ public class ThreadPoolBuilder {
 			this.maxSize = maxSize;
 			return this;
 		}
-		
+
 		public QueableCachedThreadPoolBuilder setQueueSize(int queueSize) {
 			this.queueSize = queueSize;
 			return this;

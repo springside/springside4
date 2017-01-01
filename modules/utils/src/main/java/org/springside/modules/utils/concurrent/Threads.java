@@ -17,6 +17,14 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 /**
  * 线程相关工具类.
+ * 
+ * 1. 处理了InterruptedException的sleep()
+ * 
+ * 2. 优雅关闭线程池的gracefulShutdown()
+ * 
+ * 3. 创建可自定义线程名的ThreadFactory的buildThreadFactory()
+ * 
+ * 4. 防止第三方Runnalbe未捕捉异常导致线程跑飞的wrapExceptionRunnable()
  */
 public class Threads {
 

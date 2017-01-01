@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * 
  * from Guava 20.0
  */
 final class LongAdder extends Striped64 implements Serializable {

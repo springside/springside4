@@ -23,7 +23,6 @@ import com.google.common.annotations.Beta;
  * };
  * </pre>
  */
-@Beta
 public class ThreadLocalContext {
 
 	private static ThreadLocal<Map<String, Object>> contextMap = new ThreadLocal<Map<String, Object>>() {
