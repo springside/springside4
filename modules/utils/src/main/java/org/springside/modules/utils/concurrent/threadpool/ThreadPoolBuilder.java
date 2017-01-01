@@ -1,4 +1,4 @@
-package org.springside.modules.utils.concurrent;
+package org.springside.modules.utils.concurrent.threadpool;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -12,6 +12,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
+
+import org.springside.modules.utils.concurrent.Threads;
+import org.springside.modules.utils.concurrent.threadpool.QueableCachedThreadPool.ControllableQueue;
 
 /**
  * ThreadPool创建的工具类.
@@ -224,6 +227,80 @@ public class ThreadPoolBuilder {
 			return new ScheduledThreadPoolExecutor(poolSize, threadFactory);
 		}
 	}
+	
+	/**
+	 * 从Tomcat移植过来的可扩展可用Queue缓存任务的ThreadPool
+	 * 
+	 * @see QueableCachedThreadPool
+	 */
+	public static class QueableCachedThreadPoolBuilder {
+
+		private int minSize = 0;
+		private int maxSize = Integer.MAX_VALUE;
+		private int keepAliveSecs = 10;
+		private int queueSize = 0;
+
+		private ThreadFactory threadFactory = null;
+		private String threadNamePrefix = null;
+		private Boolean daemon = null;
+
+		private RejectedExecutionHandler rejectHandler;
+
+		public QueableCachedThreadPoolBuilder setMinSize(int minSize) {
+			this.minSize = minSize;
+			return this;
+		}
+
+		public QueableCachedThreadPoolBuilder setMaxSize(int maxSize) {
+			this.maxSize = maxSize;
+			return this;
+		}
+		
+		public QueableCachedThreadPoolBuilder setQueueSize(int queueSize) {
+			this.queueSize = queueSize;
+			return this;
+		}
+
+		public QueableCachedThreadPoolBuilder setKeepAliveSecs(int keepAliveSecs) {
+			this.keepAliveSecs = keepAliveSecs;
+			return this;
+		}
+
+		/**
+		 * 与threadNamePrefix互斥, 优先使用ThreadFactory
+		 */
+		public QueableCachedThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
+			this.threadFactory = threadFactory;
+			return this;
+		}
+
+		public QueableCachedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
+			this.threadNamePrefix = threadNamePrefix;
+			return this;
+		}
+
+		public QueableCachedThreadPoolBuilder setdaemon(Boolean daemon) {
+			this.daemon = daemon;
+			return this;
+		}
+
+		public QueableCachedThreadPoolBuilder setRejectHanlder(RejectedExecutionHandler rejectHandler) {
+			this.rejectHandler = rejectHandler;
+			return this;
+		}
+
+		public QueableCachedThreadPool build() {
+
+			threadFactory = createThreadFactory(threadFactory, threadNamePrefix, daemon);
+
+			if (rejectHandler == null) {
+				rejectHandler = defaultRejectHandler;
+			}
+
+			return new QueableCachedThreadPool(minSize, maxSize, keepAliveSecs, TimeUnit.SECONDS,
+					new ControllableQueue(queueSize), threadFactory, rejectHandler);
+		}
+	}
 
 	private static ThreadFactory createThreadFactory(ThreadFactory threadFactory, String threadNamePrefix,
 			Boolean daemon) {
@@ -237,5 +314,4 @@ public class ThreadPoolBuilder {
 
 		return Executors.defaultThreadFactory();
 	}
-
 }
