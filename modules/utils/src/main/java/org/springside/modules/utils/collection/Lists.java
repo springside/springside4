@@ -134,7 +134,7 @@ public class Lists {
 	public static <T> List<T> emptyListIfNull(final List<T> list) {
 		return list == null ? (List<T>) Collections.EMPTY_LIST : list;
 	}
-	
+
 	/**
 	 * 返回一个只含一个元素但结构特殊的List，节约空间. 注意List不可写.
 	 * 
@@ -144,14 +144,12 @@ public class Lists {
 		return Collections.singletonList(o);
 	}
 
-
-	
 	/**
 	 * 返回包装后不可修改的List.
 	 */
-	 public static <T> List<T> unmodifiableList(List<? extends T> list) {
-		 return Collections.unmodifiableList(list);
-	 }
+	public static <T> List<T> unmodifiableList(List<? extends T> list) {
+		return Collections.unmodifiableList(list);
+	}
 
 	/**
 	 * 排序, 采用JDK认为最优的排序算法.
@@ -299,32 +297,9 @@ public class Lists {
 	}
 
 	/**
-	 * 返回a+b的新List, 与Collections中的实现一样.
-	 */
-	public static <T> List<T> union(final List<T> list1, final List<T> list2) {
-		List<T> result = new ArrayList<T>(list1);
-		result.addAll(list2);
-		return result;
-	}
-
-	/**
-	 * 返回a-b的新List, 与Collections中的实现一样.
+	 * 返回a与b的交集的新List
 	 * 
-	 * 与removeAll()的区别是考虑了相同元素在集合里的数量，比如list1有两个A，list2有一个A，结果剩下一个A.
-	 */
-	public static <T> List<T> subtract(final List<T> list1, final List<T> list2) {
-		List<T> list = new ArrayList<T>(list1);
-		for (T element : list2) {
-			list.remove(element);
-		}
-
-		return list;
-	}
-
-	/**
-	 * 返回a与b的交集的新List.
-	 * 
-	 * 针对List作了优化，from Apache Common Collection4 ListUtils
+	 * from Apache Common Collection4 ListUtils
 	 */
 	public static <T> List<T> intersection(List<T> list1, List<T> list2) {
 		final List<T> result = new ArrayList<T>();

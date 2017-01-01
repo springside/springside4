@@ -25,6 +25,10 @@ public class Platforms {
 	public static final boolean IS_JAVA6 = SystemUtils.IS_JAVA_1_6;
 	public static final boolean IS_JAVA7 = SystemUtils.IS_JAVA_1_7;
 	public static final boolean IS_JAVA8 = SystemUtils.IS_JAVA_1_8;
+	public static final boolean IS_ATLEASET_JAVA6 = IS_JAVA6||IS_JAVA7||IS_JAVA8;
+	public static final boolean IS_ATLEASET_JAVA7 = IS_JAVA7||IS_JAVA8;
+	public static final boolean IS_ATLEASET_JAVA8 = IS_JAVA8;
+	
 
 	// 操作系统类型及版本
 	public static final String OS_NAME = SystemUtils.OS_NAME;

@@ -69,42 +69,4 @@ public class Collections {
 			}
 		}
 	}
-
-	///////////// 集合运算//////////////
-
-	
-	/**
-	 * 返回a+b的新List.
-	 */
-	public static <T> List<T> union(final Collection<T> a, final Collection<T> b) {
-		List<T> result = new ArrayList<T>(a);
-		result.addAll(b);
-		return result;
-	}
-
-	/**
-	 * 返回a-b的新List.
-	 */
-	public static <T> List<T> subtract(final Collection<T> a, final Collection<T> b) {
-		List<T> list = new ArrayList<T>(a);
-		for (T element : b) {
-			list.remove(element);
-		}
-
-		return list;
-	}
-
-	/**
-	 * 返回a与b的交集的新List.
-	 */
-	public static <T> List<T> intersection(Collection<T> a, Collection<T> b) {
-		List<T> list = new ArrayList<T>();
-
-		for (T element : a) {
-			if (b.contains(element)) {
-				list.add(element);
-			}
-		}
-		return list;
-	}
 }
