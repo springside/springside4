@@ -3,7 +3,9 @@ package org.springside.modules.utils.concurrent.jsr166e;
 import java.util.Random;
 
 /**
- * from Guava 20.0, JDK当前版本与Streaming紧密结合不可分
+ * 移植 from Guava 20.0
+ * 
+ * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
  */
 public abstract class Striped64 extends Number {
     /*
@@ -309,7 +311,8 @@ public abstract class Striped64 extends Number {
         try {
             return java.security.AccessController.doPrivileged
             (new java.security.PrivilegedExceptionAction<sun.misc.Unsafe>() {
-                public sun.misc.Unsafe run() throws Exception {
+                @Override
+				public sun.misc.Unsafe run() throws Exception {
                     Class<sun.misc.Unsafe> k = sun.misc.Unsafe.class;
                     for (java.lang.reflect.Field f : k.getDeclaredFields()) {
                         f.setAccessible(true);

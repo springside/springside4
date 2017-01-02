@@ -12,7 +12,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
- * 从JDK8u102移植，去除Streaming部分 
+ * 从JDK8u102移植，去除Streaming部分.
+ * 
+ * JDK7版的ThreadLocalRandom只是单纯的将Random放入ThreadLocal中.
+ * 
+ * JDK8的实现更好的初始化seed 并使用了UNSAFE.
+ * 
+ * 如果是Netty环境，则需要使用Netty自身使用了FastThreadLocal的ThreadLocalRandom
  * 
  * A random number generator isolated to the current thread.  Like the
  * global {@link java.util.Random} generator used by the {@link
@@ -22,7 +28,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * than shared {@code Random} objects in concurrent programs will
  * typically encounter much less overhead and contention.  Use of
  * {@code ThreadLocalRandom} is particularly appropriate when multiple
- * tasks (for example, each a {@link ForkJoinTask}) use random numbers
+ * tasks (for example, each a ForkJoinTask use random numbers
  * in parallel in thread pools.
  *
  * <p>Usages of this class should typically be of the form:
@@ -105,9 +111,9 @@ public class ThreadLocalRandom extends Random {
                         "java.util.secureRandomSeed"));
         if (pp != null && pp.equalsIgnoreCase("true")) {
             byte[] seedBytes = java.security.SecureRandom.getSeed(8);
-            long s = (long)(seedBytes[0]) & 0xffL;
+            long s = (seedBytes[0]) & 0xffL;
             for (int i = 1; i < 8; ++i)
-                s = (s << 8) | ((long)(seedBytes[i]) & 0xffL);
+                s = (s << 8) | ((seedBytes[i]) & 0xffL);
             return s;
         }
         return (mix64(System.currentTimeMillis()) ^
@@ -195,7 +201,8 @@ public class ThreadLocalRandom extends Random {
      *
      * @throws UnsupportedOperationException always
      */
-    public void setSeed(long seed) {
+    @Override
+	public void setSeed(long seed) {
         // only allow call from super() constructor
         if (initialized)
             throw new UnsupportedOperationException();
@@ -209,7 +216,8 @@ public class ThreadLocalRandom extends Random {
     }
 
     // We must define this, but never use it.
-    protected int next(int bits) {
+    @Override
+	protected int next(int bits) {
         return (int)(mix64(nextSeed()) >>> (64 - bits));
     }
 
@@ -299,7 +307,8 @@ public class ThreadLocalRandom extends Random {
      *
      * @return a pseudorandom {@code int} value
      */
-    public int nextInt() {
+    @Override
+	public int nextInt() {
         return mix32(nextSeed());
     }
 
@@ -312,7 +321,8 @@ public class ThreadLocalRandom extends Random {
      *         (inclusive) and the bound (exclusive)
      * @throws IllegalArgumentException if {@code bound} is not positive
      */
-    public int nextInt(int bound) {
+    @Override
+	public int nextInt(int bound) {
         if (bound <= 0)
             throw new IllegalArgumentException(BadBound);
         int r = mix32(nextSeed());
@@ -350,7 +360,8 @@ public class ThreadLocalRandom extends Random {
      *
      * @return a pseudorandom {@code long} value
      */
-    public long nextLong() {
+    @Override
+	public long nextLong() {
         return mix64(nextSeed());
     }
 
@@ -403,7 +414,8 @@ public class ThreadLocalRandom extends Random {
      * @return a pseudorandom {@code double} value between zero
      *         (inclusive) and one (exclusive)
      */
-    public double nextDouble() {
+    @Override
+	public double nextDouble() {
         return (mix64(nextSeed()) >>> 11) * DOUBLE_UNIT;
     }
 
@@ -446,7 +458,8 @@ public class ThreadLocalRandom extends Random {
      *
      * @return a pseudorandom {@code boolean} value
      */
-    public boolean nextBoolean() {
+    @Override
+	public boolean nextBoolean() {
         return mix32(nextSeed()) < 0;
     }
 
@@ -457,11 +470,13 @@ public class ThreadLocalRandom extends Random {
      * @return a pseudorandom {@code float} value between zero
      *         (inclusive) and one (exclusive)
      */
-    public float nextFloat() {
+    @Override
+	public float nextFloat() {
         return (mix32(nextSeed()) >>> 8) * FLOAT_UNIT;
     }
 
-    public double nextGaussian() {
+    @Override
+	public double nextGaussian() {
         // Use nextLocalGaussian instead of nextGaussian field
         Double d = nextLocalGaussian.get();
         if (d != null) {

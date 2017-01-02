@@ -6,7 +6,9 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * from Guava 20.0, JDK当前版本与Streaming紧密结合不可分
+ * 移植from Guava 20.0.
+ * 
+ * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
  */
 final class LongAdder extends Striped64 implements Serializable {
     private static final long serialVersionUID = 7249069246863182397L;
@@ -14,7 +16,8 @@ final class LongAdder extends Striped64 implements Serializable {
     /**
      * Version of plus for use in retryUpdate
      */
-    final long fn(long v, long x) { return v + x; }
+    @Override
+	final long fn(long v, long x) { return v + x; }
 
     /**
      * Creates a new adder with initial sum of zero.
@@ -118,7 +121,8 @@ final class LongAdder extends Striped64 implements Serializable {
      * Returns the String representation of the {@link #sum}.
      * @return the String representation of the {@link #sum}
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return Long.toString(sum());
     }
 
@@ -127,7 +131,8 @@ final class LongAdder extends Striped64 implements Serializable {
      *
      * @return the sum
      */
-    public long longValue() {
+    @Override
+	public long longValue() {
         return sum();
     }
 
@@ -135,7 +140,8 @@ final class LongAdder extends Striped64 implements Serializable {
      * Returns the {@link #sum} as an {@code int} after a narrowing
      * primitive conversion.
      */
-    public int intValue() {
+    @Override
+	public int intValue() {
         return (int)sum();
     }
 
@@ -143,16 +149,18 @@ final class LongAdder extends Striped64 implements Serializable {
      * Returns the {@link #sum} as a {@code float}
      * after a widening primitive conversion.
      */
-    public float floatValue() {
-        return (float)sum();
+    @Override
+	public float floatValue() {
+        return sum();
     }
 
     /**
      * Returns the {@link #sum} as a {@code double} after a widening
      * primitive conversion.
      */
-    public double doubleValue() {
-        return (double)sum();
+    @Override
+	public double doubleValue() {
+        return sum();
     }
 
     private void writeObject(ObjectOutputStream s) throws IOException {

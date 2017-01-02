@@ -12,9 +12,13 @@ import java.util.concurrent.ConcurrentMap;
 /**
  * 关于Map的工具集合，
  * 
- * 对于Guava与Java Collections中的常用函数，直接引用.
+ * 1. 常用函数(如是否为空)
  * 
- * 对于Apache Commons Collection中的函数，直接移植避免引入依赖.
+ * 2. 对于并发Map，增加putIfAbsent(返回最终值版), createIfAbsent这两个重要函数(from Common Collection)
+ * 
+ * 3. 便捷的构造函数(via guava，并增加了用数组，List等方式初始化Map的函数)
+ * 
+ * 4. emptyMap,singletonMap,unmodifiedMap (via JDK Collection)
  * 
  * @author calvin
  */
@@ -131,7 +135,7 @@ public class Maps {
 		return new TreeMap<K, V>();
 	}
 
-	///////////////// from JDK Collections的常用函数 ///////////////////
+	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
 	 * 返回一个空的结构特殊的Map，节约空间. 注意Map不可写.

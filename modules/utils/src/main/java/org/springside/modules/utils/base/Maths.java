@@ -1,5 +1,8 @@
 package org.springside.modules.utils.base;
 
+import com.google.common.annotations.Beta;
+
+@Beta
 public class Maths {
 
     /**

@@ -18,9 +18,17 @@ import com.google.common.primitives.Longs;
 /**
  * 关于List的工具集合，
  * 
- * 对于Guava与Java Collections中的常用函数，直接引用.
+ * 1. 常用函数(如是否为空)
  * 
- * 对于Apache Commons Collection中的函数，直接移植避免引入依赖.
+ * 2. 便捷的构造函数(from guava)
+ * 
+ * 3. emptyList,singletonList,unmodifiedList (vis JDK Collection)
+ * 
+ * 4. sort/binarySearch/shuffle(via JDK Collection)
+ * 
+ * 5. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
+ * 
+ * 6. 集合运算，包括两个List是否完全相等，两个List的交集（重复元素将去重，from Commons Collecton）
  * 
  * @author calvin
  */
@@ -170,7 +178,7 @@ public class Lists {
 	}
 
 	/**
-	 * 二分查找.
+	 * 二分法快速查找对象
 	 * 
 	 * @see java.util.Collections#binarySearch(List, Object)
 	 */
@@ -179,7 +187,7 @@ public class Lists {
 	}
 
 	/**
-	 * 二分查找.
+	 * 二分法快速查找对象
 	 * 
 	 * @see java.util.Collections#binarySearch(List, Object, Comparator)
 	 */
@@ -297,7 +305,7 @@ public class Lists {
 	}
 
 	/**
-	 * 返回a与b的交集的新List
+	 * 返回a与b的交集的新List（重复元素将去重）
 	 * 
 	 * from Apache Common Collection4 ListUtils
 	 */

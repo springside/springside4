@@ -10,9 +10,9 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 通用Collection的工具集.
+ * 通用Collection的工具集
  * 
- * 其中Apache Common Collections的函数直接复制移植，避免引入.
+ * 通用函数没有针对数据结构进行优化，效率不高，所以没有太多的封装.
  * 
  * 关于List与Map的特殊工具集，另见Lists与Maps.
  */

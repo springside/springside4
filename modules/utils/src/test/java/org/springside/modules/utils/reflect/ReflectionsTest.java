@@ -10,7 +10,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
-import org.springside.modules.utils.reflect.Reflections;
 
 public class ReflectionsTest {
 
@@ -97,18 +96,7 @@ public class ReflectionsTest {
 
 	}
 
-	@Test
-	public void getSuperClassGenricType() {
-		// 获取第1，2个泛型类型
-		assertThat(Reflections.getClassGenricType(TestBean.class)).isEqualTo(String.class);
-		assertThat(Reflections.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
-
-		// 定义父类时无泛型定义
-		assertThat(Reflections.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
-
-		// 无父类定义
-		assertThat(Reflections.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
-	}
+	
 
 	@Test
 	public void convertReflectionExceptionToUnchecked() {

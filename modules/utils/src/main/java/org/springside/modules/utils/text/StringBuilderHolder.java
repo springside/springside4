@@ -7,6 +7,8 @@ package org.springside.modules.utils.text;
  * 
  * 不过仅在String对象较大时才有明显效果，否则抵不上访问ThreadLocal的消耗.
  * 
+ * 在Netty环境中，使用Netty提供的基于FastThreadLocal的版本。
+ * 
  * <pre>
  * private static ThreadLocal<StringBuilderHolder> stringBuilderHolder = new ThreadLocal<StringBuilderHolder>() {
  * 	&#64;Override

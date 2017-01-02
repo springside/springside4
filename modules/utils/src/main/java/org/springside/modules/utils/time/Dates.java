@@ -9,9 +9,13 @@ import org.apache.commons.lang3.time.FastDateFormat;
 import com.google.common.annotations.Beta;
 
 /**
- * 日期工具类
+ * 日期工具类.
  * 
- * 1. 封装Common Lang一些最常用的方法
+ * 在不方便使用joda-time时，使用本类降低Date处理的复杂度与性能消耗.
+ * 
+ * 1. 日期格式不固定时的String<->Date 转换函数.
+ * 
+ * 2. 封装Common Lang一些最常用日期方法
  * 
  * @author calvin
  */
@@ -27,27 +31,33 @@ public class Dates {
 	public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR; // Number of milliseconds in a standard day.
 
 	/**
-	 * 仅用于不固定pattern不固定的情况. 否则直接使用fastDateFormat.parse(String)
+	 * 分析日期字符串, 仅用于不固定pattern不固定的情况.
 	 * 
-	 * FastDateFormat已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找
+	 * 否则直接使用DateFormats中封装好的fastDateFormat.
+	 * 
+	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
 	 */
 	public static Date pareDate(String dateString, String pattern) throws ParseException {
 		return FastDateFormat.getInstance(pattern).parse(dateString);
 	}
 
 	/**
-	 * 仅用于不固定pattern的情况. 否则直接使用fastDateFormat.format(Date)
+	 * 格式化日期, 仅用于不固定pattern的情况.
 	 * 
-	 * FastDateFormat已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找
+	 * 否则直接使用DateFormats中封装好的fastDateFormat.
+	 * 
+	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
 	 */
 	public static String formatDate(Date date, String pattern) throws ParseException {
 		return FastDateFormat.getInstance(pattern).format(date);
 	}
 
 	/**
-	 * 仅用于不固定pattern的情况. 否则直接使用fastDateFormat.format(Date)
+	 * 格式化日期, 仅用于不固定pattern的情况.
 	 * 
-	 * FastDateFormat已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找
+	 * 否则直接使用DateFormats中封装好的fastDateFormat.
+	 * 
+	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
 	 */
 	public static String formatDate(long date, String pattern) throws ParseException {
 		return FastDateFormat.getInstance(pattern).format(date);

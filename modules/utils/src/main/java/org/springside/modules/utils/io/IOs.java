@@ -28,15 +28,15 @@ import com.google.common.annotations.Beta;
  * 
  * 代码基本从Apache Commmons IO中化简移植, 固定encoding为UTF8.
  * 
- * 1. 安静关闭Closeable对象的closeQuietly()
+ * 1. 安静关闭Closeable对象
  * 
- * 2. 读出InputStream 和 Reader内容到String的toString()
+ * 2. 读出InputStream 和 Reader内容到String(from Commons IO)
  * 
- * 3. 读出nputStream 和 Reader内容到List<String>的readLines()
+ * 3. 读出InputStream 和 Reader内容到List<String>(from Commons IO)
  * 
- * 4. 将String写到OutputStream 和 Writer的write()
+ * 4. 将String写到OutputStream 和 Writer(from Commons IO)
  * 
- * 5. InputStream/Reader与OutputStream/Writer之间复制的copy()
+ * 5. InputStream/Reader与OutputStream/Writer之间复制的copy(from Commons IO)
  * 
  * @author calvin
  */
@@ -45,7 +45,7 @@ public class IOs {
 	private static final Logger logger = LoggerFactory.getLogger(IOs.class);
 
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
-	public static final int EOF = -1;
+	private static final int EOF = -1;
 
 	private static final String CLOSE_ERROR_MESSAGE = "IOException thrown while closing Closeable.";
 

@@ -5,7 +5,7 @@ package org.springside.modules.utils.base;
  * 
  * 1. Boolean.readBoolean(name) 不够用, 进行扩展. 其他Integer.read()等都没问题.
  * 
- * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入commons-config时使用.
+ * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
  * 
  * @author calvin
  */
@@ -54,6 +54,7 @@ public class Properties {
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
 	public static String readString(String propertyName, String envName, String defaultValue) {
+		checkEnvName(envName);
 		String propertyValue = System.getProperty(propertyName);
 		if (propertyValue != null) {
 			return propertyValue;
@@ -67,6 +68,7 @@ public class Properties {
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
 	public static Integer readInt(String propertyName, String envName, Integer defaultValue) {
+		checkEnvName(envName);
 		Integer propertyValue = Numbers.toIntObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
@@ -80,6 +82,7 @@ public class Properties {
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
 	public static Long readLong(String propertyName, String envName, Long defaultValue) {
+		checkEnvName(envName);
 		Long propertyValue = Numbers.toLongObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
@@ -93,6 +96,7 @@ public class Properties {
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
 	public static Double readDouble(String propertyName, String envName, Double defaultValue) {
+		checkEnvName(envName);
 		Double propertyValue = Numbers.toDoubleObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
@@ -106,6 +110,7 @@ public class Properties {
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
 	public static Boolean readBoolean(String propertyName, String envName, Boolean defaultValue) {
+		checkEnvName(envName);
 		Boolean propertyValue = toBooleanObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
@@ -120,6 +125,15 @@ public class Properties {
 			return null;
 		} else {
 			return Boolean.valueOf(str);
+		}
+	}
+
+	/**
+	 * 检查环境变量名不能有'.'，在linux下不支持
+	 */
+	private static void checkEnvName(String envName) {
+		if (envName == null || envName.indexOf('.') != -1) {
+			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
 		}
 	}
 }

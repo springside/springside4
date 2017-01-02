@@ -25,7 +25,9 @@ import java.util.Set;
 import org.springside.modules.utils.base.Maths;
 
 /**
- * 移植Netty 4.1.6的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与性能俱比原来更优 
+ * 移植Netty 4.1.6的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与读写性能俱比原来更优.
+ * 
+ * 原子类型集合类有多个实现，选择Netty是因为有在实战中使用.
  * 
  * A hash map implementation of {@link IntObjectMap} that uses open addressing for keys. To minimize the memory
  * footprint, this class uses open addressing rather than chaining. Collisions are resolved using linear probing.
@@ -187,7 +189,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 
 	@Override
 	public void clear() {
-		Arrays.fill(keys, (int) 0);
+		Arrays.fill(keys, 0);
 		Arrays.fill(values, null);
 		size = 0;
 	}
@@ -327,7 +329,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 	}
 
 	private int objectToKey(Object key) {
-		return (int) ((Integer) key).intValue();
+		return ((Integer) key).intValue();
 	}
 
 	/**
@@ -368,7 +370,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 	 * Returns the hash code for the key.
 	 */
 	private static int hashCode(int key) {
-		return (int) key;
+		return key;
 	}
 
 	/**

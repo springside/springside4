@@ -7,6 +7,8 @@ import org.apache.commons.lang3.SystemUtils;
 /**
  * 关于系统设定，平台信息的变量
  * 
+ * via Common Lang
+ * 
  * @author calvin
  */
 public class Platforms {
@@ -24,7 +26,7 @@ public class Platforms {
 
 	// 临时目录
 	public static final String TMP_DIR = SystemUtils.JAVA_IO_TMPDIR;
-
+	
 	// Java版本
 	public static final String JAVA_VERSION = SystemUtils.JAVA_SPECIFICATION_VERSION;
 	public static final boolean IS_JAVA6 = SystemUtils.IS_JAVA_1_6;
@@ -41,5 +43,4 @@ public class Platforms {
 	public static final boolean IS_LINUX = SystemUtils.IS_OS_LINUX;
 	public static final boolean IS_UNIX = SystemUtils.IS_OS_UNIX;
 	public static final boolean IS_WINDOWS = SystemUtils.IS_OS_WINDOWS;
-
 }

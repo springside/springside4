@@ -14,6 +14,10 @@ import com.google.common.base.Throwables;
 /**
  * 关于异常的工具类.
  * 
+ * 1. 若干常用函数.
+ * 
+ * 2. StackTrace性能优化相关，尽量使用静态异常避免异常生成时获取StackTrace，及打印StackTrace的消耗
+ * 
  * @author calvin
  */
 public class Exceptions {
@@ -23,7 +27,7 @@ public class Exceptions {
 	/**
 	 * 将CheckedException转换为RuntimeException重新抛出, 可以减少函数签名中的CheckExcetpion定义.
 	 * 
-	 * CheckedException会用UndeclaredThrowableException包裹，Error则不会被转变.
+	 * CheckedException会用UndeclaredThrowableException包裹，RunTimeException和Error则不会被转变.
 	 * 
 	 * from Commons Lange 3.5 ExceptionUtils, 但依赖包可能没有这么新，因此复制下来.
 	 * 
@@ -40,9 +44,11 @@ public class Exceptions {
 	}
 
 	/**
-	 * 如果是ExecutionException 或InvocationTargetException，从cause中获得真正异常.
+	 * 如果是著名的包裹类，从cause中获得真正异常. 其他异常则不变.
 	 * 
 	 * Future中使用的ExecutionException 与 反射时定义的InvocationTargetException， 真正的异常都封装在Cause中
+	 * 
+	 * 前面 unchecked() 使用的UndeclaredThrowableException同理.
 	 * 
 	 * from Quasar and Tomcat's ExceptionUtils
 	 */
@@ -98,6 +104,8 @@ public class Exceptions {
 	public static String getMessageWithExceptionName(Throwable t) {
 		return ExceptionUtils.getMessage(t);
 	}
+
+	/////////// StackTrace 性能优化相关////////
 
 	/**
 	 * from Netty, 为静态异常设置StackTrace.

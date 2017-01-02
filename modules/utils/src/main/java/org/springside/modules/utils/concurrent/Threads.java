@@ -18,13 +18,13 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 /**
  * 线程相关工具类.
  * 
- * 1. 处理了InterruptedException的sleep()
+ * 1. 处理了InterruptedException的sleep
  * 
- * 2. 优雅关闭线程池的gracefulShutdown()
+ * 2. 优雅关闭线程池的(via guava)
  * 
- * 3. 创建可自定义线程名的ThreadFactory的buildThreadFactory()
+ * 3. 创建可自定义线程名的ThreadFactory(via guava)
  * 
- * 4. 防止第三方Runnalbe未捕捉异常导致线程跑飞的wrapExceptionRunnable()
+ * 4. 防止第三方Runnalbe未捕捉异常导致线程跑飞
  */
 public class Threads {
 
@@ -104,7 +104,7 @@ public class Threads {
 	/**
 	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
 	 */
-	public static Runnable wrapExceptionRunnable(Runnable runnable) {
+	public static Runnable wrapWithoutException(Runnable runnable) {
 		return new WrapExceptionRunnable(runnable);
 	}
 
