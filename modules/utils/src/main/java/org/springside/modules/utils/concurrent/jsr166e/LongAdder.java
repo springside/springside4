@@ -6,7 +6,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 /**
- * from Guava 20.0
+ * from Guava 20.0, JDK当前版本与Streaming紧密结合不可分
  */
 final class LongAdder extends Striped64 implements Serializable {
     private static final long serialVersionUID = 7249069246863182397L;

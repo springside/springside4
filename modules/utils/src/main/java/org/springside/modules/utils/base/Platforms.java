@@ -14,11 +14,11 @@ public class Platforms {
 	// 文件路径分隔符
 	public static final String FILE_PATH_SEPARATOR = File.separator;
 	public static final char FILE_PATH_SEPARATOR_CHAR = File.separatorChar;
-	
+
 	// ClassPath分隔符
 	public static final String CLASS_PATH_SEPARATOR = File.pathSeparator;
 	public static final char CLASS_PATH_SEPARATOR_CHAR = File.pathSeparatorChar;
-	
+
 	// 换行符, JDK7可使用System.lineSeparator()
 	public static final String LINE_SEPARATOR = SystemUtils.LINE_SEPARATOR;
 
@@ -30,10 +30,9 @@ public class Platforms {
 	public static final boolean IS_JAVA6 = SystemUtils.IS_JAVA_1_6;
 	public static final boolean IS_JAVA7 = SystemUtils.IS_JAVA_1_7;
 	public static final boolean IS_JAVA8 = SystemUtils.IS_JAVA_1_8;
-	public static final boolean IS_ATLEASET_JAVA6 = IS_JAVA6||IS_JAVA7||IS_JAVA8;
-	public static final boolean IS_ATLEASET_JAVA7 = IS_JAVA7||IS_JAVA8;
+	public static final boolean IS_ATLEASET_JAVA6 = IS_JAVA6 || IS_JAVA7 || IS_JAVA8;
+	public static final boolean IS_ATLEASET_JAVA7 = IS_JAVA7 || IS_JAVA8;
 	public static final boolean IS_ATLEASET_JAVA8 = IS_JAVA8;
-	
 
 	// 操作系统类型及版本
 	public static final String OS_NAME = SystemUtils.OS_NAME;

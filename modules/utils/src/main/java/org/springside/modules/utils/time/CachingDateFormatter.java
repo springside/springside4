@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.apache.commons.lang3.time.FastDateFormat;
 
 /**
- * 如果时间戳是递增的，而且同一毫秒内有多次format()，可用本类减少重复调用.
+ * DateFormat.format()消耗较大，如果时间戳是递增的，而且同一毫秒内有多次format()，使用用本类减少重复调用.
  * 
  * From Log4j2 DatePatternConverter
  * 

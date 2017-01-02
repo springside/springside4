@@ -30,9 +30,9 @@ public class ThreadDumpper {
 	private ThreadMXBean threadMBean = ManagementFactory.getThreadMXBean();
 	private volatile Long lastThreadDumpTime = 0L;
 
-	public ThreadDumpper(){		
+	public ThreadDumpper() {
 	}
-	
+
 	public ThreadDumpper(long leastIntervalMills, int maxStackLevel) {
 		this.leastIntervalMills = leastIntervalMills;
 		this.maxStackLevel = maxStackLevel;

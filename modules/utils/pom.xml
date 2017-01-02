@@ -25,6 +25,12 @@
 			<version>${commons-lang3.version}</version>
 		</dependency>
 		
+			<dependency>
+			<groupId>org.reflections</groupId>
+			<artifactId>reflections</artifactId>
+			<version>0.9.10</version>
+		</dependency>
+		
 		<!-- for Encodes.java -->
 		<dependency>
 			<groupId>commons-codec</groupId>

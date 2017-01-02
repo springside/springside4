@@ -3,8 +3,7 @@ package org.springside.modules.utils.concurrent.jsr166e;
 import java.util.Random;
 
 /**
- * 
- * from Guava 20.0
+ * from Guava 20.0, JDK当前版本与Streaming紧密结合不可分
  */
 public abstract class Striped64 extends Number {
     /*

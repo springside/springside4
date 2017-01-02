@@ -10,13 +10,9 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
+
 /**
- * 
- * 从 Doug Lea的CVS移植.
- * 
- * 选择1.18版, 比JDK7实现更好的初始化seed，但未引入JDK8 Streaming
- * 
- * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/main/java/util/concurrent/ThreadLocalRandom.java?revision=1.18&view=markup
+ * 从JDK8u102移植，去除Streaming部分 
  * 
  * A random number generator isolated to the current thread.  Like the
  * global {@link java.util.Random} generator used by the {@link
@@ -37,6 +33,13 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * <p>This class also provides additional commonly used bounded random
  * generation methods.
+ *
+ * <p>Instances of {@code ThreadLocalRandom} are not cryptographically
+ * secure.  Consider instead using {@link java.security.SecureRandom}
+ * in security-sensitive applications. Additionally,
+ * default-constructed instances do not use a cryptographically random
+ * seed unless the {@linkplain System#getProperty system property}
+ * {@code java.util.secureRandomSeed} is set to {@code true}.
  *
  * @since 1.7
  * @author Doug Lea
@@ -59,28 +62,26 @@ public class ThreadLocalRandom extends Random {
      * application-level overhead and footprint of most concurrent
      * programs.
      *
+     * Even though this class subclasses java.util.Random, it uses the
+     * same basic algorithm as java.util.SplittableRandom.  (See its
+     * internal documentation for explanations, which are not repeated
+     * here.)  Because ThreadLocalRandoms are not splittable
+     * though, we use only a single 64bit gamma.
+     *
      * Because this class is in a different package than class Thread,
      * field access methods use Unsafe to bypass access control rules.
-     * The base functionality of Random methods is conveniently
-     * isolated in method next(bits), that just reads and writes the
-     * Thread field rather than its own field.  However, to conform to
-     * the requirements of the Random superclass constructor, the
-     * common static ThreadLocalRandom maintains an "initialized"
-     * field for the sake of rejecting user calls to setSeed while
-     * still allowing a call from constructor.  Note that
-     * serialization is completely unnecessary because there is only a
-     * static singleton.  But we generate a serial form containing
-     * "rnd" and "initialized" fields to ensure compatibility across
-     * versions.
+     * To conform to the requirements of the Random superclass
+     * constructor, the common static ThreadLocalRandom maintains an
+     * "initialized" field for the sake of rejecting user calls to
+     * setSeed while still allowing a call from constructor.  Note
+     * that serialization is completely unnecessary because there is
+     * only a static singleton.  But we generate a serial form
+     * containing "rnd" and "initialized" fields to ensure
+     * compatibility across versions.
      *
-     * Per-thread initialization is similar to that in the no-arg
-     * Random constructor, but we avoid correlation among not only
-     * initial seeds of those created in different threads, but also
-     * those created using class Random itself; while at the same time
-     * not changing any statistical properties.  So we use the same
-     * underlying multiplicative sequence, but start the sequence far
-     * away from the base version, and then merge (xor) current time
-     * and per-thread probe bits to generate initial values.
+     * Implementations of non-core methods are mostly the same as in
+     * SplittableRandom, that were in part derived from a previous
+     * version of this class.
      *
      * The nextLocalGaussian ThreadLocal supports the very rarely used
      * nextGaussian method by providing a holder for the second of a
@@ -89,23 +90,63 @@ public class ThreadLocalRandom extends Random {
      * but we provide identical statistical properties.
      */
 
-    // same constants as Random, but must be redeclared because private
-    private static final long multiplier = 0x5DEECE66DL;
-    private static final long addend = 0xBL;
-    private static final long mask = (1L << 48) - 1;
-    private static final int PROBE_INCREMENT = 0x61c88647;
-
-    /** Generates the basis for per-thread initial seed values */
-    private static final AtomicLong seedGenerator =
-        new AtomicLong(1269533684904616924L);
-
     /** Generates per-thread initialization/probe field */
     private static final AtomicInteger probeGenerator =
-        new AtomicInteger(0xe80f8647);
+        new AtomicInteger();
+
+    /**
+     * The next seed for default constructors.
+     */
+    private static final AtomicLong seeder = new AtomicLong(initialSeed());
+
+    private static long initialSeed() {
+        String pp = java.security.AccessController.doPrivileged(
+                new sun.security.action.GetPropertyAction(
+                        "java.util.secureRandomSeed"));
+        if (pp != null && pp.equalsIgnoreCase("true")) {
+            byte[] seedBytes = java.security.SecureRandom.getSeed(8);
+            long s = (long)(seedBytes[0]) & 0xffL;
+            for (int i = 1; i < 8; ++i)
+                s = (s << 8) | ((long)(seedBytes[i]) & 0xffL);
+            return s;
+        }
+        return (mix64(System.currentTimeMillis()) ^
+                mix64(System.nanoTime()));
+    }
+
+    /**
+     * The seed increment
+     */
+    private static final long GAMMA = 0x9e3779b97f4a7c15L;
+
+    /**
+     * The increment for generating probe values
+     */
+    private static final int PROBE_INCREMENT = 0x9e3779b9;
+
+    /**
+     * The increment of seeder per new instance
+     */
+    private static final long SEEDER_INCREMENT = 0xbb67ae8584caa73bL;
+
+    // Constants from SplittableRandom
+    private static final double DOUBLE_UNIT = 0x1.0p-53;  // 1.0  / (1L << 53)
+    private static final float  FLOAT_UNIT  = 0x1.0p-24f; // 1.0f / (1 << 24)
 
     /** Rarely-used holder for the second of a pair of Gaussians */
     private static final ThreadLocal<Double> nextLocalGaussian =
         new ThreadLocal<Double>();
+
+    private static long mix64(long z) {
+        z = (z ^ (z >>> 33)) * 0xff51afd7ed558ccdL;
+        z = (z ^ (z >>> 33)) * 0xc4ceb9fe1a85ec53L;
+        return z ^ (z >>> 33);
+    }
+
+    private static int mix32(long z) {
+        z = (z ^ (z >>> 33)) * 0xff51afd7ed558ccdL;
+        return (int)(((z ^ (z >>> 33)) * 0xc4ceb9fe1a85ec53L) >>> 32);
+    }
 
     /**
      * Field used only during singleton initialization.
@@ -129,16 +170,11 @@ public class ThreadLocalRandom extends Random {
      * rely on (static) atomic generators to initialize the values.
      */
     static final void localInit() {
-        int p = probeGenerator.getAndAdd(PROBE_INCREMENT);
+        int p = probeGenerator.addAndGet(PROBE_INCREMENT);
         int probe = (p == 0) ? 1 : p; // skip 0
-        long current, next;
-        do { // same sequence as j.u.Random but different initial value
-            current = seedGenerator.get();
-            next = current * 181783497276652981L;
-        } while (!seedGenerator.compareAndSet(current, next));
-        long r = next ^ ((long)probe << 32) ^ System.nanoTime();
+        long seed = mix64(seeder.getAndAdd(SEEDER_INCREMENT));
         Thread t = Thread.currentThread();
-        UNSAFE.putLong(t, SEED, r);
+        UNSAFE.putLong(t, SEED, seed);
         UNSAFE.putInt(t, PROBE, probe);
     }
 
@@ -165,104 +201,264 @@ public class ThreadLocalRandom extends Random {
             throw new UnsupportedOperationException();
     }
 
-    protected int next(int bits) {
+    final long nextSeed() {
         Thread t; long r; // read and update per-thread seed
-        UNSAFE.putLong
-            (t = Thread.currentThread(), SEED,
-             r = (UNSAFE.getLong(t, SEED) * multiplier + addend) & mask);
-        return (int) (r >>> (48-bits));
+        UNSAFE.putLong(t = Thread.currentThread(), SEED,
+                       r = UNSAFE.getLong(t, SEED) + GAMMA);
+        return r;
     }
 
-    /**
-     * Returns a pseudorandom, uniformly distributed value between the
-     * given least value (inclusive) and bound (exclusive).
-     *
-     * @param least the least value returned
-     * @param bound the upper bound (exclusive)
-     * @return the next value
-     * @throws IllegalArgumentException if least greater than or equal
-     * to bound
-     */
-    public int nextInt(int least, int bound) {
-        if (least >= bound)
-            throw new IllegalArgumentException();
-        return nextInt(bound - least) + least;
+    // We must define this, but never use it.
+    protected int next(int bits) {
+        return (int)(mix64(nextSeed()) >>> (64 - bits));
     }
 
+    // IllegalArgumentException messages
+    static final String BadBound = "bound must be positive";
+    static final String BadRange = "bound must be greater than origin";
+    static final String BadSize  = "size must be non-negative";
+
     /**
-     * Returns a pseudorandom, uniformly distributed value
-     * between 0 (inclusive) and the specified value (exclusive).
+     * The form of nextLong used by LongStream Spliterators.  If
+     * origin is greater than bound, acts as unbounded form of
+     * nextLong, else as bounded form.
      *
-     * @param n the bound on the random number to be returned.  Must be
-     *        positive.
-     * @return the next value
-     * @throws IllegalArgumentException if n is not positive
+     * @param origin the least value, unless greater than bound
+     * @param bound the upper bound (exclusive), must not equal origin
+     * @return a pseudorandom value
      */
-    public long nextLong(long n) {
-        if (n <= 0)
-            throw new IllegalArgumentException("n must be positive");
-        // Divide n by two until small enough for nextInt. On each
-        // iteration (at most 31 of them but usually much less),
-        // randomly choose both whether to include high bit in result
-        // (offset) and whether to continue with the lower vs upper
-        // half (which makes a difference only if odd).
-        long offset = 0;
-        while (n >= Integer.MAX_VALUE) {
-            int bits = next(2);
-            long half = n >>> 1;
-            long nextn = ((bits & 2) == 0) ? half : n - half;
-            if ((bits & 1) == 0)
-                offset += n - nextn;
-            n = nextn;
+    final long internalNextLong(long origin, long bound) {
+        long r = mix64(nextSeed());
+        if (origin < bound) {
+            long n = bound - origin, m = n - 1;
+            if ((n & m) == 0L)  // power of two
+                r = (r & m) + origin;
+            else if (n > 0L) {  // reject over-represented candidates
+                for (long u = r >>> 1;            // ensure nonnegative
+                     u + m - (r = u % n) < 0L;    // rejection check
+                     u = mix64(nextSeed()) >>> 1) // retry
+                    ;
+                r += origin;
+            }
+            else {              // range not representable as long
+                while (r < origin || r >= bound)
+                    r = mix64(nextSeed());
+            }
         }
-        return offset + nextInt((int) n);
+        return r;
     }
 
     /**
-     * Returns a pseudorandom, uniformly distributed value between the
-     * given least value (inclusive) and bound (exclusive).
+     * The form of nextInt used by IntStream Spliterators.
+     * Exactly the same as long version, except for types.
      *
-     * @param least the least value returned
+     * @param origin the least value, unless greater than bound
+     * @param bound the upper bound (exclusive), must not equal origin
+     * @return a pseudorandom value
+     */
+    final int internalNextInt(int origin, int bound) {
+        int r = mix32(nextSeed());
+        if (origin < bound) {
+            int n = bound - origin, m = n - 1;
+            if ((n & m) == 0)
+                r = (r & m) + origin;
+            else if (n > 0) {
+                for (int u = r >>> 1;
+                     u + m - (r = u % n) < 0;
+                     u = mix32(nextSeed()) >>> 1)
+                    ;
+                r += origin;
+            }
+            else {
+                while (r < origin || r >= bound)
+                    r = mix32(nextSeed());
+            }
+        }
+        return r;
+    }
+
+    /**
+     * The form of nextDouble used by DoubleStream Spliterators.
+     *
+     * @param origin the least value, unless greater than bound
+     * @param bound the upper bound (exclusive), must not equal origin
+     * @return a pseudorandom value
+     */
+    final double internalNextDouble(double origin, double bound) {
+        double r = (nextLong() >>> 11) * DOUBLE_UNIT;
+        if (origin < bound) {
+            r = r * (bound - origin) + origin;
+            if (r >= bound) // correct for rounding
+                r = Double.longBitsToDouble(Double.doubleToLongBits(bound) - 1);
+        }
+        return r;
+    }
+
+    /**
+     * Returns a pseudorandom {@code int} value.
+     *
+     * @return a pseudorandom {@code int} value
+     */
+    public int nextInt() {
+        return mix32(nextSeed());
+    }
+
+    /**
+     * Returns a pseudorandom {@code int} value between zero (inclusive)
+     * and the specified bound (exclusive).
+     *
+     * @param bound the upper bound (exclusive).  Must be positive.
+     * @return a pseudorandom {@code int} value between zero
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code bound} is not positive
+     */
+    public int nextInt(int bound) {
+        if (bound <= 0)
+            throw new IllegalArgumentException(BadBound);
+        int r = mix32(nextSeed());
+        int m = bound - 1;
+        if ((bound & m) == 0) // power of two
+            r &= m;
+        else { // reject over-represented candidates
+            for (int u = r >>> 1;
+                 u + m - (r = u % bound) < 0;
+                 u = mix32(nextSeed()) >>> 1)
+                ;
+        }
+        return r;
+    }
+
+    /**
+     * Returns a pseudorandom {@code int} value between the specified
+     * origin (inclusive) and the specified bound (exclusive).
+     *
+     * @param origin the least value returned
      * @param bound the upper bound (exclusive)
-     * @return the next value
-     * @throws IllegalArgumentException if least greater than or equal
-     * to bound
+     * @return a pseudorandom {@code int} value between the origin
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code origin} is greater than
+     *         or equal to {@code bound}
      */
-    public long nextLong(long least, long bound) {
-        if (least >= bound)
-            throw new IllegalArgumentException();
-        return nextLong(bound - least) + least;
+    public int nextInt(int origin, int bound) {
+        if (origin >= bound)
+            throw new IllegalArgumentException(BadRange);
+        return internalNextInt(origin, bound);
     }
 
     /**
-     * Returns a pseudorandom, uniformly distributed {@code double} value
-     * between 0 (inclusive) and the specified value (exclusive).
+     * Returns a pseudorandom {@code long} value.
      *
-     * @param n the bound on the random number to be returned.  Must be
-     *        positive.
-     * @return the next value
-     * @throws IllegalArgumentException if n is not positive
+     * @return a pseudorandom {@code long} value
      */
-    public double nextDouble(double n) {
-        if (n <= 0)
-            throw new IllegalArgumentException("n must be positive");
-        return nextDouble() * n;
+    public long nextLong() {
+        return mix64(nextSeed());
     }
 
     /**
-     * Returns a pseudorandom, uniformly distributed value between the
-     * given least value (inclusive) and bound (exclusive).
+     * Returns a pseudorandom {@code long} value between zero (inclusive)
+     * and the specified bound (exclusive).
      *
-     * @param least the least value returned
+     * @param bound the upper bound (exclusive).  Must be positive.
+     * @return a pseudorandom {@code long} value between zero
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code bound} is not positive
+     */
+    public long nextLong(long bound) {
+        if (bound <= 0)
+            throw new IllegalArgumentException(BadBound);
+        long r = mix64(nextSeed());
+        long m = bound - 1;
+        if ((bound & m) == 0L) // power of two
+            r &= m;
+        else { // reject over-represented candidates
+            for (long u = r >>> 1;
+                 u + m - (r = u % bound) < 0L;
+                 u = mix64(nextSeed()) >>> 1)
+                ;
+        }
+        return r;
+    }
+
+    /**
+     * Returns a pseudorandom {@code long} value between the specified
+     * origin (inclusive) and the specified bound (exclusive).
+     *
+     * @param origin the least value returned
      * @param bound the upper bound (exclusive)
-     * @return the next value
-     * @throws IllegalArgumentException if least greater than or equal
-     * to bound
+     * @return a pseudorandom {@code long} value between the origin
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code origin} is greater than
+     *         or equal to {@code bound}
      */
-    public double nextDouble(double least, double bound) {
-        if (least >= bound)
-            throw new IllegalArgumentException();
-        return nextDouble() * (bound - least) + least;
+    public long nextLong(long origin, long bound) {
+        if (origin >= bound)
+            throw new IllegalArgumentException(BadRange);
+        return internalNextLong(origin, bound);
+    }
+
+    /**
+     * Returns a pseudorandom {@code double} value between zero
+     * (inclusive) and one (exclusive).
+     *
+     * @return a pseudorandom {@code double} value between zero
+     *         (inclusive) and one (exclusive)
+     */
+    public double nextDouble() {
+        return (mix64(nextSeed()) >>> 11) * DOUBLE_UNIT;
+    }
+
+    /**
+     * Returns a pseudorandom {@code double} value between 0.0
+     * (inclusive) and the specified bound (exclusive).
+     *
+     * @param bound the upper bound (exclusive).  Must be positive.
+     * @return a pseudorandom {@code double} value between zero
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code bound} is not positive
+     */
+    public double nextDouble(double bound) {
+        if (!(bound > 0.0))
+            throw new IllegalArgumentException(BadBound);
+        double result = (mix64(nextSeed()) >>> 11) * DOUBLE_UNIT * bound;
+        return (result < bound) ?  result : // correct for rounding
+            Double.longBitsToDouble(Double.doubleToLongBits(bound) - 1);
+    }
+
+    /**
+     * Returns a pseudorandom {@code double} value between the specified
+     * origin (inclusive) and bound (exclusive).
+     *
+     * @param origin the least value returned
+     * @param bound the upper bound (exclusive)
+     * @return a pseudorandom {@code double} value between the origin
+     *         (inclusive) and the bound (exclusive)
+     * @throws IllegalArgumentException if {@code origin} is greater than
+     *         or equal to {@code bound}
+     */
+    public double nextDouble(double origin, double bound) {
+        if (!(origin < bound))
+            throw new IllegalArgumentException(BadRange);
+        return internalNextDouble(origin, bound);
+    }
+
+    /**
+     * Returns a pseudorandom {@code boolean} value.
+     *
+     * @return a pseudorandom {@code boolean} value
+     */
+    public boolean nextBoolean() {
+        return mix32(nextSeed()) < 0;
+    }
+
+    /**
+     * Returns a pseudorandom {@code float} value between zero
+     * (inclusive) and one (exclusive).
+     *
+     * @return a pseudorandom {@code float} value between zero
+     *         (inclusive) and one (exclusive)
+     */
+    public float nextFloat() {
+        return (mix32(nextSeed()) >>> 8) * FLOAT_UNIT;
     }
 
     public double nextGaussian() {

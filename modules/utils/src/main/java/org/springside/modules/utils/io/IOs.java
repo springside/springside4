@@ -100,23 +100,22 @@ public class IOs {
 		copy(reader, sw, new char[DEFAULT_BUFFER_SIZE]);
 		return sw.toString();
 	}
-	
+
 	public static List<String> readLines(final Reader input) throws IOException {
-        final BufferedReader reader = toBufferedReader(input);
-        final List<String> list = new ArrayList<String>();
-        String line = reader.readLine();
-        while (line != null) {
-            list.add(line);
-            line = reader.readLine();
-        }
-        return list;
-    }
-	
+		final BufferedReader reader = toBufferedReader(input);
+		final List<String> list = new ArrayList<String>();
+		String line = reader.readLine();
+		while (line != null) {
+			list.add(line);
+			line = reader.readLine();
+		}
+		return list;
+	}
+
 	public static List<String> readLines(final InputStream input, final Charset encoding) throws IOException {
-        final InputStreamReader reader = new InputStreamReader(input, Charsets.UTF_8);
-        return readLines(reader);
-    }
-	
+		final InputStreamReader reader = new InputStreamReader(input, Charsets.UTF_8);
+		return readLines(reader);
+	}
 
 	public static void write(final String data, final OutputStream output) throws IOException {
 		if (data != null) {
@@ -171,8 +170,8 @@ public class IOs {
 		}
 		return count;
 	}
-	
+
 	private static BufferedReader toBufferedReader(final Reader reader) {
-        return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
-    }
+		return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
+	}
 }

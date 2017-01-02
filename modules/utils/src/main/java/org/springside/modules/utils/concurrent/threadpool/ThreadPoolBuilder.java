@@ -19,7 +19,7 @@ import org.springside.modules.utils.concurrent.threadpool.QueableCachedThreadPoo
 /**
  * ThreadPool创建的工具类.
  * 
- * 对比JDK Executors中的newFixedThreadPool(), newCachedThreadPool(),newScheduledThreadPool, 提供更多有用的配置项. 
+ * 对比JDK Executors中的newFixedThreadPool(), newCachedThreadPool(),newScheduledThreadPool, 提供更多有用的配置项.
  * 
  * 另包含了移植自Tomcat的QueuableCachedPool.
  * 

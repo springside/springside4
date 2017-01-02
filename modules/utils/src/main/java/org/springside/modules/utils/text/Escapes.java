@@ -9,7 +9,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
 /**
  * 转义工具集.
  * 
- * 1.Commons-Lang的json/xml/html 转义 
+ * 1.Commons-Lang的json/xml/html 转义
  * 
  * 2.JDK提供的URL 转义
  * 

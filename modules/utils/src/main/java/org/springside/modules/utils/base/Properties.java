@@ -1,7 +1,5 @@
 package org.springside.modules.utils.base;
 
-import com.google.common.annotations.Beta;
-
 /**
  * 关于Properties的工具类
  * 

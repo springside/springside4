@@ -102,7 +102,7 @@ public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExec
 		}
 
 		public boolean force(Runnable o) {
-			if ( parent.isShutdown())
+			if (parent.isShutdown())
 				throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
 			return super.offer(o); // forces the item onto the queue, to be used if the task is rejected
 		}
@@ -115,10 +115,10 @@ public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExec
 
 		@Override
 		public boolean offer(Runnable o) {
-			//springside: threadPool.getPoolSize() 是个有锁的操作，所以尽量减少
-			
+			// springside: threadPool.getPoolSize() 是个有锁的操作，所以尽量减少
+
 			int currentPoolSize = parent.getPoolSize();
-			
+
 			// we are maxed out on threads, simply queue the object
 			if (currentPoolSize >= parent.getMaximumPoolSize())
 				return super.offer(o);

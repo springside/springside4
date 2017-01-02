@@ -18,10 +18,17 @@ import org.springside.modules.utils.base.Exceptions;
 public class Encodes {
 
 	/**
-	 * Hex编码.
+	 * Hex编码, 默认为abcdef为小写字母.
 	 */
 	public static String encodeHex(byte[] input) {
 		return Hex.encodeHexString(input);
+	}
+
+	/**
+	 * Hex编码, 可决定返回字母大小写.
+	 */
+	public static String encodeHex(byte[] input, final boolean toLowerCase) {
+		return new String(Hex.encodeHex(input, toLowerCase));
 	}
 
 	/**
@@ -56,5 +63,4 @@ public class Encodes {
 		return Base64.decodeBase64(input);
 	}
 
-	
 }
