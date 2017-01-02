@@ -14,10 +14,7 @@
  */
 package org.springside.modules.utils.collection.primitive;
 
-
 import java.util.Map;
-
-
 
 /**
  * Interface for a primitive map that uses {@code long}s as keys.

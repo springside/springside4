@@ -13,22 +13,6 @@
  * the License.
  */
 package org.springside.modules.utils.collection.primitive;
-/*
- * Copyright 2014 The Netty Project
- *
- * The Netty Project licenses this file to you under the Apache License, version 2.0 (the
- * "License"); you may not use this file except in compliance with the License. You may obtain a
- * copy of the License at:
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
- */
-import org.springside.modules.utils.math.Maths;
-
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.Arrays;
@@ -37,6 +21,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+
+import org.springside.modules.utils.base.Maths;
 
 /**
  * 移植Netty 4.1.6的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与性能俱比原来更优 
@@ -100,7 +86,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 		this.loadFactor = loadFactor;
 
 		// Adjust the initial capacity if necessary.
-		int capacity = Maths.safeFindNextPositivePowerOfTwo(initialCapacity);
+		int capacity = Maths.findNextPositivePowerOfTwo(initialCapacity);
 		mask = capacity - 1;
 
 		// Allocate the arrays.
