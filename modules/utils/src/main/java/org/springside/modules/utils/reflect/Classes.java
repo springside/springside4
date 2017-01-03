@@ -1,9 +1,12 @@
 package org.springside.modules.utils.reflect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -20,13 +23,15 @@ import org.slf4j.LoggerFactory;
  * 
  * 2. 获取全部父类，全部接口(via Common Lang)，以及最全面的获取全部Annotation(自写)
  * 
+ * 3. 获取标注了annotation的所有属性和方法(最全面的循环基类和接口)
+ * 
  * 3. 取得cglib之前的用户类(from Spring)
  * 
  * 4. 获取类用泛型声明的Class实例.
  * 
  * @author calvin
  */
-public class ClassInfos {
+public class Classes {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
@@ -110,6 +115,80 @@ public class ClassInfos {
 	}
 
 	/**
+	 * 找出所有标注了该annotation的类，循环遍历父类.
+	 * 
+	 * 暂未支持Spring风格Annotation继承Annotation
+	 * 
+	 * from org.unitils.util.AnnotationUtils
+	 */
+	public static <T extends Annotation> Set<Field> getFieldsAnnotatedWith(Class<? extends Object> clazz,
+			Class<T> annotation) {
+		if (Object.class.equals(clazz)) {
+			return Collections.emptySet();
+		}
+		Set<Field> annotatedFields = new HashSet<Field>();
+		Field[] fields = clazz.getDeclaredFields();
+		for (Field field : fields) {
+			if (field.getAnnotation(annotation) != null) {
+				annotatedFields.add(field);
+			}
+		}
+		annotatedFields.addAll(getFieldsAnnotatedWith(clazz.getSuperclass(), annotation));
+		return annotatedFields;
+	}
+
+	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation) {
+		return getMethodsAnnotatedWith(clazz, annotation, new HashSet<Class<?>>());
+	}
+
+	/**
+	 * 找出所有标注了该annotation的类，循环遍历父类及接口.
+	 * 
+	 * 暂未支持Spring风格Annotation继承Annotation
+	 */
+	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation,
+			Set<Class<?>> visitedInterfaces) {
+
+		if (Object.class.equals(clazz)) {
+			return Collections.emptySet();
+		}
+
+		List<Class<?>> ifcs = ClassUtils.getAllInterfaces(clazz);
+
+		Set<Method> annotatedMethods = new HashSet<Method>();
+		Method[] methods = clazz.getDeclaredMethods();
+
+		for (Method method : methods) {
+			if (method.getAnnotation(annotation) != null
+					|| searchOnInterfaces(method, annotation, ifcs, visitedInterfaces)) {
+				annotatedMethods.add(method);
+			}
+		}
+
+		annotatedMethods.addAll(getMethodsAnnotatedWith(clazz.getSuperclass(), annotation, visitedInterfaces));
+
+		return annotatedMethods;
+	}
+
+	private static <T extends Annotation> boolean searchOnInterfaces(Method method, Class<T> annotationType,
+			List<Class<?>> ifcs, Set<Class<?>> visitedInterfaces) {
+		for (Class<?> iface : ifcs) {
+			if (!visitedInterfaces.add(iface)) {
+				continue;
+			}
+			try {
+				Method equivalentMethod = iface.getMethod(method.getName(), method.getParameterTypes());
+				if (equivalentMethod.getAnnotation(annotationType) != null) {
+					return true;
+				}
+			} catch (NoSuchMethodException ex) {
+				// Skip this interface - it doesn't have the method...
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * 获取CGLib处理过后的实体的原Class.
 	 */
 	public static Class<?> unwrapCglib(Object instance) {
@@ -125,11 +204,11 @@ public class ClassInfos {
 	}
 
 	/**
-	 * 通过反射, 获得Class定义中声明的泛型参数的类型, 
+	 * 通过反射, 获得Class定义中声明的泛型参数的类型,
 	 * 
 	 * 注意泛型必须定义在父类处. 这是唯一可以通过反射从泛型获得Class实例的地方.
 	 * 
-	 * 如无法找到, 返回Object.class. 
+	 * 如无法找到, 返回Object.class.
 	 * 
 	 * eg. public UserDao extends HibernateDao<User>
 	 * 
@@ -141,7 +220,7 @@ public class ClassInfos {
 	}
 
 	/**
-	 * 通过反射, 获得Class定义中声明的父类的泛型参数的类型. 
+	 * 通过反射, 获得Class定义中声明的父类的泛型参数的类型.
 	 * 
 	 * 注意泛型必须定义在父类处. 这是唯一可以通过反射从泛型获得Class实例的地方.
 	 * 

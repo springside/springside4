@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -153,6 +154,10 @@ public class Maps {
 	@SuppressWarnings("rawtypes")
 	public static <K extends Comparable, V> TreeMap<K, V> newTreeMap() {
 		return new TreeMap<K, V>();
+	}
+	
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+		return new ConcurrentHashMap<K, V>();
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
