@@ -5,6 +5,15 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 
+import com.google.common.base.Utf8;
+
+/**
+ * 尽量使用Common Lang StringUtils, 完全覆盖了guva对应的部分(除了split和join的API没那么酷)
+ * 
+ * 本类仅补充少量额外方法.
+ * 
+ * @author calvin
+ */
 public class Strings {
 
 	/**
@@ -44,4 +53,12 @@ public class Strings {
 		return list;
 	}
 
+	/**
+	 * 计算字符串被UTF8编码后的字节数 via guava
+	 * 
+	 * @see Utf8#encodedLength(CharSequence)
+	 */
+	public static int utf8EncodedLength(CharSequence sequence) {
+		return Utf8.encodedLength(sequence);
+	}
 }

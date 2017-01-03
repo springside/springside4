@@ -6,14 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.reflect.Reflections;
 
 import com.google.common.annotations.Beta;
 
 /**
- * 提取集合内元素的内容，依赖BeanUtils(考虑取消依赖)
+ * 提取集合内元素的内容
  */
 @SuppressWarnings("rawtypes")
 @Beta
@@ -32,8 +31,8 @@ public class CollectionExtractor {
 
 		try {
 			for (Object obj : collection) {
-				map.put(PropertyUtils.getProperty(obj, keyPropertyName),
-						PropertyUtils.getProperty(obj, valuePropertyName));
+				map.put(Reflections.getProperty(obj, keyPropertyName),
+						Reflections.getProperty(obj, valuePropertyName));
 			}
 		} catch (Exception e) {
 			throw Reflections.convertReflectionExceptionToUnchecked(e);
@@ -53,7 +52,7 @@ public class CollectionExtractor {
 
 		try {
 			for (Object obj : collection) {
-				list.add(PropertyUtils.getProperty(obj, propertyName));
+				list.add(Reflections.getProperty(obj, propertyName));
 			}
 		} catch (Exception e) {
 			throw Reflections.convertReflectionExceptionToUnchecked(e);

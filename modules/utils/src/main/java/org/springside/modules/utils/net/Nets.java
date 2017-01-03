@@ -6,6 +6,16 @@ import java.util.Random;
 
 import javax.net.ServerSocketFactory;
 
+/**
+ * 关于网络的工具类.
+ * 
+ * 1. Local Address(TODO)
+ * 
+ * 2. 查找空闲端口
+ * 
+ * @author calvin
+ *
+ */
 public class Nets {
 
 	public static final int PORT_RANGE_MIN = 1024;

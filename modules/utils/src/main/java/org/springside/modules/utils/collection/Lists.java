@@ -28,7 +28,7 @@ import com.google.common.primitives.Longs;
  * 
  * 5. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
  * 
- * 6. 集合运算，包括两个List是否完全相等，两个List的交集（重复元素将去重，from Commons Collecton）
+ * 6. 集合运算，包括两个List是否完全相等，两个List的交集，并集，from Commons Collecton）
  * 
  * @author calvin
  */
@@ -131,7 +131,7 @@ public class Lists {
 	 * @see java.util.Collections#emptyList()
 	 */
 	public static final <T> List<T> emptyList() {
-		return (List<T>)Collections.EMPTY_LIST;
+		return (List<T>) Collections.EMPTY_LIST;
 	}
 
 	/**
@@ -236,6 +236,17 @@ public class Lists {
 	}
 
 	/**
+	 * 一个独立元素＋一个数组组成新的list，而且独立元素在最前.
+	 * 
+	 * 注意转换后的List不能写入.
+	 * 
+	 * @see com.google.common.collect.Lists#asList(Object, Object[])
+	 */
+	public static <E> List<E> asList(E first, E[] rest) {
+		return com.google.common.collect.Lists.asList(first, rest);
+	}
+
+	/**
 	 * Arrays.asList()的加强版, 返回一个底层为原始类型int的List
 	 * 
 	 * 与保存Integer相比节约空间，同时也避免了AutoBoxing.
@@ -302,6 +313,18 @@ public class Lists {
 		}
 
 		return !(it1.hasNext() || it2.hasNext());
+	}
+
+	/**
+	 * 返回a+b的集合.
+	 * 
+	 * 对比Apache Common Collection4 ListUtils, 优化了初始大小
+	 */
+	public static <E> List<E> union(final List<? extends E> list1, final List<? extends E> list2) {
+		final ArrayList<E> result = new ArrayList<E>(list1.size() + list2.size());
+		result.addAll(list1);
+		result.addAll(list2);
+		return result;
 	}
 
 	/**
