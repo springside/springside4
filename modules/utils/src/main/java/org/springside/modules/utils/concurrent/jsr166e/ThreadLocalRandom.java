@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 从JDK8u102移植，去除Streaming部分.
  * 
+ * Random 有全局锁，ThreadLocalRandom通过ThreadLocal化避免了这个锁
+ * 
  * JDK7版的ThreadLocalRandom只是单纯的将Random放入ThreadLocal中.
  * 
  * JDK8的实现更好的初始化seed 并使用了UNSAFE.

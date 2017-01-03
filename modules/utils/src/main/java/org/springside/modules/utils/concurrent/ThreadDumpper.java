@@ -55,7 +55,7 @@ public class ThreadDumpper {
 			return;
 		}
 
-		synchronized (lastThreadDumpTime) {
+		synchronized (this) {
 			if (System.currentTimeMillis() - lastThreadDumpTime < leastIntervalMills) {
 				return;
 			} else {
@@ -71,7 +71,7 @@ public class ThreadDumpper {
 		for (int i = 0; i < threadInfos.length; i++) {
 			b.append(dumpThreadInfo(threadInfos[i])).append(", ");
 		}
-		logger.info("Thread dump by ThreadDumpper" + reasonMsg != null ? " for " + reasonMsg : "");
+		logger.info("Thread dump by ThreadDumpper" + reasonMsg != null ? (" for " + reasonMsg) : "");
 		logger.info(b.toString());
 	}
 
@@ -137,7 +137,9 @@ public class ThreadDumpper {
 	 * 打印ThreadDump的最小时间间隔，单位为秒，默认为0不限制.
 	 */
 	public void setLeastInterval(int leastIntervalSeconds) {
-		this.leastIntervalMills = TimeUnit.SECONDS.toMillis(leastIntervalSeconds);
+		synchronized (this) {
+			this.leastIntervalMills = TimeUnit.SECONDS.toMillis(leastIntervalSeconds);
+		}
 	}
 
 	/**

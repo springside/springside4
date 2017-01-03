@@ -53,7 +53,7 @@ public class Reflections {
 		Field field = getAccessibleField(obj, fieldName);
 
 		if (field == null) {
-			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + "]");
+			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
 		}
 
 		Object result = null;
@@ -72,7 +72,7 @@ public class Reflections {
 		Field field = getAccessibleField(obj, fieldName);
 
 		if (field == null) {
-			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + "]");
+			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
 		}
 
 		try {
@@ -106,7 +106,7 @@ public class Reflections {
 	public static Object invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
 		Method method = getAccessibleMethodByName(obj, methodName);
 		if (method == null) {
-			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + "]");
+			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
 
 		try {

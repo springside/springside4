@@ -30,7 +30,7 @@ import org.apache.commons.lang3.Validate;
  */
 public abstract class BasicFuture<T> implements Future<T> {
 
-	protected volatile boolean completed;
+	private volatile boolean completed;
 	private volatile boolean cancelled;
 	private volatile T result;
 	private volatile Exception ex;

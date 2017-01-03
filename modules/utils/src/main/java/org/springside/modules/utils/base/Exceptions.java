@@ -122,7 +122,7 @@ public class Exceptions {
 	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
 		exception.setStackTrace(
 				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
-		return exception;
+		return exception;//NOSONAR
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class Exceptions {
 	 */
 	public static <T extends Throwable> T clearStackTrace(T exception) {
 		exception.setStackTrace(EMPTY_STACK_TRACE);
-		return exception;
+		return exception;//NOSONAR
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class Exceptions {
 	public static class CloneableException extends Exception implements Cloneable {
 
 		private static final long serialVersionUID = -6270471689928560417L;
-		private String message;
+		protected String message;
 
 		public CloneableException() {
 			super();
@@ -157,7 +157,11 @@ public class Exceptions {
 
 		@Override
 		public CloneableException clone() {
-			return this.clone();
+			try {
+				return (CloneableException) super.clone();
+			} catch (CloneNotSupportedException e) {
+				return null;//NOSONAR
+			}
 		}
 
 		public CloneableException clone(String message) {
@@ -177,7 +181,7 @@ public class Exceptions {
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
 			Exceptions.setStackTrace(this, throwClazz, throwMethod);
-			return this;
+			return this; 
 		}
 	}
 
@@ -190,7 +194,7 @@ public class Exceptions {
 
 		private static final long serialVersionUID = 3984796576627959400L;
 
-		private String message;
+		protected String message;
 
 		public CloneableRuntimeException() {
 			super();
@@ -208,7 +212,11 @@ public class Exceptions {
 
 		@Override
 		public CloneableRuntimeException clone() {
-			return this.clone();
+			try {
+				return (CloneableRuntimeException) super.clone();
+			} catch (CloneNotSupportedException e) {
+				return null;//NOSONAR
+			}
 		}
 
 		public CloneableRuntimeException clone(String message) {

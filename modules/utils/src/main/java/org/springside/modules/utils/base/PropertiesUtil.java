@@ -9,7 +9,7 @@ package org.springside.modules.utils.base;
  * 
  * @author calvin
  */
-public class Properties {
+public class PropertiesUtil {
 
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
@@ -21,7 +21,7 @@ public class Properties {
 		if (stringResult != null) {
 			return Boolean.valueOf(stringResult);
 		}
-		return null;
+		return null; //NOSONAR
 	}
 
 	/**

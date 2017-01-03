@@ -14,7 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
 
 import org.springside.modules.utils.concurrent.Threads;
-import org.springside.modules.utils.concurrent.threadpool.QueableCachedThreadPool.ControllableQueue;
+import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPool.ControllableQueue;
 
 /**
  * ThreadPool创建的工具类.
@@ -57,10 +57,10 @@ public class ThreadPoolBuilder {
 	}
 
 	/**
-	 * @see QueableCachedThreadPoolBuilder
+	 * @see QueuableCachedThreadPoolBuilder
 	 */
-	public static QueableCachedThreadPoolBuilder queableCachedPool() {
-		return new QueableCachedThreadPoolBuilder();
+	public static QueuableCachedThreadPoolBuilder queuableCachedPool() {
+		return new QueuableCachedThreadPoolBuilder();
 	}
 
 	/**
@@ -263,9 +263,9 @@ public class ThreadPoolBuilder {
 	/**
 	 * 从Tomcat移植过来的可扩展可用Queue缓存任务的ThreadPool
 	 * 
-	 * @see QueableCachedThreadPool
+	 * @see QueuableCachedThreadPool
 	 */
-	public static class QueableCachedThreadPoolBuilder {
+	public static class QueuableCachedThreadPoolBuilder {
 
 		private int minSize = 0;
 		private int maxSize = Integer.MAX_VALUE;
@@ -278,22 +278,22 @@ public class ThreadPoolBuilder {
 
 		private RejectedExecutionHandler rejectHandler;
 
-		public QueableCachedThreadPoolBuilder setMinSize(int minSize) {
+		public QueuableCachedThreadPoolBuilder setMinSize(int minSize) {
 			this.minSize = minSize;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setMaxSize(int maxSize) {
+		public QueuableCachedThreadPoolBuilder setMaxSize(int maxSize) {
 			this.maxSize = maxSize;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setQueueSize(int queueSize) {
+		public QueuableCachedThreadPoolBuilder setQueueSize(int queueSize) {
 			this.queueSize = queueSize;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setKeepAliveSecs(int keepAliveSecs) {
+		public QueuableCachedThreadPoolBuilder setKeepAliveSecs(int keepAliveSecs) {
 			this.keepAliveSecs = keepAliveSecs;
 			return this;
 		}
@@ -301,27 +301,27 @@ public class ThreadPoolBuilder {
 		/**
 		 * 与threadNamePrefix互斥, 优先使用ThreadFactory
 		 */
-		public QueableCachedThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
+		public QueuableCachedThreadPoolBuilder setThreadFactory(ThreadFactory threadFactory) {
 			this.threadFactory = threadFactory;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
+		public QueuableCachedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
 			this.threadNamePrefix = threadNamePrefix;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setdaemon(Boolean daemon) {
+		public QueuableCachedThreadPoolBuilder setdaemon(Boolean daemon) {
 			this.daemon = daemon;
 			return this;
 		}
 
-		public QueableCachedThreadPoolBuilder setRejectHanlder(RejectedExecutionHandler rejectHandler) {
+		public QueuableCachedThreadPoolBuilder setRejectHanlder(RejectedExecutionHandler rejectHandler) {
 			this.rejectHandler = rejectHandler;
 			return this;
 		}
 
-		public QueableCachedThreadPool build() {
+		public QueuableCachedThreadPool build() {
 
 			threadFactory = createThreadFactory(threadFactory, threadNamePrefix, daemon);
 
@@ -329,7 +329,7 @@ public class ThreadPoolBuilder {
 				rejectHandler = defaultRejectHandler;
 			}
 
-			return new QueableCachedThreadPool(minSize, maxSize, keepAliveSecs, TimeUnit.SECONDS,
+			return new QueuableCachedThreadPool(minSize, maxSize, keepAliveSecs, TimeUnit.SECONDS,
 					new ControllableQueue(queueSize), threadFactory, rejectHandler);
 		}
 	}

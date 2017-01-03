@@ -8,6 +8,10 @@ import java.io.Serializable;
 /**
  * 移植from Guava 20.0.
  * 
+ * 自动把一个Counter分散到多个Counter从而减少CAS失败的积累，求和时再把所有Counter累计起来.
+ * 
+ * 适合于经常累加，但很少求和的场景
+ * 
  * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
  */
 final class LongAdder extends Striped64 implements Serializable {

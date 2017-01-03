@@ -143,7 +143,7 @@ public class Maps {
 	 * @see java.util.Collections#emptyMap()
 	 */
 	public static final <K, V> Map<K, V> emptyMap() {
-		return Collections.EMPTY_MAP;
+		return  (Map<K, V>) Collections.EMPTY_MAP;
 	}
 
 	/**

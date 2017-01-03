@@ -14,7 +14,7 @@ import java.util.Date;
  */
 public interface Clock {
 
-	static final Clock DEFAULT = new DefaultClock();
+	Clock DEFAULT = new DefaultClock();
 
 	Date getCurrentDate();
 
@@ -23,7 +23,7 @@ public interface Clock {
 	/**
 	 * 默认时间提供者，返回当前的时间，线程安全。
 	 */
-	public static class DefaultClock implements Clock {
+	class DefaultClock implements Clock {
 
 		@Override
 		public Date getCurrentDate() {
@@ -39,7 +39,7 @@ public interface Clock {
 	/**
 	 * 可配置的时间提供者，用于测试.
 	 */
-	public static class DummyClock implements Clock {
+	class DummyClock implements Clock {
 
 		private long time;
 

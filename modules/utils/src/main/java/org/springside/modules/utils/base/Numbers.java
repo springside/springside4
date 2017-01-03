@@ -50,8 +50,8 @@ public class Numbers {
 	 * 判断字符串是否16进制
 	 */
 	public static boolean isHexNumber(String value) {
-		int index = (value.startsWith("-") ? 1 : 0);
-		return (value.startsWith("0x", index) || value.startsWith("0X", index) || value.startsWith("#", index));
+		int index = value.startsWith("-") ? 1 : 0;
+		return value.startsWith("0x", index) || value.startsWith("0X", index) || value.startsWith("#", index);
 	}
 
 	/////////// 将字符串安全的转化为原始类型数字/////////

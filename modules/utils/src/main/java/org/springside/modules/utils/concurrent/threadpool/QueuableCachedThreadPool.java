@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author calvin
  *
  */
-public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExecutor {
+public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExecutor {
 
 	/**
 	 * The number of tasks submitted but not yet finished. This includes tasks in the queue and tasks that have been
@@ -30,7 +30,7 @@ public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExec
 	 */
 	private final AtomicInteger submittedCount = new AtomicInteger(0);
 
-	public QueableCachedThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
+	public QueuableCachedThreadPool(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			ControllableQueue workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
 		workQueue.setParent(this);
@@ -87,7 +87,7 @@ public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExec
 
 		private static final long serialVersionUID = 1L;
 
-		private volatile QueableCachedThreadPool parent = null;
+		private volatile QueuableCachedThreadPool parent = null;
 
 		public ControllableQueue() {
 			super();
@@ -97,7 +97,7 @@ public class QueableCachedThreadPool extends java.util.concurrent.ThreadPoolExec
 			super(capacity);
 		}
 
-		public void setParent(QueableCachedThreadPool tp) {
+		public void setParent(QueuableCachedThreadPool tp) {
 			parent = tp;
 		}
 

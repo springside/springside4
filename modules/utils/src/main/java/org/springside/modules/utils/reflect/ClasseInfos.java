@@ -16,17 +16,17 @@ import org.slf4j.LoggerFactory;
 /**
  * 获取Class信息的工具类
  * 
- * 1. 封装Commons Lang, 获取shortClassName 和 packageName
+ * 1. 取shortClassName 和 packageName(via Common Lang)
  * 
- * 2. 封装Commons Lang, 获取全部父类，全部接口，以及最全面的获取全部Annotation
+ * 2. 获取全部父类，全部接口(via Common Lang)，以及最全面的获取全部Annotation(自写)
  * 
- * 3. 取得cglib之前的用户类
+ * 3. 取得cglib之前的用户类(from Spring)
  * 
  * 4. 获取类用泛型声明的Class实例.
  * 
  * @author calvin
  */
-public class Classes {
+public class ClasseInfos {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
@@ -75,7 +75,9 @@ public class Classes {
 	}
 
 	/**
-	 * 递归返回本类及所有基类，所有接口的Annotation，包含Annotation继承的父Annotation，一个最彻底的实现
+	 * 递归所有的Annotation，一个最彻底的实现.
+	 * 
+	 * 包括所有基类，所有接口的Annotation，同时支持Spring风格的Annotation继承的父Annotation，
 	 */
 	public static Set<Annotation> getAllAnnotations(final Class<?> cls) {
 		List<Class<?>> allTypes = getAllSuperclasses(cls);

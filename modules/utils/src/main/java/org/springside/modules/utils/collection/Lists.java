@@ -131,7 +131,7 @@ public class Lists {
 	 * @see java.util.Collections#emptyList()
 	 */
 	public static final <T> List<T> emptyList() {
-		return Collections.EMPTY_LIST;
+		return (List<T>)Collections.EMPTY_LIST;
 	}
 
 	/**
@@ -165,7 +165,7 @@ public class Lists {
 	 * @see java.util.Collections#sort(List)
 	 */
 	public static <T extends Comparable<? super T>> void sort(List<T> list) {
-		list.sort(null);
+		Collections.sort(list);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class Lists {
 	 * @see java.util.Collections#sort(List, Comparator)
 	 */
 	public static <T> void sort(List<T> list, Comparator<? super T> c) {
-		list.sort(c);
+		Collections.sort(list, c);
 	}
 
 	/**

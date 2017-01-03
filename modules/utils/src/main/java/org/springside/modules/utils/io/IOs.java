@@ -10,7 +10,6 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
@@ -112,7 +111,7 @@ public class IOs {
 		return list;
 	}
 
-	public static List<String> readLines(final InputStream input, final Charset encoding) throws IOException {
+	public static List<String> readLines(final InputStream input) throws IOException {
 		final InputStreamReader reader = new InputStreamReader(input, Charsets.UTF_8);
 		return readLines(reader);
 	}
@@ -137,13 +136,13 @@ public class IOs {
 		return copy(input, output, new byte[DEFAULT_BUFFER_SIZE]);
 	}
 
-	public static void copy(final InputStream input, final Writer output, final Charset inputEncoding)
+	public static void copy(final InputStream input, final Writer output)
 			throws IOException {
 		final InputStreamReader in = new InputStreamReader(input, Charsets.UTF_8);
 		copy(in, output);
 	}
 
-	public static void copy(final Reader input, final OutputStream output, final Charset outputEncoding)
+	public static void copy(final Reader input, final OutputStream output)
 			throws IOException {
 		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.UTF_8);
 		copy(input, out);
