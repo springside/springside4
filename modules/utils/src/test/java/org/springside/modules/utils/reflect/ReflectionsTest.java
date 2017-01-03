@@ -63,7 +63,7 @@ public class ReflectionsTest {
 		// 使用函数名+参数类型的匹配
 		assertThat(
 				Reflections
-						.invokeMethod(bean, "privateMethod", new Class[] { String.class }, new Object[] { "calvin" }))
+						.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { String.class }))
 				.isEqualTo("hello calvin");
 
 		// 仅匹配函数名
@@ -72,7 +72,7 @@ public class ReflectionsTest {
 
 		// 函数名错
 		try {
-			Reflections.invokeMethod(bean, "notExistMethod", new Class[] { String.class }, new Object[] { "calvin" });
+			Reflections.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" }, new Class[] { String.class });
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -80,7 +80,7 @@ public class ReflectionsTest {
 
 		// 参数类型错
 		try {
-			Reflections.invokeMethod(bean, "privateMethod", new Class[] { Integer.class }, new Object[] { "calvin" });
+			Reflections.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { Integer.class });
 			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
 

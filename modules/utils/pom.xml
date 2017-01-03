@@ -31,7 +31,7 @@
 			<version>0.9.10</version>
 		</dependency>
 		
-		<!-- for Encodes.java -->
+		<!-- for Encodes -->
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
@@ -39,7 +39,7 @@
 			<optional>true</optional>
 		</dependency>
 		
-		<!-- for CollectionExtractor.java -->
+		<!-- for CollectionExtractor -->
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
@@ -47,7 +47,7 @@
 			<optional>true</optional>
 		</dependency>
 		
-		
+		<!-- for JsonMapper -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -55,7 +55,7 @@
 			<optional>true</optional>
 		</dependency>
 		
-		
+		<!-- for ObjectMapper -->
 		<dependency>
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>

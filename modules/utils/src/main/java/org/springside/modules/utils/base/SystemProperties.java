@@ -9,7 +9,7 @@ package org.springside.modules.utils.base;
  * 
  * @author calvin
  */
-public class PropertiesUtil {
+public class SystemProperties {
 
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
