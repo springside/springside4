@@ -22,7 +22,7 @@ import javax.xml.namespace.QName;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.Exceptions;
-import org.springside.modules.utils.reflect.Reflections;
+import org.springside.modules.utils.reflect.ClassInfos;
 
 /**
  * 使用Jaxb2.0实现XML<->Java Object的Mapper.
@@ -40,7 +40,7 @@ public class JaxbMapper {
 	 * Java Object->Xml without encoding.
 	 */
 	public static String toXml(Object root) {
-		Class clazz = Reflections.getUserClass(root);
+		Class clazz =ClassInfos.unwrapCglib(root);
 		return toXml(root, clazz, null);
 	}
 
@@ -48,7 +48,7 @@ public class JaxbMapper {
 	 * Java Object->Xml with encoding.
 	 */
 	public static String toXml(Object root, String encoding) {
-		Class clazz = Reflections.getUserClass(root);
+		Class clazz = ClassInfos.unwrapCglib(root);
 		return toXml(root, clazz, encoding);
 	}
 

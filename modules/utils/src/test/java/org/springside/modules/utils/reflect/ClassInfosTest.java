@@ -49,22 +49,22 @@ public class ClassInfosTest {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(ClasseInfos.getAllInterfaces(BClass.class));
-		System.out.println(ClasseInfos.getAllSuperclasses(BClass.class));
-		System.out.println(ClasseInfos.getAllAnnotations(BClass.class));
+		System.out.println(ClassInfos.getAllInterfaces(BClass.class));
+		System.out.println(ClassInfos.getAllSuperclasses(BClass.class));
+		System.out.println(ClassInfos.getAllAnnotations(BClass.class));
 	}
 
 	@Test
 	public void getSuperClassGenricType() {
 		// 获取第1，2个泛型类型
-		assertThat(ClasseInfos.getClassGenricType(TestBean.class)).isEqualTo(String.class);
-		assertThat(ClasseInfos.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
+		assertThat(ClassInfos.getClassGenricType(TestBean.class)).isEqualTo(String.class);
+		assertThat(ClassInfos.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
 
 		// 定义父类时无泛型定义
-		assertThat(ClasseInfos.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
+		assertThat(ClassInfos.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
 
 		// 无父类定义
-		assertThat(ClasseInfos.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
+		assertThat(ClassInfos.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
 	}
 
 	public static class ParentBean<T, ID> {
