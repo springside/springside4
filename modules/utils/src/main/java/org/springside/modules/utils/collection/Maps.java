@@ -58,14 +58,15 @@ public class Maps {
 	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#createIfAbsent(ConcurrentMap, Object,
 	 * org.apache.commons.lang3.concurrent.ConcurrentInitializer)
 	 */
-	public static <K, V> V createIfAbsent(final ConcurrentMap<K, V> map, final K key, final ValueInitializer<V> init) {
-		if (map == null || init == null) {
+	public static <K, V> V createIfAbsent(final ConcurrentMap<K, V> map, final K key,
+			final ValueCreator<? extends V> creator) {
+		if (map == null || creator == null) {
 			return null;
 		}
 
 		final V value = map.get(key);
 		if (value == null) {
-			return putIfAbsentWithFinalValue(map, key, init.get());
+			return putIfAbsentWithFinalValue(map, key, creator.get());
 		}
 		return value;
 	}
@@ -155,7 +156,7 @@ public class Maps {
 	public static <K extends Comparable, V> TreeMap<K, V> newTreeMap() {
 		return new TreeMap<K, V>();
 	}
-	
+
 	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
 		return new ConcurrentHashMap<K, V>();
 	}
@@ -204,11 +205,13 @@ public class Maps {
 	}
 
 	/**
+	 * 创建Value值的回调函数
+	 * 
 	 * from Common Lang
 	 * 
-	 * @see Maps#createIfAbsent(ConcurrentMap, Object, ValueInitializer)
+	 * @see Maps#createIfAbsent(ConcurrentMap, Object, ValueCreator)
 	 */
-	public interface ValueInitializer<T> {
+	public interface ValueCreator<T> {
 		/**
 		 * 创建对象
 		 */

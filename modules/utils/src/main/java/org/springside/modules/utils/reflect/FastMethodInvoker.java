@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentMap;
 
 import org.springside.modules.utils.collection.Maps;
-import org.springside.modules.utils.collection.Maps.ValueInitializer;
+import org.springside.modules.utils.collection.Maps.ValueCreator;
 
 import net.sf.cglib.reflect.FastClass;
 import net.sf.cglib.reflect.FastMethod;
@@ -24,7 +24,7 @@ public class FastMethodInvoker {
 	public static FastMethod getFastMethod(final Object obj, final String methodName, Class<?>... parameterTypes) {
 
 		final Class<?> clz = obj.getClass();
-		FastClass fastClz = Maps.createIfAbsent(classMap, clz, new ValueInitializer<FastClass>() {
+		FastClass fastClz = Maps.createIfAbsent(classMap, clz, new ValueCreator<FastClass>() {
 			@Override
 			public FastClass get() {
 				return FastClass.create(clz);
