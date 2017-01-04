@@ -8,7 +8,7 @@ import com.google.common.annotations.Beta;
  * @author calvin
  */
 @Beta
-public class ClassLoaders {
+public class ClassLoaderUtil {
 
 	private static final String CLASS_FILE_NAME_EXTENSION = ".class";
 

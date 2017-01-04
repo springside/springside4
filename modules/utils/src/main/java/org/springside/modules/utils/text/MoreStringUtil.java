@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.assertj.core.util.Lists;
 
+import com.google.common.annotations.Beta;
 import com.google.common.base.Utf8;
 
 /**
@@ -14,7 +15,8 @@ import com.google.common.base.Utf8;
  * 
  * @author calvin
  */
-public class Strings {
+@Beta
+public class MoreStringUtil {
 
 	/**
 	 * 高性能的Split，针对char的分隔符号，比JDK String自带的高效.

@@ -9,7 +9,7 @@ package org.springside.modules.utils.base;
  * 
  * @author calvin
  */
-public class SystemProperties {
+public class PropertiesUtil {
 
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
@@ -69,11 +69,11 @@ public class SystemProperties {
 	 */
 	public static Integer readInt(String propertyName, String envName, Integer defaultValue) {
 		checkEnvName(envName);
-		Integer propertyValue = Numbers.toIntObject(System.getProperty(propertyName));
+		Integer propertyValue = NumberUtil.toIntObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = Numbers.toIntObject(System.getenv(envName));
+			propertyValue = NumberUtil.toIntObject(System.getenv(envName));
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
@@ -83,11 +83,11 @@ public class SystemProperties {
 	 */
 	public static Long readLong(String propertyName, String envName, Long defaultValue) {
 		checkEnvName(envName);
-		Long propertyValue = Numbers.toLongObject(System.getProperty(propertyName));
+		Long propertyValue = NumberUtil.toLongObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = Numbers.toLongObject(System.getenv(envName));
+			propertyValue = NumberUtil.toLongObject(System.getenv(envName));
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
@@ -97,11 +97,11 @@ public class SystemProperties {
 	 */
 	public static Double readDouble(String propertyName, String envName, Double defaultValue) {
 		checkEnvName(envName);
-		Double propertyValue = Numbers.toDoubleObject(System.getProperty(propertyName));
+		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = Numbers.toDoubleObject(System.getenv(envName));
+			propertyValue = NumberUtil.toDoubleObject(System.getenv(envName));
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}

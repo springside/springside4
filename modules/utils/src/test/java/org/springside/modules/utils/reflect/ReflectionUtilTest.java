@@ -11,34 +11,34 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
 
-public class ReflectionsTest {
+public class ReflectionUtilTest {
 
 	@Test
 	public void getAndSetFieldValue() {
 		TestBean bean = new TestBean();
 		// 无需getter函数, 直接读取privateField
-		assertThat(Reflections.getFieldValue(bean, "privateField")).isEqualTo(1);
+		assertThat(ReflectionUtil.getFieldValue(bean, "privateField")).isEqualTo(1);
 		// 绕过将publicField+1的getter函数,直接读取publicField的原始值
-		assertThat(Reflections.getFieldValue(bean, "publicField")).isEqualTo(1);
+		assertThat(ReflectionUtil.getFieldValue(bean, "publicField")).isEqualTo(1);
 
 		bean = new TestBean();
 		// 无需setter函数, 直接设置privateField
-		Reflections.setFieldValue(bean, "privateField", 2);
+		ReflectionUtil.setFieldValue(bean, "privateField", 2);
 		assertThat(bean.inspectPrivateField()).isEqualTo(2);
 
 		// 绕过将publicField+1的setter函数,直接设置publicField的原始值
-		Reflections.setFieldValue(bean, "publicField", 2);
+		ReflectionUtil.setFieldValue(bean, "publicField", 2);
 		assertThat(bean.inspectPublicField()).isEqualTo(2);
 
 		try {
-			Reflections.getFieldValue(bean, "notExist");
+			ReflectionUtil.getFieldValue(bean, "notExist");
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
 		}
 
 		try {
-			Reflections.setFieldValue(bean, "notExist", 2);
+			ReflectionUtil.setFieldValue(bean, "notExist", 2);
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -49,11 +49,11 @@ public class ReflectionsTest {
 	@Test
 	public void invokeGetterAndSetter() {
 		TestBean bean = new TestBean();
-		assertThat(Reflections.invokeGetter(bean, "publicField")).isEqualTo(bean.inspectPublicField() + 1);
+		assertThat(ReflectionUtil.invokeGetter(bean, "publicField")).isEqualTo(bean.inspectPublicField() + 1);
 
 		bean = new TestBean();
 		// 通过setter的函数将+1
-		Reflections.invokeSetter(bean, "publicField", 10);
+		ReflectionUtil.invokeSetter(bean, "publicField", 10);
 		assertThat(bean.inspectPublicField()).isEqualTo(10 + 1);
 	}
 
@@ -62,17 +62,17 @@ public class ReflectionsTest {
 		TestBean bean = new TestBean();
 		// 使用函数名+参数类型的匹配
 		assertThat(
-				Reflections
+				ReflectionUtil
 						.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { String.class }))
 				.isEqualTo("hello calvin");
 
 		// 仅匹配函数名
-		assertThat(Reflections.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" })).isEqualTo(
+		assertThat(ReflectionUtil.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" })).isEqualTo(
 				"hello calvin");
 
 		// 函数名错
 		try {
-			Reflections.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" }, new Class[] { String.class });
+			ReflectionUtil.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" }, new Class[] { String.class });
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -80,7 +80,7 @@ public class ReflectionsTest {
 
 		// 参数类型错
 		try {
-			Reflections.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { Integer.class });
+			ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { Integer.class });
 			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
 
@@ -88,7 +88,7 @@ public class ReflectionsTest {
 
 		// 函数名错
 		try {
-			Reflections.invokeMethodByName(bean, "notExistMethod", new Object[] { "calvin" });
+			ReflectionUtil.invokeMethodByName(bean, "notExistMethod", new Object[] { "calvin" });
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -102,21 +102,21 @@ public class ReflectionsTest {
 	public void convertReflectionExceptionToUnchecked() {
 		IllegalArgumentException iae = new IllegalArgumentException();
 		// ReflectionException,normal
-		RuntimeException e = Reflections.convertReflectionExceptionToUnchecked(iae);
+		RuntimeException e = ReflectionUtil.convertReflectionExceptionToUnchecked(iae);
 		assertThat(e.getCause()).isEqualTo(iae);
 
 		// InvocationTargetException,extract it's target exception.
 		Exception ex = new Exception();
-		e = Reflections.convertReflectionExceptionToUnchecked(new InvocationTargetException(ex));
+		e = ReflectionUtil.convertReflectionExceptionToUnchecked(new InvocationTargetException(ex));
 		assertThat(e.getCause()).isEqualTo(ex);
 
 		// UncheckedException, ignore it.
 		RuntimeException re = new RuntimeException("abc");
-		e = Reflections.convertReflectionExceptionToUnchecked(re);
+		e = ReflectionUtil.convertReflectionExceptionToUnchecked(re);
 		assertThat(e).hasMessage("abc");
 
 		// Unexcepted Checked exception.
-		e = Reflections.convertReflectionExceptionToUnchecked(ex);
+		e = ReflectionUtil.convertReflectionExceptionToUnchecked(ex);
 		assertThat(e).hasMessage("Unexpected Checked Exception.");
 	}
 

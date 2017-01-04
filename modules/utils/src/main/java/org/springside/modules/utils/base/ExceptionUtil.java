@@ -20,7 +20,7 @@ import com.google.common.base.Throwables;
  * 
  * @author calvin
  */
-public class Exceptions {
+public class ExceptionUtil {
 
 	private static final StackTraceElement[] EMPTY_STACK_TRACE = new StackTraceElement[0];
 
@@ -180,7 +180,7 @@ public class Exceptions {
 		}
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
-			Exceptions.setStackTrace(this, throwClazz, throwMethod);
+			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this; 
 		}
 	}
@@ -235,7 +235,7 @@ public class Exceptions {
 		}
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
-			Exceptions.setStackTrace(this, throwClazz, throwMethod);
+			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
 		}
 	}

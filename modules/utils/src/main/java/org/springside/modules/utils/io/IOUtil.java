@@ -40,8 +40,8 @@ import com.google.common.annotations.Beta;
  * @author calvin
  */
 @Beta
-public class IOs {
-	private static final Logger logger = LoggerFactory.getLogger(IOs.class);
+public class IOUtil {
+	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
 
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
 	private static final int EOF = -1;

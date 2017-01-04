@@ -7,7 +7,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-public class ClassesTest {
+public class ClassUtilTest {
 
 	public interface AInterface {
 	}
@@ -67,25 +67,25 @@ public class ClassesTest {
 
 	@Test
 	public  void getAllMessage() {
-		System.out.println(Classes.getAllInterfaces(BClass.class));
-		System.out.println(Classes.getAllSuperclasses(BClass.class));
-		System.out.println(Classes.getAllAnnotations(BClass.class));
-		System.out.println(Classes.getMethodsAnnotatedWith(BClass.class, EAnnotation.class));
-		System.out.println(Classes.getMethodsAnnotatedWith(BClass.class, FAnnotation.class));
-		System.out.println(Classes.getMethodsAnnotatedWith(BClass.class, AAnnotation.class));
+		System.out.println(ClassUtil.getAllInterfaces(BClass.class));
+		System.out.println(ClassUtil.getAllSuperclasses(BClass.class));
+		System.out.println(ClassUtil.getAllAnnotations(BClass.class));
+		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class));
+		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class));
+		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class));
 	}
 
 	@Test
 	public void getSuperClassGenricType() {
 		// 获取第1，2个泛型类型
-		assertThat(Classes.getClassGenricType(TestBean.class)).isEqualTo(String.class);
-		assertThat(Classes.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
+		assertThat(ClassUtil.getClassGenricType(TestBean.class)).isEqualTo(String.class);
+		assertThat(ClassUtil.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
 
 		// 定义父类时无泛型定义
-		assertThat(Classes.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
+		assertThat(ClassUtil.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
 
 		// 无父类定义
-		assertThat(Classes.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
+		assertThat(ClassUtil.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
 	}
 
 	public static class ParentBean<T, ID> {

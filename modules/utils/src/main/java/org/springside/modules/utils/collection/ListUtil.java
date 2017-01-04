@@ -33,7 +33,7 @@ import com.google.common.primitives.Longs;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public class Lists {
+public class ListUtil {
 
 	/**
 	 * 判断是否为空.

@@ -31,11 +31,11 @@ import org.slf4j.LoggerFactory;
  * 
  * @author calvin
  */
-public class Classes {
+public class ClassUtil {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
-	private static Logger logger = LoggerFactory.getLogger(Reflections.class);
+	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
 
 	/**
 	 * 返回Class名，不包含PackageName

@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.base.Exceptions;
+import org.springside.modules.utils.base.ExceptionUtil;
 
 import com.google.common.hash.Hashing;
 
@@ -32,7 +32,7 @@ import com.google.common.hash.Hashing;
  * 
  * @author calvin
  */
-public class Hashs {
+public class HashUtil {
 
 	private static final String SHA1 = "SHA-1";
 	private static final String MD5 = "MD5";
@@ -147,7 +147,7 @@ public class Hashs {
 			}
 			return result;
 		} catch (GeneralSecurityException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
@@ -185,7 +185,7 @@ public class Hashs {
 
 			return messageDigest.digest();
 		} catch (GeneralSecurityException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 

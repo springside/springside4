@@ -18,7 +18,7 @@ import com.google.common.primitives.Longs;
  * 
  * 5.将16进制字符串安全的转化为数字对象(自写)
  */
-public class Numbers {
+public class NumberUtil {
 
 	///////////// bytes[] 与原始类型数字转换 ///////
 

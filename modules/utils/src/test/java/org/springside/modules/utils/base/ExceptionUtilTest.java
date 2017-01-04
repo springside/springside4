@@ -11,17 +11,17 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-public class ExceptionsTest {
+public class ExceptionUtilTest {
 
 	@Test
 	public void unchecked() {
 		// convert Exception to RuntimeException with cause
 		Exception exception = new Exception("my exception");
-		RuntimeException runtimeException = Exceptions.unchecked(exception);
+		RuntimeException runtimeException = ExceptionUtil.unchecked(exception);
 		assertThat(runtimeException.getCause()).isEqualTo(exception);
 
 		// do nothing of RuntimeException
-		RuntimeException runtimeException2 = Exceptions.unchecked(runtimeException);
+		RuntimeException runtimeException2 = ExceptionUtil.unchecked(runtimeException);
 		assertThat(runtimeException2).isSameAs(runtimeException);
 	}
 
@@ -30,7 +30,7 @@ public class ExceptionsTest {
 		Exception exception = new Exception("my exception");
 		RuntimeException runtimeException = new RuntimeException(exception);
 
-		String stack = Exceptions.stackTraceText(runtimeException);
+		String stack = ExceptionUtil.stackTraceText(runtimeException);
 		System.out.println(stack);
 	}
 
@@ -40,10 +40,10 @@ public class ExceptionsTest {
 		IllegalStateException illegalStateException = new IllegalStateException(ioexception);
 		RuntimeException runtimeException = new RuntimeException(illegalStateException);
 
-		assertThat(Exceptions.isCausedBy(runtimeException, IOException.class)).isTrue();
-		assertThat(Exceptions.isCausedBy(runtimeException, IllegalStateException.class, IOException.class)).isTrue();
-		assertThat(Exceptions.isCausedBy(runtimeException, Exception.class)).isTrue();
-		assertThat(Exceptions.isCausedBy(runtimeException, IllegalAccessException.class)).isFalse();
+		assertThat(ExceptionUtil.isCausedBy(runtimeException, IOException.class)).isTrue();
+		assertThat(ExceptionUtil.isCausedBy(runtimeException, IllegalStateException.class, IOException.class)).isTrue();
+		assertThat(ExceptionUtil.isCausedBy(runtimeException, Exception.class)).isTrue();
+		assertThat(ExceptionUtil.isCausedBy(runtimeException, IllegalAccessException.class)).isFalse();
 	}
 
 }

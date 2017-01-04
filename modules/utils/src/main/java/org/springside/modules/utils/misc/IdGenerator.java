@@ -8,7 +8,7 @@ package org.springside.modules.utils.misc;
 import java.security.SecureRandom;
 import java.util.UUID;
 
-import org.springside.modules.utils.text.Encodes;
+import org.springside.modules.utils.text.EncodeUtil;
 
 import com.google.common.annotations.Beta;
 
@@ -47,6 +47,6 @@ public class IdGenerator {
 	public static String randomBase64(int length) {
 		byte[] randomBytes = new byte[length];
 		random.nextBytes(randomBytes);
-		return Encodes.encodeUrlSafeBase64(randomBytes);
+		return EncodeUtil.encodeUrlSafeBase64(randomBytes);
 	}
 }

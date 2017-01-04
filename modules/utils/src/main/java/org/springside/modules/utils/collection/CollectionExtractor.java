@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springside.modules.utils.reflect.Reflections;
+import org.springside.modules.utils.reflect.ReflectionUtil;
 
 import com.google.common.annotations.Beta;
 
@@ -31,11 +31,11 @@ public class CollectionExtractor {
 
 		try {
 			for (Object obj : collection) {
-				map.put(Reflections.getProperty(obj, keyPropertyName),
-						Reflections.getProperty(obj, valuePropertyName));
+				map.put(ReflectionUtil.getProperty(obj, keyPropertyName),
+						ReflectionUtil.getProperty(obj, valuePropertyName));
 			}
 		} catch (Exception e) {
-			throw Reflections.convertReflectionExceptionToUnchecked(e);
+			throw ReflectionUtil.convertReflectionExceptionToUnchecked(e);
 		}
 
 		return map;
@@ -52,10 +52,10 @@ public class CollectionExtractor {
 
 		try {
 			for (Object obj : collection) {
-				list.add(Reflections.getProperty(obj, propertyName));
+				list.add(ReflectionUtil.getProperty(obj, propertyName));
 			}
 		} catch (Exception e) {
-			throw Reflections.convertReflectionExceptionToUnchecked(e);
+			throw ReflectionUtil.convertReflectionExceptionToUnchecked(e);
 		}
 
 		return list;

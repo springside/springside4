@@ -26,7 +26,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * 
  * 4. 防止第三方Runnalbe未捕捉异常导致线程跑飞
  */
-public class Threads {
+public class ThreadUtil {
 
 	/////////// 线程相关功能//////////
 

@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.net.ServerSocketFactory;
 
+import com.google.common.annotations.Beta;
+
 /**
  * 关于网络的工具类.
  * 
@@ -16,7 +18,8 @@ import javax.net.ServerSocketFactory;
  * @author calvin
  *
  */
-public class Nets {
+@Beta
+public class NetUtil {
 
 	public static final int PORT_RANGE_MIN = 1024;
 

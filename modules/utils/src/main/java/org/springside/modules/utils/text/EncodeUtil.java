@@ -8,14 +8,14 @@ package org.springside.modules.utils.text;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.springside.modules.utils.base.Exceptions;
+import org.springside.modules.utils.base.ExceptionUtil;
 
 /**
  * hex/base64 编解码工具集，依赖Commons-Codes
  * 
  * JDK8有内置的BASE64类.
  */
-public class Encodes {
+public class EncodeUtil {
 
 	/**
 	 * Hex编码, 默认为abcdef为小写字母.
@@ -38,7 +38,7 @@ public class Encodes {
 		try {
 			return Hex.decodeHex(input.toCharArray());
 		} catch (DecoderException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 

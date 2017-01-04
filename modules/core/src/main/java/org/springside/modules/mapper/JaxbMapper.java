@@ -21,8 +21,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.base.Exceptions;
-import org.springside.modules.utils.reflect.Classes;
+import org.springside.modules.utils.base.ExceptionUtil;
+import org.springside.modules.utils.reflect.ClassUtil;
 
 /**
  * 使用Jaxb2.0实现XML<->Java Object的Mapper.
@@ -40,7 +40,7 @@ public class JaxbMapper {
 	 * Java Object->Xml without encoding.
 	 */
 	public static String toXml(Object root) {
-		Class clazz =Classes.unwrapCglib(root);
+		Class clazz =ClassUtil.unwrapCglib(root);
 		return toXml(root, clazz, null);
 	}
 
@@ -48,7 +48,7 @@ public class JaxbMapper {
 	 * Java Object->Xml with encoding.
 	 */
 	public static String toXml(Object root, String encoding) {
-		Class clazz = Classes.unwrapCglib(root);
+		Class clazz = ClassUtil.unwrapCglib(root);
 		return toXml(root, clazz, encoding);
 	}
 
@@ -61,7 +61,7 @@ public class JaxbMapper {
 			createMarshaller(clazz, encoding).marshal(root, writer);
 			return writer.toString();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
@@ -88,7 +88,7 @@ public class JaxbMapper {
 
 			return writer.toString();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class JaxbMapper {
 			StringReader reader = new StringReader(xml);
 			return (T) createUnmarshaller(clazz).unmarshal(reader);
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
@@ -122,7 +122,7 @@ public class JaxbMapper {
 
 			return marshaller;
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class JaxbMapper {
 			JAXBContext jaxbContext = getJaxbContext(clazz);
 			return jaxbContext.createUnmarshaller();
 		} catch (JAXBException e) {
-			throw Exceptions.unchecked(e);
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 

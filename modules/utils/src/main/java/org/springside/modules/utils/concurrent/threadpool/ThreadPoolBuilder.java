@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
 
-import org.springside.modules.utils.concurrent.Threads;
+import org.springside.modules.utils.concurrent.ThreadUtil;
 import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPool.ControllableQueue;
 
 /**
@@ -341,7 +341,7 @@ public class ThreadPoolBuilder {
 		}
 
 		if (threadNamePrefix != null) {
-			return Threads.buildThreadFactory(threadNamePrefix, daemon);
+			return ThreadUtil.buildThreadFactory(threadNamePrefix, daemon);
 		}
 
 		return Executors.defaultThreadFactory();

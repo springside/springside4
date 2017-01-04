@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public class Maps {
+public class MapUtil {
 
 	/**
 	 * 判断是否为空.
@@ -209,7 +209,7 @@ public class Maps {
 	 * 
 	 * from Common Lang
 	 * 
-	 * @see Maps#createIfAbsent(ConcurrentMap, Object, ValueCreator)
+	 * @see MapUtil#createIfAbsent(ConcurrentMap, Object, ValueCreator)
 	 */
 	public interface ValueCreator<T> {
 		/**

@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.springside.modules.utils.base.Maths;
+import org.springside.modules.utils.base.MathUtil;
 
 /**
  * 移植Netty 4.1.6的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与读写性能俱比原来更优.
@@ -89,7 +89,7 @@ public class LongObjectHashMap<V> implements LongObjectMap<V> {
         this.loadFactor = loadFactor;
 
         // Adjust the initial capacity if necessary.
-        int capacity = Maths.findNextPositivePowerOfTwo(initialCapacity);
+        int capacity = MathUtil.findNextPositivePowerOfTwo(initialCapacity);
         mask = capacity - 1;
 
         // Allocate the arrays.

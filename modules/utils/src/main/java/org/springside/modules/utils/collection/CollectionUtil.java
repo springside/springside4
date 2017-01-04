@@ -16,7 +16,7 @@ import java.util.List;
  * 
  * 关于List与Map的特殊工具集，另见Lists与Maps.
  */
-public class Collections {
+public class CollectionUtil {
 
 	/**
 	 * 判断是否为空.

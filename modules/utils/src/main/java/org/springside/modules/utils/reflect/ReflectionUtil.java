@@ -31,12 +31,12 @@ import org.slf4j.LoggerFactory;
  * 3. 多次调用方法，先用getAccessibleMethod()获得Method对象，然后多次调用Method对象
  */
 @SuppressWarnings("unchecked")
-public class Reflections {
+public class ReflectionUtil {
 	private static final String SETTER_PREFIX = "set";
 
 	private static final String GETTER_PREFIX = "get";
 
-	private static Logger logger = LoggerFactory.getLogger(Reflections.class);
+	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
 
 	/////////// 属性相关函数///////////
 	/**

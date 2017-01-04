@@ -3,7 +3,7 @@ package org.springside.modules.utils.base;
 import com.google.common.annotations.Beta;
 
 @Beta
-public class Maths {
+public class MathUtil {
 
     /**
      * 找出最接近的2的倍数，比如15返回16， 17返回32. From Netty

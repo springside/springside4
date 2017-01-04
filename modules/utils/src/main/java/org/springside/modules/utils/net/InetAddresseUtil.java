@@ -6,9 +6,9 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springside.modules.utils.collection.Maps;
-import org.springside.modules.utils.collection.Maps.ValueCreator;
-import org.springside.modules.utils.text.Strings;
+import org.springside.modules.utils.collection.MapUtil;
+import org.springside.modules.utils.collection.MapUtil.ValueCreator;
+import org.springside.modules.utils.text.MoreStringUtil;
 
 /**
  * InetAddress工具类，基于Guava的InetAddress.
@@ -19,10 +19,10 @@ import org.springside.modules.utils.text.Strings;
  * 
  * @author calvin
  */
-public class InetAddresses {
+public class InetAddresseUtil {
 
-	private static ConcurrentHashMap<String, InetAddress> strToInetCache = Maps.newConcurrentHashMap();
-	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = Maps.newConcurrentHashMap();
+	private static ConcurrentHashMap<String, InetAddress> strToInetCache = MapUtil.newConcurrentHashMap();
+	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = MapUtil.newConcurrentHashMap();
 
 	/**
 	 * 从InetAddress转化到int, 传输和存储时, 用int代表InetAddress是最小的开销.
@@ -59,7 +59,7 @@ public class InetAddresses {
 	 * 如果应用中需要处理的InetAddress非常有限，使用又非常频繁时，可使用本方法。
 	 */
 	public Inet4Address fromIntInCache(final int address) {
-		return Maps.createIfAbsent(intToInetCache, address, new ValueCreator<Inet4Address>() {
+		return MapUtil.createIfAbsent(intToInetCache, address, new ValueCreator<Inet4Address>() {
 			public Inet4Address get() {
 				return com.google.common.net.InetAddresses.fromInteger(address);
 			}
@@ -85,7 +85,7 @@ public class InetAddresses {
 	 * 先字符串传换为byte[]再用getByAddress(byte[])，避免了getByName(name)可能引起的DNS访问.
 	 */
 	public InetAddress fromIpStringInCache(final String address) {
-		return Maps.createIfAbsent(strToInetCache, address, new ValueCreator<InetAddress>() {
+		return MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<InetAddress>() {
 			public InetAddress get() {
 				return com.google.common.net.InetAddresses.forString(address);
 			}
@@ -120,7 +120,7 @@ public class InetAddresses {
 	 * 先字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
 	 */
 	public Inet4Address fromIp4StringInCache(final String address) {
-		return (Inet4Address) Maps.createIfAbsent(strToInetCache, address, new ValueCreator<Inet4Address>() {
+		return (Inet4Address) MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<Inet4Address>() {
 			public Inet4Address get() {
 				return fromIp4String(address);
 			}
@@ -163,7 +163,7 @@ public class InetAddresses {
 			return null;
 		}
 
-		List<String> it = Strings.split(ipv4Str, '.', 4);
+		List<String> it = MoreStringUtil.split(ipv4Str, '.', 4);
 		if (it.size() != 4) {
 			return null;
 		}

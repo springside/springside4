@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * 
  * @author calvin
  */
-public class Escapes {
+public class EscapeUtil {
 	/**
 	 * Json转码，将字符串转码为符合JSON格式的字符串.
 	 * 
