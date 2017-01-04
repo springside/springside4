@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.springside.modules.utils.collection.MapUtil;
 import org.springside.modules.utils.collection.MapUtil.ValueCreator;
+import org.springside.modules.utils.number.NumberUtil;
 import org.springside.modules.utils.text.MoreStringUtil;
 
 /**
@@ -19,7 +20,7 @@ import org.springside.modules.utils.text.MoreStringUtil;
  * 
  * @author calvin
  */
-public class InetAddresseUtil {
+public class InetAddressUtil {
 
 	private static ConcurrentHashMap<String, InetAddress> strToInetCache = MapUtil.newConcurrentHashMap();
 	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = MapUtil.newConcurrentHashMap();
@@ -128,7 +129,7 @@ public class InetAddresseUtil {
 	}
 
 	/**
-	 * int转换到IPV4 String
+	 * int转换到IPV4 String, from Netty NetUtil
 	 */
 	public static String intToIpv4String(int i) {
 		StringBuilder buf = new StringBuilder(15);
@@ -150,8 +151,7 @@ public class InetAddresseUtil {
 		if (byteAddress == null) {
 			return 0;
 		} else {
-			return ((byteAddress[0] & 0xff) << 24) | ((byteAddress[1] & 0xff) << 16) | ((byteAddress[2] & 0xff) << 8)
-					| (byteAddress[3] & 0xff);
+			return NumberUtil.toInt(byteAddress);
 		}
 	}
 

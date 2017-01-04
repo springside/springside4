@@ -3,9 +3,6 @@ package org.springside.modules.utils.io;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -20,11 +17,9 @@ import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.collection.ListUtil;
 import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.annotations.Beta;
-import com.google.common.io.Files;
 
 /**
  * IO相关工具集
@@ -35,13 +30,12 @@ import com.google.common.io.Files;
  * 
  * 1. 安静关闭Closeable对象
  * 
- * 2. 读出Fine/InputStream/Reader内容到String 或 List<String>(from Commons IO)
+ * 2. 读出InputStream/Reader内容到String 或 List<String>(from Commons IO)
  * 
- * 3. 将String写到File/OutputStream/Writer(from Commons IO)
+ * 3. 将String写到OutputStream/Writer(from Commons IO)
  * 
  * 4. InputStream/Reader与OutputStream/Writer之间复制的copy(from Commons IO)
  * 
- * 5. 其他常用函数
  * 
  * @author calvin
  */
@@ -94,17 +88,6 @@ public class IOUtil {
 	}
 
 	/**
-	 * 简单读取文件到String.
-	 */
-	public static String toString(File file) throws IOException {
-		try {
-			return toString(new FileReader(file));
-		} catch (FileNotFoundException e) {
-			return null;
-		}
-	}
-
-	/**
 	 * 简单读取InputStream到String.
 	 */
 	public static String toString(InputStream input) throws IOException {
@@ -119,17 +102,6 @@ public class IOUtil {
 		StringBuilderWriter sw = new StringBuilderWriter();
 		copy(reader, sw, new char[DEFAULT_BUFFER_SIZE]);
 		return sw.toString();
-	}
-
-	/**
-	 * 简单读取File的每行内容到List<String>
-	 */
-	public static List<String> readLines(final File input) throws IOException {
-		try {
-			return readLines(new FileReader(input));
-		} catch (FileNotFoundException e) {
-			return ListUtil.emptyList();
-		}
 	}
 
 	/**
@@ -151,15 +123,6 @@ public class IOUtil {
 			line = reader.readLine();
 		}
 		return list;
-	}
-
-	/**
-	 * 简单写入String到File.
-	 */
-	public static void write(final String data, final File output) throws IOException {
-		if (data != null) {
-			new FileWriter(output).write(data);
-		}
 	}
 
 	/**
@@ -239,14 +202,8 @@ public class IOUtil {
 	/**
 	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
 	 */
-	public static File createTempDir(String prefix, String suffix) throws IOException{
+	public static File createTempDir(String prefix, String suffix) throws IOException {
 		return File.createTempFile(prefix, suffix);
 	}
-	
-	/**
-	 * 在临时目录创建临时目录，命名为${毫秒级时间戳}-${同一毫秒内的计数器}
-	 */
-	public static File createTempDir(){
-		return Files.createTempDir();
-	}
+
 }
