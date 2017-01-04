@@ -1,11 +1,18 @@
 package org.springside.modules.utils.base;
 
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 /**
  * 关于Properties的工具类
  * 
  * 1. Boolean.readBoolean(name) 不够用, 进行扩展. 其他Integer.read()等都没问题.
  * 
  * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
+ * 
+ * 3. Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
+ * 在其所关心的属性变化时进行通知.
  * 
  * @author calvin
  */
@@ -21,7 +28,7 @@ public class PropertiesUtil {
 		if (stringResult != null) {
 			return Boolean.valueOf(stringResult);
 		}
-		return null; //NOSONAR
+		return null; // NOSONAR
 	}
 
 	/**
@@ -136,4 +143,72 @@ public class PropertiesUtil {
 			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
 		}
 	}
+
+	/**
+	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化
+	 * 因此扩展了一个ListenableProperties, 在其所关心的属性变化时进行通知.
+	 * 
+	 * @see ListenableProperties
+	 * @see PropertiesListener
+	 */
+	public static synchronized void registerSystemPropertiesListener(PropertiesListener listener) {
+		Properties currentProperties = System.getProperties();
+
+		if (!(currentProperties instanceof ListenableProperties)) {
+			ListenableProperties newProperties = new ListenableProperties(currentProperties);
+			System.setProperties(newProperties);
+			currentProperties = newProperties;
+		}
+
+		((ListenableProperties) currentProperties).register(listener);
+	}
+
+	
+	/**
+	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化
+	 * 因此扩展了一个ListenableProperties, 在其所关心的属性变化时进行通知.
+	 * 
+	 * @see PropertiesUtil#registerSystemPropertiesListener(PropertiesListener)
+	 * @see PropertiesListener
+	 */
+	public static class ListenableProperties extends Properties {
+
+		private static final long serialVersionUID = -8282465702074684324L;
+
+		protected List<PropertiesListener> listeners = new CopyOnWriteArrayList<PropertiesListener>();
+
+		public ListenableProperties(Properties properties) {
+			super(properties);
+		}
+
+		public void register(PropertiesListener listener) {
+			listeners.add(listener);
+		}
+
+		public synchronized Object setProperty(String key, String value) {
+			Object result = put(key, value);
+			for (PropertiesListener listener : listeners) {
+				if (listener.propertyName.equals(key)) {
+					listener.onChange(key, value);
+				}
+			}
+			return result;
+		}
+
+	}
+
+	/**
+	 * 获取所关心的Properties变更的Listener基类.
+	 */
+	public abstract class PropertiesListener {
+
+		protected String propertyName;
+
+		public PropertiesListener(String propertyName) {
+			this.propertyName = propertyName;
+		}
+
+		public abstract void onChange(String propertyName, String value);
+	}
+
 }

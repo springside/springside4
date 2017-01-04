@@ -68,6 +68,7 @@
 			<optional>true</optional>
 		</dependency>
 
+		<!-- for FastInvoker -->
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
