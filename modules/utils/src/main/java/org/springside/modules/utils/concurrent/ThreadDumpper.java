@@ -64,7 +64,7 @@ public class ThreadDumpper {
 		}
 
 		logger.info("Thread dump by ThreadDumpper" + reasonMsg != null ? (" for " + reasonMsg) : "");
-		
+
 		// 参数均为false, 避免输出lockedMonitors和lockedSynchronizers导致的JVM缓慢
 		ThreadInfo[] threadInfos = threadMBean.dumpAllThreads(false, false);
 
@@ -73,8 +73,8 @@ public class ThreadDumpper {
 		for (int i = 0; i < threadInfos.length; i++) {
 			b.append(dumpThreadInfo(threadInfos[i])).append(", ");
 		}
-		
-		//两条日志间的时间间隔，是VM被thread dump堵塞的时间.
+
+		// 两条日志间的时间间隔，是VM被thread dump堵塞的时间.
 		logger.info(b.toString());
 	}
 

@@ -11,7 +11,6 @@
 	<properties>
 		<guava.version>20.0</guava.version>
 		<commons-lang3.version>3.5</commons-lang3.version>
-		<commons-codec.version>1.10</commons-codec.version>
 		<orika.version>1.5.0</orika.version>
 		<jackson.version>2.8.5</jackson.version>
 		<cglib.version>3.2.4</cglib.version>
@@ -41,17 +40,16 @@
 			<version>${commons-lang3.version}</version>
 		</dependency>
 		<!-- UTILS end -->
-
+		
+		<!-- LOGGING begin -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- LOGGING end -->
 
 		<!-- OPTIONAL begin -->
-		<!-- for Encodes -->
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>${commons-codec.version}</version>
-			<optional>true</optional>
-		</dependency>
-
 		<!-- for JsonMapper -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -77,21 +75,6 @@
 		</dependency>
 		<!-- OPTIONAL end -->
 
-		<!-- LOGGING begin -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<!-- LOGGING end -->
-
 		<!-- TEST begin -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -111,6 +94,13 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- TEST end -->

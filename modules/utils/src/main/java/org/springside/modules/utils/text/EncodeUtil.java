@@ -5,62 +5,54 @@
  *******************************************************************************/
 package org.springside.modules.utils.text;
 
-import org.apache.commons.codec.DecoderException;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-import org.springside.modules.utils.base.ExceptionUtil;
+import com.google.common.io.BaseEncoding;
 
 /**
- * hex/base64 编解码工具集，依赖Commons-Codes
+ * hex/base64 编解码工具集，依赖Guava, 取消了对Commmon Codec的依赖
  * 
- * JDK8有内置的BASE64类.
+ * JDK8也有内置的BASE64类.
  */
 public class EncodeUtil {
 
 	/**
-	 * Hex编码, 默认为abcdef为小写字母.
+	 * Hex编码, 默认为abcdef为大写字母.
 	 */
 	public static String encodeHex(byte[] input) {
-		return Hex.encodeHexString(input);
+		return BaseEncoding.base16().encode(input);
 	}
 
 	/**
-	 * Hex编码, 可决定返回字母大小写.
-	 */
-	public static String encodeHex(byte[] input, final boolean toLowerCase) {
-		return new String(Hex.encodeHex(input, toLowerCase));
-	}
-
-	/**
-	 * Hex解码.
+	 * Hex解码, 字符串有异常时抛出IllegalArgumentException.
 	 */
 	public static byte[] decodeHex(String input) {
-		try {
-			return Hex.decodeHex(input.toCharArray());
-		} catch (DecoderException e) {
-			throw ExceptionUtil.unchecked(e);
-		}
+		return BaseEncoding.base16().decode(input);
 	}
 
 	/**
 	 * Base64编码.
 	 */
 	public static String encodeBase64(byte[] input) {
-		return Base64.encodeBase64String(input);
+		return BaseEncoding.base64().encode(input);
 	}
 
 	/**
 	 * Base64编码, URL安全(将Base64中的URL非法字符'+'和'/'转为'-'和'_', 见RFC3548).
 	 */
-	public static String encodeUrlSafeBase64(byte[] input) {
-		return Base64.encodeBase64URLSafeString(input);
+	public static String encodeBase64UrlSafe(byte[] input) {
+		return BaseEncoding.base64Url().encode(input);
 	}
 
 	/**
 	 * Base64解码.
 	 */
 	public static byte[] decodeBase64(String input) {
-		return Base64.decodeBase64(input);
+		return BaseEncoding.base64().decode(input);
 	}
-
+	
+	/**
+	 * Base64解码, URL安全(将Base64中的URL非法字符'+'和'/'转为'-'和'_', 见RFC3548)..
+	 */
+	public static byte[] decodeBase64UrlSafe(String input) {
+		return BaseEncoding.base64Url().decode(input);
+	}
 }

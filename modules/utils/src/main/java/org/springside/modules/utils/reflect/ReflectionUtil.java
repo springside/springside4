@@ -205,9 +205,9 @@ public class ReflectionUtil {
 	}
 
 	/**
-	 * 循环向上转型, 获取对象的DeclaredMethod, 并强制设置为可访问. 
+	 * 循环向上转型, 获取对象的DeclaredMethod, 并强制设置为可访问.
 	 * 
-	 * 如向上转型到Object仍无法找到, 返回null. 
+	 * 如向上转型到Object仍无法找到, 返回null.
 	 * 
 	 * 匹配函数名+参数类型.
 	 * 
@@ -234,9 +234,9 @@ public class ReflectionUtil {
 	}
 
 	/**
-	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问. 
+	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
 	 * 
-	 * 如向上转型到Object仍无法找到, 返回null. 
+	 * 如向上转型到Object仍无法找到, 返回null.
 	 * 
 	 * 只匹配函数名, 如果有多个同名函数返回第一个
 	 * 

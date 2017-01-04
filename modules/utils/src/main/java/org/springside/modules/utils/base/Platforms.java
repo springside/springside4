@@ -26,7 +26,7 @@ public class Platforms {
 
 	// 临时目录
 	public static final String TMP_DIR = SystemUtils.JAVA_IO_TMPDIR;
-	
+
 	// Java版本
 	public static final String JAVA_VERSION = SystemUtils.JAVA_SPECIFICATION_VERSION;
 	public static final boolean IS_JAVA6 = SystemUtils.IS_JAVA_1_6;

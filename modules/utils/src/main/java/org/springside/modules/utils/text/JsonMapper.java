@@ -33,7 +33,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 public class JsonMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
-	
+
 	public static JsonMapper INSTANCE = new JsonMapper();
 
 	private ObjectMapper mapper;

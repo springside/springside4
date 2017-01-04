@@ -122,7 +122,7 @@ public class ExceptionUtil {
 	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
 		exception.setStackTrace(
 				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
-		return exception;//NOSONAR
+		return exception;// NOSONAR
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class ExceptionUtil {
 	 */
 	public static <T extends Throwable> T clearStackTrace(T exception) {
 		exception.setStackTrace(EMPTY_STACK_TRACE);
-		return exception;//NOSONAR
+		return exception;// NOSONAR
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class ExceptionUtil {
 			try {
 				return (CloneableException) super.clone();
 			} catch (CloneNotSupportedException e) {
-				return null;//NOSONAR
+				return null;// NOSONAR
 			}
 		}
 
@@ -181,7 +181,7 @@ public class ExceptionUtil {
 
 		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
 			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
-			return this; 
+			return this;
 		}
 	}
 
@@ -215,7 +215,7 @@ public class ExceptionUtil {
 			try {
 				return (CloneableRuntimeException) super.clone();
 			} catch (CloneNotSupportedException e) {
-				return null;//NOSONAR
+				return null;// NOSONAR
 			}
 		}
 

@@ -28,7 +28,7 @@ public class EncodeUtilTest {
 	@Test
 	public void base64UrlSafeEncode() {
 		String input = "haha,i am a very long message";
-		String result = EncodeUtil.encodeUrlSafeBase64(input.getBytes());
-		assertThat(new String(EncodeUtil.decodeBase64(result))).isEqualTo(input);
+		String result = EncodeUtil.encodeBase64UrlSafe(input.getBytes());
+		assertThat(new String(EncodeUtil.decodeBase64UrlSafe(result))).isEqualTo(input);
 	}
 }

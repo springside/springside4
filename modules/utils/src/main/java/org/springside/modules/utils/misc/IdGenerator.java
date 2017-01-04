@@ -47,6 +47,6 @@ public class IdGenerator {
 	public static String randomBase64(int length) {
 		byte[] randomBytes = new byte[length];
 		random.nextBytes(randomBytes);
-		return EncodeUtil.encodeUrlSafeBase64(randomBytes);
+		return EncodeUtil.encodeBase64UrlSafe(randomBytes);
 	}
 }

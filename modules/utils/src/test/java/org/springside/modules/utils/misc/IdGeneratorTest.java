@@ -6,7 +6,6 @@
 package org.springside.modules.utils.misc;
 
 import org.junit.Test;
-import org.springside.modules.utils.misc.IdGenerator;
 
 public class IdGeneratorTest {
 

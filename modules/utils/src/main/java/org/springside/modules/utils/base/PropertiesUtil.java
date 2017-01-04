@@ -145,8 +145,8 @@ public class PropertiesUtil {
 	}
 
 	/**
-	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化
-	 * 因此扩展了一个ListenableProperties, 在其所关心的属性变化时进行通知.
+	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
+	 * 在其所关心的属性变化时进行通知.
 	 * 
 	 * @see ListenableProperties
 	 * @see PropertiesListener
@@ -163,10 +163,9 @@ public class PropertiesUtil {
 		((ListenableProperties) currentProperties).register(listener);
 	}
 
-	
 	/**
-	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化
-	 * 因此扩展了一个ListenableProperties, 在其所关心的属性变化时进行通知.
+	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
+	 * 在其所关心的属性变化时进行通知.
 	 * 
 	 * @see PropertiesUtil#registerSystemPropertiesListener(PropertiesListener)
 	 * @see PropertiesListener
