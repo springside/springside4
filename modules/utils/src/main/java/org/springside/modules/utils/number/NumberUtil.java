@@ -1,4 +1,4 @@
-package org.springside.modules.utils.base;
+package org.springside.modules.utils.number;
 
 import org.apache.commons.lang3.math.NumberUtils;
 

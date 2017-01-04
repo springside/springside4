@@ -1,4 +1,4 @@
-package org.springside.modules.utils.base;
+package org.springside.modules.utils.number;
 
 import com.google.common.annotations.Beta;
 

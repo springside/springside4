@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -24,7 +25,7 @@ import com.google.common.primitives.Longs;
  * 
  * 3. emptyList,singletonList,unmodifiedList (vis JDK Collection)
  * 
- * 4. sort/binarySearch/shuffle(via JDK Collection)
+ * 4. sort/binarySearch/shuffle/reverse(via JDK Collection)
  * 
  * 5. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
  * 
@@ -202,6 +203,15 @@ public class ListUtil {
 	 */
 	public static void shuffle(List<?> list) {
 		Collections.shuffle(list);
+	}
+
+	/**
+	 * 返回一个倒转顺序访问的List，仅仅是一个倒序的View，不会实际多生成一个List
+	 * 
+	 * @see com.google.common.collect.Lists#reverse(List)
+	 */
+	public static <T> List<T> reverse(List<T> list) {
+		return Lists.reverse(list);
 	}
 
 	/**

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springside.modules.utils.number.NumberUtil;
+
 /**
  * 关于Properties的工具类
  * 

@@ -35,7 +35,7 @@ public class ClassUtil {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
-	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
 	/**
 	 * 返回Class名，不包含PackageName
