@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springside.modules.utils.collection.extend.SortedArrayList;
+
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
@@ -109,6 +111,24 @@ public class ListUtil {
 	}
 
 	/**
+	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 
+	 * from Jodd的新类型，插入时排序，有几个方法不支持
+	 */
+	public static <T extends Comparable> SortedArrayList<T> newSortedArrayList() {
+		return new SortedArrayList<T>();
+	}
+
+	/**
+	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 
+	 * from Jodd的新类型，插入时排序，有几个方法不支持
+	 */
+	public static <T> SortedArrayList<T> newSortedArrayList(Comparator<T> c) {
+		return new SortedArrayList<T>(c);
+	}
+	
+	/**
 	 * 根据等号左边的类型，构造类型正确的CopyOnWriteArrayList.
 	 * 
 	 * @see com.google.common.collect.Lists#newCopyOnWriteArrayList()
@@ -122,6 +142,14 @@ public class ListUtil {
 	 */
 	public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(T... elements) {
 		return new CopyOnWriteArrayList<T>(elements);
+	}
+	
+	/**
+	 * 返回包装后同步的List，所有方法都会被synchronized原语同步，用于CopyOnWriteArrayList与
+	 * ArrayDequeue均不符合
+	 */
+	public static <T> List<T> synchronizedList(List<T> list) {
+		return Collections.synchronizedList(list);
 	}
 
 	///////////////// from JDK Collections的常用函数 ///////////////////
@@ -159,6 +187,8 @@ public class ListUtil {
 	public static <T> List<T> unmodifiableList(List<? extends T> list) {
 		return Collections.unmodifiableList(list);
 	}
+
+
 
 	/**
 	 * 排序, 采用JDK认为最优的排序算法.

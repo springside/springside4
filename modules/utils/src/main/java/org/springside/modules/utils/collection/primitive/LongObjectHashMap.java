@@ -89,7 +89,7 @@ public class LongObjectHashMap<V> implements LongObjectMap<V> {
         this.loadFactor = loadFactor;
 
         // Adjust the initial capacity if necessary.
-        int capacity = MathUtil.findNextPositivePowerOfTwo(initialCapacity);
+        int capacity = MathUtil.nextPowerOfTwo(initialCapacity);
         mask = capacity - 1;
 
         // Allocate the arrays.

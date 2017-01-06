@@ -34,13 +34,15 @@ public class ExceptionUtil {
 	 * @see ExceptionUtils#wrapAndThrow(Throwable)
 	 */
 	public static RuntimeException unchecked(Throwable t) {
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
+
+		Throwable unwrapped = unwrap(t);
+		if (unwrapped instanceof RuntimeException) {
+			throw (RuntimeException) unwrapped;
 		}
-		if (t instanceof Error) {
-			throw (Error) t;
+		if (unwrapped instanceof Error) {
+			throw (Error) unwrapped;
 		}
-		throw new UndeclaredThrowableException(t);
+		throw new UndeclaredThrowableException(unwrapped);
 	}
 
 	/**

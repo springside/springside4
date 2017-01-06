@@ -22,6 +22,13 @@ import com.google.common.io.Files;
 public class FileUtil {
 
 	/**
+	 * 读取文件到byte[].
+	 */
+	public static byte[] toByteArray(File file) throws IOException {
+		return Files.toByteArray(file);
+	}
+	
+	/**
 	 * 读取文件到String.
 	 */
 	public static String toString(File file) throws IOException {
@@ -31,7 +38,7 @@ public class FileUtil {
 	/**
 	 * 读取文件的每行内容到List<String>
 	 */
-	public static List<String> readLines(final File file) throws IOException {
+	public static List<String> toLines(final File file) throws IOException {
 		return Files.readLines(file, Charsets.UTF_8);
 	}
 
@@ -64,6 +71,13 @@ public class FileUtil {
 	}
 
 	/**
+	 * 创建文件或更新时间戳
+	 */
+	public static void touch(File file) throws IOException {
+		Files.touch(file);
+	}
+
+	/**
 	 * 在临时目录创建临时目录，命名为${毫秒级时间戳}-${同一毫秒内的计数器}, from guava
 	 * 
 	 * @see Files#createTempDir()
@@ -93,17 +107,4 @@ public class FileUtil {
 		return Files.newWriter(file, Charsets.UTF_8);
 	}
 
-	/**
-	 * 获取文件名的扩展名部分
-	 */
-	public static String getFileExtension(String fullName) {
-		return Files.getFileExtension(fullName);
-	}
-	
-	/**
-	 * 将路径整理，如 "a/../b"，整理成 "b"
-	 */
-	public static String simplifyPath(String pathname){
-		return Files.simplifyPath(pathname);
-	}
 }

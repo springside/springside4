@@ -22,7 +22,7 @@ import org.springside.modules.utils.text.Charsets;
 import com.google.common.annotations.Beta;
 
 /**
- * IO相关工具集
+ * IO Stream/Reader相关工具集
  * 
  * 建议使用Apache Commons IO, 在未引入Commons IO时可以用本类做最基本的事情.
  * 
@@ -107,14 +107,14 @@ public class IOUtil {
 	/**
 	 * 简单读取Reader的每行内容到List<String>
 	 */
-	public static List<String> readLines(final InputStream input) throws IOException {
-		return readLines(new InputStreamReader(input, Charsets.UTF_8));
+	public static List<String> toLines(final InputStream input) throws IOException {
+		return toLines(new InputStreamReader(input, Charsets.UTF_8));
 	}
 
 	/**
 	 * 简单读取Reader的每行内容到List<String>
 	 */
-	public static List<String> readLines(final Reader input) throws IOException {
+	public static List<String> toLines(final Reader input) throws IOException {
 		final BufferedReader reader = toBufferedReader(input);
 		final List<String> list = new ArrayList<String>();
 		String line = reader.readLine();

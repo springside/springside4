@@ -1,21 +1,15 @@
 package org.springside.modules.utils.time;
 
-import java.text.ParseException;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateUtils;
-import org.apache.commons.lang3.time.FastDateFormat;
 
 import com.google.common.annotations.Beta;
 
 /**
  * 日期工具类.
  * 
- * 在不方便使用joda-time时，使用本类降低Date处理的复杂度与性能消耗.
- * 
- * 1. 日期格式不固定时的String<->Date 转换函数.
- * 
- * 2. 封装Common Lang一些最常用日期方法
+ * 在不方便使用joda-time时，使用本类降低Date处理的复杂度与性能消耗, 封装Common Lang一些最常用日期方法
  * 
  * @author calvin
  */
@@ -29,39 +23,6 @@ public class DateUtil {
 	public static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE; // Number of milliseconds in a standard hour.
 
 	public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR; // Number of milliseconds in a standard day.
-
-	/**
-	 * 分析日期字符串, 仅用于不固定pattern不固定的情况.
-	 * 
-	 * 否则直接使用DateFormats中封装好的fastDateFormat.
-	 * 
-	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
-	 */
-	public static Date pareDate(String dateString, String pattern) throws ParseException {
-		return FastDateFormat.getInstance(pattern).parse(dateString);
-	}
-
-	/**
-	 * 格式化日期, 仅用于不固定pattern的情况.
-	 * 
-	 * 否则直接使用DateFormats中封装好的fastDateFormat.
-	 * 
-	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
-	 */
-	public static String formatDate(Date date, String pattern) throws ParseException {
-		return FastDateFormat.getInstance(pattern).format(date);
-	}
-
-	/**
-	 * 格式化日期, 仅用于不固定pattern的情况.
-	 * 
-	 * 否则直接使用DateFormats中封装好的fastDateFormat.
-	 * 
-	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
-	 */
-	public static String formatDate(long date, String pattern) throws ParseException {
-		return FastDateFormat.getInstance(pattern).format(date);
-	}
 
 	/**
 	 * 是否同一天.
@@ -104,10 +65,24 @@ public class DateUtil {
 	}
 
 	/**
+	 * 减一月
+	 */
+	public static Date subMonths(final Date date, final int amount) {
+		return DateUtils.addMonths(date, -amount);
+	}
+
+	/**
 	 * 续一周
 	 */
 	public static Date addWeeks(final Date date, final int amount) {
 		return DateUtils.addWeeks(date, amount);
+	}
+
+	/**
+	 * 减一周
+	 */
+	public static Date subWeeks(final Date date, final int amount) {
+		return DateUtils.addWeeks(date, -amount);
 	}
 
 	/**
@@ -118,10 +93,24 @@ public class DateUtil {
 	}
 
 	/**
+	 * 减一天
+	 */
+	public static Date subDays(final Date date, final int amount) {
+		return DateUtils.addDays(date, -amount);
+	}
+
+	/**
 	 * 续一个小时
 	 */
 	public static Date addHours(final Date date, final int amount) {
 		return DateUtils.addHours(date, amount);
+	}
+
+	/**
+	 * 续一个小时
+	 */
+	public static Date subHours(final Date date, final int amount) {
+		return DateUtils.addHours(date, -amount);
 	}
 
 	/**
@@ -132,9 +121,51 @@ public class DateUtil {
 	}
 
 	/**
+	 * 续一分钟
+	 */
+	public static Date subMinutes(final Date date, final int amount) {
+		return DateUtils.addMinutes(date, -amount);
+	}
+
+	/**
 	 * 终于到了，续一秒.
 	 */
 	public static Date addSeconds(final Date date, final int amount) {
 		return DateUtils.addSeconds(date, amount);
+	}
+
+	/**
+	 * 减一秒.
+	 */
+	public static Date subSeconds(final Date date, final int amount) {
+		return DateUtils.addSeconds(date, -amount);
+	}
+
+	public static Date setYears(final Date date, final int amount) {
+		return DateUtils.setYears(date, amount);
+	}
+
+	public static Date setMonths(final Date date, final int amount) {
+		return DateUtils.setMonths(date, amount);
+	}
+
+	public static Date setDays(final Date date, final int amount) {
+		return DateUtils.setDays(date, amount);
+	}
+
+	public static Date setHours(final Date date, final int amount) {
+		return DateUtils.setHours(date, amount);
+	}
+
+	public static Date setMinutes(final Date date, final int amount) {
+		return DateUtils.setMinutes(date, amount);
+	}
+
+	public static Date setSeconds(final Date date, final int amount) {
+		return DateUtils.setSeconds(date, amount);
+	}
+
+	public static Date setMilliseconds(final Date date, final int amount) {
+		return DateUtils.setMilliseconds(date, amount);
 	}
 }

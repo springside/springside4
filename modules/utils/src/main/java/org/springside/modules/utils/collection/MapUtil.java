@@ -1,6 +1,9 @@
 package org.springside.modules.utils.collection;
 
+import static com.google.common.base.Preconditions.*;
+
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +12,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * 关于Map的工具集合，
@@ -20,6 +24,8 @@ import java.util.concurrent.ConcurrentMap;
  * 3. 便捷的构造函数(via guava，并增加了用数组，List等方式初始化Map的函数)
  * 
  * 4. emptyMap,singletonMap,unmodifiedMap (via JDK Collection)
+ * 
+ * 参考文章：《高性能场景下，Map家族的优化使用建议》 http://calvin1978.blogcn.com/articles/hashmap.html
  * 
  * @author calvin
  */
@@ -85,6 +91,29 @@ public class MapUtil {
 	/**
 	 * 根据等号左边的类型, 构造类型正确的HashMap.
 	 * 
+	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
+	 * 
+	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低
+	 * 
+	 * @see com.google.common.collect.Maps#newHashMap(int)
+	 */
+	public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize, float loadFactor) {
+		int finalSize = (int) ((float) expectedSize / loadFactor + 1.0F);
+		return new HashMap<K, V>(finalSize, loadFactor);
+	}
+
+	/**
+	 * 根据等号左边的类型, 构造类型正确的HashMap.
+	 * 
+	 * @see com.google.common.collect.Maps#newHashMap()
+	 */
+	public static <K, V> HashMap<K, V> newHashMapWith(int initialCapacity, float loadFactor) {
+		return new HashMap<K, V>();
+	}
+
+	/**
+	 * 根据等号左边的类型, 构造类型正确的HashMap.
+	 * 
 	 * 同时初始化第一个元素
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap()
@@ -137,28 +166,36 @@ public class MapUtil {
 	}
 
 	/**
-	 * 根据等号左边的类型, 构造类型正确的HashMap.
-	 * 
-	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
-	 * 
-	 * @see com.google.common.collect.Maps#newHashMap(int)
-	 */
-	public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize) {
-		return com.google.common.collect.Maps.newHashMapWithExpectedSize(expectedSize);
-	}
-
-	/**
 	 * 根据等号左边的类型，构造类型正确的TreeMap.
 	 * 
 	 * @see com.google.common.collect.Maps#newTreeMap()
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <K extends Comparable, V> TreeMap<K, V> newTreeMap() {
+	public static <K extends Comparable, V> TreeMap<K, V> newSortedMap() {
 		return new TreeMap<K, V>();
 	}
 
+	/**
+	 * 相比HashMap，当key是枚举类时, 性能与空间占用俱佳.
+	 */
+	public static <K extends Enum<K>, V> EnumMap<K, V> newEnumMap(Class<K> type) {
+		return new EnumMap<K, V>(checkNotNull(type));
+	}
+
+	/**
+	 * JDK8下，ConcurrentHashMap已不再需要设置loadFactor, concurrencyLevel和initialCapacity.
+	 * 
+	 * JDK7，建议自行用new ConcurrentHashMap设置，或使用性能更佳的JDK8 ConcurrentHashMap 的移植版。
+	 */
 	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
 		return new ConcurrentHashMap<K, V>();
+	}
+
+	/**
+	 * 根据等号左边的类型，构造类型正确的ConcurrentSkipListMap.
+	 */
+	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSortedMap() {
+		return new ConcurrentSkipListMap<K, V>();
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////

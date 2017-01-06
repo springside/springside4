@@ -14,8 +14,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.base.ExceptionUtil;
 
 /**
  * 反射工具类.
@@ -29,6 +31,8 @@ import org.slf4j.LoggerFactory;
  * 2. 一次性调用方法，其中一个特色函数是invokeByName，不准确匹配参数类型，只取第一个名称符合的函数.
  * 
  * 3. 多次调用方法，先用getAccessibleMethod()获得Method对象，然后多次调用Method对象
+ * 
+ * 4. 调用构造函数创建对象
  */
 @SuppressWarnings("unchecked")
 public class ReflectionUtil {
@@ -278,6 +282,28 @@ public class ReflectionUtil {
 		if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())
 				|| Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
 			field.setAccessible(true);
+		}
+	}
+
+	/**
+	 * 调用构造函数.
+	 */
+	public static <T> T invokeConstructor(final Class<T> cls, Object... args) {
+		try {
+			return ConstructorUtils.invokeConstructor(cls, args);
+		} catch (Exception e) {
+			throw ExceptionUtil.unchecked(e);
+		}
+	}
+
+	/**
+	 * 调用构造函数.
+	 */
+	public static <T> T invokeConstructor(final Class<T> cls, Object[] args, Class<?>[] parameterTypes) {
+		try {
+			return ConstructorUtils.invokeConstructor(cls, args, parameterTypes);
+		} catch (Exception e) {
+			throw ExceptionUtil.unchecked(e);
 		}
 	}
 
