@@ -24,9 +24,7 @@ public class RandomUtil {
 
 	/////////////////// 获取Random实例//////////////
 	/**
-	 * 返回无锁的ThreadLocalRandom，使用JDK8 u102的移植版，比JDK7的版本更佳.
-	 * 
-	 * @see ThreadLocalRandom
+	 * 返回无锁的ThreadLocalRandom
 	 */
 	public static Random threadLocalRandom() {
 		return ThreadLocalRandom.current();

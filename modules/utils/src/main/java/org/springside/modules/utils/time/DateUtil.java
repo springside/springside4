@@ -3,6 +3,7 @@ package org.springside.modules.utils.time;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DateUtils;
+import org.springside.modules.utils.base.annotation.NotNull;
 
 import com.google.common.annotations.Beta;
 
@@ -26,8 +27,10 @@ public class DateUtil {
 
 	/**
 	 * 是否同一天.
+	 * 
+	 * @see DateUtils#isSameDay(Date, Date)
 	 */
-	public static boolean isSameDay(final Date date1, final Date date2) {
+	public static boolean isSameDay(@NotNull final Date date1, @NotNull final Date date2) {
 		return DateUtils.isSameDay(date1, date2);
 	}
 
@@ -40,7 +43,7 @@ public class DateUtil {
 	 * 
 	 * @param field Calendar.HOUR,Calendar.Date etc...
 	 */
-	public static Date truncate(final Date date, final int field) {
+	public static Date truncate(@NotNull final Date date, final int field) {
 		return DateUtils.truncate(date, field);
 	}
 
@@ -53,119 +56,140 @@ public class DateUtil {
 	 * 
 	 * @param field Calendar.HOUR,Calendar.Date etc...
 	 */
-	public static Date ceiling(final Date date, final int field) {
+	public static Date ceiling(@NotNull final Date date, final int field) {
 		return DateUtils.ceiling(date, field);
 	}
 
 	/**
 	 * 续一月
 	 */
-	public static Date addMonths(final Date date, final int amount) {
+	public static Date addMonths(@NotNull final Date date, final int amount) {
 		return DateUtils.addMonths(date, amount);
 	}
 
 	/**
 	 * 减一月
 	 */
-	public static Date subMonths(final Date date, final int amount) {
+	public static Date subMonths(@NotNull final Date date, final int amount) {
 		return DateUtils.addMonths(date, -amount);
 	}
 
 	/**
 	 * 续一周
 	 */
-	public static Date addWeeks(final Date date, final int amount) {
+	public static Date addWeeks(@NotNull final Date date, final int amount) {
 		return DateUtils.addWeeks(date, amount);
 	}
 
 	/**
 	 * 减一周
 	 */
-	public static Date subWeeks(final Date date, final int amount) {
+	public static Date subWeeks(@NotNull final Date date, final int amount) {
 		return DateUtils.addWeeks(date, -amount);
 	}
 
 	/**
 	 * 续一天
 	 */
-	public static Date addDays(final Date date, final int amount) {
+	public static Date addDays(@NotNull final Date date, final int amount) {
 		return DateUtils.addDays(date, amount);
 	}
 
 	/**
 	 * 减一天
 	 */
-	public static Date subDays(final Date date, final int amount) {
+	public static Date subDays(@NotNull final Date date, final int amount) {
 		return DateUtils.addDays(date, -amount);
 	}
 
 	/**
 	 * 续一个小时
 	 */
-	public static Date addHours(final Date date, final int amount) {
+	public static Date addHours(@NotNull final Date date, final int amount) {
 		return DateUtils.addHours(date, amount);
 	}
 
 	/**
-	 * 续一个小时
+	 * 减一个小时
 	 */
-	public static Date subHours(final Date date, final int amount) {
+	public static Date subHours(@NotNull final Date date, final int amount) {
 		return DateUtils.addHours(date, -amount);
 	}
 
 	/**
 	 * 续一分钟
 	 */
-	public static Date addMinutes(final Date date, final int amount) {
+	public static Date addMinutes(@NotNull final Date date, final int amount) {
 		return DateUtils.addMinutes(date, amount);
 	}
 
 	/**
-	 * 续一分钟
+	 * 减一分钟
 	 */
-	public static Date subMinutes(final Date date, final int amount) {
+	public static Date subMinutes(@NotNull final Date date, final int amount) {
 		return DateUtils.addMinutes(date, -amount);
 	}
 
 	/**
 	 * 终于到了，续一秒.
 	 */
-	public static Date addSeconds(final Date date, final int amount) {
+	public static Date addSeconds(@NotNull final Date date, final int amount) {
 		return DateUtils.addSeconds(date, amount);
 	}
 
 	/**
 	 * 减一秒.
 	 */
-	public static Date subSeconds(final Date date, final int amount) {
+	public static Date subSeconds(@NotNull final Date date, final int amount) {
 		return DateUtils.addSeconds(date, -amount);
 	}
 
-	public static Date setYears(final Date date, final int amount) {
+	/**
+	 * 设置年份.
+	 */
+	public static Date setYears(@NotNull final Date date, final int amount) {
 		return DateUtils.setYears(date, amount);
 	}
 
-	public static Date setMonths(final Date date, final int amount) {
+	/**
+	 * 设置月份.
+	 */
+	public static Date setMonths(@NotNull final Date date, final int amount) {
 		return DateUtils.setMonths(date, amount);
 	}
 
-	public static Date setDays(final Date date, final int amount) {
+	/**
+	 * 设置日期.
+	 */
+	public static Date setDays(@NotNull final Date date, final int amount) {
 		return DateUtils.setDays(date, amount);
 	}
 
-	public static Date setHours(final Date date, final int amount) {
+	/**
+	 * 设置小时.
+	 */
+	public static Date setHours(@NotNull final Date date, final int amount) {
 		return DateUtils.setHours(date, amount);
 	}
 
-	public static Date setMinutes(final Date date, final int amount) {
+	/**
+	 * 设置分钟.
+	 */
+	public static Date setMinutes(@NotNull final Date date, final int amount) {
 		return DateUtils.setMinutes(date, amount);
 	}
 
-	public static Date setSeconds(final Date date, final int amount) {
+	/**
+	 * 设置秒.
+	 */
+	public static Date setSeconds(@NotNull final Date date, final int amount) {
 		return DateUtils.setSeconds(date, amount);
 	}
 
-	public static Date setMilliseconds(final Date date, final int amount) {
+	/**
+	 * 设置毫秒.
+	 */
+	public static Date setMilliseconds(@NotNull final Date date, final int amount) {
 		return DateUtils.setMilliseconds(date, amount);
 	}
 }
