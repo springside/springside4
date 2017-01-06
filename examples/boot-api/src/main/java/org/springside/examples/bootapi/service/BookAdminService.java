@@ -47,7 +47,7 @@ public class BookAdminService {
 
 		book.owner = owner;
 		book.status = Book.STATUS_IDLE;
-		book.onboardDate = clock.getCurrentDate();
+		book.onboardDate = clock.currentDate();
 
 		bookDao.save(book);
 	}

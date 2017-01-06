@@ -16,9 +16,9 @@ public interface Clock {
 
 	Clock DEFAULT = new DefaultClock();
 
-	Date getCurrentDate();
+	Date currentDate();
 
-	long getCurrentTimeInMillis();
+	long currentTimeMillis();
 
 	/**
 	 * 默认时间提供者，返回当前的时间，线程安全。
@@ -26,12 +26,12 @@ public interface Clock {
 	class DefaultClock implements Clock {
 
 		@Override
-		public Date getCurrentDate() {
+		public Date currentDate() {
 			return new Date();
 		}
 
 		@Override
-		public long getCurrentTimeInMillis() {
+		public long currentTimeMillis() {
 			return System.currentTimeMillis();
 		}
 	}
@@ -56,12 +56,12 @@ public interface Clock {
 		}
 
 		@Override
-		public Date getCurrentDate() {
+		public Date currentDate() {
 			return new Date(time);
 		}
 
 		@Override
-		public long getCurrentTimeInMillis() {
+		public long currentTimeMillis() {
 			return time;
 		}
 
@@ -93,5 +93,4 @@ public interface Clock {
 			time -= millis;
 		}
 	}
-
 }

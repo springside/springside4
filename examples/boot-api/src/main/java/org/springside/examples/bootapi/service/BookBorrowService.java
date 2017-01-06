@@ -53,7 +53,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Apply book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
+				String.format("Apply book <%s> request by %s", book.title, borrower.name), clock.currentDate());
 
 		messageDao.save(message);
 	}
@@ -79,7 +79,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Cancel book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
+				String.format("Cancel book <%s> request by %s", book.title, borrower.name), clock.currentDate());
 
 		messageDao.save(message);
 	}
@@ -101,11 +101,11 @@ public class BookBorrowService {
 		}
 
 		book.status = Book.STATUS_OUT;
-		book.borrowDate = clock.getCurrentDate();
+		book.borrowDate = clock.currentDate();
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Confirm book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Confirm book <%s> request by %s", book.title, owner.name), clock.currentDate());
 		messageDao.save(message);
 	}
 
@@ -132,7 +132,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Reject book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Reject book <%s> request by %s", book.title, owner.name), clock.currentDate());
 		messageDao.save(message);
 	}
 
@@ -158,7 +158,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Mark book <%s> returned by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Mark book <%s> returned by %s", book.title, owner.name), clock.currentDate());
 		messageDao.save(message);
 	}
 
