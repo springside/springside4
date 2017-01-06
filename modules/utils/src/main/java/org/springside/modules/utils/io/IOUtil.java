@@ -11,13 +11,13 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.annotations.Beta;
 
@@ -91,7 +91,7 @@ public class IOUtil {
 	 * 简单读取InputStream到String.
 	 */
 	public static String toString(InputStream input) throws IOException {
-		InputStreamReader reader = new InputStreamReader(input, Charsets.UTF_8);
+		InputStreamReader reader = new InputStreamReader(input, StandardCharsets.UTF_8);
 		return toString(reader);
 	}
 
@@ -108,7 +108,7 @@ public class IOUtil {
 	 * 简单读取Reader的每行内容到List<String>
 	 */
 	public static List<String> toLines(final InputStream input) throws IOException {
-		return toLines(new InputStreamReader(input, Charsets.UTF_8));
+		return toLines(new InputStreamReader(input, StandardCharsets.UTF_8));
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class IOUtil {
 	 */
 	public static void write(final String data, final OutputStream output) throws IOException {
 		if (data != null) {
-			output.write(data.getBytes(Charsets.UTF_8));
+			output.write(data.getBytes(StandardCharsets.UTF_8));
 		}
 	}
 
@@ -161,7 +161,7 @@ public class IOUtil {
 	 * 在InputStream与Writer间复制内容
 	 */
 	public static void copy(final InputStream input, final Writer output) throws IOException {
-		final InputStreamReader in = new InputStreamReader(input, Charsets.UTF_8);
+		final InputStreamReader in = new InputStreamReader(input, StandardCharsets.UTF_8);
 		copy(in, output);
 	}
 
@@ -169,7 +169,7 @@ public class IOUtil {
 	 * 在Reader与OutputStream间复制内容
 	 */
 	public static void copy(final Reader input, final OutputStream output) throws IOException {
-		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.UTF_8);
+		final OutputStreamWriter out = new OutputStreamWriter(output, StandardCharsets.UTF_8);
 		copy(input, out);
 		out.flush();
 	}

@@ -3,9 +3,9 @@ package org.springside.modules.utils.number;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.concurrent.jsr166e.ThreadLocalRandom;
 
 /**
  * 随机数工具集.
