@@ -10,19 +10,21 @@ import com.google.common.io.BaseEncoding;
 /**
  * hex/base64 编解码工具集，依赖Guava, 取消了对Commmon Codec的依赖
  * 
- * JDK8也有内置的BASE64类.
+ * 同时，JDK8也有内置的BASE64类.
  */
 public class EncodeUtil {
 
 	/**
-	 * Hex编码, 默认为abcdef为大写字母.
+	 * Hex编码, 将byte[]编码为String，默认为ABCDEF为大写字母.
 	 */
 	public static String encodeHex(byte[] input) {
 		return BaseEncoding.base16().encode(input);
 	}
 
 	/**
-	 * Hex解码, 字符串有异常时抛出IllegalArgumentException.
+	 * Hex解码, 将String解码为byte[].
+	 * 
+	 * 字符串有异常时抛出IllegalArgumentException.
 	 */
 	public static byte[] decodeHex(String input) {
 		return BaseEncoding.base16().decode(input);

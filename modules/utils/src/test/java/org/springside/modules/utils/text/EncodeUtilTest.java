@@ -7,6 +7,7 @@ package org.springside.modules.utils.text;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class EncodeUtilTest {
@@ -16,6 +17,22 @@ public class EncodeUtilTest {
 		String input = "haha,i am a very long message";
 		String result = EncodeUtil.encodeHex(input.getBytes());
 		assertThat(new String(EncodeUtil.decodeHex(result))).isEqualTo(input);
+
+		byte[] bytes = new byte[] { 1, 2, 15, 17 };
+		result = EncodeUtil.encodeHex(bytes);
+		assertThat(result).isEqualTo("01020F11");
+
+		input = "01020F11";
+		assertThat(EncodeUtil.decodeHex(input)).hasSize(4).containsSequence((byte) 1, (byte) 2, (byte) 15, (byte) 17);
+
+		try {
+			input = "01020G11";
+			EncodeUtil.decodeHex(input);
+			Assert.fail("should throw exception before");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(IllegalArgumentException.class);
+		}
+
 	}
 
 	@Test
@@ -23,6 +40,14 @@ public class EncodeUtilTest {
 		String input = "haha,i am a very long message";
 		String result = EncodeUtil.encodeBase64(input.getBytes());
 		assertThat(new String(EncodeUtil.decodeBase64(result))).isEqualTo(input);
+
+		byte[] bytes = new byte[] { 5 };
+		result = EncodeUtil.encodeBase64(bytes);
+		assertThat(result).isEqualTo("BQ==");
+
+		bytes = new byte[] { 1, 2, 15, 17, 127 };
+		result = EncodeUtil.encodeBase64(bytes);
+		assertThat(result).isEqualTo("AQIPEX8=");
 	}
 
 	@Test

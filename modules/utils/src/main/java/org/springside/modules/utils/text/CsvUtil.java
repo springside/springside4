@@ -94,7 +94,7 @@ public class CsvUtil {
 	/**
 	 * Converts CSV line to string array.
 	 */
-	public static String[] toStringArray(String line) {
+	public static String[] fromCsvString(String line) {
 		List<String> row = new ArrayList<>();
 
 		boolean inQuotedField = false;

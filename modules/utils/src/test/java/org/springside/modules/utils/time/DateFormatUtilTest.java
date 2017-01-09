@@ -13,15 +13,15 @@ public class DateFormatUtilTest {
 	public void isoDateFormat() {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
 		assertThat(DateFormatUtil.ISO_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44.000+08:00");
-		assertThat(DateFormatUtil.ISO_WITH_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44+08:00");
-		assertThat(DateFormatUtil.ISO_WITH_DATE_FORMAT.format(date)).isEqualTo("2016-11-01");
+		assertThat(DateFormatUtil.ISO_ON_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44+08:00");
+		assertThat(DateFormatUtil.ISO_ON_DATE_FORMAT.format(date)).isEqualTo("2016-11-01");
 	}
 
 	@Test
 	public void defaultDateFormat() {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
 		assertThat(DateFormatUtil.DEFAULT_FORMAT.format(date)).isEqualTo("2016-11-01 12:23:44.000");
-		assertThat(DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01 12:23:44");
+		assertThat(DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01 12:23:44");
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class DateFormatUtilTest {
 	@Test
 	public void formatFriendlyTimeSpanByNow() throws ParseException {
 		try {
-			Date now = DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.parse("2016-12-11 23:30:00");
+			Date now = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-11 23:30:00");
 
 			ClockUtil.useDummyClock(now);
 
@@ -61,16 +61,16 @@ public class DateFormatUtilTest {
 			Date lessOneMinute = DateFormatUtil.DEFAULT_FORMAT.parse("2016-12-11 23:29:55.000");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(lessOneMinute)).isEqualTo("5秒前");
 
-			Date lessOneHour = DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.parse("2016-12-11 23:00:00");
+			Date lessOneHour = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-11 23:00:00");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(lessOneHour)).isEqualTo("30分钟前");
 
-			Date today = DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.parse("2016-12-11 1:00:00");
+			Date today = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-11 1:00:00");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(today)).isEqualTo("今天01:00");
 
-			Date yesterday = DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.parse("2016-12-10 1:00:00");
+			Date yesterday = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-10 1:00:00");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(yesterday)).isEqualTo("昨天01:00");
 
-			Date threeDayBefore = DateFormatUtil.DEFAULT_WITH_SECOND_FORMAT.parse("2016-12-09 1:00:00");
+			Date threeDayBefore = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-09 1:00:00");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(threeDayBefore)).isEqualTo("2016-12-09");
 		
 		} finally {
