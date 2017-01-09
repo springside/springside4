@@ -12,8 +12,6 @@ import org.apache.commons.lang3.SystemUtils;
  * @author calvin
  */
 public class Platforms {
-	
-	public static final String UTF_8 = "UTF-8";
 
 	// 文件路径分隔符
 	public static final String FILE_PATH_SEPARATOR = File.separator;
@@ -23,7 +21,7 @@ public class Platforms {
 	public static final String CLASS_PATH_SEPARATOR = File.pathSeparator;
 	public static final char CLASS_PATH_SEPARATOR_CHAR = File.pathSeparatorChar;
 
-	// 换行符
+	// 换行符, JDK7可使用System.lineSeparator()
 	public static final String LINE_SEPARATOR = SystemUtils.LINE_SEPARATOR;
 
 	// 临时目录

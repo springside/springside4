@@ -5,7 +5,6 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.springside.modules.utils.base.Platforms;
 
 /**
  * 转义工具集.
@@ -69,7 +68,7 @@ public class EscapeUtil {
 	 */
 	public static String urlEncode(String part) {
 		try {
-			return URLEncoder.encode(part, Platforms.UTF_8);
+			return URLEncoder.encode(part, Charsets.UTF_8_NAME);
 		} catch (UnsupportedEncodingException ignored) {
 			return null;
 		}
@@ -80,7 +79,7 @@ public class EscapeUtil {
 	 */
 	public static String urlDecode(String part) {
 		try {
-			return URLDecoder.decode(part, Platforms.UTF_8);
+			return URLDecoder.decode(part, Charsets.UTF_8_NAME);
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}

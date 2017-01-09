@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.io.Resources;
 
@@ -38,18 +39,18 @@ public class ResourceUtil {
 	}
 
 	public String toString(String resourceName) throws IOException {
-		return Resources.toString(Resources.getResource(resourceName), StandardCharsets.UTF_8);
+		return Resources.toString(Resources.getResource(resourceName), Charsets.UTF_8);
 	}
 
 	public String toString(Class<?> contextClass, String resourceName) throws IOException {
-		return Resources.toString(Resources.getResource(contextClass, resourceName), StandardCharsets.UTF_8);
+		return Resources.toString(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
 	}
 
 	public List<String> toLines(String resourceName) throws IOException {
-		return Resources.readLines(Resources.getResource(resourceName), StandardCharsets.UTF_8);
+		return Resources.readLines(Resources.getResource(resourceName), Charsets.UTF_8);
 	}
 
 	public List<String> toLines(Class<?> contextClass, String resourceName) throws IOException {
-		return Resources.readLines(Resources.getResource(contextClass, resourceName), StandardCharsets.UTF_8);
+		return Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
 	}
 }

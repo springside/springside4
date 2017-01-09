@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.io.Files;
 
@@ -31,28 +32,28 @@ public class FileUtil {
 	 * 读取文件到String.
 	 */
 	public static String toString(File file) throws IOException {
-		return Files.toString(file, StandardCharsets.UTF_8);
+		return Files.toString(file, Charsets.UTF_8);
 	}
 
 	/**
 	 * 读取文件的每行内容到List<String>
 	 */
 	public static List<String> toLines(final File file) throws IOException {
-		return Files.readLines(file, StandardCharsets.UTF_8);
+		return Files.readLines(file, Charsets.UTF_8);
 	}
 
 	/**
 	 * 简单写入String到File.
 	 */
 	public static void write(final CharSequence data, final File file) throws IOException {
-		Files.write(data, file, StandardCharsets.UTF_8);
+		Files.write(data, file, Charsets.UTF_8);
 	}
 
 	/**
 	 * 追加String到File.
 	 */
 	public static void append(CharSequence from, File to, Charset charset) throws IOException {
-		Files.append(from, to, StandardCharsets.UTF_8);
+		Files.append(from, to, Charsets.UTF_8);
 	}
 
 	/**
@@ -96,14 +97,14 @@ public class FileUtil {
 	 * 获取File的BufferedReader
 	 */
 	public static BufferedReader newReader(File file) throws FileNotFoundException {
-		return Files.newReader(file, StandardCharsets.UTF_8);
+		return Files.newReader(file, Charsets.UTF_8);
 	}
 
 	/**
 	 * 获取File的BufferedWriter
 	 */
 	public static BufferedWriter newWriter(File file, Charset charset) throws FileNotFoundException {
-		return Files.newWriter(file, StandardCharsets.UTF_8);
+		return Files.newWriter(file, Charsets.UTF_8);
 	}
 
 }

@@ -8,7 +8,6 @@ package org.springside.modules.utils.text;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -20,7 +19,6 @@ import java.util.zip.CRC32;
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.ExceptionUtil;
 
-import com.google.common.base.Charsets;
 import com.google.common.hash.Hashing;
 
 /**
@@ -78,7 +76,7 @@ public class HashUtil {
 	 * 对输入字符串进行sha1散列.
 	 */
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(StandardCharsets.UTF_8), SHA1, null, 1);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1, null, 1);
 	}
 
 	/**
