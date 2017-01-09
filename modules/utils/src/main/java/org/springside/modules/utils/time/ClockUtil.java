@@ -6,6 +6,8 @@ import java.util.Date;
  * 日期提供者, 使用它而不是直接取得系统时间, 方便测试.
  * 
  * 平时使用DEFAULT，测试时替换为DummyClock，可准确控制时间变化而不用Thread.sleep()等待时间流逝.
+ * 
+ * @author calvin
  */
 public class ClockUtil {
 
@@ -19,7 +21,7 @@ public class ClockUtil {
 		INSTANCE = clock;
 		return clock;
 	}
-	
+
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
@@ -28,7 +30,7 @@ public class ClockUtil {
 		INSTANCE = clock;
 		return clock;
 	}
-	
+
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
@@ -66,7 +68,6 @@ public class ClockUtil {
 		return INSTANCE.nanoTime();
 	}
 
-	
 	public interface Clock {
 
 		/**

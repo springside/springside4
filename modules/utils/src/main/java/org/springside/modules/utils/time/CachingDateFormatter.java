@@ -27,7 +27,7 @@ public class CachingDateFormatter {
 
 	public String format(final long timestampMillis) {
 		CachedTime cached = cachedTime.get();
-		
+
 		if (timestampMillis != cached.timestampMillis) {
 			final CachedTime newTime = new CachedTime(timestampMillis);
 			if (cachedTime.compareAndSet(cached, newTime)) {
@@ -36,7 +36,7 @@ public class CachingDateFormatter {
 				cached = cachedTime.get();
 			}
 		}
-		
+
 		return cached.formatted;
 	}
 

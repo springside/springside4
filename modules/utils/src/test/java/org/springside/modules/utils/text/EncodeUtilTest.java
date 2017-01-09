@@ -16,7 +16,7 @@ public class EncodeUtilTest {
 	public void hexEncode() {
 		String input = "haha,i am a very long message";
 		String result = EncodeUtil.encodeHex(input.getBytes());
-		assertThat(new String(EncodeUtil.decodeHex(result))).isEqualTo(input);
+		assertThat(new String(EncodeUtil.decodeHex(result), Charsets.UTF_8)).isEqualTo(input);
 
 		byte[] bytes = new byte[] { 1, 2, 15, 17 };
 		result = EncodeUtil.encodeHex(bytes);
@@ -39,7 +39,7 @@ public class EncodeUtilTest {
 	public void base64Encode() {
 		String input = "haha,i am a very long message";
 		String result = EncodeUtil.encodeBase64(input.getBytes());
-		assertThat(new String(EncodeUtil.decodeBase64(result))).isEqualTo(input);
+		assertThat(new String(EncodeUtil.decodeBase64(result), Charsets.UTF_8)).isEqualTo(input);
 
 		byte[] bytes = new byte[] { 5 };
 		result = EncodeUtil.encodeBase64(bytes);
@@ -54,6 +54,9 @@ public class EncodeUtilTest {
 	public void base64UrlSafeEncode() {
 		String input = "haha,i am a very long message";
 		String result = EncodeUtil.encodeBase64UrlSafe(input.getBytes());
-		assertThat(new String(EncodeUtil.decodeBase64UrlSafe(result))).isEqualTo(input);
+		assertThat(new String(EncodeUtil.decodeBase64UrlSafe(result), Charsets.UTF_8)).isEqualTo(input);
+
+		assertThat(result).isEqualTo(EncodeUtil.decodeBase64UrlSafe("AQIPE+8="));
+
 	}
 }

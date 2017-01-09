@@ -9,23 +9,41 @@ import org.apache.commons.lang3.StringEscapeUtils;
 /**
  * 转义工具集.
  * 
- * 1.Commons-Lang的json/xml/html 转义
+ * 1.JDK提供的URL 转义，转义后的URL可作为URL中的参数
  * 
- * 2.JDK提供的URL 转义
+ * 2.Commons-Lang的xml/html 转义
  * 
  * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
  * 
  * @author calvin
  */
 public class EscapeUtil {
+
 	/**
-	 * Json转码，将字符串转码为符合JSON格式的字符串.
+	 * URL 编码, Encode默认为UTF-8.
 	 * 
-	 * 比如 "Stop!" 转化为\"Stop!\"
+	 * 转义后的URL可作为URL中的参数
 	 */
-	public static String escapeJson(String json) {
-		return StringEscapeUtils.escapeJson(json);
+	public static String urlEncode(String part) {
+		try {
+			return URLEncoder.encode(part, Charsets.UTF_8_NAME);
+		} catch (UnsupportedEncodingException ignored) {
+			return null;
+		}
 	}
+
+	/**
+	 * URL 解码, Encode默认为UTF-8. 转义后的URL可作为URL中的参数
+	 */
+	public static String urlDecode(String part) {
+		try {
+			return URLDecoder.decode(part, Charsets.UTF_8_NAME);
+		} catch (UnsupportedEncodingException e) {
+			return null;
+		}
+	}
+
+
 
 	/**
 	 * Xml转码，将字符串转码为符合XML1.1格式的字符串.
@@ -61,27 +79,5 @@ public class EscapeUtil {
 	 */
 	public static String unescapeHtml(String html) {
 		return StringEscapeUtils.unescapeHtml4(html);
-	}
-
-	/**
-	 * URL 编码, Encode默认为UTF-8.
-	 */
-	public static String urlEncode(String part) {
-		try {
-			return URLEncoder.encode(part, Charsets.UTF_8_NAME);
-		} catch (UnsupportedEncodingException ignored) {
-			return null;
-		}
-	}
-
-	/**
-	 * URL 解码, Encode默认为UTF-8.
-	 */
-	public static String urlDecode(String part) {
-		try {
-			return URLDecoder.decode(part, Charsets.UTF_8_NAME);
-		} catch (UnsupportedEncodingException e) {
-			return null;
-		}
 	}
 }
