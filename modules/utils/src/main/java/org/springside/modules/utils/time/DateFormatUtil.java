@@ -1,6 +1,7 @@
 package org.springside.modules.utils.time;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -26,8 +27,8 @@ public class DateFormatUtil {
 	public static final String PATTERN_ISO_WITH_DATE = "yyyy-MM-dd";
 
 	// 以空格分隔日期和时间，不带时区信息
-	public static final String PATTERN_SIMPLE = "yyyy-MM-dd HH:mm:ss.SSS";
-	public static final String PATTERN_SIMPLE_WITH_SECOND = "yyyy-MM-dd HH:mm:ss";
+	public static final String PATTERN_DEFAULT = "yyyy-MM-dd HH:mm:ss.SSS";
+	public static final String PATTERN_DEFAULT_WITH_SECOND = "yyyy-MM-dd HH:mm:ss";
 
 	// 使用工厂方法FastDateFormat.getInstance(), 从缓存中获取实例
 
@@ -37,9 +38,9 @@ public class DateFormatUtil {
 	public static final FastDateFormat ISO_WITH_DATE_FORMAT = FastDateFormat.getInstance(PATTERN_ISO_WITH_DATE);
 
 	// 以空格分隔日期和时间，不带时区信息
-	public static final FastDateFormat SIMPLE_FORMAT = FastDateFormat.getInstance(PATTERN_SIMPLE);
-	public static final FastDateFormat SIMPLE_WITH_SECOND_FORMAT = FastDateFormat
-			.getInstance(PATTERN_SIMPLE_WITH_SECOND);
+	public static final FastDateFormat DEFAULT_FORMAT = FastDateFormat.getInstance(PATTERN_DEFAULT);
+	public static final FastDateFormat DEFAULT_WITH_SECOND_FORMAT = FastDateFormat
+			.getInstance(PATTERN_DEFAULT_WITH_SECOND);
 
 	/**
 	 * 分析日期字符串, 仅用于pattern不固定的情况.
@@ -73,18 +74,83 @@ public class DateFormatUtil {
 	public static String formatDate(@NotNull String pattern, long date) {
 		return FastDateFormat.getInstance(pattern).format(date);
 	}
-	
+
+	/////// 格式化间隔时间/////////
+	/**
+	 * 按HH:mm:ss.SSS格式，格式化时间间隔.
+	 * 
+	 * endDate必须大于startDate，间隔可大于1天，
+	 */
+	public static String formatDuration(@NotNull Date startDate, @NotNull Date endDate) {
+		return DurationFormatUtils.formatDurationHMS(endDate.getTime() - startDate.getTime());
+	}
+
 	/**
 	 * 按HH:mm:ss.SSS格式，格式化时间间隔
+	 * 
+	 * 单位为毫秒，必须大于0，可大于1天
 	 */
-	public static String formatDuration(long durationMillis){
+	public static String formatDuration(long durationMillis) {
 		return DurationFormatUtils.formatDurationHMS(durationMillis);
 	}
-	
+
 	/**
 	 * 按HH:mm:ss格式，格式化时间间隔
+	 * 
+	 * endDate必须大于startDate，间隔可大于1天
 	 */
-	public static String formatDurationOnSecond(long durationMillis){
-		return DurationFormatUtils.formatDuration(durationMillis,"HH:mm:ss");
+	public static String formatDurationOnSecond(@NotNull Date startDate, @NotNull Date endDate) {
+		return DurationFormatUtils.formatDuration(endDate.getTime() - startDate.getTime(), "HH:mm:ss");
+	}
+
+	/**
+	 * 按HH:mm:ss格式，格式化时间间隔
+	 * 
+	 * 单位为毫秒，必须大于0，可大于1天
+	 */
+	public static String formatDurationOnSecond(long durationMillis) {
+		return DurationFormatUtils.formatDuration(durationMillis, "HH:mm:ss");
+	}
+
+	//////// 打印用于页面显示的用户友好，与当前时间比的时间差
+	/**
+	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
+	 * 
+	 * from AndroidUtilCode
+	 */
+	public static String formatFriendlyTimeSpanByNow(@NotNull Date date) {
+		return formatFriendlyTimeSpanByNow(date.getTime());
+	}
+
+	/**
+	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
+	 * 
+	 * from AndroidUtilCode
+	 */
+	public static String formatFriendlyTimeSpanByNow(long timeStampMillis) {
+		long now = ClockUtil.currentTimeMillis();
+		long span = now - timeStampMillis;
+		if (span < 0) {
+			// 'c' 日期和时间，被格式化为 "%ta %tb %td %tT %tZ %tY"，例如 "Sun Jul 20 16:17:00 EDT 1969"。
+			return String.format("%tc", timeStampMillis);
+		}
+		if (span < DateUtil.MILLIS_PER_SECOND) {
+			return "刚刚";
+		} else if (span < DateUtil.MILLIS_PER_MINUTE) {
+			return String.format("%d秒前", span / DateUtil.MILLIS_PER_SECOND);
+		} else if (span < DateUtil.MILLIS_PER_HOUR) {
+			return String.format("%d分钟前", span / DateUtil.MILLIS_PER_MINUTE);
+		}
+		// 获取当天00:00
+		long wee = DateUtil.truncate(new Date(now), Calendar.DATE).getTime();
+		if (timeStampMillis >= wee) {
+			// 'R' 24 小时制的时间，被格式化为 "%tH:%tM"
+			return String.format("今天%tR", timeStampMillis);
+		} else if (timeStampMillis >= wee - DateUtil.MILLIS_PER_DAY) {
+			return String.format("昨天%tR", timeStampMillis);
+		} else {
+			// 'F' ISO 8601 格式的完整日期，被格式化为 "%tY-%tm-%td"。
+			return String.format("%tF", timeStampMillis);
+		}
 	}
 }
