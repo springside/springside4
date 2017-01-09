@@ -12,16 +12,16 @@ public class DateFormatUtilTest {
 	@Test
 	public void isoDateFormat() {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
-		assertThat(DateFormatUtil.ISO_DATEFORMAT.format(date)).isEqualTo("2016-11-01T12:23:44.000+08:00");
-		assertThat(DateFormatUtil.ISO_DATEFORMAT_ON_SECOND.format(date)).isEqualTo("2016-11-01T12:23:44+08:00");
-		assertThat(DateFormatUtil.ISO_DATEFORMAT_ON_DATE.format(date)).isEqualTo("2016-11-01");
+		assertThat(DateFormatUtil.ISO_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44.000+08:00");
+		assertThat(DateFormatUtil.ISO_WITH_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44+08:00");
+		assertThat(DateFormatUtil.ISO_WITH_DATE_FORMAT.format(date)).isEqualTo("2016-11-01");
 	}
 
 	@Test
 	public void simpleDateFormat() {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
-		assertThat(DateFormatUtil.SIMPLE_DATEFORMAT.format(date)).isEqualTo("2016-11-01 12:23:44.000");
-		assertThat(DateFormatUtil.SIMPLE_DATEFORMAT_ON_SECOND.format(date)).isEqualTo("2016-11-01 12:23:44");
+		assertThat(DateFormatUtil.SIMPLE_FORMAT.format(date)).isEqualTo("2016-11-01 12:23:44.000");
+		assertThat(DateFormatUtil.SIMPLE_WITH_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01 12:23:44");
 	}
 
 	@Test
@@ -31,13 +31,18 @@ public class DateFormatUtilTest {
 		assertThat(DateFormatUtil.formatDate(DateFormatUtil.PATTERN_SIMPLE, date.getTime()))
 				.isEqualTo("2016-11-01 12:23:44.000");
 	}
-	
+
 	@Test
 	public void parseWithPattern() throws ParseException {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
 		Date resultDate = DateFormatUtil.pareDate(DateFormatUtil.PATTERN_SIMPLE, "2016-11-01 12:23:44.000");
-		assertThat(resultDate.getTime()==date.getTime()).isTrue();
+		assertThat(resultDate.getTime() == date.getTime()).isTrue();
 	}
-	
-	
+
+	public void formatDuration() {
+		Date date = new Date(116, 10, 1, 12, 23, 44);
+		date.setTime(date.getTime() + 100);
+		//DateFormatUtils.format(date, new Date()).equalTo
+	}
+
 }

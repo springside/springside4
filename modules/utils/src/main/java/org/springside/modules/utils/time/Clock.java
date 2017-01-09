@@ -16,9 +16,20 @@ public interface Clock {
 
 	Clock DEFAULT = new DefaultClock();
 
+	/**
+	 * 系统当前时间
+	 */
 	Date currentDate();
 
+	/**
+	 * 系统当前时间戳
+	 */
 	long currentTimeMillis();
+
+	/**
+	 * 操作系统启动到现在的纳秒数，与系统时间是完全独立的两个时间体系
+	 */
+	long nanoTime();
 
 	/**
 	 * 默认时间提供者，返回当前的时间，线程安全。
@@ -34,6 +45,11 @@ public interface Clock {
 		public long currentTimeMillis() {
 			return System.currentTimeMillis();
 		}
+
+		@Override
+		public long nanoTime() {
+			return System.nanoTime();
+		}
 	}
 
 	/**
@@ -42,9 +58,9 @@ public interface Clock {
 	class DummyClock implements Clock {
 
 		private long time;
+		private long nanoTme;
 
 		public DummyClock() {
-			this(0);
 		}
 
 		public DummyClock(Date date) {
@@ -63,6 +79,11 @@ public interface Clock {
 		@Override
 		public long currentTimeMillis() {
 			return time;
+		}
+
+		@Override
+		public long nanoTime() {
+			return nanoTme;
 		}
 
 		/**
@@ -91,6 +112,10 @@ public interface Clock {
 		 */
 		public void decreaseTime(int millis) {
 			time -= millis;
+		}
+
+		public void setNanoTime(long nanoTime) {
+			this.nanoTme = nanoTime;
 		}
 	}
 }
