@@ -48,7 +48,7 @@ public class PropertiesUtil {
 	public static Boolean getBoolean(String name, Boolean defaultVal) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
-			return Boolean.parseBoolean(stringResult);
+			return Boolean.valueOf(stringResult);
 		} else {
 			return defaultVal;
 		}
@@ -208,13 +208,12 @@ public class PropertiesUtil {
 			}
 			return result;
 		}
-
 	}
 
 	/**
 	 * 获取所关心的Properties变更的Listener基类.
 	 */
-	public static abstract class PropertiesListener {
+	public abstract static class PropertiesListener {
 
 		protected String propertyName;
 

@@ -97,7 +97,7 @@ public class MapUtil {
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap(int)
 	 */
-	public static <K, V> HashMap<K, V> newHashMapWithExpectedSize(int expectedSize, float loadFactor) {
+	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int expectedSize, float loadFactor) {
 		int finalSize = (int) ((double) expectedSize / loadFactor + 1.0F);
 		return new HashMap<K, V>(finalSize, loadFactor);
 	}
@@ -171,7 +171,7 @@ public class MapUtil {
 	 * @see com.google.common.collect.Maps#newTreeMap()
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <K extends Comparable, V> TreeMap<K, V> newSortedMap() {
+	public static <K extends Comparable, V> TreeMap<K, V> newNavigableMap() {
 		return new TreeMap<K, V>();
 	}
 
@@ -194,14 +194,16 @@ public class MapUtil {
 	/**
 	 * 根据等号左边的类型，构造类型正确的ConcurrentSkipListMap.
 	 */
-	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSortedMap() {
+	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentNavigableMap() {
 		return new ConcurrentSkipListMap<K, V>();
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
-	 * 返回一个空的结构特殊的Map，节约空间. 注意Map不可写.
+	 * 返回一个空的结构特殊的Map，节约空间.
+	 * 
+	 * 注意返回的Map不可写, 写入会抛出UnsupportedOperationException.
 	 * 
 	 * @see java.util.Collections#emptyMap()
 	 */
@@ -210,7 +212,9 @@ public class MapUtil {
 	}
 
 	/**
-	 * 如果map为null，转化为一个安全的空Map，注意Map不可写.
+	 * 如果map为null，转化为一个安全的空Map.
+	 * 
+	 * 注意返回的Map不可写, 写入会抛出UnsupportedOperationException.
 	 * 
 	 * @see java.util.Collections#emptyMap()
 	 */
@@ -219,7 +223,9 @@ public class MapUtil {
 	}
 
 	/**
-	 * 返回一个只含一个元素但结构特殊的Map，节约空间. 注意Map不可写.
+	 * 返回一个只含一个元素但结构特殊的Map，节约空间.
+	 * 
+	 * 注意返回的Map不可写, 写入会抛出UnsupportedOperationException.
 	 * 
 	 * @see java.util.Collections#singletonMap(Object, Object)
 	 */
@@ -228,16 +234,22 @@ public class MapUtil {
 	}
 
 	/**
-	 * 返回包装后不可修改的Map
+	 * 返回包装后不可修改的Map.
+	 * 
+	 * 如果尝试修改，会抛出UnsupportedOperationException
+	 * 
+	 * @see java.util.Collections#unmodifiableMap(Map)
 	 */
 	public static <K, V> Map<K, V> unmodifiableMap(final Map<? extends K, ? extends V> m) {
 		return Collections.unmodifiableMap(m);
 	}
 
 	/**
-	 * 返回包装后不可修改的Map
+	 * 返回包装后不可修改的有序Map.
+	 * 
+	 * @see java.util.Collections#unmodifiableSortedMap(SortedMap)
 	 */
-	public static <K, V> SortedMap<K, V> unmodifiableSortedMap(final SortedMap<K, ? extends V> m) {
+	public static <K, V> SortedMap<K, V> unmodifiableNavigableMap(final SortedMap<K, ? extends V> m) {
 		return Collections.unmodifiableSortedMap(m);
 	}
 

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springside.modules.utils.collection.extend.SortedArrayList;
+import org.springside.modules.utils.collection.type.SortedArrayList;
 
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
@@ -19,7 +19,7 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 
 /**
- * 关于List的工具集合，
+ * 关于List的工具集合.
  * 
  * 1. 常用函数(如是否为空)
  * 
@@ -115,6 +115,7 @@ public class ListUtil {
 	 * 
 	 * from Jodd的新类型，插入时排序，有几个方法不支持
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <T extends Comparable> SortedArrayList<T> newSortedArrayList() {
 		return new SortedArrayList<T>();
 	}
@@ -127,7 +128,7 @@ public class ListUtil {
 	public static <T> SortedArrayList<T> newSortedArrayList(Comparator<T> c) {
 		return new SortedArrayList<T>(c);
 	}
-	
+
 	/**
 	 * 根据等号左边的类型，构造类型正确的CopyOnWriteArrayList.
 	 * 
@@ -143,19 +144,20 @@ public class ListUtil {
 	public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(T... elements) {
 		return new CopyOnWriteArrayList<T>(elements);
 	}
-	
+
 	/**
-	 * 返回包装后同步的List，所有方法都会被synchronized原语同步，用于CopyOnWriteArrayList与
-	 * ArrayDequeue均不符合
+	 * 返回包装后同步的List，所有方法都会被synchronized原语同步，用于CopyOnWriteArrayList与 ArrayDequeue均不符合
 	 */
 	public static <T> List<T> synchronizedList(List<T> list) {
 		return Collections.synchronizedList(list);
 	}
 
-	///////////////// from JDK Collections的常用函数 ///////////////////
+	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
-	 * 返回一个空的结构特殊的List，节约空间. 注意List不可写.
+	 * 返回一个空的结构特殊的List，节约空间.
+	 * 
+	 * 注意返回的List不可写, 写入会抛出UnsupportedOperationException.
 	 * 
 	 * @see java.util.Collections#emptyList()
 	 */
@@ -164,7 +166,9 @@ public class ListUtil {
 	}
 
 	/**
-	 * 如果list为null，转化为一个安全的空List. 注意List不可写.
+	 * 如果list为null，转化为一个安全的空List.
+	 * 
+	 * 注意返回的List不可写, 写入会抛出UnsupportedOperationException.
 	 * 
 	 * @see java.util.Collections#emptyList()
 	 */
@@ -173,9 +177,11 @@ public class ListUtil {
 	}
 
 	/**
-	 * 返回一个只含一个元素但结构特殊的List，节约空间. 注意List不可写.
+	 * 返回只含一个元素但结构特殊的List，节约空间.
 	 * 
-	 * @see java.util.Collections#singleton(Object)
+	 * 注意返回的List不可写, 写入会抛出UnsupportedOperationException.
+	 * 
+	 * @see java.util.Collections#singletonList(Object)
 	 */
 	public static <T> List<T> singletonList(T o) {
 		return Collections.singletonList(o);
@@ -183,12 +189,16 @@ public class ListUtil {
 
 	/**
 	 * 返回包装后不可修改的List.
+	 * 
+	 * 如果尝试写入会抛出UnsupportedOperationException.
+	 * 
+	 * @see java.util.Collections#unmodifiableList(List)
 	 */
 	public static <T> List<T> unmodifiableList(List<? extends T> list) {
 		return Collections.unmodifiableList(list);
 	}
 
-
+	///////////////// from JDK Collections的常用函数 ///////////////////
 
 	/**
 	 * 排序, 采用JDK认为最优的排序算法.

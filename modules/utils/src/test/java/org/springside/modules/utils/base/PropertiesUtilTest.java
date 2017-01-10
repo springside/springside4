@@ -68,7 +68,7 @@ public class PropertiesUtilTest {
 		PropertiesUtil.registerSystemPropertiesListener(listener);
 
 		System.setProperty(name, "haha");
-
+		
 		assertThat(listener.newValue).isEqualTo("haha");
 	}
 

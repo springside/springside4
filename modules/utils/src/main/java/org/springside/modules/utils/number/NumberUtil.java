@@ -12,11 +12,7 @@ import com.google.common.primitives.Longs;
  * 
  * 2.判断字符串是否数字, 是否16进制字符串(via Common Lang)
  * 
- * 3.将字符串安全的转化为原始类型数字(via Common Lang)
- * 
- * 4.将10进制字符串安全的转化为数字对象(自写，Common Lang中处理不完善)
- * 
- * 5.将16进制字符串安全的转化为数字对象(自写)
+ * 3.将10机制/16进制字符串安全的转化为原始类型数字/数字对象(参考Common Lang自写)
  */
 public class NumberUtil {
 

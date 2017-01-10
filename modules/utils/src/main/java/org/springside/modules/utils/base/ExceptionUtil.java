@@ -91,6 +91,7 @@ public class ExceptionUtil {
 	/**
 	 * 判断异常是否由某些底层的异常引起.
 	 */
+	@SuppressWarnings("unchecked")
 	public static boolean isCausedBy(Throwable t, Class<? extends Exception>... causeExceptionClasses) {
 		Throwable cause = t;
 
@@ -134,10 +135,9 @@ public class ExceptionUtil {
 				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
 		return exception;// NOSONAR
 	}
-	
-	
+
 	/**
-	 * 清除StackTrace. 假设StackTrace已生成, 但把它打印出来也有不小的消耗. 
+	 * 清除StackTrace. 假设StackTrace已生成, 但把它打印出来也有不小的消耗.
 	 * 
 	 * 如果不能控制StackTrace的生成，也不能控制它的打印端(如logger)，可用此方法暴力清除Trace.
 	 * 
@@ -151,7 +151,6 @@ public class ExceptionUtil {
 		}
 		return exception;// NOSONAR
 	}
-
 
 	/**
 	 * 适用于Message经常变更的异常, 可通过clone()不经过构造函数的构造异常再设定新的异常信息
@@ -179,13 +178,13 @@ public class ExceptionUtil {
 		public CloneableException clone() {
 			try {
 				return (CloneableException) super.clone();
-			} catch (CloneNotSupportedException e) {
-				return null;// NOSONAR
+			} catch (CloneNotSupportedException e) {// NOSONAR
+				return null;
 			}
 		}
 
 		public CloneableException clone(String message) {
-			CloneableException newException = (CloneableException) this.clone();
+			CloneableException newException = this.clone();
 			newException.setMessage(message);
 			return newException;
 		}
@@ -199,7 +198,7 @@ public class ExceptionUtil {
 			this.message = message;
 		}
 
-		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
+		public CloneableException setStackTrace(Class<?> throwClazz, String throwMethod) {
 			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
 		}
@@ -217,11 +216,11 @@ public class ExceptionUtil {
 		protected String message;
 
 		public CloneableRuntimeException() {
-			super();
+			super((Throwable) null);
 		}
 
 		public CloneableRuntimeException(String message) {
-			super();
+			super((Throwable) null);
 			this.message = message;
 		}
 
@@ -234,8 +233,8 @@ public class ExceptionUtil {
 		public CloneableRuntimeException clone() {
 			try {
 				return (CloneableRuntimeException) super.clone();
-			} catch (CloneNotSupportedException e) {
-				return null;// NOSONAR
+			} catch (CloneNotSupportedException e) { // NOSONAR
+				return null;
 			}
 		}
 
@@ -254,7 +253,7 @@ public class ExceptionUtil {
 			this.message = message;
 		}
 
-		public Throwable setStackTrace(Class<?> throwClazz, String throwMethod) {
+		public CloneableRuntimeException setStackTrace(Class<?> throwClazz, String throwMethod) {
 			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
 		}

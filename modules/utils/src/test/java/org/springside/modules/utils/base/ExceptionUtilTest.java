@@ -14,14 +14,18 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil.CloneableException;
+import org.springside.modules.utils.base.ExceptionUtil.CloneableRuntimeException;
 
 public class ExceptionUtilTest {
 
 	private static RuntimeException TIMEOUT_EXCEPTION = ExceptionUtil.setStackTrace(new RuntimeException("Timeout"),
 			ExceptionUtilTest.class, "hello");
 
-	private static CloneableException TIMEOUT_EXCEPTION2 = ExceptionUtil
-			.setStackTrace(new CloneableException("Timeout"), ExceptionUtilTest.class, "hello");
+	private static CloneableException TIMEOUT_EXCEPTION2 = new CloneableException("Timeout")
+			.setStackTrace(ExceptionUtilTest.class, "hello");
+
+	private static CloneableRuntimeException TIMEOUT_EXCEPTION3 = new CloneableRuntimeException("Timeout")
+			.setStackTrace(ExceptionUtilTest.class, "hello");
 
 	@Test
 	public void unchecked() {
@@ -115,6 +119,15 @@ public class ExceptionUtilTest {
 		CloneableException timeoutException = TIMEOUT_EXCEPTION2.clone("Timeout for 30ms");
 		assertThat(ExceptionUtil.stackTraceText(timeoutException)).hasLineCount(2)
 				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableException: Timeout for 30ms")
+				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
+
+		assertThat(ExceptionUtil.stackTraceText(TIMEOUT_EXCEPTION3)).hasLineCount(2)
+				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableRuntimeException: Timeout")
+				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
+
+		CloneableRuntimeException timeoutRuntimeException = TIMEOUT_EXCEPTION3.clone("Timeout for 40ms");
+		assertThat(ExceptionUtil.stackTraceText(timeoutRuntimeException)).hasLineCount(2)
+				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableRuntimeException: Timeout for 40ms")
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 	}

@@ -1,4 +1,4 @@
-package org.springside.modules.utils.collection.extend;
+package org.springside.modules.utils.collection.type;
 
 import java.util.AbstractSet;
 import java.util.Collection;
