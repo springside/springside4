@@ -72,7 +72,7 @@ public class NetUtil {
 	 * 从某个端口开始，递增找一个空闲端口.
 	 */
 	public static int findAvailablePortFrom(int minPort) {
-		for (int port = minPort; port < PORT_RANGE_MAX; minPort++) {
+		for (int port = minPort; port < PORT_RANGE_MAX; port++) {
 			if (isPortAvailable(port)) {
 				return port;
 			}

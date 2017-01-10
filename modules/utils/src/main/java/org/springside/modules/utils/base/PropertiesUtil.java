@@ -186,6 +186,7 @@ public class PropertiesUtil {
 			listeners.add(listener);
 		}
 
+		@Override
 		public synchronized Object setProperty(String key, String value) {
 			Object result = put(key, value);
 			for (PropertiesListener listener : listeners) {
@@ -201,7 +202,7 @@ public class PropertiesUtil {
 	/**
 	 * 获取所关心的Properties变更的Listener基类.
 	 */
-	public abstract class PropertiesListener {
+	public static abstract class PropertiesListener {
 
 		protected String propertyName;
 

@@ -40,8 +40,8 @@ import com.google.common.hash.Hashing;
  */
 public class HashUtil {
 
-	private static final String SHA1 = "SHA-1";
-	private static final String MD5 = "MD5";
+	private static final String SHA1_ALG = "SHA-1";
+	private static final String MD5_ALG = "MD5";
 
 	private static SecureRandom random = new SecureRandom();
 
@@ -75,28 +75,28 @@ public class HashUtil {
 	 * 对输入字符串进行sha1散列.
 	 */
 	public static byte[] sha1(byte[] input) {
-		return digest(input, SHA1, null, 1);
+		return digest(input, SHA1_ALG, null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列, 编码默认为UTF8.
 	 */
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1, null, 1);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
 	public static byte[] sha1(byte[] input, byte[] salt) {
-		return digest(input, SHA1, salt, 1);
+		return digest(input, SHA1_ALG, salt, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
 	public static byte[] sha1(String input, byte[] salt) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1, salt, 1);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, salt, 1);
 	}
 
 	/**
@@ -105,7 +105,7 @@ public class HashUtil {
 	 * @see #generateSalt(int)
 	 */
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
-		return digest(input, SHA1, salt, iterations);
+		return digest(input, SHA1_ALG, salt, iterations);
 	}
 
 	/**
@@ -114,7 +114,7 @@ public class HashUtil {
 	 * @see #generateSalt(int)
 	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1, salt, iterations);
+		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, salt, iterations);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class HashUtil {
 	 * @see #generateSalt(int)
 	 */
 	public static byte[] sha1(String input, Charset charset, byte[] salt, int iterations) {
-		return digest(input.getBytes(charset), SHA1, salt, iterations);
+		return digest(input.getBytes(charset), SHA1_ALG, salt, iterations);
 	}
 
 	/**
@@ -170,14 +170,14 @@ public class HashUtil {
 	 * 对文件进行sha1散列.
 	 */
 	public static byte[] sha1File(InputStream input) throws IOException {
-		return digestFile(input, SHA1);
+		return digestFile(input, SHA1_ALG);
 	}
 
 	/**
 	 * 对文件进行md5散列，被破解后MD5已较少人用.
 	 */
 	public static byte[] md5File(InputStream input) throws IOException {
-		return digestFile(input, MD5);
+		return digestFile(input, MD5_ALG);
 	}
 
 	private static byte[] digestFile(InputStream input, String algorithm) throws IOException {
