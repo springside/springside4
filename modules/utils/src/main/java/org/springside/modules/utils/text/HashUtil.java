@@ -24,15 +24,15 @@ import com.google.common.hash.Hashing;
 /**
  * 封装各种Hash算法的工具类.
  * 
- * 1.集合类的HashCode
+ * 1.集合类的HashCode, 返回int
  * 
- * 2.SHA-1, 安全性较高，返回byte[](可用Encodes进一步被编码为Hex, Base64),
+ * 2.SHA-1, 安全性较高, 返回byte[](可用Encodes进一步被编码为Hex, Base64),
  * 
  * 支持带salt并且进行迭代达到更高的安全性.
  * 
- * MD5的安全性较低，默认已不支持.
+ * MD5的安全性较低, 默认已不支持.
  * 
- * 3.crc32，murmur32这些不追求安全性，性能较高，返回int.
+ * 3.crc32, murmur32这些不追求安全性, 性能较高, 返回int.
  * 
  * 其中crc32基于JDK, murmurhash基于guava
  * 
@@ -169,18 +169,18 @@ public class HashUtil {
 	/**
 	 * 对文件进行sha1散列.
 	 */
-	public static byte[] sha1(InputStream input) throws IOException {
-		return digest(input, SHA1);
+	public static byte[] sha1File(InputStream input) throws IOException {
+		return digestFile(input, SHA1);
 	}
 
 	/**
 	 * 对文件进行md5散列，被破解后MD5已较少人用.
 	 */
-	public static byte[] md5(InputStream input) throws IOException {
-		return digest(input, MD5);
+	public static byte[] md5File(InputStream input) throws IOException {
+		return digestFile(input, MD5);
 	}
 
-	private static byte[] digest(InputStream input, String algorithm) throws IOException {
+	private static byte[] digestFile(InputStream input, String algorithm) throws IOException {
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
 			int bufferLength = 8 * 1024;
@@ -201,16 +201,20 @@ public class HashUtil {
 	////////////////// 基于JDK的CRC32 ///////////////////
 
 	/**
-	 * 对输入字符串进行crc32散列.
+	 * 对输入字符串进行crc32散列返回int, 返回值有可能是负数.
+	 * 
+	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static int crc32(String input) {
-		return crc32(input.getBytes(Charsets.UTF_8));
+	public static int crc32AsInt(String input) {
+		return crc32AsInt(input.getBytes(Charsets.UTF_8));
 	}
 
 	/**
-	 * 对输入字符串进行crc32散列.
+	 * 对输入字符串进行crc32散列返回int, 返回值有可能是负数.
+	 * 
+	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static int crc32(byte[] input) {
+	public static int crc32AsInt(byte[] input) {
 		CRC32 crc32 = new CRC32();
 		crc32.update(input);
 		// CRC32 只是 32bit int，为了CheckSum接口强转成long，此处再次转回来
@@ -219,6 +223,17 @@ public class HashUtil {
 
 	/**
 	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
+	 * 
+	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
+	 */
+	public static long crc32AsLong(String input) {
+		return crc32AsLong(input.getBytes(Charsets.UTF_8));
+	}
+
+	/**
+	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
+	 * 
+	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
 	public static long crc32AsLong(byte[] input) {
 		CRC32 crc32 = new CRC32();
@@ -226,39 +241,32 @@ public class HashUtil {
 		return crc32.getValue();
 	}
 
-	/**
-	 * 对输入字符串进行crc32散列，与php兼容，在64bit系统下返回永远是正数的long
-	 */
-	public static long crc32AsLong(String input) {
-		return crc32AsLong(input.getBytes(Charsets.UTF_8));
-	}
-
 	////////////////// 基于Guava的MurMurHash ///////////////////
 	/**
 	 * 对输入字符串进行murmur32散列, 默认以类加载时的时间戳为seed
 	 */
-	public static int murmur32(byte[] input) {
+	public static int murmur32AsInt(byte[] input) {
 		return Hashing.murmur3_32().hashBytes(input).asInt();
 	}
 
 	/**
-	 * 对输入字符串进行murmur32散列, 默认以类加载时的时间戳为seed
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 默认以类加载时的时间戳为seed
 	 */
-	public static int murmur32(String input) {
+	public static int murmur32AsInt(String input) {
 		return Hashing.murmur3_32().hashString(input, Charsets.UTF_8).asInt();
 	}
 
 	/**
-	 * 对输入字符串进行murmur32散列，带有seed
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 带有seed
 	 */
-	public static int murmur32(byte[] input, int seed) {
+	public static int murmur32AsInt(byte[] input, int seed) {
 		return Hashing.murmur3_32(seed).hashBytes(input).asInt();
 	}
 
 	/**
-	 * 对输入字符串进行murmur32散列，带有seed
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 带有seed
 	 */
-	public static int murmur32(String input, int seed) {
+	public static int murmur32AsInt(String input, int seed) {
 		return Hashing.murmur3_32(seed).hashString(input, Charsets.UTF_8).asInt();
 	}
 }

@@ -61,18 +61,17 @@ public class ReflectionUtilTest {
 	public void invokeMethod() {
 		TestBean bean = new TestBean();
 		// 使用函数名+参数类型的匹配
-		assertThat(
-				ReflectionUtil
-						.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { String.class }))
-				.isEqualTo("hello calvin");
+		assertThat(ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
+				new Class[] { String.class })).isEqualTo("hello calvin");
 
 		// 仅匹配函数名
-		assertThat(ReflectionUtil.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" })).isEqualTo(
-				"hello calvin");
+		assertThat(ReflectionUtil.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" }))
+				.isEqualTo("hello calvin");
 
 		// 函数名错
 		try {
-			ReflectionUtil.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" }, new Class[] { String.class });
+			ReflectionUtil.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" },
+					new Class[] { String.class });
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -80,7 +79,8 @@ public class ReflectionUtilTest {
 
 		// 参数类型错
 		try {
-			ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }, new Class[] { Integer.class });
+			ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
+					new Class[] { Integer.class });
 			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
 
@@ -96,14 +96,12 @@ public class ReflectionUtilTest {
 
 	}
 
-	
-
 	@Test
 	public void convertReflectionExceptionToUnchecked() {
 		IllegalArgumentException iae = new IllegalArgumentException();
 		// ReflectionException,normal
 		RuntimeException e = ReflectionUtil.convertReflectionExceptionToUnchecked(iae);
-		assertThat(e.getCause()).isEqualTo(iae);
+		assertThat(e).isEqualTo(iae);
 
 		// InvocationTargetException,extract it's target exception.
 		Exception ex = new Exception();
@@ -135,7 +133,7 @@ public class ReflectionUtilTest {
 		}
 
 		// 通過setter函數會被比輸入值加1
-		public void setPublicField(int publicField) {
+		public void setPublicField(Integer publicField) {
 			this.publicField = publicField + 1;
 		}
 

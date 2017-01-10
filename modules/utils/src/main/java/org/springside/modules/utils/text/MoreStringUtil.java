@@ -3,7 +3,7 @@ package org.springside.modules.utils.text;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.assertj.core.util.Lists;
+import org.springside.modules.utils.collection.ListUtil;
 
 import com.google.common.annotations.Beta;
 import com.google.common.base.Utf8;
@@ -26,30 +26,34 @@ public class MoreStringUtil {
 	 * 1. 最后不做数组转换，直接返回List.
 	 * 
 	 * 2. 可设定List初始大小.
+	 * 
+	 * 3. preserveAllTokens 取默认值false
 	 */
 	public static List<String> split(final String str, final char separatorChar, int expectParts) {
+		
 		if (str == null) {
 			return null;
 		}
 		final int len = str.length();
 		if (len == 0) {
-			return Lists.emptyList();
+			return ListUtil.emptyList();
 		}
-		final List<String> list = new ArrayList<String>(expectParts);
+		final List<String> list = new ArrayList<String>();
 		int i = 0, start = 0;
-		boolean lastMatch = false;
+		boolean match = false;
 		while (i < len) {
 			if (str.charAt(i) == separatorChar) {
-
-				list.add(str.substring(start, i));
-				lastMatch = true;
+				if (match) {
+					list.add(str.substring(start, i));
+					match = false;
+				}
 				start = ++i;
 				continue;
 			}
-			lastMatch = false;
+			match = true;
 			i++;
 		}
-		if (lastMatch) {
+		if (match) {
 			list.add(str.substring(start, i));
 		}
 		return list;

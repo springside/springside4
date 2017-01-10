@@ -56,7 +56,11 @@ public class EncodeUtilTest {
 		String result = EncodeUtil.encodeBase64UrlSafe(input.getBytes());
 		assertThat(new String(EncodeUtil.decodeBase64UrlSafe(result), Charsets.UTF_8)).isEqualTo(input);
 
-		assertThat(result).isEqualTo(EncodeUtil.decodeBase64UrlSafe("AQIPE+8="));
-
+		try {
+			assertThat(result).isEqualTo(EncodeUtil.decodeBase64UrlSafe("AQIPE+8="));
+			Assert.fail("should throw exception before");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(IllegalArgumentException.class);
+		}
 	}
 }

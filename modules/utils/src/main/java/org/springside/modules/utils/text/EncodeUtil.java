@@ -24,7 +24,7 @@ public class EncodeUtil {
 	 * 
 	 * 字符串有异常时抛出IllegalArgumentException.
 	 */
-	public static byte[] decodeHex(String input) {
+	public static byte[] decodeHex(CharSequence input) {
 		return BaseEncoding.base16().decode(input);
 	}
 
@@ -40,7 +40,7 @@ public class EncodeUtil {
 	 * 
 	 * 如果字符不合法，抛出IllegalArgumentException
 	 */
-	public static byte[] decodeBase64(String input) {
+	public static byte[] decodeBase64(CharSequence input) {
 		return BaseEncoding.base64().decode(input);
 	}
 
@@ -56,7 +56,7 @@ public class EncodeUtil {
 	 * 
 	 * 如果字符不合法，抛出IllegalArgumentException
 	 */
-	public static byte[] decodeBase64UrlSafe(String input) {
+	public static byte[] decodeBase64UrlSafe(CharSequence input) {
 		return BaseEncoding.base64Url().decode(input);
 	}
 }

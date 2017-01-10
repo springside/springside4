@@ -14,7 +14,7 @@ import com.google.common.io.Resources;
  * 针对Jar包内的文件的工具类
  */
 public class ResourceUtil {
-	public File asFile(Class<?> contextClass, String resourceName) throws IOException {
+	public static File asFile(Class<?> contextClass, String resourceName) throws IOException {
 		try {
 			return new File(Resources.getResource(contextClass, resourceName).toURI());
 		} catch (URISyntaxException e) {
@@ -22,7 +22,7 @@ public class ResourceUtil {
 		}
 	}
 
-	public File asFile(String resourceName) throws IOException {
+	public static File asFile(String resourceName) throws IOException {
 		try {
 			return new File(Resources.getResource(resourceName).toURI());
 		} catch (URISyntaxException e) {
@@ -30,27 +30,27 @@ public class ResourceUtil {
 		}
 	}
 
-	public InputStream asStream(String resourceName) throws IOException {
+	public static InputStream asStream(String resourceName) throws IOException {
 		return Resources.getResource(resourceName).openStream();
 	}
 
-	public InputStream asStream(Class<?> contextClass, String resourceName) throws IOException {
+	public static InputStream asStream(Class<?> contextClass, String resourceName) throws IOException {
 		return Resources.getResource(contextClass, resourceName).openStream();
 	}
 
-	public String toString(String resourceName) throws IOException {
+	public static String toString(String resourceName) throws IOException {
 		return Resources.toString(Resources.getResource(resourceName), Charsets.UTF_8);
 	}
 
-	public String toString(Class<?> contextClass, String resourceName) throws IOException {
+	public static String toString(Class<?> contextClass, String resourceName) throws IOException {
 		return Resources.toString(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
 	}
 
-	public List<String> toLines(String resourceName) throws IOException {
+	public static List<String> toLines(String resourceName) throws IOException {
 		return Resources.readLines(Resources.getResource(resourceName), Charsets.UTF_8);
 	}
 
-	public List<String> toLines(Class<?> contextClass, String resourceName) throws IOException {
+	public static List<String> toLines(Class<?> contextClass, String resourceName) throws IOException {
 		return Resources.readLines(Resources.getResource(contextClass, resourceName), Charsets.UTF_8);
 	}
 }

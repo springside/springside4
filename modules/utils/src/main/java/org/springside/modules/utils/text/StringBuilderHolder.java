@@ -10,7 +10,7 @@ package org.springside.modules.utils.text;
  * 在Netty环境中，使用Netty提供的基于FastThreadLocal的版本。
  * 
  * <pre>
- * private static ThreadLocal<StringBuilderHolder> stringBuilderHolder = new ThreadLocal<StringBuilderHolder>() {
+ * private static ThreadLocal&lt;StringBuilderHolder&gt; stringBuilderHolder = new ThreadLocal&lt;StringBuilderHolder&gt;() {
  * 	&#64;Override
  * 	protected StringBuilderHolder initialValue() {
  * 		return new StringBuilderHolder(512);

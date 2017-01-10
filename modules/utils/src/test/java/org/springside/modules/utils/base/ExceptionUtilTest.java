@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ExceptionUtilTest {
@@ -17,12 +18,22 @@ public class ExceptionUtilTest {
 	public void unchecked() {
 		// convert Exception to RuntimeException with cause
 		Exception exception = new Exception("my exception");
-		RuntimeException runtimeException = ExceptionUtil.unchecked(exception);
-		assertThat(runtimeException.getCause()).isEqualTo(exception);
+		try {
+			ExceptionUtil.unchecked(exception);
+			Assert.fail("should fail");
+		} catch (Throwable t) {
+			assertThat(t.getCause()).isSameAs(exception);
+		}
 
 		// do nothing of RuntimeException
-		RuntimeException runtimeException2 = ExceptionUtil.unchecked(runtimeException);
-		assertThat(runtimeException2).isSameAs(runtimeException);
+		RuntimeException runtimeException = new RuntimeException("haha");
+		try{
+			ExceptionUtil.unchecked(runtimeException);
+			Assert.fail("should fail");
+		}catch (Throwable t) {
+			assertThat(t).isSameAs(runtimeException);
+		}
+		
 	}
 
 	@Test

@@ -12,6 +12,7 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +25,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
 /**
  * 简单封装Jackson，实现JSON String<->Java Object的Mapper.
  * 
- * 封装不同的输出风格, 使用不同的builder函数创建实例, 也可以直接使用公共示例JsonMapper.INSTANCE
+ * 可以直接使用公共示例JsonMapper.INSTANCE, 也可以使用不同的builder函数创建实例，封装不同的输出风格,
  * 
  * 不要是用GSON, 在对象稍大时非常缓慢.
  * 
@@ -53,17 +54,26 @@ public class JsonMapper {
 	}
 
 	/**
-	 * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper,建议在外部接口中使用.
+	 * 创建只输出非Null的属性到Json字符串的Mapper.
+	 */
+	public static JsonMapper nonNullMapper() {
+		return new JsonMapper(Include.NON_NULL);
+	}
+
+	/**
+	 * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
+	 * 
+	 * 注意，要小心使用, 特别留意empty的情况.
 	 */
 	public static JsonMapper nonEmptyMapper() {
 		return new JsonMapper(Include.NON_EMPTY);
 	}
 
 	/**
-	 * 创建只输出初始值被改变的属性到Json字符串的Mapper, 最节约的存储方式，建议在内部接口中使用。
+	 * 默认的全部输出的Mapper, 区别于INSTANCE，可以做进一步的配置
 	 */
-	public static JsonMapper nonDefaultMapper() {
-		return new JsonMapper(Include.NON_DEFAULT);
+	public static JsonMapper defaultMapper() {
+		return new JsonMapper();
 	}
 
 	/**
@@ -88,7 +98,7 @@ public class JsonMapper {
 	 * 
 	 * @see #fromJson(String, JavaType)
 	 */
-	public <T> T fromJson(String jsonString, Class<T> clazz) {
+	public <T> T fromJson(@Nullable String jsonString, Class<T> clazz) {
 		if (StringUtils.isEmpty(jsonString)) {
 			return null;
 		}
@@ -106,7 +116,7 @@ public class JsonMapper {
 	 * 
 	 * @see #createCollectionType(Class, Class...)
 	 */
-	public <T> T fromJson(String jsonString, JavaType javaType) {
+	public <T> T fromJson(@Nullable String jsonString, JavaType javaType) {
 		if (StringUtils.isEmpty(jsonString)) {
 			return null;
 		}
@@ -122,19 +132,19 @@ public class JsonMapper {
 	/**
 	 * 构造Collection类型.
 	 */
-	public JavaType contructCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
+	public JavaType buildCollectionType(Class<? extends Collection> collectionClass, Class<?> elementClass) {
 		return mapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
 	}
 
 	/**
 	 * 构造Map类型.
 	 */
-	public JavaType contructMapType(Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
+	public JavaType buildMapType(Class<? extends Map> mapClass, Class<?> keyClass, Class<?> valueClass) {
 		return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
 	}
 
 	/**
-	 * 当JSON里只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+	 * 当JSON里只含有Bean的部分属性時，更新一個已存在Bean，只覆盖該部分的属性.
 	 */
 	public void update(String jsonString, Object object) {
 		try {
