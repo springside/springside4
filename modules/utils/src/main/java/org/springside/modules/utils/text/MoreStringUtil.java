@@ -39,7 +39,8 @@ public class MoreStringUtil {
 			return ListUtil.emptyList();
 		}
 		final List<String> list = new ArrayList<String>();
-		int i = 0, start = 0;
+		int i = 0;
+		int start = 0;
 		boolean match = false;
 		while (i < len) {
 			if (str.charAt(i) == separatorChar) {

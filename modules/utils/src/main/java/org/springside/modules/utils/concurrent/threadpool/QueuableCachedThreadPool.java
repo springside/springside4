@@ -102,14 +102,16 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 		}
 
 		public boolean force(Runnable o) {
-			if (parent.isShutdown())
+			if (parent.isShutdown()) {
 				throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
+			}
 			return super.offer(o); // forces the item onto the queue, to be used if the task is rejected
 		}
 
 		public boolean force(Runnable o, long timeout, TimeUnit unit) throws InterruptedException {
-			if (parent.isShutdown())
+			if (parent.isShutdown()) {
 				throw new RejectedExecutionException("Executor not running, can't force a command into the queue");
+			}
 			return super.offer(o, timeout, unit); // forces the item onto the queue, to be used if the task is rejected
 		}
 
@@ -120,14 +122,17 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 			int currentPoolSize = parent.getPoolSize();
 
 			// we are maxed out on threads, simply queue the object
-			if (currentPoolSize >= parent.getMaximumPoolSize())
+			if (currentPoolSize >= parent.getMaximumPoolSize()){
 				return super.offer(o);
+			}
 			// we have idle threads, just add it to the queue
-			if (parent.getSubmittedCount() < currentPoolSize)
+			if (parent.getSubmittedCount() < currentPoolSize){
 				return super.offer(o);
+			}
 			// if we have less threads than maximum force creation of a new thread
-			if (currentPoolSize < parent.getMaximumPoolSize())
+			if (currentPoolSize < parent.getMaximumPoolSize()){
 				return false;
+			}
 			// if we reached here, we need to add it to the queue
 			return super.offer(o);
 		}

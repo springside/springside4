@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
@@ -18,6 +19,28 @@ import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
 
 public class ThreadUtilTest {
+	@Test
+	public void buildThreadFactory() {
+
+		Runnable testRunnable = new Runnable() {
+			@Override
+			public void run() {
+			}
+		};
+		// 测试name格式
+		ThreadFactory threadFactory = ThreadUtil.buildThreadFactory("example");
+		Thread thread = threadFactory.newThread(testRunnable);
+
+		assertThat(thread.getName()).isEqualTo("example-0");
+		assertThat(thread.isDaemon()).isFalse();
+
+		// 测试daemon属性设置
+		threadFactory = ThreadUtil.buildThreadFactory("example", true);
+		Thread thread2 = threadFactory.newThread(testRunnable);
+
+		assertThat(thread.getName()).isEqualTo("example-0");
+		assertThat(thread2.isDaemon()).isTrue();
+	}
 
 	@Test
 	public void gracefulShutdown() throws InterruptedException {

@@ -29,7 +29,14 @@ public class ExceptionUtil {
 	 * 
 	 * CheckedException会用UndeclaredThrowableException包裹，RunTimeException和Error则不会被转变.
 	 * 
-	 * from Commons Lange 3.5 ExceptionUtils, 但依赖包可能没有这么新，因此复制下来.
+	 * from Commons Lange 3.5 ExceptionUtils.
+	 * 
+	 * 虽然unchecked()里已直接抛出异常，但仍然定义返回值，方便欺骗Sonar。因此本函数也改变了一下返回值
+	 * 
+	 * 示例代码:
+	 * 
+	 * <pre>
+	 * try{ ... }catch(Exception e){ throw unchecked(t); }
 	 * 
 	 * @see ExceptionUtils#wrapAndThrow(Throwable)
 	 */
@@ -117,8 +124,9 @@ public class ExceptionUtil {
 	 * 如果异常可能在多个地方抛出，使用本函数设置抛出的类名和方法名.
 	 * 
 	 * <pre>
-	 * private static TimeoutException TIMEOUT_EXCEPTION = staticStackTrace(new TimeOutException(), MyClass.class,
-	 * 		"hello");
+	 * private static RuntimeException TIMEOUT_EXCEPTION = ExceptionUtil.setStackTrace(new RuntimeException("Timeout"),
+	 * 		MyClass.class, "mymethod");
+	 * 
 	 * </pre>
 	 */
 	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
@@ -126,14 +134,24 @@ public class ExceptionUtil {
 				new StackTraceElement[] { new StackTraceElement(throwClass.getName(), throwClazz, null, -1) });
 		return exception;// NOSONAR
 	}
-
+	
+	
 	/**
-	 * 清除StackTrace. 假设StackTrace已生成, 但把它打印出来也有不小的消耗. 如果不能控制打印端(如logger)，可用此方法暴力清除Trace.
+	 * 清除StackTrace. 假设StackTrace已生成, 但把它打印出来也有不小的消耗. 
+	 * 
+	 * 如果不能控制StackTrace的生成，也不能控制它的打印端(如logger)，可用此方法暴力清除Trace.
+	 * 
+	 * 但Cause链依然不能清除, 只能清除每一个Cause的StackTrace.
 	 */
 	public static <T extends Throwable> T clearStackTrace(T exception) {
-		exception.setStackTrace(EMPTY_STACK_TRACE);
+		Throwable cause = exception;
+		while (cause != null) {
+			cause.setStackTrace(EMPTY_STACK_TRACE);
+			cause = cause.getCause();
+		}
 		return exception;// NOSONAR
 	}
+
 
 	/**
 	 * 适用于Message经常变更的异常, 可通过clone()不经过构造函数的构造异常再设定新的异常信息
@@ -144,11 +162,11 @@ public class ExceptionUtil {
 		protected String message;
 
 		public CloneableException() {
-			super();
+			super((Throwable) null);
 		}
 
 		public CloneableException(String message) {
-			super();
+			super((Throwable) null);
 			this.message = message;
 		}
 
@@ -167,7 +185,7 @@ public class ExceptionUtil {
 		}
 
 		public CloneableException clone(String message) {
-			CloneableException newException = this.clone();
+			CloneableException newException = (CloneableException) this.clone();
 			newException.setMessage(message);
 			return newException;
 		}

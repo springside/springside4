@@ -83,7 +83,7 @@ public class ThreadDumpper {
 	 */
 	public String dumpThreadInfo(ThreadInfo threadInfo) {
 		StringBuilder sb = new StringBuilder(512);
-		sb.append("\"").append(threadInfo.getThreadName()).append("\" Id=").append(threadInfo.getThreadId()).append(" ")
+		sb.append("\"").append(threadInfo.getThreadName()).append("\" Id=").append(threadInfo.getThreadId()).append(' ')
 				.append(threadInfo.getThreadState());
 		if (threadInfo.getLockName() != null) {
 			sb.append(" on ").append(threadInfo.getLockName());
@@ -103,7 +103,7 @@ public class ThreadDumpper {
 		StackTraceElement[] stackTrace = threadInfo.getStackTrace();
 		for (; i < Math.min(maxStackLevel, stackTrace.length); i++) {
 			StackTraceElement ste = stackTrace[i];
-			sb.append("\tat " + ste.toString()).append('\n');
+			sb.append("\tat ").append(ste.toString()).append('\n');
 			if (i == 0 && threadInfo.getLockInfo() != null) {
 				Thread.State ts = threadInfo.getThreadState();
 				switch (ts) {

@@ -9,7 +9,7 @@ import org.springside.modules.utils.number.NumberUtil;
 /**
  * 关于Properties的工具类
  * 
- * 1. Boolean.readBoolean(name) 不够用, 进行扩展. 其他Integer.read()等都没问题.
+ * 1. Boolean.readBoolean(name) 与其他类型如Integer.readInteger()等的行为不一致，进行扩展.
  * 
  * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
  * 
@@ -23,9 +23,16 @@ public class PropertiesUtil {
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
 	/**
-	 * 读取Boolean类型的系统变量，为空时返回null，而不是false.
+	 * 读取Boolean类型的系统变量，为空时返回False，与Boolean.getBoolean()一致.
 	 */
-	public static Boolean readBoolean(String name) {
+	public static boolean getBooleanDefaultFalse(String name) {
+		return Boolean.getBoolean(name);
+	}
+
+	/**
+	 * 读取Boolean类型的系统变量，为空时返回null，代表未设置，而不是Boolean.getBoolean()的false.
+	 */
+	public static Boolean getBooleanDefaultNull(String name) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
 			return Boolean.valueOf(stringResult);
@@ -34,9 +41,11 @@ public class PropertiesUtil {
 	}
 
 	/**
-	 * 读取Boolean类型的系统变量，为空时返回默认值，因为默认值为Boolean，返回的也是Boolean
+	 * 读取Boolean类型的系统变量，为空时返回默认值, 而不是Boolean.getBoolean()的false.
+	 * 
+	 * 因为默认值为Boolean，返回值也是Boolean
 	 */
-	public static Boolean readBoolean(String name, Boolean defaultVal) {
+	public static Boolean getBoolean(String name, Boolean defaultVal) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
 			return Boolean.parseBoolean(stringResult);
@@ -46,9 +55,11 @@ public class PropertiesUtil {
 	}
 
 	/**
-	 * 读取Boolean类型的系统变量，为空时返回默认值。因为默认值为Boolean，返回的也是boolean
+	 * 读取Boolean类型的系统变量，为空时返回默认值, 而不是Boolean.getBoolean()的false.
+	 * 
+	 * 因为默认值为boolean，返回值也是boolean
 	 */
-	public static boolean readBoolean(String name, boolean defaultVal) {
+	public static boolean getBoolean(String name, boolean defaultVal) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
 			return Boolean.parseBoolean(stringResult);
@@ -146,6 +157,7 @@ public class PropertiesUtil {
 		}
 	}
 
+	/////////// ListenableProperties /////////////
 	/**
 	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
 	 * 在其所关心的属性变化时进行通知.

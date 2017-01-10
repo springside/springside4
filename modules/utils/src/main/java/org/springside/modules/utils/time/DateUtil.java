@@ -24,6 +24,8 @@ public class DateUtil {
 
 	public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR; // Number of milliseconds in a standard day.
 
+	private static final int[] MONTH_LENGTH = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
 	/**
 	 * 是否同一天.
 	 * 
@@ -270,8 +272,7 @@ public class DateUtil {
 		return result;
 	}
 
-	static final int[] MONTH_LENGTH = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-
+	
 	/**
 	 * 获取某个月有多少天, 考虑闰年等因数, 移植Jodd Core的TimeUtil
 	 */

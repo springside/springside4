@@ -26,9 +26,16 @@ public class Platforms {
 
 	// 临时目录
 	public static final String TMP_DIR = SystemUtils.JAVA_IO_TMPDIR;
+	// 当前应用的工作目录
+	public static final String WORKING_DIR = SystemUtils.USER_DIR;
+	// 用户 HOME目录
+	public static final String USER_HOME = SystemUtils.USER_HOME;
+	// Java HOME目录
+	public static final String JAVA_HOME = SystemUtils.JAVA_HOME;
 
 	// Java版本
-	public static final String JAVA_VERSION = SystemUtils.JAVA_SPECIFICATION_VERSION;
+	public static final String JAVA_SPECIFICATION_VERSION = SystemUtils.JAVA_SPECIFICATION_VERSION; // e.g. 1.8
+	public static final String JAVA_VERSION = SystemUtils.JAVA_VERSION; // e.g. 1.8.0_102
 	public static final boolean IS_JAVA6 = SystemUtils.IS_JAVA_1_6;
 	public static final boolean IS_JAVA7 = SystemUtils.IS_JAVA_1_7;
 	public static final boolean IS_JAVA8 = SystemUtils.IS_JAVA_1_8;
@@ -39,7 +46,7 @@ public class Platforms {
 	// 操作系统类型及版本
 	public static final String OS_NAME = SystemUtils.OS_NAME;
 	public static final String OS_VERSION = SystemUtils.OS_VERSION;
-	public static final String OS_ARCH = SystemUtils.OS_ARCH;
+	public static final String OS_ARCH = SystemUtils.OS_ARCH; // e.g. x86_64
 	public static final boolean IS_LINUX = SystemUtils.IS_OS_LINUX;
 	public static final boolean IS_UNIX = SystemUtils.IS_OS_UNIX;
 	public static final boolean IS_WINDOWS = SystemUtils.IS_OS_WINDOWS;

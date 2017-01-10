@@ -14,7 +14,7 @@ public class ClockUtil {
 	private static Clock INSTANCE = new DefaultClock();
 
 	/**
-	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
+	 * 切换为DummyClock，使用系统时间为初始时间, 单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock() {
 		DummyClock clock = new DummyClock();
@@ -116,15 +116,16 @@ public class ClockUtil {
 		private long nanoTme;
 
 		public DummyClock() {
-			this.time = System.currentTimeMillis();
+			this(System.currentTimeMillis());
 		}
 
 		public DummyClock(Date date) {
-			this.time = date.getTime();
+			this(date.getTime());
 		}
 
 		public DummyClock(long time) {
 			this.time = time;
+			this.nanoTme = System.nanoTime();
 		}
 
 		@Override
@@ -137,20 +138,23 @@ public class ClockUtil {
 			return time;
 		}
 
+		/**
+		 * 获取nanotime
+		 */
 		@Override
 		public long nanoTime() {
 			return nanoTme;
 		}
 
 		/**
-		 * 重新设置日期。
+		 * 重新设置日期.
 		 */
 		public void updateNow(Date newDate) {
 			time = newDate.getTime();
 		}
 
 		/**
-		 * 重新设置时间。
+		 * 重新设置时间.
 		 */
 		public void updateNow(long newTime) {
 			this.time = newTime;
@@ -170,6 +174,9 @@ public class ClockUtil {
 			time -= millis;
 		}
 
+		/**
+		 * 设置nanotime.
+		 */
 		public void setNanoTime(long nanoTime) {
 			this.nanoTme = nanoTime;
 		}

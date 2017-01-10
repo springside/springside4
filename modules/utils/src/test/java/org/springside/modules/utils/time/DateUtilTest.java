@@ -86,5 +86,8 @@ public class DateUtilTest {
 		// 2009-02-09, 整除4年, 非闰年
 		Date date2 = new Date(109, 2, 9);
 		assertThat(DateUtil.getMonthLength(date2)).isEqualTo(28);
+		
+		Date date3 = new Date(108, 8, 9);
+		assertThat(DateUtil.getMonthLength(date3)).isEqualTo(31);
 	}
 }

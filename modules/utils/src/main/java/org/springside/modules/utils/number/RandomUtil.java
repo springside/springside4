@@ -49,14 +49,14 @@ public class RandomUtil {
 	/**
 	 * 返回0到Intger.MAX_VALUE的随机Int, 使用内置全局普通Random.
 	 */
-	public static long nextInt() {
+	public static int nextInt() {
 		return nextInt(RANDOM);
 	}
 
 	/**
 	 * 返回0到Intger.MAX_VALUE的随机Int, 可传入SecureRandom或ThreadLocalRandom
 	 */
-	public static long nextInt(Random random) {
+	public static int nextInt(Random random) {
 		int n = random.nextInt();
 		if (n == Integer.MIN_VALUE) {
 			n = 0; // corner case
@@ -70,14 +70,14 @@ public class RandomUtil {
 	/**
 	 * 返回0到max的随机Int, 使用内置全局普通Random.
 	 */
-	public static long nextInt(int max) {
+	public static int nextInt(int max) {
 		return nextInt(RANDOM, max);
 	}
 
 	/**
 	 * 返回0到max的随机Int, 可传入SecureRandom或ThreadLocalRandom
 	 */
-	public static long nextInt(Random random, int max) {
+	public static int nextInt(Random random, int max) {
 		return random.nextInt(max);
 	}
 
@@ -86,7 +86,7 @@ public class RandomUtil {
 	 * 
 	 * min必须大于0.
 	 */
-	public static long nextInt(int min, int max) {
+	public static int nextInt(int min, int max) {
 		return nextInt(RANDOM, min, max);
 	}
 
@@ -99,7 +99,7 @@ public class RandomUtil {
 	 * 
 	 * @see org.apache.commons.lang3.RandomUtils#nextInt(long, long)
 	 */
-	public static long nextInt(Random random, int min, int max) {
+	public static int nextInt(Random random, int min, int max) {
 		Validate.isTrue(max >= min, "Start value must be smaller or equal to end value.");
 		Validate.isTrue(min >= 0, "Both range values must be non-negative.");
 

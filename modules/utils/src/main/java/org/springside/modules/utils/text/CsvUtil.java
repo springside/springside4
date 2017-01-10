@@ -64,10 +64,8 @@ public class CsvUtil {
 			if (ndx == -1) {
 				ndx = field.indexOf(FIELD_QUOTE);
 			}
-			if (ndx == -1) {
-				if (field.startsWith(SPACE) || field.endsWith(SPACE)) {
-					ndx = 1;
-				}
+			if (ndx == -1 && (field.startsWith(SPACE) || field.endsWith(SPACE))) {
+				ndx = 1;
 			}
 			if (ndx == -1) {
 				ndx = StringUtils.indexOf(field, SPECIAL_CHARS);
