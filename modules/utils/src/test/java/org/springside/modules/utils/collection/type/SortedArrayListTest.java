@@ -17,10 +17,10 @@ public class SortedArrayListTest {
 		list.add("9");
 		list.add("3");
 
-		assertThat(list).containsSequence("1", "3", "6", "9", "9");
+		assertThat(list).containsExactly("1", "3", "6", "9", "9");
 
 		list.remove(2);
-		assertThat(list).containsSequence("1", "3", "9", "9");
+		assertThat(list).containsExactly("1", "3", "9", "9");
 
 		assertThat(list.contains("3")).isTrue();
 		assertThat(list.contains("2")).isFalse();
@@ -31,5 +31,9 @@ public class SortedArrayListTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
+
+		SortedArrayList<String> list2 = ListUtil.newSortedArrayList();
+		list2.addAll(ListUtil.newArrayList("3", "1", "2"));
+		assertThat(list2).containsExactly("1", "2", "3");
 	}
 }

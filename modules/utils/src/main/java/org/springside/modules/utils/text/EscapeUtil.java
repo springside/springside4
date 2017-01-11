@@ -43,8 +43,6 @@ public abstract class EscapeUtil {
 		}
 	}
 
-
-
 	/**
 	 * Xml转码，将字符串转码为符合XML1.1格式的字符串.
 	 * 

@@ -43,7 +43,7 @@ public abstract class FilePathUtil {
 	public static String contactName(String baseName, String appendName) {
 		return baseName + Platforms.FILE_PATH_SEPARATOR_CHAR + appendName;
 	}
-	
+
 	/**
 	 * from Jodd
 	 */

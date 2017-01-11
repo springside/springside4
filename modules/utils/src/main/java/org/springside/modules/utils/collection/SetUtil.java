@@ -167,7 +167,7 @@ public abstract class SetUtil {
 	}
 
 	/**
-	 * set1, set2的补集（在set1和set中，不在交集中的对象，又叫反交集）的只读view，不复制产生新的Set对象.
+	 * set1, set2的补集（在set1或set2中，但不在交集中的对象，又叫反交集）的只读view，不复制产生新的Set对象.
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */

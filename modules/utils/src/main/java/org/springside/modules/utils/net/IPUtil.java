@@ -24,7 +24,7 @@ public abstract class IPUtil {
 
 	private static ConcurrentHashMap<String, InetAddress> strToInetCache = MapUtil.newConcurrentHashMap();
 	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = MapUtil.newConcurrentHashMap();
-	
+
 	/**
 	 * 从InetAddress转化到int, 传输和存储时, 用int代表InetAddress是最小的开销.
 	 * 
@@ -179,5 +179,4 @@ public abstract class IPUtil {
 		return byteAddress;
 	}
 
-	
 }

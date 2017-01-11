@@ -40,6 +40,8 @@ import java.util.Iterator;
  */
 public class SortedArrayList<E> extends ArrayList<E> {
 
+	private static final long serialVersionUID = -8301136559614447593L;
+
 	protected final Comparator<E> comparator;
 
 	/**

@@ -167,9 +167,9 @@ public class JsonMapperTest {
 		String jsonp = JsonMapper.nonEmptyMapper().toJsonP("haha", bean);
 		assertThat(jsonp).isEqualTo("haha({\"name\":\"A\",\"defaultValue\":\"hello\"})");
 	}
-	
+
 	@Test
-	public void update(){
+	public void update() {
 		TestBean bean = new TestBean("A");
 		bean.setDefaultValue("lalala");
 		JsonMapper.INSTANCE.update("{\"name\":\"B\"", bean);

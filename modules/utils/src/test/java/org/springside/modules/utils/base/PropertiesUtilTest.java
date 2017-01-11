@@ -60,11 +60,10 @@ public class PropertiesUtilTest {
 		} catch (Exception e) {
 			assertThat(e).isInstanceOf(IllegalArgumentException.class);
 		}
-		
+
 		System.clearProperty(name);
 	}
 
-	
 	@Test
 	public void readInt() {
 		String name = "ss.test" + RandomUtil.nextInt();
@@ -75,16 +74,15 @@ public class PropertiesUtilTest {
 		assertThat(result).isEqualTo(123);
 
 		// env值没有数字类型的，忽略
-		
 
 		// system properties值
 		System.setProperty(name, "456");
 		int result3 = PropertiesUtil.readInt(name, envName, 123);
 		assertThat(result3).isEqualTo(456);
-		
+
 		System.clearProperty(name);
 	}
-	
+
 	@Test
 	public void readLong() {
 		String name = "ss.test" + RandomUtil.nextInt();
@@ -95,17 +93,15 @@ public class PropertiesUtilTest {
 		assertThat(result).isEqualTo(123L);
 
 		// env值没有数字类型的，忽略
-		
 
 		// system properties值
 		System.setProperty(name, "456");
 		long result3 = PropertiesUtil.readLong(name, envName, 123L);
 		assertThat(result3).isEqualTo(456L);
-		
+
 		System.clearProperty(name);
 	}
-	
-	
+
 	@Test
 	public void readDouble() {
 		String name = "ss.test" + RandomUtil.nextInt();
@@ -116,16 +112,15 @@ public class PropertiesUtilTest {
 		assertThat(result).isEqualTo(123d);
 
 		// env值没有数字类型的，忽略
-		
 
 		// system properties值
 		System.setProperty(name, "456");
 		double result3 = PropertiesUtil.readDouble(name, envName, 123d);
 		assertThat(result3).isEqualTo(456d);
-		
+
 		System.clearProperty(name);
 	}
-	
+
 	@Test
 	public void loadProperties() {
 		Properties p1 = PropertiesUtil.loadFromFile("classpath://application.properties");

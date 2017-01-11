@@ -16,11 +16,11 @@ public class StringBuilderHolderTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		
+
 		final CountDownLatch countdown = new CountDownLatch(10);
 		final CyclicBarrier barrier = new CyclicBarrier(10);
-		
-		Runnable runnable = new Runnable(){
+
+		Runnable runnable = new Runnable() {
 			@Override
 			public void run() {
 				try {
@@ -30,25 +30,24 @@ public class StringBuilderHolderTest {
 					e.printStackTrace();
 				}
 				StringBuilder builder = stringBuilderHolder.get().stringBuilder();
-				builder.append(Thread.currentThread().getName()+"-1");
+				builder.append(Thread.currentThread().getName() + "-1");
 				System.out.println(builder.toString());
-				
+
 				builder = stringBuilderHolder.get().stringBuilder();
-				builder.append(Thread.currentThread().getName()+"-2");
+				builder.append(Thread.currentThread().getName() + "-2");
 				System.out.println(builder.toString());
-				
+
 				countdown.countDown();
 			}
 		};
-		
+
 		for (int i = 0; i < 10; i++) {
 			Thread thread = new Thread(runnable);
 			thread.start();
 		}
-		
+
 		countdown.await();
-		
-		
+
 	}
 
 }

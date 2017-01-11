@@ -69,8 +69,8 @@ public class SetUtilTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
-		
-		Set<String> set7 = SetUtil.newSetFromMap(MapUtil.<String,Boolean>newConcurrentNavigableMap());
+
+		Set<String> set7 = SetUtil.newSetFromMap(MapUtil.<String, Boolean> newConcurrentNavigableMap());
 	}
 
 	@Test
@@ -89,8 +89,7 @@ public class SetUtilTest {
 
 		Set<String> set6 = SetUtil.complement(set1, set2);
 		assertThat(set6).hasSize(6).contains("1", "2", "3", "4", "5", "7");
-		
-		
+
 		try {
 			set6.add("a");
 			Assert.fail("should fail before");

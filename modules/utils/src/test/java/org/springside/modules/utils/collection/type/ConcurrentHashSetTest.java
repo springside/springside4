@@ -18,11 +18,11 @@ public class ConcurrentHashSetTest {
 		assertThat(conrrentHashSet.size()).isEqualTo(3);
 		assertThat(conrrentHashSet.contains("a")).isTrue();
 		assertThat(conrrentHashSet.contains("d")).isFalse();
-		
-		assertThat(conrrentHashSet).contains("a","b","c");
-		
-		for(String key: conrrentHashSet){
-			System.out.print(key+",");
+
+		assertThat(conrrentHashSet).contains("a", "b", "c");
+
+		for (String key : conrrentHashSet) {
+			System.out.print(key + ",");
 		}
 	}
 

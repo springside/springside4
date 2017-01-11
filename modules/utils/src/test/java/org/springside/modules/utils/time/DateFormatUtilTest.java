@@ -72,7 +72,7 @@ public class DateFormatUtilTest {
 
 			Date threeDayBefore = DateFormatUtil.DEFAULT_ON_SECOND_FORMAT.parse("2016-12-09 1:00:00");
 			assertThat(DateFormatUtil.formatFriendlyTimeSpanByNow(threeDayBefore)).isEqualTo("2016-12-09");
-		
+
 		} finally {
 
 			ClockUtil.useDefaultClock();

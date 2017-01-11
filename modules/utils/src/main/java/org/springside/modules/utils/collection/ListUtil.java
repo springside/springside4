@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,15 +20,13 @@ import com.google.common.primitives.Longs;
 /**
  * 关于List的工具集合.
  * 
- * 1. 常用函数(如是否为空)
+ * 1. 常用函数(如是否为空，sort/binarySearch/shuffle/reverse(via JDK Collection)
  * 
  * 2. 各种 构造函数(from guava and JDK Collection)
  * 
- * 3. sort/binarySearch/shuffle/reverse(via JDK Collection)
+ * 3. Array 转ArrayList的特色函数 (from Guava)
  * 
- * 4. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
- * 
- * 5. 集合运算，包括两个List是否完全相等，两个List的交集，并集，from Commons Collection）
+ * 5. 集合运算，集合是否一致，交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
  * 
  * @author calvin
  */
@@ -87,7 +84,16 @@ public abstract class ListUtil {
 	 * @see com.google.common.collect.Lists#newArrayList(Object...)
 	 */
 	public static <T> ArrayList<T> newArrayList(T... elements) {
-		return com.google.common.collect.Lists.newArrayList(elements);
+		return Lists.newArrayList(elements);
+	}
+
+	/**
+	 * 根据等号左边的类型，构造类型正确的ArrayList, 并初始化元素.
+	 * 
+	 * @see com.google.common.collect.Lists#newArrayList(Iterable)
+	 */
+	public static <T> ArrayList<T> newArrayList(Iterable<T> elements) {
+		return Lists.newArrayList(elements);
 	}
 
 	/**
@@ -111,7 +117,7 @@ public abstract class ListUtil {
 	/**
 	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
 	 * 
-	 * from Jodd的新类型，插入时排序，有几个方法不支持
+	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
 	 */
 	@SuppressWarnings("rawtypes")
 	public static <T extends Comparable> SortedArrayList<T> newSortedArrayList() {
@@ -141,13 +147,6 @@ public abstract class ListUtil {
 	 */
 	public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(T... elements) {
 		return new CopyOnWriteArrayList<T>(elements);
-	}
-
-	/**
-	 * 返回包装后同步的List，所有方法都会被synchronized原语同步，用于CopyOnWriteArrayList与 ArrayDequeue均不符合
-	 */
-	public static <T> List<T> synchronizedList(List<T> list) {
-		return Collections.synchronizedList(list);
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
@@ -196,6 +195,15 @@ public abstract class ListUtil {
 		return Collections.unmodifiableList(list);
 	}
 
+	/**
+	 * 返回包装后同步的List，所有方法都会被synchronized原语同步.
+	 * 
+	 * 用于CopyOnWriteArrayList与 ArrayDequeue均不符合的场景
+	 */
+	public static <T> List<T> synchronizedList(List<T> list) {
+		return Collections.synchronizedList(list);
+	}
+
 	///////////////// from JDK Collections的常用函数 ///////////////////
 
 	/**
@@ -217,21 +225,29 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 二分法快速查找对象
+	 * 二分法快速查找对象, 使用Comparable对象自身的比较.
+	 * 
+	 * list必须已按升序排序.
+	 * 
+	 * 如果不存在，返回一个负数，代表如果要插入这个对象，应该插入的位置
 	 * 
 	 * @see java.util.Collections#binarySearch(List, Object)
 	 */
-	public static <T> int binarySearch(List<? extends Comparable<? super T>> list, T key) {
-		return Collections.binarySearch(list, key);
+	public static <T> int binarySearch(List<? extends Comparable<? super T>> sortedList, T key) {
+		return Collections.binarySearch(sortedList, key);
 	}
 
 	/**
-	 * 二分法快速查找对象
+	 * 二分法快速查找对象，使用Comparator.
+	 * 
+	 * list必须已按升序排序.
+	 * 
+	 * 如果不存在，返回一个负数，代表如果要插入这个对象，应该插入的位置
 	 * 
 	 * @see java.util.Collections#binarySearch(List, Object, Comparator)
 	 */
-	public static <T> int binarySearch(List<? extends T> list, T key, Comparator<? super T> c) {
-		return Collections.binarySearch(list, key, c);
+	public static <T> int binarySearch(List<? extends T> sortedList, T key, Comparator<? super T> c) {
+		return Collections.binarySearch(sortedList, key, c);
 	}
 
 	/**
@@ -261,21 +277,12 @@ public abstract class ListUtil {
 		Collections.shuffle(list, rnd);
 	}
 
-	////////////////// ArrayList 与 Array的双向转换 ///////////
-
-	/**
-	 * 将List转换为数组.
-	 * 
-	 * 其中List的实现均以良好的初始化数组大小，不需要使用list.toArray(T[])
-	 */
-	public static <T> T[] toArray(List<T> list) {
-		return (T[]) list.toArray();
-	}
+	////////////////// guava一些Array向List的转换 ///////////
 
 	/**
 	 * 将数组转换为List.
 	 * 
-	 * 注意转换后的List不能写入.
+	 * 注意转换后的List不能写入, 否则抛出UnsupportedOperationException
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 */
@@ -284,9 +291,10 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 一个独立元素＋一个数组组成新的list，而且独立元素在最前.
+	 * 一个独立元素＋一个数组组成新的list，只是一个View，不复制数组内容，而且独立元素在最前.
+	 *
 	 * 
-	 * 注意转换后的List不能写入.
+	 * 注意转换后的List不能写入, 否则抛出UnsupportedOperationException
 	 * 
 	 * @see com.google.common.collect.Lists#asList(Object, Object[])
 	 */
@@ -297,25 +305,25 @@ public abstract class ListUtil {
 	/**
 	 * Arrays.asList()的加强版, 返回一个底层为原始类型int的List
 	 * 
-	 * 与保存Integer相比节约空间，同时也避免了AutoBoxing.
+	 * 与保存Integer相比节约空间，同时只在读取数据时AutoBoxing.
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Ints#asList(int...)
 	 * 
 	 */
-	public static List<Integer> asList(int... backingArray) {
+	public static List<Integer> intAsList(int... backingArray) {
 		return Ints.asList(backingArray);
 	}
 
 	/**
 	 * Arrays.asList()的加强版, 返回一个底层为原始类型long的List
 	 * 
-	 * 与保存Long相比节约空间，同时也避免了AutoBoxing.
+	 * 与保存Long相比节约空间，同时只在读取数据时AutoBoxing.
 	 * 
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Longs#asList(long...)
 	 */
-	public static List<Long> asList(long... backingArray) {
+	public static List<Long> longAsList(long... backingArray) {
 		return Longs.asList(backingArray);
 	}
 
@@ -327,14 +335,14 @@ public abstract class ListUtil {
 	 * @see java.util.Arrays#asList(Object...)
 	 * @see com.google.common.primitives.Doubles#asList(double...)
 	 */
-	public static List<Double> asList(double... backingArray) {
+	public static List<Double> doubleAsList(double... backingArray) {
 		return Doubles.asList(backingArray);
 	}
 
 	///////////////// 集合运算 ///////////////////
 
 	/**
-	 * 比较两个List中的每个元素是否相等.
+	 * 按顺序比较两个List中的每个元素是否相等.
 	 * 
 	 * from Apache Common Collections4 ListUtils
 	 */
@@ -364,7 +372,7 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 返回a+b的集合.
+	 * list1,list2的并集（在list1或list2中的对象），产生新List
 	 * 
 	 * 对比Apache Common Collection4 ListUtils, 优化了初始大小
 	 */
@@ -376,11 +384,11 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 返回a与b的交集的新List（重复元素将去重）
+	 * list1, list2的交集（同时在list1和list2的对象），产生新List
 	 * 
-	 * from Apache Common Collection4 ListUtils
+	 * from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
 	 */
-	public static <T> List<T> intersection(List<T> list1, List<T> list2) {
+	public static <T> List<T> intersection(final List<? extends T> list1, final List<? extends T> list2) {
 		final List<T> result = new ArrayList<T>();
 
 		List<? extends T> smaller = list1;
@@ -390,14 +398,40 @@ public abstract class ListUtil {
 			larger = list1;
 		}
 
-		final HashSet<T> hashSet = new HashSet<T>(smaller);
-
+		List<T> newSmaller = new ArrayList<T>(smaller);
 		for (final T e : larger) {
-			if (hashSet.contains(e)) {
+			if (newSmaller.contains(e)) {
 				result.add(e);
-				hashSet.remove(e);
+				newSmaller.remove(e);
 			}
 		}
 		return result;
+	}
+
+	/**
+	 * list1, list2的差集（在list1，不在list2中的对象），产生新List.
+	 * 
+	 * 于removeAll相比，会计算元素出现的次数，如"a"在list1出现两次，而在list2中只出现一次，则差集里会保留一个"a".
+	 */
+	public static <T> List<T> difference(final List<? extends T> list1, final List<? extends T> list2) {
+		final ArrayList<T> result = new ArrayList<T>(list1);
+		final Iterator<? extends T> iterator = list2.iterator();
+
+		while (iterator.hasNext()) {
+			result.remove(iterator.next());
+		}
+
+		return result;
+	}
+
+	/**
+	 * list1, list2的补集（在list1或list2中，但不在交集中的对象，又叫反交集）产生新List.
+	 * 
+	 * from Apache Common Collection4 ListUtils，但其并集－交集时，没有对交集*2，所以做了修改
+	 */
+	public static <T> List<T> complement(final List<? extends T> list1, final List<? extends T> list2) {
+		List<T> intersection = intersection(list1, list2);
+		List<T> towIntersection = union(intersection, intersection);
+		return difference(union(list1, list2), towIntersection);
 	}
 }

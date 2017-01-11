@@ -78,21 +78,21 @@ public class ThreadPoolBuilderTest {
 		assertThat(thread.getName()).startsWith("cachedPool");
 		fixPoolWithNamePrefix.shutdown();
 	}
-	
+
 	@Test
 	public void scheduledPool() {
 		ScheduledThreadPoolExecutor singlePool = ThreadPoolBuilder.scheduledPool().build();
 		assertThat(singlePool.getCorePoolSize()).isEqualTo(1);
 		assertThat(singlePool.getMaximumPoolSize()).isEqualTo(Integer.MAX_VALUE);
 		singlePool.shutdown();
-		
+
 		ScheduledThreadPoolExecutor sizeablePool = ThreadPoolBuilder.scheduledPool().setPoolSize(2).build();
 		assertThat(sizeablePool.getCorePoolSize()).isEqualTo(2);
 		assertThat(sizeablePool.getMaximumPoolSize()).isEqualTo(Integer.MAX_VALUE);
 		sizeablePool.shutdown();
-		
-		ThreadPoolExecutor fixPoolWithNamePrefix = ThreadPoolBuilder.scheduledPool().setThreadNamePrefix("scheduledPool")
-				.build();
+
+		ThreadPoolExecutor fixPoolWithNamePrefix = ThreadPoolBuilder.scheduledPool()
+				.setThreadNamePrefix("scheduledPool").build();
 		Thread thread = fixPoolWithNamePrefix.getThreadFactory().newThread(new Runnable() {
 			@Override
 			public void run() {

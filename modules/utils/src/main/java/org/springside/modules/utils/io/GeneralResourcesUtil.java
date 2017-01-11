@@ -14,23 +14,23 @@ import com.google.common.annotations.Beta;
  */
 @Beta
 public abstract class GeneralResourcesUtil {
-	
-	public static final String CLASSPATH="classpath://";
-	
-	public static final String FILE="file://";
-	
+
+	public static final String CLASSPATH = "classpath://";
+
+	public static final String FILE = "file://";
+
 	/**
 	 * 兼容file://与classpath://的情况的打开文件成Stream
 	 */
-	public static InputStream asStream(String generalPath) throws IOException{
-		if(StringUtils.startsWith(generalPath, CLASSPATH)){
+	public static InputStream asStream(String generalPath) throws IOException {
+		if (StringUtils.startsWith(generalPath, CLASSPATH)) {
 			String resourceName = StringUtils.substringAfter(generalPath, CLASSPATH);
 			return ResourcesUtil.asStream(resourceName);
-		}else if(StringUtils.startsWith(generalPath, FILE)){
+		} else if (StringUtils.startsWith(generalPath, FILE)) {
 			String fileName = StringUtils.substringAfter(generalPath, CLASSPATH);
 			return FileUtil.asStream(fileName);
-		}else{
-			throw new IllegalArgumentException("unsupport resoure type:"+generalPath);
+		} else {
+			throw new IllegalArgumentException("unsupport resoure type:" + generalPath);
 		}
 	}
 }

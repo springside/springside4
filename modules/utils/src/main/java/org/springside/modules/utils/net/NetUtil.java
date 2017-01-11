@@ -120,7 +120,7 @@ public abstract class NetUtil {
 			localAddress = InetAddress.getLocalHost();
 			nic = NetworkInterface.getByInetAddress(localAddress);
 		} catch (Exception ignored) {
-			//NOSONAR
+			// NOSONAR
 		}
 
 		// 如果结果为空，或是一个loopback地址(127.0.0.1), 或是ipv6地址，再遍历网卡尝试获取
@@ -131,7 +131,7 @@ public abstract class NetUtil {
 			try {
 				localAddress = lookedUpAddr != null ? lookedUpAddr : InetAddress.getByName("127.0.0.1");
 			} catch (UnknownHostException ignored) {
-				//NOSONAR
+				// NOSONAR
 			}
 		}
 

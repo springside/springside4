@@ -94,7 +94,7 @@ public abstract class FileUtil {
 	public static File createTempDir() {
 		return Files.createTempDir();
 	}
-	
+
 	/**
 	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
 	 */

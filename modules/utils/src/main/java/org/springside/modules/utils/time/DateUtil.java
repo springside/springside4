@@ -272,7 +272,6 @@ public abstract class DateUtil {
 		return result;
 	}
 
-	
 	/**
 	 * 获取某个月有多少天, 考虑闰年等因数, 移植Jodd Core的TimeUtil
 	 */

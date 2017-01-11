@@ -40,11 +40,11 @@ public class ClassUtilTest {
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface DAnnotation {
 	}
-	
+
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface EAnnotation {
 	}
-	
+
 	@Retention(RetentionPolicy.RUNTIME)
 	public @interface FAnnotation {
 	}
@@ -60,13 +60,13 @@ public class ClassUtilTest {
 		@EAnnotation
 		public void hello() {
 			// TODO Auto-generated method stub
-			
+
 		}
 
 	}
 
 	@Test
-	public  void getAllMessage() {
+	public void getAllMessage() {
 		System.out.println(ClassUtil.getAllInterfaces(BClass.class));
 		System.out.println(ClassUtil.getAllSuperclasses(BClass.class));
 		System.out.println(ClassUtil.getAllAnnotations(BClass.class));
@@ -99,7 +99,7 @@ public class ClassUtilTest {
 	}
 
 	public static class TestBean3 {
-	
+
 	}
 
 }
