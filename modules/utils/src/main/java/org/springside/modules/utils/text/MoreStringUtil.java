@@ -3,6 +3,7 @@ package org.springside.modules.utils.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.collection.ListUtil;
 
 import com.google.common.annotations.Beta;
@@ -16,7 +17,7 @@ import com.google.common.base.Utf8;
  * @author calvin
  */
 @Beta
-public class MoreStringUtil {
+public abstract class MoreStringUtil {
 
 	/**
 	 * 高性能的Split，针对char的分隔符号，比JDK String自带的高效.
@@ -28,9 +29,11 @@ public class MoreStringUtil {
 	 * 2. 可设定List初始大小.
 	 * 
 	 * 3. preserveAllTokens 取默认值false
+	 * 
+	 * @return 如果为null返回null, 如果为""返回空数组
 	 */
-	public static List<String> split(final String str, final char separatorChar, int expectParts) {
-		
+	public static List<String> split(@Nullable final String str, final char separatorChar, int expectParts) {
+
 		if (str == null) {
 			return null;
 		}

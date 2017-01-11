@@ -69,6 +69,8 @@ public class SetUtilTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
+		
+		Set<String> set7 = SetUtil.newSetFromMap(MapUtil.<String,Boolean>newConcurrentNavigableMap());
 	}
 
 	@Test

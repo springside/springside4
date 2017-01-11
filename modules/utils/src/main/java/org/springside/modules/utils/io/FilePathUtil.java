@@ -12,7 +12,7 @@ import com.google.common.io.Files;
  * 
  * @author calvin
  */
-public class FilePathUtil {
+public abstract class FilePathUtil {
 
 	/**
 	 * 获取文件名(不包含路径)

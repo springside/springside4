@@ -13,7 +13,7 @@ import com.google.common.io.Resources;
 /**
  * 针对Jar包内的文件的工具类
  */
-public class ResourceUtil {
+public abstract class ResourcesUtil {
 	public static File asFile(Class<?> contextClass, String resourceName) throws IOException {
 		try {
 			return new File(Resources.getResource(contextClass, resourceName).toURI());

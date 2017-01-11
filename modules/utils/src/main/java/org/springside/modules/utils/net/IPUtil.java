@@ -20,7 +20,7 @@ import org.springside.modules.utils.text.MoreStringUtil;
  * 
  * @author calvin
  */
-public class IPUtil {
+public abstract class IPUtil {
 
 	private static ConcurrentHashMap<String, InetAddress> strToInetCache = MapUtil.newConcurrentHashMap();
 	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = MapUtil.newConcurrentHashMap();

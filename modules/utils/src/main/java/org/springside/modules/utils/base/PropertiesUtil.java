@@ -1,9 +1,17 @@
 package org.springside.modules.utils.base;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.mockito.internal.util.io.IOUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.io.GeneralResourcesUtil;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**
@@ -16,9 +24,13 @@ import org.springside.modules.utils.number.NumberUtil;
  * 3. Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
  * 在其所关心的属性变化时进行通知.
  * 
+ * 4. 从文件或字符串装载Properties
+ * 
  * @author calvin
  */
-public class PropertiesUtil {
+public abstract class PropertiesUtil {
+
+	private static final Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
@@ -155,6 +167,42 @@ public class PropertiesUtil {
 		if (envName == null || envName.indexOf('.') != -1) {
 			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
 		}
+	}
+
+	/////////// Load Properties /////////
+	/**
+	 * 从文件路径加载properties.
+	 * 
+	 * 路径支持从外部文件或resources文件加载, "file://"代表外部文件, "classpath://"代表resources,
+	 */
+	public static Properties loadFromFile(String generalPath) {
+		Properties p = new Properties();
+		InputStream is = null;
+		try {
+			is = GeneralResourcesUtil.asStream(generalPath);
+			p.load(is);
+		} catch (IOException e) {
+			logger.warn("Load property from " + generalPath + " fail ", e);
+		} finally {
+			IOUtil.closeQuietly(is);
+		}
+		return p;
+	}
+
+	/**
+	 * 从字符串内容加载Properties
+	 */
+	public static Properties loadFromString(String content) {
+		Properties p = new Properties();
+		Reader reader = new StringReader(content);
+		try {
+			p.load(reader);
+		} catch (IOException ignored) {
+		} finally {
+			IOUtil.closeQuietly(reader);
+		}
+
+		return p;
 	}
 
 	/////////// ListenableProperties /////////////

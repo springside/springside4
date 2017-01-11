@@ -18,7 +18,7 @@ import org.springside.modules.utils.concurrent.jsr166e.ThreadLocalRandom;
  * 
  * @author calvin
  */
-public class RandomUtil {
+public abstract class RandomUtil {
 
 	private static final Random RANDOM = new Random();
 

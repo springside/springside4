@@ -10,6 +10,8 @@ public class CsvUtilTest {
 	public void toCsvString() {
 		assertThat(CsvUtil.toCsvString(1, 2)).isEqualTo("1,2");
 
+		assertThat(CsvUtil.toCsvString(1, 2, 3, 4)).isEqualTo("1,2,3,4");
+
 		// "2" still plain as 2
 		assertThat(CsvUtil.toCsvString(1, "2")).isEqualTo("1,2");
 

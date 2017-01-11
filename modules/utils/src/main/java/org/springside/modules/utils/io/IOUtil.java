@@ -2,7 +2,6 @@ package org.springside.modules.utils.io;
 
 import java.io.BufferedReader;
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,7 +39,7 @@ import com.google.common.annotations.Beta;
  * @author calvin
  */
 @Beta
-public class IOUtil {
+public abstract class IOUtil {
 	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
 
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
@@ -197,13 +196,6 @@ public class IOUtil {
 
 	private static BufferedReader toBufferedReader(final Reader reader) {
 		return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
-	}
-
-	/**
-	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
-	 */
-	public static File createTempDir(String prefix, String suffix) throws IOException {
-		return File.createTempFile(prefix, suffix);
 	}
 
 }

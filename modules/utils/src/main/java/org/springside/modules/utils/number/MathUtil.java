@@ -4,8 +4,20 @@ import com.google.common.annotations.Beta;
 import com.google.common.math.IntMath;
 import com.google.common.math.LongMath;
 
+/**
+ * 数学相关工具类.包括
+ * 
+ * 1. 2的倍数的计算
+ * 
+ * 2. 其他函数如最大公约数
+ * 
+ * @author calvin
+ *
+ */
 @Beta
-public class MathUtil {
+public abstract class MathUtil {
+
+	/////// 2 的倍数的计算////
 
 	/**
 	 * 往上找出最接近的2的倍数，比如15返回16， 17返回32.
@@ -57,6 +69,7 @@ public class MathUtil {
 		return LongMath.isPowerOfTwo(value);
 	}
 
+	////////////// 其他函数//////////
 	/**
 	 * 两个数的最大公约数，必须均为非负数
 	 */

@@ -30,7 +30,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 /**
- * 从Jodd整体复制
+ * 从Jodd整体复制，部分指定了index的操作不支持，如 add(index, element)
  * 
  * An extension of <code>ArrayList</code> that insures that all of the items
  * added are sorted. <b>This breaks original list contract!</b>.

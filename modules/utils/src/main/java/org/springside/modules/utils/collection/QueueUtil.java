@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class QueueUtil {
+public abstract class QueueUtil {
 
 	public static <E> ArrayDeque<E> newArrayQueue() {
 		return new ArrayDeque<E>();

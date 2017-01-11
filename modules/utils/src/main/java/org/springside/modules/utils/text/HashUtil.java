@@ -38,7 +38,7 @@ import com.google.common.hash.Hashing;
  * 
  * @author calvin
  */
-public class HashUtil {
+public abstract class HashUtil {
 
 	private static final String SHA1_ALG = "SHA-1";
 	private static final String MD5_ALG = "MD5";

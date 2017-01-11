@@ -35,7 +35,7 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * Helps with CSV strings. See: http://en.wikipedia.org/wiki/Comma-separated_values
  */
-public class CsvUtil {
+public abstract class CsvUtil {
 
 	protected static final char FIELD_SEPARATOR = ',';
 	protected static final char FIELD_QUOTE = '"';

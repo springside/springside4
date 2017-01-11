@@ -3,8 +3,10 @@ package org.springside.modules.utils.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -19,7 +21,14 @@ import com.google.common.io.Files;
  * 
  * @author calvin
  */
-public class FileUtil {
+public abstract class FileUtil {
+
+	/**
+	 * 打开文件为InputStream
+	 */
+	public static InputStream asStream(String fileName) throws IOException {
+		return new FileInputStream(new File(fileName));
+	}
 
 	/**
 	 * 读取文件到byte[].
@@ -27,7 +36,7 @@ public class FileUtil {
 	public static byte[] toByteArray(File file) throws IOException {
 		return Files.toByteArray(file);
 	}
-	
+
 	/**
 	 * 读取文件到String.
 	 */
@@ -84,6 +93,13 @@ public class FileUtil {
 	 */
 	public static File createTempDir() {
 		return Files.createTempDir();
+	}
+	
+	/**
+	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
+	 */
+	public static File createTempFile(String prefix, String suffix) throws IOException {
+		return File.createTempFile(prefix, suffix);
 	}
 
 	/**

@@ -25,8 +25,17 @@ public class MathUtilTest {
 		
 		assertThat(MathUtil.isPowerOfTwo(32L)).isTrue();
 		assertThat(MathUtil.isPowerOfTwo(31L)).isFalse();
+	}
+	
+	@Test
+	public void gcd(){
+		assertThat(MathUtil.gcd(5, 6)).isEqualTo(1);
+		assertThat(MathUtil.gcd(12, 18)).isEqualTo(6);
+		assertThat(MathUtil.gcd(100, 1000)).isEqualTo(100);
 		
-		
+		assertThat(MathUtil.gcd(5L, 6L)).isEqualTo(1L);
+		assertThat(MathUtil.gcd(12L, 18L)).isEqualTo(6L);
+		assertThat(MathUtil.gcd(100L, 1000L)).isEqualTo(100L);
 	}
 
 }

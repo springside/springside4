@@ -2,6 +2,7 @@ package org.springside.modules.utils.collection.type;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
 
@@ -23,6 +24,12 @@ public class SortedArrayListTest {
 
 		assertThat(list.contains("3")).isTrue();
 		assertThat(list.contains("2")).isFalse();
-	}
 
+		try {
+			list.add(1, "2");
+			Assert.fail("should fail before");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
+		}
+	}
 }

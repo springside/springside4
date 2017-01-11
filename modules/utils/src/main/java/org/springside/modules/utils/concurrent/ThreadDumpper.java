@@ -81,7 +81,7 @@ public class ThreadDumpper {
 	/**
 	 * 打印全部的stack，重新实现threadInfo的toString()函数，因为默认最多只打印8层的stack. 同时，不再打印lockedMonitors和lockedSynchronizers.
 	 */
-	public String dumpThreadInfo(ThreadInfo threadInfo) {
+	private String dumpThreadInfo(ThreadInfo threadInfo) {
 		StringBuilder sb = new StringBuilder(512);
 		sb.append("\"").append(threadInfo.getThreadName()).append("\" Id=").append(threadInfo.getThreadId()).append(' ')
 				.append(threadInfo.getThreadState());

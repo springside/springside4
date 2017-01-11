@@ -20,7 +20,7 @@ import com.google.common.base.Throwables;
  * 
  * @author calvin
  */
-public class ExceptionUtil {
+public abstract class ExceptionUtil {
 
 	private static final StackTraceElement[] EMPTY_STACK_TRACE = new StackTraceElement[0];
 

@@ -12,7 +12,7 @@ import org.springside.modules.utils.base.annotation.Nullable;
  * 
  * @author calvin
  */
-public class TextValidator {
+public abstract class TextValidator {
 
 	/**
 	 * 正则：手机号（简单）, 1字头＋10位数字即可.

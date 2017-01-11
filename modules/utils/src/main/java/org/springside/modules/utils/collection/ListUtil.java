@@ -23,20 +23,18 @@ import com.google.common.primitives.Longs;
  * 
  * 1. 常用函数(如是否为空)
  * 
- * 2. 便捷的构造函数(from guava)
+ * 2. 各种 构造函数(from guava and JDK Collection)
  * 
- * 3. emptyList,singletonList,unmodifiedList (vis JDK Collection)
+ * 3. sort/binarySearch/shuffle/reverse(via JDK Collection)
  * 
- * 4. sort/binarySearch/shuffle/reverse(via JDK Collection)
+ * 4. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
  * 
- * 5. ArrayList 与 Array的双向转换，包含Guava特有的原子类型的asList()
- * 
- * 6. 集合运算，包括两个List是否完全相等，两个List的交集，并集，from Commons Collecton）
+ * 5. 集合运算，包括两个List是否完全相等，两个List的交集，并集，from Commons Collection）
  * 
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public class ListUtil {
+public abstract class ListUtil {
 
 	/**
 	 * 判断是否为空.

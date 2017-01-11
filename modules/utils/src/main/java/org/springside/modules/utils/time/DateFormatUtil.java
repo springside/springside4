@@ -25,7 +25,7 @@ import org.springside.modules.utils.base.annotation.NotNull;
  * 
  * @author calvin
  */
-public class DateFormatUtil {
+public abstract class DateFormatUtil {
 
 	// 以T分隔日期和时间，并带时区信息，符合ISO8601规范
 	public static final String PATTERN_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSSZZ";

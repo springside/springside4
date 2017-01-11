@@ -9,8 +9,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.base.annotation.NotNull;
 
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -26,7 +28,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * 
  * 4. 防止第三方Runnalbe未捕捉异常导致线程跑飞
  */
-public class ThreadUtil {
+public abstract class ThreadUtil {
 
 	/////////// 线程相关功能//////////
 
@@ -88,7 +90,7 @@ public class ThreadUtil {
 	 * 
 	 * @see ThreadFactoryBuilder#build()
 	 */
-	public static ThreadFactory buildThreadFactory(String threadNamePrefix) {
+	public static ThreadFactory buildThreadFactory(@NotNull String threadNamePrefix) {
 		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").build();
 	}
 
@@ -97,14 +99,14 @@ public class ThreadUtil {
 	 * 
 	 * @see #buildThreadFactory(String)
 	 */
-	public static ThreadFactory buildThreadFactory(String threadNamePrefix, boolean daemon) {
+	public static ThreadFactory buildThreadFactory(@NotNull String threadNamePrefix, @NotNull boolean daemon) {
 		return new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(daemon).build();
 	}
 
 	/**
 	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
 	 */
-	public static Runnable wrapWithoutException(Runnable runnable) {
+	public static Runnable wrapWithoutException(@NotNull Runnable runnable) {
 		return new WrapExceptionRunnable(runnable);
 	}
 
@@ -118,6 +120,7 @@ public class ThreadUtil {
 		private Runnable runnable;
 
 		public WrapExceptionRunnable(Runnable runnable) {
+			Validate.notNull(runnable);
 			this.runnable = runnable;
 		}
 

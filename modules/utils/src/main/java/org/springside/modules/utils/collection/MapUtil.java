@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public class MapUtil {
+public abstract class MapUtil {
 
 	/**
 	 * 判断是否为空.

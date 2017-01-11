@@ -14,7 +14,7 @@ import org.springside.modules.utils.base.annotation.NotNull;
  * 
  * @author calvin
  */
-public class DateUtil {
+public abstract class DateUtil {
 
 	public static final long MILLIS_PER_SECOND = 1000; // Number of milliseconds in a standard second.
 

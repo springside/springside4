@@ -14,7 +14,7 @@ import com.google.common.primitives.Longs;
  * 
  * 3.将10机制/16进制字符串安全的转化为原始类型数字/数字对象(参考Common Lang自写)
  */
-public class NumberUtil {
+public abstract class NumberUtil {
 
 	///////////// bytes[] 与原始类型数字转换 ///////
 

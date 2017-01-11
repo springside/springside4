@@ -9,7 +9,7 @@ import java.util.Date;
  * 
  * @author calvin
  */
-public class ClockUtil {
+public abstract class ClockUtil {
 
 	private static Clock INSTANCE = new DefaultClock();
 

@@ -9,14 +9,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.common.annotations.Beta;
+
 /**
  * 通用Collection的工具集
  * 
  * 通用函数没有针对数据结构进行优化，效率不高，所以没有太多的封装.
  * 
- * 关于List与Map的特殊工具集，另见Lists与Maps.
+ * 关于List, Map, Queue, Set的特殊工具集，另见特定的Utils
  */
-public class CollectionUtil {
+@Beta
+public abstract class CollectionUtil {
 
 	/**
 	 * 判断是否为空.

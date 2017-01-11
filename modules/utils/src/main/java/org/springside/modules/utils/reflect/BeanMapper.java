@@ -16,7 +16,7 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
  * 
  * 不要是用Apache Common BeanUtils进行类复制，每次就行反射查询对象的属性列表, 非常缓慢.
  */
-public class BeanMapper {
+public abstract class BeanMapper {
 
 	private static MapperFacade mapper;
 

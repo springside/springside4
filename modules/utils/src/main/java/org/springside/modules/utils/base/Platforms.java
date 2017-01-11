@@ -11,7 +11,7 @@ import org.apache.commons.lang3.SystemUtils;
  * 
  * @author calvin
  */
-public class Platforms {
+public abstract class Platforms {
 
 	// 文件路径分隔符
 	public static final String FILE_PATH_SEPARATOR = File.separator;
