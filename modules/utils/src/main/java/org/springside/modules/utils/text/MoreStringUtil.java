@@ -3,6 +3,7 @@ package org.springside.modules.utils.text;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.collection.ListUtil;
 
@@ -61,6 +62,16 @@ public abstract class MoreStringUtil {
 			list.add(str.substring(start, i));
 		}
 		return list;
+	}
+
+	/**
+	 * 判断字符串以字母结尾
+	 */
+	public static boolean endWith(CharSequence sequence, char c) {
+		if (StringUtils.isEmpty(sequence)) {
+			return false;
+		}
+		return sequence.charAt(sequence.length() - 1) == c;
 	}
 
 	/**

@@ -85,13 +85,8 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 
 	public static class ControllableQueue extends LinkedBlockingQueue<Runnable> {
 
-		private static final long serialVersionUID = 1L;
-
+		private static final long serialVersionUID = 5044057462066661171L;
 		private volatile QueuableCachedThreadPool parent = null;
-
-		public ControllableQueue() {
-			super();
-		}
 
 		public ControllableQueue(int capacity) {
 			super(capacity);

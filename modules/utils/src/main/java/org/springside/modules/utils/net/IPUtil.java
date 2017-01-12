@@ -4,29 +4,26 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
-import org.springside.modules.utils.collection.MapUtil;
-import org.springside.modules.utils.collection.MapUtil.ValueCreator;
 import org.springside.modules.utils.number.NumberUtil;
 import org.springside.modules.utils.text.MoreStringUtil;
 
 import com.google.common.net.InetAddresses;
 
 /**
- * InetAddress工具类，基于Guava的InetAddress.
+ * InetAddress工具类，基于Guava的InetAddresses.
  * 
- * 主要包含int, String/IPV4String, InetAdress/Inet4Address之间的互相转转
+ * 主要包含int, String/IPV4String, InetAdress/Inet4Address之间的互相转换
  * 
  * 先将字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
+ * 
+ * InetAddress与String的转换其实消耗不小，如果是有限的地址，建议进行缓存.
  * 
  * @author calvin
  */
 public abstract class IPUtil {
 
-	private static ConcurrentHashMap<String, InetAddress> strToInetCache = MapUtil.newConcurrentHashMap();
-	private static ConcurrentHashMap<Integer, Inet4Address> intToInetCache = MapUtil.newConcurrentHashMap();
-
+	
 	/**
 	 * 从InetAddress转化到int, 传输和存储时, 用int代表InetAddress是最小的开销.
 	 * 
@@ -57,19 +54,6 @@ public abstract class IPUtil {
 	}
 
 	/**
-	 * 从int转换为Inet4Address(仅支持IPV4)
-	 * 
-	 * 如果应用中需要处理的InetAddress非常有限，使用又非常频繁时，可使用本方法。
-	 */
-	public static Inet4Address fromIntInCache(final int address) {
-		return MapUtil.createIfAbsent(intToInetCache, address, new ValueCreator<Inet4Address>() {
-			public Inet4Address get() {
-				return InetAddresses.fromInteger(address);
-			}
-		});
-	}
-
-	/**
 	 * 从String转换为InetAddress.
 	 * 
 	 * IpString可以是ipv4 或 ipv6 string, 但不可以是域名.
@@ -80,20 +64,6 @@ public abstract class IPUtil {
 		return InetAddresses.forString(address);
 	}
 
-	/**
-	 * 从String转换为InetAddress.
-	 * 
-	 * IpString可以是ipv4 或 ipv6 string, 但不可以是域名.
-	 * 
-	 * 先字符串传换为byte[]再用getByAddress(byte[])，避免了getByName(name)可能引起的DNS访问.
-	 */
-	public static InetAddress fromIpStringInCache(final String address) {
-		return MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<InetAddress>() {
-			public InetAddress get() {
-				return InetAddresses.forString(address);
-			}
-		});
-	}
 
 	/**
 	 * 从IPv4String转换为InetAddress.
@@ -113,21 +83,6 @@ public abstract class IPUtil {
 				throw new AssertionError(e);
 			}
 		}
-	}
-
-	/**
-	 * 从IPv4String转换为InetAddress.
-	 * 
-	 * IpString如果确定ipv4, 使用本方法减少字符分析消耗 .
-	 * 
-	 * 先字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
-	 */
-	public static Inet4Address fromIpv4StringInCache(final String address) {
-		return (Inet4Address) MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<Inet4Address>() {
-			public Inet4Address get() {
-				return fromIpv4String(address);
-			}
-		});
 	}
 
 	/**

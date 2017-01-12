@@ -11,6 +11,7 @@ import javax.net.ServerSocketFactory;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.internal.util.io.IOUtil;
 
 public class NetUtilTest {
 
@@ -55,7 +56,7 @@ public class NetUtilTest {
 			}
 			
 		} finally {
-			serverSocket.close();
+			IOUtil.close(serverSocket);
 		}
 
 	}

@@ -13,6 +13,7 @@ import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.utils.base.annotation.NotNull;
+import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
@@ -72,15 +73,19 @@ public abstract class ThreadUtil {
 	 * 使用了Guava的工具类
 	 * @see MoreExecutors#shutdownAndAwaitTermination(ExecutorService, long, TimeUnit)
 	 */
-	public static boolean gracefulShutdown(ExecutorService threadPool, int shutdownTimeoutMills) {
-		return MoreExecutors.shutdownAndAwaitTermination(threadPool, shutdownTimeoutMills, TimeUnit.MILLISECONDS);
+	public static boolean gracefulShutdown(@Nullable ExecutorService threadPool, int shutdownTimeoutMills) {
+		return threadPool != null
+				? MoreExecutors.shutdownAndAwaitTermination(threadPool, shutdownTimeoutMills, TimeUnit.MILLISECONDS)
+				: true;
 	}
 
 	/**
 	 * @see #gracefulShutdown(ExecutorService, int)
 	 */
-	public static boolean gracefulShutdown(ExecutorService threadPool, int shutdownTimeout, TimeUnit timeUnit) {
-		return MoreExecutors.shutdownAndAwaitTermination(threadPool, shutdownTimeout, timeUnit);
+	public static boolean gracefulShutdown(@Nullable ExecutorService threadPool, int shutdownTimeout,
+			TimeUnit timeUnit) {
+		return threadPool != null ? MoreExecutors.shutdownAndAwaitTermination(threadPool, shutdownTimeout, timeUnit)
+				: true;
 	}
 
 	/**

@@ -31,7 +31,7 @@ import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPo
  * 
  * 参考文章 《Java ThreadPool的正确打开方式》http://calvin1978.blogcn.com/articles/java-threadpool.html
  */
-public class ThreadPoolBuilder {
+public class ThreadPoolBuilders {
 
 	private static RejectedExecutionHandler defaultRejectHandler = new AbortPolicy();
 

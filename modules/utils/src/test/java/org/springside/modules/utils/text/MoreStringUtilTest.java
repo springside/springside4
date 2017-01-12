@@ -26,6 +26,15 @@ public class MoreStringUtilTest {
 	}
 
 	@Test
+	public void other() {
+		String str = "abc";
+		assertThat(MoreStringUtil.endWith(str, 'c')).isTrue();
+		assertThat(MoreStringUtil.endWith(str, 'b')).isFalse();
+		assertThat(MoreStringUtil.endWith(null, 'b')).isFalse();
+		assertThat(MoreStringUtil.endWith("", 'b')).isFalse();
+	}
+
+	@Test
 	public void utf8EncodedLength() {
 		assertThat(MoreStringUtil.utf8EncodedLength("ab12")).isEqualTo(4);
 		assertThat(MoreStringUtil.utf8EncodedLength("中文")).isEqualTo(6);

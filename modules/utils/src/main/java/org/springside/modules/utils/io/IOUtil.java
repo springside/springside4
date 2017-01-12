@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
@@ -97,9 +96,10 @@ public abstract class IOUtil {
 	/**
 	 * 简单读取Reader到String
 	 */
-	public static String toString(Reader reader) throws IOException {
+	public static String toString(Reader input) throws IOException {
+		final BufferedReader reader = toBufferedReader(input);
 		StringBuilderWriter sw = new StringBuilderWriter();
-		copy(reader, sw, new char[DEFAULT_BUFFER_SIZE]);
+		copy(reader, sw);
 		return sw.toString();
 	}
 
@@ -146,34 +146,22 @@ public abstract class IOUtil {
 	 * 在Reader与Writer间复制内容
 	 */
 	public static long copy(final Reader input, final Writer output) throws IOException {
-		return copy(input, output, new char[DEFAULT_BUFFER_SIZE]);
+		final char[] buffer = new char[DEFAULT_BUFFER_SIZE];
+		long count = 0;
+		int n;
+		while (EOF != (n = input.read(buffer))) {
+			output.write(buffer, 0, n);
+			count += n;
+		}
+		return count;
 	}
 
 	/**
 	 * 在InputStream与OutputStream间复制内容
 	 */
 	public static long copy(final InputStream input, final OutputStream output) throws IOException {
-		return copy(input, output, new byte[DEFAULT_BUFFER_SIZE]);
-	}
 
-	/**
-	 * 在InputStream与Writer间复制内容
-	 */
-	public static void copy(final InputStream input, final Writer output) throws IOException {
-		final InputStreamReader in = new InputStreamReader(input, Charsets.UTF_8);
-		copy(in, output);
-	}
-
-	/**
-	 * 在Reader与OutputStream间复制内容
-	 */
-	public static void copy(final Reader input, final OutputStream output) throws IOException {
-		final OutputStreamWriter out = new OutputStreamWriter(output, Charsets.UTF_8);
-		copy(input, out);
-		out.flush();
-	}
-
-	private static long copy(final Reader input, final Writer output, final char[] buffer) throws IOException {
+		final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
 		long count = 0;
 		int n;
 		while (EOF != (n = input.read(buffer))) {
@@ -183,19 +171,7 @@ public abstract class IOUtil {
 		return count;
 	}
 
-	private static long copy(final InputStream input, final OutputStream output, final byte[] buffer)
-			throws IOException {
-		long count = 0;
-		int n;
-		while (EOF != (n = input.read(buffer))) {
-			output.write(buffer, 0, n);
-			count += n;
-		}
-		return count;
-	}
-
-	private static BufferedReader toBufferedReader(final Reader reader) {
+	public static BufferedReader toBufferedReader(final Reader reader) {
 		return reader instanceof BufferedReader ? (BufferedReader) reader : new BufferedReader(reader);
 	}
-
 }

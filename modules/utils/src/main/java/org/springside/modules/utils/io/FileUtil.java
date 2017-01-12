@@ -5,11 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
+import java.io.OutputStream;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.io.Files;
@@ -19,28 +22,27 @@ import com.google.common.io.Files;
  * 
  * 代码基本从调用Guava Files, 固定encoding为UTF8.
  * 
+ * 1.文件读写
+ * 
+ * 2.文件操作
+ * 
  * @author calvin
  */
 public abstract class FileUtil {
 
-	/**
-	 * 打开文件为InputStream
-	 */
-	public static InputStream asStream(String fileName) throws IOException {
-		return new FileInputStream(new File(fileName));
-	}
+	//////// 文件读写//////
 
 	/**
 	 * 读取文件到byte[].
 	 */
-	public static byte[] toByteArray(File file) throws IOException {
+	public static byte[] toByteArray(final File file) throws IOException {
 		return Files.toByteArray(file);
 	}
 
 	/**
 	 * 读取文件到String.
 	 */
-	public static String toString(File file) throws IOException {
+	public static String toString(final File file) throws IOException {
 		return Files.toString(file, Charsets.UTF_8);
 	}
 
@@ -61,22 +63,60 @@ public abstract class FileUtil {
 	/**
 	 * 追加String到File.
 	 */
-	public static void append(CharSequence from, File to, Charset charset) throws IOException {
+	public static void append(final CharSequence from, final File to) throws IOException {
 		Files.append(from, to, Charsets.UTF_8);
 	}
 
 	/**
-	 * 文件复制
+	 * 打开文件为InputStream
 	 */
-	public static void copy(File from, File to) throws IOException {
-		Files.copy(from, to);
+	public static InputStream asInputStream(String fileName) throws IOException {
+		return new FileInputStream(getFileByPath(fileName));
 	}
 
 	/**
-	 * 文件移动
+	 * 打开文件为OutputStream
 	 */
-	public static void move(File from, File to) throws IOException {
-		Files.move(from, to);
+	public static OutputStream asOututStream(String fileName) throws IOException {
+		return new FileOutputStream(getFileByPath(fileName));
+	}
+
+	/**
+	 * 获取File的BufferedReader
+	 */
+	public static BufferedReader asBufferedReader(String fileName) throws FileNotFoundException {
+		return Files.newReader(getFileByPath(fileName), Charsets.UTF_8);
+	}
+
+	/**
+	 * 获取File的BufferedWriter
+	 */
+	public static BufferedWriter asBufferedWriter(String fileName) throws FileNotFoundException {
+		return Files.newWriter(getFileByPath(fileName), Charsets.UTF_8);
+	}
+
+	///// 文件操作/////
+
+	/**
+	 * 文件复制
+	 * 
+	 * 如果文件不存在，不做修改
+	 */
+	public static void copy(@Nullable File from, File to) throws IOException {
+		if (isFileExists(from)) {
+			Files.copy(from, to);
+		}
+	}
+
+	/**
+	 * 文件移动.
+	 * 
+	 * 如果文件不存在，不做修改
+	 */
+	public static void move(@Nullable File from, File to) throws IOException {
+		if (isFileExists(from)) {
+			Files.move(from, to);
+		}
 	}
 
 	/**
@@ -84,6 +124,24 @@ public abstract class FileUtil {
 	 */
 	public static void touch(File file) throws IOException {
 		Files.touch(file);
+	}
+
+	/**
+	 * 删除文件
+	 * 
+	 * 如果文件不存在，不做修改
+	 */
+	public static void delete(@Nullable File file) throws IOException {
+		if (isFileExists(file)) {
+			file.delete();
+		}
+	}
+
+	/**
+	 * 确保父目录及其父目录直到根目录都已经创建.
+	 */
+	public static void createParentDirs(File file) throws IOException {
+		Files.createParentDirs(file);
 	}
 
 	/**
@@ -96,6 +154,13 @@ public abstract class FileUtil {
 	}
 
 	/**
+	 * 在临时目录创建临时文件，命名为tmp-${random.nextLong()}
+	 */
+	public static File createTempFile() throws IOException {
+		return File.createTempFile("tmp-", ".tmp");
+	}
+
+	/**
 	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
 	 */
 	public static File createTempFile(String prefix, String suffix) throws IOException {
@@ -103,24 +168,40 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 确保父目录及其父目录直到根目录都已经创建.
+	 * 判断文件是否存在, from Jodd
 	 */
-	public static void createParentDirs(File file) throws IOException {
-		Files.createParentDirs(file);
+	public static boolean isFileExists(String fileName) {
+		return isFileExists(getFileByPath(fileName));
 	}
 
 	/**
-	 * 获取File的BufferedReader
+	 * 判断文件是否存在, from Jodd
 	 */
-	public static BufferedReader newReader(File file) throws FileNotFoundException {
-		return Files.newReader(file, Charsets.UTF_8);
+	public static boolean isFileExists(File file) {
+		if (file == null) {
+			return false;
+		}
+		return file.exists() && file.isFile();
 	}
 
 	/**
-	 * 获取File的BufferedWriter
+	 * 判断目录是否存在, from Jodd
 	 */
-	public static BufferedWriter newWriter(File file, Charset charset) throws FileNotFoundException {
-		return Files.newWriter(file, Charsets.UTF_8);
+	public static boolean isFolderExists(String fileName) {
+		return isFolderExists(getFileByPath(fileName));
 	}
 
+	/**
+	 * 判断目录是否存在, from Jodd
+	 */
+	public static boolean isFolderExists(File folder) {
+		if (folder == null) {
+			return false;
+		}
+		return folder.exists() && folder.isDirectory();
+	}
+
+	private static File getFileByPath(String filePath) {
+		return StringUtils.isBlank(filePath) ? null : new File(filePath);
+	}
 }

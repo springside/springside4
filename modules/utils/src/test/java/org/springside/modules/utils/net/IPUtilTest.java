@@ -22,25 +22,11 @@ public class IPUtilTest {
 		assertThat(IPUtil.fromInt(-1062731775).getHostAddress()).isEqualTo("192.168.0.1");
 		assertThat(IPUtil.fromInt(-1062731774).getHostAddress()).isEqualTo("192.168.0.2");
 
-		assertThat(IPUtil.fromIntInCache(-1062731775).getHostAddress()).isEqualTo("192.168.0.1");
-		assertThat(IPUtil.fromIntInCache(-1062731774).getHostAddress()).isEqualTo("192.168.0.2");
-		assertThat(IPUtil.fromIntInCache(-1062731774).getHostAddress()).isEqualTo("192.168.0.2");
-
 		assertThat(IPUtil.fromIpString("192.168.0.1").getHostAddress()).isEqualTo("192.168.0.1");
 		assertThat(IPUtil.fromIpString("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
 		assertThat(IPUtil.fromIpv4String("192.168.0.1").getHostAddress()).isEqualTo("192.168.0.1");
 		assertThat(IPUtil.fromIpv4String("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
 
-		assertThat(IPUtil.fromIpStringInCache("192.168.0.1").getHostAddress()).isEqualTo("192.168.0.1");
-		assertThat(IPUtil.fromIpStringInCache("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
-		assertThat(IPUtil.fromIpStringInCache("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
-
-		assertThat(IPUtil.fromIpv4StringInCache("192.168.0.1").getHostAddress()).isEqualTo("192.168.0.1");
-		assertThat(IPUtil.fromIpv4StringInCache("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
-		assertThat(IPUtil.fromIpv4StringInCache("192.168.0.2").getHostAddress()).isEqualTo("192.168.0.2");
-	
-	
-		
 		assertThat(IPUtil.toInt(IPUtil.fromIpString("192.168.0.1"))).isEqualTo(-1062731775);
 	}
 }
