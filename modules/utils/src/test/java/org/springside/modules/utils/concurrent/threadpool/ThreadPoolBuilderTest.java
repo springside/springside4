@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.springside.modules.utils.concurrent.ThreadUtil;
+import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPool.ControllableQueue;
 
 public class ThreadPoolBuilderTest {
 
@@ -48,7 +49,19 @@ public class ThreadPoolBuilderTest {
 			}
 		});
 		assertThat(thread2.getName()).startsWith("fixPool");
+		assertThat(thread2.isDaemon()).isFalse();
 		fixPoolWithNamePrefix.shutdown();
+		
+		ThreadPoolExecutor fixPoolWithNamePrefixAndDaemon = ThreadPoolBuilder.fixedPool().setPoolSize(10)
+				.setThreadNamePrefix("fixPoolDaemon").setDaemon(true).build();
+		Thread thread3 = fixPoolWithNamePrefixAndDaemon.getThreadFactory().newThread(new Runnable() {
+			@Override
+			public void run() {
+			}
+		});
+		assertThat(thread3.getName()).startsWith("fixPoolDaemon");
+		assertThat(thread3.isDaemon()).isTrue();
+		fixPoolWithNamePrefixAndDaemon.shutdown();
 	}
 
 	@Test
@@ -102,4 +115,32 @@ public class ThreadPoolBuilderTest {
 		fixPoolWithNamePrefix.shutdown();
 	}
 
+	
+	@Test
+	public void quequablePool() {
+		ThreadPoolExecutor singlePool = ThreadPoolBuilder.queuableCachedPool().build();
+		assertThat(singlePool.getCorePoolSize()).isEqualTo(0);
+		assertThat(singlePool.getMaximumPoolSize()).isEqualTo(Integer.MAX_VALUE);
+		assertThat(singlePool.getKeepAliveTime(TimeUnit.SECONDS)).isEqualTo(10);
+		assertThat(singlePool.getQueue()).isInstanceOf(ControllableQueue.class);
+		singlePool.shutdown();
+
+		ThreadPoolExecutor sizeablePool = ThreadPoolBuilder.queuableCachedPool().setMinSize(10).setMaxSize(100)
+				.setKeepAliveSecs(20).build();
+		assertThat(sizeablePool.getCorePoolSize()).isEqualTo(10);
+		assertThat(sizeablePool.getMaximumPoolSize()).isEqualTo(100);
+		assertThat(sizeablePool.getKeepAliveTime(TimeUnit.SECONDS)).isEqualTo(20);
+		sizeablePool.shutdown();
+
+		ThreadPoolExecutor fixPoolWithNamePrefix = ThreadPoolBuilder.queuableCachedPool().setThreadNamePrefix("queuableCachedPool")
+				.build();
+		Thread thread = fixPoolWithNamePrefix.getThreadFactory().newThread(new Runnable() {
+
+			@Override
+			public void run() {
+			}
+		});
+		assertThat(thread.getName()).startsWith("queuableCachedPool");
+		fixPoolWithNamePrefix.shutdown();
+	}
 }

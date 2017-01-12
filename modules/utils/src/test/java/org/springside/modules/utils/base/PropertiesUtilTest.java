@@ -12,7 +12,7 @@ import org.springside.modules.utils.number.RandomUtil;
 public class PropertiesUtilTest {
 
 	@Test
-	public void readBoolean() {
+	public void getBoolean() {
 		String name = "ss.test" + RandomUtil.nextInt();
 
 		boolean result = PropertiesUtil.getBooleanDefaultFalse(name);
@@ -33,6 +33,9 @@ public class PropertiesUtilTest {
 		System.setProperty(name, "true");
 		Boolean result4 = PropertiesUtil.getBoolean(name, false);
 		assertThat(result4).isTrue();
+		
+		Boolean result5 = PropertiesUtil.getBoolean(name, Boolean.FALSE);
+		assertThat(result5).isTrue();
 	}
 
 	@Test
@@ -121,6 +124,25 @@ public class PropertiesUtilTest {
 		System.clearProperty(name);
 	}
 
+	@Test
+	public void readBoolean() {
+		String name = "ss.test" + RandomUtil.nextInt();
+		String envName = "ss_test" + RandomUtil.nextInt();
+
+		// default 值
+		boolean result = PropertiesUtil.readBoolean(name, envName, true);
+		assertThat(result).isTrue();
+
+		// env值没有boolean类型的，忽略
+
+		// system properties值
+		System.setProperty(name, "true");
+		boolean result3 = PropertiesUtil.readBoolean(name, envName, false);
+		assertThat(result3).isTrue();
+
+		System.clearProperty(name);
+	}
+	
 	@Test
 	public void loadProperties() {
 		Properties p1 = PropertiesUtil.loadFromFile("classpath://application.properties");

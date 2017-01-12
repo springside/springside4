@@ -295,9 +295,7 @@ public abstract class DateUtil {
 		if (month == 2) {
 			return leap ? 29 : 28;
 		}
-		if ((year == 1582) && (month == 10)) {
-			return 21;
-		}
+
 		return MONTH_LENGTH[month];
 	}
 }

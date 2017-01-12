@@ -46,6 +46,8 @@ public class CollectionUtilTest {
 
 		assertThat(CollectionUtil.getFirst(list1)).isNull();
 		assertThat(CollectionUtil.getFirst(null)).isNull();
+		assertThat(CollectionUtil.getLast(list1)).isNull();
+		assertThat(CollectionUtil.getLast(null)).isNull();
 	}
 
 }

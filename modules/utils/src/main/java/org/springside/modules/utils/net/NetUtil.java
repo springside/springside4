@@ -70,14 +70,16 @@ public abstract class NetUtil {
 	}
 
 	/**
-	 * 随机找一个空闲端口,from Spring SocketUtils
+	 * 从1024到65535， 随机找一个空闲端口 from Spring SocketUtils
 	 */
 	public static int findRandomAvailablePort() {
 		return findRandomAvailablePort(PORT_RANGE_MIN, PORT_RANGE_MAX);
 	}
 
 	/**
-	 * 在一个范围里随机找一个空闲端口,from Spring SocketUtils
+	 * 在范围里随机找一个空闲端口,from Spring SocketUtils.
+	 * 
+	 * @throws IllegalStateException  最多尝试(maxPort-minPort)次，如无空闲端口，抛出此异常.
 	 */
 	public static int findRandomAvailablePort(int minPort, int maxPort) {
 		int portRange = maxPort - minPort;
@@ -97,7 +99,9 @@ public abstract class NetUtil {
 	}
 
 	/**
-	 * 从某个端口开始，递增找一个空闲端口.
+	 * 从某个端口开始，递增直到65535，找一个空闲端口.
+	 * 
+	 * @throws IllegalStateException 范围内如无空闲端口，抛出此异常
 	 */
 	public static int findAvailablePortFrom(int minPort) {
 		for (int port = minPort; port < PORT_RANGE_MAX; port++) {

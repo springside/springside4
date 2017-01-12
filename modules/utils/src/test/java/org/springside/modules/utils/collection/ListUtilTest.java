@@ -26,6 +26,8 @@ public class ListUtilTest {
 
 		List<String> list6 = ListUtil.newCopyOnWriteArrayList("a", "b");
 		assertThat(list6).hasSize(2).containsExactly("a", "b");
+		
+		List<String> list7= ListUtil.newLinkedList();
 	}
 
 	@Test

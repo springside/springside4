@@ -11,6 +11,8 @@ import org.springside.modules.utils.collection.MapUtil.ValueCreator;
 import org.springside.modules.utils.number.NumberUtil;
 import org.springside.modules.utils.text.MoreStringUtil;
 
+import com.google.common.net.InetAddresses;
+
 /**
  * InetAddress工具类，基于Guava的InetAddress.
  * 
@@ -32,8 +34,8 @@ public abstract class IPUtil {
 	 * 
 	 * @see com.google.common.net.InetAddresses#coerceToInteger(InetAddress)
 	 */
-	public int toInt(InetAddress address) {
-		return com.google.common.net.InetAddresses.coerceToInteger(address);
+	public static int toInt(InetAddress address) {
+		return InetAddresses.coerceToInteger(address);
 	}
 
 	/**
@@ -43,15 +45,15 @@ public abstract class IPUtil {
 	 * 
 	 * @see com.google.common.net.InetAddresses#toAddrString(InetAddress)
 	 */
-	public static String toString(InetAddress ip) {
-		return com.google.common.net.InetAddresses.toAddrString(ip);
+	public static String toString(InetAddress address) {
+		return InetAddresses.toAddrString(address);
 	}
 
 	/**
 	 * 从int转换为Inet4Address(仅支持IPV4)
 	 */
-	public Inet4Address fromInt(int address) {
-		return com.google.common.net.InetAddresses.fromInteger(address);
+	public static Inet4Address fromInt(int address) {
+		return InetAddresses.fromInteger(address);
 	}
 
 	/**
@@ -59,10 +61,10 @@ public abstract class IPUtil {
 	 * 
 	 * 如果应用中需要处理的InetAddress非常有限，使用又非常频繁时，可使用本方法。
 	 */
-	public Inet4Address fromIntInCache(final int address) {
+	public static Inet4Address fromIntInCache(final int address) {
 		return MapUtil.createIfAbsent(intToInetCache, address, new ValueCreator<Inet4Address>() {
 			public Inet4Address get() {
-				return com.google.common.net.InetAddresses.fromInteger(address);
+				return InetAddresses.fromInteger(address);
 			}
 		});
 	}
@@ -74,8 +76,8 @@ public abstract class IPUtil {
 	 * 
 	 * 先字符串传换为byte[]再调getByAddress(byte[])，避免了调用getByName(ip)可能引起的DNS访问.
 	 */
-	public InetAddress fromIpString(String address) {
-		return com.google.common.net.InetAddresses.forString(address);
+	public static InetAddress fromIpString(String address) {
+		return InetAddresses.forString(address);
 	}
 
 	/**
@@ -85,10 +87,10 @@ public abstract class IPUtil {
 	 * 
 	 * 先字符串传换为byte[]再用getByAddress(byte[])，避免了getByName(name)可能引起的DNS访问.
 	 */
-	public InetAddress fromIpStringInCache(final String address) {
+	public static InetAddress fromIpStringInCache(final String address) {
 		return MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<InetAddress>() {
 			public InetAddress get() {
-				return com.google.common.net.InetAddresses.forString(address);
+				return InetAddresses.forString(address);
 			}
 		});
 	}
@@ -100,7 +102,7 @@ public abstract class IPUtil {
 	 * 
 	 * 先字符串传换为byte[]再调getByAddress(byte[])，避免了调用getByName(ip)可能引起的DNS访问.
 	 */
-	public Inet4Address fromIp4String(String address) {
+	public static Inet4Address fromIpv4String(String address) {
 		byte[] bytes = ip4StringToBytes(address);
 		if (bytes == null) {
 			return null;
@@ -120,10 +122,10 @@ public abstract class IPUtil {
 	 * 
 	 * 先字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
 	 */
-	public Inet4Address fromIp4StringInCache(final String address) {
+	public static Inet4Address fromIpv4StringInCache(final String address) {
 		return (Inet4Address) MapUtil.createIfAbsent(strToInetCache, address, new ValueCreator<Inet4Address>() {
 			public Inet4Address get() {
-				return fromIp4String(address);
+				return fromIpv4String(address);
 			}
 		});
 	}
@@ -178,5 +180,4 @@ public abstract class IPUtil {
 		}
 		return byteAddress;
 	}
-
 }

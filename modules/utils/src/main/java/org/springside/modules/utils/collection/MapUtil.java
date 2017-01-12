@@ -3,6 +3,7 @@ package org.springside.modules.utils.collection;
 import static com.google.common.base.Preconditions.*;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,6 +14,11 @@ import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
+
+import org.springside.modules.utils.base.annotation.NotNull;
+import org.springside.modules.utils.base.annotation.Nullable;
+
+import com.google.common.collect.Maps;
 
 /**
  * 关于Map的工具集合，
@@ -97,18 +103,22 @@ public abstract class MapUtil {
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap(int)
 	 */
-	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int expectedSize, float loadFactor) {
-		int finalSize = (int) ((double) expectedSize / loadFactor + 1.0F);
-		return new HashMap<K, V>(finalSize, loadFactor);
+	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int initialCapacity) {
+		return newHashMapWithCapacity(initialCapacity, 0.75f);
 	}
 
 	/**
 	 * 根据等号左边的类型, 构造类型正确的HashMap.
 	 * 
-	 * @see com.google.common.collect.Maps#newHashMap()
+	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
+	 * 
+	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低
+	 * 
+	 * @see com.google.common.collect.Maps#newHashMap(int)
 	 */
-	public static <K, V> HashMap<K, V> newHashMapWith(int initialCapacity, float loadFactor) {
-		return new HashMap<K, V>();
+	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int expectedSize, float loadFactor) {
+		int finalSize = (int) ((double) expectedSize / loadFactor + 1.0F);
+		return new HashMap<K, V>(finalSize, loadFactor);
 	}
 
 	/**
@@ -129,7 +139,7 @@ public abstract class MapUtil {
 	 * 
 	 * 同时初始化元素.
 	 */
-	public static <K, V> HashMap<K, V> newHashMap(final K[] keys, final V[] values) {
+	public static <K, V> HashMap<K, V> newHashMap(@NotNull final K[] keys, @NotNull final V[] values) {
 		if (keys.length != values.length) {
 			throw new IllegalArgumentException(
 					"keys.length is " + keys.length + " but values.length is " + values.length);
@@ -149,7 +159,7 @@ public abstract class MapUtil {
 	 * 
 	 * 同时初始化元素.
 	 */
-	public static <K, V> HashMap<K, V> newHashMap(final List<K> keys, final List<V> values) {
+	public static <K, V> HashMap<K, V> newHashMap(@NotNull final List<K> keys, @NotNull final List<V> values) {
 		if (keys.size() != values.size()) {
 			throw new IllegalArgumentException("keys.size is " + keys.size() + " but values.size is " + values.size());
 		}
@@ -173,6 +183,15 @@ public abstract class MapUtil {
 	@SuppressWarnings("rawtypes")
 	public static <K extends Comparable, V> TreeMap<K, V> newNavigableMap() {
 		return new TreeMap<K, V>();
+	}
+
+	/**
+	 * 根据等号左边的类型，构造类型正确的TreeMap.
+	 * 
+	 * @see com.google.common.collect.Maps#newTreeMap(Comparator)
+	 */
+	public static <C, K extends C, V> TreeMap<K, V> newNavigableMap(@Nullable Comparator<C> comparator) {
+		return Maps.newTreeMap(comparator);
 	}
 
 	/**

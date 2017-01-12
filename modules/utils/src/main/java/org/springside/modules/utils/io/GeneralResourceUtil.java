@@ -13,7 +13,7 @@ import com.google.common.annotations.Beta;
  * @author calvin
  */
 @Beta
-public abstract class GeneralResourcesUtil {
+public abstract class GeneralResourceUtil {
 
 	public static final String CLASSPATH = "classpath://";
 
@@ -25,7 +25,7 @@ public abstract class GeneralResourcesUtil {
 	public static InputStream asStream(String generalPath) throws IOException {
 		if (StringUtils.startsWith(generalPath, CLASSPATH)) {
 			String resourceName = StringUtils.substringAfter(generalPath, CLASSPATH);
-			return ResourcesUtil.asStream(resourceName);
+			return ResourceUtil.asStream(resourceName);
 		} else if (StringUtils.startsWith(generalPath, FILE)) {
 			String fileName = StringUtils.substringAfter(generalPath, CLASSPATH);
 			return FileUtil.asStream(fileName);

@@ -11,7 +11,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.mockito.internal.util.io.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.io.GeneralResourcesUtil;
+import org.springside.modules.utils.io.GeneralResourceUtil;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**
@@ -179,7 +179,7 @@ public abstract class PropertiesUtil {
 		Properties p = new Properties();
 		InputStream is = null;
 		try {
-			is = GeneralResourcesUtil.asStream(generalPath);
+			is = GeneralResourceUtil.asStream(generalPath);
 			p.load(is);
 		} catch (IOException e) {
 			logger.warn("Load property from " + generalPath + " fail ", e);

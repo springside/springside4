@@ -123,6 +123,11 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * 与threadFactory互斥, 优先使用ThreadFactory
+		 * 
+		 * 默认为NULL，不进行设置，使用JDK的默认值.
+		 */
 		public FixedThreadPoolBuilder setDaemon(Boolean daemon) {
 			this.daemon = daemon;
 			return this;
@@ -215,6 +220,11 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * 与threadFactory互斥, 优先使用ThreadFactory
+		 * 
+		 * 默认为NULL，不进行设置，使用JDK的默认值.
+		 */
 		public CachedThreadPoolBuilder setDaemon(Boolean daemon) {
 			this.daemon = daemon;
 			return this;
@@ -284,7 +294,7 @@ public class ThreadPoolBuilder {
 		private int minSize = 0;
 		private int maxSize = Integer.MAX_VALUE;
 		private int keepAliveSecs = 10;
-		private int queueSize = 0;
+		private int queueSize = 100;
 
 		private ThreadFactory threadFactory = null;
 		private String threadNamePrefix = null;
@@ -302,6 +312,9 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * LinkedQueue长度, 默认100
+		 */
 		public QueuableCachedThreadPoolBuilder setQueueSize(int queueSize) {
 			this.queueSize = queueSize;
 			return this;
@@ -320,11 +333,19 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * 与threadFactory互斥, 优先使用ThreadFactory
+		 */
 		public QueuableCachedThreadPoolBuilder setThreadNamePrefix(String threadNamePrefix) {
 			this.threadNamePrefix = threadNamePrefix;
 			return this;
 		}
 
+		/**
+		 * 与threadFactory互斥, 优先使用ThreadFactory
+		 * 
+		 * 默认为NULL，不进行设置，使用JDK的默认值.
+		 */
 		public QueuableCachedThreadPoolBuilder setDaemon(Boolean daemon) {
 			this.daemon = daemon;
 			return this;

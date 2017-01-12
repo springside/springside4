@@ -10,8 +10,8 @@ public class IOUtilTest {
 
 	@Test
 	public void read() throws IOException {
-		assertThat(IOUtil.toString(ResourcesUtil.asStream("test.txt"))).isEqualTo("ABCDEFG\nABC");
-		assertThat(IOUtil.toLines(ResourcesUtil.asStream("test.txt"))).hasSize(2).containsExactly("ABCDEFG", "ABC");
+		assertThat(IOUtil.toString(ResourceUtil.asStream("test.txt"))).isEqualTo("ABCDEFG\nABC");
+		assertThat(IOUtil.toLines(ResourceUtil.asStream("test.txt"))).hasSize(2).containsExactly("ABCDEFG", "ABC");
 	}
 
 }

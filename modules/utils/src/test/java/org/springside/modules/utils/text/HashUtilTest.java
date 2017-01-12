@@ -7,7 +7,7 @@ import java.io.InputStream;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
-import org.springside.modules.utils.io.ResourcesUtil;
+import org.springside.modules.utils.io.ResourceUtil;
 
 public class HashUtilTest {
 	@Test
@@ -43,7 +43,7 @@ public class HashUtilTest {
 
 	@Test
 	public void hashFile() throws IOException {
-		InputStream in = ResourcesUtil.asStream("test.txt");
+		InputStream in = ResourceUtil.asStream("test.txt");
 		String result = EncodeUtil.encodeBase64(HashUtil.sha1File(in));
 		assertThat(result).isEqualTo("DmSnwK/Fl0Jplrwtm9tfi7cb/js=");
 		result = EncodeUtil.encodeBase64(HashUtil.md5File(in));

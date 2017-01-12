@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.collection.type.ConcurrentHashSet;
 
 import com.google.common.collect.Sets;
@@ -72,7 +73,7 @@ public abstract class SetUtil {
 	 * 
 	 * @see com.google.common.collect.Sets#newTreeSet(Comparator)
 	 */
-	public static <T> TreeSet<T> newNavigableSet(Comparator<? super T> comparator) {
+	public static <T> TreeSet<T> newNavigableSet(@Nullable Comparator<? super T> comparator) {
 		return Sets.newTreeSet(comparator);
 	}
 

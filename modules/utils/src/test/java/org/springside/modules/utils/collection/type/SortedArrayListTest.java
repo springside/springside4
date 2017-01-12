@@ -32,7 +32,7 @@ public class SortedArrayListTest {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		SortedArrayList<String> list2 = ListUtil.newSortedArrayList();
+		SortedArrayList<String> list2 = ListUtil.newSortedArrayList(ComparableComparator.INSTANCE);
 		list2.addAll(ListUtil.newArrayList("3", "1", "2"));
 		assertThat(list2).containsExactly("1", "2", "3");
 	}
