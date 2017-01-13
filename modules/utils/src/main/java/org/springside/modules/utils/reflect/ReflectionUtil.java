@@ -63,7 +63,7 @@ public class ReflectionUtil {
 	 * 直接读取对象属性值, 无视private/protected修饰符, 不经过getter函数.
 	 */
 	public static <T> T getFieldValue(final Object obj, final String fieldName) {
-		Field field = getAccessibleField(obj, fieldName);
+		Field field = getAccessibleField(obj.getClass(), fieldName);
 
 		if (field == null) {
 			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
@@ -82,7 +82,7 @@ public class ReflectionUtil {
 	 * 直接设置对象属性值, 无视private/protected修饰符, 不经过setter函数.
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
-		Field field = getAccessibleField(obj, fieldName);
+		Field field = getAccessibleField(obj.getClass(), fieldName);
 
 		if (field == null) {
 			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
@@ -192,10 +192,10 @@ public class ReflectionUtil {
 	 * 
 	 * 因为class.getFiled(); 不能获取父类的private函数, 因此采用循环向上的getDeclaredField();
 	 */
-	public static Field getAccessibleField(final Object obj, final String fieldName) {
-		Validate.notNull(obj, "object can't be null");
+	public static Field getAccessibleField(final Class clazz, final String fieldName) {
+		Validate.notNull(clazz, "clazz can't be null");
 		Validate.notEmpty(fieldName, "fieldName can't be blank");
-		for (Class<?> superClass = obj.getClass(); superClass != Object.class; superClass = superClass
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass
 				.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);

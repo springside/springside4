@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.HashMap;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.junit.Test;
@@ -32,7 +32,7 @@ public class MapUtilTest {
 
 		TreeMap<String, Integer> map7= MapUtil.newNavigableMap(ComparableComparator.INSTANCE);
 
-		ConcurrentHashMap map8 = MapUtil.newConcurrentHashMap();
+		ConcurrentMap map8 = MapUtil.newConcurrentHashMap();
 		ConcurrentSkipListMap map9 = MapUtil.newConcurrentNavigableMap();
 	}
 

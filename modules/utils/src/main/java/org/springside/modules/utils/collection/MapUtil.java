@@ -1,6 +1,5 @@
 package org.springside.modules.utils.collection;
 
-
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
@@ -14,8 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
+import org.springside.modules.utils.concurrent.jsr166e.ConcurrentHashMapV8;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
@@ -204,10 +205,15 @@ public abstract class MapUtil {
 	/**
 	 * JDK8下，ConcurrentHashMap已不再需要设置loadFactor, concurrencyLevel和initialCapacity.
 	 * 
-	 * JDK7，建议自行用new ConcurrentHashMap设置，或使用性能更佳的JDK8 ConcurrentHashMap 的移植版。
+	 * 如果JDK8，使用原生ConcurrentHashMap，否则使用移植版
 	 */
-	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
-		return new ConcurrentHashMap<K, V>();
+	public static <K, V> ConcurrentMap<K, V> newConcurrentHashMap() {
+		if (Platforms.IS_ATLEASET_JAVA8) {
+			return new ConcurrentHashMap<K, V>();
+		} else {
+			return new ConcurrentHashMapV8<K, V>();
+		}
+
 	}
 
 	/**

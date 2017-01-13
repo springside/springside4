@@ -1,11 +1,19 @@
-package org.springside.modules.utils.concurrent.jsr166;
+/*
+ * Written by Doug Lea with assistance from members of JCP JSR-166
+ * Expert Group and released to the public domain, as explained at
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ */
+
+package org.springside.modules.utils.concurrent.jsr166e;
 
 import java.util.Random;
 
 /**
- * 移植 from Guava 20.0
+ * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/Striped64.java 1.10
  * 
- * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
+ * A package-local class holding common representation and mechanics
+ * for classes supporting dynamic striping on 64bit values. The class
+ * extends Number so that concrete subclasses must publicly do so.
  */
 public abstract class Striped64 extends Number {
     /*
@@ -71,9 +79,7 @@ public abstract class Striped64 extends Number {
      * needed again; and for short-lived ones, it does not matter.
      */
 
-	private static final long serialVersionUID = 8280493335338002293L;
-
-	/**
+    /**
      * Padded variant of AtomicLong supporting only raw accesses plus CAS.
      * The value field is placed between pads, hoping that the JVM doesn't
      * reorder them.
@@ -264,6 +270,7 @@ public abstract class Striped64 extends Number {
         }
     }
 
+
     /**
      * Sets base and all cells to the given value.
      */
@@ -311,8 +318,7 @@ public abstract class Striped64 extends Number {
         try {
             return java.security.AccessController.doPrivileged
             (new java.security.PrivilegedExceptionAction<sun.misc.Unsafe>() {
-                @Override
-				public sun.misc.Unsafe run() throws Exception {
+                public sun.misc.Unsafe run() throws Exception {
                     Class<sun.misc.Unsafe> k = sun.misc.Unsafe.class;
                     for (java.lang.reflect.Field f : k.getDeclaredFields()) {
                         f.setAccessible(true);

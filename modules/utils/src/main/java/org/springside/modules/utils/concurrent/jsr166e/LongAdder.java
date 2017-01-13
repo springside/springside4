@@ -1,27 +1,53 @@
-package org.springside.modules.utils.concurrent.jsr166;
+/*
+ * Written by Doug Lea with assistance from members of JCP JSR-166
+ * Expert Group and released to the public domain, as explained at
+ * http://creativecommons.org/publicdomain/zero/1.0/
+ */
+
+package org.springside.modules.utils.concurrent.jsr166e;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * 移植from Guava 20.0.
+ * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/LongAdder.java 1.17
  * 
- * 自动把一个Counter分散到多个Counter从而减少CAS失败的积累，求和时再把所有Counter累计起来.
- * 
- * 适合于经常累加，但很少求和的场景
- * 
- * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
+ * One or more variables that together maintain an initially zero
+ * {@code long} sum.  When updates (method {@link #add}) are contended
+ * across threads, the set of variables may grow dynamically to reduce
+ * contention. Method {@link #sum} (or, equivalently, {@link
+ * #longValue}) returns the current total combined across the
+ * variables maintaining the sum.
+ *
+ * <p>This class is usually preferable to {@link AtomicLong} when
+ * multiple threads update a common sum that is used for purposes such
+ * as collecting statistics, not for fine-grained synchronization
+ * control.  Under low update contention, the two classes have similar
+ * characteristics. But under high contention, expected throughput of
+ * this class is significantly higher, at the expense of higher space
+ * consumption.
+ *
+ * <p>This class extends {@link Number}, but does <em>not</em> define
+ * methods such as {@code equals}, {@code hashCode} and {@code
+ * compareTo} because instances are expected to be mutated, and so are
+ * not useful as collection keys.
+ *
+ * <p><em>jsr166e note: This class is targeted to be placed in
+ * java.util.concurrent.atomic.</em>
+ *
+ * @since 1.8
+ * @author Doug Lea
  */
-public final class LongAdder extends Striped64 implements Serializable {
+public class LongAdder extends Striped64 implements Serializable {
     private static final long serialVersionUID = 7249069246863182397L;
 
     /**
      * Version of plus for use in retryUpdate
      */
-    @Override
-	final long fn(long v, long x) { return v + x; }
+    final long fn(long v, long x) { return v + x; }
 
     /**
      * Creates a new adder with initial sum of zero.
@@ -125,8 +151,7 @@ public final class LongAdder extends Striped64 implements Serializable {
      * Returns the String representation of the {@link #sum}.
      * @return the String representation of the {@link #sum}
      */
-    @Override
-	public String toString() {
+    public String toString() {
         return Long.toString(sum());
     }
 
@@ -135,8 +160,7 @@ public final class LongAdder extends Striped64 implements Serializable {
      *
      * @return the sum
      */
-    @Override
-	public long longValue() {
+    public long longValue() {
         return sum();
     }
 
@@ -144,8 +168,7 @@ public final class LongAdder extends Striped64 implements Serializable {
      * Returns the {@link #sum} as an {@code int} after a narrowing
      * primitive conversion.
      */
-    @Override
-	public int intValue() {
+    public int intValue() {
         return (int)sum();
     }
 
@@ -153,18 +176,16 @@ public final class LongAdder extends Striped64 implements Serializable {
      * Returns the {@link #sum} as a {@code float}
      * after a widening primitive conversion.
      */
-    @Override
-	public float floatValue() {
-        return sum();
+    public float floatValue() {
+        return (float)sum();
     }
 
     /**
      * Returns the {@link #sum} as a {@code double} after a widening
      * primitive conversion.
      */
-    @Override
-	public double doubleValue() {
-        return sum();
+    public double doubleValue() {
+        return (double)sum();
     }
 
     private void writeObject(ObjectOutputStream s) throws IOException {
@@ -179,4 +200,5 @@ public final class LongAdder extends Striped64 implements Serializable {
         cells = null;
         base = s.readLong();
     }
+
 }

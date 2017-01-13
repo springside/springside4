@@ -9,6 +9,78 @@ import org.junit.Test;
 
 public class ClassUtilTest {
 
+	
+
+	@Test
+	public void getMessage() {
+		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class)).isEqualTo("ClassUtilTest");
+		assertThat(ClassUtil.getShortClassName(BClass.class)).isEqualTo("ClassUtilTest.BClass");
+
+		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class.getName())).isEqualTo("ClassUtilTest");
+		assertThat(ClassUtil.getShortClassName(BClass.class.getName())).isEqualTo("ClassUtilTest.BClass");
+
+		assertThat(ClassUtil.getPackageName(ClassUtilTest.class)).isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(BClass.class)).isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(ClassUtilTest.class.getName()))
+				.isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(BClass.class.getName())).isEqualTo("org.springside.modules.utils.reflect");
+
+	}
+
+	@Test
+	public void getAllClass() {
+
+		assertThat(ClassUtil.getAllInterfaces(BClass.class)).hasSize(4).contains(AInterface.class, BInterface.class,
+				CInterface.class, DInterface.class);
+		
+		assertThat(ClassUtil.getAllSuperclasses(BClass.class)).hasSize(2).contains(AClass.class, Object.class);
+		
+		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
+		
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(0);
+		
+		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(3).contains(
+				ReflectionUtil.getAccessibleField(BClass.class, "bfield"),
+				ReflectionUtil.getAccessibleField(BClass.class, "efield"),
+				ReflectionUtil.getAccessibleField(AClass.class, "afield"));
+		
+		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1).contains(
+				ReflectionUtil.getAccessibleField(AClass.class, "dfield"));
+	}
+
+	@Test
+	public void getSuperClassGenricType() {
+		// 获取第1，2个泛型类型
+		assertThat(ClassUtil.getClassGenricType(TestBean.class)).isEqualTo(String.class);
+		assertThat(ClassUtil.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
+
+		// 定义父类时无泛型定义
+		assertThat(ClassUtil.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
+
+		// 无父类定义
+		assertThat(ClassUtil.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
+	}
+
+	public static class ParentBean<T, ID> {
+	}
+
+	public static class TestBean extends ParentBean<String, Long> {
+
+	}
+
+	public static class TestBean2 extends ParentBean {
+	}
+
+	public static class TestBean3 {
+
+	}
+	
+	
+	
 	public interface AInterface {
 	}
 
@@ -51,74 +123,33 @@ public class ClassUtilTest {
 
 	@DAnnotation
 	public static class AClass implements DInterface {
+		
+		@EAnnotation
+		private int afield;
+		
+	
+		private int cfield;
+		
+		@FAnnotation
+		private int dfield;
 	}
 
 	@BAnnotation
 	public static class BClass extends AClass implements CInterface, BInterface {
 
+		
+		@EAnnotation
+		private int bfield;
+		
+		@EAnnotation
+		private int efield;
+		
 		@Override
 		@EAnnotation
 		public void hello() {
 			// TODO Auto-generated method stub
 
 		}
-
-	}
-
-	@Test
-	public void getMessage() {
-		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class)).isEqualTo("ClassUtilTest");
-		assertThat(ClassUtil.getShortClassName(BClass.class)).isEqualTo("ClassUtilTest.BClass");
-
-		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class.getName())).isEqualTo("ClassUtilTest");
-		assertThat(ClassUtil.getShortClassName(BClass.class.getName())).isEqualTo("ClassUtilTest.BClass");
-
-		assertThat(ClassUtil.getPackageName(ClassUtilTest.class)).isEqualTo("org.springside.modules.utils.reflect");
-		assertThat(ClassUtil.getPackageName(BClass.class)).isEqualTo("org.springside.modules.utils.reflect");
-		assertThat(ClassUtil.getPackageName(ClassUtilTest.class.getName()))
-				.isEqualTo("org.springside.modules.utils.reflect");
-		assertThat(ClassUtil.getPackageName(BClass.class.getName())).isEqualTo("org.springside.modules.utils.reflect");
-
-	}
-
-	@Test
-	public void getAllClass() {
-
-		assertThat(ClassUtil.getAllInterfaces(BClass.class)).hasSize(4).contains(AInterface.class, BInterface.class,
-				CInterface.class, DInterface.class);
-		assertThat(ClassUtil.getAllSuperclasses(BClass.class)).hasSize(2).contains(AClass.class, Object.class);
-		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(0);
-	}
-
-	@Test
-	public void getSuperClassGenricType() {
-		// 获取第1，2个泛型类型
-		assertThat(ClassUtil.getClassGenricType(TestBean.class)).isEqualTo(String.class);
-		assertThat(ClassUtil.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
-
-		// 定义父类时无泛型定义
-		assertThat(ClassUtil.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
-
-		// 无父类定义
-		assertThat(ClassUtil.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
-	}
-
-	public static class ParentBean<T, ID> {
-	}
-
-	public static class TestBean extends ParentBean<String, Long> {
-
-	}
-
-	public static class TestBean2 extends ParentBean {
-	}
-
-	public static class TestBean3 {
 
 	}
 

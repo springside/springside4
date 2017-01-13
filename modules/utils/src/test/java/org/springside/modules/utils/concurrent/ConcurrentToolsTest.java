@@ -3,7 +3,7 @@ package org.springside.modules.utils.concurrent;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.utils.concurrent.jsr166.LongAdder;
+import org.springside.modules.utils.concurrent.jsr166e.LongAdder;
 
 public class ConcurrentToolsTest {
 	
