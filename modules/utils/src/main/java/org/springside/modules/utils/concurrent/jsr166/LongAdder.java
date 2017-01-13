@@ -1,4 +1,4 @@
-package org.springside.modules.utils.concurrent.jsr166e;
+package org.springside.modules.utils.concurrent.jsr166;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,7 +14,7 @@ import java.io.Serializable;
  * 
  * 因为JDK当前版本与Streaming紧密结合不可分，所以使用了Guava Cache内部使用的一个比较原始的版本.
  */
-final class LongAdder extends Striped64 implements Serializable {
+public final class LongAdder extends Striped64 implements Serializable {
     private static final long serialVersionUID = 7249069246863182397L;
 
     /**
@@ -179,5 +179,4 @@ final class LongAdder extends Striped64 implements Serializable {
         cells = null;
         base = s.readLong();
     }
-
 }

@@ -7,7 +7,6 @@ package org.springside.modules.utils.text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
@@ -115,15 +114,6 @@ public abstract class HashUtil {
 	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
 		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, salt, iterations);
-	}
-
-	/**
-	 * 对输入字符串进行sha1散列，带salt而且迭代达到更高更高的安全性.
-	 * 
-	 * @see #generateSalt(int)
-	 */
-	public static byte[] sha1(String input, Charset charset, byte[] salt, int iterations) {
-		return digest(input.getBytes(charset), SHA1_ALG, salt, iterations);
 	}
 
 	/**

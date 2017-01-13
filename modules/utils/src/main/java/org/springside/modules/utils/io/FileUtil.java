@@ -9,12 +9,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.text.Charsets;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.TreeTraverser;
 import com.google.common.io.Files;
 
 /**
@@ -98,9 +102,9 @@ public abstract class FileUtil {
 	///// 文件操作/////
 
 	/**
-	 * 文件复制
+	 * 文件复制.
 	 * 
-	 * 如果文件不存在，不做修改
+	 * 如果文件不存在或者是目录，不做修改
 	 */
 	public static void copy(@Nullable File from, File to) throws IOException {
 		if (isFileExists(from)) {
@@ -109,9 +113,9 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 文件移动.
+	 * 文件移动/重命名.
 	 * 
-	 * 如果文件不存在，不做修改
+	 * 如果文件不存在或者是目录，不做修改.
 	 */
 	public static void move(@Nullable File from, File to) throws IOException {
 		if (isFileExists(from)) {
@@ -120,51 +124,126 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 创建文件或更新时间戳
+	 * 创建文件或更新时间戳.
+	 */
+	public static void touch(String filePath) throws IOException {
+		Files.touch(getFileByPath(filePath));
+	}
+
+	/**
+	 * 创建文件或更新时间戳.
 	 */
 	public static void touch(File file) throws IOException {
 		Files.touch(file);
 	}
 
 	/**
-	 * 删除文件
+	 * 删除文件.
 	 * 
-	 * 如果文件不存在，不做修改
+	 * 如果文件不存在或者是目录，则不做修改
 	 */
-	public static void delete(@Nullable File file) throws IOException {
+	public static void deleteFile(@Nullable File file) throws IOException {
 		if (isFileExists(file)) {
 			file.delete();
 		}
 	}
 
 	/**
+	 * 删除目录及所有子目录/文件
+	 */
+	public static void deleteDir(File dir) {
+		if (!isDirExists(dir)) {
+			return;
+		}
+		//后序遍历，先删掉子目录中的文件/目录
+		Iterator<File> iterator = Files.fileTreeTraverser().postOrderTraversal(dir).iterator();
+		while (iterator.hasNext()) {
+			iterator.next().delete();
+		}
+	}
+
+	/**
+	 * 前序递归列出所有文件, 包含文件与目录，及根目录本身.
+	 * 
+	 * 前序即先列出父目录，在列出子目录. 如要后序遍历, 直接使用Files.fileTreeTraverser()
+	 */
+	public static List<File> listAll(File rootDir) {
+		return Files.fileTreeTraverser().preOrderTraversal(rootDir).toList();
+	}
+
+	/**
+	 * 前序递归列出所有文件, 只包含文件.
+	 */
+	public static List<File> listFile(File rootDir) {
+		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(Files.isFile()).toList();
+	}
+
+	/**
+	 * 前序递归列出所有文件, 只包含后缀名匹配的文件. （后缀名不包含.）
+	 */
+	public static List<File> listFileWithExtension(final File rootDir, final String extension) {
+		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new Predicate<File>() {
+
+			@Override
+			public boolean apply(File input) {
+				return input.isFile() && extension.equals(FilePathUtil.getFileExtension(input));
+			}
+		}).toList();
+	}
+
+	/**
+	 * 直接使用Guava的TreeTraverser，获得更大的灵活度, 比如加入各类filter，前序/后序的选择，一边遍历一边操作
+	 * 
+	 * <pre>
+	 * FileUtil.fileTreeTraverser().preOrderTraversal(root).iterator();
+	 * </pre>
+	 */
+	public static TreeTraverser<File> fileTreeTraverser() {
+		return Files.fileTreeTraverser();
+	}
+
+	/**
+	 * 判断目录是否存在, from Jodd
+	 */
+	public static boolean isDirExists(String dirPath) {
+		return isDirExists(getFileByPath(dirPath));
+	}
+
+	/**
+	 * 判断目录是否存在, from Jodd
+	 */
+	public static boolean isDirExists(File dir) {
+		if (dir == null) {
+			return false;
+		}
+		return dir.exists() && dir.isDirectory();
+	}
+
+	public static void makeSureDirExists(String dirPath) throws IOException {
+		makeSureDirExists(getFileByPath(dirPath));
+	}
+
+	/**
+	 * 确保目录存在, 如不存在则创建
+	 */
+	public static void makeSureDirExists(File file) throws IOException {
+		Validate.notNull(file);
+		if (file.exists()) {
+			if (!file.isDirectory()) {
+				throw new IOException("There is a file exists " + file);
+			}
+		} else {
+			file.mkdirs();
+		}
+	}
+
+	/**
 	 * 确保父目录及其父目录直到根目录都已经创建.
+	 * 
+	 * @see Files#createParentDirs(File)
 	 */
 	public static void createParentDirs(File file) throws IOException {
 		Files.createParentDirs(file);
-	}
-
-	/**
-	 * 在临时目录创建临时目录，命名为${毫秒级时间戳}-${同一毫秒内的计数器}, from guava
-	 * 
-	 * @see Files#createTempDir()
-	 */
-	public static File createTempDir() {
-		return Files.createTempDir();
-	}
-
-	/**
-	 * 在临时目录创建临时文件，命名为tmp-${random.nextLong()}
-	 */
-	public static File createTempFile() throws IOException {
-		return File.createTempFile("tmp-", ".tmp");
-	}
-
-	/**
-	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
-	 */
-	public static File createTempFile(String prefix, String suffix) throws IOException {
-		return File.createTempFile(prefix, suffix);
 	}
 
 	/**
@@ -185,20 +264,26 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 判断目录是否存在, from Jodd
+	 * 在临时目录创建临时目录，命名为${毫秒级时间戳}-${同一毫秒内的计数器}, from guava
+	 * 
+	 * @see Files#createTempDir()
 	 */
-	public static boolean isFolderExists(String fileName) {
-		return isFolderExists(getFileByPath(fileName));
+	public static File createTempDir() {
+		return Files.createTempDir();
 	}
 
 	/**
-	 * 判断目录是否存在, from Jodd
+	 * 在临时目录创建临时文件，命名为tmp-${random.nextLong()}.tmp
 	 */
-	public static boolean isFolderExists(File folder) {
-		if (folder == null) {
-			return false;
-		}
-		return folder.exists() && folder.isDirectory();
+	public static File createTempFile() throws IOException {
+		return File.createTempFile("tmp-", ".tmp");
+	}
+
+	/**
+	 * 在临时目录创建临时文件，命名为${prefix}${random.nextLong()}${suffix}
+	 */
+	public static File createTempFile(String prefix, String suffix) throws IOException {
+		return File.createTempFile(prefix, suffix);
 	}
 
 	private static File getFileByPath(String filePath) {

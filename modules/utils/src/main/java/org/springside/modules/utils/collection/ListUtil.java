@@ -264,7 +264,7 @@ public abstract class ListUtil {
 	 * 
 	 * @see com.google.common.collect.Lists#reverse(List)
 	 */
-	public static <T> List<T> reverse(List<T> list) {
+	public static <T> List<T> reverse(final List<T> list) {
 		return Lists.reverse(list);
 	}
 
@@ -299,7 +299,7 @@ public abstract class ListUtil {
 	 * @see com.google.common.collect.Lists#asList(Object, Object[])
 	 */
 	public static <E> List<E> asList(E first, E[] rest) {
-		return com.google.common.collect.Lists.asList(first, rest);
+		return Lists.asList(first, rest);
 	}
 
 	/**
@@ -387,6 +387,8 @@ public abstract class ListUtil {
 	 * list1, list2的交集（同时在list1和list2的对象），产生新List
 	 * 
 	 * from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
+	 * 
+	 * 与List.retainAll()相比，考虑了的List中相同元素出现的次数, 如"a"在list1出现两次，而在list2中只出现一次，则交集里会保留一个"a".
 	 */
 	public static <T> List<T> intersection(final List<? extends T> list1, final List<? extends T> list2) {
 		final List<T> result = new ArrayList<T>();
@@ -411,7 +413,7 @@ public abstract class ListUtil {
 	/**
 	 * list1, list2的差集（在list1，不在list2中的对象），产生新List.
 	 * 
-	 * 于removeAll相比，会计算元素出现的次数，如"a"在list1出现两次，而在list2中只出现一次，则差集里会保留一个"a".
+	 * 于List.removeAll()相比，会计算元素出现的次数，如"a"在list1出现两次，而在list2中只出现一次，则差集里会保留一个"a".
 	 */
 	public static <T> List<T> difference(final List<? extends T> list1, final List<? extends T> list2) {
 		final ArrayList<T> result = new ArrayList<T>(list1);

@@ -66,13 +66,33 @@ public class ClassUtilTest {
 	}
 
 	@Test
-	public void getAllMessage() {
-		System.out.println(ClassUtil.getAllInterfaces(BClass.class));
-		System.out.println(ClassUtil.getAllSuperclasses(BClass.class));
-		System.out.println(ClassUtil.getAllAnnotations(BClass.class));
-		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class));
-		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class));
-		System.out.println(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class));
+	public void getMessage() {
+		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class)).isEqualTo("ClassUtilTest");
+		assertThat(ClassUtil.getShortClassName(BClass.class)).isEqualTo("ClassUtilTest.BClass");
+
+		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class.getName())).isEqualTo("ClassUtilTest");
+		assertThat(ClassUtil.getShortClassName(BClass.class.getName())).isEqualTo("ClassUtilTest.BClass");
+
+		assertThat(ClassUtil.getPackageName(ClassUtilTest.class)).isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(BClass.class)).isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(ClassUtilTest.class.getName()))
+				.isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(BClass.class.getName())).isEqualTo("org.springside.modules.utils.reflect");
+
+	}
+
+	@Test
+	public void getAllClass() {
+
+		assertThat(ClassUtil.getAllInterfaces(BClass.class)).hasSize(4).contains(AInterface.class, BInterface.class,
+				CInterface.class, DInterface.class);
+		assertThat(ClassUtil.getAllSuperclasses(BClass.class)).hasSize(2).contains(AClass.class, Object.class);
+		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(0);
 	}
 
 	@Test

@@ -28,7 +28,7 @@ public class FileUtilTest {
 			FileUtil.append("kaka", file);
 			assertThat(new String(FileUtil.toByteArray(file), Charsets.UTF_8)).isEqualTo("haha\nhehekaka");
 		} finally {
-			FileUtil.delete(file);
+			FileUtil.deleteFile(file);
 		}
 	}
 
@@ -53,8 +53,8 @@ public class FileUtilTest {
 
 	@Test
 	public void fileExist() throws IOException {
-		assertThat(FileUtil.isFolderExists(Platforms.TMP_DIR)).isTrue();
-		assertThat(FileUtil.isFolderExists(Platforms.TMP_DIR + RandomUtil.nextInt())).isFalse();
+		assertThat(FileUtil.isDirExists(Platforms.TMP_DIR)).isTrue();
+		assertThat(FileUtil.isDirExists(Platforms.TMP_DIR + RandomUtil.nextInt())).isFalse();
 
 		File tmpFile = null;
 		try {
@@ -64,8 +64,41 @@ public class FileUtilTest {
 			assertThat(FileUtil.isFileExists(tmpFile.getAbsolutePath() + RandomUtil.nextInt())).isFalse();
 
 		} finally {
-			FileUtil.delete(tmpFile);
+			FileUtil.deleteFile(tmpFile);
 		}
+	}
+
+	@Test
+	public void listFile() throws IOException {
+		File tmpDir = FileUtil.createTempDir();
+
+		List<File> all = FileUtil.listAll(tmpDir);
+		assertThat(all).hasSize(1);
+
+		List<File> files = FileUtil.listFile(tmpDir);
+		assertThat(files).hasSize(0);
+
+		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
+		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
+
+		String childDir = FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
+		FileUtil.makeSureDirExists(childDir);
+
+		FileUtil.touch(FilePathUtil.contact(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
+
+		all = FileUtil.listAll(tmpDir);
+		assertThat(all).hasSize(5);
+
+		files = FileUtil.listFile(tmpDir);
+		assertThat(files).hasSize(3);
+
+		files = FileUtil.listFileWithExtension(tmpDir, "tmp");
+		assertThat(files).hasSize(2);
+
+		FileUtil.deleteDir(tmpDir);
+
+		assertThat(FileUtil.isDirExists(tmpDir)).isFalse();
+
 	}
 
 }

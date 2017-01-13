@@ -1,5 +1,6 @@
 package org.springside.modules.utils.number;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.google.common.primitives.Ints;
@@ -106,7 +107,7 @@ public abstract class NumberUtil {
 	 * 将10进制的String安全的转化为Integer，当str为空或非数字字符串时，返回default值
 	 */
 	public static Integer toIntObject(String str, Integer defaultValue) {
-		if (str == null) {
+		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
 		try {
@@ -127,7 +128,7 @@ public abstract class NumberUtil {
 	 * 将10进制的String安全的转化为Long，当str为空或非数字字符串时，返回default值
 	 */
 	public static Long toLongObject(String str, Long defaultValue) {
-		if (str == null) {
+		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
 		try {
@@ -148,7 +149,7 @@ public abstract class NumberUtil {
 	 * 将10进制的String安全的转化为Long，当str为空或非数字字符串时，返回default值
 	 */
 	public static Double toDoubleObject(String str, Double defaultValue) {
-		if (str == null) {
+		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
 		try {
@@ -171,7 +172,7 @@ public abstract class NumberUtil {
 	 * 将16进制的String转化为Integer，出错时返回默认值.
 	 */
 	public static Integer hexToIntObject(String str, Integer defaultValue) {
-		if (str == null) {
+		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
 		try {
@@ -192,7 +193,7 @@ public abstract class NumberUtil {
 	 * 将16进制的String转化为Long，出错时返回默认值.
 	 */
 	public static Long hexToLongObject(String str, Long defaultValue) {
-		if (str == null) {
+		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
 		try {

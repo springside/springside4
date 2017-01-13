@@ -5,7 +5,6 @@ import java.security.SecureRandom;
 import java.util.Random;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.concurrent.jsr166e.ThreadLocalRandom;
 
 /**
  * 随机数工具集.
@@ -27,7 +26,7 @@ public abstract class RandomUtil {
 	 * 返回无锁的ThreadLocalRandom
 	 */
 	public static Random threadLocalRandom() {
-		return ThreadLocalRandom.current();
+		return org.springside.modules.utils.concurrent.jsr166.ThreadLocalRandom.current();
 	}
 
 	/**

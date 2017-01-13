@@ -31,6 +31,13 @@ public class SortedArrayListTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
+		
+		try {
+			list.set(1, "2");
+			Assert.fail("should fail before");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
+		}
 
 		SortedArrayList<String> list2 = ListUtil.newSortedArrayList(ComparableComparator.INSTANCE);
 		list2.addAll(ListUtil.newArrayList("3", "1", "2"));

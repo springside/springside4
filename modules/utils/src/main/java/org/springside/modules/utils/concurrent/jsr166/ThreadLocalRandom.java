@@ -3,7 +3,7 @@
  * Expert Group and released to the public domain, as explained at
  * http://creativecommons.org/publicdomain/zero/1.0/
  */
-package org.springside.modules.utils.concurrent.jsr166e;
+package org.springside.modules.utils.concurrent.jsr166;
 
 import java.io.ObjectStreamField;
 import java.util.Random;

@@ -38,7 +38,9 @@ public abstract class ClassUtil {
 	private static Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
 	/**
-	 * 返回Class名，不包含PackageName
+	 * 返回Class名, 不包含PackageName.
+	 * 
+	 * 内部类的话，返回"主类.内部类"
 	 */
 	public static String getShortClassName(final Class<?> cls) {
 		return ClassUtils.getShortClassName(cls);
@@ -46,6 +48,8 @@ public abstract class ClassUtil {
 
 	/**
 	 * 返回Class名，不包含PackageName
+	 * 
+	 * 部类的话，返回"主类.内部类"
 	 */
 	public static String getShortClassName(final String className) {
 		return ClassUtils.getShortClassName(className);
@@ -66,7 +70,7 @@ public abstract class ClassUtil {
 	}
 
 	/**
-	 * 递归返回所有的SupperClasses，比Spring中的相同实现靠谱
+	 * 递归返回所有的SupperClasses，包含Object.class
 	 */
 	public static List<Class<?>> getAllSuperclasses(final Class<?> cls) {
 		return ClassUtils.getAllSuperclasses(cls);
@@ -80,7 +84,7 @@ public abstract class ClassUtil {
 	}
 
 	/**
-	 * 递归所有的Annotation，一个最彻底的实现.
+	 * 递归Class所有的Annotation，一个最彻底的实现.
 	 * 
 	 * 包括所有基类，所有接口的Annotation，同时支持Spring风格的Annotation继承的父Annotation，
 	 */

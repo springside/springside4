@@ -31,7 +31,7 @@ public class FastMethodInvoker {
 			}
 		});
 
-		Method method = ReflectionUtil.getAccessibleMethod(obj, methodName, parameterTypes);
+		Method method = ReflectionUtil.getAccessibleMethod(obj.getClass(), methodName, parameterTypes);
 		return fastClz.getMethod(method);
 	}
 

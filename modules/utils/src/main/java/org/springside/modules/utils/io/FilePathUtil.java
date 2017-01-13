@@ -1,5 +1,7 @@
 package org.springside.modules.utils.io;
 
+import java.io.File;
+
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
@@ -23,6 +25,13 @@ public abstract class FilePathUtil {
 		return fullName.substring(last + 1);
 	}
 
+	/**
+	 * 获取文件名的扩展名部分(不包含.)
+	 */
+	public static String getFileExtension(File file) {
+		return Files.getFileExtension(file.getName());
+	}
+	
 	/**
 	 * 获取文件名的扩展名部分(不包含.)
 	 */

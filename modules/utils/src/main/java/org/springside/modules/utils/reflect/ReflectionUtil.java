@@ -100,7 +100,7 @@ public class ReflectionUtil {
 	 */
 	public static <T> T getProperty(Object obj, String propertyName) {
 		String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(propertyName);
-		Method method = getAccessibleMethod(obj, getterMethodName);
+		Method method = getAccessibleMethod(obj.getClass(), getterMethodName);
 		if (method != null) {
 			try {
 				return (T) method.invoke(obj, ArrayUtils.EMPTY_OBJECT_ARRAY);
@@ -117,7 +117,7 @@ public class ReflectionUtil {
 	 */
 	public static void setProperty(Object obj, String propertyName, final Object value) {
 		String setterMethodName = SETTER_PREFIX + StringUtils.capitalize(propertyName);
-		Method method = getAccessibleMethod(obj, setterMethodName, value.getClass());
+		Method method = getAccessibleMethod(obj.getClass(), setterMethodName, value.getClass());
 		if (method != null) {
 			try {
 				method.invoke(obj, value);
@@ -139,9 +139,9 @@ public class ReflectionUtil {
 	 * 用于一次性调用的情况，否则应使用getAccessibleMethod()函数获得Method后反复调用.
 	 */
 	public static <T> T invokeMethod(Object obj, String methodName, Object... args) {
-		args = ArrayUtils.nullToEmpty(args);
-		final Class<?>[] parameterTypes = ClassUtils.toClass(args);
-		return (T) invokeMethod(obj, methodName, args, parameterTypes);
+		Object[] theArgs = ArrayUtils.nullToEmpty(args);
+		final Class<?>[] parameterTypes = ClassUtils.toClass(theArgs);
+		return (T) invokeMethod(obj, methodName, theArgs, parameterTypes);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class ReflectionUtil {
 	 */
 	public static Object invokeMethod(final Object obj, final String methodName, final Object[] args,
 			final Class<?>[] parameterTypes) {
-		Method method = getAccessibleMethod(obj, methodName, parameterTypes);
+		Method method = getAccessibleMethod(obj.getClass(), methodName, parameterTypes);
 		if (method == null) {
 			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
@@ -173,7 +173,7 @@ public class ReflectionUtil {
 	 * 用于一次性调用的情况，否则应使用getAccessibleMethodByName()函数获得Method后反复调用.
 	 */
 	public static Object invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
-		Method method = getAccessibleMethodByName(obj, methodName);
+		Method method = getAccessibleMethodByName(obj.getClass(), methodName);
 		if (method == null) {
 			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
@@ -219,15 +219,15 @@ public class ReflectionUtil {
 	 * 
 	 * 因为class.getFiled() 不能获取父类的private函数, 因此采用循环向上的getDeclaredField();
 	 */
-	public static Method getAccessibleMethod(final Object obj, final String methodName, Class<?>... parameterTypes) {
-		Validate.notNull(obj, "object can't be null");
+	public static Method getAccessibleMethod(final Class clazz, final String methodName, Class<?>... parameterTypes) {
+		Validate.notNull(clazz, "class can't be null");
 		Validate.notEmpty(methodName, "methodName can't be blank");
-		parameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
+		Class[] theParameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
 
-		for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType
+		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType
 				.getSuperclass()) {
 			try {
-				Method method = searchType.getDeclaredMethod(methodName, parameterTypes);
+				Method method = searchType.getDeclaredMethod(methodName, theParameterTypes);
 				makeAccessible(method);
 				return method;
 			} catch (NoSuchMethodException e) {
@@ -248,11 +248,11 @@ public class ReflectionUtil {
 	 * 
 	 * 因为class.getMethods() 不能获取父类的private函数, 因此采用循环向上的getMethods();
 	 */
-	public static Method getAccessibleMethodByName(final Object obj, final String methodName) {
-		Validate.notNull(obj, "object can't be null");
+	public static Method getAccessibleMethodByName(final Class clazz, final String methodName) {
+		Validate.notNull(clazz, "clazz can't be null");
 		Validate.notEmpty(methodName, "methodName can't be blank");
 
-		for (Class<?> searchType = obj.getClass(); searchType != Object.class; searchType = searchType
+		for (Class<?> searchType =clazz; searchType != Object.class; searchType = searchType
 				.getSuperclass()) {
 			Method[] methods = searchType.getDeclaredMethods();
 			for (Method method : methods) {
@@ -291,17 +291,6 @@ public class ReflectionUtil {
 	public static <T> T invokeConstructor(final Class<T> cls, Object... args) {
 		try {
 			return ConstructorUtils.invokeConstructor(cls, args);
-		} catch (Exception e) {
-			throw ExceptionUtil.unchecked(e);
-		}
-	}
-
-	/**
-	 * 调用构造函数.
-	 */
-	public static <T> T invokeConstructor(final Class<T> cls, Object[] args, Class<?>[] parameterTypes) {
-		try {
-			return ConstructorUtils.invokeConstructor(cls, args, parameterTypes);
 		} catch (Exception e) {
 			throw ExceptionUtil.unchecked(e);
 		}

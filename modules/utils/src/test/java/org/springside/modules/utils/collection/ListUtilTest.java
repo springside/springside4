@@ -26,8 +26,8 @@ public class ListUtilTest {
 
 		List<String> list6 = ListUtil.newCopyOnWriteArrayList("a", "b");
 		assertThat(list6).hasSize(2).containsExactly("a", "b");
-		
-		List<String> list7= ListUtil.newLinkedList();
+
+		List<String> list7 = ListUtil.newLinkedList();
 	}
 
 	@Test
@@ -114,6 +114,10 @@ public class ListUtilTest {
 		assertThat(ListUtil.binarySearch(list, "b")).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "b", ComparableComparator.INSTANCE)).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "x")).isEqualTo(-8);
+
+		List list8 = ListUtil.reverse(list);
+
+		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 
 	@Test
@@ -157,7 +161,9 @@ public class ListUtilTest {
 		List<String> list4 = ListUtil.asList("d", "a", "c", "b", "e");
 		List<String> list5 = ListUtil.asList("d", "a", "c", "b", "e", "i", "g", "x");
 
+		assertThat(ListUtil.isEqual(list1, list1)).isTrue();
 		assertThat(ListUtil.isEqual(list1, list2)).isTrue();
+		
 		assertThat(ListUtil.isEqual(list1, list3)).isFalse();
 		assertThat(ListUtil.isEqual(list1, list4)).isFalse();
 		assertThat(ListUtil.isEqual(list1, list5)).isFalse();

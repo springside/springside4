@@ -11,8 +11,8 @@ public class ThreadLocalContextTest {
 	@Test
 	public void test() throws InterruptedException {
 
-		final CountDownLatch countdown = new CountDownLatch(10);
-		final CyclicBarrier barrier = new CyclicBarrier(10);
+		final CountDownLatch countdown = ConcurrentTools.countDownLatch(10);
+		final CyclicBarrier barrier = ConcurrentTools.cyclicBarrier(10);
 
 		Runnable runnable = new Runnable() {
 			@Override

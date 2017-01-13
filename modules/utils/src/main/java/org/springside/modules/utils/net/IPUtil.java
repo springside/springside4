@@ -23,7 +23,6 @@ import com.google.common.net.InetAddresses;
  */
 public abstract class IPUtil {
 
-	
 	/**
 	 * 从InetAddress转化到int, 传输和存储时, 用int代表InetAddress是最小的开销.
 	 * 
@@ -64,7 +63,6 @@ public abstract class IPUtil {
 		return InetAddresses.forString(address);
 	}
 
-
 	/**
 	 * 从IPv4String转换为InetAddress.
 	 * 
@@ -89,15 +87,8 @@ public abstract class IPUtil {
 	 * int转换到IPV4 String, from Netty NetUtil
 	 */
 	public static String intToIpv4String(int i) {
-		StringBuilder buf = new StringBuilder(15);
-		buf.append(i >> 24 & 0xff);
-		buf.append('.');
-		buf.append(i >> 16 & 0xff);
-		buf.append('.');
-		buf.append(i >> 8 & 0xff);
-		buf.append('.');
-		buf.append(i & 0xff);
-		return buf.toString();
+		return new StringBuilder(15).append(i >> 24 & 0xff).append('.').append(i >> 16 & 0xff).append('.')
+				.append(i >> 8 & 0xff).append('.').append(i & 0xff).toString();
 	}
 
 	/**

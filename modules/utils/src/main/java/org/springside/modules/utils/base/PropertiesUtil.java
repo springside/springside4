@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.mockito.internal.util.io.IOUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.utils.io.GeneralResourceUtil;
+import org.springside.modules.utils.io.IOUtil;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**

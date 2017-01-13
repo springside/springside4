@@ -42,7 +42,7 @@ public abstract class MoreStringUtil {
 		if (len == 0) {
 			return ListUtil.emptyList();
 		}
-		final List<String> list = new ArrayList<String>();
+		final List<String> list = new ArrayList<String>(expectParts);
 		int i = 0;
 		int start = 0;
 		boolean match = false;

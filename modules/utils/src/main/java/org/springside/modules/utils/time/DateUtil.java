@@ -157,35 +157,35 @@ public abstract class DateUtil {
 	//////////// 直接设置时间//////////////
 
 	/**
-	 * 设置年份.
+	 * 设置年份, 公元纪年.
 	 */
 	public static Date setYears(@NotNull final Date date, int amount) {
 		return DateUtils.setYears(date, amount);
 	}
 
 	/**
-	 * 设置月份.
+	 * 设置月份, 0-11.
 	 */
 	public static Date setMonths(@NotNull final Date date, int amount) {
 		return DateUtils.setMonths(date, amount);
 	}
 
 	/**
-	 * 设置日期.
+	 * 设置日期, 1-31.
 	 */
 	public static Date setDays(@NotNull final Date date, int amount) {
 		return DateUtils.setDays(date, amount);
 	}
 
 	/**
-	 * 设置小时.
+	 * 设置小时, 0-23.
 	 */
 	public static Date setHours(@NotNull final Date date, int amount) {
 		return DateUtils.setHours(date, amount);
 	}
 
 	/**
-	 * 设置分钟.
+	 * 设置分钟, 0-59.
 	 */
 	public static Date setMinutes(@NotNull final Date date, int amount) {
 		return DateUtils.setMinutes(date, amount);
@@ -285,15 +285,12 @@ public abstract class DateUtil {
 	 * 获取某个月有多少天, 考虑闰年等因数, 移植Jodd Core的TimeUtil
 	 */
 	public static int getMonthLength(int year, int month) {
-		return getMonthLength(year, month, isLeapYear(year));
-	}
 
-	static int getMonthLength(int year, int month, boolean leap) {
 		if ((month < 1) || (month > 12)) {
 			throw new IllegalArgumentException("Invalid month: " + month);
 		}
 		if (month == 2) {
-			return leap ? 29 : 28;
+			return isLeapYear(year) ? 29 : 28;
 		}
 
 		return MONTH_LENGTH[month];

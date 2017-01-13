@@ -1,4 +1,4 @@
-package org.springside.modules.utils.concurrent.jsr166e;
+package org.springside.modules.utils.concurrent.jsr166;
 
 import java.util.Random;
 

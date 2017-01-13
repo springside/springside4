@@ -1,6 +1,5 @@
 package org.springside.modules.utils.collection;
 
-import static com.google.common.base.Preconditions.*;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -18,6 +17,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 
 /**
@@ -198,7 +198,7 @@ public abstract class MapUtil {
 	 * 相比HashMap，当key是枚举类时, 性能与空间占用俱佳.
 	 */
 	public static <K extends Enum<K>, V> EnumMap<K, V> newEnumMap(Class<K> type) {
-		return new EnumMap<K, V>(checkNotNull(type));
+		return new EnumMap<K, V>(Preconditions.checkNotNull(type));
 	}
 
 	/**

@@ -51,7 +51,7 @@ public class ThreadUtilTest {
 
 		// time enough to shutdown
 		ExecutorService pool = Executors.newSingleThreadExecutor();
-		Runnable task = new Task(logger, 500, 0);
+		Runnable task = new Task(logger, 200, 0);
 		pool.execute(task);
 		ThreadUtil.gracefulShutdown(pool, 1000, TimeUnit.MILLISECONDS);
 		assertThat(pool.isTerminated()).isTrue();
