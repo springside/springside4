@@ -150,25 +150,28 @@ public abstract class ClassUtil {
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 */
-	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation,
+	private static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation,
 			Set<Class<?>> visitedInterfaces) {
-
+		//已递归到Objebt.class, 停止递归
 		if (Object.class.equals(clazz)) {
 			return Collections.emptySet();
 		}
 
 		List<Class<?>> ifcs = ClassUtils.getAllInterfaces(clazz);
-
 		Set<Method> annotatedMethods = new HashSet<Method>();
+		
+		//遍历当前类的所有方法
 		Method[] methods = clazz.getDeclaredMethods();
 
 		for (Method method : methods) {
+			//如果当前方法有标注，或定义了该方法的所有接口有标注
 			if (method.getAnnotation(annotation) != null
 					|| searchOnInterfaces(method, annotation, ifcs, visitedInterfaces)) {
 				annotatedMethods.add(method);
 			}
 		}
 
+		//递归父类
 		annotatedMethods.addAll(getMethodsAnnotatedWith(clazz.getSuperclass(), annotation, visitedInterfaces));
 
 		return annotatedMethods;
@@ -177,6 +180,7 @@ public abstract class ClassUtil {
 	private static <T extends Annotation> boolean searchOnInterfaces(Method method, Class<T> annotationType,
 			List<Class<?>> ifcs, Set<Class<?>> visitedInterfaces) {
 		for (Class<?> iface : ifcs) {
+			//之前已访问过该接口, 略过
 			if (!visitedInterfaces.add(iface)) {
 				continue;
 			}
