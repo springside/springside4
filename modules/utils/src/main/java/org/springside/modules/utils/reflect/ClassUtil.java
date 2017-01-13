@@ -141,49 +141,39 @@ public abstract class ClassUtil {
 		return annotatedFields;
 	}
 
-	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation) {
-		return getMethodsAnnotatedWith(clazz, annotation, new HashSet<Class<?>>());
-	}
-
 	/**
 	 * 找出所有标注了该annotation的类，循环遍历父类及接口.
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 */
-	private static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation,
-			Set<Class<?>> visitedInterfaces) {
-		//已递归到Objebt.class, 停止递归
+	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation) {
+		// 已递归到Objebt.class, 停止递归
 		if (Object.class.equals(clazz)) {
 			return Collections.emptySet();
 		}
 
 		List<Class<?>> ifcs = ClassUtils.getAllInterfaces(clazz);
 		Set<Method> annotatedMethods = new HashSet<Method>();
-		
-		//遍历当前类的所有方法
+
+		// 遍历当前类的所有方法
 		Method[] methods = clazz.getDeclaredMethods();
 
 		for (Method method : methods) {
-			//如果当前方法有标注，或定义了该方法的所有接口有标注
-			if (method.getAnnotation(annotation) != null
-					|| searchOnInterfaces(method, annotation, ifcs, visitedInterfaces)) {
+			// 如果当前方法有标注，或定义了该方法的所有接口有标注
+			if (method.getAnnotation(annotation) != null || searchOnInterfaces(method, annotation, ifcs)) {
 				annotatedMethods.add(method);
 			}
 		}
 
-		//递归父类
-		annotatedMethods.addAll(getMethodsAnnotatedWith(clazz.getSuperclass(), annotation, visitedInterfaces));
+		// 递归父类
+		annotatedMethods.addAll(getMethodsAnnotatedWith(clazz.getSuperclass(), annotation));
 
 		return annotatedMethods;
 	}
 
 	private static <T extends Annotation> boolean searchOnInterfaces(Method method, Class<T> annotationType,
-			List<Class<?>> ifcs, Set<Class<?>> visitedInterfaces) {
+			List<Class<?>> ifcs) {
 		for (Class<?> iface : ifcs) {
-			//之前已访问过该接口, 略过
-			if (!visitedInterfaces.add(iface)) {
-				continue;
-			}
 			try {
 				Method equivalentMethod = iface.getMethod(method.getName(), method.getParameterTypes());
 				if (equivalentMethod.getAnnotation(annotationType) != null) {
