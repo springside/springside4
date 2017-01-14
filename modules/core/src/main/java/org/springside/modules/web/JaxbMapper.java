@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.mapper;
+package org.springside.modules.web;
 
 import java.io.StringReader;
 import java.io.StringWriter;

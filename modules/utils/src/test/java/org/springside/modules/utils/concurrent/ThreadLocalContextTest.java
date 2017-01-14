@@ -26,6 +26,8 @@ public class ThreadLocalContextTest {
 				ThreadLocalContext.put("myname", Thread.currentThread().getName());
 				ThreadUtil.sleep(RandomUtil.nextLong(100, 300));
 				System.out.println(ThreadLocalContext.get("myname"));
+				ThreadLocalContext.reset();
+				System.out.println("shoud null for " +Thread.currentThread().getName() + ":"+ThreadLocalContext.get("myname"));
 				countdown.countDown();
 			}
 		};

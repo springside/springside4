@@ -17,7 +17,7 @@ import org.springside.modules.utils.number.NumberUtil;
 /**
  * 关于Properties的工具类
  * 
- * 1. Boolean.readBoolean(name) 与其他类型如Integer.readInteger()等的行为不一致，进行扩展.
+ * 1. 统一的读取系统变量，其中Boolean.readBoolean的风格不统一，Double则不支持，都进行了扩展.
  * 
  * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
  * 
@@ -35,49 +35,83 @@ public abstract class PropertiesUtil {
 	/////////// Boolean.readBoolean()扩展 ///////////////
 
 	/**
-	 * 读取Boolean类型的系统变量，为空时返回False，与Boolean.getBoolean()一致.
-	 */
-	public static boolean getBooleanDefaultFalse(String name) {
-		return Boolean.getBoolean(name);
-	}
-
-	/**
 	 * 读取Boolean类型的系统变量，为空时返回null，代表未设置，而不是Boolean.getBoolean()的false.
 	 */
-	public static Boolean getBooleanDefaultNull(String name) {
+	public static Boolean booleanSystemProperty(String name) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
 			return Boolean.valueOf(stringResult);
 		}
-		return null; // NOSONAR
+		return null;
 	}
 
 	/**
 	 * 读取Boolean类型的系统变量，为空时返回默认值, 而不是Boolean.getBoolean()的false.
-	 * 
-	 * 因为默认值为Boolean，返回值也是Boolean
 	 */
-	public static Boolean getBoolean(String name, Boolean defaultVal) {
+	public static Boolean booleanSystemProperty(String name, Boolean defaultValue) {
 		String stringResult = System.getProperty(name);
 		if (stringResult != null) {
 			return Boolean.valueOf(stringResult);
 		} else {
-			return defaultVal;
+			return defaultValue;
 		}
 	}
 
 	/**
-	 * 读取Boolean类型的系统变量，为空时返回默认值, 而不是Boolean.getBoolean()的false.
-	 * 
-	 * 因为默认值为boolean，返回值也是boolean
+	 * 读取String类型的系统变量，为空时返回null.
 	 */
-	public static boolean getBoolean(String name, boolean defaultVal) {
-		String stringResult = System.getProperty(name);
-		if (stringResult != null) {
-			return Boolean.parseBoolean(stringResult);
-		} else {
-			return defaultVal;
-		}
+	public static String stringSystemProperty(String name) {
+		return System.getProperty(name);
+	}
+
+	/**
+	 * 读取String类型的系统变量，为空时返回默认值
+	 */
+	public static String stringSystemProperty(String name, String defaultValue) {
+		return System.getProperty(name, defaultValue);
+	}
+
+	/**
+	 * 读取Integer类型的系统变量，为空时返回null.
+	 */
+	public static Integer intSystemProperty(String name) {
+		return Integer.getInteger(name);
+	}
+
+	/**
+	 * 读取Integer类型的系统变量，为空时返回默认值
+	 */
+	public static Integer intSystemProperty(String name, Integer defaultValue) {
+		return Integer.getInteger(name, defaultValue);
+	}
+
+	/**
+	 * 读取Long类型的系统变量，为空时返回null.
+	 */
+	public static Long longSystemProperty(String name) {
+		return Long.getLong(name);
+	}
+
+	/**
+	 * 读取Integer类型的系统变量，为空时返回默认值
+	 */
+	public static Long longSystemProperty(String name, Long defaultValue) {
+		return Long.getLong(name, defaultValue);
+	}
+
+	/**
+	 * 读取Double类型的系统变量，为空时返回null.
+	 */
+	public static Double doubleSystemProperty(String propertyName) {
+		return NumberUtil.toDoubleObject(System.getProperty(propertyName));
+	}
+
+	/**
+	 * 读取Double类型的系统变量，为空时返回默认值.
+	 */
+	public static Double doubleSystemProperty(String propertyName, Double defaultValue) {
+		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName));
+		return propertyValue != null ? propertyValue : defaultValue;
 	}
 
 	/////////// 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先.///////////////
@@ -85,7 +119,7 @@ public abstract class PropertiesUtil {
 	/**
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
-	public static String readString(String propertyName, String envName, String defaultValue) {
+	public static String stringSystemProperty(String propertyName, String envName, String defaultValue) {
 		checkEnvName(envName);
 		String propertyValue = System.getProperty(propertyName);
 		if (propertyValue != null) {
@@ -99,7 +133,7 @@ public abstract class PropertiesUtil {
 	/**
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
-	public static Integer readInt(String propertyName, String envName, Integer defaultValue) {
+	public static Integer intSystemProperty(String propertyName, String envName, Integer defaultValue) {
 		checkEnvName(envName);
 		Integer propertyValue = NumberUtil.toIntObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
@@ -113,7 +147,7 @@ public abstract class PropertiesUtil {
 	/**
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
-	public static Long readLong(String propertyName, String envName, Long defaultValue) {
+	public static Long longSystemProperty(String propertyName, String envName, Long defaultValue) {
 		checkEnvName(envName);
 		Long propertyValue = NumberUtil.toLongObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
@@ -127,7 +161,7 @@ public abstract class PropertiesUtil {
 	/**
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
-	public static Double readDouble(String propertyName, String envName, Double defaultValue) {
+	public static Double doubleSystemProperty(String propertyName, String envName, Double defaultValue) {
 		checkEnvName(envName);
 		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName));
 		if (propertyValue != null) {
@@ -141,7 +175,7 @@ public abstract class PropertiesUtil {
 	/**
 	 * 合并系统变量(-D)，环境变量 和默认值，以系统变量优先
 	 */
-	public static Boolean readBoolean(String propertyName, String envName, Boolean defaultValue) {
+	public static Boolean booleanSystemProperty(String propertyName, String envName, Boolean defaultValue) {
 		checkEnvName(envName);
 		Boolean propertyValue = toBooleanObject(System.getProperty(propertyName));
 		if (propertyValue != null) {

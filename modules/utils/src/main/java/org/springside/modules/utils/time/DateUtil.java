@@ -26,6 +26,7 @@ public abstract class DateUtil {
 
 	private static final int[] MONTH_LENGTH = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
+	//////// 日期比较 ///////////
 	/**
 	 * 是否同一天.
 	 * 
@@ -39,8 +40,22 @@ public abstract class DateUtil {
 	 * 是否同一时刻.
 	 */
 	public static boolean isSameTime(@NotNull final Date date1, @NotNull final Date date2) {
-		return date1.getTime() == date2.getTime();
+		// date.getMillisOf() 比date.getTime()快
+		return date1.compareTo(date2) == 0;
 	}
+
+	/**
+	 * 判断日期是否在范围内，包含相等的日期
+	 */
+	public static boolean isBetween(@NotNull final Date date, @NotNull final Date start, @NotNull final Date end) {
+		if (date == null || start == null || end == null || start.after(end)) {
+			throw new IllegalArgumentException("some date parameters is null or dateBein after dateEnd");
+		}
+		return !date.before(start) && !date.after(end);
+	}
+	
+	
+	/////////// 日期设置处理 /////////
 
 	/**
 	 * 日期往下取整.

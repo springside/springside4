@@ -149,10 +149,10 @@ public abstract class NetUtil {
 	 */
 	private static InetAddress findLocalAddressViaNetworkInterface() {
 		// 如果hostname +/etc/hosts 得到的是127.0.0.1, 则首选这块网卡
-		String preferNamePrefix = PropertiesUtil.readString("localhost.prefer.nic.prefix",
+		String preferNamePrefix = PropertiesUtil.stringSystemProperty("localhost.prefer.nic.prefix",
 				"LOCALHOST_PREFER_NIC_PREFIX", "bond0.");
 		// 如果hostname +/etc/hosts 得到的是127.0.0.1, 和首选网卡都不符合要求，则按顺序遍历下面的网卡
-		String defaultNicList = PropertiesUtil.readString("localhost.default.nic.list", "LOCALHOST_DEFAULT_NIC_LIST",
+		String defaultNicList = PropertiesUtil.stringSystemProperty("localhost.default.nic.list", "LOCALHOST_DEFAULT_NIC_LIST",
 				"bond0,eth0,em0,br0");
 
 		InetAddress resultAddress = null;

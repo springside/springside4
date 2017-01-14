@@ -1,4 +1,4 @@
-package org.springside.modules.utils.collection;
+package org.springside.modules.web;
 
 import java.util.ArrayList;
 import java.util.Collection;

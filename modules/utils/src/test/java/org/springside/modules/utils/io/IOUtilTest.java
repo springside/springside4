@@ -7,6 +7,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.springside.modules.utils.io.type.StringBuilderWriter;
 import org.springside.modules.utils.text.Charsets;
 
 public class IOUtilTest {

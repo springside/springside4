@@ -43,7 +43,7 @@ public class FileUtilTest {
 		FileUtil.write(content, file);
 		File newFile = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testFile" + RandomUtil.nextInt()));
 
-		FileUtil.copy(file, newFile);
+		FileUtil.copyFile(file, newFile);
 		assertThat(FileUtil.isFileExists(newFile)).isTrue();
 
 		String result = FileUtil.toString(newFile);

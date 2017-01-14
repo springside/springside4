@@ -15,6 +15,7 @@ import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.io.type.StringBuilderWriter;
 import org.springside.modules.utils.text.Charsets;
 
 import com.google.common.annotations.Beta;

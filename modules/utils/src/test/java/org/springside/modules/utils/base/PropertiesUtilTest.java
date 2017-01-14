@@ -12,53 +12,100 @@ import org.springside.modules.utils.number.RandomUtil;
 public class PropertiesUtilTest {
 
 	@Test
-	public void getBoolean() {
+	public void systemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 
-		boolean result = PropertiesUtil.getBooleanDefaultFalse(name);
-		assertThat(result).isFalse();
-
-		Boolean result0 = PropertiesUtil.getBooleanDefaultNull(name);
+		Boolean result0 = PropertiesUtil.booleanSystemProperty(name);
 		assertThat(result0).isNull();
 
-		Boolean result1 = PropertiesUtil.getBoolean(name, null);
+		Boolean result1 = PropertiesUtil.booleanSystemProperty(name, null);
 		assertThat(result1).isNull();
 
-		boolean result2 = PropertiesUtil.getBoolean(name, false);
-		assertThat(result2).isFalse();
-
-		Boolean result3 = PropertiesUtil.getBoolean(name, Boolean.TRUE);
+		Boolean result3 = PropertiesUtil.booleanSystemProperty(name, Boolean.TRUE);
 		assertThat(result3).isTrue();
 
 		System.setProperty(name, "true");
-		Boolean result4 = PropertiesUtil.getBoolean(name, false);
-		assertThat(result4).isTrue();
-		
-		Boolean result5 = PropertiesUtil.getBoolean(name, Boolean.FALSE);
+
+		Boolean result5 = PropertiesUtil.booleanSystemProperty(name, Boolean.FALSE);
 		assertThat(result5).isTrue();
+
+		System.clearProperty(name);
+
+		/// int
+		Integer result6 = PropertiesUtil.intSystemProperty(name);
+		assertThat(result6).isNull();
+
+		result6 = PropertiesUtil.intSystemProperty(name, 1);
+		assertThat(result6).isEqualTo(1);
+
+		System.setProperty(name, "2");
+		result6 = PropertiesUtil.intSystemProperty(name, 1);
+		assertThat(result6).isEqualTo(2);
+
+		System.clearProperty(name);
+
+		///// long
+		Long result7 = PropertiesUtil.longSystemProperty(name);
+		assertThat(result7).isNull();
+
+		result7 = PropertiesUtil.longSystemProperty(name, 1L);
+		assertThat(result7).isEqualTo(1L);
+
+		System.setProperty(name, "2");
+		result7 = PropertiesUtil.longSystemProperty(name, 1L);
+		assertThat(result7).isEqualTo(2L);
+
+		System.clearProperty(name);
+
+		///// doulbe
+		Double result8 = PropertiesUtil.doubleSystemProperty(name);
+		assertThat(result8).isNull();
+
+		result8 = PropertiesUtil.doubleSystemProperty(name, 1.1);
+		assertThat(result8).isEqualTo(1.1);
+
+		System.setProperty(name, "2.1");
+		result8 = PropertiesUtil.doubleSystemProperty(name, 1.1);
+		assertThat(result8).isEqualTo(2.1);
+
+		System.clearProperty(name);
+
+		///// String
+		String result9 = PropertiesUtil.stringSystemProperty(name);
+		assertThat(result9).isNull();
+
+		result9 = PropertiesUtil.stringSystemProperty(name, "1.1");
+		assertThat(result9).isEqualTo("1.1");
+
+		System.setProperty(name, "2.1");
+		result9 = PropertiesUtil.stringSystemProperty(name, "1.1");
+		assertThat(result9).isEqualTo("2.1");
+
+		System.clearProperty(name);
+
 	}
 
 	@Test
-	public void readString() {
+	public void stringSystemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 		String envName = "ss_test" + RandomUtil.nextInt();
 
 		// default 值
-		String result = PropertiesUtil.readString(name, envName, "123");
+		String result = PropertiesUtil.stringSystemProperty(name, envName, "123");
 		assertThat(result).isEqualTo("123");
 
 		// env值
-		String result2 = PropertiesUtil.readString(name, "HOME", "123");
+		String result2 = PropertiesUtil.stringSystemProperty(name, "HOME", "123");
 		assertThat(result2).isNotEqualTo("123");
 
 		// system properties值
 		System.setProperty(name, "456");
-		String result3 = PropertiesUtil.readString(name, envName, "123");
+		String result3 = PropertiesUtil.stringSystemProperty(name, envName, "123");
 		assertThat(result3).isEqualTo("456");
 
 		try {
 			// 非法字符
-			String result4 = PropertiesUtil.readString(name, name, "123");
+			String result4 = PropertiesUtil.stringSystemProperty(name, name, "123");
 			Assert.fail("should fail before");
 		} catch (Exception e) {
 			assertThat(e).isInstanceOf(IllegalArgumentException.class);
@@ -68,81 +115,81 @@ public class PropertiesUtilTest {
 	}
 
 	@Test
-	public void readInt() {
+	public void intSystemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 		String envName = "ss_test" + RandomUtil.nextInt();
 
 		// default 值
-		int result = PropertiesUtil.readInt(name, envName, 123);
+		int result = PropertiesUtil.intSystemProperty(name, envName, 123);
 		assertThat(result).isEqualTo(123);
 
 		// env值没有数字类型的，忽略
 
 		// system properties值
 		System.setProperty(name, "456");
-		int result3 = PropertiesUtil.readInt(name, envName, 123);
+		int result3 = PropertiesUtil.intSystemProperty(name, envName, 123);
 		assertThat(result3).isEqualTo(456);
 
 		System.clearProperty(name);
 	}
 
 	@Test
-	public void readLong() {
+	public void longSystemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 		String envName = "ss_test" + RandomUtil.nextInt();
 
 		// default 值
-		long result = PropertiesUtil.readLong(name, envName, 123L);
+		long result = PropertiesUtil.longSystemProperty(name, envName, 123L);
 		assertThat(result).isEqualTo(123L);
 
 		// env值没有数字类型的，忽略
 
 		// system properties值
 		System.setProperty(name, "456");
-		long result3 = PropertiesUtil.readLong(name, envName, 123L);
+		long result3 = PropertiesUtil.longSystemProperty(name, envName, 123L);
 		assertThat(result3).isEqualTo(456L);
 
 		System.clearProperty(name);
 	}
 
 	@Test
-	public void readDouble() {
+	public void doubleSystemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 		String envName = "ss_test" + RandomUtil.nextInt();
 
 		// default 值
-		double result = PropertiesUtil.readDouble(name, envName, 123d);
+		double result = PropertiesUtil.doubleSystemProperty(name, envName, 123d);
 		assertThat(result).isEqualTo(123d);
 
 		// env值没有数字类型的，忽略
 
 		// system properties值
 		System.setProperty(name, "456");
-		double result3 = PropertiesUtil.readDouble(name, envName, 123d);
+		double result3 = PropertiesUtil.doubleSystemProperty(name, envName, 123d);
 		assertThat(result3).isEqualTo(456d);
 
 		System.clearProperty(name);
 	}
 
 	@Test
-	public void readBoolean() {
+	public void booleanSystemProperty() {
 		String name = "ss.test" + RandomUtil.nextInt();
 		String envName = "ss_test" + RandomUtil.nextInt();
 
 		// default 值
-		boolean result = PropertiesUtil.readBoolean(name, envName, true);
+		boolean result = PropertiesUtil.booleanSystemProperty(name, envName, true);
 		assertThat(result).isTrue();
 
 		// env值没有boolean类型的，忽略
 
 		// system properties值
 		System.setProperty(name, "true");
-		boolean result3 = PropertiesUtil.readBoolean(name, envName, false);
+		boolean result3 = PropertiesUtil.booleanSystemProperty(name, envName, false);
 		assertThat(result3).isTrue();
 
 		System.clearProperty(name);
 	}
-	
+
 	@Test
 	public void loadProperties() {
 		Properties p1 = PropertiesUtil.loadFromFile("classpath://application.properties");

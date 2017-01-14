@@ -3,13 +3,14 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.collection;
+package org.springside.modules.mapper;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
 import org.junit.Test;
+import org.springside.modules.web.CollectionExtractor;
 
 import com.google.common.collect.Lists;
 

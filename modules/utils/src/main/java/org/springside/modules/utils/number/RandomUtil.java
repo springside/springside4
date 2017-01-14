@@ -11,23 +11,25 @@ import org.springside.modules.utils.base.Platforms;
 /**
  * 随机数工具集.
  * 
- * 1. 获取无锁的ThreadLocalRandom
+ * 1. 获取无锁的兼容JDK6的ThreadLocalRandom 
  * 
  * 2. 获取性能较佳的SecureRandom
  * 
- * 3. 保证没有负数陷阱，也能更精确she定范围的nextInt 与 nextLong(copy from Common Lang RandomUtils)
+ * 3. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble
+ *    (copy from Common Lang RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
+ * 
+ * 4. 随机字符串
  * 
  * @author calvin
  */
 public abstract class RandomUtil {
 
-	private static final Random RANDOM = new Random();
-
+	
 	/////////////////// 获取Random实例//////////////
 	/**
 	 * 返回无锁的ThreadLocalRandom
 	 * 
-	 * 如果JDK6，使用移植于JDK7的版本，否则使用JDK自带
+	 * 如果JDK6，使用移植于jsr166e的版本(相当于JDK7的实现)
 	 */
 	public static Random threadLocalRandom() {
 		if (Platforms.IS_ATLEASET_JAVA7) {
@@ -57,7 +59,7 @@ public abstract class RandomUtil {
 	 * 返回0到Intger.MAX_VALUE的随机Int, 使用内置全局普通Random.
 	 */
 	public static int nextInt() {
-		return nextInt(RANDOM);
+		return nextInt(threadLocalRandom());
 	}
 
 	/**
@@ -78,7 +80,7 @@ public abstract class RandomUtil {
 	 * 返回0到max的随机Int, 使用内置全局普通Random.
 	 */
 	public static int nextInt(int max) {
-		return nextInt(RANDOM, max);
+		return nextInt(threadLocalRandom(), max);
 	}
 
 	/**
@@ -94,7 +96,7 @@ public abstract class RandomUtil {
 	 * min必须大于0.
 	 */
 	public static int nextInt(int min, int max) {
-		return nextInt(RANDOM, min, max);
+		return nextInt(threadLocalRandom(), min, max);
 	}
 
 	/**
@@ -122,7 +124,7 @@ public abstract class RandomUtil {
 	 * 返回0－Long.MAX_VALUE间的随机Long, 使用内置全局普通Random.
 	 */
 	public static long nextLong() {
-		return nextLong(RANDOM);
+		return nextLong(threadLocalRandom());
 	}
 
 	/**
@@ -142,7 +144,7 @@ public abstract class RandomUtil {
 	 * 返回0－max间的随机Long, 使用内置全局普通Random.
 	 */
 	public static long nextLong(long max) {
-		return nextLong(RANDOM, 0, max);
+		return nextLong(threadLocalRandom(), 0, max);
 	}
 
 	/**
@@ -158,7 +160,7 @@ public abstract class RandomUtil {
 	 * min必须大于0.
 	 */
 	public static long nextLong(long min, long max) {
-		return nextLong(RANDOM, min, max);
+		return nextLong(threadLocalRandom(), min, max);
 	}
 
 	/**
@@ -186,7 +188,7 @@ public abstract class RandomUtil {
 	 * 返回0-之间的double
 	 */
 	public static double nextDouble() {
-		return nextDouble(RANDOM, 0, Double.MAX_VALUE);
+		return nextDouble(threadLocalRandom(), 0, Double.MAX_VALUE);
 	}
 
 	/**
@@ -200,7 +202,7 @@ public abstract class RandomUtil {
 	 * 返回0-max之间的double
 	 */
 	public static double nextDouble(double max) {
-		return nextDouble(RANDOM, 0, max);
+		return nextDouble(threadLocalRandom(), 0, max);
 	}
 
 	/**
@@ -214,7 +216,7 @@ public abstract class RandomUtil {
 	 * 返回min-max之间的double
 	 */
 	public static double nextDouble(final double min, final double max) {
-		return nextDouble(RANDOM, min, max);
+		return nextDouble(threadLocalRandom(), min, max);
 	}
 
 	/**
@@ -236,7 +238,7 @@ public abstract class RandomUtil {
 	 * 随机字母或数字，固定长度
 	 */
 	public static String randomStringFixLength(int length) {
-		return RandomStringUtils.random(length, 0, 0, true, true, null, RANDOM);
+		return RandomStringUtils.random(length, 0, 0, true, true, null, threadLocalRandom());
 	}
 
 	/**
@@ -250,7 +252,7 @@ public abstract class RandomUtil {
 	 * 随机字母或数字，随机长度
 	 */
 	public static String randomStringRandomLength(int minLength, int maxLength) {
-		return RandomStringUtils.random(nextInt(minLength, maxLength), 0, 0, true, true, null, RANDOM);
+		return RandomStringUtils.random(nextInt(minLength, maxLength), 0, 0, true, true, null, threadLocalRandom());
 	}
 
 	/**
@@ -264,7 +266,7 @@ public abstract class RandomUtil {
 	 * 随机字母，固定长度
 	 */
 	public static String randomLetterFixLength(int length) {
-		return RandomStringUtils.random(length, 0, 0, true, false, null, RANDOM);
+		return RandomStringUtils.random(length, 0, 0, true, false, null, threadLocalRandom());
 	}
 
 	/**
@@ -278,7 +280,7 @@ public abstract class RandomUtil {
 	 * 随机字母，随机长度
 	 */
 	public static String randomLetterRandomLength(int minLength, int maxLength) {
-		return RandomStringUtils.random(nextInt(minLength, maxLength), 0, 0, true, false, null, RANDOM);
+		return RandomStringUtils.random(nextInt(minLength, maxLength), 0, 0, true, false, null, threadLocalRandom());
 	}
 
 	/**
@@ -292,7 +294,7 @@ public abstract class RandomUtil {
 	 * 随机ASCII字符(含字母，数字及其他符号)，固定长度
 	 */
 	public static String randomAsciiFixLength(int length) {
-		return RandomStringUtils.random(length, 32, 127, false, false, null, RANDOM);
+		return RandomStringUtils.random(length, 32, 127, false, false, null, threadLocalRandom());
 	}
 
 	/**
@@ -306,7 +308,8 @@ public abstract class RandomUtil {
 	 * 随机ASCII字符(含字母，数字及其他符号)，随机长度
 	 */
 	public static String randomAsciiRandomLength(int minLength, int maxLength) {
-		return RandomStringUtils.random(nextInt(minLength, maxLength), 32, 127, false, false, null, RANDOM);
+		return RandomStringUtils.random(nextInt(minLength, maxLength), 32, 127, false, false, null,
+				threadLocalRandom());
 	}
 
 	/**

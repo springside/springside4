@@ -27,12 +27,26 @@ public abstract class NumberUtil {
 		return Longs.toByteArray(value);
 	}
 
+	/**
+	 * from ElasticSearch Numbers
+	 */
+	public static byte[] toBytes(double val) {
+		return toBytes(Double.doubleToRawLongBits(val));
+	}
+
 	public static int toInt(byte[] bytes) {
 		return Ints.fromByteArray(bytes);
 	}
 
 	public static long toLong(byte[] bytes) {
 		return Longs.fromByteArray(bytes);
+	}
+
+	/**
+	 * from ElasticSearch Numbers
+	 */
+	public static double toDouble(byte[] bytes) {
+		return Double.longBitsToDouble(toLong(bytes));
 	}
 
 	/////// 判断字符串类型//////////

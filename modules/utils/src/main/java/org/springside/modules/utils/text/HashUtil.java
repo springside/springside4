@@ -7,8 +7,8 @@ package org.springside.modules.utils.text;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +16,6 @@ import java.util.Iterator;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.base.ExceptionUtil;
 
 import com.google.common.hash.Hashing;
 
@@ -25,11 +24,13 @@ import com.google.common.hash.Hashing;
  * 
  * 1.集合类的HashCode, 返回int
  * 
- * 2.SHA-1, 安全性较高, 返回byte[](可用Encodes进一步被编码为Hex, Base64),
+ * 2.SHA-1, 安全性较高, 返回byte[](可用Encodes进一步被编码为Hex, Base64)
+ * 
+ * 性能优化，使用ThreadLocal的MessageDigest(from ElasticSearch)
  * 
  * 支持带salt并且进行迭代达到更高的安全性.
  * 
- * MD5的安全性较低, 默认已不支持.
+ * MD5的安全性较低, 只在文件Checksum时支持.
  * 
  * 3.crc32, murmur32这些不追求安全性, 性能较高, 返回int.
  * 
@@ -39,8 +40,22 @@ import com.google.common.hash.Hashing;
  */
 public abstract class HashUtil {
 
-	private static final String SHA1_ALG = "SHA-1";
-	private static final String MD5_ALG = "MD5";
+	private static ThreadLocal<MessageDigest> createThreadLocalMessageDigest(final String digest) {
+		return new ThreadLocal<MessageDigest>() {
+			@Override
+			protected MessageDigest initialValue() {
+				try {
+					return MessageDigest.getInstance(digest);
+				} catch (NoSuchAlgorithmException e) {
+					throw new RuntimeException(
+							"unexpected exception creating MessageDigest instance for [" + digest + "]", e);
+				}
+			}
+		};
+	}
+
+	private static final ThreadLocal<MessageDigest> MD5_DIGEST = createThreadLocalMessageDigest("MD5");
+	private static final ThreadLocal<MessageDigest> SHA_1_DIGEST = createThreadLocalMessageDigest("SHA-1");
 
 	private static SecureRandom random = new SecureRandom();
 
@@ -74,28 +89,28 @@ public abstract class HashUtil {
 	 * 对输入字符串进行sha1散列.
 	 */
 	public static byte[] sha1(byte[] input) {
-		return digest(input, SHA1_ALG, null, 1);
+		return digest(input, get(SHA_1_DIGEST), null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列, 编码默认为UTF8.
 	 */
 	public static byte[] sha1(String input) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, null, 1);
+		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
 	public static byte[] sha1(byte[] input, byte[] salt) {
-		return digest(input, SHA1_ALG, salt, 1);
+		return digest(input, get(SHA_1_DIGEST), salt, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
 	public static byte[] sha1(String input, byte[] salt) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, salt, 1);
+		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), salt, 1);
 	}
 
 	/**
@@ -104,7 +119,7 @@ public abstract class HashUtil {
 	 * @see #generateSalt(int)
 	 */
 	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
-		return digest(input, SHA1_ALG, salt, iterations);
+		return digest(input, get(SHA_1_DIGEST), salt, iterations);
 	}
 
 	/**
@@ -113,34 +128,34 @@ public abstract class HashUtil {
 	 * @see #generateSalt(int)
 	 */
 	public static byte[] sha1(String input, byte[] salt, int iterations) {
-		return digest(input.getBytes(Charsets.UTF_8), SHA1_ALG, salt, iterations);
+		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), salt, iterations);
+	}
+
+	private static MessageDigest get(ThreadLocal<MessageDigest> messageDigest) {
+		MessageDigest instance = messageDigest.get();
+		instance.reset();
+		return instance;
 	}
 
 	/**
 	 * 对字符串进行散列, 支持md5与sha1算法.
 	 */
-	private static byte[] digest(byte[] input, String algorithm, byte[] salt, int iterations) {
-		try {
-			MessageDigest digest = MessageDigest.getInstance(algorithm);
-
-			// 带盐
-			if (salt != null) {
-				digest.update(salt);
-			}
-
-			// 第一次散列
-			byte[] result = digest.digest(input);
-
-			// 如果迭代次数>1，进一步迭代散列
-			for (int i = 1; i < iterations; i++) {
-				digest.reset();
-				result = digest.digest(result);
-			}
-
-			return result;
-		} catch (GeneralSecurityException e) {
-			throw ExceptionUtil.unchecked(e);
+	private static byte[] digest(byte[] input, MessageDigest digest, byte[] salt, int iterations) {
+		// 带盐
+		if (salt != null) {
+			digest.update(salt);
 		}
+
+		// 第一次散列
+		byte[] result = digest.digest(input);
+
+		// 如果迭代次数>1，进一步迭代散列
+		for (int i = 1; i < iterations; i++) {
+			digest.reset();
+			result = digest.digest(result);
+		}
+
+		return result;
 	}
 
 	/**
@@ -160,32 +175,27 @@ public abstract class HashUtil {
 	 * 对文件进行sha1散列.
 	 */
 	public static byte[] sha1File(InputStream input) throws IOException {
-		return digestFile(input, SHA1_ALG);
+		return digestFile(input, get(SHA_1_DIGEST));
 	}
 
 	/**
 	 * 对文件进行md5散列，被破解后MD5已较少人用.
 	 */
 	public static byte[] md5File(InputStream input) throws IOException {
-		return digestFile(input, MD5_ALG);
+		return digestFile(input, get(MD5_DIGEST));
 	}
 
-	private static byte[] digestFile(InputStream input, String algorithm) throws IOException {
-		try {
-			MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
-			int bufferLength = 8 * 1024;
-			byte[] buffer = new byte[bufferLength];
-			int read = input.read(buffer, 0, bufferLength);
+	private static byte[] digestFile(InputStream input, MessageDigest messageDigest) throws IOException {
+		int bufferLength = 8 * 1024;
+		byte[] buffer = new byte[bufferLength];
+		int read = input.read(buffer, 0, bufferLength);
 
-			while (read > -1) {
-				messageDigest.update(buffer, 0, read);
-				read = input.read(buffer, 0, bufferLength);
-			}
-
-			return messageDigest.digest();
-		} catch (GeneralSecurityException e) {
-			throw ExceptionUtil.unchecked(e);
+		while (read > -1) {
+			messageDigest.update(buffer, 0, read);
+			read = input.read(buffer, 0, bufferLength);
 		}
+
+		return messageDigest.digest();
 	}
 
 	////////////////// 基于JDK的CRC32 ///////////////////

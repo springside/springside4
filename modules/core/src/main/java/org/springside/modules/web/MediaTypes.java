@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.net;
+package org.springside.modules.web;
 
 /**
  * 带UTF-8 charset 定义的MediaType.

@@ -22,6 +22,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.junit.Test;
+import org.springside.modules.web.JaxbMapper;
 
 import com.google.common.collect.Lists;
 

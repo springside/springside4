@@ -99,16 +99,48 @@ public abstract class FileUtil {
 		return Files.newWriter(getFileByPath(fileName), Charsets.UTF_8);
 	}
 
-	///// 文件操作/////
+	///// 文件操作 /////
+
+	/**
+	 * 复制文件或目录
+	 */
+	public static void copy(File from, File to) throws IOException {
+		if (from.isDirectory())
+			copyDir(from, to);
+		else
+			copyFile(from, to);
+	}
 
 	/**
 	 * 文件复制.
 	 * 
 	 * 如果文件不存在或者是目录，不做修改
 	 */
-	public static void copy(@Nullable File from, File to) throws IOException {
+	public static void copyFile(@Nullable File from, File to) throws IOException {
 		if (isFileExists(from)) {
 			Files.copy(from, to);
+		}
+	}
+
+	/**
+	 * 复制目录
+	 */
+	public static void copyDir(File from, File to) throws IOException {
+		if (to.exists()) {
+			if (!to.isDirectory())
+				throw new IllegalArgumentException(to.toString());
+		} else {
+			to.mkdirs();
+		}
+
+		File[] files = from.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				String name = files[i].getName();
+				if (".".equals(name) || "..".equals(name))
+					continue;
+				copy(files[i], new File(to, name));
+			}
 		}
 	}
 
@@ -117,7 +149,7 @@ public abstract class FileUtil {
 	 * 
 	 * 如果文件不存在或者是目录，不做修改.
 	 */
-	public static void move(@Nullable File from, File to) throws IOException {
+	public static void moveFile(@Nullable File from, File to) throws IOException {
 		if (isFileExists(from)) {
 			Files.move(from, to);
 		}
@@ -155,7 +187,7 @@ public abstract class FileUtil {
 		if (!isDirExists(dir)) {
 			return;
 		}
-		//后序遍历，先删掉子目录中的文件/目录
+		// 后序遍历，先删掉子目录中的文件/目录
 		Iterator<File> iterator = Files.fileTreeTraverser().postOrderTraversal(dir).iterator();
 		while (iterator.hasNext()) {
 			iterator.next().delete();
@@ -182,13 +214,7 @@ public abstract class FileUtil {
 	 * 前序递归列出所有文件, 只包含后缀名匹配的文件. （后缀名不包含.）
 	 */
 	public static List<File> listFileWithExtension(final File rootDir, final String extension) {
-		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new Predicate<File>() {
-
-			@Override
-			public boolean apply(File input) {
-				return input.isFile() && extension.equals(FilePathUtil.getFileExtension(input));
-			}
-		}).toList();
+		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new FileExtensionFilter(extension)).toList();
 	}
 
 	/**
@@ -219,6 +245,9 @@ public abstract class FileUtil {
 		return dir.exists() && dir.isDirectory();
 	}
 
+	/**
+	 * 确保目录存在, 如不存在则创建
+	 */
 	public static void makeSureDirExists(String dirPath) throws IOException {
 		makeSureDirExists(getFileByPath(dirPath));
 	}
@@ -288,5 +317,21 @@ public abstract class FileUtil {
 
 	private static File getFileByPath(String filePath) {
 		return StringUtils.isBlank(filePath) ? null : new File(filePath);
+	}
+
+	/**
+	 * 以文件名后缀做filter，配合fileTreeTraverser使用
+	 */
+	public static final class FileExtensionFilter implements Predicate<File> {
+		private final String extension;
+
+		private FileExtensionFilter(String extension) {
+			this.extension = extension;
+		}
+
+		@Override
+		public boolean apply(File input) {
+			return input.isFile() && extension.equals(FilePathUtil.getFileExtension(input));
+		}
 	}
 }

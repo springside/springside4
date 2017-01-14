@@ -83,4 +83,16 @@ public abstract class MathUtil {
 	public static long gcd(long a, long b) {
 		return LongMath.gcd(a, b);
 	}
+
+	/**
+	 * 保证结果为正数的取模，from ElasticSearch
+	 */
+	public static int mod(int v, int m) {
+		int r = v % m;
+		if (r < 0) {
+			r += m;
+		}
+		return r;
+	}
+
 }

@@ -20,8 +20,8 @@ import org.springside.examples.bootapi.service.BookAdminService;
 import org.springside.examples.bootapi.service.BookBorrowService;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.utils.net.MediaTypes;
 import org.springside.modules.utils.reflect.BeanMapper;
+import org.springside.modules.web.MediaTypes;
 
 // Spring Restful MVC Controller的标识, 直接输出内容，不调用template引擎.
 @RestController
