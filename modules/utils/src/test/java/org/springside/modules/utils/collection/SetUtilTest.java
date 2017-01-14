@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.type.ConcurrentHashSet;
-import org.springside.modules.utils.collection.type.NaturalOrderComparator;
+import org.springside.modules.utils.collection.type.ComparableComparator;
 
 public class SetUtilTest {
 
@@ -27,7 +27,7 @@ public class SetUtilTest {
 
 		TreeSet<String> set5 = SetUtil.newSortedSet();
 
-		TreeSet<String> set6 = SetUtil.newSortedSet(NaturalOrderComparator.INSTANCE);
+		TreeSet<String> set6 = SetUtil.newSortedSet(ComparableComparator.INSTANCE);
 
 		ConcurrentHashSet set7 = SetUtil.newConcurrentHashSet();
 	}

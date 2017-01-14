@@ -9,6 +9,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
@@ -41,6 +43,19 @@ public class ReflectionUtil {
 	private static final String GETTER_PREFIX = "get";
 
 	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
+
+	private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new IdentityHashMap<Class<?>, Class<?>>(8);
+
+	static {
+		primitiveWrapperTypeMap.put(Boolean.class, Boolean.TYPE);
+		primitiveWrapperTypeMap.put(Byte.class, Byte.TYPE);
+		primitiveWrapperTypeMap.put(Character.class, Character.TYPE);
+		primitiveWrapperTypeMap.put(Double.class, Double.TYPE);
+		primitiveWrapperTypeMap.put(Float.class, Float.TYPE);
+		primitiveWrapperTypeMap.put(Integer.class, Integer.TYPE);
+		primitiveWrapperTypeMap.put(Long.class, Long.TYPE);
+		primitiveWrapperTypeMap.put(Short.class, Short.TYPE);
+	}
 
 	/////////// 属性相关函数, 用于一次性调用的情况 ///////////
 	/**
@@ -315,28 +330,11 @@ public class ReflectionUtil {
 	 */
 	private static void wrapClassses(Class<?>[] source) {
 		for (int i = 0; i < source.length; i++) {
-			source[i] = wrapClass(source[i]);
+			Class<?> wrapClass = primitiveWrapperTypeMap.get(source[i]);
+			if (wrapClass != null) {
+				source[i] = wrapClass;
+			}
 		}
 	}
 
-	/**
-	 * 兼容原子类型与非原子类型的转换，不考虑依赖两者不同来区分不同函数的场景
-	 */
-	private static Class<?> wrapClass(Class<?> clazz) {
-		if (clazz.equals(Integer.class)) {
-			return Integer.TYPE;
-		} else if (clazz.equals(Long.class)) {
-			return Long.TYPE;
-		} else if (clazz.equals(Double.class)) {
-			return Double.TYPE;
-		} else if (clazz.equals(Float.class)) {
-			return Float.TYPE;
-		} else if (clazz.equals(Boolean.class)) {
-			return Boolean.TYPE;
-		} else if (clazz.equals(Byte.class)) {
-			return Byte.TYPE;
-		}
-
-		return clazz;
-	}
 }

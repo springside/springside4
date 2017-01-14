@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
-import org.springside.modules.utils.collection.type.NaturalOrderComparator;
+import org.springside.modules.utils.collection.type.ComparableComparator;
 
 public class ListUtilTest {
 	@Test
@@ -108,12 +108,12 @@ public class ListUtilTest {
 		System.out.println("shuffle list:" + list);
 
 		
-		ListUtil.sort(list, NaturalOrderComparator.INSTANCE);
+		ListUtil.sort(list, ComparableComparator.INSTANCE);
 
 		assertThat(list).hasSize(7).containsExactly("a", "b", "c", "d", "e", "g", "i");
 		
 		assertThat(ListUtil.binarySearch(list, "b")).isEqualTo(1);
-		assertThat(ListUtil.binarySearch(list, "b", NaturalOrderComparator.INSTANCE)).isEqualTo(1);
+		assertThat(ListUtil.binarySearch(list, "b", ComparableComparator.INSTANCE)).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "x")).isEqualTo(-8);
 
 		
@@ -129,7 +129,7 @@ public class ListUtilTest {
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 		
 		ListUtil.shuffle(list8);
-		ListUtil.sortReverse(list8,NaturalOrderComparator.INSTANCE);
+		ListUtil.sortReverse(list8,ComparableComparator.INSTANCE);
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 

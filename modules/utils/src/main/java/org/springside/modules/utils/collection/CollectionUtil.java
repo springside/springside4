@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springside.modules.utils.collection.type.NaturalOrderComparator;
+import org.springside.modules.utils.collection.type.ComparableComparator;
 
 import com.google.common.annotations.Beta;
 
@@ -83,7 +83,7 @@ public abstract class CollectionUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> Comparator<T> naturalOrderComparator() {
-		return NaturalOrderComparator.INSTANCE;
+		return ComparableComparator.INSTANCE;
 	}
 
 	/**

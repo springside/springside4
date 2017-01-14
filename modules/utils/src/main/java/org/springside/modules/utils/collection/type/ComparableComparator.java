@@ -11,10 +11,10 @@ import java.util.Comparator;
  * 
  * @author calvin
  */
-public class NaturalOrderComparator<T extends Comparable<T>> implements Comparator<T> {
+public class ComparableComparator<T extends Comparable<T>> implements Comparator<T> {
 
 	@SuppressWarnings("rawtypes")
-	public static final NaturalOrderComparator INSTANCE = new NaturalOrderComparator();
+	public static final ComparableComparator INSTANCE = new ComparableComparator();
 
 	@Override
 	public int compare(T o1, T o2) {

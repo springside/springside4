@@ -124,6 +124,7 @@ public class SortedArrayList<E> extends ArrayList<E> {
 	 * @throws UnsupportedOperationException This method not supported.
 	 */
 	@Override
+	@Deprecated
 	public void add(int index, E element) {
 		throw new UnsupportedOperationException();
 	}
@@ -132,6 +133,7 @@ public class SortedArrayList<E> extends ArrayList<E> {
 	 * @throws UnsupportedOperationException This method not supported.
 	 */
 	@Override
+	@Deprecated
 	public E set(int index, E element) {
 		throw new UnsupportedOperationException();
 	}
@@ -140,6 +142,7 @@ public class SortedArrayList<E> extends ArrayList<E> {
 	 * @throws UnsupportedOperationException This method not supported.
 	 */
 	@Override
+	@Deprecated
 	public boolean addAll(int index, Collection<? extends E> c) {
 		throw new UnsupportedOperationException();
 	}
