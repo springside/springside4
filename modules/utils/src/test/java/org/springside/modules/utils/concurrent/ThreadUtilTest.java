@@ -10,13 +10,16 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
+import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilders;
 
 public class ThreadUtilTest {
 	@Test
@@ -87,6 +90,42 @@ public class ThreadUtilTest {
 		thread.interrupt();
 		ThreadUtil.sleep(500);
 		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
+	}
+
+	@Test
+	public void exception() {
+		ScheduledThreadPoolExecutor executor = ThreadPoolBuilders.scheduledPool().build();
+		ExceptionTask task = new ExceptionTask();
+		executor.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);
+
+		ThreadUtil.sleep(500);
+
+		// 线程第一次跑就被中断
+		assertThat(task.counter.get()).isEqualTo(1);
+		ThreadUtil.gracefulShutdown(executor, 1000);
+
+		////////
+		executor = ThreadPoolBuilders.scheduledPool().build();
+		task = new ExceptionTask();
+		Runnable wrapTask = ThreadUtil.wrapException(task);
+		executor.scheduleAtFixedRate(wrapTask, 0, 100, TimeUnit.MILLISECONDS);
+
+		ThreadUtil.sleep(500);
+		assertThat(task.counter.get()).isGreaterThan(1);
+		System.out.println("-------actual run:" + task.counter.get());
+		ThreadUtil.gracefulShutdown(executor, 1000);
+
+	}
+
+	static class ExceptionTask implements Runnable {
+		public AtomicInteger counter = new AtomicInteger(0);
+
+		@Override
+		public void run() {
+			counter.incrementAndGet();
+			throw new RuntimeException("fail");
+		}
+
 	}
 
 	static class Task implements Runnable {

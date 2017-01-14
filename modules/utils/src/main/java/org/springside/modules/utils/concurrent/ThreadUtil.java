@@ -109,9 +109,11 @@ public abstract class ThreadUtil {
 	}
 
 	/**
-	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，调用本函数进行包括
+	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
+	 * 
+	 * 在无法控制第三方包的Runnalbe实现时，调用本函数进行包裹.
 	 */
-	public static Runnable wrapWithoutException(@NotNull Runnable runnable) {
+	public static Runnable wrapException(@NotNull Runnable runnable) {
 		return new WrapExceptionRunnable(runnable);
 	}
 
