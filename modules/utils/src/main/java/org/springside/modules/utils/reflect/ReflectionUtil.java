@@ -42,9 +42,9 @@ public class ReflectionUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
 
-	/////////// 属性相关函数///////////
+	/////////// 属性相关函数, 用于一次性调用的情况 ///////////
 	/**
-	 * 调用Getter方法,无视private/protected修饰符.
+	 * 调用Getter方法, 无视private/protected修饰符.
 	 */
 	public static <T> T invokeGetter(Object obj, String propertyName) {
 		String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(propertyName);
@@ -173,7 +173,7 @@ public class ReflectionUtil {
 	 * 用于一次性调用的情况，否则应使用getAccessibleMethodByName()函数获得Method后反复调用.
 	 */
 	public static Object invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
-		Method method = getAccessibleMethodByName(obj.getClass(), methodName);
+		Method method = findAccessibleMethodByName(obj.getClass(), methodName);
 		if (method == null) {
 			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
@@ -195,8 +195,7 @@ public class ReflectionUtil {
 	public static Field getAccessibleField(final Class clazz, final String fieldName) {
 		Validate.notNull(clazz, "clazz can't be null");
 		Validate.notEmpty(fieldName, "fieldName can't be blank");
-		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass
-				.getSuperclass()) {
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
 			try {
 				Field field = superClass.getDeclaredField(fieldName);
 				makeAccessible(field);
@@ -224,8 +223,10 @@ public class ReflectionUtil {
 		Validate.notEmpty(methodName, "methodName can't be blank");
 		Class[] theParameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
 
-		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType
-				.getSuperclass()) {
+		// 处理原子类型与对象类型的兼容
+		wrapClassses(theParameterTypes);
+
+		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType.getSuperclass()) {
 			try {
 				Method method = searchType.getDeclaredMethod(methodName, theParameterTypes);
 				makeAccessible(method);
@@ -248,12 +249,11 @@ public class ReflectionUtil {
 	 * 
 	 * 因为class.getMethods() 不能获取父类的private函数, 因此采用循环向上的getMethods();
 	 */
-	public static Method getAccessibleMethodByName(final Class clazz, final String methodName) {
+	public static Method findAccessibleMethodByName(final Class clazz, final String methodName) {
 		Validate.notNull(clazz, "clazz can't be null");
 		Validate.notEmpty(methodName, "methodName can't be blank");
 
-		for (Class<?> searchType =clazz; searchType != Object.class; searchType = searchType
-				.getSuperclass()) {
+		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType.getSuperclass()) {
 			Method[] methods = searchType.getDeclaredMethods();
 			for (Method method : methods) {
 				if (method.getName().equals(methodName)) {
@@ -308,5 +308,35 @@ public class ReflectionUtil {
 			return (RuntimeException) e;
 		}
 		return new RuntimeException("Unexpected Checked Exception.", e);
+	}
+
+	/**
+	 * 兼容原子类型与非原子类型的转换，不考虑依赖两者不同来区分不同函数的场景
+	 */
+	private static void wrapClassses(Class<?>[] source) {
+		for (int i = 0; i < source.length; i++) {
+			source[i] = wrapClass(source[i]);
+		}
+	}
+
+	/**
+	 * 兼容原子类型与非原子类型的转换，不考虑依赖两者不同来区分不同函数的场景
+	 */
+	private static Class<?> wrapClass(Class<?> clazz) {
+		if (clazz.equals(Integer.class)) {
+			return Integer.TYPE;
+		} else if (clazz.equals(Long.class)) {
+			return Long.TYPE;
+		} else if (clazz.equals(Double.class)) {
+			return Double.TYPE;
+		} else if (clazz.equals(Float.class)) {
+			return Float.TYPE;
+		} else if (clazz.equals(Boolean.class)) {
+			return Boolean.TYPE;
+		} else if (clazz.equals(Byte.class)) {
+			return Byte.TYPE;
+		}
+
+		return clazz;
 	}
 }

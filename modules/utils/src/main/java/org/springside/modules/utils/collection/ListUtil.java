@@ -22,9 +22,9 @@ import com.google.common.primitives.Longs;
  * 
  * 1. 常用函数(如是否为空，sort/binarySearch/shuffle/reverse(via JDK Collection)
  * 
- * 2. 各种 构造函数(from guava and JDK Collection)
+ * 2. 各种构造函数(from guava and JDK Collection)
  * 
- * 3. Array 转ArrayList的特色函数 (from Guava)
+ * 3. Array 转 ArrayList的特色函数 (from Guava)
  * 
  * 5. 集合运算，集合是否一致，交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
  * 
@@ -101,8 +101,8 @@ public abstract class ListUtil {
 	 * 
 	 * @see com.google.common.collect.Lists#newArrayListWithCapacity(int)
 	 */
-	public static <T> ArrayList<T> newArrayListWithCapacity(int initialArraySize) {
-		return new ArrayList<T>(initialArraySize);
+	public static <T> ArrayList<T> newArrayListWithCapacity(int initSize) {
+		return new ArrayList<T>(initSize);
 	}
 
 	/**
@@ -207,7 +207,7 @@ public abstract class ListUtil {
 	///////////////// from JDK Collections的常用函数 ///////////////////
 
 	/**
-	 * 排序, 采用JDK认为最优的排序算法.
+	 * 升序排序, 采用JDK认为最优的排序算法, 使用元素自身的compareTo()方法
 	 * 
 	 * @see java.util.Collections#sort(List)
 	 */
@@ -216,12 +216,30 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 排序, 采用JDK认为最优的排序算法.
+	 * 倒序排序, 采用JDK认为最优的排序算法,使用元素自身的compareTo()方法
+	 * 
+	 * @see java.util.Collections#sort(List)
+	 */
+	public static <T extends Comparable<? super T>> void sortReverse(List<T> list) {
+		Collections.sort(list, Collections.reverseOrder());
+	}
+
+	/**
+	 * 升序排序, 采用JDK认为最优的排序算法, 使用Comparetor.
 	 * 
 	 * @see java.util.Collections#sort(List, Comparator)
 	 */
 	public static <T> void sort(List<T> list, Comparator<? super T> c) {
 		Collections.sort(list, c);
+	}
+
+	/**
+	 * 倒序排序, 采用JDK认为最优的排序算法, 使用Comparetor
+	 * 
+	 * @see java.util.Collections#sort(List, Comparator)
+	 */
+	public static <T> void sortReverse(List<T> list, Comparator<? super T> c) {
+		Collections.sort(list, Collections.reverseOrder(c));
 	}
 
 	/**

@@ -6,10 +6,9 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.springside.modules.utils.collection.type.ComparableComparator;
 import org.springside.modules.utils.collection.type.ConcurrentHashSet;
+import org.springside.modules.utils.collection.type.NaturalOrderComparator;
 
 public class SetUtilTest {
 
@@ -26,9 +25,9 @@ public class SetUtilTest {
 		HashSet<String> set4 = SetUtil.newHashSet(ListUtil.newArrayList("1", "2", "2"));
 		assertThat(set4).hasSize(2).contains("1", "2");
 
-		TreeSet<String> set5 = SetUtil.newNavigableSet();
+		TreeSet<String> set5 = SetUtil.newSortedSet();
 
-		TreeSet<String> set6 = SetUtil.newNavigableSet(ComparableComparator.INSTANCE);
+		TreeSet<String> set6 = SetUtil.newSortedSet(NaturalOrderComparator.INSTANCE);
 
 		ConcurrentHashSet set7 = SetUtil.newConcurrentHashSet();
 	}
@@ -46,7 +45,7 @@ public class SetUtilTest {
 
 		try {
 			set1.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -55,7 +54,7 @@ public class SetUtilTest {
 		assertThat(set4).hasSize(1).contains("1");
 		try {
 			set4.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -65,12 +64,12 @@ public class SetUtilTest {
 
 		try {
 			set6.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		Set<String> set7 = SetUtil.newSetFromMap(MapUtil.<String, Boolean> newConcurrentNavigableMap());
+		Set<String> set7 = SetUtil.newSetFromMap(MapUtil.<String, Boolean> newConcurrentSortedMap());
 	}
 
 	@Test
@@ -92,7 +91,7 @@ public class SetUtilTest {
 
 		try {
 			set6.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}

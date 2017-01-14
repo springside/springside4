@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.util.Properties;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.base.PropertiesUtil.PropertiesListener;
 import org.springside.modules.utils.number.RandomUtil;
@@ -106,7 +105,7 @@ public class PropertiesUtilTest {
 		try {
 			// 非法字符
 			String result4 = PropertiesUtil.stringSystemProperty(name, name, "123");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Exception e) {
 			assertThat(e).isInstanceOf(IllegalArgumentException.class);
 		}

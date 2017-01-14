@@ -54,7 +54,6 @@ public abstract class DateUtil {
 		return !date.before(start) && !date.after(end);
 	}
 	
-	
 	/////////// 日期设置处理 /////////
 
 	/**

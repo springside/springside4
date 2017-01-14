@@ -11,7 +11,7 @@ public class ComparableComparatorTest {
 
 	@Test
 	public void test() {
-		TreeSet<String> set = SetUtil.newNavigableSet(ComparableComparator.INSTANCE);
+		TreeSet<String> set = SetUtil.newSortedSet(NaturalOrderComparator.INSTANCE);
 
 		set.add("3");
 		set.add("1");

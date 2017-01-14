@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.concurrent.ThreadUtil;
 
@@ -41,7 +40,7 @@ public class QueuableCachedThreadPoolTest {
 			// 爆
 			try {
 				threadPool.submit(new LongRunTask());
-				Assert.fail("should fail before");
+				fail("should fail before");
 			} catch (Throwable t) {
 				assertThat(t).isInstanceOf(RejectedExecutionException.class);
 			}

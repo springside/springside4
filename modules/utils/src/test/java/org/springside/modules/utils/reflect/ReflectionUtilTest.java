@@ -38,6 +38,7 @@ public class ReflectionUtilTest {
 		ReflectionUtil.setFieldValue(bean, "publicField", 2);
 		assertThat(bean.inspectPublicField()).isEqualTo(2);
 
+		// 没有绕过将publicField+1的setter函数
 		ReflectionUtil.setProperty(bean, "publicField", 3);
 		assertThat(bean.inspectPublicField()).isEqualTo(4);
 
@@ -151,7 +152,7 @@ public class ReflectionUtilTest {
 		}
 
 		// 通過setter函數會被比輸入值加1
-		public void setPublicField(Integer publicField) {
+		public void setPublicField(int publicField) {
 			this.publicField = publicField + 1;
 		}
 

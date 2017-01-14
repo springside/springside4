@@ -72,7 +72,7 @@ public class RandomUtilTest {
 
 		assertThat(RandomUtil.randomStringFixLength(5)).hasSize(5);
 		assertThat(RandomUtil.randomStringFixLength(RandomUtil.threadLocalRandom(), 5)).hasSize(5);
-		
+
 		System.out.println(RandomUtil.randomLetterFixLength(5));
 		System.out.println(RandomUtil.randomLetterRandomLength(5, 10));
 
@@ -81,7 +81,7 @@ public class RandomUtilTest {
 
 		assertThat(RandomUtil.randomLetterFixLength(5)).hasSize(5);
 		assertThat(RandomUtil.randomLetterFixLength(RandomUtil.threadLocalRandom(), 5)).hasSize(5);
-	
+
 		System.out.println(RandomUtil.randomAsciiFixLength(5));
 		System.out.println(RandomUtil.randomAsciiRandomLength(5, 10));
 

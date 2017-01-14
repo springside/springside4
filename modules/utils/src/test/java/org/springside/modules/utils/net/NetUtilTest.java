@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 
 import javax.net.ServerSocketFactory;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.internal.util.io.IOUtil;
 
@@ -36,25 +35,25 @@ public class NetUtilTest {
 
 		assertThat(port3).isBetween(NetUtil.PORT_RANGE_MIN, NetUtil.PORT_RANGE_MAX);
 		System.out.println("random port:" + port3);
-		
-		//尝试占住一个端口
+
+		// 尝试占住一个端口
 		ServerSocket serverSocket = null;
 		try {
 			serverSocket = ServerSocketFactory.getDefault().createServerSocket(port, 1,
 					InetAddress.getByName("localhost"));
 
 			assertThat(NetUtil.isPortAvailable(port)).isFalse();
-			
+
 			int port4 = NetUtil.findAvailablePortFrom(port);
-			assertThat(port4).isEqualTo(port+1);
-			
-			try{
+			assertThat(port4).isEqualTo(port + 1);
+
+			try {
 				int port5 = NetUtil.findRandomAvailablePort(port, port);
-				Assert.fail("should fail before");
-			}catch(Throwable t){
+				fail("should fail before");
+			} catch (Throwable t) {
 				assertThat(t).isInstanceOf(IllegalStateException.class);
 			}
-			
+
 		} finally {
 			IOUtil.close(serverSocket);
 		}

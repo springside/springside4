@@ -182,7 +182,7 @@ public abstract class MapUtil {
 	 * @see com.google.common.collect.Maps#newTreeMap()
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <K extends Comparable, V> TreeMap<K, V> newNavigableMap() {
+	public static <K extends Comparable, V> TreeMap<K, V> newSortedMap() {
 		return new TreeMap<K, V>();
 	}
 
@@ -191,7 +191,7 @@ public abstract class MapUtil {
 	 * 
 	 * @see com.google.common.collect.Maps#newTreeMap(Comparator)
 	 */
-	public static <C, K extends C, V> TreeMap<K, V> newNavigableMap(@Nullable Comparator<C> comparator) {
+	public static <C, K extends C, V> TreeMap<K, V> newSortedMap(@Nullable Comparator<C> comparator) {
 		return Maps.newTreeMap(comparator);
 	}
 
@@ -219,7 +219,7 @@ public abstract class MapUtil {
 	/**
 	 * 根据等号左边的类型，构造类型正确的ConcurrentSkipListMap.
 	 */
-	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentNavigableMap() {
+	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSortedMap() {
 		return new ConcurrentSkipListMap<K, V>();
 	}
 
@@ -274,7 +274,7 @@ public abstract class MapUtil {
 	 * 
 	 * @see java.util.Collections#unmodifiableSortedMap(SortedMap)
 	 */
-	public static <K, V> SortedMap<K, V> unmodifiableNavigableMap(final SortedMap<K, ? extends V> m) {
+	public static <K, V> SortedMap<K, V> unmodifiableSortedMap(final SortedMap<K, ? extends V> m) {
 		return Collections.unmodifiableSortedMap(m);
 	}
 

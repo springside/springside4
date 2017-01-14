@@ -2,7 +2,6 @@ package org.springside.modules.utils.collection.type;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
 
@@ -27,19 +26,19 @@ public class SortedArrayListTest {
 
 		try {
 			list.add(1, "2");
-			Assert.fail("should fail before");
-		} catch (Throwable t) {
-			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
-		}
-		
-		try {
-			list.set(1, "2");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		SortedArrayList<String> list2 = ListUtil.newSortedArrayList(ComparableComparator.INSTANCE);
+		try {
+			list.set(1, "2");
+			fail("should fail before");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
+		}
+
+		SortedArrayList<String> list2 = ListUtil.newSortedArrayList(NaturalOrderComparator.INSTANCE);
 		list2.addAll(ListUtil.newArrayList("3", "1", "2"));
 		assertThat(list2).containsExactly("1", "2", "3");
 	}

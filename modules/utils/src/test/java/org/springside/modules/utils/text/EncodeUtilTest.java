@@ -7,7 +7,6 @@ package org.springside.modules.utils.text;
 
 import static org.assertj.core.api.Assertions.*;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 public class EncodeUtilTest {
@@ -28,7 +27,7 @@ public class EncodeUtilTest {
 		try {
 			input = "01020G11";
 			EncodeUtil.decodeHex(input);
-			Assert.fail("should throw exception before");
+			fail("should throw exception before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(IllegalArgumentException.class);
 		}
@@ -58,7 +57,7 @@ public class EncodeUtilTest {
 
 		try {
 			assertThat(result).isEqualTo(EncodeUtil.decodeBase64UrlSafe("AQIPE+8="));
-			Assert.fail("should throw exception before");
+			fail("should throw exception before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(IllegalArgumentException.class);
 		}

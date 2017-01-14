@@ -6,8 +6,12 @@
 package org.springside.modules.utils.collection;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+
+import org.springside.modules.utils.collection.type.NaturalOrderComparator;
 
 import com.google.common.annotations.Beta;
 
@@ -70,5 +74,29 @@ public abstract class CollectionUtil {
 				return current;
 			}
 		}
+	}
+
+	///// 排序 ////
+
+	/**
+	 * 按Comparable默认顺序排序的Comparetor
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> Comparator<T> naturalOrderComparator() {
+		return NaturalOrderComparator.INSTANCE;
+	}
+
+	/**
+	 * 按Comparable默认顺序倒序的Comparator
+	 */
+	public static <T> Comparator<T> reverseNaturalOrderComparator() {
+		return Collections.reverseOrder(null);
+	}
+
+	/**
+	 * 将Comparator倒序的Comparator
+	 */
+	public static <T> Comparator<T> reverseComparator(Comparator<T> cmp) {
+		return Collections.reverseOrder(cmp);
 	}
 }

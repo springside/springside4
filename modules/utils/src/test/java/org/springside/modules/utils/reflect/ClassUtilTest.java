@@ -9,8 +9,6 @@ import org.junit.Test;
 
 public class ClassUtilTest {
 
-	
-
 	@Test
 	public void getMessage() {
 		assertThat(ClassUtil.getShortClassName(ClassUtilTest.class)).isEqualTo("ClassUtilTest");
@@ -32,24 +30,24 @@ public class ClassUtilTest {
 
 		assertThat(ClassUtil.getAllInterfaces(BClass.class)).hasSize(4).contains(AInterface.class, BInterface.class,
 				CInterface.class, DInterface.class);
-		
+
 		assertThat(ClassUtil.getAllSuperclasses(BClass.class)).hasSize(2).contains(AClass.class, Object.class);
-		
+
 		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
-		
+
 		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+				.contains(ReflectionUtil.findAccessibleMethodByName(BClass.class, "hello"));
 		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"));
+				.contains(ReflectionUtil.findAccessibleMethodByName(BClass.class, "hello"));
 		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(0);
-		
+
 		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(3).contains(
 				ReflectionUtil.getAccessibleField(BClass.class, "bfield"),
 				ReflectionUtil.getAccessibleField(BClass.class, "efield"),
 				ReflectionUtil.getAccessibleField(AClass.class, "afield"));
-		
-		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1).contains(
-				ReflectionUtil.getAccessibleField(AClass.class, "dfield"));
+
+		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getAccessibleField(AClass.class, "dfield"));
 	}
 
 	@Test
@@ -78,9 +76,7 @@ public class ClassUtilTest {
 	public static class TestBean3 {
 
 	}
-	
-	
-	
+
 	public interface AInterface {
 	}
 
@@ -123,13 +119,12 @@ public class ClassUtilTest {
 
 	@DAnnotation
 	public static class AClass implements DInterface {
-		
+
 		@EAnnotation
 		private int afield;
-		
-	
+
 		private int cfield;
-		
+
 		@FAnnotation
 		private int dfield;
 	}
@@ -137,13 +132,12 @@ public class ClassUtilTest {
 	@BAnnotation
 	public static class BClass extends AClass implements CInterface, BInterface {
 
-		
 		@EAnnotation
 		private int bfield;
-		
+
 		@EAnnotation
 		private int efield;
-		
+
 		@Override
 		@EAnnotation
 		public void hello() {

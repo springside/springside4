@@ -17,6 +17,10 @@ public class DateUtilTest {
 
 		Date date3 = new Date(106, 10, 1);
 		assertThat(DateUtil.isSameTime(date1, date3)).isTrue();
+		
+		Date date4 = new Date(106, 10, 1, 12, 23, 43);
+		assertThat(DateUtil.isBetween(date3, date1, date2));
+		assertThat(DateUtil.isBetween(date4, date1, date2));
 
 	}
 
@@ -95,7 +99,7 @@ public class DateUtilTest {
 		assertThat(DateUtil.isSameTime(DateUtil.setHours(date, 9), expectedDate4)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.setMinutes(date, 9), expectedDate5)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.setSeconds(date, 10), expectedDate6)).isTrue();
-		
+
 	}
 
 	@Test

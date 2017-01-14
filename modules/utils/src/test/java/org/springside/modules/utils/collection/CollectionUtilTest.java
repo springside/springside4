@@ -16,12 +16,12 @@ public class CollectionUtilTest {
 		List<String> list2 = ListUtil.newArrayList("a", "b", "c");
 		List<String> list3 = ListUtil.newArrayList("a");
 
-		Set<String> set1 = SetUtil.newNavigableSet();
+		Set<String> set1 = SetUtil.newSortedSet();
 		set1.add("a");
 		set1.add("b");
 		set1.add("c");
 
-		Set<String> set2 = SetUtil.newNavigableSet();
+		Set<String> set2 = SetUtil.newSortedSet();
 		set2.add("a");
 
 		assertThat(CollectionUtil.isEmpty(list1)).isTrue();

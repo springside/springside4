@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil.CloneableException;
 import org.springside.modules.utils.base.ExceptionUtil.CloneableRuntimeException;
@@ -33,7 +32,7 @@ public class ExceptionUtilTest {
 		Exception exception = new Exception("my exception");
 		try {
 			ExceptionUtil.unchecked(exception);
-			Assert.fail("should fail");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t.getCause()).isSameAs(exception);
 		}
@@ -42,7 +41,7 @@ public class ExceptionUtilTest {
 		RuntimeException runtimeException = new RuntimeException("haha");
 		try {
 			ExceptionUtil.unchecked(runtimeException);
-			Assert.fail("should fail");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isSameAs(runtimeException);
 		}

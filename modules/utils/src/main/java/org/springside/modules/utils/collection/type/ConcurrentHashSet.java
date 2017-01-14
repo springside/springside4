@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+
+import org.springside.modules.utils.collection.MapUtil;
 
 /**
  * JDK并没有提供ConcurrenHashSet，考虑到JDK的HashSet也是基于HashMap实现的，因此ConcurrenHashSet也由ConcurrenHashMap完成。
@@ -23,7 +24,7 @@ public class ConcurrentHashSet<E> extends AbstractSet<E> implements Set<E>, java
 	private transient Set<E> s; // Its keySet
 
 	public ConcurrentHashSet() {
-		m = new ConcurrentHashMap<E, Boolean>();
+		m = MapUtil.newConcurrentHashMap();
 		s = m.keySet();
 	}
 

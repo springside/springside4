@@ -51,7 +51,7 @@ public class ThreadPoolBuildersTest {
 		assertThat(thread2.getName()).startsWith("fixPool");
 		assertThat(thread2.isDaemon()).isFalse();
 		fixPoolWithNamePrefix.shutdown();
-		
+
 		ThreadPoolExecutor fixPoolWithNamePrefixAndDaemon = ThreadPoolBuilders.fixedPool().setPoolSize(10)
 				.setThreadNamePrefix("fixPoolDaemon").setDaemon(true).build();
 		Thread thread3 = fixPoolWithNamePrefixAndDaemon.getThreadFactory().newThread(new Runnable() {
@@ -115,7 +115,6 @@ public class ThreadPoolBuildersTest {
 		fixPoolWithNamePrefix.shutdown();
 	}
 
-	
 	@Test
 	public void quequablePool() {
 		ThreadPoolExecutor singlePool = ThreadPoolBuilders.queuableCachedPool().build();
@@ -132,8 +131,8 @@ public class ThreadPoolBuildersTest {
 		assertThat(sizeablePool.getKeepAliveTime(TimeUnit.SECONDS)).isEqualTo(20);
 		sizeablePool.shutdown();
 
-		ThreadPoolExecutor fixPoolWithNamePrefix = ThreadPoolBuilders.queuableCachedPool().setThreadNamePrefix("queuableCachedPool")
-				.build();
+		ThreadPoolExecutor fixPoolWithNamePrefix = ThreadPoolBuilders.queuableCachedPool()
+				.setThreadNamePrefix("queuableCachedPool").build();
 		Thread thread = fixPoolWithNamePrefix.getThreadFactory().newThread(new Runnable() {
 
 			@Override

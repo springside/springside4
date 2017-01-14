@@ -8,7 +8,7 @@ import org.springside.modules.utils.base.annotation.Nullable;
 /**
  * 通过正则表达判断是否正确的手机号，固定电话，身份证，邮箱等.
  * 
- * 从AndroidUtilCode的RegexUtils移植, 优化正则表达式为预编译, 并修改了TEL的正则表达式.
+ * 从AndroidUtilCode的RegexUtils移植, 性能优化将正则表达式为预编译, 并修改了TEL的正则表达式.
  * 
  * @author calvin
  */

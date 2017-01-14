@@ -5,9 +5,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.List;
 import java.util.Random;
 
-import org.junit.Assert;
 import org.junit.Test;
-import org.springside.modules.utils.collection.type.ComparableComparator;
+import org.springside.modules.utils.collection.type.NaturalOrderComparator;
 
 public class ListUtilTest {
 	@Test
@@ -44,7 +43,7 @@ public class ListUtilTest {
 
 		try {
 			list1.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -53,7 +52,7 @@ public class ListUtilTest {
 		assertThat(list4).hasSize(1).contains("1");
 		try {
 			list4.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -63,7 +62,7 @@ public class ListUtilTest {
 
 		try {
 			list6.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -108,15 +107,29 @@ public class ListUtilTest {
 		ListUtil.shuffle(list, new Random());
 		System.out.println("shuffle list:" + list);
 
-		ListUtil.sort(list, ComparableComparator.INSTANCE);
+		
+		ListUtil.sort(list, NaturalOrderComparator.INSTANCE);
 
 		assertThat(list).hasSize(7).containsExactly("a", "b", "c", "d", "e", "g", "i");
+		
 		assertThat(ListUtil.binarySearch(list, "b")).isEqualTo(1);
-		assertThat(ListUtil.binarySearch(list, "b", ComparableComparator.INSTANCE)).isEqualTo(1);
+		assertThat(ListUtil.binarySearch(list, "b", NaturalOrderComparator.INSTANCE)).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "x")).isEqualTo(-8);
 
+		
+		//reverse
 		List list8 = ListUtil.reverse(list);
-
+		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
+		
+		
+		
+		//sortReverse
+		ListUtil.shuffle(list8);
+		ListUtil.sortReverse(list8);
+		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
+		
+		ListUtil.shuffle(list8);
+		ListUtil.sortReverse(list8,NaturalOrderComparator.INSTANCE);
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 
@@ -127,7 +140,7 @@ public class ListUtilTest {
 
 		try {
 			list.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -137,7 +150,7 @@ public class ListUtilTest {
 
 		try {
 			list2.add("a");
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
@@ -163,7 +176,7 @@ public class ListUtilTest {
 
 		assertThat(ListUtil.isEqual(list1, list1)).isTrue();
 		assertThat(ListUtil.isEqual(list1, list2)).isTrue();
-		
+
 		assertThat(ListUtil.isEqual(list1, list3)).isFalse();
 		assertThat(ListUtil.isEqual(list1, list4)).isFalse();
 		assertThat(ListUtil.isEqual(list1, list5)).isFalse();

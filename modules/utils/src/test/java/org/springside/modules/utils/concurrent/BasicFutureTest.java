@@ -6,7 +6,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil;
 
@@ -56,7 +55,7 @@ public class BasicFutureTest {
 		try {
 			MyFuture<String> future2 = new MyFuture<String>();
 			future2.get(10, TimeUnit.MILLISECONDS);
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (TimeoutException e) {
 			assertThat(e).isInstanceOf(TimeoutException.class);
 		}
@@ -66,7 +65,7 @@ public class BasicFutureTest {
 			MyFuture<String> future3 = new MyFuture<String>();
 			Tasks.fail(future3);
 			future3.get();
-			Assert.fail("should fail before");
+			fail("should fail before");
 		} catch (Throwable t) {
 			assertThat(ExceptionUtil.unwrap(t)).hasMessage("wuwu");
 		}

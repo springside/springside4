@@ -30,18 +30,16 @@ public class HashUtilTest {
 		result = EncodeUtil.encodeBase64(HashUtil.sha1("hhahah", HashUtil.generateSalt(5)));
 		System.out.println("sha1 with salt:" + result);
 
-		
 		// 带盐，固定的盐
 		result = EncodeUtil.encodeBase64(HashUtil.sha1("hhahah", new byte[] { 1, 2, 3 }));
 		assertThat(result).isEqualTo("U/7wy5R1sVrjEf3dOTAPz383g2k=");
 		result2 = EncodeUtil.encodeBase64(HashUtil.sha1("hhahah".getBytes(), new byte[] { 1, 2, 3 }));
 		assertThat(result).isEqualTo(result2);
 
-
 		// 带盐迭代, 每次salt值不一样，所以值也不一样。
 		result = EncodeUtil.encodeBase64(HashUtil.sha1("hhahah", HashUtil.generateSalt(5), 2));
 		System.out.println("sha1 with salt with iteration:" + result);
-	
+
 		// 带盐迭代, 固定的盐
 		result = EncodeUtil.encodeBase64(HashUtil.sha1("hhahah", new byte[] { 1, 2, 3 }, 2));
 		assertThat(result).isEqualTo("n9O7laits+ovoK8X8xde+XrsCtM=");
@@ -64,7 +62,7 @@ public class HashUtilTest {
 		assertThat(HashUtil.crc32AsInt("hahhha1")).isEqualTo(-625925593);
 		assertThat(HashUtil.crc32AsInt("hahhha1".getBytes())).isEqualTo(-625925593);
 		assertThat(HashUtil.crc32AsInt("hahhha2")).isEqualTo(1136161693);
-		
+
 		assertThat(HashUtil.crc32AsLong("hahhha1")).isEqualTo(3669041703L);
 		assertThat(HashUtil.crc32AsLong("hahhha1".getBytes())).isEqualTo(3669041703L);
 		assertThat(HashUtil.crc32AsLong("hahhha2")).isEqualTo(1136161693L);
@@ -79,10 +77,9 @@ public class HashUtilTest {
 		assertThat(HashUtil.murmur32AsInt("hahhha4")).isEqualTo(-1044105167);
 		assertThat(HashUtil.murmur32AsInt("hahhha5")).isEqualTo(-93397348);
 		assertThat(HashUtil.murmur32AsInt("hahhha6")).isEqualTo(1844168902);
-		
-		
-		assertThat(HashUtil.murmur32AsInt("hahhha1",12345)).isEqualTo(-1980822128);
-		assertThat(HashUtil.murmur32AsInt("hahhha1".getBytes(),12345)).isEqualTo(-1980822128);
+
+		assertThat(HashUtil.murmur32AsInt("hahhha1", 12345)).isEqualTo(-1980822128);
+		assertThat(HashUtil.murmur32AsInt("hahhha1".getBytes(), 12345)).isEqualTo(-1980822128);
 	}
 
 }
