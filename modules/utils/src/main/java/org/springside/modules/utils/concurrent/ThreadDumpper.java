@@ -1,8 +1,7 @@
 package org.springside.modules.utils.concurrent;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.ThreadInfo;
-import java.lang.management.ThreadMXBean;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -27,7 +26,6 @@ public class ThreadDumpper {
 	private long leastIntervalMills = 0; // 每次打印ThreadDump的最小时间间隔，单位为毫秒
 	private int maxStackLevel = DEFAULT_MAX_STACK_LEVEL; // 打印StackTrace的最大深度
 
-	private ThreadMXBean threadMBean = ManagementFactory.getThreadMXBean();
 	private volatile Long lastThreadDumpTime = 0L;
 
 	public ThreadDumpper() {
@@ -63,63 +61,32 @@ public class ThreadDumpper {
 			}
 		}
 
-		logger.info("Thread dump by ThreadDumpper" + reasonMsg != null ? (" for " + reasonMsg) : "");
+		logger.info("Thread dump by ThreadDumpper" + (reasonMsg != null ? (" for " + reasonMsg) : ""));
 
-		// 参数均为false, 避免输出lockedMonitors和lockedSynchronizers导致的JVM缓慢
-		ThreadInfo[] threadInfos = threadMBean.dumpAllThreads(false, false);
-
-		StringBuilder b = new StringBuilder(8192);
-		b.append('[');
-		for (int i = 0; i < threadInfos.length; i++) {
-			b.append(dumpThreadInfo(threadInfos[i])).append(", ");
-		}
-
+		Map<Thread, StackTraceElement[]> threads = Thread.getAllStackTraces();
 		// 两条日志间的时间间隔，是VM被thread dump堵塞的时间.
-		logger.info(b.toString());
+		logger.info("Finish the threads snapshot");
+
+		StringBuilder sb = new StringBuilder(8192 * 20).append("\n");
+
+		for (Entry<Thread, StackTraceElement[]> entry : threads.entrySet()) {
+			dumpThreadInfo(entry.getKey(), entry.getValue(), sb);
+		}
+		logger.info(sb.toString());
+
 	}
 
 	/**
 	 * 打印全部的stack，重新实现threadInfo的toString()函数，因为默认最多只打印8层的stack. 同时，不再打印lockedMonitors和lockedSynchronizers.
 	 */
-	private String dumpThreadInfo(ThreadInfo threadInfo) {
-		StringBuilder sb = new StringBuilder(512);
-		sb.append("\"").append(threadInfo.getThreadName()).append("\" Id=").append(threadInfo.getThreadId()).append(' ')
-				.append(threadInfo.getThreadState());
-		if (threadInfo.getLockName() != null) {
-			sb.append(" on ").append(threadInfo.getLockName());
-		}
-		if (threadInfo.getLockOwnerName() != null) {
-			sb.append(" owned by \"").append(threadInfo.getLockOwnerName()).append("\" Id=")
-					.append(threadInfo.getLockOwnerId());
-		}
-		if (threadInfo.isSuspended()) {
-			sb.append(" (suspended)");
-		}
-		if (threadInfo.isInNative()) {
-			sb.append(" (in native)");
-		}
+	private String dumpThreadInfo(Thread thread, StackTraceElement[] stackTrace, StringBuilder sb) {
+		sb.append("\"").append(thread.getName()).append("\" Id=").append(thread.getId()).append(' ')
+				.append(thread.getState());
 		sb.append('\n');
 		int i = 0;
-		StackTraceElement[] stackTrace = threadInfo.getStackTrace();
 		for (; i < Math.min(maxStackLevel, stackTrace.length); i++) {
 			StackTraceElement ste = stackTrace[i];
 			sb.append("\tat ").append(ste.toString()).append('\n');
-			if (i == 0 && threadInfo.getLockInfo() != null) {
-				Thread.State ts = threadInfo.getThreadState();
-				switch (ts) {
-				case BLOCKED:
-					sb.append("\t-  blocked on ").append(threadInfo.getLockInfo()).append('\n');
-					break;
-				case WAITING:
-					sb.append("\t-  waiting on ").append(threadInfo.getLockInfo()).append('\n');
-					break;
-				case TIMED_WAITING:
-					sb.append("\t-  time waiting on ").append(threadInfo.getLockInfo()).append('\n');
-					break;
-				default:
-				}
-			}
-
 		}
 		if (i < stackTrace.length) {
 			sb.append("\t...").append('\n');

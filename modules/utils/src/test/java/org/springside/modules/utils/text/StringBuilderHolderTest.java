@@ -7,12 +7,6 @@ import org.junit.Test;
 
 public class StringBuilderHolderTest {
 
-	private static ThreadLocal<StringBuilderHolder> stringBuilderHolder = new ThreadLocal<StringBuilderHolder>() {
-		@Override
-		protected StringBuilderHolder initialValue() {
-			return new StringBuilderHolder(512);
-		}
-	};
 
 	@Test
 	public void test() throws InterruptedException {
@@ -29,11 +23,11 @@ public class StringBuilderHolderTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				StringBuilder builder = stringBuilderHolder.get().stringBuilder();
+				StringBuilder builder = StringBuilderHolder.get();
 				builder.append(Thread.currentThread().getName() + "-1");
 				System.out.println(builder.toString());
 
-				builder = stringBuilderHolder.get().stringBuilder();
+				builder = StringBuilderHolder.get();
 				builder.append(Thread.currentThread().getName() + "-2");
 				System.out.println(builder.toString());
 
