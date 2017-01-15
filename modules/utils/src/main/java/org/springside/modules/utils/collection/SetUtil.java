@@ -172,7 +172,7 @@ public abstract class SetUtil {
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */
-	public static <E> Set<E> complement(final Set<? extends E> set1, final Set<? extends E> set2) {
+	public static <E> Set<E> disjoint(final Set<? extends E> set1, final Set<? extends E> set2) {
 		return Sets.symmetricDifference(set1, set2);
 	}
 }

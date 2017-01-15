@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.junit.Test;
-import org.springside.modules.utils.collection.type.ComparableComparator;
 
 public class ListUtilTest {
 	@Test
@@ -108,12 +107,12 @@ public class ListUtilTest {
 		System.out.println("shuffle list:" + list);
 
 		
-		ListUtil.sort(list, ComparableComparator.INSTANCE);
+		ListUtil.sort(list, ComparatorUtil.NATUAL);
 
 		assertThat(list).hasSize(7).containsExactly("a", "b", "c", "d", "e", "g", "i");
 		
 		assertThat(ListUtil.binarySearch(list, "b")).isEqualTo(1);
-		assertThat(ListUtil.binarySearch(list, "b", ComparableComparator.INSTANCE)).isEqualTo(1);
+		assertThat(ListUtil.binarySearch(list, "b", ComparatorUtil.NATUAL)).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "x")).isEqualTo(-8);
 
 		
@@ -129,7 +128,7 @@ public class ListUtilTest {
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 		
 		ListUtil.shuffle(list8);
-		ListUtil.sortReverse(list8,ComparableComparator.INSTANCE);
+		ListUtil.sortReverse(list8,ComparatorUtil.NATUAL);
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 
@@ -196,7 +195,7 @@ public class ListUtilTest {
 		List<String> result3 = ListUtil.difference(list2, list1);
 		assertThat(result3).containsExactly("4", "5", "7", "6");
 
-		List<String> result4 = ListUtil.complement(list1, list2);
+		List<String> result4 = ListUtil.disjoint(list1, list2);
 		assertThat(result4).containsExactly("1", "2", "3", "4", "5", "7", "6");
 	}
 }

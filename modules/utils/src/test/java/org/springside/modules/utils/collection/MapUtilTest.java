@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.MapUtil.ValueCreator;
-import org.springside.modules.utils.collection.type.ComparableComparator;
 
 public class MapUtilTest {
 
@@ -70,7 +69,7 @@ public class MapUtilTest {
 
 		TreeMap<String, Integer> map6 = MapUtil.newSortedMap();
 
-		TreeMap<String, Integer> map7 = MapUtil.newSortedMap(ComparableComparator.INSTANCE);
+		TreeMap<String, Integer> map7 = MapUtil.newSortedMap(ComparatorUtil.NATUAL);
 
 		ConcurrentMap map8 = MapUtil.newConcurrentHashMap();
 		ConcurrentSkipListMap map9 = MapUtil.newConcurrentSortedMap();

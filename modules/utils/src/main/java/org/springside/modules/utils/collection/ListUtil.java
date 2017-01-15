@@ -115,25 +115,6 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
-	 */
-	@SuppressWarnings("rawtypes")
-	public static <T extends Comparable> SortedArrayList<T> newSortedArrayList() {
-		return new SortedArrayList<T>();
-	}
-
-	/**
-	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，有几个方法不支持
-	 */
-	public static <T> SortedArrayList<T> newSortedArrayList(Comparator<T> c) {
-		return new SortedArrayList<T>(c);
-	}
-
-	/**
 	 * 根据等号左边的类型，构造类型正确的CopyOnWriteArrayList.
 	 * 
 	 * @see com.google.common.collect.Lists#newCopyOnWriteArrayList()
@@ -147,6 +128,27 @@ public abstract class ListUtil {
 	 */
 	public static <T> CopyOnWriteArrayList<T> newCopyOnWriteArrayList(T... elements) {
 		return new CopyOnWriteArrayList<T>(elements);
+	}
+
+	////////////// 特别类型的List//////////////
+
+	/**
+	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 
+	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
+	 */
+	@SuppressWarnings("rawtypes")
+	public static <T extends Comparable> SortedArrayList<T> createSortedArrayList() {
+		return new SortedArrayList<T>();
+	}
+
+	/**
+	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 
+	 * from Jodd的新类型，插入时排序，有几个方法不支持
+	 */
+	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<T> c) {
+		return new SortedArrayList<T>(c);
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
@@ -449,7 +451,7 @@ public abstract class ListUtil {
 	 * 
 	 * from Apache Common Collection4 ListUtils，但其并集－交集时，没有对交集*2，所以做了修改
 	 */
-	public static <T> List<T> complement(final List<? extends T> list1, final List<? extends T> list2) {
+	public static <T> List<T> disjoint(final List<? extends T> list1, final List<? extends T> list2) {
 		List<T> intersection = intersection(list1, list2);
 		List<T> towIntersection = union(intersection, intersection);
 		return difference(union(list1, list2), towIntersection);

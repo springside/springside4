@@ -19,7 +19,11 @@ import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.concurrent.jsr166e.ConcurrentHashMapV8;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ConcurrentHashMultiset;
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Maps;
+import com.google.common.collect.TreeRangeMap;
 
 /**
  * 关于Map的工具集合，
@@ -221,6 +225,74 @@ public abstract class MapUtil {
 	 */
 	public static <K, V> ConcurrentSkipListMap<K, V> newConcurrentSortedMap() {
 		return new ConcurrentSkipListMap<K, V>();
+	}
+
+	///////////////// from Guava的特别Map //////////////////////
+
+	/**
+	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 */
+	public static <E> HashMultiset<E> createMapCounter() {
+		return HashMultiset.create();
+	}
+
+	/**
+	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 */
+	public static <E> HashMultiset<E> createMapCounter(int distinctElements) {
+		return HashMultiset.create(distinctElements);
+	}
+
+	/**
+	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 */
+	public static <E> HashMultiset<E> createMapCounter(Iterable<? extends E> elements) {
+		return HashMultiset.create(elements);
+	}
+
+	/**
+	 * 以Guava的MultiSet，实现线程安全的HashMap<E,Integer>结构的Counter
+	 */
+	public static <E> ConcurrentHashMultiset<E> createConcurrentMapCounter() {
+		return ConcurrentHashMultiset.create();
+	}
+
+	/**
+	 * 以Guava的MultiSet，实现线程安全的HashMap<E,Integer>结构的Counter
+	 */
+	public static <E> ConcurrentHashMultiset<E> createConcurrentMapCounter(Iterable<? extends E> elements) {
+		return ConcurrentHashMultiset.create(elements);
+	}
+
+	/**
+	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
+	 * 
+	 * 注意非线程安全, MultiMap无线程安全的实现.
+	 * 
+	 * 另有其他结构存储values的MultiMap，请自行参考使用.
+	 */
+	public static <K, V> ArrayListMultimap<K, V> createMultiValueMap() {
+		return ArrayListMultimap.create();
+	}
+
+	/**
+	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
+	 * 
+	 * 注意非线程安全, MultiMap无线程安全的实现.
+	 * 
+	 * 另有其他结构存储values的MultiMap，请自行参考使用.
+	 */
+	public static <K, V> ArrayListMultimap<K, V> createMultiValueMap(int expectedKeys, int expectedValuesPerKey) {
+		return ArrayListMultimap.create(expectedKeys, expectedValuesPerKey);
+	}
+
+	/**
+	 * 以Guava TreeRangeMap实现的, 一段范围的Key指向同一个Value的Map
+	 * 
+	 * 适合一致性哈希等场景
+	 */
+	public static <K extends Comparable, V> TreeRangeMap<K, V> createRangeMap() {
+		return TreeRangeMap.create();
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////

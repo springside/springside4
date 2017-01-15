@@ -50,4 +50,21 @@ public class CollectionUtilTest {
 		assertThat(CollectionUtil.getLast(null)).isNull();
 	}
 
+	@Test
+	public void minAndMax() {
+		List<Integer> list = ListUtil.newArrayList(4, 1, 9, 100, 20, 101, 40);
+		
+		assertThat(CollectionUtil.min(list)).isEqualTo(1);
+		assertThat(CollectionUtil.min(list,ComparatorUtil.natural())).isEqualTo(1);
+		assertThat(CollectionUtil.max(list)).isEqualTo(101);
+		assertThat(CollectionUtil.max(list,ComparatorUtil.natural())).isEqualTo(101);
+		
+		assertThat(CollectionUtil.minAndMax(list).getLeft()).isEqualTo(1);
+		assertThat(CollectionUtil.minAndMax(list).getRight()).isEqualTo(101);
+		
+		assertThat(CollectionUtil.minAndMax(list,ComparatorUtil.natural()).getLeft()).isEqualTo(1);
+		assertThat(CollectionUtil.minAndMax(list,ComparatorUtil.natural()).getRight()).isEqualTo(101);
+		
+	}
+
 }

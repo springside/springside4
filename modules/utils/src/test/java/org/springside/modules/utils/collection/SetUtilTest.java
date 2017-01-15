@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.type.ConcurrentHashSet;
-import org.springside.modules.utils.collection.type.ComparableComparator;
 
 public class SetUtilTest {
 
@@ -27,7 +26,7 @@ public class SetUtilTest {
 
 		TreeSet<String> set5 = SetUtil.newSortedSet();
 
-		TreeSet<String> set6 = SetUtil.newSortedSet(ComparableComparator.INSTANCE);
+		TreeSet<String> set6 = SetUtil.newSortedSet(ComparatorUtil.NATUAL);
 
 		ConcurrentHashSet set7 = SetUtil.newConcurrentHashSet();
 	}
@@ -86,7 +85,7 @@ public class SetUtilTest {
 		Set<String> set5 = SetUtil.difference(set1, set2);
 		assertThat(set5).hasSize(3).contains("1", "2", "3");
 
-		Set<String> set6 = SetUtil.complement(set1, set2);
+		Set<String> set6 = SetUtil.disjoint(set1, set2);
 		assertThat(set6).hasSize(6).contains("1", "2", "3", "4", "5", "7");
 
 		try {
