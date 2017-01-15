@@ -21,10 +21,12 @@ import org.springside.modules.utils.number.NumberUtil;
  * 
  * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
  * 
- * 3. Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
- * 在其所关心的属性变化时进行通知.
+ * 3. 统一读取Properties
  * 
  * 4. 从文件或字符串装载Properties
+ * 
+ * 5. Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
+ * 在其所关心的属性变化时进行通知.
  * 
  * @author calvin
  */
@@ -177,23 +179,38 @@ public abstract class PropertiesUtil {
 	 */
 	public static Boolean booleanSystemProperty(String propertyName, String envName, Boolean defaultValue) {
 		checkEnvName(envName);
-		Boolean propertyValue = toBooleanObject(System.getProperty(propertyName));
+		Boolean propertyValue = BooleanUtil.toBooleanObject(System.getProperty(propertyName), null);
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = toBooleanObject(System.getenv(envName));
+			propertyValue = BooleanUtil.toBooleanObject(System.getenv(envName), null);
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
 
-	private static Boolean toBooleanObject(String str) {
-		if (str == null) {
-			return null;
-		} else {
-			return Boolean.valueOf(str);
-		}
+	/////////////////// 读取Properties ////////////////////
+
+	public static Boolean getBoolean(Properties p, String name, Boolean defaultValue) {
+		return BooleanUtil.toBooleanObject(p.getProperty(name), defaultValue);
 	}
 
+	public static Integer getInt(Properties p, String name, Integer defaultValue) {
+		return NumberUtil.toIntObject(p.getProperty(name), defaultValue);
+	}
+
+	public static Long getLong(Properties p, String name, Long defaultValue) {
+		return NumberUtil.toLongObject(p.getProperty(name), defaultValue);
+	}
+
+	public static Double getDouble(Properties p, String name, Double defaultValue) {
+		return NumberUtil.toDoubleObject(p.getProperty(name), defaultValue);
+	}
+
+	public static String getString(Properties p, String name, String defaultValue) {
+		return p.getProperty(name, defaultValue);
+	}
+
+	/////////// 加载Properties////////
 	/**
 	 * 检查环境变量名不能有'.'，在linux下不支持
 	 */

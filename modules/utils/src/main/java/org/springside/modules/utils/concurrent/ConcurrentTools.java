@@ -4,6 +4,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
 
 import org.springside.modules.utils.concurrent.jsr166e.LongAdder;
+import org.springside.modules.utils.misc.Sampler;
 
 import com.google.common.util.concurrent.RateLimiter;
 
@@ -34,8 +35,19 @@ public class ConcurrentTools {
 
 	/**
 	 * 返回漏桶算法的RateLimiter
+	 * 
+	 * @permitsPerSecond 期望的QPS, RateLimiter将QPS平滑到毫秒级别上，但有蓄水及桶外预借的能力.
 	 */
 	public static RateLimiter rateLimiter(int permitsPerSecond) {
 		return RateLimiter.create(permitsPerSecond);
+	}
+	
+	/**
+	 * 返回采样器.
+	 * 
+	 * @param selectPercent 采样率，在0-100 之间，可以有小数位
+	 */
+	public static Sampler sampler(double selectPercent){
+		return Sampler.create(selectPercent);
 	}
 }

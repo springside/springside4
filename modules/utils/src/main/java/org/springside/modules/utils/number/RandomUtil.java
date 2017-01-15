@@ -46,7 +46,7 @@ public abstract class RandomUtil {
 	 * 
 	 * 详见：《SecureRandom的江湖偏方与真实效果》http://calvin1978.blogcn.com/articles/securerandom.html
 	 */
-	public static Random secureRandom() {
+	public static SecureRandom secureRandom() {
 		try {
 			return SecureRandom.getInstance("SHA1PRNG");
 		} catch (NoSuchAlgorithmException e) {
