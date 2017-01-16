@@ -80,4 +80,19 @@ public class NumberUtilTest {
 		assertThat(NumberUtil.hexToLongObject("0xHI", 123L)).isEqualTo(123L);
 
 	}
+
+	@Test
+	public void toStringTest() {
+		assertThat(NumberUtil.toString(23)).isEqualTo("23");
+		assertThat(NumberUtil.toString(new Integer(23))).isEqualTo("23");
+		assertThat(NumberUtil.toString(23l)).isEqualTo("23");
+		assertThat(NumberUtil.toString(new Long(23))).isEqualTo("23");
+		assertThat(NumberUtil.toString(23l)).isEqualTo("23");
+		
+		assertThat(NumberUtil.toString(new Double(23.112d))).isEqualTo("23.112");
+		assertThat(NumberUtil.toString(23.112d)).isEqualTo("23.112");
+		assertThat(NumberUtil.to2DigitString(23.112d)).isEqualTo("23.11");
+		assertThat(NumberUtil.to2DigitString(23.116d)).isEqualTo("23.12");
+
+	}
 }

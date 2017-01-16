@@ -42,12 +42,12 @@ public class SortedArrayList<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -8301136559614447593L;
 
-	protected final Comparator<E> comparator;
+	protected final Comparator<? super E> comparator;
 
 	/**
 	 * Constructs a new <code>SortedArrayList</code>.
 	 */
-	public SortedArrayList(Comparator<E> c) {
+	public SortedArrayList(Comparator<? super E> c) {
 		comparator = c;
 	}
 

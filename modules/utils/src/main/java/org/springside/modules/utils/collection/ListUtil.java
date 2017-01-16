@@ -143,7 +143,7 @@ public abstract class ListUtil {
 	 * 
 	 * from Jodd的新类型，插入时排序，有几个方法不支持
 	 */
-	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<T> c) {
+	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<? super T> c) {
 		return new SortedArrayList<T>(c);
 	}
 

@@ -26,7 +26,8 @@ public class ThreadLocalContext {
 	private static ThreadLocal<Map<String, Object>> contextMap = new ThreadLocal<Map<String, Object>>() {
 		@Override
 		protected Map<String, Object> initialValue() {
-			return new HashMap<String, Object>();
+			// 降低loadFactory减少冲突
+			return new HashMap<String, Object>(16, 0.5f);
 		}
 	};
 

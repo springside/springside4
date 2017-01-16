@@ -9,6 +9,8 @@ import java.util.TreeSet;
 import org.junit.Test;
 import org.springside.modules.utils.collection.type.ConcurrentHashSet;
 
+import com.google.common.collect.Ordering;
+
 public class SetUtilTest {
 
 	@Test
@@ -26,7 +28,7 @@ public class SetUtilTest {
 
 		TreeSet<String> set5 = SetUtil.newSortedSet();
 
-		TreeSet<String> set6 = SetUtil.newSortedSet(ComparatorUtil.NATUAL);
+		TreeSet<String> set6 = SetUtil.newSortedSet(Ordering.natural());
 
 		ConcurrentHashSet set7 = SetUtil.newConcurrentHashSet();
 	}

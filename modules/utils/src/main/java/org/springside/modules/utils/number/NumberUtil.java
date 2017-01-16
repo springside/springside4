@@ -1,5 +1,7 @@
 package org.springside.modules.utils.number;
 
+import java.util.Locale;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -217,7 +219,40 @@ public abstract class NumberUtil {
 		}
 	}
 
-	/////////// 不同精度的数字类型互转 ///////
+	/////// toString (定义了原子类型与对象类型的参数，保证不会用错函数) ///////
+
+	public static String toString(int i) {
+		return Integer.toString(i);
+	}
+
+	public static String toString(Integer i) {
+		return i.toString();
+	}
+
+	public static String toString(long l) {
+		return Long.toString(l);
+	}
+
+	public static String toString(Long l) {
+		return l.toString();
+	}
+
+	public static String toString(double d) {
+		return Double.toString(d);
+	}
+
+	public static String toString(Double d) {
+		return d.toString();
+	}
+
+	/**
+	 * 输出格式化为小数后两位的double字符串
+	 */
+	public static String to2DigitString(double d) {
+		return String.format(Locale.ROOT, "%.2f", d);
+	}
+
+	/////////// 杂项 ///////
 
 	/**
 	 * 安全的将小于Integer.MAX的long转为int，否则抛出错误
@@ -227,4 +262,5 @@ public abstract class NumberUtil {
 			return (int) x;
 		throw new IllegalArgumentException("Int " + x + " out of range");
 	}
+
 }

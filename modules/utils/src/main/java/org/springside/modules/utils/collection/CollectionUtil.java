@@ -22,6 +22,12 @@ import com.google.common.annotations.Beta;
  * 通用函数没有针对数据结构进行优化，效率不高，所以没有太多的封装.
  * 
  * 关于List, Map, Queue, Set的特殊工具集，另见特定的Utils
+ * 
+ * 另JDK中缺少ComparableComparator和NullComparator，直到JDK8才补上。
+ * 
+ * 因此平时请使用guava的Ordering,fluentable的API更好用，可以设置nullFirst，nullLast,reverse
+ * 
+ * @see com.google.common.collect.Ordering
  */
 @Beta
 public abstract class CollectionUtil {

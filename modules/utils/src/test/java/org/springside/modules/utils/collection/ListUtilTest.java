@@ -7,6 +7,8 @@ import java.util.Random;
 
 import org.junit.Test;
 
+import com.google.common.collect.Ordering;
+
 public class ListUtilTest {
 	@Test
 	public void guavaBuildList() {
@@ -106,33 +108,27 @@ public class ListUtilTest {
 		ListUtil.shuffle(list, new Random());
 		System.out.println("shuffle list:" + list);
 
-		
-		ListUtil.sort(list, ComparatorUtil.NATUAL);
+		ListUtil.sort(list, Ordering.natural());
 
 		assertThat(list).hasSize(7).containsExactly("a", "b", "c", "d", "e", "g", "i");
-		
+
 		assertThat(ListUtil.binarySearch(list, "b")).isEqualTo(1);
-		assertThat(ListUtil.binarySearch(list, "b", ComparatorUtil.NATUAL)).isEqualTo(1);
+		assertThat(ListUtil.binarySearch(list, "b", Ordering.natural())).isEqualTo(1);
 		assertThat(ListUtil.binarySearch(list, "x")).isEqualTo(-8);
 
-		
-		//reverse
+		// reverse
 		List list8 = ListUtil.reverse(list);
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
-		
-		
-		
-		//sortReverse
+
+		// sortReverse
 		ListUtil.shuffle(list8);
 		ListUtil.sortReverse(list8);
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
-		
+
 		ListUtil.shuffle(list8);
-		ListUtil.sortReverse(list8,ComparatorUtil.NATUAL);
+		ListUtil.sortReverse(list8, Ordering.natural());
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
-
-	
 
 	@Test
 	public void listCompare() {
