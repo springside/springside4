@@ -15,6 +15,8 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.annotations.Beta;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Iterators;
 
 /**
  * 通用Collection的工具集
@@ -73,16 +75,16 @@ public abstract class CollectionUtil {
 			return list.get(list.size() - 1);
 		}
 
-		// 其他类型通过iterator滚动到最后一个元素.
-		Iterator<T> iterator = collection.iterator();
-		while (true) {
-			T current = iterator.next();
-			if (!iterator.hasNext()) {
-				return current;
-			}
-		}
+		return Iterators.getLast(collection.iterator());
 	}
 
+	/**
+	 * 两个集合中的元素按顺序相等.
+	 */
+	public static boolean elementsEqual(Iterable<?> iterable1, Iterable<?> iterable2) {
+		return Iterables.elementsEqual(iterable1, iterable2);
+	}
+	
 	/**
 	 * 返回无序集合中的最小值，使用元素默认排序
 	 */

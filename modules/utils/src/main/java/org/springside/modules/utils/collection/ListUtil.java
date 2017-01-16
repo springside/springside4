@@ -293,38 +293,7 @@ public abstract class ListUtil {
 		Collections.shuffle(list, rnd);
 	}
 
-	
 	///////////////// 集合运算 ///////////////////
-
-	/**
-	 * 按顺序比较两个List中的每个元素是否相等.
-	 * 
-	 * from Apache Common Collections4 ListUtils
-	 */
-	public static boolean isEqual(final List<?> list1, final List<?> list2) {
-		if (list1 == list2) {
-			return true;
-		}
-		if (list1 == null || list2 == null || list1.size() != list2.size()) {
-			return false;
-		}
-
-		final Iterator<?> it1 = list1.iterator();
-		final Iterator<?> it2 = list2.iterator();
-		Object obj1 = null;
-		Object obj2 = null;
-
-		while (it1.hasNext() && it2.hasNext()) {
-			obj1 = it1.next();
-			obj2 = it2.next();
-
-			if (!(obj1 == null ? obj2 == null : obj1.equals(obj2))) {
-				return false;
-			}
-		}
-
-		return !(it1.hasNext() || it2.hasNext());
-	}
 
 	/**
 	 * list1,list2的并集（在list1或list2中的对象），产生新List

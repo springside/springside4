@@ -68,5 +68,22 @@ public class CollectionUtilTest {
 		assertThat(CollectionUtil.minAndMax(list,Ordering.natural()).getRight()).isEqualTo(101);
 		
 	}
+	
+	@Test
+	public void listCompare() {
+		List<String> list1 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
+		List<String> list2 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
+
+		List<String> list3 = ArrayUtil.asList("d", "c", "a", "b", "e", "i", "g");
+		List<String> list4 = ArrayUtil.asList("d", "a", "c", "b", "e");
+		List<String> list5 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g", "x");
+
+		assertThat(CollectionUtil.elementsEqual(list1, list1)).isTrue();
+		assertThat(CollectionUtil.elementsEqual(list1, list2)).isTrue();
+
+		assertThat(CollectionUtil.elementsEqual(list1, list3)).isFalse();
+		assertThat(CollectionUtil.elementsEqual(list1, list4)).isFalse();
+		assertThat(CollectionUtil.elementsEqual(list1, list5)).isFalse();
+	}
 
 }

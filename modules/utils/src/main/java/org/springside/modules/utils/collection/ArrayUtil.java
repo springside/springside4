@@ -1,12 +1,16 @@
 package org.springside.modules.utils.collection;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.springside.modules.utils.base.annotation.Nullable;
+
 import com.google.common.collect.Lists;
+import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -37,8 +41,28 @@ public class ArrayUtil {
 		return list.toArray(array);
 	}
 
-	
-	////////////////// guava一些Array向List的转换 ///////////
+	/**
+	 * 添加元素到数组末尾，没有银弹，复制扩容.
+	 */
+	public static <T> T[] concat(@Nullable T element, T[] array) {
+		return ObjectArrays.concat(element, array);
+	}
+
+	/**
+	 * 传入类型与大小创建数组.
+	 */
+	public static <T> T[] newArray(Class<T> type, int length) {
+		return (T[]) Array.newInstance(type, length);
+	}
+
+	/**
+	 * list.toArray() 返回的是Object[] 如果要有类型的数组话，就要使用list.toArray(new String[list.size()])，这里对调用做了简化
+	 */
+	public static <T> T[] toArray(List<T> list, Class<T> type) {
+		return list.toArray((T[]) Array.newInstance(type, list.size()));
+	}
+
+	////////////////// guava Array向List的转换 ///////////
 
 	/**
 	 * 原版将数组转换为List.

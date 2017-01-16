@@ -130,22 +130,7 @@ public class ListUtilTest {
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 
-	@Test
-	public void listCompare() {
-		List<String> list1 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
-		List<String> list2 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
-
-		List<String> list3 = ArrayUtil.asList("d", "c", "a", "b", "e", "i", "g");
-		List<String> list4 = ArrayUtil.asList("d", "a", "c", "b", "e");
-		List<String> list5 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g", "x");
-
-		assertThat(ListUtil.isEqual(list1, list1)).isTrue();
-		assertThat(ListUtil.isEqual(list1, list2)).isTrue();
-
-		assertThat(ListUtil.isEqual(list1, list3)).isFalse();
-		assertThat(ListUtil.isEqual(list1, list4)).isFalse();
-		assertThat(ListUtil.isEqual(list1, list5)).isFalse();
-	}
+	
 
 	@Test
 	public void collectionCalc() {
