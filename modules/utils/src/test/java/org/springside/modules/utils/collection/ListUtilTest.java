@@ -132,46 +132,16 @@ public class ListUtilTest {
 		assertThat(list8).hasSize(7).containsExactly("i", "g", "e", "d", "c", "b", "a");
 	}
 
-	@Test
-	public void asList() {
-		List<String> list = ListUtil.asList("d", "a", "c", "b", "e", "i", "g");
-		assertThat(list).hasSize(7).containsExactly("d", "a", "c", "b", "e", "i", "g");
-
-		try {
-			list.add("a");
-			fail("should fail before");
-		} catch (Throwable t) {
-			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
-		}
-
-		List<String> list2 = ListUtil.asList("d", new String[] { "a", "c", "b", "e", "i", "g" });
-		assertThat(list2).hasSize(7).containsExactly("d", "a", "c", "b", "e", "i", "g");
-
-		try {
-			list2.add("a");
-			fail("should fail before");
-		} catch (Throwable t) {
-			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
-		}
-
-		List<Integer> list3 = ListUtil.intAsList(1, 2, 3);
-		assertThat(list3).hasSize(3).containsExactly(1, 2, 3);
-
-		List<Long> list4 = ListUtil.longAsList(1L, 2L, 3L);
-		assertThat(list4).hasSize(3).containsExactly(1L, 2L, 3L);
-
-		List<Double> list5 = ListUtil.doubleAsList(1.1d, 2.2d, 3.3d);
-		assertThat(list5).hasSize(3).containsExactly(1.1d, 2.2d, 3.3d);
-	}
+	
 
 	@Test
 	public void listCompare() {
-		List<String> list1 = ListUtil.asList("d", "a", "c", "b", "e", "i", "g");
-		List<String> list2 = ListUtil.asList("d", "a", "c", "b", "e", "i", "g");
+		List<String> list1 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
+		List<String> list2 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g");
 
-		List<String> list3 = ListUtil.asList("d", "c", "a", "b", "e", "i", "g");
-		List<String> list4 = ListUtil.asList("d", "a", "c", "b", "e");
-		List<String> list5 = ListUtil.asList("d", "a", "c", "b", "e", "i", "g", "x");
+		List<String> list3 = ArrayUtil.asList("d", "c", "a", "b", "e", "i", "g");
+		List<String> list4 = ArrayUtil.asList("d", "a", "c", "b", "e");
+		List<String> list5 = ArrayUtil.asList("d", "a", "c", "b", "e", "i", "g", "x");
 
 		assertThat(ListUtil.isEqual(list1, list1)).isTrue();
 		assertThat(ListUtil.isEqual(list1, list2)).isTrue();

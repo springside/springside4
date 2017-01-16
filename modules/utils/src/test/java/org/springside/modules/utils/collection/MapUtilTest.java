@@ -64,7 +64,7 @@ public class MapUtilTest {
 		HashMap<String, Integer> map4 = MapUtil.newHashMap(new String[] { "1", "2" }, new Integer[] { 1, 2 });
 		assertThat(map4).hasSize(2).containsEntry("1", 1).containsEntry("2", 2);
 
-		HashMap<String, Integer> map5 = MapUtil.newHashMap(ListUtil.asList("1", "2", "3"), ListUtil.asList(1, 2, 3));
+		HashMap<String, Integer> map5 = MapUtil.newHashMap(ArrayUtil.asList("1", "2", "3"), ArrayUtil.asList(1, 2, 3));
 		assertThat(map5).hasSize(3).containsEntry("1", 1).containsEntry("2", 2).containsEntry("3", 3);
 
 		TreeMap<String, Integer> map6 = MapUtil.newSortedMap();

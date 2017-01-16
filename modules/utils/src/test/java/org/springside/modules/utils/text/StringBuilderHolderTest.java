@@ -23,11 +23,11 @@ public class StringBuilderHolderTest {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				StringBuilder builder = StringBuilderHolder.get();
+				StringBuilder builder = StringBuilderHolder.getGlobal();
 				builder.append(Thread.currentThread().getName() + "-1");
 				System.out.println(builder.toString());
 
-				builder = StringBuilderHolder.get();
+				builder = StringBuilderHolder.getGlobal();
 				builder.append(Thread.currentThread().getName() + "-2");
 				System.out.println(builder.toString());
 

@@ -49,7 +49,7 @@ public abstract class ClassUtil {
 	/**
 	 * 返回Class名，不包含PackageName
 	 * 
-	 * 部类的话，返回"主类.内部类"
+	 * 内部类的话，返回"主类.内部类"
 	 */
 	public static String getShortClassName(final String className) {
 		return ClassUtils.getShortClassName(className);
@@ -77,7 +77,7 @@ public abstract class ClassUtil {
 	}
 
 	/**
-	 * 递归返回本类及所有基类继承的接口，比Spring中的相同实现靠谱
+	 * 递归返回本类及所有基类继承的接口，及接口继承的接口，比Spring中的相同实现完整
 	 */
 	public static List<Class<?>> getAllInterfaces(final Class<?> cls) {
 		return ClassUtils.getAllInterfaces(cls);
@@ -119,7 +119,33 @@ public abstract class ClassUtil {
 	}
 
 	/**
-	 * 找出所有标注了该annotation的类，循环遍历父类.
+	 * 找出所有标注了该annotation的公共属性，循环遍历父类.
+	 * 
+	 * 暂未支持Spring风格Annotation继承Annotation
+	 * 
+	 * from org.unitils.util.AnnotationUtils
+	 */
+	public static <T extends Annotation> Set<Field> getPublicFieldsAnnotatedWith(Class<? extends Object> clazz,
+			Class<T> annotation) {
+
+		if (Object.class.equals(clazz)) {
+			return Collections.emptySet();
+		}
+
+		Set<Field> annotatedFields = new HashSet<Field>();
+		Field[] fields = clazz.getFields();
+
+		for (Field field : fields) {
+			if (field.getAnnotation(annotation) != null) {
+				annotatedFields.add(field);
+			}
+		}
+
+		return annotatedFields;
+	}
+
+	/**
+	 * 找出所有标注了该annotation的属性，循环遍历父类，包含private属性.
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 * 
@@ -142,11 +168,12 @@ public abstract class ClassUtil {
 	}
 
 	/**
-	 * 找出所有标注了该annotation的类，循环遍历父类及接口.
+	 * 找出所有标注了该annotation的公共方法(含父类的公共函数)，循环其接口.
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 */
-	public static <T extends Annotation> Set<Method> getMethodsAnnotatedWith(Class<?> clazz, Class<T> annotation) {
+	public static <T extends Annotation> Set<Method> getPublicMethodsAnnotatedWith(Class<?> clazz,
+			Class<T> annotation) {
 		// 已递归到Objebt.class, 停止递归
 		if (Object.class.equals(clazz)) {
 			return Collections.emptySet();
@@ -155,8 +182,8 @@ public abstract class ClassUtil {
 		List<Class<?>> ifcs = ClassUtils.getAllInterfaces(clazz);
 		Set<Method> annotatedMethods = new HashSet<Method>();
 
-		// 遍历当前类的所有方法
-		Method[] methods = clazz.getDeclaredMethods();
+		// 遍历当前类的所有公共方法
+		Method[] methods = clazz.getMethods();
 
 		for (Method method : methods) {
 			// 如果当前方法有标注，或定义了该方法的所有接口有标注
@@ -164,9 +191,6 @@ public abstract class ClassUtil {
 				annotatedMethods.add(method);
 			}
 		}
-
-		// 递归父类
-		annotatedMethods.addAll(getMethodsAnnotatedWith(clazz.getSuperclass(), annotation));
 
 		return annotatedMethods;
 	}
@@ -200,6 +224,8 @@ public abstract class ClassUtil {
 		}
 		return clazz;
 	}
+
+	////////////////
 
 	/**
 	 * 通过反射, 获得Class定义中声明的泛型参数的类型,

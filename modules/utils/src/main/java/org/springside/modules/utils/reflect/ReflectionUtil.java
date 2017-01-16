@@ -28,19 +28,21 @@ import org.springside.modules.utils.base.ExceptionUtil;
  * 
  * 基于这两点要求，没有现有库满足，只能自写
  * 
- * 1. 属性访问：a.调用getter/setter方法, b.直接访问变量, c.直接先尝试查找getter/setter，如果不存在则直接访问变量
+ * 1. 属性访问，包括：a.调用getter/setter方法, b.直接访问变量, c.直接先尝试查找getter/setter，如果不存在则直接访问变量
  * 
- * 2. 一次性调用方法，其中一个特色函数是invokeByName，不准确匹配参数类型，只取第一个名称符合的函数.
+ * 2. 一次性调用方法. 其中一个特色函数是invokeMethodByName，不准确匹配参数类型，只取第一个名称符合的函数.
  * 
- * 3. 多次调用方法，先用getAccessibleMethod()获得Method对象，然后多次调用Method对象
+ * 3. 多次调用方法，先用getAccessibleMethod()获得Method对象，然后多次调用Method对象.
  * 
- * 4. 调用构造函数创建对象
+ * 4. 一次性调用构造函数,创建对象
  */
 @SuppressWarnings("unchecked")
 public class ReflectionUtil {
 	private static final String SETTER_PREFIX = "set";
 
 	private static final String GETTER_PREFIX = "get";
+
+	private static final String IS_PREFIX = "is";
 
 	private static Logger logger = LoggerFactory.getLogger(ReflectionUtil.class);
 
@@ -63,7 +65,21 @@ public class ReflectionUtil {
 	 */
 	public static <T> T invokeGetter(Object obj, String propertyName) {
 		String getterMethodName = GETTER_PREFIX + StringUtils.capitalize(propertyName);
-		return (T) invokeMethod(obj, getterMethodName);
+
+		Method method = getAccessibleMethod(obj.getClass(), getterMethodName);
+
+		// retry on another name
+		if (method == null) {
+			getterMethodName = IS_PREFIX + StringUtils.capitalize(propertyName);
+			method = getAccessibleMethod(obj.getClass(), getterMethodName);
+		}
+
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+		}
+		
+		return (T) invokeMethod(obj, method);
 	}
 
 	/**
@@ -166,7 +182,7 @@ public class ReflectionUtil {
 	 * 
 	 * 用于一次性调用的情况，否则应使用getAccessibleMethod()函数获得Method后反复调用.
 	 */
-	public static Object invokeMethod(final Object obj, final String methodName, final Object[] args,
+	public static <T> T invokeMethod(final Object obj, final String methodName, final Object[] args,
 			final Class<?>[] parameterTypes) {
 		Method method = getAccessibleMethod(obj.getClass(), methodName, parameterTypes);
 		if (method == null) {
@@ -174,7 +190,7 @@ public class ReflectionUtil {
 		}
 
 		try {
-			return method.invoke(obj, args);
+			return (T) method.invoke(obj, args);
 		} catch (Exception e) {
 			throw convertReflectionExceptionToUnchecked(e);
 		}
@@ -187,18 +203,31 @@ public class ReflectionUtil {
 	 * 
 	 * 用于一次性调用的情况，否则应使用getAccessibleMethodByName()函数获得Method后反复调用.
 	 */
-	public static Object invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
+	public static <T> T invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
 		Method method = findAccessibleMethodByName(obj.getClass(), methodName);
 		if (method == null) {
 			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
 
 		try {
-			return method.invoke(obj, args);
+			return (T) method.invoke(obj, args);
 		} catch (Exception e) {
 			throw convertReflectionExceptionToUnchecked(e);
 		}
 	}
+
+	/**
+	 * 调用已准备好的Method
+	 */
+	public static <T> T invokeMethod(final Object obj, Method method, Object... args) {
+		try {
+			return (T) method.invoke(obj, args);
+		} catch (Exception e) {
+			throw convertReflectionExceptionToUnchecked(e);
+		}
+	}
+
+	//////
 
 	/**
 	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.

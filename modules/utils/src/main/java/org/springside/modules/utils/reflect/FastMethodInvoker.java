@@ -13,6 +13,8 @@ import net.sf.cglib.reflect.FastMethod;
 /**
  * 基于Cglib, 基于字节码生成的快速反射, 比JDK反射的速度快.
  * 
+ * 比如反射调用A类的“hello” 方法，cglib会直接生成一个调用a.hello()的FastMethod子类.
+ * 
  * @author calvin
  */
 public class FastMethodInvoker {

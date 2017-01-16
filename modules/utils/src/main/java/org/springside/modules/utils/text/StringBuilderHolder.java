@@ -12,17 +12,50 @@ package org.springside.modules.utils.text;
  */
 public class StringBuilderHolder {
 
-	private static ThreadLocal<StringBuilder> stringBuilder = new ThreadLocal<StringBuilder>() {
+	private static ThreadLocal<StringBuilder> globalStringBuilder = new ThreadLocal<StringBuilder>() {
 		@Override
 		protected StringBuilder initialValue() {
 			return new StringBuilder(1024);
 		}
 	};
 
+	private ThreadLocal<StringBuilder> stringBuilder = new ThreadLocal<StringBuilder>() {
+		@Override
+		protected StringBuilder initialValue() {
+			return new StringBuilder(capaticy);
+		}
+	};
+
+	private int capaticy = 1024;
+
+	public StringBuilderHolder() {
+	}
+
+	public StringBuilderHolder(int capaticy) {
+		this.capaticy = capaticy;
+	}
+
 	/**
+	 * 获取全局的StringBuilder.
+	 * 
+	 * 当StringBuilder会被连续使用，期间不会调用其他可能也使用StringBuilderHolder的子函数时使用.
+	 * 
 	 * 重置StringBuilder内部的writerIndex, 而char[]保留不动.
 	 */
-	public static StringBuilder get() {
+	public static StringBuilder getGlobal() {
+		StringBuilder sb = globalStringBuilder.get();
+		sb.setLength(0);
+		return sb;
+	}
+
+	/**
+	 * 获取本StringBuilderHolder的StringBuilder.
+	 * 
+	 * 当StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数时使用.
+	 * 
+	 * 重置StringBuilder内部的writerIndex, 而char[]保留不动.
+	 */
+	public StringBuilder get() {
 		StringBuilder sb = stringBuilder.get();
 		sb.setLength(0);
 		return sb;

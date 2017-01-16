@@ -12,7 +12,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package org.springside.modules.utils.collection.primitive;
+package org.springside.modules.utils.collection.type.primitive;
 
 import java.util.AbstractCollection;
 import java.util.AbstractSet;

@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.text.Charsets;
 
@@ -28,7 +29,7 @@ import com.google.common.io.Files;
  * 
  * 1.文件读写
  * 
- * 2.文件操作
+ * 2.文件及目录操作
  * 
  * @author calvin
  */
@@ -103,8 +104,13 @@ public abstract class FileUtil {
 
 	/**
 	 * 复制文件或目录
+	 * 
+	 * @param from 如果为null，或者是不存在的文件或目录，抛出异常.
+	 * @param to 如果为null，或者from是目录而to是已存在文件，或相反
 	 */
-	public static void copy(File from, File to) throws IOException {
+	public static void copy(@NotNull File from, @NotNull File to) throws IOException {
+		Validate.notNull(from);
+
 		if (from.isDirectory())
 			copyDir(from, to);
 		else
@@ -114,21 +120,25 @@ public abstract class FileUtil {
 	/**
 	 * 文件复制.
 	 * 
-	 * 如果文件不存在或者是目录，不做修改
+	 * @param from 如果为nll，或文件不存在或者是目录，，抛出异常
+	 * @param to 如果to为null，或文件存在但是一个目录，抛出异常
 	 */
-	public static void copyFile(@Nullable File from, File to) throws IOException {
-		if (isFileExists(from)) {
-			Files.copy(from, to);
-		}
+	public static void copyFile(@NotNull File from, @NotNull File to) throws IOException {
+		Validate.isTrue(isFileExists(from), from + " is not exist or not a file");
+		Validate.notNull(to);
+		Validate.isTrue(!FileUtil.isDirExists(to), to + " is exist but it is a dir");
+		Files.copy(from, to);
 	}
 
 	/**
 	 * 复制目录
 	 */
-	public static void copyDir(File from, File to) throws IOException {
+	public static void copyDir(@NotNull File from, @NotNull File to) throws IOException {
+		Validate.isTrue(isDirExists(from), from + " is not exist or not a dir");
+		Validate.notNull(to);
+
 		if (to.exists()) {
-			if (!to.isDirectory())
-				throw new IllegalArgumentException(to.toString());
+			Validate.isTrue(!to.isFile(), to + " is exist but it is a file");
 		} else {
 			to.mkdirs();
 		}
@@ -146,12 +156,33 @@ public abstract class FileUtil {
 
 	/**
 	 * 文件移动/重命名.
-	 * 
-	 * 如果文件不存在或者是目录，不做修改.
 	 */
-	public static void moveFile(@Nullable File from, File to) throws IOException {
-		if (isFileExists(from)) {
-			Files.move(from, to);
+	public static void moveFile(@NotNull File from, @NotNull File to) throws IOException {
+		Validate.isTrue(isFileExists(from), from + " is not exist or not a file");
+		Validate.notNull(to);
+		Validate.isTrue(!isDirExists(to), to + " is  exist but it is a dir");
+
+		Files.move(from, to);
+	}
+
+	/**
+	 * 目录移动/重命名
+	 */
+	public static void moveDir(@NotNull File from, @NotNull File to) throws IOException {
+		Validate.isTrue(isDirExists(from), from + " is not exist or not a dir");
+		Validate.notNull(to);
+		Validate.isTrue(!isFileExists(to), to + " is exist but it is a file");
+
+		final boolean rename = from.renameTo(to);
+		if (!rename) {
+			if (to.getCanonicalPath().startsWith(from.getCanonicalPath() + File.separator)) {
+				throw new IOException("Cannot move directory: " + from + " to a subdirectory of itself: " + to);
+			}
+			copyDir(from, to);
+			deleteDir(from);
+			if (from.exists()) {
+				throw new IOException("Failed to delete original directory '" + from + "' after copy to '" + to + "'");
+			}
 		}
 	}
 
@@ -175,18 +206,16 @@ public abstract class FileUtil {
 	 * 如果文件不存在或者是目录，则不做修改
 	 */
 	public static void deleteFile(@Nullable File file) throws IOException {
-		if (isFileExists(file)) {
-			file.delete();
-		}
+		Validate.isTrue(isFileExists(file), file + " is not exist or not a file");
+		file.delete();
 	}
 
 	/**
 	 * 删除目录及所有子目录/文件
 	 */
 	public static void deleteDir(File dir) {
-		if (!isDirExists(dir)) {
-			return;
-		}
+		Validate.isTrue(isDirExists(dir), dir + " is not exist or not a dir");
+
 		// 后序遍历，先删掉子目录中的文件/目录
 		Iterator<File> iterator = Files.fileTreeTraverser().postOrderTraversal(dir).iterator();
 		while (iterator.hasNext()) {

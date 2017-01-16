@@ -216,4 +216,15 @@ public abstract class NumberUtil {
 			return defaultValue;
 		}
 	}
+
+	/////////// 不同精度的数字类型互转 ///////
+
+	/**
+	 * 安全的将小于Integer.MAX的long转为int，否则抛出错误
+	 */
+	public static int toInt32(long x) throws IllegalArgumentException {
+		if ((int) x == x)
+			return (int) x;
+		throw new IllegalArgumentException("Int " + x + " out of range");
+	}
 }

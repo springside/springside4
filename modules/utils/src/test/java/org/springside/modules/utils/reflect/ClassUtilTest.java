@@ -35,11 +35,9 @@ public class ClassUtilTest {
 
 		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
 
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.findAccessibleMethodByName(BClass.class, "hello"));
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.findAccessibleMethodByName(BClass.class, "hello"));
-		assertThat(ClassUtil.getMethodsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(0);
+		assertThat(ClassUtil.getPublicFieldsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(2).contains(
+				ReflectionUtil.getAccessibleField(BClass.class, "sfield"),
+				ReflectionUtil.getAccessibleField(BClass.class, "tfield"));
 
 		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(3).contains(
 				ReflectionUtil.getAccessibleField(BClass.class, "bfield"),
@@ -127,6 +125,16 @@ public class ClassUtilTest {
 
 		@FAnnotation
 		private int dfield;
+
+		@AAnnotation
+		public int tfield;
+
+		@AAnnotation
+		protected int vfield;
+
+		public void hello2(int i) {
+
+		}
 	}
 
 	@BAnnotation
@@ -138,10 +146,20 @@ public class ClassUtilTest {
 		@EAnnotation
 		private int efield;
 
+		@AAnnotation
+		public int sfield;
+
+		@AAnnotation
+		protected int ufield;
+
 		@Override
 		@EAnnotation
 		public void hello() {
 			// TODO Auto-generated method stub
+
+		}
+
+		public void hello2(int i) {
 
 		}
 

@@ -16,12 +16,15 @@ import java.util.concurrent.ConcurrentSkipListMap;
 import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
+import org.springside.modules.utils.collection.type.primitive.IntObjectHashMap;
+import org.springside.modules.utils.collection.type.primitive.LongObjectHashMap;
 import org.springside.modules.utils.concurrent.jsr166e.ConcurrentHashMapV8;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.TreeRangeMap;
 
@@ -93,6 +96,8 @@ public abstract class MapUtil {
 	/**
 	 * 根据等号左边的类型, 构造类型正确的HashMap.
 	 * 
+	 * 未初始化数组大小, 默认为16个桶.
+	 * 
 	 * @see com.google.common.collect.Maps#newHashMap()
 	 */
 	public static <K, V> HashMap<K, V> newHashMap() {
@@ -104,12 +109,12 @@ public abstract class MapUtil {
 	 * 
 	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
 	 * 
-	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低
+	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低，此处用了0.5
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap(int)
 	 */
 	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int initialCapacity) {
-		return newHashMapWithCapacity(initialCapacity, 0.75f);
+		return newHashMapWithCapacity(initialCapacity, 0.5f);
 	}
 
 	/**
@@ -117,7 +122,7 @@ public abstract class MapUtil {
 	 * 
 	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
 	 * 
-	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低
+	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低，建议0.5
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap(int)
 	 */
@@ -217,7 +222,6 @@ public abstract class MapUtil {
 		} else {
 			return new ConcurrentHashMapV8<K, V>();
 		}
-
 	}
 
 	/**
@@ -230,14 +234,49 @@ public abstract class MapUtil {
 	///////////////// from Guava的特别Map //////////////////////
 
 	/**
-	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 * 创建Key为弱引用的ConcurrentMap，Key对象可被回收.
+	 * 
+	 * JDK没有WeakHashMap的并发实现, 由Guava提供
 	 */
-	public static <E> HashMultiset<E> createMapCounter() {
-		return HashMultiset.create();
+	public static <K, V> ConcurrentMap<K, V> createWeakKeyConcurrentHashMap(int initialCapacity, int concurrencyLevel) {
+		return new MapMaker().weakKeys().initialCapacity(initialCapacity).concurrencyLevel(concurrencyLevel).makeMap();
+	}
+
+	/**
+	 * 创建Value为弱引用的ConcurrentMap，Value对象可被回收.
+	 * 
+	 * JDK没有WeakHashMap的并发实现, 由Guava提供
+	 */
+	public static <K, V> ConcurrentMap<K, V> createWeakValueConcurrentHashMap(int initialCapacity,
+			int concurrencyLevel) {
+		return new MapMaker().weakValues().initialCapacity(initialCapacity).concurrencyLevel(concurrencyLevel)
+				.makeMap();
+	}
+
+	/**
+	 * 创建移植自Netty的key为int的优化HashMap
+	 * 
+	 * @param initialCapacity 默认为16
+	 * @param loadFactor 默认为0.5
+	 */
+	public static <V> IntObjectHashMap<V> createIntObjectHashMap(int initialCapacity, float loadFactor) {
+		return new IntObjectHashMap<V>(initialCapacity, loadFactor);
+	}
+
+	/**
+	 * 创建移植自Netty的key为long的优化HashMap
+	 * 
+	 * @param initialCapacity 默认为16
+	 * @param loadFactor 默认为0.5
+	 */
+	public static <V> LongObjectHashMap<V> createLongObjectHashMap(int initialCapacity, float loadFactor) {
+		return new LongObjectHashMap<V>(initialCapacity, loadFactor);
 	}
 
 	/**
 	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 * 
+	 * @param distinctElements 默认为为16
 	 */
 	public static <E> HashMultiset<E> createMapCounter(int distinctElements) {
 		return HashMultiset.create(distinctElements);
@@ -264,16 +303,6 @@ public abstract class MapUtil {
 		return ConcurrentHashMultiset.create(elements);
 	}
 
-	/**
-	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
-	 * 
-	 * 注意非线程安全, MultiMap无线程安全的实现.
-	 * 
-	 * 另有其他结构存储values的MultiMap，请自行参考使用.
-	 */
-	public static <K, V> ArrayListMultimap<K, V> createMultiValueMap() {
-		return ArrayListMultimap.create();
-	}
 
 	/**
 	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
@@ -281,6 +310,9 @@ public abstract class MapUtil {
 	 * 注意非线程安全, MultiMap无线程安全的实现.
 	 * 
 	 * 另有其他结构存储values的MultiMap，请自行参考使用.
+	 * 
+	 * @param expectedKeys 默认为16
+	 * @param expectedValuesPerKey 默认为3
 	 */
 	public static <K, V> ArrayListMultimap<K, V> createMultiValueMap(int expectedKeys, int expectedValuesPerKey) {
 		return ArrayListMultimap.create(expectedKeys, expectedValuesPerKey);
@@ -291,6 +323,7 @@ public abstract class MapUtil {
 	 * 
 	 * 适合一致性哈希等场景
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <K extends Comparable, V> TreeRangeMap<K, V> createRangeMap() {
 		return TreeRangeMap.create();
 	}

@@ -11,6 +11,8 @@ import com.google.common.math.LongMath;
  * 
  * 2. 其他函数如最大公约数
  * 
+ * 3. 安全的取模
+ * 
  * @author calvin
  *
  */

@@ -200,6 +200,8 @@ public abstract class RandomUtil {
 
 	/**
 	 * 返回0-max之间的double
+	 * 
+	 * 注意：与JDK默认返回0-1的行为不一致.
 	 */
 	public static double nextDouble(double max) {
 		return nextDouble(threadLocalRandom(), 0, max);

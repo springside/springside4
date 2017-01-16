@@ -1,7 +1,6 @@
 package org.springside.modules.utils.collection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,9 +12,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.springside.modules.utils.collection.type.SortedArrayList;
 
 import com.google.common.collect.Lists;
-import com.google.common.primitives.Doubles;
-import com.google.common.primitives.Ints;
-import com.google.common.primitives.Longs;
 
 /**
  * 关于List的工具集合.
@@ -297,68 +293,7 @@ public abstract class ListUtil {
 		Collections.shuffle(list, rnd);
 	}
 
-	////////////////// guava一些Array向List的转换 ///////////
-
-	/**
-	 * 将数组转换为List.
-	 * 
-	 * 注意转换后的List不能写入, 否则抛出UnsupportedOperationException
-	 * 
-	 * @see java.util.Arrays#asList(Object...)
-	 */
-	public static <T> List<T> asList(T... a) {
-		return Arrays.asList(a);
-	}
-
-	/**
-	 * 一个独立元素＋一个数组组成新的list，只是一个View，不复制数组内容，而且独立元素在最前.
-	 *
-	 * 
-	 * 注意转换后的List不能写入, 否则抛出UnsupportedOperationException
-	 * 
-	 * @see com.google.common.collect.Lists#asList(Object, Object[])
-	 */
-	public static <E> List<E> asList(E first, E[] rest) {
-		return Lists.asList(first, rest);
-	}
-
-	/**
-	 * Arrays.asList()的加强版, 返回一个底层为原始类型int的List
-	 * 
-	 * 与保存Integer相比节约空间，同时只在读取数据时AutoBoxing.
-	 * 
-	 * @see java.util.Arrays#asList(Object...)
-	 * @see com.google.common.primitives.Ints#asList(int...)
-	 * 
-	 */
-	public static List<Integer> intAsList(int... backingArray) {
-		return Ints.asList(backingArray);
-	}
-
-	/**
-	 * Arrays.asList()的加强版, 返回一个底层为原始类型long的List
-	 * 
-	 * 与保存Long相比节约空间，同时只在读取数据时AutoBoxing.
-	 * 
-	 * @see java.util.Arrays#asList(Object...)
-	 * @see com.google.common.primitives.Longs#asList(long...)
-	 */
-	public static List<Long> longAsList(long... backingArray) {
-		return Longs.asList(backingArray);
-	}
-
-	/**
-	 * Arrays.asList()的加强版, 返回一个底层为原始类型double的List
-	 * 
-	 * 与保存Double相比节约空间，同时也避免了AutoBoxing.
-	 * 
-	 * @see java.util.Arrays#asList(Object...)
-	 * @see com.google.common.primitives.Doubles#asList(double...)
-	 */
-	public static List<Double> doubleAsList(double... backingArray) {
-		return Doubles.asList(backingArray);
-	}
-
+	
 	///////////////// 集合运算 ///////////////////
 
 	/**
