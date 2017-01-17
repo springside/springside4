@@ -36,16 +36,16 @@ public class ClassUtilTest {
 		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
 
 		assertThat(ClassUtil.getPublicFieldsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(2).contains(
-				ReflectionUtil.getAccessibleField(BClass.class, "sfield"),
-				ReflectionUtil.getAccessibleField(BClass.class, "tfield"));
+				ClassUtil.getAccessibleField(BClass.class, "sfield"),
+				ClassUtil.getAccessibleField(BClass.class, "tfield"));
 
 		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(3).contains(
-				ReflectionUtil.getAccessibleField(BClass.class, "bfield"),
-				ReflectionUtil.getAccessibleField(BClass.class, "efield"),
-				ReflectionUtil.getAccessibleField(AClass.class, "afield"));
+				ClassUtil.getAccessibleField(BClass.class, "bfield"),
+				ClassUtil.getAccessibleField(BClass.class, "efield"),
+				ClassUtil.getAccessibleField(AClass.class, "afield"));
 
 		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
-				.contains(ReflectionUtil.getAccessibleField(AClass.class, "dfield"));
+				.contains(ClassUtil.getAccessibleField(AClass.class, "dfield"));
 	}
 
 	@Test

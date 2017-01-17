@@ -22,11 +22,34 @@ public class FastMethodInvoker {
 	// 存放cglib的FastClass
 	private static ConcurrentMap<Class<?>, FastClass> fastClassMap = MapUtil.newConcurrentHashMap();
 
-	/**
-	 * 获取cglib生成的FastMethod，并保存起来留作后用
-	 */
-	public static FastMethod getFastMethod(final Class<?> clz, final String methodName, Class<?>... parameterTypes) {
+	private final FastMethod fastMethod;
 
+	/**
+	 * 获取cglib生成的FastMethod，创建方法的FastMethodInvoker实例.
+	 */
+	public static FastMethodInvoker create(final Class<?> clz, final String methodName, Class<?>... parameterTypes) {
+		Method method = ClassUtil.getAccessibleMethod(clz, methodName, parameterTypes);
+		return build(clz, method);
+	}
+
+	/**
+	 * 获取cglib生成的FastMethod，创建Getter方法的FastMethodInvoker实例.
+	 */
+	public static FastMethodInvoker createGetter(final Class<?> clz, final String propertyName) {
+		Method method = ClassUtil.getGetterMethod(clz, propertyName);
+		return build(clz, method);
+	}
+
+	/**
+	 * 获取cglib生成的FastMethod，创建Setter方法的FastMethodInvoker实例.
+	 */
+	public static FastMethodInvoker createSetter(final Class<?> clz, final String propertyName,
+			Class<?> parameterType) {
+		Method method = ClassUtil.getSetterMethod(clz, propertyName, parameterType);
+		return build(clz, method);
+	}
+
+	private static FastMethodInvoker build(final Class<?> clz, Method method) {
 		FastClass fastClz = MapUtil.createIfAbsent(fastClassMap, clz, new ValueCreator<FastClass>() {
 			@Override
 			public FastClass get() {
@@ -34,21 +57,22 @@ public class FastMethodInvoker {
 			}
 		});
 
-		Method method = ReflectionUtil.getAccessibleMethod(clz, methodName, parameterTypes);
+		return new FastMethodInvoker(fastClz.getMethod(method));
+	}
 
-		return fastClz.getMethod(method);
+	protected FastMethodInvoker(FastMethod fastMethod) {
+		this.fastMethod = fastMethod;
 	}
 
 	/**
 	 * 调用方法
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T invoke(FastMethod method, Object obj, Object... args) {
+	public <T> T invoke(Object obj, Object... args) {
 		try {
-			return (T) method.invoke(obj, args);
+			return (T) fastMethod.invoke(obj, args);
 		} catch (Exception e) {
 			throw ExceptionUtil.unchecked(ExceptionUtil.unwrap(e));
 		}
 	}
-
 }

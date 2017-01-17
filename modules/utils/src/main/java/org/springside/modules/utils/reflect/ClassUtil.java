@@ -3,15 +3,20 @@ package org.springside.modules.utils.reflect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,15 +24,15 @@ import org.slf4j.LoggerFactory;
 /**
  * 获取Class信息的工具类
  * 
- * 1. 取shortClassName 和 packageName(via Common Lang)
+ * 1. 取shortClassName 和 packageName
  * 
- * 2. 获取全部父类，全部接口(via Common Lang)，以及最全面的获取全部Annotation(自写)
+ * 2. 获取全部父类，全部接口，以及全部Annotation
  * 
- * 3. 获取标注了annotation的所有属性和方法(最全面的循环基类和接口)
+ * 3. 获取标注了annotation的所有属性和方法
  * 
- * 3. 取得cglib之前的用户类(from Spring)
+ * 4. 获取方法与属性 (兼容了原始类型的参数, 并默认将方法与属性设为可访问)
  * 
- * 4. 获取类用泛型声明的Class实例.
+ * 5. 其他杂项
  * 
  * @author calvin
  */
@@ -37,6 +42,24 @@ public abstract class ClassUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(ClassUtil.class);
 
+	private static final Map<Class<?>, Class<?>> primitiveWrapperTypeMap = new IdentityHashMap<Class<?>, Class<?>>(8);
+
+	static {
+		primitiveWrapperTypeMap.put(Boolean.class, Boolean.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Byte.class, Byte.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Character.class, Character.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Double.class, Double.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Float.class, Float.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Integer.class, Integer.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Long.class, Long.TYPE);
+		ClassUtil.primitiveWrapperTypeMap.put(Short.class, Short.TYPE);
+	}
+
+	private static final String SETTER_PREFIX = "set";
+	private static final String GETTER_PREFIX = "get";
+	private static final String IS_PREFIX = "is";
+
+	////////// shortClassName 和 packageName//////////
 	/**
 	 * 返回Class名, 不包含PackageName.
 	 * 
@@ -69,6 +92,7 @@ public abstract class ClassUtil {
 		return ClassUtils.getPackageName(className);
 	}
 
+	////////// 获取全部父类，全部接口，以及全部Annotation//////////
 	/**
 	 * 递归返回所有的SupperClasses，包含Object.class
 	 */
@@ -117,6 +141,8 @@ public abstract class ClassUtil {
 			}
 		}
 	}
+
+	//// 获取标注了annotation的所有属性和方法////////
 
 	/**
 	 * 找出所有标注了该annotation的公共属性，循环遍历父类.
@@ -210,6 +236,142 @@ public abstract class ClassUtil {
 		return false;
 	}
 
+	/**
+	 * 循环遍历，按属性名获取前缀为get或is的函数，并设为可访问
+	 */
+	public static Method getSetterMethod(Class<?> clazz, String propertyName, Class<?> parameterType) {
+		String setterMethodName = ClassUtil.SETTER_PREFIX + StringUtils.capitalize(propertyName);
+		return ClassUtil.getAccessibleMethod(clazz, setterMethodName, parameterType);
+	}
+
+	/**
+	 * 循环遍历，按属性名获取前缀为set的函数，并设为可访问
+	 */
+	public static Method getGetterMethod(Class<?> clazz, String propertyName) {
+		String getterMethodName = ClassUtil.GETTER_PREFIX + StringUtils.capitalize(propertyName);
+
+		Method method = ClassUtil.getAccessibleMethod(clazz, getterMethodName);
+
+		// retry on another name
+		if (method == null) {
+			getterMethodName = ClassUtil.IS_PREFIX + StringUtils.capitalize(propertyName);
+			method = ClassUtil.getAccessibleMethod(clazz, getterMethodName);
+		}
+		return method;
+	}
+
+	/**
+	 * 循环向上转型, 获取对象的DeclaredField, 并强制设置为可访问.
+	 * 
+	 * 如向上转型到Object仍无法找到, 返回null.
+	 * 
+	 * 因为class.getFiled(); 不能获取父类的private函数, 因此采用循环向上的getDeclaredField();
+	 */
+	public static Field getAccessibleField(final Class clazz, final String fieldName) {
+		Validate.notNull(clazz, "clazz can't be null");
+		Validate.notEmpty(fieldName, "fieldName can't be blank");
+		for (Class<?> superClass = clazz; superClass != Object.class; superClass = superClass.getSuperclass()) {
+			try {
+				Field field = superClass.getDeclaredField(fieldName);
+				ClassUtil.makeAccessible(field);
+				return field;
+			} catch (NoSuchFieldException e) {// NOSONAR
+				// Field不在当前类定义,继续向上转型
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 循环向上转型, 获取对象的DeclaredMethod, 并强制设置为可访问.
+	 * 
+	 * 如向上转型到Object仍无法找到, 返回null.
+	 * 
+	 * 匹配函数名+参数类型.
+	 * 
+	 * 因为class.getFiled() 不能获取父类的private函数, 因此采用循环向上的getDeclaredField();
+	 */
+	public static Method getAccessibleMethod(final Class<?> clazz, final String methodName,
+			Class<?>... parameterTypes) {
+		Validate.notNull(clazz, "class can't be null");
+		Validate.notEmpty(methodName, "methodName can't be blank");
+		Class[] theParameterTypes = ArrayUtils.nullToEmpty(parameterTypes);
+
+		// 处理原子类型与对象类型的兼容
+		ClassUtil.wrapClassses(theParameterTypes);
+
+		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType.getSuperclass()) {
+			try {
+				Method method = searchType.getDeclaredMethod(methodName, theParameterTypes);
+				ClassUtil.makeAccessible(method);
+				return method;
+			} catch (NoSuchMethodException e) {
+				// Method不在当前类定义,继续向上转型
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 循环向上转型, 获取对象的DeclaredMethod,并强制设置为可访问.
+	 * 
+	 * 如向上转型到Object仍无法找到, 返回null.
+	 * 
+	 * 只匹配函数名, 如果有多个同名函数返回第一个
+	 * 
+	 * 用于方法需要被多次调用的情况. 先使用本函数先取得Method,然后调用Method.invoke(Object obj, Object... args)
+	 * 
+	 * 因为class.getMethods() 不能获取父类的private函数, 因此采用循环向上的getMethods();
+	 */
+	public static Method findAccessibleMethodByName(final Class clazz, final String methodName) {
+		Validate.notNull(clazz, "clazz can't be null");
+		Validate.notEmpty(methodName, "methodName can't be blank");
+
+		for (Class<?> searchType = clazz; searchType != Object.class; searchType = searchType.getSuperclass()) {
+			Method[] methods = searchType.getDeclaredMethods();
+			for (Method method : methods) {
+				if (method.getName().equals(methodName)) {
+					ClassUtil.makeAccessible(method);
+					return method;
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * 改变private/protected的方法为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
+	 */
+	public static void makeAccessible(Method method) {
+		if ((!Modifier.isPublic(method.getModifiers()) || !Modifier.isPublic(method.getDeclaringClass().getModifiers()))
+				&& !method.isAccessible()) {
+			method.setAccessible(true);
+		}
+	}
+
+	/**
+	 * 改变private/protected的成员变量为public，尽量不调用实际改动的语句，避免JDK的SecurityManager抱怨。
+	 */
+	public static void makeAccessible(Field field) {
+		if ((!Modifier.isPublic(field.getModifiers()) || !Modifier.isPublic(field.getDeclaringClass().getModifiers())
+				|| Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+			field.setAccessible(true);
+		}
+	}
+
+	/**
+	 * 兼容原子类型与非原子类型的转换，不考虑依赖两者不同来区分不同函数的场景
+	 */
+	private static void wrapClassses(Class<?>[] source) {
+		for (int i = 0; i < source.length; i++) {
+			Class<?> wrapClass = primitiveWrapperTypeMap.get(source[i]);
+			if (wrapClass != null) {
+				source[i] = wrapClass;
+			}
+		}
+	}
+
+	/////////// 杂项 /////////
 	/**
 	 * 获取CGLib处理过后的实体的原Class.
 	 */

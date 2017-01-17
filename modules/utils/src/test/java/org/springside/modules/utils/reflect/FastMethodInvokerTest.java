@@ -8,24 +8,22 @@ import java.util.List;
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
 
-import net.sf.cglib.reflect.FastMethod;
-
 public class FastMethodInvokerTest {
 
 	@Test
 	public void test() throws InvocationTargetException {
-		FastMethod fastGetAge = FastMethodInvoker.getFastMethod(Student.class, "getAge");
+		FastMethodInvoker fastGetAge = FastMethodInvoker.create(Student.class, "getAge");
 		Student student1 = new Student("zhang3", 20, new Teacher("li4"), ListUtil.newArrayList("chinese", "english"));
 		Student student2 = new Student("zhang4", 30, new Teacher("li5"), ListUtil.newArrayList("chinese2", "english4"));
 
-		int age = FastMethodInvoker.invoke(fastGetAge, student1);
+		int age = fastGetAge.invoke(student1);
 		assertThat(age).isEqualTo(20);
 
-		age = FastMethodInvoker.invoke(fastGetAge, student2);
+		age = fastGetAge.invoke(student2);
 		assertThat(age).isEqualTo(30);
 
-		FastMethod fastSetAge = FastMethodInvoker.getFastMethod(Student.class, "setAge", int.class);
-		FastMethodInvoker.invoke(fastSetAge, student1, 1);
+		FastMethodInvoker fastSetAge = FastMethodInvoker.create(Student.class, "setAge", int.class);
+		fastSetAge.invoke(student1, 1);
 
 		assertThat(student1.getAge()).isEqualTo(1);
 	}
