@@ -11,11 +11,11 @@ import com.google.common.primitives.Longs;
 /**
  * 数字的工具类.
  * 
- * 1.原始类型数字与byte[]的转换(via Guava)
+ * 1.原始类型数字与byte[]的双向转换(via Guava)
  * 
  * 2.判断字符串是否数字, 是否16进制字符串(via Common Lang)
  * 
- * 3.将10机制/16进制字符串安全的转化为原始类型数字/数字对象(参考Common Lang自写)
+ * 3.10机制/16进制字符串 与 原始类型数字/数字对象 的双向转换(参考Common Lang自写)
  */
 public abstract class NumberUtil {
 

@@ -17,7 +17,7 @@ import com.google.common.collect.Sets;
  * 
  * 1. 各种Set的创建函数, 包括ConcurrentHashSet
  * 
- * 2. 集合运算函数(交集，并集等)
+ * 2. 集合运算函数(交集，并集等,from guava)
  */
 public abstract class SetUtil {
 

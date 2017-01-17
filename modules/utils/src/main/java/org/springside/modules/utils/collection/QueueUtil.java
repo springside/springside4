@@ -12,12 +12,14 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springside.modules.utils.base.Platforms;
 
+import com.google.common.collect.EvictingQueue;
+
 /**
  * Queue工具集.
  * 
  * 1.各种Queue，Dequeue的创建
  * 
- * 2.LIFO的Stack的创建
+ * 2.特殊类型Queue:LIFO的Stack, LRU的Queue
  */
 public abstract class QueueUtil {
 
@@ -94,7 +96,7 @@ public abstract class QueueUtil {
 		return new LinkedBlockingDeque<E>(capacity);
 	}
 
-	//////////////// Stack ///////////
+	//////////////// 特殊类型Queue：Stack ///////////
 
 	/**
 	 * 支持后进先出的栈，用ArrayDeque实现, 经过Collections#asLifoQueue()转换顺序
@@ -103,7 +105,7 @@ public abstract class QueueUtil {
 	 * 
 	 * @see Collections#asLifoQueue()
 	 */
-	public static <E> Queue<E> newStack(int initSize) {
+	public static <E> Queue<E> createStack(int initSize) {
 		return Collections.asLifoQueue(new ArrayDeque<E>(initSize));
 	}
 
@@ -113,9 +115,22 @@ public abstract class QueueUtil {
 	 * 兼容了JDK6
 	 * 
 	 * 另对于BlockingQueue接口， JDK暂无Lifo倒转实现，因此只能直接使用未调转顺序的LinkedBlockingDeque
+	 * 
+	 * @see Collections#asLifoQueue()
 	 */
-	public static <E> Queue<E> newConcurrentStack() {
+	public static <E> Queue<E> createConcurrentStack() {
 		return (Queue<E>) Collections.asLifoQueue(newConcurrentNonBlockingDeque());
+	}
+
+	//////////////// 特殊类型Queue：LRUQueue ///////////
+
+	/**
+	 * LRUQueue, 如果Queue已满，则删除最旧的元素.
+	 * 
+	 * 内部实现是ArrayDeque
+	 */
+	public static <E> EvictingQueue<E> createLRUQueue(int maxSize) {
+		return EvictingQueue.create(maxSize);
 	}
 
 }

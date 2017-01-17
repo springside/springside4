@@ -24,6 +24,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.MapDifference;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.TreeRangeMap;
@@ -35,9 +36,10 @@ import com.google.common.collect.TreeRangeMap;
  * 
  * 2. 对于并发Map，增加putIfAbsent(返回最终值版), createIfAbsent这两个重要函数(from Common Lang)
  * 
- * 3. 便捷的构造函数(via guava，并增加了用数组，List等方式初始化Map的函数)
+ * 3. 便捷的构造函数(via guava,Java Collections，并增加了用数组，List等方式初始化Map的函数)
  * 
- * 4. emptyMap,singletonMap,unmodifiedMap (via JDK Collection)
+ * 4. 特殊的类型，包括WeakConcurrentHashMap, IntObjectHashMap, MapCounter, MultiKeyMap, RangeMap
+ * 
  * 
  * 参考文章：《高性能场景下，Map家族的优化使用建议》 http://calvin1978.blogcn.com/articles/hashmap.html
  * 
@@ -109,19 +111,6 @@ public abstract class MapUtil {
 	 * 
 	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
 	 * 
-	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低，此处用了0.5
-	 * 
-	 * @see com.google.common.collect.Maps#newHashMap(int)
-	 */
-	public static <K, V> HashMap<K, V> newHashMapWithCapacity(int initialCapacity) {
-		return newHashMapWithCapacity(initialCapacity, 0.5f);
-	}
-
-	/**
-	 * 根据等号左边的类型, 构造类型正确的HashMap.
-	 * 
-	 * 注意HashMap中有0.75的加载因子的影响, 需要进行运算后才能正确初始化HashMap的大小.
-	 * 
 	 * 加载因子也是HashMap中减少Hash冲突的重要一环，如果读写频繁，总记录数不多的Map，可以比默认值0.75进一步降低，建议0.5
 	 * 
 	 * @see com.google.common.collect.Maps#newHashMap(int)
@@ -135,8 +124,6 @@ public abstract class MapUtil {
 	 * 根据等号左边的类型, 构造类型正确的HashMap.
 	 * 
 	 * 同时初始化第一个元素
-	 * 
-	 * @see com.google.common.collect.Maps#newHashMap()
 	 */
 	public static <K, V> HashMap<K, V> newHashMap(final K key, final V value) {
 		HashMap<K, V> map = new HashMap<K, V>();
@@ -303,7 +290,6 @@ public abstract class MapUtil {
 		return ConcurrentHashMultiset.create(elements);
 	}
 
-
 	/**
 	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
 	 * 
@@ -381,6 +367,16 @@ public abstract class MapUtil {
 	 */
 	public static <K, V> SortedMap<K, V> unmodifiableSortedMap(final SortedMap<K, ? extends V> m) {
 		return Collections.unmodifiableSortedMap(m);
+	}
+
+	//////// Map操作//////
+
+	/**
+	 * 对比两个Map的差异，返回MapDifference，各种妙用.
+	 */
+	public static <K, V> MapDifference<K, V> difference(Map<? extends K, ? extends V> left,
+			Map<? extends K, ? extends V> right) {
+		return Maps.difference(left, right);
 	}
 
 	/**

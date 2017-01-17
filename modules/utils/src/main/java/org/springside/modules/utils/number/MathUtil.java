@@ -26,7 +26,7 @@ public abstract class MathUtil {
 	/**
 	 * 往上找出最接近的2的倍数，比如15返回16， 17返回32.
 	 * 
-	 * value必须为正数.
+	 * @param value必须为正数，否则抛出异常.
 	 */
 	public static int nextPowerOfTwo(int value) {
 		return IntMath.ceilingPowerOfTwo(value);
@@ -35,7 +35,7 @@ public abstract class MathUtil {
 	/**
 	 * 往上找出最接近的2的倍数，比如15返回16， 17返回32.
 	 * 
-	 * value必须为正数.
+	 * @param value必须为正数，否则抛出异常.
 	 */
 	public static long nextPowerOfTwo(long value) {
 		return LongMath.ceilingPowerOfTwo(value);
@@ -44,7 +44,7 @@ public abstract class MathUtil {
 	/**
 	 * 往下找出最接近2的倍数，比如15返回8， 17返回16.
 	 * 
-	 * value必须为正数.
+	 * @param value必须为正数，否则抛出异常.
 	 */
 	public static int previousPowerOfTwo(int value) {
 		return IntMath.floorPowerOfTwo(value);
@@ -53,7 +53,7 @@ public abstract class MathUtil {
 	/**
 	 * 往下找出最接近2的倍数，比如15返回8， 17返回16.
 	 * 
-	 * value必须为正数.
+	 * @param value必须为正数，否则抛出异常.
 	 */
 	public static long previousPowerOfTwo(long value) {
 		return LongMath.floorPowerOfTwo(value);
@@ -61,6 +61,8 @@ public abstract class MathUtil {
 
 	/**
 	 * 是否2的倍数
+	 * 
+	 * @param value不是正数时总是返回false
 	 */
 	public static boolean isPowerOfTwo(int value) {
 		return IntMath.isPowerOfTwo(value);
@@ -68,9 +70,20 @@ public abstract class MathUtil {
 
 	/**
 	 * 是否2的倍数
+	 * 
+	 * @param value <=0 时总是返回false
 	 */
 	public static boolean isPowerOfTwo(long value) {
 		return LongMath.isPowerOfTwo(value);
+	}
+
+	/**
+	 * 当模为2的倍数时，用比取模块更快的方式计算.
+	 * 
+	 * @param value 可以为负数，比如 －1 mod 16 = 15
+	 */
+	public static int modByPowerOfTwo(int value, int mod) {
+		return value & mod - 1;
 	}
 
 	////////////// 其他函数//////////
@@ -112,7 +125,9 @@ public abstract class MathUtil {
 	}
 
 	/**
-	 * 能控制rounding方向的相除
+	 * 能控制rounding方向的相除.
+	 * 
+	 * jdk的'/'运算符，直接向下取整
 	 */
 	public static int divide(int p, int q, RoundingMode mode) {
 		return IntMath.divide(p, q, mode);
@@ -123,6 +138,20 @@ public abstract class MathUtil {
 	 */
 	public static long divide(long p, long q, RoundingMode mode) {
 		return LongMath.divide(p, q, mode);
+	}
+
+	/**
+	 * 平方
+	 */
+	public static int pow(int b, int k) {
+		return IntMath.pow(b, k);
+	}
+
+	/**
+	 * 平方
+	 */
+	public static long pow(long b, int k) {
+		return LongMath.pow(b, k);
 	}
 
 	/**

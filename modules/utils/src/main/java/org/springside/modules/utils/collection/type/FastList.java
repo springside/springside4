@@ -207,6 +207,11 @@ public final class FastList<T> implements List<T>, RandomAccess, Serializable {
 
 				throw new NoSuchElementException("No more elements in FastList");
 			}
+
+			@Override
+			public void remove() {
+				throw new UnsupportedOperationException("remove");
+			}
 		};
 	}
 

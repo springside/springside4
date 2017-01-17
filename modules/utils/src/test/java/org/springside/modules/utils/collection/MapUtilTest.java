@@ -57,7 +57,7 @@ public class MapUtilTest {
 	public void guavaBuildMap() {
 		HashMap<String, Integer> map1 = MapUtil.newHashMap();
 
-		HashMap<String, Integer> map2 = MapUtil.newHashMapWithCapacity(10);
+		HashMap<String, Integer> map2 = MapUtil.newHashMapWithCapacity(10, 0.5f);
 		map2 = MapUtil.newHashMapWithCapacity(10, 0.5f);
 
 		HashMap<String, Integer> map3 = MapUtil.newHashMap("1", 1);
