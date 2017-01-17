@@ -20,8 +20,8 @@ import org.springside.examples.bootapi.service.BookAdminService;
 import org.springside.examples.bootapi.service.BookBorrowService;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.constants.MediaTypes;
-import org.springside.modules.mapper.BeanMapper;
+import org.springside.modules.utils.reflect.BeanMapper;
+import org.springside.modules.web.MediaTypes;
 
 // Spring Restful MVC Controller的标识, 直接输出内容，不调用template引擎.
 @RestController
@@ -42,7 +42,7 @@ public class BookEndpoint {
 	public List<BookDto> listAllBook(Pageable pageable) {
 		Iterable<Book> books = adminService.findAll(pageable);
 
-		return BeanMapper.mapList(books, BookDto.class);
+		return BeanMapper.mapList(books, Book.class,BookDto.class);
 	}
 
 	@RequestMapping(value = "/api/books/{id}", produces = MediaTypes.JSON_UTF_8)
@@ -127,7 +127,7 @@ public class BookEndpoint {
 		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = adminService.listMyBook(currentUser.id, pageable);
-		return BeanMapper.mapList(books, BookDto.class);
+		return BeanMapper.mapList(books, Book.class, BookDto.class);
 	}
 
 	@RequestMapping(value = "/api/myborrowedbook", produces = MediaTypes.JSON_UTF_8)
@@ -136,7 +136,7 @@ public class BookEndpoint {
 		checkToken(token);
 		Account currentUser = accountService.getLoginUser(token);
 		List<Book> books = borrowService.listMyBorrowedBook(currentUser.id, pageable);
-		return BeanMapper.mapList(books, BookDto.class);
+		return BeanMapper.mapList(books, Book.class, BookDto.class);
 	}
 
 	private void checkToken(String token) {

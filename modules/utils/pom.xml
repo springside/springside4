@@ -2,15 +2,30 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.springside</groupId>
-		<artifactId>springside-modules</artifactId>
-		<version>5.0.0-SNAPSHOT</version>
-		<relativePath>../</relativePath>
-	</parent>
+	<groupId>io.springside</groupId>
 	<artifactId>springside-utils</artifactId>
+	<version>5.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>Springside :: Module :: Utils</name>
+
+	<properties>
+		<guava.version>20.0</guava.version>
+		<commons-lang3.version>3.5</commons-lang3.version>
+		<orika.version>1.5.0</orika.version>
+		<jackson.version>2.8.5</jackson.version>
+		<cglib.version>3.2.4</cglib.version>
+		<slf4j.version>1.7.22</slf4j.version>
+		<logback.version>1.1.8</logback.version>
+		<junit.version>4.12</junit.version>
+		<assertj.version>2.2.0</assertj.version>
+		<mockito.version>1.10.19</mockito.version>
+
+		<!-- Plugin的属性 -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.6</java.version>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+	</properties>
 
 	<dependencies>
 		<!-- UTILS begin -->
@@ -18,42 +33,47 @@
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>${guava.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons-lang3.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>commons-codec</groupId>
-			<artifactId>commons-codec</artifactId>
-			<version>${commons-codec.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils</artifactId>
-			<version>${commons-beanutils.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<!-- UTILS end -->
-
+		
 		<!-- LOGGING begin -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-			<optional>true</optional>
 		</dependency>
 		<!-- LOGGING end -->
+
+		<!-- OPTIONAL begin -->
+		<!-- for JsonMapper -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- for ObjectMapper -->
+		<dependency>
+			<groupId>ma.glasnost.orika</groupId>
+			<artifactId>orika-core</artifactId>
+			<version>${orika.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- for FastInvoker -->
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>${cglib.version}</version>
+			<optional>true</optional>
+		</dependency>
+		<!-- OPTIONAL end -->
 
 		<!-- TEST begin -->
 		<dependency>
@@ -74,6 +94,13 @@
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
 			<version>${mockito.version}</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- TEST end -->
@@ -104,10 +131,6 @@
 							<goal>test-jar</goal>
 						</goals>
 						<configuration>
-							<includes>
-								<include>org/springside/modules/test/**/*.class</include>
-								<include>jetty/webdefault-windows.xml</include>
-							</includes>
 							<excludes>
 								<exclude>org/springside/modules/test/**/*Test.class</exclude>
 							</excludes>

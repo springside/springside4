@@ -13,7 +13,8 @@ import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.utils.Clock;
+import org.springside.modules.utils.time.ClockUtil;
+
 
 // Spring Bean的标识.
 @Service
@@ -24,9 +25,7 @@ public class BookAdminService {
 	@Autowired
 	private BookDao bookDao;
 
-	// 可注入的Clock，方便测试时控制日期
-	protected Clock clock = Clock.DEFAULT;
-
+	
 	@Transactional(readOnly = true)
 	public Iterable<Book> findAll(Pageable pageable) {
 		return bookDao.findAll(pageable);
@@ -47,7 +46,7 @@ public class BookAdminService {
 
 		book.owner = owner;
 		book.status = Book.STATUS_IDLE;
-		book.onboardDate = clock.getCurrentDate();
+		book.onboardDate = ClockUtil.currentDate();
 
 		bookDao.save(book);
 	}

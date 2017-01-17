@@ -9,12 +9,12 @@ import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
-
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * 在List中保存日志的Appender, 用于测试Logback的日志输出.
@@ -124,7 +124,7 @@ public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEven
 	 * 将此appender添加到root logger中.
 	 */
 	public void addToRootLogger() {
-		Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		Logger logger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		logger.addAppender(this);
 	}
 
@@ -148,7 +148,7 @@ public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEven
 	 * 将此appender从root logger中移除.
 	 */
 	public void removeFromRootLogger() {
-		Logger logger = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+		Logger logger = (Logger) LoggerFactory.getLogger(org.slf4j.Logger.ROOT_LOGGER_NAME);
 		logger.detachAppender(this);
 	}
 

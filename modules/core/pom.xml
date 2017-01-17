@@ -34,18 +34,6 @@
 			<optional>true</optional>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>ma.glasnost.orika</groupId>
-			<artifactId>orika-core</artifactId>
-			<version>${orika.version}</version>
-			<optional>true</optional>
-		</dependency>
 		
 		<!-- UTILS end -->
 

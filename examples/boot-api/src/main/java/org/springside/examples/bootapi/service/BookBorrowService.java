@@ -15,7 +15,7 @@ import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.repository.MessageDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.utils.Clock;
+import org.springside.modules.utils.time.ClockUtil;
 
 // Spring Bean的标识.
 @Service
@@ -28,9 +28,6 @@ public class BookBorrowService {
 
 	@Autowired
 	protected MessageDao messageDao;
-
-	// 可注入的Clock，方便测试时控制日期
-	protected Clock clock = Clock.DEFAULT;
 
 	@Transactional
 	public void applyBorrowRequest(Long id, Account borrower) {
@@ -53,7 +50,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Apply book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
+				String.format("Apply book <%s> request by %s", book.title, borrower.name), ClockUtil.currentDate());
 
 		messageDao.save(message);
 	}
@@ -79,7 +76,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.owner,
-				String.format("Cancel book <%s> request by %s", book.title, borrower.name), clock.getCurrentDate());
+				String.format("Cancel book <%s> request by %s", book.title, borrower.name), ClockUtil.currentDate());
 
 		messageDao.save(message);
 	}
@@ -101,11 +98,11 @@ public class BookBorrowService {
 		}
 
 		book.status = Book.STATUS_OUT;
-		book.borrowDate = clock.getCurrentDate();
+		book.borrowDate = ClockUtil.currentDate();
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Confirm book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Confirm book <%s> request by %s", book.title, owner.name), ClockUtil.currentDate());
 		messageDao.save(message);
 	}
 
@@ -132,7 +129,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Reject book <%s> request by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Reject book <%s> request by %s", book.title, owner.name), ClockUtil.currentDate());
 		messageDao.save(message);
 	}
 
@@ -158,7 +155,7 @@ public class BookBorrowService {
 		bookDao.save(book);
 
 		Message message = new Message(book.borrower,
-				String.format("Mark book <%s> returned by %s", book.title, owner.name), clock.getCurrentDate());
+				String.format("Mark book <%s> returned by %s", book.title, owner.name), ClockUtil.currentDate());
 		messageDao.save(message);
 	}
 
