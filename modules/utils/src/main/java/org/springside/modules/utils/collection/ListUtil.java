@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.springside.modules.utils.collection.type.FastList;
 import org.springside.modules.utils.collection.type.SortedArrayList;
 
 import com.google.common.collect.Lists;
@@ -20,9 +21,9 @@ import com.google.common.collect.Lists;
  * 
  * 2. 各种构造函数(from guava and JDK Collection)
  * 
- * 3. Array 转 ArrayList的特色函数 (from Guava)
+ * 3. 各种扩展List类型的创建函数
  * 
- * 5. 集合运算，集合是否一致，交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
+ * 5. 集合运算：交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
  * 
  * @author calvin
  */
@@ -129,7 +130,7 @@ public abstract class ListUtil {
 	////////////// 特别类型的List//////////////
 
 	/**
-	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 构造排序的ArrayList.
 	 * 
 	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
 	 */
@@ -139,12 +140,21 @@ public abstract class ListUtil {
 	}
 
 	/**
-	 * 根据等号左边的类型，构造类型转换的SortedArrayList.
+	 * 构造排序的ArrayList.
 	 * 
-	 * from Jodd的新类型，插入时排序，有几个方法不支持
+	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
 	 */
 	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<? super T> c) {
 		return new SortedArrayList<T>(c);
+	}
+	
+	/**
+	 * 创建没有RangeCheck的ArrayList
+	 * 
+	 * from hikari连接池，但有不少方法并不支持
+	 */
+	public static <T> FastList<T> createFastList(Class<T> clazz, int capacity){
+		return new FastList(clazz,capacity);
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////

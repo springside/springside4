@@ -21,13 +21,11 @@ import com.google.common.collect.Iterators;
 /**
  * 通用Collection的工具集
  * 
- * 通用函数没有针对数据结构进行优化，效率不高，所以没有太多的封装.
- * 
- * 关于List, Map, Queue, Set的特殊工具集，另见特定的Utils
+ * 关于List, Map, Queue, Set的特殊工具集，另见特定的Utils.
  * 
  * 另JDK中缺少ComparableComparator和NullComparator，直到JDK8才补上。
  * 
- * 因此平时请使用guava的Ordering,fluentable的API更好用，可以设置nullFirst，nullLast,reverse
+ * 因此平时请使用guava的Ordering,fluentable的API更好用，可以链式设置nullFirst，nullLast,reverse
  * 
  * @see com.google.common.collect.Ordering
  */
@@ -79,7 +77,7 @@ public abstract class CollectionUtil {
 	}
 
 	/**
-	 * 两个集合中的元素按顺序相等.
+	 * 两个集合中的所有元素按顺序相等.
 	 */
 	public static boolean elementsEqual(Iterable<?> iterable1, Iterable<?> iterable2) {
 		return Iterables.elementsEqual(iterable1, iterable2);
