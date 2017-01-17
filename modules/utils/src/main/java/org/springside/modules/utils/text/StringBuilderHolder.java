@@ -7,36 +7,44 @@ package org.springside.modules.utils.text;
  * 
  * 不过仅在String对象较大时才有明显效果，否则抵不上访问ThreadLocal的消耗.
  * 
- * 在Netty环境中，使用Netty提供的基于FastThreadLocal的版本。
+ * 当StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数时，需要创建独立的Holder, 否则使用公共的Holder
+ * 
+ * 注意：在Netty环境中，使用Netty提供的基于FastThreadLocal的版本。
  *
  */
 public class StringBuilderHolder {
 
+	// 公共的Holder
 	private static ThreadLocal<StringBuilder> globalStringBuilder = new ThreadLocal<StringBuilder>() {
 		@Override
 		protected StringBuilder initialValue() {
-			return new StringBuilder(1024);
+			return new StringBuilder(512);
 		}
 	};
 
+	// 独立的Holder
 	private ThreadLocal<StringBuilder> stringBuilder = new ThreadLocal<StringBuilder>() {
 		@Override
 		protected StringBuilder initialValue() {
-			return new StringBuilder(capaticy);
+			return new StringBuilder(initSize);
 		}
 	};
 
-	private int capaticy = 1024;
+	private int initSize = 512;
 
-	public StringBuilderHolder() {
-	}
-
-	public StringBuilderHolder(int capaticy) {
-		this.capaticy = capaticy;
+	/**
+	 * 创建独立的Holder.
+	 * 
+	 * 用于StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数.
+	 * 
+	 * @param initSize StringBulder的初始大小，如果容量不足将进行扩容，扩容后的数组将一直保留
+	 */
+	public StringBuilderHolder(int initSize) {
+		this.initSize = initSize;
 	}
 
 	/**
-	 * 获取全局的StringBuilder.
+	 * 获取公共Holder的StringBuilder.
 	 * 
 	 * 当StringBuilder会被连续使用，期间不会调用其他可能也使用StringBuilderHolder的子函数时使用.
 	 * 
@@ -49,9 +57,7 @@ public class StringBuilderHolder {
 	}
 
 	/**
-	 * 获取本StringBuilderHolder的StringBuilder.
-	 * 
-	 * 当StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数时使用.
+	 * 获取独立Holder的StringBuilder.
 	 * 
 	 * 重置StringBuilder内部的writerIndex, 而char[]保留不动.
 	 */

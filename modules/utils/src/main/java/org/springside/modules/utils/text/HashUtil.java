@@ -10,9 +10,6 @@ import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
@@ -20,11 +17,9 @@ import org.apache.commons.lang3.Validate;
 import com.google.common.hash.Hashing;
 
 /**
- * 封装各种Hash算法的工具类.
+ * 封装各种Hash算法的工具类
  * 
- * 1.集合类的HashCode, 返回int
- * 
- * 2.SHA-1, 安全性较高, 返回byte[](可用Encodes进一步被编码为Hex, Base64)
+ * 1.SHA-1, 安全性较高, 返回byte[](可用Encodes进一步被编码为Hex, Base64)
  * 
  * 性能优化，使用ThreadLocal的MessageDigest(from ElasticSearch)
  * 
@@ -32,11 +27,11 @@ import com.google.common.hash.Hashing;
  * 
  * MD5的安全性较低, 只在文件Checksum时支持.
  * 
- * 3.crc32, murmur32这些不追求安全性, 性能较高, 返回int.
+ * 2.crc32, murmur32这些不追求安全性, 性能较高, 返回int.
  * 
  * 其中crc32基于JDK, murmurhash基于guava
  * 
- * 4.无需哈希环的一致性哈希
+ * 3.无需哈希环的一致性哈希
  * 
  * @author calvin
  */
@@ -60,31 +55,6 @@ public abstract class HashUtil {
 	private static final ThreadLocal<MessageDigest> SHA_1_DIGEST = createThreadLocalMessageDigest("SHA-1");
 
 	private static SecureRandom random = new SecureRandom();
-
-	////////////////// HashCode //////////////////
-	/**
-	 * 多个对象的HashCode串联
-	 */
-	public static int hashCode(Object... objects) {
-		return Arrays.hashCode(objects);
-	}
-
-	/**
-	 * 集合的HashCode串联
-	 */
-	public static int hashCode(final Collection<?> list) {
-		if (list == null) {
-			return 0;
-		}
-		int hashCode = 1;
-		final Iterator<?> it = list.iterator();
-
-		while (it.hasNext()) {
-			final Object obj = it.next();
-			hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
-		}
-		return hashCode;
-	}
 
 	////////////////// SHA1 ///////////////////
 	/**

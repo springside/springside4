@@ -64,14 +64,52 @@ public abstract class MoreStringUtil {
 		return list;
 	}
 
+	
+
 	/**
-	 * 判断字符串以字母结尾
+	 * String 有replace(char,char)，但缺少单独replace first/last的
 	 */
-	public static boolean endWith(CharSequence sequence, char c) {
-		if (StringUtils.isEmpty(sequence)) {
+	public static String replaceFirst(String s, char sub, char with) {
+		int index = s.indexOf(sub);
+		if (index == -1) {
+			return s;
+		}
+		char[] str = s.toCharArray();
+		str[index] = with;
+		return new String(str);
+	}
+
+	/**
+	 * String 有replace(char,char)，但缺少单独replace first/last的
+	 */
+	public static String replaceLast(String s, char sub, char with) {
+		int index = s.lastIndexOf(sub);
+		if (index == -1) {
+			return s;
+		}
+		char[] str = s.toCharArray();
+		str[index] = with;
+		return new String(str);
+	}
+	
+	/**
+	 * 判断字符串是否以字母开头
+	 */
+	public static boolean startWithChar(String s, char c) {
+		if (StringUtils.isEmpty(s)) {
 			return false;
 		}
-		return sequence.charAt(sequence.length() - 1) == c;
+		return s.charAt(0) == c;
+	}
+	
+	/**
+	 * 判断字符串是否以字母结尾
+	 */
+	public static boolean endWith(CharSequence s, char c) {
+		if (StringUtils.isEmpty(s)) {
+			return false;
+		}
+		return s.charAt(s.length() - 1) == c;
 	}
 
 	/**

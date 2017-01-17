@@ -12,20 +12,10 @@ import org.springside.modules.utils.number.RandomUtil;
  */
 public class Sampler {
 
-	private double threshold;
+	private static final Double ALWAYS = new Double(100);
+	private static final Double NEVER = new Double(0);
 
-	/**
-	 * 优化的创建函数，如果为0或100时，返回更直接的采样器
-	 */
-	public static Sampler create(double selectPercent) {
-		if (selectPercent == 100) {
-			return new AlwaysSampler();
-		} else if (selectPercent == 0) {
-			return new NeverSampler();
-		} else {
-			return new Sampler(selectPercent);
-		}
-	}
+	private double threshold;
 
 	protected Sampler() {
 	}
@@ -33,11 +23,24 @@ public class Sampler {
 	/**
 	 * @param selectPercent 采样率，在0-100 之间，可以有小数位
 	 */
-	public Sampler(double selectPercent) {
+	protected Sampler(double selectPercent) {
 		Validate.isTrue((selectPercent >= 0) && (selectPercent <= 100),
 				"Invalid selectPercent value: " + selectPercent);
 
 		this.threshold = selectPercent / 100;
+	}
+
+	/**
+	 * 优化的创建函数，如果为0或100时，返回更直接的采样器
+	 */
+	public static Sampler create(Double selectPercent) {
+		if (selectPercent.equals(ALWAYS)) {
+			return new AlwaysSampler();
+		} else if (selectPercent.equals(NEVER)) {
+			return new NeverSampler();
+		} else {
+			return new Sampler(selectPercent);
+		}
 	}
 
 	/**
@@ -51,10 +54,6 @@ public class Sampler {
 	 * 采样率为100时，总是返回true
 	 */
 	public static class AlwaysSampler extends Sampler {
-
-		public AlwaysSampler() {
-		}
-
 		public boolean select() {
 			return true;
 		}

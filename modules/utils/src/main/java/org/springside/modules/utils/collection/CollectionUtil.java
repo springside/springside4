@@ -11,8 +11,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
+import org.springside.modules.utils.collection.type.Pair;
 
 import com.google.common.annotations.Beta;
 import com.google.common.collect.Iterables;
@@ -129,7 +128,7 @@ public abstract class CollectionUtil {
 				maxCandidate = next;
 			}
 		}
-		return new ImmutablePair<T, T>(minCandidate, maxCandidate);
+		return Pair.of(minCandidate, maxCandidate);
 	}
 
 	/**
@@ -150,7 +149,7 @@ public abstract class CollectionUtil {
 			}
 		}
 
-		return new ImmutablePair<T, T>(minCandidate, maxCandidate);
+		return Pair.of(minCandidate, maxCandidate);
 	}
 
 	/**

@@ -8,6 +8,7 @@ package org.springside.modules.utils.misc;
 import java.security.SecureRandom;
 import java.util.UUID;
 
+import org.springside.modules.utils.number.RandomUtil;
 import org.springside.modules.utils.text.EncodeUtil;
 
 import com.google.common.annotations.Beta;
@@ -38,7 +39,7 @@ public class IdGenerator {
 	 * 使用SecureRandom随机生成Long.
 	 */
 	public static long randomLong() {
-		return Math.abs(random.nextLong());
+		return RandomUtil.nextLong();
 	}
 
 	/**

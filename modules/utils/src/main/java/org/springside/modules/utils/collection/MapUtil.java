@@ -26,6 +26,8 @@ import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
+import com.google.common.collect.MultimapBuilder;
+import com.google.common.collect.SortedSetMultimap;
 import com.google.common.collect.TreeRangeMap;
 import com.google.common.util.concurrent.AtomicLongMap;
 
@@ -91,6 +93,20 @@ public abstract class MapUtil {
 			return putIfAbsentWithFinalValue(map, key, creator.get());
 		}
 		return value;
+	}
+
+	/**
+	 * 创建Value值的回调函数
+	 * 
+	 * from Common Lang
+	 * 
+	 * @see MapUtil#createIfAbsent(ConcurrentMap, Object, ValueCreator)
+	 */
+	public interface ValueCreator<T> {
+		/**
+		 * 创建对象
+		 */
+		T get();
 	}
 
 	///////////////// from Guava的构造函数///////////////////
@@ -260,7 +276,6 @@ public abstract class MapUtil {
 		return new LongObjectHashMap<V>(initialCapacity, loadFactor);
 	}
 
-
 	/**
 	 * 以Guava的AtomicLongMap，实现线程安全的HashMap<E,AtomicLong>结构的Counter
 	 */
@@ -280,19 +295,39 @@ public abstract class MapUtil {
 	 * 
 	 * 注意非线程安全, MultiMap无线程安全的实现.
 	 * 
-	 * 另有其他结构存储values的MultiMap，请自行参考使用.
+	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
 	 * 
 	 * @param expectedKeys 默认为16
 	 * @param expectedValuesPerKey 默认为3
 	 */
-	public static <K, V> ArrayListMultimap<K, V> createMultiValueMap(int expectedKeys, int expectedValuesPerKey) {
+	public static <K, V> ArrayListMultimap<K, V> createListValueMap(int expectedKeys, int expectedValuesPerKey) {
 		return ArrayListMultimap.create(expectedKeys, expectedValuesPerKey);
 	}
 
 	/**
-	 * 以Guava TreeRangeMap实现的, 一段范围的Key指向同一个Value的Map
+	 * 以Guava的MultiMap，实现的HashMap<E,TreeSet<V>>结构的一个Key对应多个值的map.
 	 * 
-	 * 适合一致性哈希等场景
+	 * 注意非线程安全, MultiMap无线程安全的实现.
+	 * 
+	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
+	 */
+	public static <K, V extends Comparable> SortedSetMultimap<K, V> createSortedSetValueMap() {
+		return MultimapBuilder.hashKeys().treeSetValues().build();
+	}
+
+	/**
+	 * 以Guava的MultiMap，实现的HashMap<E,TreeSet<V>>结构的一个Key对应多个值的map.
+	 * 
+	 * 注意非线程安全, MultiMap无线程安全的实现.
+	 * 
+	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
+	 */
+	public static <K, V> SortedSetMultimap<K, V> createSortedSetValueMap(Comparator<V> comparator) {
+		return (SortedSetMultimap<K, V>) MultimapBuilder.hashKeys().treeSetValues(comparator);
+	}
+
+	/**
+	 * 以Guava TreeRangeMap实现的, 一段范围的Key指向同一个Value的Map
 	 */
 	@SuppressWarnings("rawtypes")
 	public static <K extends Comparable, V> TreeRangeMap<K, V> createRangeMap() {
@@ -354,27 +389,16 @@ public abstract class MapUtil {
 		return Collections.unmodifiableSortedMap(m);
 	}
 
-	//////// Map操作//////
+	//////// Map的集合操作 //////
 
 	/**
-	 * 对比两个Map的差异，返回MapDifference，各种妙用.
+	 * 对两个Map进行比较，返回MapDifference，然后各种妙用.
+	 * 
+	 * 包括key的差集，key的交集，以及key相同但value不同的元素。
 	 */
 	public static <K, V> MapDifference<K, V> difference(Map<? extends K, ? extends V> left,
 			Map<? extends K, ? extends V> right) {
 		return Maps.difference(left, right);
 	}
 
-	/**
-	 * 创建Value值的回调函数
-	 * 
-	 * from Common Lang
-	 * 
-	 * @see MapUtil#createIfAbsent(ConcurrentMap, Object, ValueCreator)
-	 */
-	public interface ValueCreator<T> {
-		/**
-		 * 创建对象
-		 */
-		T get();
-	}
 }

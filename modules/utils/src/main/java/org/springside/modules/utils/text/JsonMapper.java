@@ -23,11 +23,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 
 /**
- * 简单封装Jackson，实现JSON String<->Java Object的Mapper.
+ * 简单封装Jackson，实现JSON String<->Java Object转换的Mapper.
  * 
  * 可以直接使用公共示例JsonMapper.INSTANCE, 也可以使用不同的builder函数创建实例，封装不同的输出风格,
  * 
  * 不要是用GSON, 在对象稍大时非常缓慢.
+ * 
+ * 注意: 需要参考本模块的POM文件，显式引用jackson.
  * 
  * @author calvin
  */
@@ -35,7 +37,7 @@ public class JsonMapper {
 
 	private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
 
-	public static JsonMapper INSTANCE = new JsonMapper();
+	public static final JsonMapper INSTANCE = new JsonMapper();
 
 	private ObjectMapper mapper;
 

@@ -61,11 +61,11 @@ public class CollectionUtilTest {
 		assertThat(CollectionUtil.max(list)).isEqualTo(101);
 		assertThat(CollectionUtil.max(list,Ordering.natural())).isEqualTo(101);
 		
-		assertThat(CollectionUtil.minAndMax(list).getLeft()).isEqualTo(1);
-		assertThat(CollectionUtil.minAndMax(list).getRight()).isEqualTo(101);
+		assertThat(CollectionUtil.minAndMax(list).getFirst()).isEqualTo(1);
+		assertThat(CollectionUtil.minAndMax(list).getSecond()).isEqualTo(101);
 		
-		assertThat(CollectionUtil.minAndMax(list,Ordering.natural()).getLeft()).isEqualTo(1);
-		assertThat(CollectionUtil.minAndMax(list,Ordering.natural()).getRight()).isEqualTo(101);
+		assertThat(CollectionUtil.minAndMax(list,Ordering.natural()).getFirst()).isEqualTo(1);
+		assertThat(CollectionUtil.minAndMax(list,Ordering.natural()).getSecond()).isEqualTo(101);
 		
 	}
 	

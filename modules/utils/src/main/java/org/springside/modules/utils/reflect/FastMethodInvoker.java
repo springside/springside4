@@ -15,6 +15,8 @@ import net.sf.cglib.reflect.FastMethod;
  * 
  * 比如反射调用A类的“hello” 方法，cglib会直接生成一个调用a.hello()的FastMethod子类.
  * 
+ * 注意: 需要参考本模块的POM文件，显式引用cglib.
+ * 
  * @author calvin
  */
 public class FastMethodInvoker {
