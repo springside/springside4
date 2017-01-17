@@ -23,11 +23,11 @@ import org.springside.modules.utils.concurrent.jsr166e.ConcurrentHashMapV8;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ConcurrentHashMultiset;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.TreeRangeMap;
+import com.google.common.util.concurrent.AtomicLongMap;
 
 /**
  * 关于Map的工具集合，
@@ -260,27 +260,12 @@ public abstract class MapUtil {
 		return new LongObjectHashMap<V>(initialCapacity, loadFactor);
 	}
 
-	/**
-	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
-	 * 
-	 * @param distinctElements 默认为为16
-	 */
-	public static <E> HashMultiset<E> createMapCounter(int distinctElements) {
-		return HashMultiset.create(distinctElements);
-	}
 
 	/**
-	 * 以Guava的MultiSet，实现的HashMap<E,Integer>结构的Counter
+	 * 以Guava的AtomicLongMap，实现线程安全的HashMap<E,AtomicLong>结构的Counter
 	 */
-	public static <E> HashMultiset<E> createMapCounter(Iterable<? extends E> elements) {
-		return HashMultiset.create(elements);
-	}
-
-	/**
-	 * 以Guava的MultiSet，实现线程安全的HashMap<E,Integer>结构的Counter
-	 */
-	public static <E> ConcurrentHashMultiset<E> createConcurrentMapCounter() {
-		return ConcurrentHashMultiset.create();
+	public static <E> AtomicLongMap<E> createConcurrentMapCounter() {
+		return AtomicLongMap.create();
 	}
 
 	/**

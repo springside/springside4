@@ -262,5 +262,4 @@ public abstract class NumberUtil {
 			return (int) x;
 		throw new IllegalArgumentException("Int " + x + " out of range");
 	}
-
 }

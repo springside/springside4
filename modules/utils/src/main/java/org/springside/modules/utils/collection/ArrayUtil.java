@@ -18,7 +18,9 @@ import com.google.common.primitives.Longs;
 /**
  * 数组工具类.
  * 
- * Arrays的其他函数，如sort(), toString() 请直接调用
+ * JDK Arrays的其他函数，如sort(), toString() 请直接调用
+ * 
+ * Common Lang ArrayUtils的其他函数，如subarray(),reverse(),indeOf(), 请直接调用
  */
 public class ArrayUtil {
 

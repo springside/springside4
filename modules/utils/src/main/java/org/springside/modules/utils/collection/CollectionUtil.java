@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.annotations.Beta;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Ordering;
 
 /**
  * 通用Collection的工具集
@@ -82,7 +83,8 @@ public abstract class CollectionUtil {
 	public static boolean elementsEqual(Iterable<?> iterable1, Iterable<?> iterable2) {
 		return Iterables.elementsEqual(iterable1, iterable2);
 	}
-	
+
+	///////////// 求最大最小值，及Top N, Low N//////////
 	/**
 	 * 返回无序集合中的最小值，使用元素默认排序
 	 */
@@ -150,4 +152,33 @@ public abstract class CollectionUtil {
 
 		return new ImmutablePair<T, T>(minCandidate, maxCandidate);
 	}
+
+	/**
+	 * 排序最高的N个对象, guava已优化.
+	 */
+	public static <T extends Comparable> List<T> topN(Iterable<T> coll, int n) {
+		return Ordering.natural().greatestOf(coll, n);
+	}
+
+	/**
+	 * 排序最高的N个对象, guava已优化.
+	 */
+	public static <T extends Comparable> List<T> topN(Iterable<T> coll, int n, Comparator<? super T> comp) {
+		return Ordering.from(comp).greatestOf(coll, n);
+	}
+
+	/**
+	 * 排序最低的N个对象, guava已优化.
+	 */
+	public static <T extends Comparable> List<T> bottomN(Iterable<T> coll, int n) {
+		return Ordering.natural().leastOf(coll, n);
+	}
+
+	/**
+	 * 排序最低的N个对象, guava已优化.
+	 */
+	public static <T extends Comparable> List<T> bottomN(Iterable<T> coll, int n, Comparator<? super T> comp) {
+		return Ordering.from(comp).leastOf(coll, n);
+	}
+
 }
