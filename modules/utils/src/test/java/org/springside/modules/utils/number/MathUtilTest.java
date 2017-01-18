@@ -39,8 +39,9 @@ public class MathUtilTest {
 		assertThat(MathUtil.modByPowerOfTwo(1, 16)).isEqualTo(1);
 		assertThat(MathUtil.modByPowerOfTwo(31, 16)).isEqualTo(15);
 		assertThat(MathUtil.modByPowerOfTwo(32, 16)).isEqualTo(0);
+		assertThat(MathUtil.modByPowerOfTwo(65, 16)).isEqualTo(1);
 		assertThat(MathUtil.modByPowerOfTwo(-1, 16)).isEqualTo(15);
-
+		
 	}
 
 	@Test

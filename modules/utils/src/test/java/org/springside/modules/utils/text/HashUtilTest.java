@@ -14,7 +14,7 @@ public class HashUtilTest {
 	@Test
 	public void hashCodeTest() {
 		assertThat(ObjectUtil.hashCode("a", "b") - ObjectUtil.hashCode("a", "a")).isEqualTo(1);
-		assertThat(ObjectUtil.hashCode("a", "b")).isEqualTo(HashUtil.hashCode(ListUtil.newArrayList("a", "b")));
+		assertThat(ObjectUtil.hashCode("a", "b")).isEqualTo(ObjectUtil.hashCode(ListUtil.newArrayList("a", "b")));
 	}
 
 	@Test
