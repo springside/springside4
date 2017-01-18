@@ -1,6 +1,7 @@
 package org.springside.modules.utils.base;
 
 import java.io.File;
+import java.lang.management.ManagementFactory;
 
 import org.apache.commons.lang3.SystemUtils;
 
@@ -50,4 +51,24 @@ public abstract class Platforms {
 	public static final boolean IS_LINUX = SystemUtils.IS_OS_LINUX;
 	public static final boolean IS_UNIX = SystemUtils.IS_OS_UNIX;
 	public static final boolean IS_WINDOWS = SystemUtils.IS_OS_WINDOWS;
+
+	/**
+	 * 获得当前进程的PID
+	 * 
+	 * 当失败时返回-1
+	 */
+	public static int getPid() {
+		// format: "pid@hostname"
+		String name = ManagementFactory.getRuntimeMXBean().getName();
+		String[] split = name.split("@");
+		if (split.length != 2) {
+			return -1;
+		}
+		
+		try {
+			return Integer.parseInt(split[0]);
+		} catch (Exception e) {
+			return -1;
+		}
+	}
 }

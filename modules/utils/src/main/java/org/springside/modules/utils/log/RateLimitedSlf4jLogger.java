@@ -19,14 +19,14 @@ import org.springside.modules.utils.time.ClockUtil;
  */
 public class RateLimitedSlf4jLogger implements Logger {
 
-	private final Logger logger;
+	private final Logger delegate;
 	private final long windowSizeMillis;
 	private final AtomicBoolean logToggle = new AtomicBoolean(false);
 
 	private volatile long lastLoggedMillis = 0;
 
 	public RateLimitedSlf4jLogger(Logger logger, long time, TimeUnit timeUnit) {
-		this.logger = logger;
+		this.delegate = logger;
 		windowSizeMillis = timeUnit.toMillis(time);
 	}
 
@@ -47,406 +47,406 @@ public class RateLimitedSlf4jLogger implements Logger {
 
 	@Override
 	public boolean isDebugEnabled() {
-		return logger.isDebugEnabled();
+		return delegate.isDebugEnabled();
 	}
 
 	@Override
 	public void debug(String msg) {
 		if (shouldLog()) {
-			logger.debug(msg);
+			delegate.debug(msg);
 		}
 	}
 
 	@Override
 	public void debug(String format, Object arg) {
 		if (shouldLog()) {
-			logger.debug(format, arg);
+			delegate.debug(format, arg);
 		}
 	}
 
 	@Override
 	public void debug(String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.debug(format, arg1, arg2);
+			delegate.debug(format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void debug(String format, Object... args) {
 		if (shouldLog()) {
-			logger.debug(format, args);
+			delegate.debug(format, args);
 		}
 	}
 
 	@Override
 	public void debug(String message, Throwable throwable) {
 		if (shouldLog()) {
-			logger.debug(message, throwable);
+			delegate.debug(message, throwable);
 		}
 	}
 
 	@Override
 	public boolean isDebugEnabled(Marker marker) {
-		return logger.isDebugEnabled(marker);
+		return delegate.isDebugEnabled(marker);
 	}
 
 	@Override
 	public void debug(Marker marker, String msg) {
 		if (shouldLog()) {
-			logger.debug(marker, msg);
+			delegate.debug(marker, msg);
 		}
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object arg) {
 		if (shouldLog()) {
-			logger.debug(marker, format, arg);
+			delegate.debug(marker, format, arg);
 		}
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.debug(marker, format, arg1, arg2);
+			delegate.debug(marker, format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object... arguments) {
 		if (shouldLog()) {
-			logger.debug(marker, format, arguments);
+			delegate.debug(marker, format, arguments);
 		}
 	}
 
 	@Override
 	public void debug(Marker marker, String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.debug(marker, msg, t);
+			delegate.debug(marker, msg, t);
 		}
 	}
 
 	@Override
 	public boolean isInfoEnabled() {
-		return logger.isInfoEnabled();
+		return delegate.isInfoEnabled();
 	}
 
 	@Override
 	public void info(String msg) {
 		if (shouldLog()) {
-			logger.debug(msg);
+			delegate.debug(msg);
 		}
 	}
 
 	@Override
 	public void info(String format, Object arg) {
 		if (shouldLog()) {
-			logger.info(format, arg);
+			delegate.info(format, arg);
 		}
 	}
 
 	@Override
 	public void info(String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.info(format, arg1, arg2);
+			delegate.info(format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public boolean isWarnEnabled() {
-		return logger.isWarnEnabled();
+		return delegate.isWarnEnabled();
 	}
 
 	@Override
 	public void warn(String msg) {
 		if (shouldLog()) {
-			logger.warn(msg);
+			delegate.warn(msg);
 		}
 	}
 
 	@Override
 	public void warn(String format, Object arg) {
 		if (shouldLog()) {
-			logger.warn(format, arg);
+			delegate.warn(format, arg);
 		}
 	}
 
 	@Override
 	public boolean isErrorEnabled() {
-		return logger.isErrorEnabled();
+		return delegate.isErrorEnabled();
 	}
 
 	@Override
 	public void error(String msg) {
 		if (shouldLog()) {
-			logger.error(msg);
+			delegate.error(msg);
 		}
 	}
 
 	@Override
 	public void error(String format, Object arg) {
 		if (shouldLog()) {
-			logger.error(format, arg);
+			delegate.error(format, arg);
 		}
 	}
 
 	@Override
 	public void error(String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.error(format, arg1, arg2);
+			delegate.error(format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void info(String format, Object... args) {
 		if (shouldLog()) {
-			logger.info(format, args);
+			delegate.info(format, args);
 		}
 	}
 
 	@Override
 	public void info(String message, Throwable throwable) {
 		if (shouldLog()) {
-			logger.info(message, throwable);
+			delegate.info(message, throwable);
 		}
 	}
 
 	@Override
 	public boolean isInfoEnabled(Marker marker) {
-		return logger.isInfoEnabled(marker);
+		return delegate.isInfoEnabled(marker);
 	}
 
 	@Override
 	public void info(Marker marker, String msg) {
 		if (shouldLog()) {
-			logger.info(marker, msg);
+			delegate.info(marker, msg);
 		}
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object arg) {
 		if (shouldLog()) {
-			logger.info(marker, format, arg);
+			delegate.info(marker, format, arg);
 		}
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.info(marker, format, arg1, arg2);
+			delegate.info(marker, format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object... arguments) {
 		if (shouldLog()) {
-			logger.info(marker, format, arguments);
+			delegate.info(marker, format, arguments);
 		}
 	}
 
 	@Override
 	public void info(Marker marker, String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.info(marker, msg, t);
+			delegate.info(marker, msg, t);
 		}
 	}
 
 	@Override
 	public void warn(String format, Object... args) {
 		if (shouldLog()) {
-			logger.warn(format, args);
+			delegate.warn(format, args);
 		}
 	}
 
 	@Override
 	public void warn(String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.warn(format, arg1, arg2);
+			delegate.warn(format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void warn(String message, Throwable throwable) {
 		if (shouldLog()) {
-			logger.warn(message, throwable);
+			delegate.warn(message, throwable);
 		}
 	}
 
 	@Override
 	public boolean isWarnEnabled(Marker marker) {
-		return logger.isWarnEnabled(marker);
+		return delegate.isWarnEnabled(marker);
 	}
 
 	@Override
 	public void warn(Marker marker, String msg) {
 		if (shouldLog()) {
-			logger.warn(marker, msg);
+			delegate.warn(marker, msg);
 		}
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object arg) {
 		if (shouldLog()) {
-			logger.warn(marker, format, arg);
+			delegate.warn(marker, format, arg);
 		}
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.warn(marker, format, arg1, arg2);
+			delegate.warn(marker, format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object... arguments) {
 		if (shouldLog()) {
-			logger.warn(marker, format, arguments);
+			delegate.warn(marker, format, arguments);
 		}
 	}
 
 	@Override
 	public void warn(Marker marker, String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.warn(marker, msg, t);
+			delegate.warn(marker, msg, t);
 		}
 	}
 
 	@Override
 	public void error(String format, Object... args) {
 		if (shouldLog()) {
-			logger.error(format, args);
+			delegate.error(format, args);
 		}
 	}
 
 	@Override
 	public void error(String message, Throwable throwable) {
 		if (shouldLog()) {
-			logger.error(message, throwable);
+			delegate.error(message, throwable);
 		}
 	}
 
 	@Override
 	public boolean isErrorEnabled(Marker marker) {
-		return logger.isErrorEnabled(marker);
+		return delegate.isErrorEnabled(marker);
 	}
 
 	@Override
 	public void error(Marker marker, String msg) {
 		if (shouldLog()) {
-			logger.error(marker, msg);
+			delegate.error(marker, msg);
 		}
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object arg) {
 		if (shouldLog()) {
-			logger.error(marker, format, arg);
+			delegate.error(marker, format, arg);
 		}
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.error(marker, format, arg1, arg2);
+			delegate.error(marker, format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object... arguments) {
 		if (shouldLog()) {
-			logger.error(marker, format, arguments);
+			delegate.error(marker, format, arguments);
 		}
 	}
 
 	@Override
 	public void error(Marker marker, String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.error(marker, msg, t);
+			delegate.error(marker, msg, t);
 		}
 	}
 
 	@Override
 	public String getName() {
-		return logger.getName();
+		return delegate.getName();
 	}
 
 	@Override
 	public boolean isTraceEnabled() {
-		return logger.isTraceEnabled();
+		return delegate.isTraceEnabled();
 	}
 
 	@Override
 	public void trace(String msg) {
 		if (shouldLog()) {
-			logger.trace(msg);
+			delegate.trace(msg);
 		}
 	}
 
 	@Override
 	public void trace(String format, Object arg) {
 		if (shouldLog()) {
-			logger.trace(format, arg);
+			delegate.trace(format, arg);
 		}
 	}
 
 	@Override
 	public void trace(String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.trace(format, arg1, arg2);
+			delegate.trace(format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void trace(String format, Object... arguments) {
 		if (shouldLog()) {
-			logger.trace(format, arguments);
+			delegate.trace(format, arguments);
 		}
 	}
 
 	@Override
 	public void trace(String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.trace(msg, t);
+			delegate.trace(msg, t);
 		}
 	}
 
 	@Override
 	public boolean isTraceEnabled(Marker marker) {
-		return logger.isTraceEnabled(marker);
+		return delegate.isTraceEnabled(marker);
 	}
 
 	@Override
 	public void trace(Marker marker, String msg) {
 		if (shouldLog()) {
-			logger.trace(marker, msg);
+			delegate.trace(marker, msg);
 		}
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object arg) {
 		if (shouldLog()) {
-			logger.trace(marker, format, arg);
+			delegate.trace(marker, format, arg);
 		}
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object arg1, Object arg2) {
 		if (shouldLog()) {
-			logger.trace(marker, format, arg1, arg2);
+			delegate.trace(marker, format, arg1, arg2);
 		}
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object... argArray) {
 		if (shouldLog()) {
-			logger.trace(marker, format, argArray);
+			delegate.trace(marker, format, argArray);
 		}
 	}
 
 	@Override
 	public void trace(Marker marker, String msg, Throwable t) {
 		if (shouldLog()) {
-			logger.trace(marker, msg, t);
+			delegate.trace(marker, msg, t);
 		}
 	}
 }

@@ -48,6 +48,13 @@ public abstract class ClockUtil {
 	}
 
 	/**
+	 * 计算流逝的时间
+	 */
+	public static long elapsedTime(long beginTime) {
+		return currentTimeMillis() - beginTime;
+	}
+
+	/**
 	 * 系统当前时间
 	 */
 	public static Date currentDate() {

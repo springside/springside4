@@ -54,6 +54,13 @@ public abstract class ThreadUtil {
 			Thread.currentThread().interrupt();
 		}
 	}
+	
+	/**
+	 * 纯粹为了提醒下处理InterruptedException的正确方式，除非你是在写不可中断的任务.
+	 */
+	public static void handleInterruptedException(){
+		Thread.currentThread().interrupt();
+	}
 
 	/////////// 线程池相关功能//////////
 
