@@ -37,6 +37,9 @@ import com.google.common.hash.Hashing;
  */
 public abstract class HashUtil {
 
+	public static final int MURMUR_SEED = 1318007700;
+
+	// ThreadLocal重用MessageDigest
 	private static ThreadLocal<MessageDigest> createThreadLocalMessageDigest(final String digest) {
 		return new ThreadLocal<MessageDigest>() {
 			@Override
@@ -215,31 +218,31 @@ public abstract class HashUtil {
 
 	////////////////// 基于Guava的MurMurHash ///////////////////
 	/**
-	 * 对输入字符串进行murmur32散列, 默认以类加载时的时间戳为seed
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数
 	 */
 	public static int murmur32AsInt(byte[] input) {
-		return Hashing.murmur3_32().hashBytes(input).asInt();
+		return Hashing.murmur3_32(MURMUR_SEED).hashBytes(input).asInt();
 	}
 
 	/**
-	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 默认以类加载时的时间戳为seed
+	 * 对输入字符串进行murmur32散列, 返回值可能是负数
 	 */
 	public static int murmur32AsInt(String input) {
-		return Hashing.murmur3_32().hashString(input, Charsets.UTF_8).asInt();
+		return Hashing.murmur3_32(MURMUR_SEED).hashString(input, Charsets.UTF_8).asInt();
+	}
+	
+	/**
+	 * 对输入字符串进行murmur128散列, 返回值可能是负数
+	 */
+	public static long murmur128AsLong(byte[] input) {
+		return Hashing.murmur3_128(MURMUR_SEED).hashBytes(input).asLong();
 	}
 
 	/**
-	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 带有seed
+	 * 对输入字符串进行murmur128散列, 返回值可能是负数
 	 */
-	public static int murmur32AsInt(byte[] input, int seed) {
-		return Hashing.murmur3_32(seed).hashBytes(input).asInt();
-	}
-
-	/**
-	 * 对输入字符串进行murmur32散列, 返回值可能是负数, 带有seed
-	 */
-	public static int murmur32AsInt(String input, int seed) {
-		return Hashing.murmur3_32(seed).hashString(input, Charsets.UTF_8).asInt();
+	public static long murmur128AsLong(String input) {
+		return Hashing.murmur3_128(MURMUR_SEED).hashString(input, Charsets.UTF_8).asLong();
 	}
 
 	///////////////// 一致性哈希//////////

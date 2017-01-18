@@ -26,10 +26,7 @@ public class SystemPropertiesUtil {
 	 */
 	public static Boolean getBoolean(String name) {
 		String stringResult = System.getProperty(name);
-		if (stringResult != null) {
-			return Boolean.valueOf(stringResult);
-		}
-		return null;
+		return BooleanUtil.toBooleanObject(stringResult);
 	}
 
 	/**
@@ -37,11 +34,7 @@ public class SystemPropertiesUtil {
 	 */
 	public static Boolean getBoolean(String name, Boolean defaultValue) {
 		String stringResult = System.getProperty(name);
-		if (stringResult != null) {
-			return Boolean.valueOf(stringResult);
-		} else {
-			return defaultValue;
-		}
+		return BooleanUtil.toBooleanObject(stringResult, defaultValue);
 	}
 
 	/**

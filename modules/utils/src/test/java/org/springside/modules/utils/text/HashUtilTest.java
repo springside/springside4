@@ -71,16 +71,16 @@ public class HashUtilTest {
 
 	@Test
 	public void murmurhash() {
-		assertThat(HashUtil.murmur32AsInt("hahhha1")).isEqualTo(106210656);
-		assertThat(HashUtil.murmur32AsInt("hahhha1".getBytes())).isEqualTo(106210656);
-		assertThat(HashUtil.murmur32AsInt("hahhha2")).isEqualTo(1140739654);
-		assertThat(HashUtil.murmur32AsInt("hahhha3")).isEqualTo(1660833342);
-		assertThat(HashUtil.murmur32AsInt("hahhha4")).isEqualTo(-1044105167);
-		assertThat(HashUtil.murmur32AsInt("hahhha5")).isEqualTo(-93397348);
-		assertThat(HashUtil.murmur32AsInt("hahhha6")).isEqualTo(1844168902);
+		assertThat(HashUtil.murmur32AsInt("hahhha1")).isEqualTo(-1920794701);
+		assertThat(HashUtil.murmur32AsInt("hahhha1".getBytes())).isEqualTo(-1920794701);
+		assertThat(HashUtil.murmur32AsInt("hahhha2")).isEqualTo(2065789419);
+		assertThat(HashUtil.murmur32AsInt("hahhha3")).isEqualTo(-293065542);
+		assertThat(HashUtil.murmur32AsInt("hahhha4")).isEqualTo(-2003559207);
+		assertThat(HashUtil.murmur32AsInt("hahhha5")).isEqualTo(-3887993);
+		assertThat(HashUtil.murmur32AsInt("hahhha6")).isEqualTo(-446760132);
+		
+		assertThat(HashUtil.murmur128AsLong("hahhha6")).isEqualTo(-5203515929515563680L);
 
-		assertThat(HashUtil.murmur32AsInt("hahhha1", 12345)).isEqualTo(-1980822128);
-		assertThat(HashUtil.murmur32AsInt("hahhha1".getBytes(), 12345)).isEqualTo(-1980822128);
 	}
 
 }

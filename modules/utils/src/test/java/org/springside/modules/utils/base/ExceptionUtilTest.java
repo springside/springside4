@@ -93,7 +93,7 @@ public class ExceptionUtilTest {
 	@Test
 	public void getName() {
 		IOException ioexception = new IOException("my exception");
-		assertThat(ExceptionUtil.getMessageWithExceptionName(ioexception)).isEqualTo("IOException: my exception");
+		assertThat(ExceptionUtil.buildMessageWithShortName(ioexception)).isEqualTo("IOException: my exception");
 	}
 
 	@Test

@@ -7,6 +7,8 @@ package org.springside.modules.utils.base;
 
 import java.lang.reflect.UndeclaredThrowableException;
 
+import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import com.google.common.base.Throwables;
@@ -107,12 +109,32 @@ public abstract class ExceptionUtil {
 	}
 
 	/**
-	 * 拼装异常类名与异常信息
+	 * 拼装 短异常类名: 异常信息.
+	 * 
+	 * 与Throwable.toString()相比使用了短类名
 	 * 
 	 * @see ExceptionUtils#getMessage(Throwable)
 	 */
-	public static String getMessageWithExceptionName(Throwable t) {
+	public static String buildMessageWithShortName(Throwable t) {
 		return ExceptionUtils.getMessage(t);
+	}
+
+	/**
+	 * 拼装 短异常类名: 异常信息 <-- RootCause的短异常类名: 异常信息
+	 */
+	public static String buildMessageWithRootCause(Throwable t) {
+		if (t == null) {
+			return StringUtils.EMPTY;
+		}
+
+		final String clsName = ClassUtils.getShortClassName(t, null);
+		final String message = StringUtils.defaultString(t.getMessage());
+		Throwable cause = getRootCause(t);
+
+		StringBuilder sb = new StringBuilder(128).append(clsName).append(":").append(message).append("; <---")
+				.append(buildMessageWithShortName(cause));
+
+		return sb.toString();
 	}
 
 	/////////// StackTrace 性能优化相关////////
