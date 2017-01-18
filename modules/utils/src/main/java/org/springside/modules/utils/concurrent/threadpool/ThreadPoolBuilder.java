@@ -13,7 +13,6 @@ import java.util.concurrent.ThreadPoolExecutor.AbortPolicy;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.Validate;
-import org.springside.modules.utils.concurrent.ThreadUtil;
 import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPool.ControllableQueue;
 
 /**
@@ -31,7 +30,7 @@ import org.springside.modules.utils.concurrent.threadpool.QueuableCachedThreadPo
  * 
  * 参考文章 《Java ThreadPool的正确打开方式》http://calvin1978.blogcn.com/articles/java-threadpool.html
  */
-public class ThreadPoolBuilders {
+public class ThreadPoolBuilder {
 
 	private static RejectedExecutionHandler defaultRejectHandler = new AbortPolicy();
 
@@ -380,9 +379,9 @@ public class ThreadPoolBuilders {
 
 		if (threadNamePrefix != null) {
 			if (daemon != null) {
-				return ThreadUtil.buildThreadFactory(threadNamePrefix, daemon);
+				return ThreadPoolUtil.buildThreadFactory(threadNamePrefix, daemon);
 			} else {
-				return ThreadUtil.buildThreadFactory(threadNamePrefix);
+				return ThreadPoolUtil.buildThreadFactory(threadNamePrefix);
 			}
 		}
 

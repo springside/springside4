@@ -19,7 +19,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
-import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilders;
+import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilder;
+import org.springside.modules.utils.concurrent.threadpool.ThreadPoolUtil;
 
 public class ThreadUtilTest {
 	@Test
@@ -31,14 +32,14 @@ public class ThreadUtilTest {
 			}
 		};
 		// 测试name格式
-		ThreadFactory threadFactory = ThreadUtil.buildThreadFactory("example");
+		ThreadFactory threadFactory = ThreadPoolUtil.buildThreadFactory("example");
 		Thread thread = threadFactory.newThread(testRunnable);
 
 		assertThat(thread.getName()).isEqualTo("example-0");
 		assertThat(thread.isDaemon()).isFalse();
 
 		// 测试daemon属性设置
-		threadFactory = ThreadUtil.buildThreadFactory("example", true);
+		threadFactory = ThreadPoolUtil.buildThreadFactory("example", true);
 		Thread thread2 = threadFactory.newThread(testRunnable);
 
 		assertThat(thread.getName()).isEqualTo("example-0");
@@ -56,7 +57,7 @@ public class ThreadUtilTest {
 		ExecutorService pool = Executors.newSingleThreadExecutor();
 		Runnable task = new Task(logger, 200, 0);
 		pool.execute(task);
-		ThreadUtil.gracefulShutdown(pool, 1000, TimeUnit.MILLISECONDS);
+		ThreadPoolUtil.gracefulShutdown(pool, 1000, TimeUnit.MILLISECONDS);
 		assertThat(pool.isTerminated()).isTrue();
 		assertThat(appender.getFirstLog()).isNull();
 
@@ -65,7 +66,7 @@ public class ThreadUtilTest {
 		pool = Executors.newSingleThreadExecutor();
 		task = new Task(logger, 1000, 0);
 		pool.execute(task);
-		ThreadUtil.gracefulShutdown(pool, 500, TimeUnit.MILLISECONDS);
+		ThreadPoolUtil.gracefulShutdown(pool, 500, TimeUnit.MILLISECONDS);
 		assertThat(pool.isTerminated()).isTrue();
 		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
 
@@ -82,7 +83,7 @@ public class ThreadUtilTest {
 			@Override
 			public void run() {
 				lock.countDown();
-				ThreadUtil.gracefulShutdown(self, 200000, TimeUnit.MILLISECONDS);
+				ThreadPoolUtil.gracefulShutdown(self, 200000, TimeUnit.MILLISECONDS);
 			}
 		});
 		thread.start();
@@ -94,7 +95,7 @@ public class ThreadUtilTest {
 
 	@Test
 	public void exception() {
-		ScheduledThreadPoolExecutor executor = ThreadPoolBuilders.scheduledPool().build();
+		ScheduledThreadPoolExecutor executor = ThreadPoolBuilder.scheduledPool().build();
 		ExceptionTask task = new ExceptionTask();
 		executor.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);
 
@@ -102,18 +103,18 @@ public class ThreadUtilTest {
 
 		// 线程第一次跑就被中断
 		assertThat(task.counter.get()).isEqualTo(1);
-		ThreadUtil.gracefulShutdown(executor, 1000);
+		ThreadPoolUtil.gracefulShutdown(executor, 1000);
 
 		////////
-		executor = ThreadPoolBuilders.scheduledPool().build();
+		executor = ThreadPoolBuilder.scheduledPool().build();
 		task = new ExceptionTask();
-		Runnable wrapTask = ThreadUtil.wrapException(task);
+		Runnable wrapTask = ThreadPoolUtil.wrapException(task);
 		executor.scheduleAtFixedRate(wrapTask, 0, 100, TimeUnit.MILLISECONDS);
 
 		ThreadUtil.sleep(500);
 		assertThat(task.counter.get()).isGreaterThan(1);
 		System.out.println("-------actual run:" + task.counter.get());
-		ThreadUtil.gracefulShutdown(executor, 1000);
+		ThreadPoolUtil.gracefulShutdown(executor, 1000);
 
 	}
 

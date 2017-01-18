@@ -21,7 +21,7 @@ public class QueuableCachedThreadPoolTest {
 	public void test() {
 		QueuableCachedThreadPool threadPool = null;
 		try {
-			threadPool = ThreadPoolBuilders.queuableCachedPool().setMinSize(0).setMaxSize(10).setQueueSize(10).build();
+			threadPool = ThreadPoolBuilder.queuableCachedPool().setMinSize(0).setMaxSize(10).setQueueSize(10).build();
 			// 线程满
 			for (int i = 0; i < 10; i++) {
 				threadPool.submit(new LongRunTask());
@@ -46,7 +46,7 @@ public class QueuableCachedThreadPoolTest {
 			}
 
 		} finally {
-			ThreadUtil.gracefulShutdown(threadPool, 1000);
+			ThreadPoolUtil.gracefulShutdown(threadPool, 1000);
 		}
 	}
 

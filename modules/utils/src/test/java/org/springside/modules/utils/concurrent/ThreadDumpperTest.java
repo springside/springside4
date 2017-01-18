@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.springside.modules.test.log.LogbackListAppender;
-import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilders;
+import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilder;
 
 public class ThreadDumpperTest {
 	
@@ -27,7 +27,7 @@ public class ThreadDumpperTest {
 
 	@Test
 	public void test() throws InterruptedException {
-		ExecutorService executor = ThreadPoolBuilders.fixedPool().setPoolSize(10).build();
+		ExecutorService executor = ThreadPoolBuilder.fixedPool().setPoolSize(10).build();
 		CountDownLatch countDownLatch= ConcurrentTools.countDownLatch(10);
 		for(int i=0;i<10;i++){
 			executor.execute(new LongRunTask(countDownLatch));
