@@ -22,7 +22,7 @@ public class AccountEndPoint {
 	private static Logger logger = LoggerFactory.getLogger(AccountEndPoint.class);
 
 	@Autowired
-	private AccountService accountServcie;
+	private AccountService accountService;
 
 	@RequestMapping(value = "/api/accounts/login", produces = MediaTypes.JSON_UTF_8)
 	public Map<String, String> login(@RequestParam("email") String email, @RequestParam("password") String password) {
@@ -31,14 +31,14 @@ public class AccountEndPoint {
 			throw new ServiceException("User or password empty", ErrorCode.BAD_REQUEST);
 		}
 
-		String token = accountServcie.login(email, password);
+		String token = accountService.login(email, password);
 
 		return Collections.singletonMap("token", token);
 	}
 
 	@RequestMapping(value = "/api/accounts/logout")
 	public void logout(@RequestParam(value = "token", required = false) String token) {
-		accountServcie.logout(token);
+		accountService.logout(token);
 	}
 
 	@RequestMapping(value = "/api/accounts/register")
@@ -49,6 +49,6 @@ public class AccountEndPoint {
 			throw new ServiceException("User or name or password empty", ErrorCode.BAD_REQUEST);
 		}
 
-		accountServcie.register(email, name, password);
+		accountService.register(email, name, password);
 	}
 }
