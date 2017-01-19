@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.lang.reflect.InvocationTargetException;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
 
 public class ReflectionUtilTest {
 
@@ -134,7 +135,7 @@ public class ReflectionUtilTest {
 
 		// Unexcepted Checked exception.
 		e = ReflectionUtil.convertReflectionExceptionToUnchecked(ex);
-		assertThat(e).hasMessage("Unexpected Checked Exception.");
+		assertThat(e).isInstanceOf(UncheckedException.class);
 	}
 
 	public static class ParentBean<T, ID> {

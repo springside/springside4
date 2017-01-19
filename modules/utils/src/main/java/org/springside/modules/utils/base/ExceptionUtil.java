@@ -5,8 +5,6 @@
  *******************************************************************************/
 package org.springside.modules.utils.base;
 
-import java.lang.reflect.UndeclaredThrowableException;
-
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -51,7 +49,7 @@ public abstract class ExceptionUtil {
 		if (unwrapped instanceof Error) {
 			throw (Error) unwrapped;
 		}
-		throw new UndeclaredThrowableException(unwrapped);
+		throw new UncheckedException(unwrapped);
 	}
 
 	/**
@@ -59,16 +57,15 @@ public abstract class ExceptionUtil {
 	 * 
 	 * Future中使用的ExecutionException 与 反射时定义的InvocationTargetException， 真正的异常都封装在Cause中
 	 * 
-	 * 前面 unchecked() 使用的UndeclaredThrowableException同理.
+	 * 前面 unchecked() 使用的UncheckedException同理.
 	 * 
 	 * from Quasar and Tomcat's ExceptionUtils
 	 */
 	public static Throwable unwrap(Throwable t) {
-		if (t instanceof java.util.concurrent.ExecutionException
-				|| t instanceof java.lang.reflect.InvocationTargetException
-				|| t instanceof java.lang.reflect.UndeclaredThrowableException) {
+		if (t instanceof java.util.concurrent.ExecutionException|| t instanceof java.lang.reflect.InvocationTargetException||t instanceof UncheckedException) {
 			return t.getCause();
 		}
+
 		return t;
 	}
 
@@ -278,6 +275,26 @@ public abstract class ExceptionUtil {
 		public CloneableRuntimeException setStackTrace(Class<?> throwClazz, String throwMethod) {
 			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
+		}
+	}
+
+	/**
+	 * 自定义一个CheckedException的wrapper
+	 * 
+	 * @author calvin
+	 *
+	 */
+	public static class UncheckedException extends RuntimeException {
+
+		private static final long serialVersionUID = 4140223302171577501L;
+
+		public UncheckedException(Throwable cause) {
+			super(cause);
+		}
+
+		@Override
+		public String getMessage() {
+			return super.getCause().getMessage();
 		}
 	}
 }

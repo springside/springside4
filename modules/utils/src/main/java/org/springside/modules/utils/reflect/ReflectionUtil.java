@@ -8,13 +8,12 @@ package org.springside.modules.utils.reflect;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.springside.modules.utils.base.ExceptionUtil;
+import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
 
 /**
  * 反射工具类.
@@ -36,7 +35,10 @@ public class ReflectionUtil {
 	 */
 	public static <T> T invokeGetter(Object obj, String propertyName) {
 		Method method = ClassUtil.getGetterMethod(obj.getClass(), propertyName);
-		Validate.notNull(method, "Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+		}
 		return (T) invokeMethod(obj, method);
 	}
 
@@ -45,7 +47,9 @@ public class ReflectionUtil {
 	 */
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
 		Method method = ClassUtil.getSetterMethod(obj.getClass(), propertyName, value.getClass());
-		Validate.notNull(method, "Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+		if (method == null) {
+			throw new IllegalArgumentException("Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+		}
 		invokeMethod(obj, method, value);
 	}
 
@@ -54,7 +58,9 @@ public class ReflectionUtil {
 	 */
 	public static <T> T getFieldValue(final Object obj, final String fieldName) {
 		Field field = ClassUtil.getAccessibleField(obj.getClass(), fieldName);
-		Validate.notNull(field, "Could not find field [" + fieldName + "] on target [" + obj + ']');
+		if (field == null) {
+			throw new IllegalArgumentException( "Could not find field [" + fieldName + "] on target [" + obj + ']');
+		}
 		return getFieldValue(obj, field);
 	}
 
@@ -74,7 +80,9 @@ public class ReflectionUtil {
 	 */
 	public static void setFieldValue(final Object obj, final String fieldName, final Object value) {
 		Field field = ClassUtil.getAccessibleField(obj.getClass(), fieldName);
-		Validate.notNull(field, "Could not find field [" + fieldName + "] on target [" + obj + ']');
+		if (field == null) {
+			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
+		}
 		setField(obj, field, value);
 	}
 
@@ -141,7 +149,9 @@ public class ReflectionUtil {
 	public static <T> T invokeMethod(final Object obj, final String methodName, final Object[] args,
 			final Class<?>[] parameterTypes) {
 		Method method = ClassUtil.getAccessibleMethod(obj.getClass(), methodName, parameterTypes);
-		Validate.notNull(method, "Could not find method [" + methodName + "] on target [" + obj + ']');
+		if (method == null) {
+			throw new IllegalArgumentException( "Could not find method [" + methodName + "] on target [" + obj + ']');
+		}
 		return invokeMethod(obj, method, args);
 	}
 
@@ -152,7 +162,9 @@ public class ReflectionUtil {
 	 */
 	public static <T> T invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
 		Method method = ClassUtil.findAccessibleMethodByName(obj.getClass(), methodName);
-		Validate.notNull(method, "Could not find method [" + methodName + "] on target [" + obj + ']');
+		if (method == null) {
+			throw new IllegalArgumentException( "Could not find method [" + methodName + "] on target [" + obj + ']');
+		}
 		return invokeMethod(obj, method, args);
 	}
 
@@ -192,6 +204,6 @@ public class ReflectionUtil {
 		} else if (e instanceof RuntimeException) {
 			return (RuntimeException) e;
 		}
-		return new UndeclaredThrowableException(e);
+		return new UncheckedException(e);
 	}
 }
