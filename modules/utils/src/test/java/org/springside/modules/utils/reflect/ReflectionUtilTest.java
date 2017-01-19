@@ -63,10 +63,17 @@ public class ReflectionUtilTest {
 		TestBean bean = new TestBean();
 		assertThat(ReflectionUtil.invokeGetter(bean, "publicField")).isEqualTo(bean.inspectPublicField() + 1);
 
+		MethodInvoker invoker = MethodInvoker.createGetter(TestBean.class, "publicField");
+		assertThat(invoker.invoke(bean)).isEqualTo(bean.inspectPublicField() + 1);
+
 		bean = new TestBean();
 		// 通过setter的函数将+1
 		ReflectionUtil.invokeSetter(bean, "publicField", 10);
 		assertThat(bean.inspectPublicField()).isEqualTo(10 + 1);
+
+		MethodInvoker invoker2 = MethodInvoker.createSetter(TestBean.class, "publicField", Integer.class);
+		invoker2.invoke(bean, 12);
+		assertThat(bean.inspectPublicField()).isEqualTo(12 + 1);
 	}
 
 	@Test
@@ -75,6 +82,10 @@ public class ReflectionUtilTest {
 		// 使用函数名+参数类型的匹配
 		assertThat(ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
 				new Class[] { String.class })).isEqualTo("hello calvin");
+
+		// MethodInvoker
+		MethodInvoker invoker = MethodInvoker.createMethod(bean.getClass(), "privateMethod", String.class);
+		assertThat(invoker.invoke(bean, new Object[] { "calvin" })).isEqualTo("hello calvin");
 
 		// 仅匹配函数名
 		assertThat(ReflectionUtil.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" }))
@@ -89,12 +100,28 @@ public class ReflectionUtilTest {
 
 		}
 
+		// 函数名错
+		try {
+			MethodInvoker.createMethod(bean.getClass(), "notExistMethod", String.class);
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
+
+		}
+
 		// 参数类型错
 		try {
 			ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
 					new Class[] { Integer.class });
 			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
+
+		}
+
+		// 参数类型错
+		try {
+			MethodInvoker.createMethod(bean.getClass(), "privateMethod", Integer.class);
+			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
+		} catch (IllegalArgumentException e) {
 
 		}
 

@@ -26,12 +26,28 @@ public class MoreStringUtilTest {
 	}
 
 	@Test
-	public void other() {
+	public void charMatch() {
 		String str = "abc";
+		assertThat(MoreStringUtil.startWith(str, 'a')).isTrue();
+		assertThat(MoreStringUtil.startWith(str, 'b')).isFalse();
+		assertThat(MoreStringUtil.startWith(null, 'b')).isFalse();
+		assertThat(MoreStringUtil.startWith("", 'b')).isFalse();
+		
 		assertThat(MoreStringUtil.endWith(str, 'c')).isTrue();
 		assertThat(MoreStringUtil.endWith(str, 'b')).isFalse();
 		assertThat(MoreStringUtil.endWith(null, 'b')).isFalse();
 		assertThat(MoreStringUtil.endWith("", 'b')).isFalse();
+
+		assertThat(MoreStringUtil.replaceFirst("abbc", 'b', 'c')).isEqualTo("acbc");
+		assertThat(MoreStringUtil.replaceFirst("abcc", 'c', 'c')).isEqualTo("abcc");
+		assertThat(MoreStringUtil.replaceFirst("", 'c', 'c')).isEqualTo("");
+		assertThat(MoreStringUtil.replaceFirst(null, 'c', 'c')).isNull();
+		
+		assertThat(MoreStringUtil.replaceLast("abbc", 'b', 'c')).isEqualTo("abcc");
+		assertThat(MoreStringUtil.replaceLast("abcc", 'c', 'c')).isEqualTo("abcc");
+		assertThat(MoreStringUtil.replaceLast("", 'c', 'c')).isEqualTo("");
+		assertThat(MoreStringUtil.replaceLast(null, 'c', 'c')).isNull();
+
 	}
 
 	@Test

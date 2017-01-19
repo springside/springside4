@@ -6,17 +6,18 @@ import java.util.Random;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.base.MoreValidate;
 import org.springside.modules.utils.base.Platforms;
 
 /**
  * 随机数工具集.
  * 
- * 1. 获取无锁的兼容JDK6的ThreadLocalRandom 
+ * 1. 获取无锁的兼容JDK6的ThreadLocalRandom
  * 
  * 2. 获取性能较佳的SecureRandom
  * 
- * 3. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble
- *    (copy from Common Lang RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
+ * 3. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble (copy from Common Lang
+ * RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
  * 
  * 4. 随机字符串
  * 
@@ -24,7 +25,6 @@ import org.springside.modules.utils.base.Platforms;
  */
 public abstract class RandomUtil {
 
-	
 	/////////////////// 获取Random实例//////////////
 	/**
 	 * 返回无锁的ThreadLocalRandom
@@ -110,7 +110,7 @@ public abstract class RandomUtil {
 	 */
 	public static int nextInt(Random random, int min, int max) {
 		Validate.isTrue(max >= min, "Start value must be smaller or equal to end value.");
-		Validate.isTrue(min >= 0, "Both range values must be non-negative.");
+		MoreValidate.nonNegative("min", min);
 
 		if (min == max) {
 			return min;
@@ -174,7 +174,7 @@ public abstract class RandomUtil {
 	 */
 	public static long nextLong(Random random, long min, long max) {
 		Validate.isTrue(max >= min, "Start value must be smaller or equal to end value.");
-		Validate.isTrue(min >= 0, "Both range values must be non-negative.");
+		MoreValidate.nonNegative("min", min);
 
 		if (min == max) {
 			return min;
@@ -226,7 +226,7 @@ public abstract class RandomUtil {
 	 */
 	public static double nextDouble(Random random, final double min, final double max) {
 		Validate.isTrue(max >= min, "Start value must be smaller or equal to end value.");
-		Validate.isTrue(min >= 0, "Both range values must be non-negative.");
+		MoreValidate.nonNegative("min", min);
 
 		if (min == max) {
 			return min;
@@ -318,6 +318,6 @@ public abstract class RandomUtil {
 	 * 随机ASCII字符(含字母，数字及其他符号)，随机长度
 	 */
 	public static String randomAsciiRandomLength(Random random, int minLength, int maxLength) {
-		return RandomStringUtils.random(nextInt(random, minLength, maxLength),32, 127, false, false, null, random);
+		return RandomStringUtils.random(nextInt(random, minLength, maxLength), 32, 127, false, false, null, random);
 	}
 }

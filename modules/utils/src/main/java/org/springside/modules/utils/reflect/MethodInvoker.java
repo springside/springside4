@@ -10,16 +10,27 @@ public class MethodInvoker {
 
 	public static MethodInvoker createMethod(final Class<?> clz, final String methodName, Class<?>... parameterTypes) {
 		Method method = ClassUtil.getAccessibleMethod(clz, methodName, parameterTypes);
+		if (method == null) {
+			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + clz + ']');
+		}
 		return new MethodInvoker(method);
 	}
 
 	public static MethodInvoker createGetter(final Class<?> clz, final String propertyName) {
 		Method method = ClassUtil.getGetterMethod(clz, propertyName);
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + clz + ']');
+		}
 		return new MethodInvoker(method);
 	}
 
 	public static MethodInvoker createSetter(final Class<?> clz, final String propertyName, Class<?> parameterType) {
 		Method method = ClassUtil.getSetterMethod(clz, propertyName, parameterType);
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + clz + ']');
+		}
 		return new MethodInvoker(method);
 	}
 
@@ -30,7 +41,7 @@ public class MethodInvoker {
 	/**
 	 * 调用已准备好的Method
 	 */
-	public <T> T invokeMethod(final Object obj, Object... args) {
+	public <T> T invoke(final Object obj, Object... args) {
 		try {
 			return (T) method.invoke(obj, args);
 		} catch (Exception e) {

@@ -91,9 +91,13 @@ public class ExceptionUtilTest {
 	}
 
 	@Test
-	public void getName() {
+	public void buildMessage() {
 		IOException ioexception = new IOException("my exception");
 		assertThat(ExceptionUtil.buildMessageWithShortName(ioexception)).isEqualTo("IOException: my exception");
+
+		RuntimeException runtimeExcetpion = new RuntimeException("my runtimeException", ioexception);
+		assertThat(ExceptionUtil.buildMessageWithRootCause(runtimeExcetpion))
+				.isEqualTo("RuntimeException:my runtimeException; <---IOException: my exception");
 	}
 
 	@Test

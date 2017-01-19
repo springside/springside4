@@ -30,7 +30,17 @@ public class PlatformsTest {
 		if (Platforms.IS_JAVA7) {
 			assertThat(Platforms.IS_ATLEASET_JAVA6).isTrue();
 			assertThat(Platforms.IS_ATLEASET_JAVA7).isTrue();
+			assertThat(Platforms.IS_ATLEASET_JAVA8).isFalse();
 		}
+		
+		if (Platforms.IS_JAVA8) {
+			assertThat(Platforms.IS_ATLEASET_JAVA6).isTrue();
+			assertThat(Platforms.IS_ATLEASET_JAVA7).isTrue();
+			assertThat(Platforms.IS_ATLEASET_JAVA8).isTrue();
+		}
+		
+		System.out.println("pid:"+ Platforms.getPid());
+		assertThat(Platforms.getPid()).isNotEqualTo(-1);
 	}
 
 }

@@ -13,6 +13,8 @@ public class UnitConverterTest {
 		assertThat(UnitConverter.convertDurationMillis("12s")).isEqualTo(12000);
 		assertThat(UnitConverter.convertDurationMillis("12ms")).isEqualTo(12);
 		assertThat(UnitConverter.convertDurationMillis("12m")).isEqualTo(12 * 60 * 1000);
+		assertThat(UnitConverter.convertDurationMillis("12h")).isEqualTo(12l * 60 * 60 * 1000);
+		assertThat(UnitConverter.convertDurationMillis("12d")).isEqualTo(12l * 24 * 60 * 60 * 1000);
 
 		try {
 			assertThat(UnitConverter.convertDurationMillis("12a")).isEqualTo(12 * 60 * 1000);

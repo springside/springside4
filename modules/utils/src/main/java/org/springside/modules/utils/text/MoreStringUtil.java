@@ -7,7 +7,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.collection.ListUtil;
 
-import com.google.common.annotations.Beta;
 import com.google.common.base.Utf8;
 
 /**
@@ -17,7 +16,6 @@ import com.google.common.base.Utf8;
  * 
  * @author calvin
  */
-@Beta
 public abstract class MoreStringUtil {
 
 	/**
@@ -34,7 +32,6 @@ public abstract class MoreStringUtil {
 	 * @return 如果为null返回null, 如果为""返回空数组
 	 */
 	public static List<String> split(@Nullable final String str, final char separatorChar, int expectParts) {
-
 		if (str == null) {
 			return null;
 		}
@@ -64,12 +61,13 @@ public abstract class MoreStringUtil {
 		return list;
 	}
 
-	
-
 	/**
 	 * String 有replace(char,char)，但缺少单独replace first/last的
 	 */
-	public static String replaceFirst(String s, char sub, char with) {
+	public static String replaceFirst(@Nullable String s, char sub, char with) {
+		if (s == null) {
+			return null;
+		}
 		int index = s.indexOf(sub);
 		if (index == -1) {
 			return s;
@@ -80,9 +78,13 @@ public abstract class MoreStringUtil {
 	}
 
 	/**
-	 * String 有replace(char,char)，但缺少单独replace first/last的
+	 * String 有replace(char,char)替换全部char，但缺少单独replace first/last
 	 */
-	public static String replaceLast(String s, char sub, char with) {
+	public static String replaceLast(@Nullable String s, char sub, char with) {
+		if (s == null) {
+			return null;
+		}
+
 		int index = s.lastIndexOf(sub);
 		if (index == -1) {
 			return s;
@@ -91,21 +93,25 @@ public abstract class MoreStringUtil {
 		str[index] = with;
 		return new String(str);
 	}
-	
+
 	/**
 	 * 判断字符串是否以字母开头
+	 * 
+	 * 如果字符串为Null或空，返回false
 	 */
-	public static boolean startWithChar(String s, char c) {
+	public static boolean startWith(@Nullable CharSequence s, char c) {
 		if (StringUtils.isEmpty(s)) {
 			return false;
 		}
 		return s.charAt(0) == c;
 	}
-	
+
 	/**
 	 * 判断字符串是否以字母结尾
+	 * 
+	 * 如果字符串为Null或空，返回false
 	 */
-	public static boolean endWith(CharSequence s, char c) {
+	public static boolean endWith(@Nullable CharSequence s, char c) {
 		if (StringUtils.isEmpty(s)) {
 			return false;
 		}
@@ -117,7 +123,10 @@ public abstract class MoreStringUtil {
 	 * 
 	 * @see Utf8#encodedLength(CharSequence)
 	 */
-	public static int utf8EncodedLength(CharSequence sequence) {
+	public static int utf8EncodedLength(@Nullable CharSequence sequence) {
+		if (StringUtils.isEmpty(sequence)) {
+			return 0;
+		}
 		return Utf8.encodedLength(sequence);
 	}
 }

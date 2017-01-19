@@ -61,23 +61,11 @@ public class BooleanUtil {
 	}
 
 	/**
-	 * 多个值的and
-	 */
-	public static boolean and(final Boolean... array) {
-		return BooleanUtils.and(array);
-	}
-
-	/**
 	 * 多个值的or
 	 */
 	public static boolean or(final boolean... array) {
 		return BooleanUtils.or(array);
 	}
 
-	/**
-	 * 多个值的or
-	 */
-	public static boolean or(final Boolean... array) {
-		return BooleanUtils.or(array);
-	}
+
 }

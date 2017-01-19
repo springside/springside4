@@ -31,6 +31,9 @@ public class FastMethodInvoker {
 	 */
 	public static FastMethodInvoker create(final Class<?> clz, final String methodName, Class<?>... parameterTypes) {
 		Method method = ClassUtil.getAccessibleMethod(clz, methodName, parameterTypes);
+		if (method == null) {
+			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + clz + ']');
+		}
 		return build(clz, method);
 	}
 
@@ -39,6 +42,10 @@ public class FastMethodInvoker {
 	 */
 	public static FastMethodInvoker createGetter(final Class<?> clz, final String propertyName) {
 		Method method = ClassUtil.getGetterMethod(clz, propertyName);
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + clz + ']');
+		}
 		return build(clz, method);
 	}
 
@@ -48,6 +55,10 @@ public class FastMethodInvoker {
 	public static FastMethodInvoker createSetter(final Class<?> clz, final String propertyName,
 			Class<?> parameterType) {
 		Method method = ClassUtil.getSetterMethod(clz, propertyName, parameterType);
+		if (method == null) {
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + clz + ']');
+		}
 		return build(clz, method);
 	}
 

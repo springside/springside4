@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class ObjectUtil {
 
-	String NULL = "null";
+	private static String NULL = "null";
 
 	/**
 	 * 多个对象的HashCode串联
@@ -18,7 +18,7 @@ public class ObjectUtil {
 	 */
 	public static String toPrettyString(Object value) {
 		if (value == null) {
-			return null;
+			return NULL;
 		}
 
 		Class<?> type = value.getClass();

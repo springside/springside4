@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.apache.commons.lang3.mutable.MutableInt;
+import org.apache.commons.lang3.mutable.MutableLong;
 import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
@@ -259,8 +261,8 @@ public abstract class MapUtil {
 	/**
 	 * 创建移植自Netty的key为int的优化HashMap
 	 * 
-	 * @param initialCapacity 默认为16
-	 * @param loadFactor 默认为0.5
+	 * @param initialCapacity 建议为16
+	 * @param loadFactor 建议为0.5
 	 */
 	public static <V> IntObjectHashMap<V> createIntObjectHashMap(int initialCapacity, float loadFactor) {
 		return new IntObjectHashMap<V>(initialCapacity, loadFactor);
@@ -269,11 +271,31 @@ public abstract class MapUtil {
 	/**
 	 * 创建移植自Netty的key为long的优化HashMap
 	 * 
-	 * @param initialCapacity 默认为16
-	 * @param loadFactor 默认为0.5
+	 * @param initialCapacity 建议为16
+	 * @param loadFactor 建议为0.5
 	 */
 	public static <V> LongObjectHashMap<V> createLongObjectHashMap(int initialCapacity, float loadFactor) {
 		return new LongObjectHashMap<V>(initialCapacity, loadFactor);
+	}
+
+	/**
+	 * 创建值为可更改的Integer的HashMap. 可更改的Integer在更改时不需要重新创建Integer对象，节约了内存
+	 * 
+	 * @param initialCapacity 建议为16
+	 * @param loadFactor 建议为0.5
+	 */
+	public static <K> HashMap<K, MutableInt> createMutableIntValueHashMap(int initialCapacity, float loadFactor) {
+		return new HashMap<K, MutableInt>(initialCapacity, loadFactor);
+	}
+
+	/**
+	 * 创建值为可更改的Long的HashMap. 可更改的Long在更改时不需要重新创建Long对象，节约了内存
+	 * 
+	 * @param initialCapacity 建议为16
+	 * @param loadFactor 建议为0.5
+	 */
+	public static <K> HashMap<K, MutableLong> createMutableLongValueHashMap(int initialCapacity, float loadFactor) {
+		return new HashMap<K, MutableLong>(initialCapacity, loadFactor);
 	}
 
 	/**

@@ -59,8 +59,6 @@ public class UnitConverter {
 					return number * 60 * 60 * 1000;
 				case 'd':
 					return number * 60 * 60 * 24 * 1000;
-				case 'y':
-					return number * 365 * 60 * 60 * 24 * 1000;
 				default:
 					throw new IllegalArgumentException("unknown time unit :" + unit);
 				}
