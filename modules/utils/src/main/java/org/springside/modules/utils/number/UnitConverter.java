@@ -39,7 +39,7 @@ public class UnitConverter {
 		Matcher matcher = NUMBER_AND_UNIT.matcher(duration);
 
 		if (matcher.matches()) {
-			long number = Long.valueOf(matcher.group(1));
+			long number = Long.parseLong(matcher.group(1));
 
 			if (matcher.group(2) != null) {
 				String unitStr = matcher.group(2).toLowerCase();
@@ -83,7 +83,7 @@ public class UnitConverter {
 		Matcher matcher = NUMBER_AND_UNIT.matcher(size);
 
 		if (matcher.matches()) {
-			long number = Long.valueOf(matcher.group(1));
+			long number = Long.parseLong(matcher.group(1));
 
 			if (matcher.group(2) != null) {
 				char unit = matcher.group(2).toLowerCase().charAt(0);
@@ -97,6 +97,8 @@ public class UnitConverter {
 					return number * 1024 * 1024;
 				case 'g':
 					return number * 1024 * 1024 * 1024;
+				case 't':
+					return number * 1024 * 1024 * 1024 * 1024;
 				default:
 					throw new IllegalArgumentException("unknown size unit :" + unit);
 				}

@@ -30,8 +30,28 @@ public class MoreValidate {
 	/**
 	 * 校验为正数则返回该数字，否则抛出异常.
 	 */
+	public static Integer positive(@Nullable String role, Integer x) {
+		if (x.intValue() <= 0) {
+			throw new IllegalArgumentException(role + " (" + x + ") must be > 0");
+		}
+		return x;
+	}
+
+	/**
+	 * 校验为正数则返回该数字，否则抛出异常.
+	 */
 	public static long positive(@Nullable String role, long x) {
 		if (x <= 0) {
+			throw new IllegalArgumentException(role + " (" + x + ") must be > 0");
+		}
+		return x;
+	}
+
+	/**
+	 * 校验为正数则返回该数字，否则抛出异常.
+	 */
+	public static Long positive(@Nullable String role, Long x) {
+		if (x.longValue() <= 0) {
 			throw new IllegalArgumentException(role + " (" + x + ") must be > 0");
 		}
 		return x;
@@ -60,8 +80,28 @@ public class MoreValidate {
 	/**
 	 * 校验为正数则返回该数字，否则抛出异常.
 	 */
+	public static Integer nonNegative(@Nullable String role, Integer x) {
+		if (x.intValue() < 0) {
+			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
+		}
+		return x;
+	}
+
+	/**
+	 * 校验为正数则返回该数字，否则抛出异常.
+	 */
 	public static long nonNegative(@Nullable String role, long x) {
 		if (x < 0) {
+			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
+		}
+		return x;
+	}
+
+	/**
+	 * 校验为正数则返回该数字，否则抛出异常.
+	 */
+	public static Long nonNegative(@Nullable String role, Long x) {
+		if (x.longValue() < 0) {
 			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
 		}
 		return x;

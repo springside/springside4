@@ -17,7 +17,7 @@ import org.springside.modules.utils.time.ClockUtil;
  * 
  * @author calvin
  */
-public class RateLimitedSlf4jLogger implements Logger {
+public class ThrottledSlf4jLogger implements Logger {
 
 	private final Logger delegate;
 	private final long windowSizeMillis;
@@ -25,7 +25,7 @@ public class RateLimitedSlf4jLogger implements Logger {
 
 	private volatile long lastLoggedMillis = 0;
 
-	public RateLimitedSlf4jLogger(Logger logger, long time, TimeUnit timeUnit) {
+	public ThrottledSlf4jLogger(Logger logger, long time, TimeUnit timeUnit) {
 		this.delegate = logger;
 		windowSizeMillis = timeUnit.toMillis(time);
 	}

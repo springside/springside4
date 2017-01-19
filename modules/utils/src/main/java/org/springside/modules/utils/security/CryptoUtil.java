@@ -28,9 +28,9 @@ import org.springside.modules.utils.number.RandomUtil;
  */
 public class CryptoUtil {
 
-	private static final String AES = "AES";
-	private static final String AES_CBC = "AES/CBC/PKCS5Padding";
-	private static final String HMACSHA1 = "HmacSHA1";
+	private static final String AES_ALG = "AES";
+	private static final String AES_CBC_ALG = "AES/CBC/PKCS5Padding";
+	private static final String HMACSHA1_ALG = "HmacSHA1";
 
 	private static final int DEFAULT_HMACSHA1_KEYSIZE = 160; // RFC2401
 	private static final int DEFAULT_AES_KEYSIZE = 128;
@@ -47,8 +47,8 @@ public class CryptoUtil {
 	 */
 	public static byte[] hmacSha1(byte[] input, byte[] key) {
 		try {
-			SecretKey secretKey = new SecretKeySpec(key, HMACSHA1);
-			Mac mac = Mac.getInstance(HMACSHA1);
+			SecretKey secretKey = new SecretKeySpec(key, HMACSHA1_ALG);
+			Mac mac = Mac.getInstance(HMACSHA1_ALG);
 			mac.init(secretKey);
 			return mac.doFinal(input);
 		} catch (GeneralSecurityException e) {
@@ -73,7 +73,7 @@ public class CryptoUtil {
 	 */
 	public static byte[] generateHmacSha1Key() {
 		try {
-			KeyGenerator keyGenerator = KeyGenerator.getInstance(HMACSHA1);
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(HMACSHA1_ALG);
 			keyGenerator.init(DEFAULT_HMACSHA1_KEYSIZE);
 			SecretKey secretKey = keyGenerator.generateKey();
 			return secretKey.getEncoded();
@@ -136,8 +136,8 @@ public class CryptoUtil {
 	 */
 	private static byte[] aes(byte[] input, byte[] key, int mode) {
 		try {
-			SecretKey secretKey = new SecretKeySpec(key, AES);
-			Cipher cipher = Cipher.getInstance(AES);
+			SecretKey secretKey = new SecretKeySpec(key, AES_ALG);
+			Cipher cipher = Cipher.getInstance(AES_ALG);
 			cipher.init(mode, secretKey);
 			return cipher.doFinal(input);
 		} catch (GeneralSecurityException e) {
@@ -155,9 +155,9 @@ public class CryptoUtil {
 	 */
 	private static byte[] aes(byte[] input, byte[] key, byte[] iv, int mode) {
 		try {
-			SecretKey secretKey = new SecretKeySpec(key, AES);
+			SecretKey secretKey = new SecretKeySpec(key, AES_ALG);
 			IvParameterSpec ivSpec = new IvParameterSpec(iv);
-			Cipher cipher = Cipher.getInstance(AES_CBC);
+			Cipher cipher = Cipher.getInstance(AES_CBC_ALG);
 			cipher.init(mode, secretKey, ivSpec);
 			return cipher.doFinal(input);
 		} catch (GeneralSecurityException e) {
@@ -177,7 +177,7 @@ public class CryptoUtil {
 	 */
 	public static byte[] generateAesKey(int keysize) {
 		try {
-			KeyGenerator keyGenerator = KeyGenerator.getInstance(AES);
+			KeyGenerator keyGenerator = KeyGenerator.getInstance(AES_ALG);
 			keyGenerator.init(keysize);
 			SecretKey secretKey = keyGenerator.generateKey();
 			return secretKey.getEncoded();

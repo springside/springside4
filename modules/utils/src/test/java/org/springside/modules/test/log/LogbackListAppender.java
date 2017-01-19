@@ -31,6 +31,18 @@ public class LogbackListAppender extends UnsynchronizedAppenderBase<ILoggingEven
 		start();
 	}
 
+	public static LogbackListAppender create(Class<?> loggerClass) {
+		LogbackListAppender appender = new LogbackListAppender();
+		appender.addToLogger(loggerClass);
+		return appender;
+	}
+
+	public static LogbackListAppender create(String loggerName) {
+		LogbackListAppender appender = new LogbackListAppender();
+		appender.addToLogger(loggerName);
+		return appender;
+	}
+
 	@Override
 	protected void append(ILoggingEvent e) {
 		logs.add(e);

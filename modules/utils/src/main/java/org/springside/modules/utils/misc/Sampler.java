@@ -12,8 +12,8 @@ import org.springside.modules.utils.number.RandomUtil;
  */
 public class Sampler {
 
-	private static final Double ALWAYS = new Double(100);
-	private static final Double NEVER = new Double(0);
+	private static final Double ALWAYS = Double.valueOf(100);
+	private static final Double NEVER = Double.valueOf(0);
 
 	private double threshold;
 

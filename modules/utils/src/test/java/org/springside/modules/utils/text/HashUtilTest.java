@@ -6,14 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.ObjectUtil;
 import org.springside.modules.utils.io.ResourceUtil;
 
 public class HashUtilTest {
-	@Test
-	public void hashCodeTest() {
-		assertThat(ObjectUtil.hashCode("a", "b") - ObjectUtil.hashCode("a", "a")).isEqualTo(1);
-	}
+	
 
 	@Test
 	public void hashSha1() {
