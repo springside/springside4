@@ -13,6 +13,8 @@ import java.security.SecureRandom;
 import java.util.zip.CRC32;
 
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.base.annotation.NotNull;
+import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.google.common.hash.Hashing;
 
@@ -63,28 +65,28 @@ public abstract class HashUtil {
 	/**
 	 * 对输入字符串进行sha1散列.
 	 */
-	public static byte[] sha1(byte[] input) {
+	public static byte[] sha1(@NotNull byte[] input) {
 		return digest(input, get(SHA_1_DIGEST), null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列, 编码默认为UTF8.
 	 */
-	public static byte[] sha1(String input) {
+	public static byte[] sha1(@NotNull String input) {
 		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), null, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
-	public static byte[] sha1(byte[] input, byte[] salt) {
+	public static byte[] sha1(@NotNull byte[] input, @Nullable byte[] salt) {
 		return digest(input, get(SHA_1_DIGEST), salt, 1);
 	}
 
 	/**
 	 * 对输入字符串进行sha1散列，带salt达到更高的安全性.
 	 */
-	public static byte[] sha1(String input, byte[] salt) {
+	public static byte[] sha1(@NotNull String input, @Nullable byte[] salt) {
 		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), salt, 1);
 	}
 
@@ -93,7 +95,7 @@ public abstract class HashUtil {
 	 * 
 	 * @see #generateSalt(int)
 	 */
-	public static byte[] sha1(byte[] input, byte[] salt, int iterations) {
+	public static byte[] sha1(@NotNull byte[] input, @Nullable byte[] salt, int iterations) {
 		return digest(input, get(SHA_1_DIGEST), salt, iterations);
 	}
 
@@ -102,7 +104,7 @@ public abstract class HashUtil {
 	 * 
 	 * @see #generateSalt(int)
 	 */
-	public static byte[] sha1(String input, byte[] salt, int iterations) {
+	public static byte[] sha1(@NotNull String input, @Nullable byte[] salt, int iterations) {
 		return digest(input.getBytes(Charsets.UTF_8), get(SHA_1_DIGEST), salt, iterations);
 	}
 
@@ -115,7 +117,7 @@ public abstract class HashUtil {
 	/**
 	 * 对字符串进行散列, 支持md5与sha1算法.
 	 */
-	private static byte[] digest(byte[] input, MessageDigest digest, byte[] salt, int iterations) {
+	private static byte[] digest(@NotNull byte[] input, MessageDigest digest, byte[] salt, int iterations) {
 		// 带盐
 		if (salt != null) {
 			digest.update(salt);
@@ -180,7 +182,7 @@ public abstract class HashUtil {
 	 * 
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static int crc32AsInt(String input) {
+	public static int crc32AsInt(@NotNull String input) {
 		return crc32AsInt(input.getBytes(Charsets.UTF_8));
 	}
 
@@ -189,7 +191,7 @@ public abstract class HashUtil {
 	 * 
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static int crc32AsInt(byte[] input) {
+	public static int crc32AsInt(@NotNull byte[] input) {
 		CRC32 crc32 = new CRC32();
 		crc32.update(input);
 		// CRC32 只是 32bit int，为了CheckSum接口强转成long，此处再次转回来
@@ -201,7 +203,7 @@ public abstract class HashUtil {
 	 * 
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static long crc32AsLong(String input) {
+	public static long crc32AsLong(@NotNull String input) {
 		return crc32AsLong(input.getBytes(Charsets.UTF_8));
 	}
 
@@ -210,7 +212,7 @@ public abstract class HashUtil {
 	 * 
 	 * Guava也有crc32实现, 但返回值无法返回long，所以统一使用JDK默认实现
 	 */
-	public static long crc32AsLong(byte[] input) {
+	public static long crc32AsLong(@NotNull byte[] input) {
 		CRC32 crc32 = new CRC32();
 		crc32.update(input);
 		return crc32.getValue();
@@ -220,28 +222,28 @@ public abstract class HashUtil {
 	/**
 	 * 对输入字符串进行murmur32散列, 返回值可能是负数
 	 */
-	public static int murmur32AsInt(byte[] input) {
+	public static int murmur32AsInt(@NotNull byte[] input) {
 		return Hashing.murmur3_32(MURMUR_SEED).hashBytes(input).asInt();
 	}
 
 	/**
 	 * 对输入字符串进行murmur32散列, 返回值可能是负数
 	 */
-	public static int murmur32AsInt(String input) {
+	public static int murmur32AsInt(@NotNull String input) {
 		return Hashing.murmur3_32(MURMUR_SEED).hashString(input, Charsets.UTF_8).asInt();
 	}
-	
+
 	/**
 	 * 对输入字符串进行murmur128散列, 返回值可能是负数
 	 */
-	public static long murmur128AsLong(byte[] input) {
+	public static long murmur128AsLong(@NotNull byte[] input) {
 		return Hashing.murmur3_128(MURMUR_SEED).hashBytes(input).asLong();
 	}
 
 	/**
 	 * 对输入字符串进行murmur128散列, 返回值可能是负数
 	 */
-	public static long murmur128AsLong(String input) {
+	public static long murmur128AsLong(@NotNull String input) {
 		return Hashing.murmur3_128(MURMUR_SEED).hashString(input, Charsets.UTF_8).asLong();
 	}
 
@@ -251,8 +253,8 @@ public abstract class HashUtil {
 	 * 一致性哈希算法，无需构造一致性哈希环的
 	 * 
 	 * @param input 输入值
-	 * @param buckets 桶的数量
-	 * @return 桶的index，从0开始
+	 * @param buckets 桶的数量, 必须>0
+	 * @return 分配到的桶的index，从0开始
 	 */
 	public static int consistentHash(long input, int buckets) {
 		return Hashing.consistentHash(input, buckets);

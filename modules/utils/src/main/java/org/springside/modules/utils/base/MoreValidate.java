@@ -1,7 +1,5 @@
 package org.springside.modules.utils.base;
 
-import java.math.BigInteger;
-
 import org.springside.modules.utils.base.annotation.Nullable;
 
 /**
@@ -60,9 +58,9 @@ public class MoreValidate {
 	/**
 	 * 校验为正数则返回该数字，否则抛出异常.
 	 */
-	static BigInteger positive(@Nullable String role, BigInteger x) {
-		if (x.signum() <= 0) {
-			throw new IllegalArgumentException(role + " (" + x + ") must be > 0");
+	public static double positive(@Nullable String role, double x) {
+		if (!(x > 0)) { // not x < 0, to work with NaN.
+			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
 		}
 		return x;
 	}
@@ -102,16 +100,6 @@ public class MoreValidate {
 	 */
 	public static Long nonNegative(@Nullable String role, Long x) {
 		if (x.longValue() < 0) {
-			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
-		}
-		return x;
-	}
-
-	/**
-	 * 校验为正数则返回该数字，否则抛出异常.
-	 */
-	public static BigInteger nonNegative(@Nullable String role, BigInteger x) {
-		if (x.signum() < 0) {
 			throw new IllegalArgumentException(role + " (" + x + ") must be >= 0");
 		}
 		return x;

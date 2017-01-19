@@ -14,30 +14,34 @@ public abstract class ClockUtil {
 	private static Clock INSTANCE = new DefaultClock();
 
 	/**
+	 * 计算流逝的时间
+	 */
+	public static long elapsedTime(long beginTime) {
+		return currentTimeMillis() - beginTime;
+	}
+
+	/**
 	 * 切换为DummyClock，使用系统时间为初始时间, 单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock() {
-		DummyClock clock = new DummyClock();
-		INSTANCE = clock;
-		return clock;
+		INSTANCE = new DummyClock();
+		return (DummyClock) INSTANCE;
 	}
 
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock(long timeStampMills) {
-		DummyClock clock = new DummyClock(timeStampMills);
-		INSTANCE = clock;
-		return clock;
+		INSTANCE = new DummyClock(timeStampMills);
+		return (DummyClock) INSTANCE;
 	}
 
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock(Date date) {
-		DummyClock clock = new DummyClock(date);
-		INSTANCE = clock;
-		return clock;
+		INSTANCE = new DummyClock(date);
+		return (DummyClock) INSTANCE;
 	}
 
 	/**
@@ -45,13 +49,6 @@ public abstract class ClockUtil {
 	 */
 	public static synchronized void useDefaultClock() {
 		INSTANCE = new DefaultClock();
-	}
-
-	/**
-	 * 计算流逝的时间
-	 */
-	public static long elapsedTime(long beginTime) {
-		return currentTimeMillis() - beginTime;
 	}
 
 	/**

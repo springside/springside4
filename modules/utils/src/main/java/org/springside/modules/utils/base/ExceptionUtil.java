@@ -8,6 +8,7 @@ package org.springside.modules.utils.base;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.google.common.base.Throwables;
 
@@ -62,7 +63,8 @@ public abstract class ExceptionUtil {
 	 * from Quasar and Tomcat's ExceptionUtils
 	 */
 	public static Throwable unwrap(Throwable t) {
-		if (t instanceof java.util.concurrent.ExecutionException|| t instanceof java.lang.reflect.InvocationTargetException||t instanceof UncheckedException) {
+		if (t instanceof java.util.concurrent.ExecutionException
+				|| t instanceof java.lang.reflect.InvocationTargetException || t instanceof UncheckedException) {
 			return t.getCause();
 		}
 
@@ -80,6 +82,8 @@ public abstract class ExceptionUtil {
 
 	/**
 	 * 获取异常的Root Cause.
+	 * 
+	 * 如无底层Cause, 则返回自身
 	 * 
 	 * @see Throwables#getRootCause(Throwable)
 	 */
@@ -112,14 +116,14 @@ public abstract class ExceptionUtil {
 	 * 
 	 * @see ExceptionUtils#getMessage(Throwable)
 	 */
-	public static String buildMessageWithShortName(Throwable t) {
+	public static String toStringWithShortName(@Nullable Throwable t) {
 		return ExceptionUtils.getMessage(t);
 	}
 
 	/**
 	 * 拼装 短异常类名: 异常信息 <-- RootCause的短异常类名: 异常信息
 	 */
-	public static String buildMessageWithRootCause(Throwable t) {
+	public static String toStringWithRootCause(@Nullable Throwable t) {
 		if (t == null) {
 			return StringUtils.EMPTY;
 		}
@@ -128,8 +132,10 @@ public abstract class ExceptionUtil {
 		final String message = StringUtils.defaultString(t.getMessage());
 		Throwable cause = getRootCause(t);
 
-		StringBuilder sb = new StringBuilder(128).append(clsName).append(":").append(message).append("; <---")
-				.append(buildMessageWithShortName(cause));
+		StringBuilder sb = new StringBuilder(128).append(clsName).append(": ").append(message);
+		if (cause != t) {
+			sb.append("; <---").append(toStringWithShortName(cause));
+		}
 
 		return sb.toString();
 	}

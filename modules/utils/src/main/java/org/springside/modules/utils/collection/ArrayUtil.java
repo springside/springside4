@@ -44,10 +44,17 @@ public class ArrayUtil {
 	}
 
 	/**
-	 * 添加元素到数组末尾，没有银弹，复制扩容.
+	 * 添加元素到数组头，没有银弹，复制扩容.
 	 */
 	public static <T> T[] concat(@Nullable T element, T[] array) {
 		return ObjectArrays.concat(element, array);
+	}
+
+	/**
+	 * 添加元素到数组末尾，没有银弹，复制扩容.
+	 */
+	public static <T> T[] concat(T[] array, @Nullable T element) {
+		return ObjectArrays.concat(array, element);
 	}
 
 	/**

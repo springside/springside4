@@ -15,12 +15,28 @@ public class NumberUtilTest {
 		assertThat(bytes).containsSequence((byte) 0, (byte) 0, (byte) 1, (byte) 1);
 		assertThat(NumberUtil.toInt(bytes)).isEqualTo(257);
 
+		//long
 		byte[] bytes2 = NumberUtil.toBytes(1L);
 		assertThat(bytes2).hasSize(8);
 
-		bytes = NumberUtil.toBytes(257L);
-		assertThat(bytes).containsSequence((byte) 0, (byte) 0, (byte) 1, (byte) 1);
-		assertThat(NumberUtil.toLong(bytes)).isEqualTo(257L);
+		
+		bytes2 = NumberUtil.toBytes(257L);
+		assertThat(bytes2).containsSequence((byte) 0, (byte) 0, (byte) 1, (byte) 1);
+		assertThat(NumberUtil.toLong(bytes2)).isEqualTo(257L);
+		
+		//dobule
+		byte[] bytes3 = NumberUtil.toBytes(1.123d);
+		assertThat(NumberUtil.toDouble(bytes3)).isEqualTo(1.123d);
+		
+		//toInt32
+		assertThat(NumberUtil.toInt32(123l)).isEqualTo(123);
+		
+		try{
+			NumberUtil.toInt32(Long.valueOf(Integer.MAX_VALUE+1l));
+			fail("should fail here");
+		}catch(Exception e){
+			assertThat(e).isInstanceOf(IllegalArgumentException.class);
+		}
 	}
 
 	@Test

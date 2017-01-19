@@ -44,7 +44,7 @@ public class ObjectUtil {
 				} else if (componentType == byte.class) {
 					sb.append(Arrays.toString((byte[]) value));
 				} else {
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("unsupport array type");
 				}
 
 				return sb.toString();

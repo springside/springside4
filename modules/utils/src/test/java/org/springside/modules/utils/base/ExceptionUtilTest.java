@@ -37,6 +37,15 @@ public class ExceptionUtilTest {
 			assertThat(t.getCause()).isSameAs(exception);
 		}
 
+		// do nothing of Error
+		Error error = new LinkageError();
+		try {
+			ExceptionUtil.unchecked(error);
+			fail("should fail before");
+		} catch (Throwable t) {
+			assertThat(t).isSameAs(error);
+		}
+
 		// do nothing of RuntimeException
 		RuntimeException runtimeException = new RuntimeException("haha");
 		try {
@@ -88,16 +97,23 @@ public class ExceptionUtilTest {
 		RuntimeException runtimeException = new RuntimeException(illegalStateException);
 
 		assertThat(ExceptionUtil.getRootCause(runtimeException)).isSameAs(ioexception);
+		//无cause
+		assertThat(ExceptionUtil.getRootCause(ioexception)).isSameAs(ioexception);
 	}
 
 	@Test
 	public void buildMessage() {
 		IOException ioexception = new IOException("my exception");
-		assertThat(ExceptionUtil.buildMessageWithShortName(ioexception)).isEqualTo("IOException: my exception");
+		assertThat(ExceptionUtil.toStringWithShortName(ioexception)).isEqualTo("IOException: my exception");
+		assertThat(ExceptionUtil.toStringWithShortName(null)).isEqualTo("");
 
 		RuntimeException runtimeExcetpion = new RuntimeException("my runtimeException", ioexception);
-		assertThat(ExceptionUtil.buildMessageWithRootCause(runtimeExcetpion))
-				.isEqualTo("RuntimeException:my runtimeException; <---IOException: my exception");
+		assertThat(ExceptionUtil.toStringWithRootCause(runtimeExcetpion))
+				.isEqualTo("RuntimeException: my runtimeException; <---IOException: my exception");
+		
+		assertThat(ExceptionUtil.toStringWithRootCause(null)).isEqualTo("");
+		//无cause
+		assertThat(ExceptionUtil.toStringWithRootCause(ioexception)).isEqualTo("IOException: my exception");
 	}
 
 	@Test

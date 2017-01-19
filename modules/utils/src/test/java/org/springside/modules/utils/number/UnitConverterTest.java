@@ -22,6 +22,13 @@ public class UnitConverterTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(IllegalArgumentException.class);
 		}
+		
+		try {
+			assertThat(UnitConverter.convertDurationMillis("a12")).isEqualTo(12 * 60 * 1000);
+			fail("should fail");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(IllegalArgumentException.class);
+		}
 	}
 
 	@Test
@@ -36,6 +43,13 @@ public class UnitConverterTest {
 
 		try {
 			UnitConverter.convertSizeBytes("12x");
+			fail("should fail");
+		} catch (Throwable t) {
+			assertThat(t).isInstanceOf(IllegalArgumentException.class);
+		}
+		
+		try {
+			UnitConverter.convertSizeBytes("a12");
 			fail("should fail");
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(IllegalArgumentException.class);

@@ -28,4 +28,15 @@ public class ClockUtilTest {
 
 	}
 
+	@Test
+	public void elapsedTime() {
+		try {
+			DummyClock clock = ClockUtil.useDummyClock(2000);
+			clock.increaseTime(1000);
+			assertThat(ClockUtil.elapsedTime(2000)).isEqualTo(1000);
+		} finally {
+			ClockUtil.useDefaultClock();
+		}
+	}
+
 }

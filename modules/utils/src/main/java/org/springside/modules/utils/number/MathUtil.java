@@ -104,14 +104,18 @@ public abstract class MathUtil {
 	}
 
 	/**
-	 * 保证结果为正数的取模
+	 * 保证结果为正数的取模.
+	 * 
+	 * 如果(v = x/m) <0，v+=m.
 	 */
 	public static int mod(int x, int m) {
 		return IntMath.mod(x, m);
 	}
 
 	/**
-	 * 保证结果为正数的取模
+	 * 保证结果为正数的取模.
+	 * 
+	 * 如果(v = x/m) <0，v+=m.
 	 */
 	public static long mod(long x, long m) {
 		return LongMath.mod(x, m);
@@ -135,6 +139,8 @@ public abstract class MathUtil {
 
 	/**
 	 * 能控制rounding方向的相除
+	 * 
+	 * jdk的'/'运算符，直接向下取整
 	 */
 	public static long divide(long p, long q, RoundingMode mode) {
 		return LongMath.divide(p, q, mode);
@@ -142,6 +148,8 @@ public abstract class MathUtil {
 
 	/**
 	 * 平方
+	 * 
+	 * @param k 平方次数,不能为负数, k=0时返回1.
 	 */
 	public static int pow(int b, int k) {
 		return IntMath.pow(b, k);
@@ -149,6 +157,8 @@ public abstract class MathUtil {
 
 	/**
 	 * 平方
+	 * 
+	 * @param k 平方次数,不能为负数, k=0时返回1.
 	 */
 	public static long pow(long b, int k) {
 		return LongMath.pow(b, k);

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.concurrent;
+package org.springside.modules.utils.concurrent.threadpool;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -19,10 +19,9 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springside.modules.test.log.LogbackListAppender;
-import org.springside.modules.utils.concurrent.threadpool.ThreadPoolBuilder;
-import org.springside.modules.utils.concurrent.threadpool.ThreadPoolUtil;
+import org.springside.modules.utils.concurrent.ThreadUtil;
 
-public class ThreadUtilTest {
+public class ThreadPoolUtilTest {
 	@Test
 	public void buildThreadFactory() {
 
@@ -91,10 +90,13 @@ public class ThreadUtilTest {
 		thread.interrupt();
 		ThreadUtil.sleep(500);
 		assertThat(appender.getFirstLog().getMessage()).isEqualTo("InterruptedException");
+
+		ThreadPoolUtil.gracefulShutdown(null, 1000);
+		ThreadPoolUtil.gracefulShutdown(null, 1000, TimeUnit.MILLISECONDS);
 	}
 
 	@Test
-	public void exception() {
+	public void wrapException() {
 		ScheduledThreadPoolExecutor executor = ThreadPoolBuilder.scheduledPool().build();
 		ExceptionTask task = new ExceptionTask();
 		executor.scheduleAtFixedRate(task, 0, 100, TimeUnit.MILLISECONDS);
@@ -107,12 +109,12 @@ public class ThreadUtilTest {
 
 		////////
 		executor = ThreadPoolBuilder.scheduledPool().build();
-		task = new ExceptionTask();
-		Runnable wrapTask = ThreadPoolUtil.wrapException(task);
+		ExceptionTask newTask = new ExceptionTask();
+		Runnable wrapTask = ThreadPoolUtil.wrapException(newTask);
 		executor.scheduleAtFixedRate(wrapTask, 0, 100, TimeUnit.MILLISECONDS);
 
 		ThreadUtil.sleep(500);
-		assertThat(task.counter.get()).isGreaterThan(1);
+		assertThat(newTask.counter.get()).isGreaterThan(2);
 		System.out.println("-------actual run:" + task.counter.get());
 		ThreadPoolUtil.gracefulShutdown(executor, 1000);
 

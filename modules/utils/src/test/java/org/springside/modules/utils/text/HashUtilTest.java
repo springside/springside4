@@ -74,6 +74,7 @@ public class HashUtilTest {
 		assertThat(HashUtil.murmur32AsInt("hahhha6")).isEqualTo(-446760132);
 		
 		assertThat(HashUtil.murmur128AsLong("hahhha6")).isEqualTo(-5203515929515563680L);
+		assertThat(HashUtil.murmur128AsLong("hahhha6".getBytes(Charsets.UTF_8))).isEqualTo(-5203515929515563680L);
 
 	}
 
