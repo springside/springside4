@@ -145,7 +145,7 @@ public abstract class SetUtil {
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */
-	public static <E> Set<E> union(final Set<? extends E> set1, final Set<? extends E> set2) {
+	public static <E> Set<E> unionView(final Set<? extends E> set1, final Set<? extends E> set2) {
 		return Sets.union(set1, set2);
 	}
 
@@ -154,7 +154,7 @@ public abstract class SetUtil {
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */
-	public static <E> Set<E> intersection(final Set<E> set1, final Set<?> set2) {
+	public static <E> Set<E> intersectionView(final Set<E> set1, final Set<?> set2) {
 		return Sets.intersection(set1, set2);
 	}
 
@@ -163,7 +163,7 @@ public abstract class SetUtil {
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */
-	public static <E> Set<E> difference(final Set<E> set1, final Set<?> set2) {
+	public static <E> Set<E> differenceView(final Set<E> set1, final Set<?> set2) {
 		return Sets.difference(set1, set2);
 	}
 
@@ -172,7 +172,7 @@ public abstract class SetUtil {
 	 * 
 	 * 如果尝试写入该View会抛出UnsupportedOperationException
 	 */
-	public static <E> Set<E> disjoint(final Set<? extends E> set1, final Set<? extends E> set2) {
+	public static <E> Set<E> disjointView(final Set<? extends E> set1, final Set<? extends E> set2) {
 		return Sets.symmetricDifference(set1, set2);
 	}
 }

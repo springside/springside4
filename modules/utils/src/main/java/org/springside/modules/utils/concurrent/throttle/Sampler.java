@@ -1,4 +1,4 @@
-package org.springside.modules.utils.misc;
+package org.springside.modules.utils.concurrent.throttle;
 
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.number.RandomUtil;
