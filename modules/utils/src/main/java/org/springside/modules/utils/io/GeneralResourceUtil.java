@@ -27,7 +27,7 @@ public abstract class GeneralResourceUtil {
 			String resourceName = StringUtils.substringAfter(generalPath, CLASSPATH);
 			return ResourceUtil.asStream(resourceName);
 		} else if (StringUtils.startsWith(generalPath, FILE)) {
-			String fileName = StringUtils.substringAfter(generalPath, CLASSPATH);
+			String fileName = StringUtils.substringAfter(generalPath, FILE);
 			return FileUtil.asInputStream(fileName);
 		} else {
 			throw new IllegalArgumentException("unsupport resoure type:" + generalPath);
