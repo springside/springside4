@@ -9,6 +9,8 @@ script:
   - "mvn test" 
   - jdk_switcher use oraclejdk8 
   - "mvn clean test"
+  - jdk_switcher use oraclejdk7
+  - "mvn test"  
 
 branches:
   only:
