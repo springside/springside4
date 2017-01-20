@@ -6,9 +6,9 @@ install: true
 script:
   -  "cd modules;mvn clean test"
   - jdk_switcher use openjdk6
-  - "mvn clean test"
+  - "mvn test"
   - jdk_switcher use oraclejdk8
-  - "mvn clean test" 
+  - "mvn test" 
 branches:
   only:
     - master 
