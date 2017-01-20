@@ -4,6 +4,7 @@ jdk:
   - oraclejdk7
   - openjdk6
 
+install: true
 script: "cd modules;mvn clean test"
 
 branches:

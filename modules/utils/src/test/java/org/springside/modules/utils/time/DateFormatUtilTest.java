@@ -12,8 +12,8 @@ public class DateFormatUtilTest {
 	@Test
 	public void isoDateFormat() {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
-		assertThat(DateFormatUtil.ISO_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44.000+08:00");
-		assertThat(DateFormatUtil.ISO_ON_SECOND_FORMAT.format(date)).isEqualTo("2016-11-01T12:23:44+08:00");
+		assertThat(DateFormatUtil.ISO_FORMAT.format(date)).contains("2016-11-01T12:23:44.000");
+		assertThat(DateFormatUtil.ISO_ON_SECOND_FORMAT.format(date)).contains("2016-11-01T12:23:44");
 		assertThat(DateFormatUtil.ISO_ON_DATE_FORMAT.format(date)).isEqualTo("2016-11-01");
 	}
 
