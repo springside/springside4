@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>io.springside</groupId>
 	<artifactId>springside-utils</artifactId>
-	<version>5.0.0-SNAPSHOT</version>
+	<version>5.0.0-BETA1</version>
 	<packaging>jar</packaging>
 	<name>Springside :: Module :: Utils</name>
 
