@@ -14,6 +14,7 @@
 		<orika.version>1.5.0</orika.version>
 		<jackson.version>2.8.5</jackson.version>
 		<cglib.version>3.2.4</cglib.version>
+		<commons-collections.version>4.1</commons-collections.version>
 		<slf4j.version>1.7.22</slf4j.version>
 		<logback.version>1.1.8</logback.version>
 		<junit.version>4.12</junit.version>
@@ -71,6 +72,14 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>${cglib.version}</version>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- for CommonCollections -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collections.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<!-- OPTIONAL end -->
