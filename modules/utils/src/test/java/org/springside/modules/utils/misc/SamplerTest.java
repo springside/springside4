@@ -22,7 +22,7 @@ public class SamplerTest {
 
 		assertThat(hits).isBetween(900, 1200);
 		//////////
-		Sampler sampler2 = new Sampler(0.5);
+		Sampler sampler2 = Sampler.create(0.5);
 
 		hits = 0;
 		for (int i = 0; i < 10000; i++) {
