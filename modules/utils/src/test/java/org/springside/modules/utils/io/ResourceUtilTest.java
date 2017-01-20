@@ -14,7 +14,7 @@ public class ResourceUtilTest {
 	@Test
 	public void test() throws IOException {
 		// getResoruce
-		assertThat(ResourceUtil.toString("/test.txt")).contains("ABCDEFG");
+		assertThat(ResourceUtil.toString("test.txt")).contains("ABCDEFG");
 		assertThat(ResourceUtil.toString(ResourceUtilTest.class, "/test.txt")).contains("ABCDEFG");
 		assertThat(ResourceUtil.toLines("test.txt")).containsExactly("ABCDEFG", "ABC");
 		assertThat(ResourceUtil.toLines(ResourceUtilTest.class, "/test.txt")).containsExactly("ABCDEFG", "ABC");

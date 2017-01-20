@@ -6,7 +6,6 @@
 
 package org.springside.modules.utils.concurrent.jsr166e;
 
-import java.util.concurrent.RecursiveAction;
 
 /**
  * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/CountedCompleter.java 1.31

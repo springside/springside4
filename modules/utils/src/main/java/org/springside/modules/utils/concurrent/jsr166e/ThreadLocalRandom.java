@@ -7,7 +7,6 @@
 package org.springside.modules.utils.concurrent.jsr166e;
 
 import java.util.Random;
-import java.util.concurrent.ForkJoinTask;
 
 /**
  * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/ThreadLocalRandom.java 1.2
