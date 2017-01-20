@@ -7,7 +7,6 @@ import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.MoreValidate;
-import org.springside.modules.utils.base.Platforms;
 
 /**
  * 随机数工具集.
@@ -32,11 +31,7 @@ public abstract class RandomUtil {
 	 * 如果JDK6，使用移植于jsr166e的版本(相当于JDK7的实现)
 	 */
 	public static Random threadLocalRandom() {
-		if (Platforms.IS_ATLEASET_JAVA7) {
-			return java.util.concurrent.ThreadLocalRandom.current();
-		} else {
-			return org.springside.modules.utils.concurrent.jsr166e.ThreadLocalRandom.current();
-		}
+		return java.util.concurrent.ThreadLocalRandom.current();
 	}
 
 	/**

@@ -12,8 +12,7 @@ SpringSide是以Spring Framework为核心的，Pragmatic风格的JavaEE应用参
 
 全部示例以一个P2P图书馆展开，P2P图书馆避免了中央式图书馆所需的场地和图书管理员，大家把图书登记在应用里互相借阅。
 
-
-## 快速开始
+## 快速开始 (JDK7.0+)
 
 1. 运行根目录下的quick-start.sh 或 quick-start.bat
    * 将modules安装到本地maven仓库

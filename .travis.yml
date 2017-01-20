@@ -7,8 +7,8 @@ script:
   -  "cd modules;mvn clean test"
   - jdk_switcher use oraclejdk8
   - "mvn test" 
-  - jdk_switcher use openjdk6
-  - "mvn test"
+  - jdk_switcher use oraclejdk8 
+  - "mvn clean test"
 
 branches:
   only:

@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import org.springside.modules.utils.base.Platforms;
-
 import com.google.common.collect.EvictingQueue;
 
 /**
@@ -50,11 +48,7 @@ public abstract class QueueUtil {
 	 * 创建无阻塞情况下，性能最优的并发双端队列 (兼容JDK6的情况)
 	 */
 	public static <E> Deque<E> newConcurrentNonBlockingDeque() {
-		if (Platforms.IS_ATLEASET_JAVA7) {
 			return new java.util.concurrent.ConcurrentLinkedDeque<E>();
-		} else {
-			return new org.springside.modules.utils.concurrent.jsr166e.ConcurrentLinkedDeque<E>();
-		}
 	}
 
 	/**
