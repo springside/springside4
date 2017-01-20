@@ -69,4 +69,11 @@ public abstract class FilePathUtil {
 
 		return contactName;
 	}
+
+	/**
+	 * 获得参数clazz所在的Jar文件的绝对路径
+	 */
+	public static String getJarPath(Class<?> clazz) {
+		return clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
+	}
 }

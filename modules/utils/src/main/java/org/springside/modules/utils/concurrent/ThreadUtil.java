@@ -7,6 +7,8 @@ package org.springside.modules.utils.concurrent;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 线程相关工具类.
  * 
@@ -35,11 +37,38 @@ public abstract class ThreadUtil {
 			Thread.currentThread().interrupt();
 		}
 	}
-	
+
 	/**
 	 * 纯粹为了提醒下处理InterruptedException的正确方式，除非你是在写不可中断的任务.
 	 */
-	public static void handleInterruptedException(){
+	public static void handleInterruptedException() {
 		Thread.currentThread().interrupt();
 	}
+
+	/**
+	 * 通过StackTrace，获得调用者的类名.
+	 */
+	public static String getCallerClass() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		if (stacktrace.length >= 3) {
+			StackTraceElement element = stacktrace[3];
+			return element.getClassName();
+		} else {
+			return StringUtils.EMPTY;
+		}
+	}
+
+	/**
+	 * 通过StackTrace，获得调用者的"类名.方法名()"
+	 */
+	public static String getCallerMethod() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		if (stacktrace.length >= 3) {
+			StackTraceElement element = stacktrace[3];
+			return element.getClassName() + '.' + element.getMethodName() + "()";
+		} else {
+			return StringUtils.EMPTY;
+		}
+	}
+
 }
