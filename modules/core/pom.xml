@@ -18,7 +18,7 @@
 		<junit.version>4.12</junit.version>
 		<assertj.version>2.2.0</assertj.version>
 		<mockito.version>1.10.19</mockito.version>
-	
+
 		<!-- Plugin的属性 -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.7</java.version>
@@ -31,7 +31,6 @@
 			<groupId>io.springside</groupId>
 			<artifactId>springside-utils</artifactId>
 			<version>${springside.version}</version>
-			<optional>true</optional>
 		</dependency>
 
 		<!-- UTILS begin -->
@@ -48,7 +47,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		
+
 		<!-- UTILS end -->
 
 		<!-- LOGGING begin -->
@@ -140,7 +139,9 @@
 
 			<!-- 打包测试用的jar包，classfier为tests -->
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 				<executions>
 					<execution>
 						<goals>
@@ -163,6 +164,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>1.4.1</version>
 			</plugin>
 		</plugins>
 	</build>

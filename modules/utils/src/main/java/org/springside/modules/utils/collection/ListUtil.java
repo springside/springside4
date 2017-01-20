@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springside.modules.utils.collection.type.FastList;
 import org.springside.modules.utils.collection.type.SortedArrayList;
 
 import com.google.common.collect.Lists;
@@ -146,15 +145,6 @@ public abstract class ListUtil {
 	 */
 	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<? super T> c) {
 		return new SortedArrayList<T>(c);
-	}
-	
-	/**
-	 * 创建没有RangeCheck的ArrayList
-	 * 
-	 * from hikari连接池，但有不少方法并不支持
-	 */
-	public static <T> FastList<T> createFastList(Class<T> clazz, int capacity){
-		return new FastList(clazz,capacity);
 	}
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
