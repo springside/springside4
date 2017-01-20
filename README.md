@@ -1,10 +1,10 @@
-[![Build Status](https://api.travis-ci.org/springside/springside4.svg?branch=master)](https://travis-ci.org/springside/springside4/)
+[![Build Status](https://api.travis-ci.org/springside/springside4.png?branch=master)](https://travis-ci.org/springside/springside4/)
 
 SpringSide是以Spring Framework为核心的，Pragmatic风格的JavaEE应用参考示例，是JavaEE世界中的主流技术选型，最佳实践的总结与演示。
   
-  1. Utils - 性能与易用性兼顾的Java基础库，在Guava 与 Apache Common Lang基础上，综合各门各派的大成之作.
+  1. Utils - 性能与易用性兼顾的Java基础库，综合各门各派的大成之作(近期重点).
   2. BootApi - 基于Spring Boot的Web Service应用, 可以用于SOA服务，或Ajax页面的后台.
-  3. BootWeb - 基于Spring Boot的Web应用, 典型的增删改查管理.
+  3. BootWeb - 基于Spring Boot的Web应用, 典型的增删改查管理(未开始).
   4. Showcase - 更多的示例.
  
 
