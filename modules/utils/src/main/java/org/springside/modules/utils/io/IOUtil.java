@@ -8,10 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,32 +52,6 @@ public abstract class IOUtil {
 		if (closeable != null) {
 			try {
 				closeable.close();
-			} catch (IOException e) {
-				logger.warn(CLOSE_ERROR_MESSAGE, e);
-			}
-		}
-	}
-
-	/**
-	 * For JDK6 which ZipFile is not Closeable.
-	 */
-	public static void closeQuietly(ZipFile zipfile) {
-		if (zipfile != null) {
-			try {
-				zipfile.close();
-			} catch (IOException e) {
-				logger.warn(CLOSE_ERROR_MESSAGE, e);
-			}
-		}
-	}
-
-	/**
-	 * For JDK6 which Socket is not Closeable.
-	 */
-	public static void closeQuietly(Socket socket) {
-		if (socket != null) {
-			try {
-				socket.close();
 			} catch (IOException e) {
 				logger.warn(CLOSE_ERROR_MESSAGE, e);
 			}
