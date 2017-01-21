@@ -94,7 +94,7 @@ public class LongObjectHashMap<V> implements LongObjectMap<V> {
 
         // Allocate the arrays.
         keys = new long[capacity];
-        @SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
+        @SuppressWarnings({ "unchecked" })
         V[] temp = (V[]) new Object[capacity];
         values = temp;
 
@@ -455,7 +455,7 @@ public class LongObjectHashMap<V> implements LongObjectMap<V> {
         V[] oldVals = values;
 
         keys = new long[newCapacity];
-        @SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
+        @SuppressWarnings({ "unchecked"})
         V[] temp = (V[]) new Object[newCapacity];
         values = temp;
 
