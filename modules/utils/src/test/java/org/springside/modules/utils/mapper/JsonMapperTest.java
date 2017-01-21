@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.text;
+package org.springside.modules.utils.mapper;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.junit.Test;
+import org.springside.modules.utils.mapper.JsonMapper;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -172,7 +173,7 @@ public class JsonMapperTest {
 	public void update() {
 		TestBean bean = new TestBean("A");
 		bean.setDefaultValue("lalala");
-		JsonMapper.INSTANCE.update("{\"name\":\"B\"", bean);
+		JsonMapper.INSTANCE.update("{\"name\":\"B\"}", bean);
 		assertThat(bean.getName()).isEqualTo("B");
 		assertThat(bean.getDefaultValue()).isEqualTo("lalala");
 	}

@@ -33,7 +33,7 @@ import org.springside.examples.bootapi.dto.BookDto;
 import org.springside.examples.bootapi.repository.BookDao;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.modules.test.data.RandomData;
-import org.springside.modules.utils.text.JsonMapper;
+import org.springside.modules.utils.mapper.JsonMapper;
 
 import com.google.common.collect.Maps;
 

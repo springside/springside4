@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.mapper;
+package org.springside.modules.utils.mapper;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,7 +22,7 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.junit.Test;
-import org.springside.modules.web.JaxbMapper;
+import org.springside.modules.utils.mapper.XmlMapper;
 
 import com.google.common.collect.Lists;
 
@@ -42,7 +42,7 @@ import com.google.common.collect.Lists;
  * </user>
  * </pre>
  */
-public class JaxbMapperTest {
+public class XmlMapperTest {
 
 	@Test
 	public void objectToXml() {
@@ -53,7 +53,7 @@ public class JaxbMapperTest {
 		user.getInterests().add("movie");
 		user.getInterests().add("sports");
 
-		String xml = JaxbMapper.toXml(user, "UTF-8");
+		String xml = XmlMapper.toXml(user, "UTF-8");
 		System.out.println("Jaxb Object to Xml result:\n" + xml);
 		assertXmlByDom4j(xml);
 	}
@@ -61,7 +61,7 @@ public class JaxbMapperTest {
 	@Test
 	public void xmlToObject() {
 		String xml = generateXmlByDom4j();
-		User user = JaxbMapper.fromXml(xml, User.class);
+		User user = XmlMapper.fromXml(xml, User.class);
 
 		System.out.println("Jaxb Xml to Object result:\n" + user);
 
@@ -84,7 +84,7 @@ public class JaxbMapperTest {
 
 		List<User> userList = Lists.newArrayList(user1, user2);
 
-		String xml = JaxbMapper.toXml(userList, "userList", User.class, "UTF-8");
+		String xml = XmlMapper.toXml(userList, "userList", User.class, "UTF-8");
 		System.out.println("Jaxb Object List to Xml result:\n" + xml);
 	}
 

@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.web;
+package org.springside.modules.utils.mapper;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -32,7 +32,7 @@ import org.springside.modules.utils.reflect.ClassUtil;
  * 
  * @author calvin
  */
-public class JaxbMapper {
+public class XmlMapper {
 
 	private static ConcurrentMap<Class, JAXBContext> jaxbContexts = new ConcurrentHashMap<Class, JAXBContext>();
 

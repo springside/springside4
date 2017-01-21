@@ -1,4 +1,4 @@
-package org.springside.modules.utils.reflect;
+package org.springside.modules.utils.mapper;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
+import org.springside.modules.utils.mapper.BeanMapper;
 
 import ma.glasnost.orika.metadata.Type;
 

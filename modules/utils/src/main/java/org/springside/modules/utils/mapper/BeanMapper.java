@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  *******************************************************************************/
-package org.springside.modules.utils.reflect;
+package org.springside.modules.utils.mapper;
 
 import java.util.List;
 

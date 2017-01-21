@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import org.springside.examples.bootapi.service.exception.ServiceException;
-import org.springside.modules.utils.text.JsonMapper;
+import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.web.MediaTypes;
 
 import com.google.common.collect.Maps;

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springside.modules.utils.text.JsonMapper;
+import org.springside.modules.utils.mapper.JsonMapper;
 import org.springside.modules.web.MediaTypes;
 
 /**
