@@ -110,7 +110,7 @@ public class ThreadPoolUtilTest {
 		////////
 		executor = ThreadPoolBuilder.scheduledPool().build();
 		ExceptionTask newTask = new ExceptionTask();
-		Runnable wrapTask = ThreadPoolUtil.wrapException(newTask);
+		Runnable wrapTask = ThreadPoolUtil.safeRunnable(newTask);
 		executor.scheduleAtFixedRate(wrapTask, 0, 100, TimeUnit.MILLISECONDS);
 
 		ThreadUtil.sleep(500);
