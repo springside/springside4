@@ -252,6 +252,13 @@ public abstract class DateUtil {
 	}
 
 	/**
+	 * 2016-11-10 07:33:23, 则返回2016-12-31 23:59:59.999
+	 */
+	public static Date endOfYear(@NotNull final Date date) {
+		return new Date(nextYear(date).getTime() - 1);
+	}
+
+	/**
 	 * 2016-11-10 07:33:23, 则返回2017-1-1 00:00:00
 	 */
 	public static Date nextYear(@NotNull final Date date) {
@@ -266,6 +273,13 @@ public abstract class DateUtil {
 	}
 
 	/**
+	 * 2016-11-10 07:33:23, 则返回2016-11-30 23:59:59.999
+	 */
+	public static Date endOfMonth(@NotNull final Date date) {
+		return new Date(nextMonth(date).getTime() - 1);
+	}
+
+	/**
 	 * 2016-11-10 07:33:23, 则返回2016-12-1 00:00:00
 	 */
 	public static Date nextMonth(@NotNull final Date date) {
@@ -273,16 +287,24 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 2016-11-10 07:33:23, 则返回2016-11-1 00:00:00
+	 * 2017-1-20 07:33:23, 则返回2017-1-16 00:00:00
 	 */
 	public static Date beginOfWeek(@NotNull final Date date) {
-		return DateUtils.truncate(DateUtil.subDays(date, DateUtil.getDayOfWeek(date)-1), Calendar.DATE);
+		return DateUtils.truncate(DateUtil.subDays(date, DateUtil.getDayOfWeek(date) - 1), Calendar.DATE);
 	}
 
 	/**
-	 * 2016-11-10 07:33:23, 则返回2016-12-1 00:00:00
+	 * 2017-1-20 07:33:23, 则返回2017-1-22 23:59:59.999
 	 */
-	public static Date nextWeek(@NotNull final Date date) {return DateUtils.truncate(DateUtil.addDays(date, 8-DateUtil.getDayOfWeek(date)), Calendar.DATE);
+	public static Date endOfWeek(@NotNull final Date date) {
+		return new Date(nextWeek(date).getTime() - 1);
+	}
+
+	/**
+	 * 2017-1-23 07:33:23, 则返回2017-1-22 00:00:00
+	 */
+	public static Date nextWeek(@NotNull final Date date) {
+		return DateUtils.truncate(DateUtil.addDays(date, 8 - DateUtil.getDayOfWeek(date)), Calendar.DATE);
 	}
 
 	/**
@@ -290,6 +312,13 @@ public abstract class DateUtil {
 	 */
 	public static Date beginOfDate(@NotNull final Date date) {
 		return DateUtils.truncate(date, Calendar.DATE);
+	}
+
+	/**
+	 * 2017-1-23 07:33:23, 则返回2017-1-23 23:59:59.999
+	 */
+	public static Date endOfDate(@NotNull final Date date) {
+		return new Date(nextDate(date).getTime() - 1);
 	}
 
 	/**
@@ -307,6 +336,13 @@ public abstract class DateUtil {
 	}
 
 	/**
+	 * 2017-1-23 07:33:23, 则返回2017-1-23 07:59:59.999
+	 */
+	public static Date endOfHour(@NotNull final Date date) {
+		return new Date(nextHour(date).getTime() - 1);
+	}
+
+	/**
 	 * 2016-12-10 07:33:23, 则返回2016-12-10 08:00:00
 	 */
 	public static Date nextHour(@NotNull final Date date) {
@@ -318,6 +354,13 @@ public abstract class DateUtil {
 	 */
 	public static Date beginOfMinute(@NotNull final Date date) {
 		return DateUtils.truncate(date, Calendar.MINUTE);
+	}
+
+	/**
+	 * 2017-1-23 07:33:23, 则返回2017-1-23 07:33:59.999
+	 */
+	public static Date endOfMinute(@NotNull final Date date) {
+		return new Date(nextMinute(date).getTime() - 1);
 	}
 
 	/**

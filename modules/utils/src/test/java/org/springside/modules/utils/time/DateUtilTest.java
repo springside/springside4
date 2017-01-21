@@ -43,48 +43,56 @@ public class DateUtilTest {
 
 	@Test
 	public void truncateAndCelling() {
-		//Sat Jan 21 12:12:12 CST 2017
+		// Sat Jan 21 12:12:12 CST 2017
 		Date date = new Date(117, 0, 21, 12, 12, 12);
-		
+
 		Date beginYear = new Date(117, 0, 1, 0, 0, 0);
+		Date endYear = new Date(new Date(117, 11, 31, 23, 59, 59).getTime() + 999);
 		Date nextYear = new Date(118, 0, 1, 0, 0, 0);
 
 		Date beginMonth = new Date(117, 0, 1);
+		Date endMonth = new Date(new Date(117, 0, 31, 23, 59, 59).getTime() + 999);
 		Date nextMonth = new Date(117, 1, 1);
 
 		Date beginWeek = new Date(117, 0, 16);
+		Date endWeek = new Date(new Date(117, 0, 22, 23, 59, 59).getTime() + 999);
 		Date nextWeek = new Date(117, 0, 23);
-		
-		
+
 		Date beginDate = new Date(117, 0, 21);
+		Date endDate = new Date(new Date(117, 0, 21, 23, 59, 59).getTime() + 999);
 		Date nextDate = new Date(117, 0, 22);
-		
+
 		Date beginHour = new Date(117, 0, 21, 12, 0, 0);
+		Date endHour = new Date(new Date(117, 0, 21, 12, 59, 59).getTime() + 999);
 		Date nextHour = new Date(117, 0, 21, 13, 0, 0);
 
 		Date beginMinute = new Date(117, 0, 21, 12, 12, 0);
+		Date endMinute = new Date(new Date(117, 0, 21, 12, 12, 59).getTime() + 999);
 		Date nextMinute = new Date(117, 0, 21, 12, 13, 0);
-		
+
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfYear(date), beginYear)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfYear(date), endYear)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextYear(date), nextYear)).isTrue();
 
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfMonth(date), beginMonth)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfMonth(date), endMonth)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextMonth(date), nextMonth)).isTrue();
-		
+
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfWeek(date), beginWeek)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfWeek(date), endWeek)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextWeek(date), nextWeek)).isTrue();
 
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfDate(date), beginDate)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfDate(date), endDate)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextDate(date), nextDate)).isTrue();
 
-		
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfHour(date), beginHour)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfHour(date), endHour)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextHour(date), nextHour)).isTrue();
 
 		assertThat(DateUtil.isSameTime(DateUtil.beginOfMinute(date), beginMinute)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfMinute(date), endMinute)).isTrue();
 		assertThat(DateUtil.isSameTime(DateUtil.nextMinute(date), nextMinute)).isTrue();
-		
-	
 	}
 
 	@Test
