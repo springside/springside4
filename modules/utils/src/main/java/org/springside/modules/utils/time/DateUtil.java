@@ -53,39 +53,11 @@ public abstract class DateUtil {
 		}
 		return !date.before(start) && !date.after(end);
 	}
-	
-	/////////// 日期设置处理 /////////
-
-	/**
-	 * 日期往下取整.
-	 * 
-	 * 如 2016-12-10 07:33:23, 如果filed为Calendar.HOUR，则返回2016-12-10 07:00:00
-	 * 
-	 * 如果filed为Calendar.MONTH，则返回2016-12-01 00:00:00
-	 * 
-	 * @param field Calendar.HOUR,Calendar.Date etc...
-	 */
-	public static Date truncate(@NotNull final Date date, int field) {
-		return DateUtils.truncate(date, field);
-	}
-
-	/**
-	 * 日期往上取整.
-	 * 
-	 * 如 2016-12-10 07:33:23, 如果filed为Calendar.HOUR，则返回2016-12-10 08:00:00
-	 * 
-	 * 如果filed为 Calendar.MONTH，则返回2017-01-01 00:00:00
-	 * 
-	 * @param field Calendar.HOUR,Calendar.Date etc...
-	 */
-	public static Date ceiling(@NotNull final Date date, int field) {
-		return DateUtils.ceiling(date, field);
-	}
 
 	//////////// 往前往后滚动时间//////////////
 
 	/**
-	 * 续一月
+	 * 加一月
 	 */
 	public static Date addMonths(@NotNull final Date date, int amount) {
 		return DateUtils.addMonths(date, amount);
@@ -99,7 +71,7 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 续一周
+	 * 加一周
 	 */
 	public static Date addWeeks(@NotNull final Date date, int amount) {
 		return DateUtils.addWeeks(date, amount);
@@ -113,7 +85,7 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 续一天
+	 * 加一天
 	 */
 	public static Date addDays(@NotNull final Date date, final int amount) {
 		return DateUtils.addDays(date, amount);
@@ -127,21 +99,21 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 续一个小时
+	 * 加一小时
 	 */
 	public static Date addHours(@NotNull final Date date, int amount) {
 		return DateUtils.addHours(date, amount);
 	}
 
 	/**
-	 * 减一个小时
+	 * 减一小时
 	 */
 	public static Date subHours(@NotNull final Date date, int amount) {
 		return DateUtils.addHours(date, -amount);
 	}
 
 	/**
-	 * 续一分钟
+	 * 加一分钟
 	 */
 	public static Date addMinutes(@NotNull final Date date, int amount) {
 		return DateUtils.addMinutes(date, amount);
@@ -206,7 +178,7 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 设置秒.
+	 * 设置秒, 0-59.
 	 */
 	public static Date setSeconds(@NotNull final Date date, int amount) {
 		return DateUtils.setSeconds(date, amount);
@@ -219,14 +191,13 @@ public abstract class DateUtil {
 		return DateUtils.setMilliseconds(date, amount);
 	}
 
-	///// 获取日期的//////
+	///// 获取日期的位置//////
 	/**
-	 * 获得日期是一周的第几天, 返回值为1是Sunday , 2是Monday....
-	 * 
-	 * 可通过Canendar的setFirstDayOfWeek()来改变Monday开始为1
+	 * 获得日期是一周的第几天. 已改为中国习惯，1 是Monday，而不是Sundays.
 	 */
 	public static int getDayOfWeek(@NotNull final Date date) {
-		return get(date, Calendar.DAY_OF_WEEK);
+		int result = get(date, Calendar.DAY_OF_WEEK);
+		return result == 1 ? 7 : result - 1;
 	}
 
 	/**
@@ -237,28 +208,123 @@ public abstract class DateUtil {
 	}
 
 	/**
-	 * 获得日期是一年的第几天，返回值从1开始.
+	 * 获得日期是一月的第几周，返回值从1开始.
 	 * 
-	 * 开始的一周，只要有一天在那个月里都算.
+	 * 开始的一周，只要有一天在那个月里都算. 已改为中国习惯，1 是Monday，而不是Sunday
 	 */
 	public static int getWeekOfMonth(@NotNull final Date date) {
-		return get(date, Calendar.WEEK_OF_MONTH);
+		return getWithMondayFirst(date, Calendar.WEEK_OF_MONTH);
 	}
 
 	/**
 	 * 获得日期是一年的第几周，返回值从1开始.
 	 * 
-	 * 开始的一周，只要有一天在那一年里都算.
+	 * 开始的一周，只要有一天在那一年里都算.已改为中国习惯，1 是Monday，而不是Sunday
 	 */
 	public static int getWeekOfYear(@NotNull final Date date) {
-		return get(date, Calendar.WEEK_OF_YEAR);
+		return getWithMondayFirst(date, Calendar.WEEK_OF_YEAR);
 	}
 
 	private static int get(final Date date, int field) {
 		Validate.notNull(date, "The date must not be null");
 		Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
+		cal.setTime(date);
+
+		return cal.get(field);
+	}
+
+	private static int getWithMondayFirst(final Date date, int field) {
+		Validate.notNull(date, "The date must not be null");
+		Calendar cal = Calendar.getInstance();
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
 		return cal.get(field);
+	}
+
+	///// 获得往前往后的日期//////
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-1-1 00:00:00
+	 */
+	public static Date beginOfYear(@NotNull final Date date) {
+		return DateUtils.truncate(date, Calendar.YEAR);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2017-1-1 00:00:00
+	 */
+	public static Date nextYear(@NotNull final Date date) {
+		return DateUtils.ceiling(date, Calendar.YEAR);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-11-1 00:00:00
+	 */
+	public static Date beginOfMonth(@NotNull final Date date) {
+		return DateUtils.truncate(date, Calendar.MONTH);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-12-1 00:00:00
+	 */
+	public static Date nextMonth(@NotNull final Date date) {
+		return DateUtils.ceiling(date, Calendar.MONTH);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-11-1 00:00:00
+	 */
+	public static Date beginOfWeek(@NotNull final Date date) {
+		return DateUtils.truncate(DateUtil.subDays(date, DateUtil.getDayOfWeek(date)-1), Calendar.DATE);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-12-1 00:00:00
+	 */
+	public static Date nextWeek(@NotNull final Date date) {return DateUtils.truncate(DateUtil.addDays(date, 8-DateUtil.getDayOfWeek(date)), Calendar.DATE);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-11-10 00:00:00
+	 */
+	public static Date beginOfDate(@NotNull final Date date) {
+		return DateUtils.truncate(date, Calendar.DATE);
+	}
+
+	/**
+	 * 2016-11-10 07:33:23, 则返回2016-11-11 00:00:00
+	 */
+	public static Date nextDate(@NotNull final Date date) {
+		return DateUtils.ceiling(date, Calendar.DATE);
+	}
+
+	/**
+	 * 2016-12-10 07:33:23, 则返回2016-12-10 07:00:00
+	 */
+	public static Date beginOfHour(@NotNull final Date date) {
+		return DateUtils.truncate(date, Calendar.HOUR_OF_DAY);
+	}
+
+	/**
+	 * 2016-12-10 07:33:23, 则返回2016-12-10 08:00:00
+	 */
+	public static Date nextHour(@NotNull final Date date) {
+		return DateUtils.ceiling(date, Calendar.HOUR_OF_DAY);
+	}
+
+	/**
+	 * 2016-12-10 07:33:23, 则返回2016-12-10 07:33:00
+	 */
+	public static Date beginOfMinute(@NotNull final Date date) {
+		return DateUtils.truncate(date, Calendar.MINUTE);
+	}
+
+	/**
+	 * 2016-12-10 07:33:23, 则返回2016-12-10 07:34:00
+	 */
+	public static Date nextMinute(@NotNull final Date date) {
+		return DateUtils.ceiling(date, Calendar.MINUTE);
 	}
 
 	////// 闰年及每月天数///////

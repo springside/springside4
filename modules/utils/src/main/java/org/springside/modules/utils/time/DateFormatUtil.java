@@ -1,7 +1,6 @@
 package org.springside.modules.utils.time;
 
 import java.text.ParseException;
-import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -147,7 +146,7 @@ public abstract class DateFormatUtil {
 			return String.format("%d分钟前", span / DateUtil.MILLIS_PER_MINUTE);
 		}
 		// 获取当天00:00
-		long wee = DateUtil.truncate(new Date(now), Calendar.DATE).getTime();
+		long wee = DateUtil.beginOfDate(new Date(now)).getTime();
 		if (timeStampMillis >= wee) {
 			// 'R' 24 小时制的时间，被格式化为 "%tH:%tM"
 			return String.format("今天%tR", timeStampMillis);
