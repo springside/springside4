@@ -373,6 +373,37 @@ public abstract class ClassUtil {
 
 	/////////// 杂项 /////////
 	/**
+	 * From Spring, 按顺序获取默认ClassLoader
+	 * 
+	 * 1. Thread.currentThread().getContextClassLoader()
+	 * 
+	 * 2. ClassUtil的加载ClassLoader
+	 * 
+	 * 3. SystemClassLoader
+	 */
+	public static ClassLoader getDefaultClassLoader() {
+		ClassLoader cl = null;
+		try {
+			cl = Thread.currentThread().getContextClassLoader();
+		} catch (Throwable ex) {
+			// Cannot access thread context ClassLoader - falling back...
+		}
+		if (cl == null) {
+			// No thread context class loader -> use class loader of this class.
+			cl = ClassUtils.class.getClassLoader();
+			if (cl == null) {
+				// getClassLoader() returning null indicates the bootstrap ClassLoader
+				try {
+					cl = ClassLoader.getSystemClassLoader();
+				} catch (Throwable ex) {
+					// Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+				}
+			}
+		}
+		return cl;
+	}
+
+	/**
 	 * 获取CGLib处理过后的实体的原Class.
 	 */
 	public static Class<?> unwrapCglib(Object instance) {
@@ -386,8 +417,6 @@ public abstract class ClassUtil {
 		}
 		return clazz;
 	}
-
-	////////////////
 
 	/**
 	 * 通过反射, 获得Class定义中声明的泛型参数的类型,

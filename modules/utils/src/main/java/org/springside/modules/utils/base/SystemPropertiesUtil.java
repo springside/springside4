@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springside.modules.utils.base.SystemPropertiesUtil.PropertiesListener;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**
@@ -198,7 +197,6 @@ public class SystemPropertiesUtil {
 	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
 	 * 在其所关心的属性变化时进行通知.
 	 * 
-	 * @see PropertiesUtil#registerSystemPropertiesListener(PropertiesListener)
 	 * @see PropertiesListener
 	 */
 	public static class ListenableProperties extends Properties {

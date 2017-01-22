@@ -20,7 +20,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  * 
  * 2. 创建可自定义线程名的ThreadFactory(via guava)
  * 
- * 3. 防止第三方Runnalbe未捕捉异常导致线程跑飞
+ * 3. 防止第三方Runnable未捕捉异常导致线程跑飞
  * 
  * @author calvin
  *
@@ -81,24 +81,24 @@ public class ThreadPoolUtil {
 	}
 
 	/**
-	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行.
+	 * 防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法继续执行.
 	 * 
-	 * 在无法控制第三方包的Runnalbe实现时，调用本函数进行包裹.
+	 * 在无法控制第三方包的Runnable实现时，调用本函数进行包裹.
 	 */
-	public static Runnable wrapException(@NotNull Runnable runnable) {
-		return new WrapExceptionRunnable(runnable);
+	public static Runnable safeRunnable(@NotNull Runnable runnable) {
+		return new SafeRunnable(runnable);
 	}
 
 	/**
 	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，使用本类进行包裹.
 	 */
-	public static class WrapExceptionRunnable implements Runnable {
+	public static class SafeRunnable implements Runnable {
 	
-		private static Logger logger = LoggerFactory.getLogger(WrapExceptionRunnable.class);
+		private static Logger logger = LoggerFactory.getLogger(SafeRunnable.class);
 	
 		private Runnable runnable;
 	
-		public WrapExceptionRunnable(Runnable runnable) {
+		public SafeRunnable(Runnable runnable) {
 			Validate.notNull(runnable);
 			this.runnable = runnable;
 		}

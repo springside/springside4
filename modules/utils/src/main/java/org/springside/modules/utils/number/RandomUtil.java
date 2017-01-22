@@ -7,19 +7,16 @@ import java.util.Random;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.MoreValidate;
-import org.springside.modules.utils.base.Platforms;
 
 /**
  * 随机数工具集.
  * 
- * 1. 获取无锁的兼容JDK6的ThreadLocalRandom
+ * 1. 获取无锁的ThreadLocalRandom, 性能较佳的SecureRandom
  * 
- * 2. 获取性能较佳的SecureRandom
- * 
- * 3. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble (copy from Common Lang
+ * 2. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble (copy from Common Lang
  * RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
  * 
- * 4. 随机字符串
+ * 3. 随机字符串
  * 
  * @author calvin
  */
@@ -28,15 +25,9 @@ public abstract class RandomUtil {
 	/////////////////// 获取Random实例//////////////
 	/**
 	 * 返回无锁的ThreadLocalRandom
-	 * 
-	 * 如果JDK6，使用移植于jsr166e的版本(相当于JDK7的实现)
 	 */
 	public static Random threadLocalRandom() {
-		if (Platforms.IS_ATLEASET_JAVA7) {
-			return java.util.concurrent.ThreadLocalRandom.current();
-		} else {
-			return org.springside.modules.utils.concurrent.jsr166e.ThreadLocalRandom.current();
-		}
+		return java.util.concurrent.ThreadLocalRandom.current();
 	}
 
 	/**

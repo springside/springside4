@@ -9,7 +9,7 @@ public class ConcurrentToolsTest {
 
 	@Test
 	public void longAdder() {
-		LongAdder counter = ConcurrentTools.newLongAdder();
+		LongAdder counter = ConcurrentTools.longAdder();
 		counter.increment();
 		counter.add(2);
 		assertThat(counter.longValue()).isEqualTo(3L);

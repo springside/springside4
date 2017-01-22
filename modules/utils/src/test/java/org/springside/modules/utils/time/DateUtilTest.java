@@ -2,7 +2,6 @@ package org.springside.modules.utils.time;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import org.junit.Test;
@@ -43,23 +42,57 @@ public class DateUtilTest {
 	}
 
 	@Test
-	public void truncate() {
-		Date date = new Date(106, 10, 1, 12, 12, 12);
-		Date expectedDate = new Date(106, 10, 1);
+	public void truncateAndCelling() {
+		// Sat Jan 21 12:12:12 CST 2017
+		Date date = new Date(117, 0, 21, 12, 12, 12);
 
-		Date resultDate = DateUtil.truncate(date, Calendar.DATE);
+		Date beginYear = new Date(117, 0, 1, 0, 0, 0);
+		Date endYear = new Date(new Date(117, 11, 31, 23, 59, 59).getTime() + 999);
+		Date nextYear = new Date(118, 0, 1, 0, 0, 0);
 
-		assertThat(resultDate.getTime()).isEqualTo(expectedDate.getTime());
-	}
+		Date beginMonth = new Date(117, 0, 1);
+		Date endMonth = new Date(new Date(117, 0, 31, 23, 59, 59).getTime() + 999);
+		Date nextMonth = new Date(117, 1, 1);
 
-	@Test
-	public void celling() {
-		Date date = new Date(106, 10, 1, 12, 12, 12);
-		Date expectedDate = new Date(106, 10, 2);
+		Date beginWeek = new Date(117, 0, 16);
+		Date endWeek = new Date(new Date(117, 0, 22, 23, 59, 59).getTime() + 999);
+		Date nextWeek = new Date(117, 0, 23);
 
-		Date resultDate = DateUtil.ceiling(date, Calendar.DATE);
+		Date beginDate = new Date(117, 0, 21);
+		Date endDate = new Date(new Date(117, 0, 21, 23, 59, 59).getTime() + 999);
+		Date nextDate = new Date(117, 0, 22);
 
-		assertThat(resultDate.getTime()).isEqualTo(expectedDate.getTime());
+		Date beginHour = new Date(117, 0, 21, 12, 0, 0);
+		Date endHour = new Date(new Date(117, 0, 21, 12, 59, 59).getTime() + 999);
+		Date nextHour = new Date(117, 0, 21, 13, 0, 0);
+
+		Date beginMinute = new Date(117, 0, 21, 12, 12, 0);
+		Date endMinute = new Date(new Date(117, 0, 21, 12, 12, 59).getTime() + 999);
+		Date nextMinute = new Date(117, 0, 21, 12, 13, 0);
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfYear(date), beginYear)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfYear(date), endYear)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextYear(date), nextYear)).isTrue();
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfMonth(date), beginMonth)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfMonth(date), endMonth)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextMonth(date), nextMonth)).isTrue();
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfWeek(date), beginWeek)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfWeek(date), endWeek)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextWeek(date), nextWeek)).isTrue();
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfDate(date), beginDate)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfDate(date), endDate)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextDate(date), nextDate)).isTrue();
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfHour(date), beginHour)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfHour(date), endHour)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextHour(date), nextHour)).isTrue();
+
+		assertThat(DateUtil.isSameTime(DateUtil.beginOfMinute(date), beginMinute)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.endOfMinute(date), endMinute)).isTrue();
+		assertThat(DateUtil.isSameTime(DateUtil.nextMinute(date), nextMinute)).isTrue();
 	}
 
 	@Test
@@ -124,8 +157,10 @@ public class DateUtilTest {
 	public void getDayOfWeek() {
 		// 2017-01-09
 		Date date = new Date(117, 0, 9);
-		int dayOfWeek = DateUtil.getDayOfWeek(date);
-		assertThat(dayOfWeek).isEqualTo(2);
+		assertThat(DateUtil.getDayOfWeek(date)).isEqualTo(1);
+
+		Date date2 = new Date(117, 0, 15);
+		assertThat(DateUtil.getDayOfWeek(date2)).isEqualTo(7);
 	}
 
 	@Test
@@ -160,7 +195,7 @@ public class DateUtilTest {
 		assertThat(DateUtil.getDayOfYear(date4)).isEqualTo(364);
 
 		Date date5 = new Date(117, 0, 12);
-		assertThat(DateUtil.getWeekOfMonth(date5)).isEqualTo(2);
-		assertThat(DateUtil.getWeekOfYear(date5)).isEqualTo(2);
+		assertThat(DateUtil.getWeekOfMonth(date5)).isEqualTo(3);
+		assertThat(DateUtil.getWeekOfYear(date5)).isEqualTo(3);
 	}
 }

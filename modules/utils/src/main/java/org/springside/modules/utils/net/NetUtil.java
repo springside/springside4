@@ -79,7 +79,7 @@ public abstract class NetUtil {
 	/**
 	 * 在范围里随机找一个空闲端口,from Spring SocketUtils.
 	 * 
-	 * @throws IllegalStateException  最多尝试(maxPort-minPort)次，如无空闲端口，抛出此异常.
+	 * @throws IllegalStateException 最多尝试(maxPort-minPort)次，如无空闲端口，抛出此异常.
 	 */
 	public static int findRandomAvailablePort(int minPort, int maxPort) {
 		int portRange = maxPort - minPort;
@@ -152,8 +152,8 @@ public abstract class NetUtil {
 		String preferNamePrefix = SystemPropertiesUtil.getString("localhost.prefer.nic.prefix",
 				"LOCALHOST_PREFER_NIC_PREFIX", "bond0.");
 		// 如果hostname +/etc/hosts 得到的是127.0.0.1, 和首选网卡都不符合要求，则按顺序遍历下面的网卡
-		String defaultNicList = SystemPropertiesUtil.getString("localhost.default.nic.list", "LOCALHOST_DEFAULT_NIC_LIST",
-				"bond0,eth0,em0,br0");
+		String defaultNicList = SystemPropertiesUtil.getString("localhost.default.nic.list",
+				"LOCALHOST_DEFAULT_NIC_LIST", "bond0,eth0,em0,br0");
 
 		InetAddress resultAddress = null;
 		Map<String, NetworkInterface> candidateInterfaces = MapUtil.newHashMap();
@@ -188,9 +188,11 @@ public abstract class NetUtil {
 
 			for (String nifName : defaultNicList.split(",")) {
 				NetworkInterface nic = candidateInterfaces.get(nifName);
-				resultAddress = findAvailableInetAddress(nic);
-				if (resultAddress != null) {
-					return resultAddress;
+				if (nic != null) {
+					resultAddress = findAvailableInetAddress(nic);
+					if (resultAddress != null) {
+						return resultAddress;
+					}
 				}
 			}
 		} catch (SocketException e) {

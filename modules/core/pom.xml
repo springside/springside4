@@ -9,14 +9,14 @@
 	<name>Springside :: Module :: Core</name>
 
 	<properties>
-		<spring.version>4.1.8.RELEASE</spring.version>
+		<spring.version>4.3.5.RELEASE</spring.version>
 		<springside.version>5.0.0-SNAPSHOT</springside.version>
 		<guava.version>20.0</guava.version>
 		<commons-lang3.version>3.5</commons-lang3.version>
 		<slf4j.version>1.7.22</slf4j.version>
 		<logback.version>1.1.8</logback.version>
 		<junit.version>4.12</junit.version>
-		<assertj.version>2.2.0</assertj.version>
+		<assertj.version>2.6.0</assertj.version>
 		<mockito.version>1.10.19</mockito.version>
 
 		<!-- Plugin的属性 -->
@@ -127,6 +127,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -135,36 +136,6 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>
-
-			<!-- 打包测试用的jar包，classfier为tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>test-jar</goal>
-						</goals>
-						<configuration>
-							<includes>
-								<include>org/springside/modules/test/**/*.class</include>
-								<include>jetty/webdefault-windows.xml</include>
-							</includes>
-							<excludes>
-								<exclude>org/springside/modules/test/**/*Test.class</exclude>
-							</excludes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- enforcer, 规则统一定义在parent -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>1.4.1</version>
 			</plugin>
 		</plugins>
 	</build>

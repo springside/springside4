@@ -15,7 +15,7 @@ public class ConcurrentTools {
 	 * 
 	 * 为了保持JDK版本兼容性，统一采用移植版
 	 */
-	public static LongAdder newLongAdder() {
+	public static LongAdder longAdder() {
 		return new LongAdder();
 	}
 

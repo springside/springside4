@@ -93,7 +93,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 
 		// Allocate the arrays.
 		keys = new int[capacity];
-		@SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
+		@SuppressWarnings({ "unchecked" })
 		V[] temp = (V[]) new Object[capacity];
 		values = temp;
 
@@ -453,7 +453,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 		V[] oldVals = values;
 
 		keys = new int[newCapacity];
-		@SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
+		@SuppressWarnings({ "unchecked" })
 		V[] temp = (V[]) new Object[newCapacity];
 		values = temp;
 
