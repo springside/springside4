@@ -111,6 +111,15 @@ public abstract class ListUtil {
 	}
 
 	/**
+	 * 根据等号左边的类型，构造类型正确的LinkedList.
+	 * 
+	 * @see com.google.common.collect.Lists#newLinkedList()
+	 */
+	public static <T> LinkedList<T> newLinkedList(Iterable<? extends T> elements) {
+		return Lists.newLinkedList(elements);
+	}
+
+	/**
 	 * 根据等号左边的类型，构造类型正确的CopyOnWriteArrayList.
 	 * 
 	 * @see com.google.common.collect.Lists#newCopyOnWriteArrayList()
@@ -301,7 +310,7 @@ public abstract class ListUtil {
 	 * 对比Apache Common Collection4 ListUtils, 优化了初始大小
 	 */
 	public static <E> List<E> union(final List<? extends E> list1, final List<? extends E> list2) {
-		final ArrayList<E> result = new ArrayList<E>(list1.size() + list2.size());
+		final List<E> result = new ArrayList<E>(list1.size() + list2.size());
 		result.addAll(list1);
 		result.addAll(list2);
 		return result;
@@ -315,8 +324,6 @@ public abstract class ListUtil {
 	 * 与List.retainAll()相比，考虑了的List中相同元素出现的次数, 如"a"在list1出现两次，而在list2中只出现一次，则交集里会保留一个"a".
 	 */
 	public static <T> List<T> intersection(final List<? extends T> list1, final List<? extends T> list2) {
-		final List<T> result = new ArrayList<T>();
-
 		List<? extends T> smaller = list1;
 		List<? extends T> larger = list2;
 		if (list1.size() > list2.size()) {
@@ -324,7 +331,9 @@ public abstract class ListUtil {
 			larger = list1;
 		}
 
+		// 克隆一个可修改的副本
 		List<T> newSmaller = new ArrayList<T>(smaller);
+		List<T> result = new ArrayList<T>(smaller.size());
 		for (final T e : larger) {
 			if (newSmaller.contains(e)) {
 				result.add(e);
@@ -337,10 +346,10 @@ public abstract class ListUtil {
 	/**
 	 * list1, list2的差集（在list1，不在list2中的对象），产生新List.
 	 * 
-	 * 于List.removeAll()相比，会计算元素出现的次数，如"a"在list1出现两次，而在list2中只出现一次，则差集里会保留一个"a".
+	 * 与List.removeAll()相比，会计算元素出现的次数，如"a"在list1出现两次，而在list2中只出现一次，则差集里会保留一个"a".
 	 */
 	public static <T> List<T> difference(final List<? extends T> list1, final List<? extends T> list2) {
-		final ArrayList<T> result = new ArrayList<T>(list1);
+		final List<T> result = new ArrayList<T>(list1);
 		final Iterator<? extends T> iterator = list2.iterator();
 
 		while (iterator.hasNext()) {
