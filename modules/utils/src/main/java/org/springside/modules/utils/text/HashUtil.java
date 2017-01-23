@@ -33,8 +33,6 @@ import com.google.common.hash.Hashing;
  * 
  * 其中crc32基于JDK, murmurhash基于guava
  * 
- * 3.无需哈希环的一致性哈希
- * 
  * @author calvin
  */
 public abstract class HashUtil {
@@ -246,18 +244,4 @@ public abstract class HashUtil {
 	public static long murmur128AsLong(@NotNull String input) {
 		return Hashing.murmur3_128(MURMUR_SEED).hashString(input, Charsets.UTF_8).asLong();
 	}
-
-	///////////////// 一致性哈希//////////
-
-	/**
-	 * 一致性哈希算法，无需构造一致性哈希环的
-	 * 
-	 * @param input 输入值
-	 * @param buckets 桶的数量, 必须>0
-	 * @return 分配到的桶的index，从0开始
-	 */
-	public static int consistentHash(long input, int buckets) {
-		return Hashing.consistentHash(input, buckets);
-	}
-
 }
