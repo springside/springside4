@@ -41,13 +41,41 @@ public class FileUtilTest {
 
 		String content = "haha\nhehe";
 		FileUtil.write(content, file);
+		assertThat(FileUtil.toString(file)).isEqualTo(content);
+		
 		File newFile = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testFile" + RandomUtil.nextInt()));
+		File newFile2 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testFile" + RandomUtil.nextInt()));
 
 		FileUtil.copyFile(file, newFile);
 		assertThat(FileUtil.isFileExists(newFile)).isTrue();
+		assertThat(FileUtil.toString(newFile)).isEqualTo(content);
 
-		String result = FileUtil.toString(newFile);
-		assertThat(result).isEqualTo(content);
+		FileUtil.moveFile(newFile, newFile2);
+		assertThat(FileUtil.toString(newFile2)).isEqualTo("haha\nhehe");
+
+	
+	}
+
+	@Test
+	public void opDir() throws IOException {
+		String fileName = "testFile" + RandomUtil.nextInt();
+		File dir = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir"));
+
+		File file = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir", fileName));
+		String content = "haha\nhehe";
+		FileUtil.makesureDirExists(dir);
+		FileUtil.write(content, file);
+
+		File dir2 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir2"));
+		FileUtil.copyDir(dir, dir2);
+		File file2 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir2", fileName));
+		assertThat(FileUtil.toString(file2)).isEqualTo("haha\nhehe");
+
+		File dir3 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir3"));
+		FileUtil.moveDir(dir, dir3);
+		File file3 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testDir3", fileName));
+		assertThat(FileUtil.toString(file3)).isEqualTo("haha\nhehe");
+		assertThat(FileUtil.isDirExists(dir)).isFalse();
 
 	}
 
@@ -67,8 +95,6 @@ public class FileUtilTest {
 			FileUtil.deleteFile(tmpFile);
 		}
 	}
-
-	private String sep = Platforms.FILE_PATH_SEPARATOR;
 
 	@Test
 	public void getName() {

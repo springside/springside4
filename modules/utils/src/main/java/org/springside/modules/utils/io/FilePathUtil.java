@@ -58,10 +58,30 @@ public abstract class FilePathUtil {
 	}
 
 	/**
+	 * 获得上层目录的路径
+	 */
+	public static String getParentPath(String path) {
+		String parentPath = path;
+
+		if (Platforms.FILE_PATH_SEPARATOR.equals(parentPath)) {
+			return parentPath;
+		}
+
+		parentPath = MoreStringUtil.removeEnd(parentPath, Platforms.FILE_PATH_SEPARATOR_CHAR);
+
+		int idx = parentPath.lastIndexOf(Platforms.FILE_PATH_SEPARATOR_CHAR);
+		if (idx >= 0)
+			parentPath = parentPath.substring(0, idx + 1);
+		else
+			parentPath = Platforms.FILE_PATH_SEPARATOR;
+
+		return parentPath;
+	}
+
+	/**
 	 * 获得参数clazz所在的Jar文件的绝对路径
 	 */
 	public static String getJarPath(Class<?> clazz) {
 		return clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
 	}
-
 }

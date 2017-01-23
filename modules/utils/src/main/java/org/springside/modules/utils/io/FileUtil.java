@@ -109,11 +109,13 @@ public abstract class FileUtil {
 	 */
 	public static void copy(@NotNull File from, @NotNull File to) throws IOException {
 		Validate.notNull(from);
+		Validate.notNull(to);
 
-		if (from.isDirectory())
+		if (from.isDirectory()) {
 			copyDir(from, to);
-		else
+		} else {
 			copyFile(from, to);
+		}
 	}
 
 	/**
@@ -242,14 +244,14 @@ public abstract class FileUtil {
 	/**
 	 * 确保目录存在, 如不存在则创建
 	 */
-	public static void makeSureDirExists(String dirPath) throws IOException {
-		makeSureDirExists(getFileByPath(dirPath));
+	public static void makesureDirExists(String dirPath) throws IOException {
+		makesureDirExists(getFileByPath(dirPath));
 	}
 
 	/**
 	 * 确保目录存在, 如不存在则创建
 	 */
-	public static void makeSureDirExists(File file) throws IOException {
+	public static void makesureDirExists(File file) throws IOException {
 		Validate.notNull(file);
 		if (file.exists()) {
 			if (!file.isDirectory()) {
@@ -265,7 +267,7 @@ public abstract class FileUtil {
 	 * 
 	 * @see Files#createParentDirs(File)
 	 */
-	public static void createParentDirs(File file) throws IOException {
+	public static void makesureParentDirExists(File file) throws IOException {
 		Files.createParentDirs(file);
 	}
 
@@ -335,5 +337,4 @@ public abstract class FileUtil {
 	public static String getFileExtension(String fullName) {
 		return Files.getFileExtension(fullName);
 	}
-
 }

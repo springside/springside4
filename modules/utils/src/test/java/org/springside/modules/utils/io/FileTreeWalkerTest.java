@@ -25,7 +25,7 @@ public class FileTreeWalkerTest {
 		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
 
 		String childDir = FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
-		FileUtil.makeSureDirExists(childDir);
+		FileUtil.makesureDirExists(childDir);
 
 		FileUtil.touch(FilePathUtil.contact(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
 
@@ -35,20 +35,34 @@ public class FileTreeWalkerTest {
 		files = FileTreeWalker.listFile(tmpDir);
 		assertThat(files).hasSize(3);
 
+		//extension
 		files = FileTreeWalker.listFileWithExtension(tmpDir, "tmp");
 		assertThat(files).hasSize(2);
 
 		files = FileTreeWalker.listFileWithExtension(tmpDir, "tp");
 		assertThat(files).hasSize(0);
 
+		//wildcard
 		files = FileTreeWalker.listFileWithWildcardFileName(tmpDir, "*.tmp");
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithWildcardFileName(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 
+		//regex
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tmp");
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tp");
+		assertThat(files).hasSize(0);
+		
+		
+		//antpath
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**/*.tmp");
+		assertThat(files).hasSize(2);
+		
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*/*.tmp");
+		assertThat(files).hasSize(1);
+		
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 
 		FileUtil.deleteDir(tmpDir);

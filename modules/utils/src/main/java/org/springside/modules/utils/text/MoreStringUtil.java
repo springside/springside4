@@ -10,9 +10,9 @@ import org.springside.modules.utils.collection.ListUtil;
 import com.google.common.base.Utf8;
 
 /**
- * 尽量使用Common Lang StringUtils, 完全覆盖了guva对应的部分(除了split和join的API没那么酷)
+ * 尽量使用Common Lang StringUtils, 基本覆盖了所有类库的StringUtils
  * 
- * 本类仅补充少量额外方法.
+ * 本类仅补充少量额外方法, 尤其是针对char的运算
  * 
  * @author calvin
  */
@@ -117,6 +117,16 @@ public abstract class MoreStringUtil {
 		}
 		return s.charAt(s.length() - 1) == c;
 	}
+	
+	/**
+	 * 如果结尾字符为c, 去除掉该字符.
+	 */
+	public static String removeEnd(final String s, final char c) {
+        if (endWith(s,c)) {
+            return s.substring(0, s.length() - 1);
+        }
+        return s;
+    }
 
 	/**
 	 * 计算字符串被UTF8编码后的字节数 via guava

@@ -29,6 +29,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.Platforms;
 
 /**
+ * 
+ * 从Jodd移植，匹配以通配符比较字符串（比正则表达式简单），以及Ant Path风格如比较目录Path
+ * 
  * Checks whether a string or path matches a given wildcard pattern. Possible patterns allow to match single characters
  * ('?') or any count of characters ('*'). Wildcard characters can be escaped (by an '\'). When matching path, deep tree
  * wildcard also can be used ('**').

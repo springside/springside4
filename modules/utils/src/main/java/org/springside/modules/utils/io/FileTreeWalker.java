@@ -61,7 +61,7 @@ public class FileTreeWalker {
 	 * 如 ("/a/b/hello.txt", "he.*\.text") 将被返回
 	 */
 	public static List<File> listFileWithAntPath(final File rootDir, final String antPathPattern) {
-		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new AntPathFilter(antPathPattern)).toList();
+		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new AntPathFilter(FilePathUtil.contact(rootDir.getAbsolutePath(), antPathPattern))).toList();
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class FileTreeWalker {
 
 		@Override
 		public boolean apply(File input) {
-			return input.isFile() && WildcardMatcher.matchPath(input.getName(), pattern);
+			return input.isFile() && WildcardMatcher.matchPath(input.getAbsolutePath(), pattern);
 		}
 	}
 }

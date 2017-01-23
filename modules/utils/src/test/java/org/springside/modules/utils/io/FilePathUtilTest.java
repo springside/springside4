@@ -14,14 +14,20 @@ public class FilePathUtilTest {
 	@Test
 	public void pathName() {
 		String filePath = FilePathUtil.contact(sep + "abc", "ef");
-		assertThat(filePath).isEqualTo(sep + "abc" + sep + "ef");
+		assertThat(filePath).isEqualTo(FilePathUtil.normalizePath("/abc/ef"));
 
-		String filePath2 = FilePathUtil.contact(sep + "stuv", "xy");
-		assertThat(filePath2).isEqualTo(sep + "stuv" + sep + "xy");
+		String filePath2 = FilePathUtil.contact(sep + "stuv" + sep, "xy");
+		assertThat(filePath2).isEqualTo(FilePathUtil.normalizePath("/stuv/xy"));
 
 		assertThat(FilePathUtil.simplifyPath("../dd/../abc")).isEqualTo("../abc");
 		assertThat(FilePathUtil.simplifyPath("../../dd/../abc")).isEqualTo("../../abc");
 		assertThat(FilePathUtil.simplifyPath("./abc")).isEqualTo("abc");
+
+		assertThat(FilePathUtil.getParentPath(FilePathUtil.normalizePath("/abc/dd/efg/")))
+				.isEqualTo(FilePathUtil.normalizePath("/abc/dd/"));
+
+		assertThat(FilePathUtil.getParentPath(FilePathUtil.normalizePath("/abc/dd/efg.txt")))
+				.isEqualTo(FilePathUtil.normalizePath("/abc/dd/"));
 	}
 
 	@Test
