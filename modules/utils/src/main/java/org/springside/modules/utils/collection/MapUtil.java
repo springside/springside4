@@ -71,7 +71,8 @@ public abstract class MapUtil {
 	 * 
 	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#putIfAbsent(ConcurrentMap, Object, Object)
 	 */
-	public static <K, V> V putIfAbsentWithFinalValue(final ConcurrentMap<K, V> map, final K key, final V value) {
+	public static <K, V> V putIfAbsentWithFinalValue(@NotNull final ConcurrentMap<K, V> map, final K key,
+			final V value) {
 		final V result = map.putIfAbsent(key, value);
 		return result != null ? result : value;
 	}
@@ -84,12 +85,8 @@ public abstract class MapUtil {
 	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#createIfAbsent(ConcurrentMap, Object,
 	 * org.apache.commons.lang3.concurrent.ConcurrentInitializer)
 	 */
-	public static <K, V> V createIfAbsent(final ConcurrentMap<K, V> map, final K key,
-			final ValueCreator<? extends V> creator) {
-		if (map == null || creator == null) {
-			return null;
-		}
-
+	public static <K, V> V createIfAbsent(@NotNull final ConcurrentMap<K, V> map, final K key,
+			@NotNull final ValueCreator<? extends V> creator) {
 		final V value = map.get(key);
 		if (value == null) {
 			return putIfAbsentWithFinalValue(map, key, creator.get());
@@ -99,8 +96,6 @@ public abstract class MapUtil {
 
 	/**
 	 * 创建Value值的回调函数
-	 * 
-	 * from Common Lang
 	 * 
 	 * @see MapUtil#createIfAbsent(ConcurrentMap, Object, ValueCreator)
 	 */
@@ -212,7 +207,7 @@ public abstract class MapUtil {
 	/**
 	 * 相比HashMap，当key是枚举类时, 性能与空间占用俱佳.
 	 */
-	public static <K extends Enum<K>, V> EnumMap<K, V> newEnumMap(Class<K> type) {
+	public static <K extends Enum<K>, V> EnumMap<K, V> newEnumMap(@NotNull Class<K> type) {
 		return new EnumMap<K, V>(Preconditions.checkNotNull(type));
 	}
 

@@ -68,36 +68,17 @@ public class FileUtilTest {
 		}
 	}
 
+	private String sep = Platforms.FILE_PATH_SEPARATOR;
+
 	@Test
-	public void listFile() throws IOException {
-		File tmpDir = FileUtil.createTempDir();
+	public void getName() {
 
-		List<File> all = FileUtil.listAll(tmpDir);
-		assertThat(all).hasSize(1);
+		assertThat(FileUtil.getFileName(FilePathUtil.normalizePath("/a/d/b/abc.txt"))).isEqualTo("abc.txt");
+		assertThat(FileUtil.getFileName("abc.txt")).isEqualTo("abc.txt");
 
-		List<File> files = FileUtil.listFile(tmpDir);
-		assertThat(files).hasSize(0);
-
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
-
-		String childDir = FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
-		FileUtil.makeSureDirExists(childDir);
-
-		FileUtil.touch(FilePathUtil.contact(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
-
-		all = FileUtil.listAll(tmpDir);
-		assertThat(all).hasSize(5);
-
-		files = FileUtil.listFile(tmpDir);
-		assertThat(files).hasSize(3);
-
-		files = FileUtil.listFileWithExtension(tmpDir, "tmp");
-		assertThat(files).hasSize(2);
-
-		FileUtil.deleteDir(tmpDir);
-
-		assertThat(FileUtil.isDirExists(tmpDir)).isFalse();
+		assertThat(FileUtil.getFileExtension(FilePathUtil.normalizePath("a/d/b/abc.txt"))).isEqualTo("txt");
+		assertThat(FileUtil.getFileExtension(FilePathUtil.normalizePath("/a/d/b/abc"))).isEqualTo("");
+		assertThat(FileUtil.getFileExtension(FilePathUtil.normalizePath("/a/d/b/abc."))).isEqualTo("");
 
 	}
 

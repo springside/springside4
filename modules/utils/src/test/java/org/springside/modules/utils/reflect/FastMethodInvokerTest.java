@@ -22,10 +22,22 @@ public class FastMethodInvokerTest {
 		age = fastGetAge.invoke(student2);
 		assertThat(age).isEqualTo(30);
 
+		FastMethodInvoker fastGetAge2 = FastMethodInvoker.createGetter(Student.class, "age");
+		age = fastGetAge2.invoke(student1);
+		assertThat(age).isEqualTo(20);
+
+		age = fastGetAge2.invoke(student2);
+		assertThat(age).isEqualTo(30);
+
 		FastMethodInvoker fastSetAge = FastMethodInvoker.create(Student.class, "setAge", int.class);
 		fastSetAge.invoke(student1, 1);
 
 		assertThat(student1.getAge()).isEqualTo(1);
+		
+		FastMethodInvoker fastSetAge2 = FastMethodInvoker.createSetter(Student.class, "age", int.class);
+		fastSetAge2.invoke(student1, 3);
+
+		assertThat(student1.getAge()).isEqualTo(3);
 	}
 
 	public static class Student {

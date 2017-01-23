@@ -108,10 +108,117 @@ public class MapUtilTest {
 		} catch (Throwable t) {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
+	}
+
+	@Test
+	public void weakMap() {
+		ConcurrentMap<MyBean, MyBean> weakKeyMap = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		initExpireAllMap(weakKeyMap);
+		System.gc();
+		assertThat(weakKeyMap.get(new MyBean("A"))).isNull();
+		assertThat(weakKeyMap).hasSize(1); // key仍然在
+
+		ConcurrentMap<MyBean, MyBean> weakKeyMap2 = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		MyBean value = new MyBean("B");
+		initExpireKeyMap(weakKeyMap2, value);
+		System.gc();
+		assertThat(weakKeyMap2.get(new MyBean("A"))).isNull();
+
+		ConcurrentMap<MyBean, MyBean> weakKeyMap3 = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		MyBean key = new MyBean("A");
+		initExpireValueMap(weakKeyMap3, key);
+		System.gc();
+		assertThat(weakKeyMap3.get(key)).isEqualTo(new MyBean("B"));
+
+		// weak value
+		ConcurrentMap<MyBean, MyBean> weakValueMap = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+		initExpireAllMap(weakValueMap);
+		System.gc();
+		assertThat(weakValueMap.get(new MyBean("A"))).isNull();
+		
+		ConcurrentMap<MyBean, MyBean> weakValueMap2 = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+		MyBean value2 = new MyBean("B");
+		initExpireKeyMap(weakValueMap2, value2);
+		System.gc();
+		assertThat(weakValueMap2.get(new MyBean("A"))).isEqualTo(new MyBean("B"));
+
+		ConcurrentMap<MyBean, MyBean> weakValueMap3 = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+		MyBean key3 = new MyBean("A");
+		initExpireValueMap(weakValueMap3, key3);
+		System.gc();
+		assertThat(weakValueMap3.get(new MyBean("A"))).isNull();
+	}
+
+	// 抽出子函数，使得Key/Value的生命周琦过期
+	private void initExpireAllMap(ConcurrentMap<MyBean, MyBean> weakKeyMap) {
+		MyBean key = new MyBean("A");
+		MyBean value = new MyBean("B");
+		weakKeyMap.put(key, value);
+		assertThat(weakKeyMap.get(key)).isEqualTo(value);
+	}
+
+	// 抽出子函数，使得key过期，value不过期
+	private void initExpireKeyMap(ConcurrentMap<MyBean, MyBean> weakKeyMap, MyBean value) {
+		MyBean key = new MyBean("A");
+		weakKeyMap.put(key, value);
+		assertThat(weakKeyMap.get(key)).isEqualTo(value);
+	}
+
+	// 抽出子函数，使得key不过期，value过期
+	private void initExpireValueMap(ConcurrentMap<MyBean, MyBean> weakKeyMap, MyBean key) {
+		MyBean value = new MyBean("B");
+		weakKeyMap.put(key, value);
+		assertThat(weakKeyMap.get(key)).isEqualTo(value);
+	}
+
+	// 抽出子函数，使得Key/Value的生命周琦过期
+	private void initWeakValue(ConcurrentMap<MyBean, MyBean> weakKeyMap) {
+		MyBean key = new MyBean("A");
+		MyBean value = new MyBean("B");
+		weakKeyMap.put(key, value);
+		assertThat(weakKeyMap.get(new MyBean("A"))).isEqualTo(value);
+	}
+
+	public static class MyBean {
+		String name;
+
+		public MyBean(String name) {
+			this.name = name;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			MyBean other = (MyBean) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			return true;
+		}
 
 	}
 
 	public enum EnumA {
 		A, B, C
+	}
+	
+	@Test
+	public void IntObjectHashMap(){
+		
 	}
 }

@@ -1,49 +1,36 @@
 package org.springside.modules.utils.io;
 
-import java.io.File;
-
-import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.Platforms;
-import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.text.MoreStringUtil;
 
 import com.google.common.io.Files;
 
 /**
- * 关于文件名，文件路径的工具集
+ * 关于文件路径的工具集
  * 
  * @author calvin
  */
 public abstract class FilePathUtil {
 
 	/**
-	 * 获取文件名(不包含路径)
+	 * 在Windows环境里，兼容Windows上的路径分割符，将 '/' 转回 '\'
 	 */
-	public static String getFileName(@NotNull String fullName) {
-		Validate.notEmpty(fullName);
-		int last = fullName.lastIndexOf(Platforms.FILE_PATH_SEPARATOR_CHAR);
-		return fullName.substring(last + 1);
-	}
+	public static String normalizePath(String path) {
+		if (Platforms.FILE_PATH_SEPARATOR_CHAR == Platforms.WINDOWS_FILE_PATH_SEPARATOR_CHAR
+				&& StringUtils.indexOf(path, Platforms.LINUX_FILE_PATH_SEPARATOR_CHAR) != -1) {
+			return StringUtils.replaceChars(path, Platforms.LINUX_FILE_PATH_SEPARATOR_CHAR,
+					Platforms.WINDOWS_FILE_PATH_SEPARATOR_CHAR);
+		}
+		return path;
 
-	/**
-	 * 获取文件名的扩展名部分(不包含.)
-	 */
-	public static String getFileExtension(File file) {
-		return Files.getFileExtension(file.getName());
-	}
-
-	/**
-	 * 获取文件名的扩展名部分(不包含.)
-	 */
-	public static String getFileExtension(String fullName) {
-		return Files.getFileExtension(fullName);
 	}
 
 	/**
 	 * 将路径整理，如 "a/../b"，整理成 "b"
 	 */
-	public static String simplifyPath(String pathName) {
-		return Files.simplifyPath(pathName);
+	public static String simplifyPath(String path) {
+		return Files.simplifyPath(path);
 	}
 
 	/**
@@ -76,4 +63,5 @@ public abstract class FilePathUtil {
 	public static String getJarPath(Class<?> clazz) {
 		return clazz.getProtectionDomain().getCodeSource().getLocation().getFile();
 	}
+
 }

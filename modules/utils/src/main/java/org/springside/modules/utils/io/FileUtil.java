@@ -14,12 +14,11 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.text.Charsets;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.TreeTraverser;
 import com.google.common.io.Files;
 
 /**
@@ -224,40 +223,6 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 前序递归列出所有文件, 包含文件与目录，及根目录本身.
-	 * 
-	 * 前序即先列出父目录，在列出子目录. 如要后序遍历, 直接使用Files.fileTreeTraverser()
-	 */
-	public static List<File> listAll(File rootDir) {
-		return Files.fileTreeTraverser().preOrderTraversal(rootDir).toList();
-	}
-
-	/**
-	 * 前序递归列出所有文件, 只包含文件.
-	 */
-	public static List<File> listFile(File rootDir) {
-		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(Files.isFile()).toList();
-	}
-
-	/**
-	 * 前序递归列出所有文件, 只包含后缀名匹配的文件. （后缀名不包含.）
-	 */
-	public static List<File> listFileWithExtension(final File rootDir, final String extension) {
-		return Files.fileTreeTraverser().preOrderTraversal(rootDir).filter(new FileExtensionFilter(extension)).toList();
-	}
-
-	/**
-	 * 直接使用Guava的TreeTraverser，获得更大的灵活度, 比如加入各类filter，前序/后序的选择，一边遍历一边操作
-	 * 
-	 * <pre>
-	 * FileUtil.fileTreeTraverser().preOrderTraversal(root).iterator();
-	 * </pre>
-	 */
-	public static TreeTraverser<File> fileTreeTraverser() {
-		return Files.fileTreeTraverser();
-	}
-
-	/**
 	 * 判断目录是否存在, from Jodd
 	 */
 	public static boolean isDirExists(String dirPath) {
@@ -349,18 +314,26 @@ public abstract class FileUtil {
 	}
 
 	/**
-	 * 以文件名后缀做filter，配合fileTreeTraverser使用
+	 * 获取文件名(不包含路径)
 	 */
-	public static final class FileExtensionFilter implements Predicate<File> {
-		private final String extension;
-
-		private FileExtensionFilter(String extension) {
-			this.extension = extension;
-		}
-
-		@Override
-		public boolean apply(File input) {
-			return input.isFile() && extension.equals(FilePathUtil.getFileExtension(input));
-		}
+	public static String getFileName(@NotNull String fullName) {
+		Validate.notEmpty(fullName);
+		int last = fullName.lastIndexOf(Platforms.FILE_PATH_SEPARATOR_CHAR);
+		return fullName.substring(last + 1);
 	}
+
+	/**
+	 * 获取文件名的扩展名部分(不包含.)
+	 */
+	public static String getFileExtension(File file) {
+		return Files.getFileExtension(file.getName());
+	}
+
+	/**
+	 * 获取文件名的扩展名部分(不包含.)
+	 */
+	public static String getFileExtension(String fullName) {
+		return Files.getFileExtension(fullName);
+	}
+
 }

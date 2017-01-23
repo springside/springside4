@@ -28,9 +28,10 @@ import com.google.common.io.Resources;
  * 
  * 所以resourceName无需以"/"打头即表示jar file中的根目录，带了"/" 反而导致JarFile.getEntry(resouceName)时没有返回.
  * 
- * 指定contextClass时，class.getResource()会先对name进行处理再交给classLoader，打头的"/"的会被去除，不以"/"打头则表示与该contextClass package的相对路径, 会先转为绝对路径.
+ * 指定contextClass时，class.getResource()会先对name进行处理再交给classLoader，打头的"/"的会被去除，不以"/"打头则表示与该contextClass package的相对路径,
+ * 会先转为绝对路径.
  * 
- * 3.同名资源 
+ * 3.同名资源
  * 
  * 如果有多个同名资源，除非调用getResources()获取全部资源，否则在URLClassLoader中按ClassPath顺序打开第一个命中的Jar文件.
  */

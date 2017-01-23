@@ -9,18 +9,7 @@ import com.google.common.io.Files;
 
 public class FilePathUtilTest {
 
-	private String sep = Platforms.FILE_PATH_SEPARATOR;
-
-	@Test
-	public void getName() {
-		assertThat(FilePathUtil.getFileName(sep + "a" + sep + "d" + sep + "b" + sep + "abc.txt")).isEqualTo("abc.txt");
-		assertThat(FilePathUtil.getFileName("abc.txt")).isEqualTo("abc.txt");
-
-		assertThat(FilePathUtil.getFileExtension(sep + "a" + sep + "d" + sep + "b" + sep + "abc.txt")).isEqualTo("txt");
-		assertThat(FilePathUtil.getFileExtension(sep + "a" + sep + "d" + sep + "b" + sep + "abc")).isEqualTo("");
-		assertThat(FilePathUtil.getFileExtension(sep + "a" + sep + "d" + sep + "b" + sep + "abc.")).isEqualTo("");
-
-	}
+	char sep = Platforms.FILE_PATH_SEPARATOR_CHAR;
 
 	@Test
 	public void pathName() {
@@ -40,5 +29,4 @@ public class FilePathUtilTest {
 		System.out.println("the jar file contains Files.class" + FilePathUtil.getJarPath(Files.class));
 		assertThat(FilePathUtil.getJarPath(Files.class)).endsWith("guava-20.0.jar");
 	}
-
 }
