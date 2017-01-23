@@ -79,6 +79,10 @@ public class ReflectionUtilTest {
 	@Test
 	public void invokeMethod() {
 		TestBean bean = new TestBean();
+		// 使用函数名+参数类型的匹配, 支持传参数
+		assertThat(ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" }))
+				.isEqualTo("hello calvin");
+
 		// 使用函数名+参数类型的匹配
 		assertThat(ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
 				new Class[] { String.class })).isEqualTo("hello calvin");

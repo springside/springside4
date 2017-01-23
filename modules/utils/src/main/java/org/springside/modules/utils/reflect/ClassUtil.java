@@ -151,7 +151,7 @@ public abstract class ClassUtil {
 	 * 
 	 * from org.unitils.util.AnnotationUtils
 	 */
-	public static <T extends Annotation> Set<Field> getPublicFieldsAnnotatedWith(Class<? extends Object> clazz,
+	public static <T extends Annotation> Set<Field> getAnnotatedPublicFields(Class<? extends Object> clazz,
 			Class<T> annotation) {
 
 		if (Object.class.equals(clazz)) {
@@ -177,7 +177,7 @@ public abstract class ClassUtil {
 	 * 
 	 * from org.unitils.util.AnnotationUtils
 	 */
-	public static <T extends Annotation> Set<Field> getFieldsAnnotatedWith(Class<? extends Object> clazz,
+	public static <T extends Annotation> Set<Field> getAnnotatedFields(Class<? extends Object> clazz,
 			Class<T> annotation) {
 		if (Object.class.equals(clazz)) {
 			return Collections.emptySet();
@@ -189,7 +189,7 @@ public abstract class ClassUtil {
 				annotatedFields.add(field);
 			}
 		}
-		annotatedFields.addAll(getFieldsAnnotatedWith(clazz.getSuperclass(), annotation));
+		annotatedFields.addAll(getAnnotatedFields(clazz.getSuperclass(), annotation));
 		return annotatedFields;
 	}
 
@@ -197,9 +197,10 @@ public abstract class ClassUtil {
 	 * 找出所有标注了该annotation的公共方法(含父类的公共函数)，循环其接口.
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
+	 * 
+	 * 另，如果子类重载父类的公共函数，父类函数上的annotation不会继承，只有接口上的annotation会被继承.
 	 */
-	public static <T extends Annotation> Set<Method> getPublicMethodsAnnotatedWith(Class<?> clazz,
-			Class<T> annotation) {
+	public static <T extends Annotation> Set<Method> getAnnotatedPublicMethods(Class<?> clazz, Class<T> annotation) {
 		// 已递归到Objebt.class, 停止递归
 		if (Object.class.equals(clazz)) {
 			return Collections.emptySet();
@@ -236,6 +237,7 @@ public abstract class ClassUtil {
 		return false;
 	}
 
+	///////// 获取方法////
 	/**
 	 * 循环遍历，按属性名获取前缀为get或is的函数，并设为可访问
 	 */
@@ -323,7 +325,7 @@ public abstract class ClassUtil {
 	 * 
 	 * 因为class.getMethods() 不能获取父类的private函数, 因此采用循环向上的getMethods();
 	 */
-	public static Method findAccessibleMethodByName(final Class clazz, final String methodName) {
+	public static Method getAccessibleMethodByName(final Class clazz, final String methodName) {
 		Validate.notNull(clazz, "clazz can't be null");
 		Validate.notEmpty(methodName, "methodName can't be blank");
 

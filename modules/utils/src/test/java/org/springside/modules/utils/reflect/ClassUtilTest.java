@@ -35,17 +35,23 @@ public class ClassUtilTest {
 
 		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
 
-		assertThat(ClassUtil.getPublicFieldsAnnotatedWith(BClass.class, AAnnotation.class)).hasSize(2).contains(
+		assertThat(ClassUtil.getAnnotatedPublicFields(BClass.class, AAnnotation.class)).hasSize(2).contains(
 				ClassUtil.getAccessibleField(BClass.class, "sfield"),
 				ClassUtil.getAccessibleField(BClass.class, "tfield"));
 
-		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, EAnnotation.class)).hasSize(3).contains(
+		assertThat(ClassUtil.getAnnotatedFields(BClass.class, EAnnotation.class)).hasSize(3).contains(
 				ClassUtil.getAccessibleField(BClass.class, "bfield"),
 				ClassUtil.getAccessibleField(BClass.class, "efield"),
 				ClassUtil.getAccessibleField(AClass.class, "afield"));
 
-		assertThat(ClassUtil.getFieldsAnnotatedWith(BClass.class, FAnnotation.class)).hasSize(1)
+		assertThat(ClassUtil.getAnnotatedFields(BClass.class, FAnnotation.class)).hasSize(1)
 				.contains(ClassUtil.getAccessibleField(AClass.class, "dfield"));
+
+		assertThat(ClassUtil.getAnnotatedPublicMethods(BClass.class, FAnnotation.class)).hasSize(3).contains(
+				ClassUtil.getAccessibleMethodByName(BClass.class, "hello"),
+				ClassUtil.getAccessibleMethodByName(BClass.class, "hello3"),
+				ClassUtil.getAccessibleMethodByName(AClass.class, "hello4")
+				);
 	}
 
 	@Test
@@ -132,9 +138,35 @@ public class ClassUtilTest {
 		@AAnnotation
 		protected int vfield;
 
+		// not counted as public annotated method
 		public void hello2(int i) {
 
 		}
+
+		// counted as public annotated method
+		@FAnnotation
+		public void hello4(int i) {
+
+		}
+
+		// not counted as public annotated method
+		@FAnnotation
+		protected void hello5(int i) {
+
+		}
+
+		// not counted as public annotated method
+		@FAnnotation
+		private void hello6(int i) {
+
+		}
+
+		// not counted as public annotated method, because the child override it
+		@FAnnotation
+		public void hello7(int i) {
+
+		}
+
 	}
 
 	@BAnnotation
@@ -152,6 +184,7 @@ public class ClassUtilTest {
 		@AAnnotation
 		protected int ufield;
 
+		// counted as public annotated method, BInterface
 		@Override
 		@EAnnotation
 		public void hello() {
@@ -160,6 +193,18 @@ public class ClassUtilTest {
 		}
 
 		public void hello2(int i) {
+
+		}
+
+		// counted as public annotated method
+		@FAnnotation
+		public void hello3(int i) {
+
+		}
+
+		// not counted as public annotated method
+		@Override
+		public void hello7(int i) {
 
 		}
 

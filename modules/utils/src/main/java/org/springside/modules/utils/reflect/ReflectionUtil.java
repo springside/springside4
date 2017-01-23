@@ -24,7 +24,7 @@ import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
  * 
  * 2. 对于方法调用，本类全部是一次性调用的简化方法，如果考虑性能，对反复调用的方法应使用 MethodInvoker 及 FastMethodInvoker.
  * 
- * 3. 对于直接属性访问，恰当使用本类中的一次性调用，和基于预先获取的field反复调用两种做法.
+ * 3. 对于直接属性访问，恰当使用本类中的一次性调用，和基于预先获取的Field对象反复调用两种做法.
  */
 @SuppressWarnings("unchecked")
 public class ReflectionUtil {
@@ -161,7 +161,7 @@ public class ReflectionUtil {
 	 * 只匹配函数名，如果有多个同名函数调用第一个. 用于确信只有一个同名函数, 但参数类型不确定的情况
 	 */
 	public static <T> T invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
-		Method method = ClassUtil.findAccessibleMethodByName(obj.getClass(), methodName);
+		Method method = ClassUtil.getAccessibleMethodByName(obj.getClass(), methodName);
 		if (method == null) {
 			throw new IllegalArgumentException( "Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
