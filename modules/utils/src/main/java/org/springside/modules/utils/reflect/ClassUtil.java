@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  * 
  * @author calvin
  */
-public abstract class ClassUtil {
+public class ClassUtil {
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
 
@@ -471,6 +471,19 @@ public abstract class ClassUtil {
 		}
 
 		return (Class) params[index];
+	}
+
+	/**
+	 * 探测类是否存在classpath中
+	 */
+	public static boolean isPresent(String className, ClassLoader classLoader) {
+		try {
+			classLoader.loadClass(className);
+			return true;
+		} catch (Throwable ex) {
+			// Class or one of its dependencies is not present...
+			return false;
+		}
 	}
 
 }

@@ -54,6 +54,7 @@ public class Sampler {
 	 * 采样率为100时，总是返回true
 	 */
 	public static class AlwaysSampler extends Sampler {
+		@Override
 		public boolean select() {
 			return true;
 		}
@@ -63,6 +64,7 @@ public class Sampler {
 	 * 采样率为0时，总是返回false
 	 */
 	public static class NeverSampler extends Sampler {
+		@Override
 		public boolean select() {
 			return false;
 		}

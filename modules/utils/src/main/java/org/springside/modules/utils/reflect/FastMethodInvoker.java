@@ -26,6 +26,10 @@ public class FastMethodInvoker {
 
 	private final FastMethod fastMethod;
 
+	protected FastMethodInvoker(FastMethod fastMethod) {
+		this.fastMethod = fastMethod;
+	}
+
 	/**
 	 * 获取cglib生成的FastMethod，创建方法的FastMethodInvoker实例.
 	 */
@@ -73,10 +77,6 @@ public class FastMethodInvoker {
 		return new FastMethodInvoker(fastClz.getMethod(method));
 	}
 
-	protected FastMethodInvoker(FastMethod fastMethod) {
-		this.fastMethod = fastMethod;
-	}
-
 	/**
 	 * 调用方法
 	 */
@@ -85,7 +85,7 @@ public class FastMethodInvoker {
 		try {
 			return (T) fastMethod.invoke(obj, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.unchecked(ExceptionUtil.unwrap(e));
+			throw ExceptionUtil.uncheckedAndWrap(e);
 		}
 	}
 }

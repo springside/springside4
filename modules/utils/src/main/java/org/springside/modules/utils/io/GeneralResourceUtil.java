@@ -13,7 +13,7 @@ import com.google.common.annotations.Beta;
  * @author calvin
  */
 @Beta
-public abstract class GeneralResourceUtil {
+public class GeneralResourceUtil {
 
 	public static final String CLASSPATH = "classpath://";
 

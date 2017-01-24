@@ -35,7 +35,7 @@ import com.google.common.hash.Hashing;
  * 
  * @author calvin
  */
-public abstract class HashUtil {
+public class HashUtil {
 
 	public static final int MURMUR_SEED = 1318007700;
 

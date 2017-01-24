@@ -32,7 +32,7 @@ import com.google.common.io.Files;
  * 
  * @author calvin
  */
-public abstract class FileUtil {
+public class FileUtil {
 
 	//////// 文件读写//////
 
@@ -148,8 +148,9 @@ public abstract class FileUtil {
 		if (files != null) {
 			for (int i = 0; i < files.length; i++) {
 				String name = files[i].getName();
-				if (".".equals(name) || "..".equals(name))
+				if (".".equals(name) || "..".equals(name)) {
 					continue;
+				}
 				copy(files[i], new File(to, name));
 			}
 		}
@@ -182,7 +183,7 @@ public abstract class FileUtil {
 			copyDir(from, to);
 			deleteDir(from);
 			if (from.exists()) {
-				throw new IOException("Failed to delete original directory '" + from + "' after copy to '" + to + "'");
+				throw new IOException("Failed to delete original directory '" + from + "' after copy to '" + to + '\'');
 			}
 		}
 	}

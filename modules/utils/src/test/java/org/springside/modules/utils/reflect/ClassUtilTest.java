@@ -67,6 +67,11 @@ public class ClassUtilTest {
 		assertThat(ClassUtil.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
 	}
 
+	public void classPresent(){
+		assertThat(ClassUtil.isPresent("a.b.c", ClassUtil.getDefaultClassLoader())).isFalse();
+		assertThat(ClassUtil.isPresent("org.springside.modules.utils.reflect.ClassUtil", ClassUtil.getDefaultClassLoader())).isTrue();
+	}
+	
 	public static class ParentBean<T, ID> {
 	}
 

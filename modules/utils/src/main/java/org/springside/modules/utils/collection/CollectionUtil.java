@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.springside.modules.utils.collection.type.Pair;
 
-import com.google.common.annotations.Beta;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Ordering;
@@ -29,8 +28,7 @@ import com.google.common.collect.Ordering;
  * 
  * @see com.google.common.collect.Ordering
  */
-@Beta
-public abstract class CollectionUtil {
+public class CollectionUtil {
 
 	/**
 	 * 判断是否为空.

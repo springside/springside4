@@ -35,7 +35,7 @@ import com.google.common.io.Resources;
  * 
  * 如果有多个同名资源，除非调用getResources()获取全部资源，否则在URLClassLoader中按ClassPath顺序打开第一个命中的Jar文件.
  */
-public abstract class ResourceUtil {
+public class ResourceUtil {
 
 	// 打开单个文件////
 	/**

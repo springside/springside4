@@ -19,7 +19,7 @@ import com.google.common.collect.Sets;
  * 
  * 2. 集合运算函数(交集，并集等,from guava)
  */
-public abstract class SetUtil {
+public class SetUtil {
 
 	/**
 	 * 根据等号左边的类型，构造类型正确的HashSet.

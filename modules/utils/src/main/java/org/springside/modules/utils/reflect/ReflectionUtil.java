@@ -48,7 +48,8 @@ public class ReflectionUtil {
 	public static void invokeSetter(Object obj, String propertyName, Object value) {
 		Method method = ClassUtil.getSetterMethod(obj.getClass(), propertyName, value.getClass());
 		if (method == null) {
-			throw new IllegalArgumentException("Could not find getter method [" + propertyName + "] on target [" + obj + ']');
+			throw new IllegalArgumentException(
+					"Could not find getter method [" + propertyName + "] on target [" + obj + ']');
 		}
 		invokeMethod(obj, method, value);
 	}
@@ -59,7 +60,7 @@ public class ReflectionUtil {
 	public static <T> T getFieldValue(final Object obj, final String fieldName) {
 		Field field = ClassUtil.getAccessibleField(obj.getClass(), fieldName);
 		if (field == null) {
-			throw new IllegalArgumentException( "Could not find field [" + fieldName + "] on target [" + obj + ']');
+			throw new IllegalArgumentException("Could not find field [" + fieldName + "] on target [" + obj + ']');
 		}
 		return getFieldValue(obj, field);
 	}
@@ -150,7 +151,7 @@ public class ReflectionUtil {
 			final Class<?>[] parameterTypes) {
 		Method method = ClassUtil.getAccessibleMethod(obj.getClass(), methodName, parameterTypes);
 		if (method == null) {
-			throw new IllegalArgumentException( "Could not find method [" + methodName + "] on target [" + obj + ']');
+			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
 		return invokeMethod(obj, method, args);
 	}
@@ -163,7 +164,7 @@ public class ReflectionUtil {
 	public static <T> T invokeMethodByName(final Object obj, final String methodName, final Object[] args) {
 		Method method = ClassUtil.getAccessibleMethodByName(obj.getClass(), methodName);
 		if (method == null) {
-			throw new IllegalArgumentException( "Could not find method [" + methodName + "] on target [" + obj + ']');
+			throw new IllegalArgumentException("Could not find method [" + methodName + "] on target [" + obj + ']');
 		}
 		return invokeMethod(obj, method, args);
 	}
@@ -175,7 +176,7 @@ public class ReflectionUtil {
 		try {
 			return (T) method.invoke(obj, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.unchecked(ExceptionUtil.unwrap(e));
+			throw ExceptionUtil.uncheckedAndWrap(e);
 		}
 	}
 
@@ -187,7 +188,7 @@ public class ReflectionUtil {
 		try {
 			return ConstructorUtils.invokeConstructor(cls, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.unchecked(e);
+			throw ExceptionUtil.uncheckedAndWrap(e);
 		}
 	}
 

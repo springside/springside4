@@ -19,7 +19,7 @@ import com.google.common.collect.EvictingQueue;
  * 
  * 2.特殊类型Queue:LIFO的Stack, LRU的Queue
  */
-public abstract class QueueUtil {
+public class QueueUtil {
 
 	/**
 	 * 创建ArrayDeque (JDK无ArrayQueue)

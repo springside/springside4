@@ -27,8 +27,6 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
  */
 public class ThreadPoolUtil {
 
-	
-
 	/**
 	 * 按照ExecutorService JavaDoc示例代码编写的Graceful Shutdown方法.
 	 * 
@@ -93,16 +91,16 @@ public class ThreadPoolUtil {
 	 * 保证不会有Exception抛出到线程池的Runnable包裹类，防止用户没有捕捉异常导致中断了线程池中的线程, 使得SchedulerService无法执行. 在无法控制第三方包的Runnalbe实现时，使用本类进行包裹.
 	 */
 	public static class SafeRunnable implements Runnable {
-	
+
 		private static Logger logger = LoggerFactory.getLogger(SafeRunnable.class);
-	
+
 		private Runnable runnable;
-	
+
 		public SafeRunnable(Runnable runnable) {
 			Validate.notNull(runnable);
 			this.runnable = runnable;
 		}
-	
+
 		@Override
 		public void run() {
 			try {

@@ -21,7 +21,7 @@ import org.springside.modules.utils.number.NumberUtil;
  * 
  * @author calvin
  */
-public abstract class PropertiesUtil {
+public class PropertiesUtil {
 
 	private static final Logger logger = LoggerFactory.getLogger(PropertiesUtil.class);
 

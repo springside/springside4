@@ -17,7 +17,7 @@ import com.google.common.primitives.Longs;
  * 
  * 3.10机制/16进制字符串 与 原始类型数字/数字对象 的双向转换(参考Common Lang自写)
  */
-public abstract class NumberUtil {
+public class NumberUtil {
 
 	///////////// bytes[] 与原始类型数字转换 ///////
 
@@ -255,11 +255,12 @@ public abstract class NumberUtil {
 	/////////// 杂项 ///////
 
 	/**
-	 * 安全的将小于Integer.MAX的long转为int，否则抛出错误
+	 * 安全的将小于Integer.MAX的long转为int，否则抛出IllegalArgumentException异常
 	 */
-	public static int toInt32(long x) throws IllegalArgumentException {
-		if ((int) x == x)
+	public static int toInt32(long x) {
+		if ((int) x == x){
 			return (int) x;
+		}
 		throw new IllegalArgumentException("Int " + x + " out of range");
 	}
 }

@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springside.modules.utils.io.type.StringBuilderWriter;
 import org.springside.modules.utils.text.Charsets;
 
-import com.google.common.annotations.Beta;
-
 /**
  * IO Stream/Reader相关工具集
  * 
@@ -36,8 +34,7 @@ import com.google.common.annotations.Beta;
  * 
  * @author calvin
  */
-@Beta
-public abstract class IOUtil {
+public class IOUtil {
 	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
 
 	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;

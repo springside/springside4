@@ -14,6 +14,7 @@ import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil.CloneableException;
 import org.springside.modules.utils.base.ExceptionUtil.CloneableRuntimeException;
+import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
 
 public class ExceptionUtilTest {
 
@@ -67,6 +68,14 @@ public class ExceptionUtilTest {
 
 		InvocationTargetException ie = new InvocationTargetException(re);
 		assertThat(ExceptionUtil.unwrap(ie)).isSameAs(re);
+		
+		Exception e = new Exception("my exception");
+		ExecutionException ee2 = new ExecutionException(e);
+		try{
+		ExceptionUtil.uncheckedAndWrap(ee2);
+		}catch (Throwable t) {
+			assertThat(t).isInstanceOf(UncheckedException.class).hasCauseExactlyInstanceOf(Exception.class);
+		}
 	}
 
 	@Test
@@ -97,7 +106,7 @@ public class ExceptionUtilTest {
 		RuntimeException runtimeException = new RuntimeException(illegalStateException);
 
 		assertThat(ExceptionUtil.getRootCause(runtimeException)).isSameAs(ioexception);
-		//无cause
+		// 无cause
 		assertThat(ExceptionUtil.getRootCause(ioexception)).isSameAs(ioexception);
 	}
 
@@ -110,9 +119,9 @@ public class ExceptionUtilTest {
 		RuntimeException runtimeExcetpion = new RuntimeException("my runtimeException", ioexception);
 		assertThat(ExceptionUtil.toStringWithRootCause(runtimeExcetpion))
 				.isEqualTo("RuntimeException: my runtimeException; <---IOException: my exception");
-		
+
 		assertThat(ExceptionUtil.toStringWithRootCause(null)).isEqualTo("");
-		//无cause
+		// 无cause
 		assertThat(ExceptionUtil.toStringWithRootCause(ioexception)).isEqualTo("IOException: my exception");
 	}
 

@@ -16,7 +16,7 @@ import com.google.common.base.Utf8;
  * 
  * @author calvin
  */
-public abstract class MoreStringUtil {
+public class MoreStringUtil {
 
 	/**
 	 * 高性能的Split，针对char的分隔符号，比JDK String自带的高效.
@@ -117,16 +117,16 @@ public abstract class MoreStringUtil {
 		}
 		return s.charAt(s.length() - 1) == c;
 	}
-	
+
 	/**
 	 * 如果结尾字符为c, 去除掉该字符.
 	 */
 	public static String removeEnd(final String s, final char c) {
-        if (endWith(s,c)) {
-            return s.substring(0, s.length() - 1);
-        }
-        return s;
-    }
+		if (endWith(s, c)) {
+			return s.substring(0, s.length() - 1);
+		}
+		return s;
+	}
 
 	/**
 	 * 计算字符串被UTF8编码后的字节数 via guava

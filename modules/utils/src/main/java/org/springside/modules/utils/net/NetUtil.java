@@ -30,7 +30,7 @@ import com.google.common.annotations.Beta;
  *
  */
 @Beta
-public abstract class NetUtil {
+public class NetUtil {
 
 	private static Logger logger = LoggerFactory.getLogger(NetUtil.class);
 

@@ -27,7 +27,7 @@ public class ArrayUtil {
 	/**
 	 * 将传入的数组乱序
 	 */
-	public final static <T> T[] shuffle(T[] array) {
+	public static <T> T[] shuffle(T[] array) {
 		List<T> list = new ArrayList<T>(array.length);
 		Collections.addAll(list, array);
 		Collections.shuffle(list);

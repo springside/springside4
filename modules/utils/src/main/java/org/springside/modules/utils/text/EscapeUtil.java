@@ -17,7 +17,7 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * 
  * @author calvin
  */
-public abstract class EscapeUtil {
+public class EscapeUtil {
 
 	/**
 	 * URL 编码, Encode默认为UTF-8.

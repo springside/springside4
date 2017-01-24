@@ -20,7 +20,7 @@ import org.springside.modules.utils.base.MoreValidate;
  * 
  * @author calvin
  */
-public abstract class RandomUtil {
+public class RandomUtil {
 
 	/////////////////// 获取Random实例//////////////
 	/**

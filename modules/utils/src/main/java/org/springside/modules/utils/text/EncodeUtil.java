@@ -10,7 +10,7 @@ import com.google.common.io.BaseEncoding;
 /**
  * hex/base64 编解码工具集，依赖Guava, 取消了对Commmon Codec的依赖
  */
-public abstract class EncodeUtil {
+public class EncodeUtil {
 
 	/**
 	 * Hex编码, 将byte[]编码为String，默认为ABCDEF为大写字母.

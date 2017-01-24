@@ -21,7 +21,7 @@ import com.google.common.base.Throwables;
  * 
  * @author calvin
  */
-public abstract class ExceptionUtil {
+public class ExceptionUtil {
 
 	private static final StackTraceElement[] EMPTY_STACK_TRACE = new StackTraceElement[0];
 
@@ -43,14 +43,13 @@ public abstract class ExceptionUtil {
 	 */
 	public static RuntimeException unchecked(Throwable t) {
 
-		Throwable unwrapped = unwrap(t);
-		if (unwrapped instanceof RuntimeException) {
-			throw (RuntimeException) unwrapped;
+		if (t instanceof RuntimeException) {
+			throw (RuntimeException) t;
 		}
-		if (unwrapped instanceof Error) {
-			throw (Error) unwrapped;
+		if (t instanceof Error) {
+			throw (Error) t;
 		}
-		throw new UncheckedException(unwrapped);
+		throw new UncheckedException(t);
 	}
 
 	/**
@@ -69,6 +68,21 @@ public abstract class ExceptionUtil {
 		}
 
 		return t;
+	}
+
+	/**
+	 * 组合unchecked与unwrap的效果
+	 */
+	public static RuntimeException uncheckedAndWrap(Throwable t) {
+
+		Throwable unwrapped = unwrap(t);
+		if (unwrapped instanceof RuntimeException) {
+			throw (RuntimeException) unwrapped;
+		}
+		if (unwrapped instanceof Error) {
+			throw (Error) unwrapped;
+		}
+		throw new UncheckedException(unwrapped);
 	}
 
 	/**

@@ -67,5 +67,4 @@ public class BooleanUtil {
 		return BooleanUtils.or(array);
 	}
 
-
 }

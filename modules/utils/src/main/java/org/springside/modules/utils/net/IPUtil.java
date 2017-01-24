@@ -21,7 +21,7 @@ import com.google.common.net.InetAddresses;
  * 
  * @author calvin
  */
-public abstract class IPUtil {
+public class IPUtil {
 
 	/**
 	 * 从InetAddress转化到int, 传输和存储时, 用int代表InetAddress是最小的开销.

@@ -45,7 +45,7 @@ public class MethodInvoker {
 		try {
 			return (T) method.invoke(obj, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.unchecked(ExceptionUtil.unwrap(e));
+			throw ExceptionUtil.uncheckedAndWrap(e);
 		}
 	}
 

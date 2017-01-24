@@ -50,7 +50,7 @@ import com.google.common.util.concurrent.AtomicLongMap;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public abstract class MapUtil {
+public class MapUtil {
 
 	/**
 	 * 判断是否为空.

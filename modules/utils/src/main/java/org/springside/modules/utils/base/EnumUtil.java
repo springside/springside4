@@ -10,13 +10,12 @@ import org.apache.commons.lang3.EnumUtils;
  * @author calvin
  *
  */
-public abstract class EnumUtil {
+public class EnumUtil {
 
 	/**
 	 * 将若干个枚举值转换为long，用于使用long保存多个选项的情况.
 	 */
-	public static <E extends Enum<E>> long generateBits(final Class<E> enumClass,
-			final Iterable<? extends E> values) {
+	public static <E extends Enum<E>> long generateBits(final Class<E> enumClass, final Iterable<? extends E> values) {
 		return EnumUtils.generateBitVector(enumClass, values);
 	}
 

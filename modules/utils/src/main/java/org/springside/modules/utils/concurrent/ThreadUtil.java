@@ -14,7 +14,7 @@ import org.apache.commons.lang3.StringUtils;
  * 
  * 1. 处理了InterruptedException的sleep
  */
-public abstract class ThreadUtil {
+public class ThreadUtil {
 
 	/**
 	 * sleep等待, 单位为毫秒, 已捕捉并处理InterruptedException.
@@ -50,7 +50,7 @@ public abstract class ThreadUtil {
 	 */
 	public static String getCallerClass() {
 		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 3) {
+		if (stacktrace.length >= 4) {
 			StackTraceElement element = stacktrace[3];
 			return element.getClassName();
 		} else {
@@ -63,8 +63,34 @@ public abstract class ThreadUtil {
 	 */
 	public static String getCallerMethod() {
 		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 3) {
+		if (stacktrace.length >= 4) {
 			StackTraceElement element = stacktrace[3];
+			return element.getClassName() + '.' + element.getMethodName() + "()";
+		} else {
+			return StringUtils.EMPTY;
+		}
+	}
+
+	/**
+	 * 通过StackTrace，获得调用者的类名.
+	 */
+	public static String getCurrentClass() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		if (stacktrace.length >= 3) {
+			StackTraceElement element = stacktrace[2];
+			return element.getClassName();
+		} else {
+			return StringUtils.EMPTY;
+		}
+	}
+
+	/**
+	 * 通过StackTrace，获得当前方法的"类名.方法名()"
+	 */
+	public static String getCurrentMethod() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		if (stacktrace.length >= 3) {
+			StackTraceElement element = stacktrace[2];
 			return element.getClassName() + '.' + element.getMethodName() + "()";
 		} else {
 			return StringUtils.EMPTY;

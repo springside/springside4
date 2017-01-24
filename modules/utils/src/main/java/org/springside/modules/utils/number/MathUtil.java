@@ -2,7 +2,6 @@ package org.springside.modules.utils.number;
 
 import java.math.RoundingMode;
 
-import com.google.common.annotations.Beta;
 import com.google.common.math.IntMath;
 import com.google.common.math.LongMath;
 
@@ -11,15 +10,12 @@ import com.google.common.math.LongMath;
  * 
  * 1. 2的倍数的计算
  * 
- * 2. 其他函数如最大公约数
- * 
- * 3. 安全的取模
+ * 2. 其他函数如最大公约数, 乘方，开方，安全的取模，可控制取整方向的相除等。
  * 
  * @author calvin
  *
  */
-@Beta
-public abstract class MathUtil {
+public class MathUtil {
 
 	/////// 2 的倍数的计算////
 

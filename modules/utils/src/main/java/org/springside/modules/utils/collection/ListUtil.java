@@ -27,7 +27,7 @@ import com.google.common.collect.Lists;
  * @author calvin
  */
 @SuppressWarnings("unchecked")
-public abstract class ListUtil {
+public class ListUtil {
 
 	/**
 	 * 判断是否为空.

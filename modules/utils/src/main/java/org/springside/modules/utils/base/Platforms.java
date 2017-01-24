@@ -12,13 +12,13 @@ import org.apache.commons.lang3.SystemUtils;
  * 
  * @author calvin
  */
-public abstract class Platforms {
+public class Platforms {
 
 	// 文件路径分隔符
 	public static final String FILE_PATH_SEPARATOR = File.separator;
 	public static final char FILE_PATH_SEPARATOR_CHAR = File.separatorChar;
-	public static final char WINDOWS_FILE_PATH_SEPARATOR_CHAR='\\';
-	public static final char LINUX_FILE_PATH_SEPARATOR_CHAR='/';
+	public static final char WINDOWS_FILE_PATH_SEPARATOR_CHAR = '\\';
+	public static final char LINUX_FILE_PATH_SEPARATOR_CHAR = '/';
 
 	// ClassPath分隔符
 	public static final String CLASS_PATH_SEPARATOR = File.pathSeparator;
@@ -66,7 +66,7 @@ public abstract class Platforms {
 		if (split.length != 2) {
 			return -1;
 		}
-		
+
 		try {
 			return Integer.parseInt(split[0]);
 		} catch (Exception e) {

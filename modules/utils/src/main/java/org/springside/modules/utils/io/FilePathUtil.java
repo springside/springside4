@@ -11,7 +11,7 @@ import com.google.common.io.Files;
  * 
  * @author calvin
  */
-public abstract class FilePathUtil {
+public class FilePathUtil {
 
 	/**
 	 * 在Windows环境里，兼容Windows上的路径分割符，将 '/' 转回 '\'
@@ -70,10 +70,11 @@ public abstract class FilePathUtil {
 		parentPath = MoreStringUtil.removeEnd(parentPath, Platforms.FILE_PATH_SEPARATOR_CHAR);
 
 		int idx = parentPath.lastIndexOf(Platforms.FILE_PATH_SEPARATOR_CHAR);
-		if (idx >= 0)
+		if (idx >= 0) {
 			parentPath = parentPath.substring(0, idx + 1);
-		else
+		} else {
 			parentPath = Platforms.FILE_PATH_SEPARATOR;
+		}
 
 		return parentPath;
 	}

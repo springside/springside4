@@ -20,7 +20,7 @@ import ma.glasnost.orika.metadata.TypeFactory;
  * 
  * 注意: 需要参考本模块的POM文件，显式引用orika.
  */
-public abstract class BeanMapper {
+public class BeanMapper {
 
 	private static MapperFacade mapper;
 
