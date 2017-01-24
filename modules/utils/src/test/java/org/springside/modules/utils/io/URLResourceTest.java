@@ -43,21 +43,11 @@ public class URLResourceTest {
 			File file2 = URLResourceUtil.asFile("file://" + file.getAbsolutePath());
 			assertThat(FileUtil.toString(file2)).isEqualTo("haha");
 
-			try {
-				URLResourceUtil.asFile("file://" + file.getAbsolutePath() + ".noexist");
-				fail("should fail");
-			} catch (Throwable t) {
-				assertThat(t).isInstanceOf(IllegalArgumentException.class);
-			}
+			File file2NotExist = URLResourceUtil.asFile("file://" + file.getAbsolutePath() + ".noexist");
 
 			File file3 = URLResourceUtil.asFile(file.getAbsolutePath());
 			assertThat(FileUtil.toString(file3)).isEqualTo("haha");
-			try {
-				URLResourceUtil.asFile(file.getAbsolutePath() + ".noexist");
-				fail("should fail");
-			} catch (Throwable t) {
-				assertThat(t).isInstanceOf(IllegalArgumentException.class);
-			}
+			File file3NotExist = URLResourceUtil.asFile(file.getAbsolutePath() + ".noexist");
 
 		} finally {
 			FileUtil.deleteFile(file);
