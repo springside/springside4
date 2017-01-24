@@ -33,6 +33,8 @@ import com.google.common.io.Files;
  * @author calvin
  */
 public class FileUtil {
+	
+	
 
 	//////// 文件读写//////
 
@@ -77,12 +79,26 @@ public class FileUtil {
 	public static InputStream asInputStream(String fileName) throws IOException {
 		return new FileInputStream(getFileByPath(fileName));
 	}
+	
+	/**
+	 * 打开文件为InputStream
+	 */
+	public static InputStream asInputStream(File file) throws IOException {
+		return new FileInputStream(file);
+	}
 
 	/**
 	 * 打开文件为OutputStream
 	 */
 	public static OutputStream asOututStream(String fileName) throws IOException {
 		return new FileOutputStream(getFileByPath(fileName));
+	}
+	
+	/**
+	 * 打开文件为OutputStream
+	 */
+	public static OutputStream asOututStream(File file) throws IOException {
+		return new FileOutputStream(file);
 	}
 
 	/**

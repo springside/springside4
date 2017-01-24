@@ -8,8 +8,8 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.io.GeneralResourceUtil;
 import org.springside.modules.utils.io.IOUtil;
+import org.springside.modules.utils.io.URLResourceUtil;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**
@@ -51,13 +51,13 @@ public class PropertiesUtil {
 	/**
 	 * 从文件路径加载properties.
 	 * 
-	 * 路径支持从外部文件或resources文件加载, "file://"代表外部文件, "classpath://"代表resources,
+	 * 路径支持从外部文件或resources文件加载, "file://"或无前缀代表外部文件, "classpath://"代表resources,
 	 */
 	public static Properties loadFromFile(String generalPath) {
 		Properties p = new Properties();
 		InputStream is = null;
 		try {
-			is = GeneralResourceUtil.asStream(generalPath);
+			is = URLResourceUtil.asStream(generalPath);
 			p.load(is);
 		} catch (IOException e) {
 			logger.warn("Load property from " + generalPath + " fail ", e);
