@@ -10,6 +10,10 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springside.modules.metrics.metric.Counter;
+import org.springside.modules.metrics.metric.Histogram;
+import org.springside.modules.metrics.metric.HistogramMetric;
+import org.springside.modules.metrics.metric.Timer;
 
 public class MetricRegistryTest {
 

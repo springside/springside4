@@ -1,10 +1,19 @@
 language: java
+jdk:
+  - oraclejdk7
+
+install: true
 script:
-- mvn test
-- mvn test -Pfunctional-test -Dselenium.driver=firefox
-env: MAVEN_OPTS="-XX:MaxPermSize=128m"
-addons:
-  firefox: "26.0"
-before_install:
-  - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
+  - "cd modules;mvn clean test"
+  - jdk_switcher use oraclejdk8 
+  - "mvn clean test"
+  - mvn clean package -Dmaven.test.skip=true
+  - jdk_switcher use oraclejdk7
+  - "mvn test"
+  - "mvn clean package -Dmaven.test.skip=true" 
+  - jdk_switcher use oraclejdk7
+  - "mvn test"  
+
+branches:
+  only:
+    - master 

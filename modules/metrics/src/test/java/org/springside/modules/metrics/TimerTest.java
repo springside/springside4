@@ -8,7 +8,10 @@ package org.springside.modules.metrics;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.metrics.Timer.TimerContext;
+import org.springside.modules.metrics.metric.Counter;
+import org.springside.modules.metrics.metric.Timer;
+import org.springside.modules.metrics.metric.TimerMetric;
+import org.springside.modules.metrics.metric.Timer.TimerContext;
 import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class TimerTest {
@@ -31,12 +34,12 @@ public class TimerTest {
 		TimerMetric metric = timer.calculateMetric();
 
 		assertThat(metric.counterMetric.totalCount).isEqualTo(2);
-		assertThat(metric.counterMetric.meanRate).isEqualTo(4);
+		assertThat(metric.counterMetric.avgRate).isEqualTo(4);
 		assertThat(metric.counterMetric.latestCount).isEqualTo(2);
 		assertThat(metric.counterMetric.latestRate).isEqualTo(4);
 
 		assertThat(metric.histogramMetric.min).isEqualTo(200);
-		assertThat(metric.histogramMetric.mean).isEqualTo(250);
+		assertThat(metric.histogramMetric.avg).isEqualTo(250);
 		assertThat(metric.histogramMetric.pcts.get(90d)).isEqualTo(300);
 	}
 }

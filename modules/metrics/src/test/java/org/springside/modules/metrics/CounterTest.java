@@ -9,6 +9,8 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springside.modules.metrics.metric.Counter;
+import org.springside.modules.metrics.metric.CounterMetric;
 import org.springside.modules.metrics.utils.Clock.MockClock;
 
 public class CounterTest {
@@ -31,7 +33,7 @@ public class CounterTest {
 
 		CounterMetric metric = counter.calculateMetric();
 		assertThat(metric.totalCount).isEqualTo(60);
-		assertThat(metric.meanRate).isEqualTo(60);
+		assertThat(metric.avgRate).isEqualTo(60);
 		assertThat(metric.latestCount).isEqualTo(60);
 		assertThat(metric.latestRate).isEqualTo(60);
 
@@ -40,7 +42,7 @@ public class CounterTest {
 		metric = counter.calculateMetric();
 
 		assertThat(metric.totalCount).isEqualTo(80);
-		assertThat(metric.meanRate).isEqualTo(40);
+		assertThat(metric.avgRate).isEqualTo(40);
 		assertThat(metric.latestCount).isEqualTo(20);
 		assertThat(metric.latestRate).isEqualTo(20);
 	}
