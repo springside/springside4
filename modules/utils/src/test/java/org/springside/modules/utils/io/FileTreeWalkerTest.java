@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.number.RandomUtil;
 
 public class FileTreeWalkerTest {
@@ -35,33 +36,40 @@ public class FileTreeWalkerTest {
 		files = FileTreeWalker.listFile(tmpDir);
 		assertThat(files).hasSize(3);
 
-		//extension
+		// extension
 		files = FileTreeWalker.listFileWithExtension(tmpDir, "tmp");
 		assertThat(files).hasSize(2);
 
 		files = FileTreeWalker.listFileWithExtension(tmpDir, "tp");
 		assertThat(files).hasSize(0);
 
-		//wildcard
+		// wildcard
 		files = FileTreeWalker.listFileWithWildcardFileName(tmpDir, "*.tmp");
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithWildcardFileName(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 
-		//regex
+		// regex
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tmp");
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tp");
 		assertThat(files).hasSize(0);
-		
-		
-		//antpath
+
+		// antpath
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**/*.tmp");
-		assertThat(files).hasSize(2);
-		
+		if (!Platforms.IS_WINDOWS) {
+			assertThat(files).hasSize(2);
+		} else {
+			assertThat(files).hasSize(0);
+		}
+
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*/*.tmp");
-		assertThat(files).hasSize(1);
-		
+		if (!Platforms.IS_WINDOWS) {
+			assertThat(files).hasSize(1);
+		} else {
+			assertThat(files).hasSize(0);
+		}
+
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 

@@ -7,16 +7,18 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.Platforms;
 
 public class URLResourceTest {
 
 	@Test
 	public void resource() throws IOException {
 		File file = URLResourceUtil.asFile("classpath://application.properties");
-		assertThat(FileUtil.toString(file)).isEqualTo("springside.min=1\nspringside.max=10");
+		assertThat(FileUtil.toString(file))
+				.isEqualTo("springside.min=1" + Platforms.LINE_SEPARATOR + "springside.max=10");
 
 		InputStream is = URLResourceUtil.asStream("classpath://application.properties");
-		assertThat(IOUtil.toString(is)).isEqualTo("springside.min=1\nspringside.max=10");
+		assertThat(IOUtil.toString(is)).isEqualTo("springside.min=1" + Platforms.LINE_SEPARATOR + "springside.max=10");
 		IOUtil.closeQuietly(is);
 
 		try {
