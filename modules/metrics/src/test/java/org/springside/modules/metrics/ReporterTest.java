@@ -10,11 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.Ignore;
 import org.junit.Test;
-import org.springside.modules.metrics.Timer.TimerContext;
+import org.springside.modules.metrics.metric.Counter;
+import org.springside.modules.metrics.metric.Histogram;
+import org.springside.modules.metrics.metric.Timer;
+import org.springside.modules.metrics.metric.Timer.TimerContext;
 import org.springside.modules.metrics.reporter.ConsoleReporter;
 import org.springside.modules.metrics.reporter.GraphiteReporter;
-import org.springside.modules.metrics.reporter.ReportScheduler;
-import org.springside.modules.metrics.reporter.Reporter;
 import org.springside.modules.metrics.reporter.Slf4jReporter;
 import org.springside.modules.metrics.utils.Clock.MockClock;
 

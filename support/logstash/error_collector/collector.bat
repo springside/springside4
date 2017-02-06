@@ -1,1 +1,0 @@
-logstash agent -f collector.conf -- web
