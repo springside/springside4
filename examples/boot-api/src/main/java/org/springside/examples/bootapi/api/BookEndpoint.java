@@ -6,12 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springside.examples.bootapi.domain.Account;
 import org.springside.examples.bootapi.domain.Book;
 import org.springside.examples.bootapi.dto.BookDto;
@@ -24,6 +19,7 @@ import org.springside.modules.utils.mapper.BeanMapper;
 import org.springside.modules.web.MediaTypes;
 
 // Spring Restful MVC Controller的标识, 直接输出内容，不调用template引擎.
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class BookEndpoint {
 
