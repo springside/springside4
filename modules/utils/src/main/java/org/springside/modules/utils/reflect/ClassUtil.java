@@ -291,7 +291,7 @@ public class ClassUtil {
 	 * 
 	 * 匹配函数名+参数类型.
 	 * 
-	 * 因为class.getFiled() 不能获取父类的private函数, 因此采用循环向上的getDeclaredField();
+	 * 因为class.getMethod() 不能获取父类的private函数, 因此采用循环向上的getDeclaredMethod();
 	 */
 	public static Method getAccessibleMethod(final Class<?> clazz, final String methodName,
 			Class<?>... parameterTypes) {
