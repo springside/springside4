@@ -27,7 +27,7 @@ import com.fasterxml.jackson.databind.util.JSONPObject;
  * 
  * 可以直接使用公共示例JsonMapper.INSTANCE, 也可以使用不同的builder函数创建实例，封装不同的输出风格,
  * 
- * 不要是用GSON, 在对象稍大时非常缓慢.
+ * 不要使用GSON, 在对象稍大时非常缓慢.
  * 
  * 注意: 需要参考本模块的POM文件，显式引用jackson.
  * 
