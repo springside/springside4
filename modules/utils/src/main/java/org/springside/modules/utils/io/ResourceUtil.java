@@ -14,26 +14,24 @@ import org.springside.modules.utils.text.Charsets;
 import com.google.common.io.Resources;
 
 /**
- * 针对Jar包内的文件的工具类.
+ * 针对Jar包内的文件的工具类.<br />
  * 
- * 1.ClassLoader
+ * 1.ClassLoader<br />
  * 
- * 不指定contextClas时，优先使用Thread.getContextClassLoader()， 如果未设置则使用Guava Resources的ClassLoader
+ * 不指定contextClas时，优先使用Thread.getContextClassLoader()， 如果未设置则使用Guava Resources的ClassLoader<br />
  * 
- * 指定contextClass，则直接使用该contextClass的ClassLoader.
+ * 指定contextClass，则直接使用该contextClass的ClassLoader.<br />
  * 
- * 2.路径
+ * 2.路径<br />
  * 
- * 不指定contextClass时，按URLClassLoader的实现, 从jar file中查找resourceName，
- * 
- * 所以resourceName无需以"/"打头即表示jar file中的根目录，带了"/" 反而导致JarFile.getEntry(resouceName)时没有返回.
+ * 不指定contextClass时，按URLClassLoader的实现, 从jar file中查找resourceName，所以resourceName无需以"/"打头即表示jar file中的根目录，带了"/" 反而导致JarFile.getEntry(resouceName)时没有返回.<br />
  * 
  * 指定contextClass时，class.getResource()会先对name进行处理再交给classLoader，打头的"/"的会被去除，不以"/"打头则表示与该contextClass package的相对路径,
- * 会先转为绝对路径.
+ * 会先转为绝对路径.<br />
  * 
- * 3.同名资源
+ * 3.同名资源<br />
  * 
- * 如果有多个同名资源，除非调用getResources()获取全部资源，否则在URLClassLoader中按ClassPath顺序打开第一个命中的Jar文件.
+ * 如果有多个同名资源，除非调用getResources()获取全部资源，否则在URLClassLoader中按ClassPath顺序打开第一个命中的Jar文件.<br />
  */
 public class ResourceUtil {
 
