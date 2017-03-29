@@ -11,3 +11,7 @@
 # Others
 target/
 logs/
+examples/boot-api/src/main/resources/processes/Developer_Hiring.bpmn20.xml
+examples/boot-api/src/main/resources/processes/Developer_Hiring_with_jpa.bpmn20.xml
+examples/boot-api/src/main/resources/processes/leave-dynamic-form.bpmn20.xml
+examples/boot-api/src/test/java/org/activiti/HireProcessTest.java

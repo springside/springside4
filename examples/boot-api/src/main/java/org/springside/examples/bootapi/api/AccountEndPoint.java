@@ -14,8 +14,11 @@ import org.springside.examples.bootapi.service.AccountService;
 import org.springside.examples.bootapi.service.exception.ErrorCode;
 import org.springside.examples.bootapi.service.exception.ServiceException;
 import org.springside.modules.web.MediaTypes;
+import org.springframework.web.bind.annotation.*;
+
 
 // Spring Restful MVC Controller的标识, 直接输出内容，不调用template引擎.
+@CrossOrigin(maxAge = 3600)
 @RestController
 public class AccountEndPoint {
 
