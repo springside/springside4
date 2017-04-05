@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.io.ResourceUtil;
 
 public class HashUtilTest {
@@ -47,7 +48,11 @@ public class HashUtilTest {
 	public void hashFile() throws IOException {
 		InputStream in = ResourceUtil.asStream("test.txt");
 		String result = EncodeUtil.encodeBase64(HashUtil.sha1File(in));
-		assertThat(result).isEqualTo("DmSnwK/Fl0Jplrwtm9tfi7cb/js=");
+		if (Platforms.IS_WINDOWS) {
+			assertThat(result).isEqualTo("zV5GyYs9TxreIF1wRODMLsA/4Qg=");
+		} else {
+			assertThat(result).isEqualTo("DmSnwK/Fl0Jplrwtm9tfi7cb/js=");
+		}
 		result = EncodeUtil.encodeBase64(HashUtil.md5File(in));
 		assertThat(result).isEqualTo("1B2M2Y8AsgTpgAmY7PhCfg==");
 	}
