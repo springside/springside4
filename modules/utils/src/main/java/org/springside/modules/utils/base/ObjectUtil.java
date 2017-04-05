@@ -43,25 +43,15 @@ public class ObjectUtil {
 					sb.append(Arrays.toString((short[]) value));
 				} else if (componentType == byte.class) {
 					sb.append(Arrays.toString((byte[]) value));
+				} else if (componentType == char.class) {
+					sb.append(Arrays.toString((char[]) value));
 				} else {
 					throw new IllegalArgumentException("unsupport array type");
 				}
 
 				return sb.toString();
-			} else {
-				StringBuilder sb = new StringBuilder();
-				sb.append('[');
-
-				Object[] array = (Object[]) value;
-				for (int i = 0; i < array.length; i++) {
-					if (i > 0) {
-						sb.append(", ");
-					}
-					sb.append(toPrettyString(array[i]));
-				}
-				sb.append(']');
-				return sb.toString();
 			}
+			return Arrays.toString((Object[]) value);
 		} else if (value instanceof Iterable) {
 			Iterable iterable = (Iterable) value;
 			StringBuilder sb = new StringBuilder();

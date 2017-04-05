@@ -7,6 +7,7 @@ import java.io.Closeable;
 import java.io.IOException;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.io.type.StringBuilderWriter;
 import org.springside.modules.utils.text.Charsets;
 
@@ -14,7 +15,11 @@ public class IOUtilTest {
 
 	@Test
 	public void read() throws IOException {
-		assertThat(IOUtil.toString(ResourceUtil.asStream("test.txt"))).isEqualTo("ABCDEFG\nABC");
+		if (Platforms.IS_WINDOWS) {
+			assertThat(IOUtil.toString(ResourceUtil.asStream("test.txt"))).isEqualTo("ABCDEFG\r\nABC");
+		} else {
+			assertThat(IOUtil.toString(ResourceUtil.asStream("test.txt"))).isEqualTo("ABCDEFG\nABC");
+		}
 		assertThat(IOUtil.toLines(ResourceUtil.asStream("test.txt"))).hasSize(2).containsExactly("ABCDEFG", "ABC");
 	}
 

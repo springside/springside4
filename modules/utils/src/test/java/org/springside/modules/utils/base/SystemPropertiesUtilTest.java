@@ -92,8 +92,13 @@ public class SystemPropertiesUtilTest {
 		assertThat(result).isEqualTo("123");
 
 		// env值
-		String result2 = SystemPropertiesUtil.getString(name, "HOME", "123");
-		assertThat(result2).isNotEqualTo("123");
+		if (Platforms.IS_WINDOWS) {
+			String result2 = SystemPropertiesUtil.getString(name, "JAVA_HOME", "123");
+			assertThat(result2).isNotEqualTo("123");
+		} else {
+			String result2 = SystemPropertiesUtil.getString(name, "HOME", "123");
+			assertThat(result2).isNotEqualTo("123");
+		}
 
 		// system properties值
 		System.setProperty(name, "456");

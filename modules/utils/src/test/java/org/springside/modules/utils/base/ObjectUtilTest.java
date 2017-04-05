@@ -24,7 +24,8 @@ public class ObjectUtilTest {
 		assertThat(ObjectUtil.toPrettyString(new boolean[] { true, false })).isEqualTo("[true, false]");
 		assertThat(ObjectUtil.toPrettyString(new short[] { 1, 2 })).isEqualTo("[1, 2]");
 		assertThat(ObjectUtil.toPrettyString(new byte[] { 1, 2 })).isEqualTo("[1, 2]");
-		
+		assertThat(ObjectUtil.toPrettyString(new char[] { '1', '2' })).isEqualTo("[1, 2]");
+
 		assertThat(ObjectUtil.toPrettyString(new Integer[] { 1, 2 })).isEqualTo("[1, 2]");
 		assertThat(ObjectUtil.toPrettyString(ListUtil.newArrayList("1", "2"))).isEqualTo("{1,2}");
 	}
