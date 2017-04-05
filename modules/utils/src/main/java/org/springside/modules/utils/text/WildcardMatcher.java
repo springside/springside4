@@ -27,6 +27,9 @@ package org.springside.modules.utils.text;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.Platforms;
+import org.springside.modules.utils.io.FilePathUtil;
+
+import java.io.File;
 
 /**
  * 
@@ -166,8 +169,8 @@ public class WildcardMatcher {
 	 * separators (both \ and /). '**' represents deep tree wildcard, as in Ant.
 	 */
 	public static boolean matchPath(String path, String pattern) {
-		String[] pathElements = StringUtils.split(path, Platforms.FILE_PATH_SEPARATOR_CHAR);
-		String[] patternElements = StringUtils.split(pattern, Platforms.FILE_PATH_SEPARATOR_CHAR);
+		String[] pathElements = StringUtils.split(path, PATH_SEPARATORS);
+		String[] patternElements = StringUtils.split(pattern, PATH_SEPARATORS);
 		return matchTokens(pathElements, patternElements);
 	}
 
