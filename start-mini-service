@@ -1,0 +1,10 @@
+#!/bin/bash
+
+echo "Mini-Service:init database data and start jetty."
+
+cd examples/mini-service
+
+mvn antrun:run -Prefreshdb
+mvn clean jetty:run -Djetty.port=8082 
+
+echo "[INFO] http://localhost:8082/mini-service"

@@ -1,0 +1,15 @@
+#!/bin/bash
+echo "[Pre-Requirement] Makesure install JDK 6.0+ and set the JAVA_HOME."
+echo "[Pre-Requirement] Makesure install Maven 3.0+"
+set MAVEN_OPTS=$MAVEN_OPTS -XX:MaxPermSize=128m
+
+echo "[Step 1] Install all springside modules to local maven repository, and generate eclipse files to all projects."
+mvn clean install -Pmodules -Dmaven.test.skip=true
+mvn -Pall eclipse:clean eclipse:eclipse
+
+echo "[Step 2] Start H2 Standalone database."
+cd support/h2
+mvn exec:java -PwithoutBrowser 
+
+
+
