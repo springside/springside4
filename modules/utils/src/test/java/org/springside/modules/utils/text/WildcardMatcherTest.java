@@ -47,10 +47,10 @@ public class WildcardMatcherTest {
 		assertThat(WildcardMatcher.matchPath("a/b/ddxxa", "a/?/dd*")).isTrue();
 		assertThat(WildcardMatcher.matchPath("a/b/dd", "**/dd")).isTrue();
 
-		assertThat(WildcardMatcher.matchPath("/a/b/c/dd", "/a/*/dd")).isFalse();
+		assertThat(WildcardMatcher.matchPath("/a/b/c/dd", "/a/*/dd")).isTrue();
 
 		// matchOne
-		assertThat(WildcardMatcher.matchPathOne("/a/b/c/dd", new String[] { "/a/*/dd", "**/dd" })).isEqualTo(1);
+		assertThat(WildcardMatcher.matchPathOne("/a/b/c/dd", new String[] { "/a/*/dd", "**/dd" })).isEqualTo(0);
 		assertThat(WildcardMatcher.matchPathOne("/a/b/c/dd", new String[] { "/a/**/dd", "**/dd" })).isEqualTo(0);
 		assertThat(WildcardMatcher.matchPathOne("/a/b/c/dd", new String[] { "/b/d", "/a/c/*" })).isEqualTo(-1);
 
