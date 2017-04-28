@@ -57,10 +57,10 @@ public class FileTreeWalkerTest {
 		
 		//antpath
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**/*.tmp");
-		assertThat(files).hasSize(2);
+		assertThat(files).hasSize(0);
 		
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*/*.tmp");
-		assertThat(files).hasSize(1);
+		assertThat(files).hasSize(0);
 		
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
