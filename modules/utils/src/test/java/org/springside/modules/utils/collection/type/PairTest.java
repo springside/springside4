@@ -3,6 +3,7 @@ package org.springside.modules.utils.collection.type;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
+import org.springside.modules.utils.base.type.Pair;
 
 public class PairTest {
 	

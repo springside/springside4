@@ -109,7 +109,7 @@ public class CsvUtil {
 			} else if (c == FIELD_QUOTE) {
 				if (inQuotedField) {
 					if (i + 1 == len || line.charAt(i + 1) == FIELD_SEPARATOR) { // we are already quoting - peek to see
-																					// if this is the end of the field
+						// if this is the end of the field
 						addField(row, line, fieldStart, i, inQuotedField);
 						fieldStart = i + 2;
 						i++; // and skip the comma

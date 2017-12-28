@@ -3,13 +3,13 @@ package org.springside.modules.utils.collection;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
 import org.springside.modules.utils.base.annotation.Nullable;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Ints;
@@ -18,11 +18,38 @@ import com.google.common.primitives.Longs;
 /**
  * 数组工具类.
  * 
+ * 1. 创建Array的函数
+ * 
+ * 2. 数组的乱序与contact相加
+ * 
+ * 3. 从Array转换到Guava的底层为原子类型的List
+ * 
  * JDK Arrays的其他函数，如sort(), toString() 请直接调用
  * 
- * Common Lang ArrayUtils的其他函数，如subarray(),reverse(),indeOf(), 请直接调用
+ * Common Lang ArrayUtils的其他函数，如subarray(),reverse(),indexOf(), 请直接调用
  */
 public class ArrayUtil {
+
+	/**
+	 * 传入类型与大小创建数组.
+	 * 
+	 * Array.newInstance()的性能并不差
+	 */
+	public static <T> T[] newArray(Class<T> type, int length) {
+		return (T[]) Array.newInstance(type, length);
+	}
+
+	/**
+	 * 从collection转为Array, 以 list.toArray(new String[0]); 最快
+	 * 不需要创建list.size()的数组.
+	 * 
+	 * 本函数等价于list.toArray(new String[0]); 用户也可以直接用后者.
+	 * 
+	 * https://shipilev.net/blog/2016/arrays-wisdom-ancients/
+	 */
+	public static <T> T[] toArray(Collection<T> col, Class<T> type) {
+		return col.toArray((T[])Array.newInstance(type, 0));
+	}
 
 	/**
 	 * 将传入的数组乱序
@@ -57,22 +84,7 @@ public class ArrayUtil {
 		return ObjectArrays.concat(array, element);
 	}
 
-	/**
-	 * 传入类型与大小创建数组.
-	 */
-	public static <T> T[] newArray(Class<T> type, int length) {
-		return (T[]) Array.newInstance(type, length);
-	}
-
-	/**
-	 * list.toArray() 返回的是Object[] 如果要有类型的数组话，就要使用list.toArray(new String[list.size()])，这里对调用做了简化
-	 */
-	public static <T> T[] toArray(List<T> list, Class<T> type) {
-		return list.toArray((T[]) Array.newInstance(type, list.size()));
-	}
-
-	////////////////// guava Array向List的转换 ///////////
-
+	////////////////// guava Array 转换为底层为原子类型的List ///////////
 	/**
 	 * 原版将数组转换为List.
 	 * 
@@ -82,18 +94,6 @@ public class ArrayUtil {
 	 */
 	public static <T> List<T> asList(T... a) {
 		return Arrays.asList(a);
-	}
-
-	/**
-	 * 一个独立元素＋一个数组组成新的list，只是一个View，不复制数组内容，而且独立元素在最前.
-	 *
-	 * 
-	 * 注意转换后的List不能写入, 否则抛出UnsupportedOperationException
-	 * 
-	 * @see com.google.common.collect.Lists#asList(Object, Object[])
-	 */
-	public static <E> List<E> asList(E first, E[] rest) {
-		return Lists.asList(first, rest);
 	}
 
 	/**

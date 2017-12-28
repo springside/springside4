@@ -48,7 +48,7 @@ public class FileTreeWalker {
 	/**
 	 * 前序递归列出所有文件, 列出文件名匹配正则表达式的文件
 	 * 
-	 * 如 ("/a/b/hello.txt", "he.*\.text") 将被返回
+	 * 如 ("/a/b/hello.txt", "he.*\.txt") 将被返回
 	 */
 	public static List<File> listFileWithRegexFileName(final File rootDir, final String regexFileNamePattern) {
 		return Files.fileTreeTraverser().preOrderTraversal(rootDir)
@@ -58,7 +58,7 @@ public class FileTreeWalker {
 	/**
 	 * 前序递归列出所有文件, 列出符合ant path风格表达式的文件
 	 * 
-	 * 如 ("/a/b/hello.txt", "he.*\.text") 将被返回
+	 * 如 ("/a/b/hello.txt", "he.*\.txt") 将被返回
 	 */
 	public static List<File> listFileWithAntPath(final File rootDir, final String antPathPattern) {
 		return Files.fileTreeTraverser().preOrderTraversal(rootDir)

@@ -1,9 +1,4 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2014 springside.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
-package org.springside.modules.utils.mapper;
+package org.springside.modules.utils.reflect;
 
 import java.util.List;
 

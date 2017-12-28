@@ -25,8 +25,10 @@
 
 package org.springside.modules.utils.text;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springside.modules.utils.base.Platforms;
+import java.util.List;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
 
 /**
  * 
@@ -55,7 +57,8 @@ public class WildcardMatcher {
 	/**
 	 * Internal matching recursive function.
 	 */
-	private static boolean match(CharSequence string, CharSequence pattern, int sNdx, int pNdx) {
+	private static boolean match(CharSequence string, CharSequence pattern, final int sNdxConst, final int pNdxConst) {
+
 		int pLen = pattern.length();
 		if (pLen == 1) {
 			if (pattern.charAt(0) == '*') { // speed-up
@@ -65,6 +68,8 @@ public class WildcardMatcher {
 		int sLen = string.length();
 		boolean nextIsNotWildcard = false;
 
+		int sNdx = sNdxConst;
+		int pNdx = pNdxConst;
 		while (true) {
 
 			// check if end of string and/or pattern occurred
@@ -143,32 +148,33 @@ public class WildcardMatcher {
 		return -1;
 	}
 
+	// ---------------------------------------------------------------- path
+
+	protected static final String PATH_MATCH = "**";
+	protected static final Splitter PATH_SPLITTER = Splitter.on(CharMatcher.anyOf("/\\"));
+
 	/**
 	 * Matches path to at least one pattern. Returns index of matched pattern or <code>-1</code> otherwise.
-	 * @see #matchPath(String, String)
+	 * @see #matchPath(String, String, char)
 	 */
-	public static int matchPathOne(String path, String[] patterns) {
+	public static int matchPathOne(String platformDependentPath, String[] patterns) {
 		for (int i = 0; i < patterns.length; i++) {
-			if (matchPath(path, patterns[i])) {
+			if (matchPath(platformDependentPath, patterns[i])) {
 				return i;
 			}
 		}
 		return -1;
 	}
 
-	// ---------------------------------------------------------------- path
-
-	protected static final String PATH_MATCH = "**";
-	protected static final String PATH_SEPARATORS = "/\\";
-
 	/**
 	 * Matches path against pattern using *, ? and ** wildcards. Both path and the pattern are tokenized on path
-	 * separators (both \ and /). '**' represents deep tree wildcard, as in Ant.
+	 * separators (both \ and /). '**' represents deep tree wildcard, as in Ant. The separator should match the
+	 * corresponding path
 	 */
 	public static boolean matchPath(String path, String pattern) {
-		String[] pathElements = StringUtils.split(path, Platforms.FILE_PATH_SEPARATOR_CHAR);
-		String[] patternElements = StringUtils.split(pattern, Platforms.FILE_PATH_SEPARATOR_CHAR);
-		return matchTokens(pathElements, patternElements);
+		List<String> pathElements = PATH_SPLITTER.splitToList(path);
+		List<String> patternElements = PATH_SPLITTER.splitToList(pattern);
+		return matchTokens(pathElements.toArray(new String[0]), patternElements.toArray(new String[0]));
 	}
 
 	/**
@@ -249,7 +255,8 @@ public class WildcardMatcher {
 				}
 
 				ndx = tokNdxStart + i;
-				break;
+				break; // NOSONAR
+				// this is a double-loop, cannot be refactor to break statement directly
 			}
 
 			if (ndx == -1) {

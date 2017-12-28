@@ -7,14 +7,13 @@ package org.springside.modules.utils.text;
  * 
  * 不过仅在String对象较大时才有明显效果，否则抵不上访问ThreadLocal的消耗.
  * 
- * 当StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数时，需要创建独立的Holder, 否则使用公共的Holder
+ * 当StringBuilder在使用过程中，会调用其他可能也使用StringBuilderHolder的子函数时，需要创建独立的Holder, 否则会共同使用公共的Holder
  * 
- * 注意：在Netty环境中，使用Netty提供的基于FastThreadLocal的版本。
- *
+ * 注意：在Netty环境中，使用Netty提供的基于FastThreadLocal的版本
  */
 public class StringBuilderHolder {
 
-	// 公共的Holder
+	// 全局公共的ThreadLocal StringBuilder
 	private static ThreadLocal<StringBuilder> globalStringBuilder = new ThreadLocal<StringBuilder>() {
 		@Override
 		protected StringBuilder initialValue() {
@@ -22,7 +21,7 @@ public class StringBuilderHolder {
 		}
 	};
 
-	// 独立的Holder
+	// 独立创建的ThreadLocal的StringBuilder
 	private ThreadLocal<StringBuilder> stringBuilder = new ThreadLocal<StringBuilder>() {
 		@Override
 		protected StringBuilder initialValue() {

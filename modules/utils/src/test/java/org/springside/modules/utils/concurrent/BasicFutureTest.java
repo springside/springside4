@@ -8,6 +8,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil;
+import org.springside.modules.utils.concurrent.type.BasicFuture;
 
 public class BasicFutureTest {
 
@@ -32,11 +33,11 @@ public class BasicFutureTest {
 	private static class Tasks {
 
 		public static void success(MyFuture<String> future) {
-			future.completed("haha");
+			future.complete("haha");
 		}
 
 		public static void fail(MyFuture<String> future) {
-			future.failed(new RuntimeException("wuwu"));
+			future.fail(new RuntimeException("wuwu"));
 		}
 
 		public static void cancel(MyFuture<String> future) {

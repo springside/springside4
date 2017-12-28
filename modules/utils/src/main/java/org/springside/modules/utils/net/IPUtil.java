@@ -18,8 +18,6 @@ import com.google.common.net.InetAddresses;
  * 先将字符串传换为byte[]再用InetAddress.getByAddress(byte[])，避免了InetAddress.getByName(ip)可能引起的DNS访问.
  * 
  * InetAddress与String的转换其实消耗不小，如果是有限的地址，建议进行缓存.
- * 
- * @author calvin
  */
 public class IPUtil {
 
@@ -41,7 +39,7 @@ public class IPUtil {
 	 * 
 	 * @see com.google.common.net.InetAddresses#toAddrString(InetAddress)
 	 */
-	public static String toString(InetAddress address) {
+	public static String toIpString(InetAddress address) {
 		return InetAddresses.toAddrString(address);
 	}
 

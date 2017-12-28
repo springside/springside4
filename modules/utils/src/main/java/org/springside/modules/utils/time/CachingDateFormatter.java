@@ -9,12 +9,14 @@ import org.apache.commons.lang3.time.FastDateFormat;
  * 
  * From Log4j2 DatePatternConverter，进行了优化，根据输出格式是否毫秒级，决定缓存在秒级还是毫秒级.
  * 
+ * 注意如果输出格式为毫秒级的话，根据QPS决定性价比
+ * 
  * @author calvin
  */
 public class CachingDateFormatter {
 	private FastDateFormat fastDateFormat;
 	private AtomicReference<CachedTime> cachedTime;
-	private boolean onSecond;// 根据时间格式，决定缓存在
+	private boolean onSecond;// 根据时间格式，决定缓存在秒级还是毫秒级
 
 	public CachingDateFormatter(String pattern) {
 		this(FastDateFormat.getInstance(pattern));

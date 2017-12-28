@@ -1,4 +1,4 @@
-package org.springside.modules.utils.concurrent.throttle;
+package org.springside.modules.utils.concurrent;
 
 import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.number.RandomUtil;
@@ -8,7 +8,6 @@ import org.springside.modules.utils.number.RandomUtil;
  * 
  * from Twitter Common, 优化使用ThreadLocalRandom
  * 
- * @author calvin
  */
 public class Sampler {
 

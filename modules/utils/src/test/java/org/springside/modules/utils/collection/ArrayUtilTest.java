@@ -34,15 +34,7 @@ public class ArrayUtilTest {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		List<String> list2 = ArrayUtil.asList("d", new String[] { "a", "c", "b", "e", "i", "g" });
-		assertThat(list2).hasSize(7).containsExactly("d", "a", "c", "b", "e", "i", "g");
-
-		try {
-			list2.add("a");
-			fail("should fail before");
-		} catch (Throwable t) {
-			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
-		}
+		
 
 		List<Integer> list3 = ArrayUtil.intAsList(1, 2, 3);
 		assertThat(list3).hasSize(3).containsExactly(1, 2, 3);

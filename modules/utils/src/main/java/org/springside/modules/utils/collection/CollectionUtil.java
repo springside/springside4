@@ -1,8 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2014 springside.github.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
 package org.springside.modules.utils.collection;
 
 import java.util.Collection;
@@ -11,7 +6,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.springside.modules.utils.collection.type.Pair;
+import org.springside.modules.utils.base.type.Pair;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Iterators;
@@ -20,11 +15,14 @@ import com.google.common.collect.Ordering;
 /**
  * 通用Collection的工具集
  * 
- * 关于List, Map, Queue, Set的特殊工具集，另见特定的Utils.
+ * 1. 集合是否为空，取得集合中首个及最后一个元素，判断集合是否完全相等
+ * 
+ * 2. 集合的最大最小值，及Top N, Bottom N
+ * 
+ * 关于List, Map, Queue, Set的特殊工具集，另见特定的Util.
  * 
  * 另JDK中缺少ComparableComparator和NullComparator，直到JDK8才补上。
- * 
- * 因此平时请使用guava的Ordering,fluentable的API更好用，可以链式设置nullFirst，nullLast,reverse
+ * 因此平时请使用guava的Ordering.natural(),fluentable的API更好用，可以链式设置nullFirst，nullLast,reverse
  * 
  * @see com.google.common.collect.Ordering
  */
@@ -81,7 +79,7 @@ public class CollectionUtil {
 		return Iterables.elementsEqual(iterable1, iterable2);
 	}
 
-	///////////// 求最大最小值，及Top N, Low N//////////
+	///////////// 求最大最小值，及Top N, Bottom N//////////
 	/**
 	 * 返回无序集合中的最小值，使用元素默认排序
 	 */
@@ -111,7 +109,9 @@ public class CollectionUtil {
 	}
 
 	/**
-	 * 返回无序集合中的最小值和最大值，使用元素默认排序
+	 * 同时返回无序集合中的最小值和最大值，使用元素默认排序
+	 * 
+	 * 在返回的Pair中，第一个为最小值，第二个为最大值
 	 */
 	public static <T extends Object & Comparable<? super T>> Pair<T, T> minAndMax(Collection<? extends T> coll) {
 		Iterator<? extends T> i = coll.iterator();
@@ -131,6 +131,8 @@ public class CollectionUtil {
 
 	/**
 	 * 返回无序集合中的最小值和最大值
+	 * 
+	 * 在返回的Pair中，第一个为最小值，第二个为最大值
 	 */
 	public static <T> Pair<T, T> minAndMax(Collection<? extends T> coll, Comparator<? super T> comp) {
 
@@ -160,7 +162,7 @@ public class CollectionUtil {
 	/**
 	 * 排序最高的N个对象, guava已优化.
 	 */
-	public static <T extends Comparable> List<T> topN(Iterable<T> coll, int n, Comparator<? super T> comp) {
+	public static <T> List<T> topN(Iterable<T> coll, int n, Comparator<? super T> comp) {
 		return Ordering.from(comp).greatestOf(coll, n);
 	}
 
@@ -174,7 +176,7 @@ public class CollectionUtil {
 	/**
 	 * 排序最低的N个对象, guava已优化.
 	 */
-	public static <T extends Comparable> List<T> bottomN(Iterable<T> coll, int n, Comparator<? super T> comp) {
+	public static <T> List<T> bottomN(Iterable<T> coll, int n, Comparator<? super T> comp) {
 		return Ordering.from(comp).leastOf(coll, n);
 	}
 

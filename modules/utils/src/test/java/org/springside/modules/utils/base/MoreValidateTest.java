@@ -60,8 +60,19 @@ public class MoreValidateTest {
 			MoreValidate.nonNegative("x", -1);
 			fail("fail");
 		} catch (Throwable t) {
+			assertThat(t).hasMessage("x (-1) must be >= 0");
 			assertThat(t).isInstanceOf(IllegalArgumentException.class);
 		}
+		
+		try {
+			MoreValidate.nonNegative(null, -1);
+			fail("fail");
+		} catch (Throwable t) {
+			assertThat(t).hasMessage("null (-1) must be >= 0");
+			assertThat(t).isInstanceOf(IllegalArgumentException.class);
+			
+		}
+		
 		try {
 			MoreValidate.positive("x", -1);
 			fail("fail");

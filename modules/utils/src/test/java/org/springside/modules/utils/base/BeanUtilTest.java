@@ -30,12 +30,10 @@ public class BeanUtilTest {
 		assertThat(BooleanUtil.negate(true)).isFalse();
 		assertThat(BooleanUtil.negate(false)).isTrue();
 
-		assertThat(BooleanUtil.or(true, true, false)).isTrue();
+		assertThat(BooleanUtil.or(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE)).isTrue();
 		assertThat(BooleanUtil.or(false, false, false)).isFalse();
 
-		assertThat(BooleanUtil.and(true, true, false)).isFalse();
+		assertThat(BooleanUtil.and(Boolean.TRUE, Boolean.TRUE, Boolean.FALSE)).isFalse();
 		assertThat(BooleanUtil.and(true, true, true)).isTrue();
-
 	}
-
 }

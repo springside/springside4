@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springside.modules.utils.collection.type.SortedArrayList;
-
 import com.google.common.collect.Lists;
 
 /**
@@ -23,8 +21,6 @@ import com.google.common.collect.Lists;
  * 3. 各种扩展List类型的创建函数
  * 
  * 5. 集合运算：交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
- * 
- * @author calvin
  */
 @SuppressWarnings("unchecked")
 public class ListUtil {
@@ -135,27 +131,6 @@ public class ListUtil {
 		return new CopyOnWriteArrayList<T>(elements);
 	}
 
-	////////////// 特别类型的List//////////////
-
-	/**
-	 * 构造排序的ArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
-	 */
-	@SuppressWarnings("rawtypes")
-	public static <T extends Comparable> SortedArrayList<T> createSortedArrayList() {
-		return new SortedArrayList<T>();
-	}
-
-	/**
-	 * 构造排序的ArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
-	 */
-	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<? super T> c) {
-		return new SortedArrayList<T>(c);
-	}
-
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
@@ -241,7 +216,7 @@ public class ListUtil {
 	}
 
 	/**
-	 * 倒序排序, 采用JDK认为最优的排序算法, 使用Comparetor
+	 * 倒序排序, 采用JDK认为最优的排序算法, 使用Comparator
 	 * 
 	 * @see java.util.Collections#sort(List, Comparator)
 	 */

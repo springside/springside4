@@ -1,23 +1,17 @@
 package org.springside.modules.utils.collection;
 
 import java.util.ArrayDeque;
-import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import com.google.common.collect.EvictingQueue;
-
 /**
  * Queue工具集.
  * 
- * 1.各种Queue，Dequeue的创建
- * 
- * 2.特殊类型Queue:LIFO的Stack, LRU的Queue
+ * 各种Queue，Dequeue的创建
  */
 public class QueueUtil {
 
@@ -54,7 +48,7 @@ public class QueueUtil {
 	/**
 	 * 创建并发阻塞情况下，长度不受限的队列.
 	 * 
-	 * 长度不受限，即队列不会因为满而阻塞，但会因为空而阻塞.
+	 * 长度不受限，即生产者不会因为满而阻塞，但消费者会因为空而阻塞.
 	 */
 	public static <E> LinkedBlockingQueue<E> newBlockingUnlimitQueue() {
 		return new LinkedBlockingQueue<E>();
@@ -63,7 +57,7 @@ public class QueueUtil {
 	/**
 	 * 创建并发阻塞情况下，长度不受限的双端队列.
 	 * 
-	 * 长度不受限，即队列不会因为满而阻塞，但会因为空而阻塞.
+	 * 长度不受限，即生产者不会因为满而阻塞，但消费者会因为空而阻塞.
 	 */
 	public static <E> LinkedBlockingDeque<E> newBlockingUnlimitDeque() {
 		return new LinkedBlockingDeque<E>();
@@ -90,39 +84,5 @@ public class QueueUtil {
 		return new LinkedBlockingDeque<E>(capacity);
 	}
 
-	//////////////// 特殊类型Queue：Stack ///////////
-
-	/**
-	 * 支持后进先出的栈，用ArrayDeque实现, 经过Collections#asLifoQueue()转换顺序
-	 * 
-	 * 需设置初始长度，默认为16，数组满时成倍扩容
-	 * 
-	 * @see Collections#asLifoQueue()
-	 */
-	public static <E> Queue<E> createStack(int initSize) {
-		return Collections.asLifoQueue(new ArrayDeque<E>(initSize));
-	}
-
-	/**
-	 * 支持后进先出的并发栈，用ConcurrentLinkedDeque实现，经过Collections#asLifoQueue()转换顺序
-	 * 
-	 * 另对于BlockingQueue接口， JDK暂无Lifo倒转实现，因此只能直接使用未调转顺序的LinkedBlockingDeque
-	 * 
-	 * @see Collections#asLifoQueue()
-	 */
-	public static <E> Queue<E> createConcurrentStack() {
-		return (Queue<E>) Collections.asLifoQueue(newConcurrentNonBlockingDeque());
-	}
-
-	//////////////// 特殊类型Queue：LRUQueue ///////////
-
-	/**
-	 * LRUQueue, 如果Queue已满，则删除最旧的元素.
-	 * 
-	 * 内部实现是ArrayDeque
-	 */
-	public static <E> EvictingQueue<E> createLRUQueue(int maxSize) {
-		return EvictingQueue.create(maxSize);
-	}
-
+	
 }

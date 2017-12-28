@@ -17,9 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 1. 删除定期重启线程避免内存泄漏的功能，
  * 
  * 2. TaskQueue中可能3次有锁的读取线程数量，改为只读取1次，这把锁也是这个实现里的唯一遗憾了。
- * 
- * @author calvin
- *
  */
 public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExecutor {
 
@@ -69,7 +66,9 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 		submittedCount.incrementAndGet();
 		try {
 			super.execute(command);
-		} catch (RejectedExecutionException rx) {
+		} catch (RejectedExecutionException rx) { // NOSONAR
+			// not to re-throw this exception because this is only used to find out whether the pool is full, not for a
+			// exception purpose
 			final ControllableQueue queue = (ControllableQueue) super.getQueue();
 			try {
 				if (!queue.force(command, timeout, unit)) {

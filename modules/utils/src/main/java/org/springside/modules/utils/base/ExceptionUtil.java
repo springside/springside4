@@ -1,8 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2017 springside.github.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
 package org.springside.modules.utils.base;
 
 import org.apache.commons.lang3.ClassUtils;
@@ -15,15 +10,17 @@ import com.google.common.base.Throwables;
 /**
  * 关于异常的工具类.
  * 
- * 1. 若干常用函数.
+ * 1. Checked/Uncheked及Wrap(如ExecutionException)的转换.
  * 
- * 2. StackTrace性能优化相关，尽量使用静态异常避免异常生成时获取StackTrace，及打印StackTrace的消耗
+ * 2. 打印Exception的辅助函数.
  * 
- * @author calvin
+ * 3. StackTrace性能优化相关，尽量使用静态异常避免异常生成时获取StackTrace，及打印StackTrace的消耗
  */
 public class ExceptionUtil {
 
 	private static final StackTraceElement[] EMPTY_STACK_TRACE = new StackTraceElement[0];
+
+	///// Checked/Uncheked及Wrap(如ExecutionException)的转换/////
 
 	/**
 	 * 将CheckedException转换为RuntimeException重新抛出, 可以减少函数签名中的CheckExcetpion定义.
@@ -38,17 +35,18 @@ public class ExceptionUtil {
 	 * 
 	 * <pre>
 	 * try{ ... }catch(Exception e){ throw unchecked(t); }
+	 * </pre>
 	 * 
 	 * @see ExceptionUtils#wrapAndThrow(Throwable)
 	 */
 	public static RuntimeException unchecked(Throwable t) {
-
 		if (t instanceof RuntimeException) {
 			throw (RuntimeException) t;
 		}
 		if (t instanceof Error) {
 			throw (Error) t;
 		}
+
 		throw new UncheckedException(t);
 	}
 
@@ -82,8 +80,30 @@ public class ExceptionUtil {
 		if (unwrapped instanceof Error) {
 			throw (Error) unwrapped;
 		}
+
 		throw new UncheckedException(unwrapped);
 	}
+
+	/**
+	 * 自定义一个CheckedException的wrapper.
+	 * 
+	 * 返回Message/Cause时, 将返回内层Exception的信息.
+	 */
+	public static class UncheckedException extends RuntimeException {
+
+		private static final long serialVersionUID = 4140223302171577501L;
+
+		public UncheckedException(Throwable cause) {
+			super(cause);
+		}
+
+		@Override
+		public String getMessage() {
+			return super.getCause().getMessage();
+		}
+	}
+
+	////// 输出内容相关 //////
 
 	/**
 	 * 将StackTrace[]转换为String, 供Logger或e.printStackTrace()外的其他地方使用.
@@ -147,7 +167,7 @@ public class ExceptionUtil {
 		Throwable cause = getRootCause(t);
 
 		StringBuilder sb = new StringBuilder(128).append(clsName).append(": ").append(message);
-		if (cause != t) {
+		if (cause != t) { // NOSONAR
 			sb.append("; <---").append(toStringWithShortName(cause));
 		}
 
@@ -166,7 +186,6 @@ public class ExceptionUtil {
 	 * <pre>
 	 * private static RuntimeException TIMEOUT_EXCEPTION = ExceptionUtil.setStackTrace(new RuntimeException("Timeout"),
 	 * 		MyClass.class, "mymethod");
-	 * 
 	 * </pre>
 	 */
 	public static <T extends Throwable> T setStackTrace(T exception, Class<?> throwClass, String throwClazz) {
@@ -192,7 +211,13 @@ public class ExceptionUtil {
 	}
 
 	/**
-	 * 适用于Message经常变更的异常, 可通过clone()不经过构造函数的构造异常再设定新的异常信息
+	 * 适用于异常信息需要变更的情况, 可通过clone()，不经过构造函数（也就避免了获得StackTrace）地从之前定义的静态异常中克隆，再设定新的异常信息
+	 * 
+	 * private static CloneableException TIMEOUT_EXCEPTION = new CloneableException("Timeout") .setStackTrace(My.class,
+	 * "hello"); ...
+	 * 
+	 * throw TIMEOUT_EXCEPTION.clone("Timeout for 40ms");
+	 * 
 	 */
 	public static class CloneableException extends Exception implements Cloneable {
 
@@ -222,31 +247,41 @@ public class ExceptionUtil {
 			}
 		}
 
+		@Override
+		public String getMessage() {
+			return message;
+		}
+
+		/**
+		 * 简便函数，定义静态异常时使用
+		 */
+		public CloneableException setStackTrace(Class<?> throwClazz, String throwMethod) {
+			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
+			return this;
+		}
+
+		/**
+		 * 简便函数, clone并重新设定Message
+		 */
 		public CloneableException clone(String message) {
 			CloneableException newException = this.clone();
 			newException.setMessage(message);
 			return newException;
 		}
 
-		@Override
-		public String getMessage() {
-			return message;
-		}
-
-		public void setMessage(String message) {
+		/**
+		 * 简便函数, 重新设定Message
+		 */
+		public CloneableException setMessage(String message) {
 			this.message = message;
-		}
-
-		public CloneableException setStackTrace(Class<?> throwClazz, String throwMethod) {
-			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
 		}
 	}
 
 	/**
-	 * 重载fillInStackTrace()方法，不生成StackTrace.
+	 * 适用于异常信息需要变更的情况, 可通过clone()，不经过构造函数（也就避免了获得StackTrace）地从之前定义的静态异常中克隆，再设定新的异常信息
 	 * 
-	 * 适用于Message经常变更，不能使用静态异常时
+	 * @see CloneableException
 	 */
 	public static class CloneableRuntimeException extends RuntimeException implements Cloneable {
 
@@ -277,44 +312,34 @@ public class ExceptionUtil {
 			}
 		}
 
+		@Override
+		public String getMessage() {
+			return message;
+		}
+
+		/**
+		 * 简便函数，定义静态异常时使用
+		 */
+		public CloneableRuntimeException setStackTrace(Class<?> throwClazz, String throwMethod) {
+			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
+			return this;
+		}
+
+		/**
+		 * 简便函数, clone并重新设定Message
+		 */
 		public CloneableRuntimeException clone(String message) {
 			CloneableRuntimeException newException = this.clone();
 			newException.setMessage(message);
 			return newException;
 		}
 
-		@Override
-		public String getMessage() {
-			return message;
-		}
-
-		public void setMessage(String message) {
+		/**
+		 * 简便函数, 重新设定Message
+		 */
+		public CloneableRuntimeException setMessage(String message) {
 			this.message = message;
-		}
-
-		public CloneableRuntimeException setStackTrace(Class<?> throwClazz, String throwMethod) {
-			ExceptionUtil.setStackTrace(this, throwClazz, throwMethod);
 			return this;
-		}
-	}
-
-	/**
-	 * 自定义一个CheckedException的wrapper
-	 * 
-	 * @author calvin
-	 *
-	 */
-	public static class UncheckedException extends RuntimeException {
-
-		private static final long serialVersionUID = 4140223302171577501L;
-
-		public UncheckedException(Throwable cause) {
-			super(cause);
-		}
-
-		@Override
-		public String getMessage() {
-			return super.getCause().getMessage();
 		}
 	}
 }

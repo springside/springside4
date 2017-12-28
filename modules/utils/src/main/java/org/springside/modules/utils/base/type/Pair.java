@@ -1,4 +1,4 @@
-package org.springside.modules.utils.collection.type;
+package org.springside.modules.utils.base.type;
 
 import org.springside.modules.utils.base.annotation.Nullable;
 

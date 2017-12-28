@@ -15,7 +15,7 @@ public class FileUtilTest {
 
 	@Test
 	public void readWrite() throws IOException {
-		File file = FileUtil.createTempFile("abc", ".tmp");
+		File file = FileUtil.createTempFile("abc", ".tmp").toFile();
 		try {
 			String content = "haha\nhehe";
 			FileUtil.write(content, file);
@@ -42,7 +42,7 @@ public class FileUtilTest {
 		String content = "haha\nhehe";
 		FileUtil.write(content, file);
 		assertThat(FileUtil.toString(file)).isEqualTo(content);
-		
+
 		File newFile = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testFile" + RandomUtil.nextInt()));
 		File newFile2 = new File(FilePathUtil.contact(Platforms.TMP_DIR, "testFile" + RandomUtil.nextInt()));
 
@@ -53,7 +53,7 @@ public class FileUtilTest {
 		FileUtil.moveFile(newFile, newFile2);
 		assertThat(FileUtil.toString(newFile2)).isEqualTo("haha\nhehe");
 
-	
+
 	}
 
 	@Test
@@ -86,7 +86,7 @@ public class FileUtilTest {
 
 		File tmpFile = null;
 		try {
-			tmpFile = FileUtil.createTempFile();
+			tmpFile = FileUtil.createTempFile().toFile();
 			assertThat(FileUtil.isFileExists(tmpFile)).isTrue();
 
 			assertThat(FileUtil.isFileExists(tmpFile.getAbsolutePath() + RandomUtil.nextInt())).isFalse();

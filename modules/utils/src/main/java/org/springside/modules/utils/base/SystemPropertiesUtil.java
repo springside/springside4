@@ -7,7 +7,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.springside.modules.utils.number.NumberUtil;
 
 /**
- * 关于系统Properties的工具类
+ * 关于SystemProperties的工具类
  * 
  * 1. 统一的读取系统变量，其中Boolean.readBoolean的风格不统一，Double则不支持，都进行了扩展.
  * 
@@ -15,8 +15,6 @@ import org.springside.modules.utils.number.NumberUtil;
  * 
  * 3. Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
  * 在其所关心的属性变化时进行通知.
- * 
- * @author calvin
  */
 public class SystemPropertiesUtil {
 
@@ -165,6 +163,15 @@ public class SystemPropertiesUtil {
 		}
 	}
 
+	/**
+	 * 检查环境变量名不能有'.'，在linux下不支持
+	 */
+	private static void checkEnvName(String envName) {
+		if (envName == null || envName.indexOf('.') != -1) {
+			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
+		}
+	}
+
 	/////////// ListenableProperties /////////////
 	/**
 	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
@@ -175,6 +182,7 @@ public class SystemPropertiesUtil {
 	public static synchronized void registerSystemPropertiesListener(PropertiesListener listener) {
 		Properties currentProperties = System.getProperties();
 
+		// 将System的properties实现替换为ListenableProperties
 		if (!(currentProperties instanceof ListenableProperties)) {
 			ListenableProperties newProperties = new ListenableProperties(currentProperties);
 			System.setProperties(newProperties);
@@ -185,21 +193,12 @@ public class SystemPropertiesUtil {
 	}
 
 	/**
-	 * 检查环境变量名不能有'.'，在linux下不支持
-	 */
-	private static void checkEnvName(String envName) {
-		if (envName == null || envName.indexOf('.') != -1) {
-			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
-		}
-	}
-
-	/**
 	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
 	 * 在其所关心的属性变化时进行通知.
 	 * 
 	 * @see PropertiesListener
 	 */
-	public static class ListenableProperties extends Properties {
+	public static class ListenableProperties extends Properties { // NOSONAR
 
 		private static final long serialVersionUID = -8282465702074684324L;
 
@@ -226,10 +225,11 @@ public class SystemPropertiesUtil {
 	}
 
 	/**
-	 * 获取所关心的Properties变更的Listener基类.
+	 * 获取所关心的Property变更的Listener基类.
 	 */
 	public abstract static class PropertiesListener {
 
+		// 关心的Property
 		protected String propertyName;
 
 		public PropertiesListener(String propertyName) {

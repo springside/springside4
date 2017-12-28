@@ -98,11 +98,11 @@ public class ResourceUtil {
 
 	///////////// 打开所有同名文件///////
 
-	public static List<URL> getResources(String resourceName) {
-		return getResources(resourceName, ClassUtil.getDefaultClassLoader());
+	public static List<URL> getResourcesQuietly(String resourceName) {
+		return getResourcesQuietly(resourceName, ClassUtil.getDefaultClassLoader());
 	}
 
-	public static List<URL> getResources(String resourceName, ClassLoader contextClassLoader) {
+	public static List<URL> getResourcesQuietly(String resourceName, ClassLoader contextClassLoader) {
 		try {
 			Enumeration<URL> urls = contextClassLoader.getResources(resourceName);
 			List<URL> list = new ArrayList<URL>(10);
@@ -110,7 +110,7 @@ public class ResourceUtil {
 				list.add(urls.nextElement());
 			}
 			return list;
-		} catch (IOException e) {
+		} catch (IOException e) {// NOSONAR
 			return ListUtil.emptyList();
 		}
 	}

@@ -4,17 +4,17 @@ import java.util.Arrays;
 
 public class ObjectUtil {
 
-	private static String NULL = "null";
+	private static final String NULL = "null";
 
 	/**
-	 * 多个对象的HashCode串联
+	 * 多个对象的HashCode串联, 组成新的HashCode
 	 */
 	public static int hashCode(Object... objects) {
 		return Arrays.hashCode(objects);
 	}
 
 	/**
-	 * 对象的toString()，处理了对象为数组和集合的情况.
+	 * 对象的toString(), 处理了对象为数组的情况，JDK的默认toString()只打数组的地址如 "[Ljava.lang.Integer;@490d6c15.
 	 */
 	public static String toPrettyString(Object value) {
 		if (value == null) {
@@ -43,6 +43,8 @@ public class ObjectUtil {
 					sb.append(Arrays.toString((short[]) value));
 				} else if (componentType == byte.class) {
 					sb.append(Arrays.toString((byte[]) value));
+				} else if (componentType == char.class) {
+					sb.append(Arrays.toString((char[]) value));
 				} else {
 					throw new IllegalArgumentException("unsupport array type");
 				}
@@ -63,6 +65,8 @@ public class ObjectUtil {
 				return sb.toString();
 			}
 		} else if (value instanceof Iterable) {
+			//因为Collection的处理也是默认调用元素的toString(),
+			//为了处理元素是数组的情况，同样需要重载
 			Iterable iterable = (Iterable) value;
 			StringBuilder sb = new StringBuilder();
 			sb.append('{');
@@ -80,5 +84,4 @@ public class ObjectUtil {
 
 		return value.toString();
 	}
-
 }

@@ -13,7 +13,7 @@ public class FileTreeWalkerTest {
 
 	@Test
 	public void listFile() throws IOException {
-		File tmpDir = FileUtil.createTempDir();
+		File tmpDir = FileUtil.createTempDir().toFile();
 
 		List<File> all = FileTreeWalker.listAll(tmpDir);
 		assertThat(all).hasSize(1);
@@ -53,15 +53,15 @@ public class FileTreeWalkerTest {
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tp");
 		assertThat(files).hasSize(0);
-		
-		
+
+
 		//antpath
-		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**/*.tmp");
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**" + File.separator + "*.tmp");
 		assertThat(files).hasSize(2);
-		
-		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*/*.tmp");
+
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*" + File.separator + "*.tmp");
 		assertThat(files).hasSize(1);
-		
+
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 

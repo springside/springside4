@@ -1,16 +1,16 @@
 package org.springside.modules.utils.base;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.io.IOUtil;
 import org.springside.modules.utils.io.URLResourceUtil;
 import org.springside.modules.utils.number.NumberUtil;
+import org.springside.modules.utils.text.Charsets;
 
 /**
  * 关于Properties的工具类
@@ -18,8 +18,6 @@ import org.springside.modules.utils.number.NumberUtil;
  * 1. 统一读取Properties
  * 
  * 2. 从文件或字符串装载Properties
- * 
- * @author calvin
  */
 public class PropertiesUtil {
 
@@ -49,20 +47,16 @@ public class PropertiesUtil {
 
 	/////////// 加载Properties////////
 	/**
-	 * 从文件路径加载properties.
+	 * 从文件路径加载properties. 默认使用utf-8编码解析文件
 	 * 
-	 * 路径支持从外部文件或resources文件加载, "file://"或无前缀代表外部文件, "classpath://"代表resources,
+	 * 路径支持从外部文件或resources文件加载, "file://"或无前缀代表外部文件, "classpath://"代表resources
 	 */
 	public static Properties loadFromFile(String generalPath) {
 		Properties p = new Properties();
-		InputStream is = null;
-		try {
-			is = URLResourceUtil.asStream(generalPath);
-			p.load(is);
+		try (Reader reader = new InputStreamReader(URLResourceUtil.asStream(generalPath), Charsets.UTF_8)) {
+			p.load(reader);
 		} catch (IOException e) {
-			logger.warn("Load property from " + generalPath + " fail ", e);
-		} finally {
-			IOUtil.closeQuietly(is);
+			logger.warn("Load property from " + generalPath + " failed", e);
 		}
 		return p;
 	}
@@ -72,14 +66,10 @@ public class PropertiesUtil {
 	 */
 	public static Properties loadFromString(String content) {
 		Properties p = new Properties();
-		Reader reader = new StringReader(content);
-		try {
+		try (Reader reader = new StringReader(content)) {
 			p.load(reader);
-		} catch (IOException ignored) {
-		} finally {
-			IOUtil.closeQuietly(reader);
+		} catch (IOException ignored) { // NOSONAR
 		}
-
 		return p;
 	}
 

@@ -1,56 +1,44 @@
 package org.springside.modules.utils.collection;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
-import org.apache.commons.lang3.mutable.MutableInt;
-import org.apache.commons.lang3.mutable.MutableLong;
-import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
-import org.springside.modules.utils.collection.type.primitive.IntObjectHashMap;
-import org.springside.modules.utils.collection.type.primitive.LongObjectHashMap;
-import org.springside.modules.utils.concurrent.jsr166e.ConcurrentHashMapV8;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.MapDifference;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
-import com.google.common.collect.MultimapBuilder;
-import com.google.common.collect.SortedSetMultimap;
-import com.google.common.collect.TreeRangeMap;
-import com.google.common.util.concurrent.AtomicLongMap;
 
 /**
  * 关于Map的工具集合，
  * 
- * 1. 常用函数(如是否为空)
+ * 1. 常用函数(如是否为空, 两个map的Diff对比，针对value值的排序)
  * 
  * 2. 对于并发Map，增加putIfAbsent(返回最终值版), createIfAbsent这两个重要函数(from Common Lang)
  * 
  * 3. 便捷的构造函数(via guava,Java Collections，并增加了用数组，List等方式初始化Map的函数)
  * 
- * 4. 特殊的类型，包括WeakConcurrentHashMap, IntObjectHashMap, MapCounter, MultiKeyMap, RangeMap
- * 
- * 
- * 参考文章：《高性能场景下，Map家族的优化使用建议》 http://calvin1978.blogcn.com/articles/hashmap.html
- * 
- * @author calvin
+ * 4. JDK Collections的empty,singleton
  */
 @SuppressWarnings("unchecked")
 public class MapUtil {
+
+	public static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
 	/**
 	 * 判断是否为空.
@@ -71,8 +59,7 @@ public class MapUtil {
 	 * 
 	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#putIfAbsent(ConcurrentMap, Object, Object)
 	 */
-	public static <K, V> V putIfAbsentWithFinalValue(@NotNull final ConcurrentMap<K, V> map, final K key,
-			final V value) {
+	public static <K, V> V putIfAbsentReturnLast(@NotNull final ConcurrentMap<K, V> map, final K key, final V value) {
 		final V result = map.putIfAbsent(key, value);
 		return result != null ? result : value;
 	}
@@ -80,24 +67,24 @@ public class MapUtil {
 	/**
 	 * 如果Key不存在则创建，返回最后存储在Map中的Value.
 	 * 
-	 * 如果创建对象有一定成本, 直接使用PutIfAbsent可能重复浪费，则使用此类，传入回调的ConcurrentInitializer
+	 * 如果创建Value对象有一定成本, 直接使用PutIfAbsent可能重复浪费，则使用此类，传入一个被回调的ValueCreator，Lazy创建对象。
 	 * 
 	 * @see org.apache.commons.lang3.concurrent.ConcurrentUtils#createIfAbsent(ConcurrentMap, Object,
 	 * org.apache.commons.lang3.concurrent.ConcurrentInitializer)
 	 */
-	public static <K, V> V createIfAbsent(@NotNull final ConcurrentMap<K, V> map, final K key,
+	public static <K, V> V createIfAbsentReturnLast(@NotNull final ConcurrentMap<K, V> map, final K key,
 			@NotNull final ValueCreator<? extends V> creator) {
 		final V value = map.get(key);
 		if (value == null) {
-			return putIfAbsentWithFinalValue(map, key, creator.get());
+			return putIfAbsentReturnLast(map, key, creator.get());
 		}
 		return value;
 	}
 
 	/**
-	 * 创建Value值的回调函数
+	 * Lazy创建Value值的回调类
 	 * 
-	 * @see MapUtil#createIfAbsent(ConcurrentMap, Object, ValueCreator)
+	 * @see MapUtil#createIfAbsentReturnLast(ConcurrentMap, Object, ValueCreator)
 	 */
 	public interface ValueCreator<T> {
 		/**
@@ -155,7 +142,7 @@ public class MapUtil {
 					"keys.length is " + keys.length + " but values.length is " + values.length);
 		}
 
-		HashMap<K, V> map = new HashMap<K, V>();
+		HashMap<K, V> map = new HashMap<K, V>(keys.length * 2);
 
 		for (int i = 0; i < keys.length; i++) {
 			map.put(keys[i], values[i]);
@@ -174,7 +161,7 @@ public class MapUtil {
 			throw new IllegalArgumentException("keys.size is " + keys.size() + " but values.size is " + values.size());
 		}
 
-		HashMap<K, V> map = new HashMap<K, V>();
+		HashMap<K, V> map = new HashMap<K, V>(keys.size() * 2);
 		Iterator<K> keyIt = keys.iterator();
 		Iterator<V> valueIt = values.iterator();
 
@@ -212,16 +199,10 @@ public class MapUtil {
 	}
 
 	/**
-	 * JDK8下，ConcurrentHashMap已不再需要设置loadFactor, concurrencyLevel和initialCapacity.
-	 * 
-	 * 如果JDK8，使用原生ConcurrentHashMap，否则使用移植版
+	 * 根据等号左边的类型，构造类型正确的ConcurrentHashMap.
 	 */
-	public static <K, V> ConcurrentMap<K, V> newConcurrentHashMap() {
-		if (Platforms.IS_ATLEASET_JAVA8) {
-			return new ConcurrentHashMap<K, V>();
-		} else {
-			return new ConcurrentHashMapV8<K, V>();
-		}
+	public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
+		return new ConcurrentHashMap<K, V>();
 	}
 
 	/**
@@ -231,125 +212,8 @@ public class MapUtil {
 		return new ConcurrentSkipListMap<K, V>();
 	}
 
-	///////////////// from Guava的特别Map //////////////////////
-
-	/**
-	 * 创建Key为弱引用的ConcurrentMap，Key对象可被回收.
-	 * 
-	 * JDK没有WeakHashMap的并发实现, 由Guava提供
-	 */
-	public static <K, V> ConcurrentMap<K, V> createWeakKeyConcurrentHashMap(int initialCapacity, int concurrencyLevel) {
-		return new MapMaker().weakKeys().initialCapacity(initialCapacity).concurrencyLevel(concurrencyLevel).makeMap();
-	}
-
-	/**
-	 * 创建Value为弱引用的ConcurrentMap，Value对象可被回收.
-	 * 
-	 * JDK没有WeakHashMap的并发实现, 由Guava提供
-	 */
-	public static <K, V> ConcurrentMap<K, V> createWeakValueConcurrentHashMap(int initialCapacity,
-			int concurrencyLevel) {
-		return new MapMaker().weakValues().initialCapacity(initialCapacity).concurrencyLevel(concurrencyLevel)
-				.makeMap();
-	}
-
-	/**
-	 * 创建移植自Netty的key为int的优化HashMap
-	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
-	 */
-	public static <V> IntObjectHashMap<V> createIntObjectHashMap(int initialCapacity, float loadFactor) {
-		return new IntObjectHashMap<V>(initialCapacity, loadFactor);
-	}
-
-	/**
-	 * 创建移植自Netty的key为long的优化HashMap
-	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
-	 */
-	public static <V> LongObjectHashMap<V> createLongObjectHashMap(int initialCapacity, float loadFactor) {
-		return new LongObjectHashMap<V>(initialCapacity, loadFactor);
-	}
-
-	/**
-	 * 创建值为可更改的Integer的HashMap. 可更改的Integer在更改时不需要重新创建Integer对象，节约了内存
-	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
-	 */
-	public static <K> HashMap<K, MutableInt> createMutableIntValueHashMap(int initialCapacity, float loadFactor) {
-		return new HashMap<K, MutableInt>(initialCapacity, loadFactor);
-	}
-
-	/**
-	 * 创建值为可更改的Long的HashMap. 可更改的Long在更改时不需要重新创建Long对象，节约了内存
-	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
-	 */
-	public static <K> HashMap<K, MutableLong> createMutableLongValueHashMap(int initialCapacity, float loadFactor) {
-		return new HashMap<K, MutableLong>(initialCapacity, loadFactor);
-	}
-
-	/**
-	 * 以Guava的AtomicLongMap，实现线程安全的HashMap<E,AtomicLong>结构的Counter
-	 */
-	public static <E> AtomicLongMap<E> createConcurrentMapCounter() {
-		return AtomicLongMap.create();
-	}
-
-	/**
-	 * 以Guava的MultiSet，实现线程安全的HashMap<E,Integer>结构的Counter
-	 */
-	public static <E> ConcurrentHashMultiset<E> createConcurrentMapCounter(Iterable<? extends E> elements) {
-		return ConcurrentHashMultiset.create(elements);
-	}
-
-	/**
-	 * 以Guava的MultiMap，实现的HashMap<E,List<V>>结构的一个Key对应多个值的map.
-	 * 
-	 * 注意非线程安全, MultiMap无线程安全的实现.
-	 * 
-	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
-	 * 
-	 * @param expectedKeys 默认为16
-	 * @param expectedValuesPerKey 默认为3
-	 */
-	public static <K, V> ArrayListMultimap<K, V> createListValueMap(int expectedKeys, int expectedValuesPerKey) {
-		return ArrayListMultimap.create(expectedKeys, expectedValuesPerKey);
-	}
-
-	/**
-	 * 以Guava的MultiMap，实现的HashMap<E,TreeSet<V>>结构的一个Key对应多个值的map.
-	 * 
-	 * 注意非线程安全, MultiMap无线程安全的实现.
-	 * 
-	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
-	 */
-	public static <K, V extends Comparable> SortedSetMultimap<K, V> createSortedSetValueMap() {
-		return MultimapBuilder.hashKeys().treeSetValues().build();
-	}
-
-	/**
-	 * 以Guava的MultiMap，实现的HashMap<E,TreeSet<V>>结构的一个Key对应多个值的map.
-	 * 
-	 * 注意非线程安全, MultiMap无线程安全的实现.
-	 * 
-	 * 另有其他结构存储values的MultiMap，请自行参考MultimapBuilder使用.
-	 */
-	public static <K, V> SortedSetMultimap<K, V> createSortedSetValueMap(Comparator<V> comparator) {
-		return (SortedSetMultimap<K, V>) MultimapBuilder.hashKeys().treeSetValues(comparator);
-	}
-
-	/**
-	 * 以Guava TreeRangeMap实现的, 一段范围的Key指向同一个Value的Map
-	 */
-	@SuppressWarnings("rawtypes")
-	public static <K extends Comparable, V> TreeRangeMap<K, V> createRangeMap() {
-		return TreeRangeMap.create();
-	}
+	
+	
 
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
@@ -361,7 +225,7 @@ public class MapUtil {
 	 * @see java.util.Collections#emptyMap()
 	 */
 	public static final <K, V> Map<K, V> emptyMap() {
-		return (Map<K, V>) Collections.EMPTY_MAP;
+		return Collections.EMPTY_MAP;
 	}
 
 	/**
@@ -406,16 +270,106 @@ public class MapUtil {
 		return Collections.unmodifiableSortedMap(m);
 	}
 
-	//////// Map的集合操作 //////
-
+	//////// 对两个Map进行diff的操作 ///////
 	/**
 	 * 对两个Map进行比较，返回MapDifference，然后各种妙用.
 	 * 
 	 * 包括key的差集，key的交集，以及key相同但value不同的元素。
+	 * 
+	 * @see com.google.common.collect.MapDifference
 	 */
 	public static <K, V> MapDifference<K, V> difference(Map<? extends K, ? extends V> left,
 			Map<? extends K, ? extends V> right) {
 		return Maps.difference(left, right);
 	}
 
+	//////////// 按值排序及取TOP N的操作 /////////
+	/**
+	 * 对一个Map按Value进行排序，返回排序LinkedHashMap，多用于Value是Counter的情况.
+	 * 
+	 * @param reverse 按Value的倒序 or 正序排列
+	 */
+	public static <K, V extends Comparable> Map<K, V> sortByValue(Map<K, V> map, final boolean reverse) {
+		return sortByValueInternal(map, reverse ? new ComparableEntryValueReverseComparator<K, V>()
+				: new ComparableEntryValueComparator<K, V>());
+	}
+
+	/**
+	 * 对一个Map按Value进行排序，返回排序LinkedHashMap.
+	 */
+	public static <K, V> Map<K, V> sortByValue(Map<K, V> map, final Comparator<? super V> comparator) {
+		return sortByValueInternal(map, new EntryValueComparator<K, V>(comparator));
+	}
+
+	private static <K, V> Map<K, V> sortByValueInternal(Map<K, V> map, Comparator<Entry<K, V>> comparator) {
+		Set<Entry<K, V>> entrySet = map.entrySet();
+		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[entrySet.size()]);
+
+		Arrays.sort(entryArray, comparator);
+
+		Map<K, V> result = new LinkedHashMap<K, V>();
+		for (Entry<K, V> entry : entryArray) {
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result;
+	}
+
+	/**
+	 * 对一个Map按Value进行排序，返回排序LinkedHashMap，最多只返回n条，多用于Value是Counter的情况.
+	 * @param reverse 按Value的倒序 or 正序排列
+	 */
+	public static <K, V extends Comparable> Map<K, V> topNByValue(Map<K, V> map, final boolean reverse, int n) {
+		return topNByValueInternal(map, n, reverse ? new ComparableEntryValueReverseComparator<K, V>()
+				: new ComparableEntryValueComparator<K, V>());
+	}
+
+	/**
+	 * 对一个Map按Value进行排序，返回排序LinkedHashMap, 最多只返回n条，多用于Value是Counter的情况.
+	 */
+	public static <K, V> Map<K, V> topNByValue(Map<K, V> map, final Comparator<? super V> comparator, int n) {
+		return topNByValueInternal(map, n, new EntryValueComparator<K, V>(comparator));
+	}
+
+	private static <K, V> Map<K, V> topNByValueInternal(Map<K, V> map, int n, Comparator<Entry<K, V>> comparator) {
+		Set<Entry<K, V>> entrySet = map.entrySet();
+		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[entrySet.size()]);
+		Arrays.sort(entryArray, comparator);
+
+		Map<K, V> result = new LinkedHashMap<K, V>();
+		int size = Math.min(n, entryArray.length);
+		for (int i = 0; i < size; i++) {
+			Entry<K, V> entry = entryArray[i];
+			result.put(entry.getKey(), entry.getValue());
+		}
+		return result;
+	}
+
+	private static final class ComparableEntryValueComparator<K, V extends Comparable>
+			implements Comparator<Entry<K, V>> {
+		@Override
+		public int compare(Entry<K, V> o1, Entry<K, V> o2) {
+			return (o1.getValue()).compareTo(o2.getValue());
+		}
+	}
+
+	private static final class ComparableEntryValueReverseComparator<K, V extends Comparable>
+			implements Comparator<Entry<K, V>> {
+		@Override
+		public int compare(Entry<K, V> o1, Entry<K, V> o2) {
+			return -(o1.getValue()).compareTo(o2.getValue());
+		}
+	}
+
+	private static final class EntryValueComparator<K, V> implements Comparator<Entry<K, V>> {
+		private final Comparator<? super V> comparator;
+
+		private EntryValueComparator(Comparator<? super V> comparator2) {
+			this.comparator = comparator2;
+		}
+
+		@Override
+		public int compare(Entry<K, V> o1, Entry<K, V> o2) {
+			return comparator.compare(o1.getValue(), o2.getValue());
+		}
+	}
 }

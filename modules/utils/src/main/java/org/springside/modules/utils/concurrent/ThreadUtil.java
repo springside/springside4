@@ -1,18 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2014 springside.github.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
 package org.springside.modules.utils.concurrent;
 
 import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * 线程相关工具类.
  * 
  * 1. 处理了InterruptedException的sleep
+ * 
+ * 2. 正确的InterruptedException处理方法
  */
 public class ThreadUtil {
 
@@ -23,7 +18,7 @@ public class ThreadUtil {
 		try {
 			Thread.sleep(durationMillis);
 		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
+			handleInterruptedException();
 		}
 	}
 
@@ -34,7 +29,7 @@ public class ThreadUtil {
 		try {
 			Thread.sleep(unit.toMillis(duration));
 		} catch (InterruptedException e) {
-			Thread.currentThread().interrupt();
+			handleInterruptedException();
 		}
 	}
 
@@ -43,58 +38,6 @@ public class ThreadUtil {
 	 */
 	public static void handleInterruptedException() {
 		Thread.currentThread().interrupt();
-	}
-
-	/**
-	 * 通过StackTrace，获得调用者的类名.
-	 */
-	public static String getCallerClass() {
-		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 4) {
-			StackTraceElement element = stacktrace[3];
-			return element.getClassName();
-		} else {
-			return StringUtils.EMPTY;
-		}
-	}
-
-	/**
-	 * 通过StackTrace，获得调用者的"类名.方法名()"
-	 */
-	public static String getCallerMethod() {
-		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 4) {
-			StackTraceElement element = stacktrace[3];
-			return element.getClassName() + '.' + element.getMethodName() + "()";
-		} else {
-			return StringUtils.EMPTY;
-		}
-	}
-
-	/**
-	 * 通过StackTrace，获得调用者的类名.
-	 */
-	public static String getCurrentClass() {
-		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 3) {
-			StackTraceElement element = stacktrace[2];
-			return element.getClassName();
-		} else {
-			return StringUtils.EMPTY;
-		}
-	}
-
-	/**
-	 * 通过StackTrace，获得当前方法的"类名.方法名()"
-	 */
-	public static String getCurrentMethod() {
-		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
-		if (stacktrace.length >= 3) {
-			StackTraceElement element = stacktrace[2];
-			return element.getClassName() + '.' + element.getMethodName() + "()";
-		} else {
-			return StringUtils.EMPTY;
-		}
 	}
 
 }

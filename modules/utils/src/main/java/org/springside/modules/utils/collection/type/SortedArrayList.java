@@ -38,7 +38,7 @@ import java.util.Iterator;
  * auto sort this list.Note: Not all methods for adding and
  * removing elements are supported.
  */
-public class SortedArrayList<E> extends ArrayList<E> {
+public final class SortedArrayList<E> extends ArrayList<E> { // NOSONAR
 
 	private static final long serialVersionUID = -8301136559614447593L;
 
@@ -65,7 +65,7 @@ public class SortedArrayList<E> extends ArrayList<E> {
 	 */
 	public SortedArrayList(Collection<? extends E> c) {
 		comparator = null;
-		addAll(c);
+		addAll(c); //
 	}
 
 	/**
@@ -166,10 +166,11 @@ public class SortedArrayList<E> extends ArrayList<E> {
 	 * Conducts a binary search to find the index where Object
 	 * should be inserted.
 	 */
-	protected int findInsertionPoint(E o, int low, int high) {
-
+	protected int findInsertionPoint(E o, int originalLow, int originalHigh) {
+		int low = originalLow;
+		int high = originalHigh;
 		while (low <= high) {
-			int mid = (low + high) >>> 1;
+			int mid = low + ((high - low) >>> 1);
 			int delta = compare(get(mid), o);
 
 			if (delta > 0) {

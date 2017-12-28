@@ -16,8 +16,6 @@ import org.apache.commons.lang3.Validate;
  * 兼容url为无前缀，file://与classpath:// 三种情况的工具集
  * 
  * 参考Spring ResourceUtils
- * 
- * @author calvin
  */
 public class URLResourceUtil {
 
@@ -70,7 +68,7 @@ public class URLResourceUtil {
 		}
 		try {
 			return new File(toURI(fileUrl.toString()).getSchemeSpecificPart());
-		} catch (URISyntaxException ex) {
+		} catch (URISyntaxException ex) { // NOSONAR
 			// Fallback for URLs that are not valid URIs (should hardly ever happen).
 			return new File(fileUrl.getFile());
 		}

@@ -70,21 +70,21 @@ public class NumberUtil {
 	/////////// 将字符串安全的转化为原始类型数字/////////
 
 	/**
-	 * 将10进制的String安全的转化为int，当str为空或非数字字符串时，返回0
+	 * 将10进制的String安全的转化为int. 当str为空或非数字字符串时，返回0
 	 */
 	public static int toInt(String str) {
 		return NumberUtils.toInt(str, 0);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为int，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为int. 当str为空或非数字字符串时，返回default值.
 	 */
 	public static int toInt(String str, int defaultValue) {
 		return NumberUtils.toInt(str, defaultValue);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为long，当str为空或非数字字符串时，返回0
+	 * 将10进制的String安全的转化为long. 当str为空或非数字字符串时，返回0.
 	 */
 	public static long toLong(String str) {
 		return NumberUtils.toLong(str, 0L);
@@ -98,14 +98,14 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将10进制的String安全的转化为double，当str为空或非数字字符串时，返回0
+	 * 将10进制的String安全的转化为double. 当str为空或非数字字符串时，返回0
 	 */
 	public static double toDouble(String str) {
 		return NumberUtils.toDouble(str, 0L);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为double，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为double. 当str为空或非数字字符串时，返回default值
 	 */
 	public static double toDouble(String str, double defaultValue) {
 		return NumberUtils.toDouble(str, defaultValue);
@@ -113,14 +113,14 @@ public class NumberUtil {
 
 	////////////// 10进制字符串 转换对象类型数字/////////////
 	/**
-	 * 将10进制的String安全的转化为Integer，当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Integer. 当str为空或非数字字符串时，返回null
 	 */
 	public static Integer toIntObject(String str) {
 		return toIntObject(str, null);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Integer，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为Integer. 当str为空或非数字字符串时，返回default值
 	 */
 	public static Integer toIntObject(String str, Integer defaultValue) {
 		if (StringUtils.isEmpty(str)) {
@@ -134,7 +134,7 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Long，当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Long. 当str为空或非数字字符串时，返回null
 	 */
 	public static Long toLongObject(String str) {
 		return toLongObject(str, null);
@@ -155,14 +155,14 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Double，当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Double. 当str为空或非数字字符串时，返回null
 	 */
 	public static Double toDoubleObject(String str) {
 		return toDoubleObject(str, null);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Long，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为Long. 当str为空或非数字字符串时，返回default值
 	 */
 	public static Double toDoubleObject(String str, Double defaultValue) {
 		if (StringUtils.isEmpty(str)) {
@@ -219,7 +219,8 @@ public class NumberUtil {
 		}
 	}
 
-	/////// toString (定义了原子类型与对象类型的参数，保证不会用错函数) ///////
+	/////// toString ///////
+	// 定义了原子类型与对象类型的参数，保证不会用错函数会导致额外AutoBoxing转换//
 
 	public static String toString(int i) {
 		return Integer.toString(i);
@@ -258,7 +259,7 @@ public class NumberUtil {
 	 * 安全的将小于Integer.MAX的long转为int，否则抛出IllegalArgumentException异常
 	 */
 	public static int toInt32(long x) {
-		if ((int) x == x){
+		if ((int) x == x) {
 			return (int) x;
 		}
 		throw new IllegalArgumentException("Int " + x + " out of range");

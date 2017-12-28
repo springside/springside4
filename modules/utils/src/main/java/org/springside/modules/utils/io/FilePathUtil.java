@@ -8,8 +8,6 @@ import com.google.common.io.Files;
 
 /**
  * 关于文件路径的工具集
- * 
- * @author calvin
  */
 public class FilePathUtil {
 

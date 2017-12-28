@@ -3,6 +3,7 @@ package org.springside.modules.utils.number;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.Validate;
@@ -13,10 +14,10 @@ import org.springside.modules.utils.base.MoreValidate;
  * 
  * 1. 获取无锁的ThreadLocalRandom, 性能较佳的SecureRandom
  * 
- * 2. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble (copy from Common Lang
- * RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
+ * 2. 保证没有负数陷阱，也能更精确设定范围的nextInt/nextLong/nextDouble
+ *  (copy from Common Lang RandomUtils，但默认使用性能较优的ThreadLocalRandom，并可配置其他的Random)
  * 
- * 3. 随机字符串
+ * 3. 随机字符串 (via Common Lang RandomStringUtils)
  * 
  * @author calvin
  */
@@ -27,7 +28,7 @@ public class RandomUtil {
 	 * 返回无锁的ThreadLocalRandom
 	 */
 	public static Random threadLocalRandom() {
-		return java.util.concurrent.ThreadLocalRandom.current();
+		return ThreadLocalRandom.current();
 	}
 
 	/**
@@ -40,21 +41,21 @@ public class RandomUtil {
 	public static SecureRandom secureRandom() {
 		try {
 			return SecureRandom.getInstance("SHA1PRNG");
-		} catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {// NOSONAR
 			return new SecureRandom();
 		}
 	}
 
 	////////////////// nextInt 相关/////////
 	/**
-	 * 返回0到Intger.MAX_VALUE的随机Int, 使用内置全局普通Random.
+	 * 返回0到Intger.MAX_VALUE的随机Int, 使用ThreadLocalRandom.
 	 */
 	public static int nextInt() {
-		return nextInt(threadLocalRandom());
+		return nextInt(ThreadLocalRandom.current());
 	}
 
 	/**
-	 * 返回0到Intger.MAX_VALUE的随机Int, 可传入SecureRandom或ThreadLocalRandom
+	 * 返回0到Intger.MAX_VALUE的随机Int, 可传入ThreadLocalRandom或SecureRandom
 	 */
 	public static int nextInt(Random random) {
 		int n = random.nextInt();
@@ -68,10 +69,10 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回0到max的随机Int, 使用内置全局普通Random.
+	 * 返回0到max的随机Int, 使用ThreadLocalRandom.
 	 */
 	public static int nextInt(int max) {
-		return nextInt(threadLocalRandom(), max);
+		return nextInt(ThreadLocalRandom.current(), max);
 	}
 
 	/**
@@ -82,12 +83,12 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回min到max的随机Int, 使用内置全局普通Random.
+	 * 返回min到max的随机Int, 使用ThreadLocalRandom.
 	 * 
 	 * min必须大于0.
 	 */
 	public static int nextInt(int min, int max) {
-		return nextInt(threadLocalRandom(), min, max);
+		return nextInt(ThreadLocalRandom.current(), min, max);
 	}
 
 	/**
@@ -112,10 +113,10 @@ public class RandomUtil {
 
 	////////////////// long 相关/////////
 	/**
-	 * 返回0－Long.MAX_VALUE间的随机Long, 使用内置全局普通Random.
+	 * 返回0－Long.MAX_VALUE间的随机Long, 使用ThreadLocalRandom.
 	 */
 	public static long nextLong() {
-		return nextLong(threadLocalRandom());
+		return nextLong(ThreadLocalRandom.current());
 	}
 
 	/**
@@ -132,10 +133,10 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回0－max间的随机Long, 使用内置全局普通Random.
+	 * 返回0－max间的随机Long, 使用ThreadLocalRandom.
 	 */
 	public static long nextLong(long max) {
-		return nextLong(threadLocalRandom(), 0, max);
+		return nextLong(ThreadLocalRandom.current(), 0, max);
 	}
 
 	/**
@@ -146,12 +147,12 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回min－max间的随机Long, 使用内置全局普通Random.
+	 * 返回min－max间的随机Long, 使用ThreadLocalRandom.
 	 * 
 	 * min必须大于0.
 	 */
 	public static long nextLong(long min, long max) {
-		return nextLong(threadLocalRandom(), min, max);
+		return nextLong(ThreadLocalRandom.current(), min, max);
 	}
 
 	/**
@@ -176,10 +177,10 @@ public class RandomUtil {
 
 	///////// Double //////
 	/**
-	 * 返回0-之间的double
+	 * 返回0-之间的double, 使用ThreadLocalRandom
 	 */
 	public static double nextDouble() {
-		return nextDouble(threadLocalRandom(), 0, Double.MAX_VALUE);
+		return nextDouble(ThreadLocalRandom.current(), 0, Double.MAX_VALUE);
 	}
 
 	/**
@@ -190,12 +191,12 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回0-max之间的double
+	 * 返回0-max之间的double, 使用ThreadLocalRandom
 	 * 
 	 * 注意：与JDK默认返回0-1的行为不一致.
 	 */
 	public static double nextDouble(double max) {
-		return nextDouble(threadLocalRandom(), 0, max);
+		return nextDouble(ThreadLocalRandom.current(), 0, max);
 	}
 
 	/**
@@ -206,10 +207,10 @@ public class RandomUtil {
 	}
 
 	/**
-	 * 返回min-max之间的double
+	 * 返回min-max之间的double,ThreadLocalRandom
 	 */
 	public static double nextDouble(final double min, final double max) {
-		return nextDouble(threadLocalRandom(), min, max);
+		return nextDouble(ThreadLocalRandom.current(), min, max);
 	}
 
 	/**

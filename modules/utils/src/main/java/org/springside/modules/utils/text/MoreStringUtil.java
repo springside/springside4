@@ -7,6 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.annotation.Nullable;
 import org.springside.modules.utils.collection.ListUtil;
 
+import com.google.common.base.CharMatcher;
+import com.google.common.base.Splitter;
 import com.google.common.base.Utf8;
 
 /**
@@ -14,9 +16,26 @@ import com.google.common.base.Utf8;
  * 
  * 本类仅补充少量额外方法, 尤其是针对char的运算
  * 
+ * 1. split char/chars
+ * 
+ * 2. 针对char的replace first/last, startWith,endWith 等
+ * 
  * @author calvin
  */
 public class MoreStringUtil {
+
+	/////////// split char 相关 ////////
+
+	/**
+	 * 高性能的Split，针对char的分隔符号，比JDK String自带的高效.
+	 * 
+	 * from Commons Lange 3.5 StringUtils 并做优化
+	 * 
+	 * @see #split(String, char, int)
+	 */
+	public static List<String> split(@Nullable final String str, final char separatorChar) {
+		return split(str, separatorChar, 10);
+	}
 
 	/**
 	 * 高性能的Split，针对char的分隔符号，比JDK String自带的高效.
@@ -29,16 +48,20 @@ public class MoreStringUtil {
 	 * 
 	 * 3. preserveAllTokens 取默认值false
 	 * 
+	 * @param expectParts 预估分割后的List大小，初始化数据更精准
+	 * 
 	 * @return 如果为null返回null, 如果为""返回空数组
 	 */
 	public static List<String> split(@Nullable final String str, final char separatorChar, int expectParts) {
 		if (str == null) {
 			return null;
 		}
+
 		final int len = str.length();
 		if (len == 0) {
 			return ListUtil.emptyList();
 		}
+
 		final List<String> list = new ArrayList<String>(expectParts);
 		int i = 0;
 		int start = 0;
@@ -61,6 +84,20 @@ public class MoreStringUtil {
 		return list;
 	}
 
+	/**
+	 * 使用多个可选的char作为分割符, 还可以设置omitEmptyStrings,trimResults等配置
+	 * 
+	 * 设置后的Splitter进行重用，不要每次创建
+	 * 
+	 * @param separatorChars 比如Unix/Windows的路径分割符 "/\\"
+	 * 
+	 * @see com.google.common.base.Splitter
+	 */
+	public static Splitter charsSplitter(final String separatorChars) {
+		return Splitter.on(CharMatcher.anyOf(separatorChars));
+	}
+
+	////////// 其他 char 相关 ///////////
 	/**
 	 * String 有replace(char,char)，但缺少单独replace first/last的
 	 */
@@ -128,6 +165,7 @@ public class MoreStringUtil {
 		return s;
 	}
 
+	///////////// 其他 ////////////
 	/**
 	 * 计算字符串被UTF8编码后的字节数 via guava
 	 * 

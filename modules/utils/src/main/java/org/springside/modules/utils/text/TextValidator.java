@@ -6,11 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springside.modules.utils.base.annotation.Nullable;
 
 /**
- * 通过正则表达判断是否正确的手机号，固定电话，身份证，邮箱等.
+ * 通过正则表达判断是否正确的URL， 邮箱，手机号，固定电话，身份证，邮箱等.
  * 
  * 从AndroidUtilCode的RegexUtils移植, 性能优化将正则表达式为预编译, 并修改了TEL的正则表达式.
- * 
- * @author calvin
  */
 public class TextValidator {
 

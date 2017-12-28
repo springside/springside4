@@ -1,4 +1,4 @@
-package org.springside.modules.utils.mapper;
+package org.springside.modules.utils.reflect;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
-import org.springside.modules.utils.mapper.BeanMapper;
 
 import ma.glasnost.orika.metadata.Type;
 
@@ -65,14 +64,13 @@ public class BeanMapperTest {
 		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 	}
 
-	
 	@Test
 	public void copyArrayObject() {
 		Student student1 = new Student("zhang3", 20, new Teacher("li4"), ListUtil.newArrayList("chinese", "english"));
 		Student student2 = new Student("zhang4", 30, new Teacher("li5"), ListUtil.newArrayList("chinese2", "english4"));
 		Student student3 = new Student("zhang5", 40, new Teacher("li6"), ListUtil.newArrayList("chinese3", "english5"));
-		Student[] studentList = new Student[]{student1, student2, student3};
-		StudentVO[] studentVoList =new StudentVO[studentList.length];
+		Student[] studentList = new Student[] { student1, student2, student3 };
+		StudentVO[] studentVoList = new StudentVO[studentList.length];
 		BeanMapper.mapArray(studentVoList, studentList, StudentVO.class);
 		assertThat(studentVoList).hasSize(3);
 		StudentVO studentVo = studentVoList[0];
@@ -85,9 +83,9 @@ public class BeanMapperTest {
 		/////////
 		Type<Student> studentType = BeanMapper.getType(Student.class);
 		Type<StudentVO> studentVoType = BeanMapper.getType(StudentVO.class);
-		
-		StudentVO[] studentVoList2 =new StudentVO[studentList.length];
-		BeanMapper.mapArray(studentVoList2, studentList,studentType, studentVoType);
+
+		StudentVO[] studentVoList2 = new StudentVO[studentList.length];
+		BeanMapper.mapArray(studentVoList2, studentList, studentType, studentVoType);
 		assertThat(studentVoList).hasSize(3);
 		studentVo = studentVoList2[0];
 
@@ -97,7 +95,6 @@ public class BeanMapperTest {
 		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 	}
 
-	
 	public static class Student {
 		public String name;
 		private int age;

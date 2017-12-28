@@ -19,8 +19,7 @@ public class ClassUtilTest {
 
 		assertThat(ClassUtil.getPackageName(ClassUtilTest.class)).isEqualTo("org.springside.modules.utils.reflect");
 		assertThat(ClassUtil.getPackageName(BClass.class)).isEqualTo("org.springside.modules.utils.reflect");
-		assertThat(ClassUtil.getPackageName(ClassUtilTest.class.getName()))
-				.isEqualTo("org.springside.modules.utils.reflect");
+		assertThat(ClassUtil.getPackageName(ClassUtilTest.class.getName())).isEqualTo("org.springside.modules.utils.reflect");
 		assertThat(ClassUtil.getPackageName(BClass.class.getName())).isEqualTo("org.springside.modules.utils.reflect");
 
 	}
@@ -33,45 +32,43 @@ public class ClassUtilTest {
 
 		assertThat(ClassUtil.getAllSuperclasses(BClass.class)).hasSize(2).contains(AClass.class, Object.class);
 
-		assertThat(ClassUtil.getAllAnnotations(BClass.class)).hasSize(4);
+		assertThat(AnnotationUtil.getAllAnnotations(BClass.class)).hasSize(4);
 
-		assertThat(ClassUtil.getAnnotatedPublicFields(BClass.class, AAnnotation.class)).hasSize(2).contains(
-				ClassUtil.getAccessibleField(BClass.class, "sfield"),
-				ClassUtil.getAccessibleField(BClass.class, "tfield"));
+		assertThat(AnnotationUtil.getAnnotatedPublicFields(BClass.class, AAnnotation.class)).hasSize(2).contains(
+				ReflectionUtil.getField(BClass.class, "sfield"), ReflectionUtil.getField(BClass.class, "tfield"));
 
-		assertThat(ClassUtil.getAnnotatedFields(BClass.class, EAnnotation.class)).hasSize(3).contains(
-				ClassUtil.getAccessibleField(BClass.class, "bfield"),
-				ClassUtil.getAccessibleField(BClass.class, "efield"),
-				ClassUtil.getAccessibleField(AClass.class, "afield"));
+		assertThat(AnnotationUtil.getAnnotatedFields(BClass.class, EAnnotation.class)).hasSize(3).contains(
+				ReflectionUtil.getField(BClass.class, "bfield"), ReflectionUtil.getField(BClass.class, "efield"),
+				ReflectionUtil.getField(AClass.class, "afield"));
 
-		assertThat(ClassUtil.getAnnotatedFields(BClass.class, FAnnotation.class)).hasSize(1)
-				.contains(ClassUtil.getAccessibleField(AClass.class, "dfield"));
+		assertThat(AnnotationUtil.getAnnotatedFields(BClass.class, FAnnotation.class)).hasSize(1)
+				.contains(ReflectionUtil.getField(AClass.class, "dfield"));
 
-		assertThat(ClassUtil.getAnnotatedPublicMethods(BClass.class, FAnnotation.class)).hasSize(3).contains(
-				ClassUtil.getAccessibleMethodByName(BClass.class, "hello"),
-				ClassUtil.getAccessibleMethodByName(BClass.class, "hello3"),
-				ClassUtil.getAccessibleMethodByName(AClass.class, "hello4")
-				);
+		assertThat(AnnotationUtil.getAnnotatedPublicMethods(BClass.class, FAnnotation.class)).hasSize(3).contains(
+				ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello"),
+				ReflectionUtil.getAccessibleMethodByName(BClass.class, "hello3"),
+				ReflectionUtil.getAccessibleMethodByName(AClass.class, "hello4"));
 	}
 
 	@Test
-	public void getSuperClassGenricType() {
+	public void getSuperClassGenericType() {
 		// 获取第1，2个泛型类型
-		assertThat(ClassUtil.getClassGenricType(TestBean.class)).isEqualTo(String.class);
-		assertThat(ClassUtil.getClassGenricType(TestBean.class, 1)).isEqualTo(Long.class);
+		assertThat(ClassUtil.getClassGenericType(TestBean.class)).isEqualTo(String.class);
+		assertThat(ClassUtil.getClassGenericType(TestBean.class, 1)).isEqualTo(Long.class);
 
 		// 定义父类时无泛型定义
-		assertThat(ClassUtil.getClassGenricType(TestBean2.class)).isEqualTo(Object.class);
+		assertThat(ClassUtil.getClassGenericType(TestBean2.class)).isEqualTo(Object.class);
 
 		// 无父类定义
-		assertThat(ClassUtil.getClassGenricType(TestBean3.class)).isEqualTo(Object.class);
+		assertThat(ClassUtil.getClassGenericType(TestBean3.class)).isEqualTo(Object.class);
 	}
 
-	public void classPresent(){
+	public void classPresent() {
 		assertThat(ClassUtil.isPresent("a.b.c", ClassUtil.getDefaultClassLoader())).isFalse();
-		assertThat(ClassUtil.isPresent("org.springside.modules.utils.reflect.ClassUtil", ClassUtil.getDefaultClassLoader())).isTrue();
+		assertThat(ClassUtil.isPresent("org.springside.modules.utils.reflect.ClassUtil", ClassUtil.getDefaultClassLoader()))
+				.isTrue();
 	}
-	
+
 	public static class ParentBean<T, ID> {
 	}
 

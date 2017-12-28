@@ -34,8 +34,8 @@ public class QueueUtilTest {
 	@Test
 	public void stack() {
 
-		Queue<String> stack = QueueUtil.createStack(10);
-		Queue<String> stack2 = QueueUtil.createConcurrentStack();
+		Queue<String> stack = ExQueues.createStack(10);
+		Queue<String> stack2 = ExQueues.createConcurrentStack();
 
 		stack.offer("1");
 		stack.offer("2");

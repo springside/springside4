@@ -10,10 +10,7 @@ import com.google.common.math.LongMath;
  * 
  * 1. 2的倍数的计算
  * 
- * 2. 其他函数如最大公约数, 乘方，开方，安全的取模，可控制取整方向的相除等。
- * 
- * @author calvin
- *
+ * 2. 其他函数如安全的取模，可控制取整方向的相除，乘方，开方等。
  */
 public class MathUtil {
 
@@ -83,21 +80,6 @@ public class MathUtil {
 	}
 
 	////////////// 其他函数//////////
-	/**
-	 * 两个数的最大公约数，必须均为非负数.
-	 * 
-	 * 是公约数，别想太多
-	 */
-	public static int gcd(int a, int b) {
-		return IntMath.gcd(a, b);
-	}
-
-	/**
-	 * 两个数的最大公约数，必须均为非负数
-	 */
-	public static long gcd(long a, long b) {
-		return LongMath.gcd(a, b);
-	}
 
 	/**
 	 * 保证结果为正数的取模.
@@ -120,12 +102,12 @@ public class MathUtil {
 	/**
 	 * 保证结果为正数的取模
 	 */
-	public static long mod(long x, int m) {
+	public static int mod(long x, int m) {
 		return LongMath.mod(x, m);
 	}
 
 	/**
-	 * 能控制rounding方向的相除.
+	 * 能控制rounding方向的int相除.
 	 * 
 	 * jdk的'/'运算符，直接向下取整
 	 */
@@ -134,7 +116,7 @@ public class MathUtil {
 	}
 
 	/**
-	 * 能控制rounding方向的相除
+	 * 能控制rounding方向的long相除
 	 * 
 	 * jdk的'/'运算符，直接向下取整
 	 */
@@ -145,7 +127,7 @@ public class MathUtil {
 	/**
 	 * 平方
 	 * 
-	 * @param k 平方次数,不能为负数, k=0时返回1.
+	 * @param k 平方次数, 不能为负数, k=0时返回1.
 	 */
 	public static int pow(int b, int k) {
 		return IntMath.pow(b, k);

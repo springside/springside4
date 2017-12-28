@@ -24,11 +24,11 @@ public class ResourceUtilTest {
 		assertThat(ResourceUtil.toString("META-INF/MANIFEST.MF")).contains("Manifest");
 
 		// getResources
-		assertThat(ResourceUtil.getResources("META-INF/MANIFEST.MF").size()).isGreaterThan(1);
+		assertThat(ResourceUtil.getResourcesQuietly("META-INF/MANIFEST.MF").size()).isGreaterThan(1);
 
-		System.out.println(ResourceUtil.getResources("META-INF/MANIFEST.MF"));
+		System.out.println(ResourceUtil.getResourcesQuietly("META-INF/MANIFEST.MF"));
 
-		assertThat(ResourceUtil.getResources("META-INF/MANIFEST.MF", ResourceUtilTest.class.getClassLoader()).size())
+		assertThat(ResourceUtil.getResourcesQuietly("META-INF/MANIFEST.MF", ResourceUtilTest.class.getClassLoader()).size())
 				.isGreaterThan(1);
 
 	}

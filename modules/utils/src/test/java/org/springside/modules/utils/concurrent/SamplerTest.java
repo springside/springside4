@@ -1,9 +1,8 @@
-package org.springside.modules.utils.misc;
+package org.springside.modules.utils.concurrent;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.utils.concurrent.Sampler;
 import org.springside.modules.utils.concurrent.Sampler.AlwaysSampler;
 import org.springside.modules.utils.concurrent.Sampler.NeverSampler;
 
@@ -57,3 +56,4 @@ public class SamplerTest {
 		}
 	}
 }
+

@@ -16,7 +16,7 @@
  * Foundation. For more information on the Apache Software Foundation, please see <http://www.apache.org/>.
  *
  */
-package org.springside.modules.utils.concurrent;
+package org.springside.modules.utils.concurrent.type;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -86,7 +86,7 @@ public abstract class BasicFuture<T> implements Future<T> {
 		return this.result;
 	}
 
-	public boolean completed(final T result) {
+	public boolean complete(final T result) {
 		synchronized (this) {
 			if (this.completed) {
 				return false;
@@ -100,7 +100,7 @@ public abstract class BasicFuture<T> implements Future<T> {
 		return true;
 	}
 
-	public boolean failed(final Exception exception) {
+	public boolean fail(final Exception exception) {
 		synchronized (this) {
 			if (this.completed) {
 				return false;

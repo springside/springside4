@@ -63,7 +63,7 @@ public class ThreadPoolBuilder {
 	}
 
 	/**
-	 * 创建FixedThreadPool.
+	 * 创建FixedThreadPool.建议必须设置queueSize保证有界。
 	 * 
 	 * 1. 任务提交时, 如果线程数还没达到poolSize即创建新线程并绑定任务(即poolSize次提交后线程总数必达到poolSize，不会重用之前的线程)
 	 * 
@@ -71,12 +71,12 @@ public class ThreadPoolBuilder {
 	 * 
 	 * 2. 第poolSize次任务提交后, 新增任务放入Queue中, Pool中的所有线程从Queue中take任务执行.
 	 * 
-	 * Queue默认为无限长的LinkedBlockingQueue, 也可以设置queueSize换成有界的队列.
+	 * Queue默认为无限长的LinkedBlockingQueue, 但建议设置queueSize换成有界的队列.
 	 * 
 	 * 如果使用有界队列, 当队列满了之后,会调用RejectHandler进行处理, 默认为AbortPolicy，抛出RejectedExecutionException异常.
 	 * 其他可选的Policy包括静默放弃当前任务(Discard)，放弃Queue里最老的任务(DisacardOldest)，或由主线程来直接执行(CallerRuns).
 	 * 
-	 * 3. 因为线程全部为core线程，所以不会在空闲回收.
+	 * 3. 因为线程全部为core线程，所以不会在空闲时回收.
 	 */
 	public static class FixedThreadPoolBuilder {
 
@@ -99,7 +99,9 @@ public class ThreadPoolBuilder {
 		}
 
 		/**
-		 * 默认为-1, 使用无限长的LinkedBlockingQueue，为正数时使用ArrayBlockingQueue
+		 * 不设置时默认为-1, 使用无限长的LinkedBlockingQueue.
+		 * 
+		 * 为正数时使用ArrayBlockingQueue.
 		 */
 		public FixedThreadPoolBuilder setQueueSize(int queueSize) {
 			this.queueSize = queueSize;
@@ -157,7 +159,7 @@ public class ThreadPoolBuilder {
 	}
 
 	/**
-	 * 创建CachedThreadPool.
+	 * 创建CachedThreadPool, maxSize建议设置
 	 * 
 	 * 1. 任务提交时, 如果线程数还没达到minSize即创建新线程并绑定任务(即minSize次提交后线程总数必达到minSize, 不会重用之前的线程)
 	 * 
@@ -165,7 +167,7 @@ public class ThreadPoolBuilder {
 	 * 
 	 * 2. 第minSize次任务提交后, 新增任务提交进SynchronousQueue后，如果没有空闲线程立刻处理，则会创建新的线程, 直到总线程数达到上限.
 	 * 
-	 * maxSize默认为Integer.Max, 可进行设置.
+	 * maxSize默认为Integer.Max, 可以进行设置.
 	 * 
 	 * 如果设置了maxSize, 当总线程数达到上限, 会调用RejectHandler进行处理, 默认为AbortPolicy, 抛出RejectedExecutionException异常.
 	 * 其他可选的Policy包括静默放弃当前任务(Discard)，或由主线程来直接执行(CallerRuns).
@@ -190,6 +192,9 @@ public class ThreadPoolBuilder {
 			return this;
 		}
 
+		/**
+		 * Max默认Integer.MAX_VALUE的，建议设置
+		 */
 		public CachedThreadPoolBuilder setMaxSize(int maxSize) {
 			this.maxSize = maxSize;
 			return this;

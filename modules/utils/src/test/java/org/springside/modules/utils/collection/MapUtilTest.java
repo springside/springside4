@@ -6,6 +6,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
@@ -29,11 +30,11 @@ public class MapUtilTest {
 		assertThat(MapUtil.isNotEmpty(map)).isTrue();
 
 		//////////
-		ConcurrentMap<String, Integer> map2 = MapUtil.newConcurrentHashMap();
-		assertThat(MapUtil.putIfAbsentWithFinalValue(map2, "haha", 3)).isEqualTo(3);
-		assertThat(MapUtil.putIfAbsentWithFinalValue(map2, "haha", 4)).isEqualTo(3);
+		ConcurrentMap<String, Integer> map2 = new ConcurrentHashMap<String, Integer>();
+		assertThat(MapUtil.putIfAbsentReturnLast(map2, "haha", 3)).isEqualTo(3);
+		assertThat(MapUtil.putIfAbsentReturnLast(map2, "haha", 4)).isEqualTo(3);
 
-		MapUtil.createIfAbsent(map2, "haha", new ValueCreator<Integer>() {
+		MapUtil.createIfAbsentReturnLast(map2, "haha", new ValueCreator<Integer>() {
 			@Override
 			public Integer get() {
 				return 5;
@@ -42,7 +43,7 @@ public class MapUtilTest {
 
 		assertThat(map2).hasSize(1).containsEntry("haha", 3);
 
-		MapUtil.createIfAbsent(map2, "haha2", new ValueCreator<Integer>() {
+		MapUtil.createIfAbsentReturnLast(map2, "haha2", new ValueCreator<Integer>() {
 			@Override
 			public Integer get() {
 				return 5;
@@ -73,10 +74,9 @@ public class MapUtilTest {
 
 		TreeMap<String, Integer> map7 = MapUtil.newSortedMap(Ordering.natural());
 
-		ConcurrentMap map8 = MapUtil.newConcurrentHashMap();
-		ConcurrentSkipListMap map9 = MapUtil.newConcurrentSortedMap();
+		ConcurrentSkipListMap map10 = MapUtil.newConcurrentSortedMap();
 
-		EnumMap map10 = MapUtil.newEnumMap(EnumA.class);
+		EnumMap map11 = MapUtil.newEnumMap(EnumA.class);
 	}
 
 	@Test
@@ -112,44 +112,44 @@ public class MapUtilTest {
 
 	@Test
 	public void weakMap() {
-		ConcurrentMap<MyBean, MyBean> weakKeyMap = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap = ExMaps.createWeakKeyConcurrentMap(10, 1);
 		initExpireAllMap(weakKeyMap);
 		System.gc();
 		assertThat(weakKeyMap.get(new MyBean("A"))).isNull();
 		assertThat(weakKeyMap).hasSize(1); // key仍然在
 
-		ConcurrentMap<MyBean, MyBean> weakKeyMap2 = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap2 = ExMaps.createWeakKeyConcurrentMap(10, 1);
 		MyBean value = new MyBean("B");
 		initExpireKeyMap(weakKeyMap2, value);
 		System.gc();
 		assertThat(weakKeyMap2.get(new MyBean("A"))).isNull();
 
-		ConcurrentMap<MyBean, MyBean> weakKeyMap3 = MapUtil.createWeakKeyConcurrentHashMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap3 = ExMaps.createWeakKeyConcurrentMap(10, 1);
 		MyBean key = new MyBean("A");
 		initExpireValueMap(weakKeyMap3, key);
 		System.gc();
 		assertThat(weakKeyMap3.get(key)).isEqualTo(new MyBean("B"));
 
 		// weak value
-		ConcurrentMap<MyBean, MyBean> weakValueMap = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakValueMap = ExMaps.createWeakValueConcurrentMap(10, 1);
 		initExpireAllMap(weakValueMap);
 		System.gc();
 		assertThat(weakValueMap.get(new MyBean("A"))).isNull();
-		
-		ConcurrentMap<MyBean, MyBean> weakValueMap2 = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+
+		ConcurrentMap<MyBean, MyBean> weakValueMap2 = ExMaps.createWeakValueConcurrentMap(10, 1);
 		MyBean value2 = new MyBean("B");
 		initExpireKeyMap(weakValueMap2, value2);
 		System.gc();
 		assertThat(weakValueMap2.get(new MyBean("A"))).isEqualTo(new MyBean("B"));
 
-		ConcurrentMap<MyBean, MyBean> weakValueMap3 = MapUtil.createWeakValueConcurrentHashMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakValueMap3 = ExMaps.createWeakValueConcurrentMap(10, 1);
 		MyBean key3 = new MyBean("A");
 		initExpireValueMap(weakValueMap3, key3);
 		System.gc();
 		assertThat(weakValueMap3.get(new MyBean("A"))).isNull();
 	}
 
-	// 抽出子函数，使得Key/Value的生命周琦过期
+	// 抽出子函数，使得Key/Value的生命周期过期
 	private void initExpireAllMap(ConcurrentMap<MyBean, MyBean> weakKeyMap) {
 		MyBean key = new MyBean("A");
 		MyBean value = new MyBean("B");
@@ -216,9 +216,37 @@ public class MapUtilTest {
 	public enum EnumA {
 		A, B, C
 	}
-	
+
 	@Test
-	public void IntObjectHashMap(){
-		
+	public void sortAndTop() {
+		Map<String, Integer> map = MapUtil.newHashMap(new String[] { "A", "B", "C" }, new Integer[] { 3, 1, 2 });
+		// sort
+		Map<String, Integer> resultMap = MapUtil.sortByValue(map, false);
+		assertThat(resultMap.toString()).isEqualTo("{B=1, C=2, A=3}");
+		resultMap = MapUtil.sortByValue(map, true);
+		assertThat(resultMap.toString()).isEqualTo("{A=3, C=2, B=1}");
+
+		resultMap = MapUtil.sortByValue(map, Ordering.natural());
+		assertThat(resultMap.toString()).isEqualTo("{B=1, C=2, A=3}");
+		resultMap = MapUtil.sortByValue(map, Ordering.natural().reverse());
+		assertThat(resultMap.toString()).isEqualTo("{A=3, C=2, B=1}");
+
+		// Top n
+		resultMap = MapUtil.topNByValue(map, false, 2);
+		assertThat(resultMap.toString()).isEqualTo("{B=1, C=2}");
+		resultMap = MapUtil.topNByValue(map, true, 2);
+		assertThat(resultMap.toString()).isEqualTo("{A=3, C=2}");
+
+		resultMap = MapUtil.topNByValue(map, Ordering.natural(), 2);
+		assertThat(resultMap.toString()).isEqualTo("{B=1, C=2}");
+		resultMap = MapUtil.topNByValue(map, Ordering.natural().reverse(), 2);
+		assertThat(resultMap.toString()).isEqualTo("{A=3, C=2}");
+
+		// top Size > array Size
+		resultMap = MapUtil.topNByValue(map, false, 4);
+		assertThat(resultMap.toString()).isEqualTo("{B=1, C=2, A=3}");
+		resultMap = MapUtil.topNByValue(map, true, 4);
+		assertThat(resultMap.toString()).isEqualTo("{A=3, C=2, B=1}");
+
 	}
 }

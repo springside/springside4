@@ -14,8 +14,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
  * 2.Commons-Lang的xml/html 转义
  * 
  * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
- * 
- * @author calvin
  */
 public class EscapeUtil {
 
@@ -27,7 +25,8 @@ public class EscapeUtil {
 	public static String urlEncode(String part) {
 		try {
 			return URLEncoder.encode(part, Charsets.UTF_8_NAME);
-		} catch (UnsupportedEncodingException ignored) {
+		} catch (UnsupportedEncodingException ignored) { // NOSONAR
+			// this exception is only for detecting and handling invalid inputs
 			return null;
 		}
 	}
@@ -38,7 +37,8 @@ public class EscapeUtil {
 	public static String urlDecode(String part) {
 		try {
 			return URLDecoder.decode(part, Charsets.UTF_8_NAME);
-		} catch (UnsupportedEncodingException e) {
+		} catch (UnsupportedEncodingException e) { // NOSONAR
+			// this exception is only for detecting and handling invalid inputs
 			return null;
 		}
 	}

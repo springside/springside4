@@ -13,17 +13,17 @@ import org.slf4j.LoggerFactory;
  * 因为ThreadDump本身会造成JVM停顿，所以加上了开关和最少间隔时间的选项(默认不限制)
  * 
  * 因为ThreadInfo的toString()最多只会打印8层的StackTrace，所以加上了最大打印层数的选项.(默认为8)
- * 
- * @author calvin
  */
 public class ThreadDumpper {
 
 	private static final int DEFAULT_MAX_STACK_LEVEL = 8;
 
+	private static final int DEFAULT_MIN_INTERVAL = 1000 * 60 * 1; //1分钟
+
 	private static Logger logger = LoggerFactory.getLogger(ThreadDumpper.class);
 
 	private boolean enable = true; // 快速关闭该功能
-	private long leastIntervalMills = 0; // 每次打印ThreadDump的最小时间间隔，单位为毫秒
+	private long leastIntervalMills = DEFAULT_MIN_INTERVAL; // 每次打印ThreadDump的最小时间间隔，单位为毫秒
 	private int maxStackLevel = DEFAULT_MAX_STACK_LEVEL; // 打印StackTrace的最大深度
 
 	private volatile Long lastThreadDumpTime = 0L;
