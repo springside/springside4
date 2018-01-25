@@ -12,7 +12,7 @@ public class EnumUtilTest {
 	}
 
 	@Test
-	public void test() {
+	public void testBits() {
 		assertThat(EnumUtil.generateBits(Options.class, Options.A)).isEqualTo(1);
 		assertThat(EnumUtil.generateBits(Options.class, Options.A, Options.B)).isEqualTo(3);
 
@@ -24,6 +24,13 @@ public class EnumUtilTest {
 				EnumUtil.generateBits(Options.class, Options.A, Options.C, Options.D))).hasSize(3)
 						.containsExactly(Options.A, Options.C, Options.D);
 
+	}
+
+	@Test
+	public void testString() {
+		assertThat(EnumUtil.toString(Options.A)).isEqualTo("A");
+
+		assertThat(EnumUtil.fromString(Options.class, "B")).isEqualTo(Options.B);
 	}
 
 }

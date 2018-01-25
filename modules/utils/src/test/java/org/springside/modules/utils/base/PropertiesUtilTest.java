@@ -32,6 +32,8 @@ public class PropertiesUtilTest {
 		assertThat(PropertiesUtil.getString(p2, "springside.maxA", "")).isEqualTo("");
 
 		assertThat(PropertiesUtil.getBoolean(p2, "isOpen", false)).isTrue();
+		
+		
 	}
 
 }

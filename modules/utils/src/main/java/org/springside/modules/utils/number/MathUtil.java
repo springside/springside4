@@ -76,7 +76,7 @@ public class MathUtil {
 	 * @param value 可以为负数，比如 －1 mod 16 = 15
 	 */
 	public static int modByPowerOfTwo(int value, int mod) {
-		return value & mod - 1;
+		return value & (mod - 1);
 	}
 
 	////////////// 其他函数//////////

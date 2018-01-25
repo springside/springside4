@@ -17,8 +17,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 1. 删除定期重启线程避免内存泄漏的功能，
  * 
  * 2. TaskQueue中可能3次有锁的读取线程数量，改为只读取1次，这把锁也是这个实现里的唯一遗憾了。
+ * 
+ * https://github.com/apache/tomcat/blob/trunk/java/org/apache/tomcat/util/threads/ThreadPoolExecutor.java
  */
-public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExecutor {
+public final class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExecutor {
 
 	/**
 	 * The number of tasks submitted but not yet finished. This includes tasks in the queue and tasks that have been
@@ -31,6 +33,7 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 			ControllableQueue workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
 		workQueue.setParent(this);
+		prestartAllCoreThreads(); //NOSOANR
 	}
 
 	@Override
@@ -82,10 +85,13 @@ public class QueuableCachedThreadPool extends java.util.concurrent.ThreadPoolExe
 		}
 	}
 
-	public static class ControllableQueue extends LinkedBlockingQueue<Runnable> {
+	/**
+	 * https://github.com/apache/tomcat/blob/trunk/java/org/apache/tomcat/util/threads/TaskQueue.java
+	 */
+	protected static class ControllableQueue extends LinkedBlockingQueue<Runnable> {
 
 		private static final long serialVersionUID = 5044057462066661171L;
-		private volatile QueuableCachedThreadPool parent = null;
+		private transient volatile QueuableCachedThreadPool parent = null;
 
 		public ControllableQueue(int capacity) {
 			super(capacity);

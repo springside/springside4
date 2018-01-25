@@ -4,6 +4,8 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springside.modules.utils.base.annotation.NotNull;
+import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
@@ -30,7 +32,7 @@ public class NumberUtil {
 	}
 
 	/**
-	 * from ElasticSearch Numbers
+	 * copy from ElasticSearch Numbers
 	 */
 	public static byte[] toBytes(double val) {
 		return toBytes(Double.doubleToRawLongBits(val));
@@ -45,7 +47,7 @@ public class NumberUtil {
 	}
 
 	/**
-	 * from ElasticSearch Numbers
+	 * copy from ElasticSearch Numbers
 	 */
 	public static double toDouble(byte[] bytes) {
 		return Double.longBitsToDouble(toLong(bytes));
@@ -55,74 +57,98 @@ public class NumberUtil {
 	/**
 	 * 判断字符串是否合法数字
 	 */
-	public static boolean isNumber(String str) {
-		return NumberUtils.isNumber(str);
+	public static boolean isNumber(@Nullable String str) {
+		return NumberUtils.isCreatable(str);
 	}
 
 	/**
 	 * 判断字符串是否16进制
 	 */
-	public static boolean isHexNumber(String value) {
+	public static boolean isHexNumber(@Nullable String value) {
+		if (StringUtils.isEmpty(value)) {
+			return false;
+		}
+
 		int index = value.startsWith("-") ? 1 : 0;
 		return value.startsWith("0x", index) || value.startsWith("0X", index) || value.startsWith("#", index);
 	}
 
-	/////////// 将字符串安全的转化为原始类型数字/////////
+	/////////// 将字符串转化为原始类型数字/////////
 
 	/**
-	 * 将10进制的String安全的转化为int. 当str为空或非数字字符串时，返回0
+	 * 将10进制的String转化为int.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static int toInt(String str) {
-		return NumberUtils.toInt(str, 0);
+	public static int toInt(@NotNull String str) {
+		return Integer.parseInt(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为int. 当str为空或非数字字符串时，返回default值.
+	 * 将10进制的String安全的转化为int.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值.
 	 */
-	public static int toInt(String str, int defaultValue) {
+	public static int toInt(@Nullable String str, int defaultValue) {
 		return NumberUtils.toInt(str, defaultValue);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为long. 当str为空或非数字字符串时，返回0.
+	 * 将10进制的String安全的转化为long.
+	 * 
+	 * 当str或非数字字符串时抛NumberFormatException
 	 */
-	public static long toLong(String str) {
-		return NumberUtils.toLong(str, 0L);
+	public static long toLong(@NotNull String str) {
+		return Long.parseLong(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为long，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为long.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值
 	 */
-	public static long toLong(String str, long defaultValue) {
+	public static long toLong(@Nullable String str, long defaultValue) {
 		return NumberUtils.toLong(str, defaultValue);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为double. 当str为空或非数字字符串时，返回0
+	 * 将10进制的String安全的转化为double.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static double toDouble(String str) {
-		return NumberUtils.toDouble(str, 0L);
+	public static double toDouble(@NotNull String str) {
+		// 统一行为，不要有时候抛NPE，有时候抛NumberFormatException
+		if (str == null) {
+			throw new NumberFormatException("null");
+		}
+		return Double.parseDouble(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为double. 当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为double.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值
 	 */
-	public static double toDouble(String str, double defaultValue) {
+	public static double toDouble(@Nullable String str, double defaultValue) {
 		return NumberUtils.toDouble(str, defaultValue);
 	}
 
 	////////////// 10进制字符串 转换对象类型数字/////////////
 	/**
-	 * 将10进制的String安全的转化为Integer. 当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Integer.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static Integer toIntObject(String str) {
-		return toIntObject(str, null);
+	public static Integer toIntObject(@NotNull String str) {
+		return Integer.valueOf(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Integer. 当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为Integer.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值
 	 */
-	public static Integer toIntObject(String str, Integer defaultValue) {
+	public static Integer toIntObject(@Nullable String str, Integer defaultValue) {
 		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
@@ -134,16 +160,20 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Long. 当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Long.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static Long toLongObject(String str) {
-		return toLongObject(str, null);
+	public static Long toLongObject(@NotNull String str) {
+		return Long.valueOf(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Long，当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为Long.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值
 	 */
-	public static Long toLongObject(String str, Long defaultValue) {
+	public static Long toLongObject(@Nullable String str, Long defaultValue) {
 		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
@@ -155,16 +185,24 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Double. 当str为空或非数字字符串时，返回null
+	 * 将10进制的String安全的转化为Double.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static Double toDoubleObject(String str) {
-		return toDoubleObject(str, null);
+	public static Double toDoubleObject(@NotNull String str) {
+		// 统一行为，不要有时候抛NPE，有时候抛NumberFormatException
+		if (str == null) {
+			throw new NumberFormatException("null");
+		}
+		return Double.valueOf(str);
 	}
 
 	/**
-	 * 将10进制的String安全的转化为Long. 当str为空或非数字字符串时，返回default值
+	 * 将10进制的String安全的转化为Long.
+	 * 
+	 * 当str为空或非数字字符串时，返回default值
 	 */
-	public static Double toDoubleObject(String str, Double defaultValue) {
+	public static Double toDoubleObject(@Nullable String str, Double defaultValue) {
 		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
@@ -178,16 +216,22 @@ public class NumberUtil {
 	//////////// 16进制 字符串转换为数字对象//////////
 
 	/**
-	 * 将16进制的String转化为Integer，出错时返回null.
+	 * 将16进制的String转化为Integer.
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static Integer hexToIntObject(String str) {
-		return hexToIntObject(str, null);
+	public static Integer hexToIntObject(@NotNull String str) {
+		// 统一行为，不要有时候抛NPE，有时候抛NumberFormatException
+		if (str == null) {
+			throw new NumberFormatException("null");
+		}
+		return Integer.decode(str);
 	}
 
 	/**
 	 * 将16进制的String转化为Integer，出错时返回默认值.
 	 */
-	public static Integer hexToIntObject(String str, Integer defaultValue) {
+	public static Integer hexToIntObject(@Nullable String str, Integer defaultValue) {
 		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
@@ -199,16 +243,22 @@ public class NumberUtil {
 	}
 
 	/**
-	 * 将16进制的String转化为Long，出错时返回null.
+	 * 将16进制的String转化为Long
+	 * 
+	 * 当str为空或非数字字符串时抛NumberFormatException
 	 */
-	public static Long hexToLongObject(String str) {
-		return hexToLongObject(str, null);
+	public static Long hexToLongObject(@NotNull String str) {
+		// 统一行为，不要有时候抛NPE，有时候抛NumberFormatException
+		if (str == null) {
+			throw new NumberFormatException("null");
+		}
+		return Long.decode(str);
 	}
 
 	/**
 	 * 将16进制的String转化为Long，出错时返回默认值.
 	 */
-	public static Long hexToLongObject(String str, Long defaultValue) {
+	public static Long hexToLongObject(@Nullable String str, Long defaultValue) {
 		if (StringUtils.isEmpty(str)) {
 			return defaultValue;
 		}
@@ -226,7 +276,7 @@ public class NumberUtil {
 		return Integer.toString(i);
 	}
 
-	public static String toString(Integer i) {
+	public static String toString(@NotNull Integer i) {
 		return i.toString();
 	}
 
@@ -234,7 +284,7 @@ public class NumberUtil {
 		return Long.toString(l);
 	}
 
-	public static String toString(Long l) {
+	public static String toString(@NotNull Long l) {
 		return l.toString();
 	}
 
@@ -242,7 +292,7 @@ public class NumberUtil {
 		return Double.toString(d);
 	}
 
-	public static String toString(Double d) {
+	public static String toString(@NotNull Double d) {
 		return d.toString();
 	}
 

@@ -18,6 +18,7 @@
  */
 package org.springside.modules.utils.concurrent.type;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -26,11 +27,15 @@ import java.util.concurrent.TimeoutException;
 import org.apache.commons.lang3.Validate;
 
 /**
- * 从Apache HttpClient 4.2 移植，一个Future实现类的基本框架.
+ * 从Apache HttpClient 移植(2017.4)，一个Future实现类的基本框架.
+ * 
+ * https://github.com/apache/httpcomponents-core/blob/master/httpcore5/src/main/java/org/apache/hc/core5/concurrent/BasicFuture.java
+ * 
+ * 不过HC用的是callback，这里用的是继承
  */
 public abstract class BasicFuture<T> implements Future<T> {
 
-	private volatile boolean completed;
+	private volatile boolean completed; //NOSONAR
 	private volatile boolean cancelled;
 	private volatile T result;
 	private volatile Exception ex;
@@ -83,10 +88,14 @@ public abstract class BasicFuture<T> implements Future<T> {
 		if (this.ex != null) {
 			throw new ExecutionException(this.ex);
 		}
+
+		if (cancelled) {
+			throw new CancellationException();
+		}
 		return this.result;
 	}
 
-	public boolean complete(final T result) {
+	public boolean completed(final T result) {
 		synchronized (this) {
 			if (this.completed) {
 				return false;
@@ -100,7 +109,7 @@ public abstract class BasicFuture<T> implements Future<T> {
 		return true;
 	}
 
-	public boolean fail(final Exception exception) {
+	public boolean failed(final Exception exception) {
 		synchronized (this) {
 			if (this.completed) {
 				return false;

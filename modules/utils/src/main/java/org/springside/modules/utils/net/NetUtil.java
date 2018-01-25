@@ -14,6 +14,7 @@ import javax.net.ServerSocketFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springside.modules.utils.base.Platforms;
 import org.springside.modules.utils.base.SystemPropertiesUtil;
 import org.springside.modules.utils.collection.MapUtil;
 
@@ -22,7 +23,7 @@ import com.google.common.annotations.Beta;
 /**
  * 关于网络的工具类.
  * 
- * 1. 获取本机IP地址(Local Address)
+ * 1. 获取本机IP地址与HostName
  * 
  * 2. 查找空闲端口
  */
@@ -33,23 +34,48 @@ public class NetUtil {
 	public static final int PORT_RANGE_MIN = 1024;
 	public static final int PORT_RANGE_MAX = 65535;
 
-	private static final Random random = new Random();
+	private static Random random = new Random();
 
 	/////// LocalAddress //////
+
+	/**
+	 * 获得本地地址
+	 */
+	public static InetAddress getLocalAddress() {
+		return LocalAddressHoler.INSTANCE.localInetAddress;
+	}
+
+	/**
+	 * 获得本地Ip地址
+	 */
+	public static String getLocalHost() {
+		return LocalAddressHoler.INSTANCE.localHost;
+	}
+
+	/**
+	 * 获得本地HostName
+	 */
+	public static String getHostName() {
+		return LocalAddressHoler.INSTANCE.hostName;
+	}
+
 	/**
 	 * 懒加载进行探测
 	 */
-	static class LocalAddressHoler {
-		static final LocalAddress instance = new LocalAddress();
+	private static class LocalAddressHoler {
+		static final LocalAddress INSTANCE = new LocalAddress();
 	}
 
-	static class LocalAddress {
+	private static class LocalAddress {
 
-		private InetAddress localAddress;
+		private InetAddress localInetAddress;
 		private String localHost;
+		private String hostName;
 
 		public LocalAddress() {
 			initLocalAddress();
+			// from Common Lang SystemUtils
+			hostName = Platforms.IS_WINDOWS ? System.getenv("COMPUTERNAME") : System.getenv("HOSTNAME");
 		}
 
 		/**
@@ -59,24 +85,23 @@ public class NetUtil {
 			NetworkInterface nic = null;
 			// 根据命令行执行hostname获得本机hostname， 与/etc/hosts 中该hostname的第一条ip配置，获得ip地址
 			try {
-				localAddress = InetAddress.getLocalHost();
-				nic = NetworkInterface.getByInetAddress(localAddress);
+				localInetAddress = InetAddress.getLocalHost();
+				nic = NetworkInterface.getByInetAddress(localInetAddress);
 			} catch (Exception ignored) { // NOSONAR
 			}
 
 			// 如果结果为空，或是一个loopback地址(127.0.0.1), 或是ipv6地址，再遍历网卡尝试获取
-			if (localAddress == null || nic == null || localAddress.isLoopbackAddress()
-					|| localAddress instanceof Inet6Address) {
+			if (localInetAddress == null || nic == null || localInetAddress.isLoopbackAddress()
+					|| localInetAddress instanceof Inet6Address) {
 				InetAddress lookedUpAddr = findLocalAddressViaNetworkInterface();
 				// 仍然不符合要求，只好使用127.0.0.1
 				try {
-					localAddress = lookedUpAddr != null ? lookedUpAddr : InetAddress.getByName("127.0.0.1");
-				} catch (UnknownHostException ignored) {
-					// NOSONAR
+					localInetAddress = lookedUpAddr != null ? lookedUpAddr : InetAddress.getByName("127.0.0.1");
+				} catch (UnknownHostException ignored) {// NOSONAR
 				}
 			}
 
-			localHost = IPUtil.toIpString(localAddress);
+			localHost = IPUtil.toIpString(localInetAddress);
 
 			logger.info("localhost is {}", localHost);
 		}
@@ -105,7 +130,7 @@ public class NetUtil {
 						if (!nic.isUp() || !nic.supportsMulticast()) {
 							continue;
 						}
-					} catch (SocketException e) {
+					} catch (SocketException ignored) { // NOSONAR
 						continue;
 					}
 
@@ -132,11 +157,10 @@ public class NetUtil {
 						}
 					}
 				}
-			} catch (SocketException e) {
+			} catch (SocketException e) {// NOSONAR
 				return null;
 			}
 			return null;
-
 		}
 
 		/**
@@ -151,20 +175,6 @@ public class NetUtil {
 			}
 			return null;
 		}
-	}
-
-	/**
-	 * 获得本地地址
-	 */
-	public static InetAddress getLocalAddress() {
-		return LocalAddressHoler.instance.localAddress;
-	}
-
-	/**
-	 * 获得本地地址
-	 */
-	public static String getLocalHost() {
-		return LocalAddressHoler.instance.localHost;
 	}
 
 	/////////// 查找空闲端口 /////////

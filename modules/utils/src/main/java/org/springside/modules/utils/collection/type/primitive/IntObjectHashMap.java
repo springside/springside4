@@ -1,18 +1,17 @@
 /*
  * Copyright 2014 The Netty Project
  *
- * The Netty Project licenses this file to you under the Apache License, version 2.0 (the
- * "License"); you may not use this file except in compliance with the License. You may obtain a
- * copy of the License at:
+ * The Netty Project licenses this file to you under the Apache License, version 2.0 (the "License"); you may not use
+ * this file except in compliance with the License. You may obtain a copy of the License at:
  *
  * http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing, software distributed under the License
- * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
- * or implied. See the License for the specific language governing permissions and limitations under
- * the License.
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+ * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+ * specific language governing permissions and limitations under the License.
  */
 package org.springside.modules.utils.collection.type.primitive;
+
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
 import java.util.Arrays;
@@ -25,9 +24,11 @@ import java.util.Set;
 import org.springside.modules.utils.number.MathUtil;
 
 /**
- * 移植Netty 4.1.6的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与读写性能俱比原来更优.
+ * 移植Netty 4.1.9的Key为原子类型的集合类, 在数据结构上与HashMap不一样，空间占用与读写性能俱比原来更优.
  * 
  * 原子类型集合类有多个实现，选择Netty是因为有在实战中使用.
+ * 
+ * https://github.com/netty/netty/blob/4.1/common/src/main/templates/io/netty/util/collection/KObjectHashMap.template
  * 
  * A hash map implementation of {@link IntObjectMap} that uses open addressing for keys. To minimize the memory
  * footprint, this class uses open addressing rather than chaining. Collisions are resolved using linear probing.
@@ -93,7 +94,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 
 		// Allocate the arrays.
 		keys = new int[capacity];
-		@SuppressWarnings({ "unchecked" })
+		@SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
 		V[] temp = (V[]) new Object[capacity];
 		values = temp;
 
@@ -102,6 +103,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 	}
 
 	private static <T> T toExternal(T value) {
+		assert value != null : "null is not a legitimate internal value. Concurrent Modification?";
 		return value == NULL_VALUE ? null : value;
 	}
 
@@ -189,7 +191,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 
 	@Override
 	public void clear() {
-		Arrays.fill(keys, 0);
+		Arrays.fill(keys, (int) 0);
 		Arrays.fill(values, null);
 		size = 0;
 	}
@@ -329,7 +331,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 	}
 
 	private int objectToKey(Object key) {
-		return ((Integer) key).intValue();
+		return (int) ((Integer) key).intValue();
 	}
 
 	/**
@@ -370,7 +372,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 	 * Returns the hash code for the key.
 	 */
 	private static int hashCode(int key) {
-		return key;
+		return (int) key;
 	}
 
 	/**
@@ -416,22 +418,22 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 		// entries and move them back if possible, optimizing future lookups.
 		// Knuth Section 6.4 Algorithm R, also used by the JDK's IdentityHashMap.
 
-		boolean movedBack = false;
 		int nextFree = index;
-		for (int i = probeNext(index); values[i] != null; i = probeNext(i)) {
-			int bucket = hashIndex(keys[i]);
+		int i = probeNext(index);
+		for (V value = values[i]; value != null; value = values[i = probeNext(i)]) {
+			int key = keys[i];
+			int bucket = hashIndex(key);
 			if (i < bucket && (bucket <= nextFree || nextFree <= i) || bucket <= nextFree && nextFree <= i) {
 				// Move the displaced entry "back" to the first available position.
-				keys[nextFree] = keys[i];
-				values[nextFree] = values[i];
-				movedBack = true;
+				keys[nextFree] = key;
+				values[nextFree] = value;
 				// Put the first entry after the displaced entry
 				keys[i] = 0;
 				values[i] = null;
 				nextFree = i;
 			}
 		}
-		return movedBack;
+		return nextFree != index;
 	}
 
 	/**
@@ -453,7 +455,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 		V[] oldVals = values;
 
 		keys = new int[newCapacity];
-		@SuppressWarnings({ "unchecked" })
+		@SuppressWarnings({ "unchecked", "SuspiciousArrayCast" })
 		V[] temp = (V[]) new Object[newCapacity];
 		values = temp;
 
@@ -596,10 +598,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 		private int entryIndex = -1;
 
 		private void scanNext() {
-			for (;;) {
-				if (++nextIndex == values.length || values[nextIndex] != null) {
-					break;
-				}
+			while (++nextIndex != values.length && values[nextIndex] == null) {
 			}
 		}
 
@@ -608,7 +607,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 			if (nextIndex == -1) {
 				scanNext();
 			}
-			return nextIndex < keys.length;
+			return nextIndex != values.length;
 		}
 
 		@Override
@@ -627,7 +626,7 @@ public class IntObjectHashMap<V> implements IntObjectMap<V> {
 
 		@Override
 		public void remove() {
-			if (prevIndex < 0) {
+			if (prevIndex == -1) {
 				throw new IllegalStateException("next must be called before each remove.");
 			}
 			if (removeAt(prevIndex)) {

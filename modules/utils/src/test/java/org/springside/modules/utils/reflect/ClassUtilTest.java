@@ -1,6 +1,7 @@
 package org.springside.modules.utils.reflect;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -64,9 +65,24 @@ public class ClassUtilTest {
 	}
 
 	public void classPresent() {
-		assertThat(ClassUtil.isPresent("a.b.c", ClassUtil.getDefaultClassLoader())).isFalse();
-		assertThat(ClassUtil.isPresent("org.springside.modules.utils.reflect.ClassUtil", ClassUtil.getDefaultClassLoader()))
+		assertThat(ClassLoaderUtil.isPresent("a.b.c", ClassLoaderUtil.getDefaultClassLoader())).isFalse();
+		assertThat(ClassLoaderUtil.isPresent("org.springside.modules.utils.reflect.ClassUtil", ClassLoaderUtil.getDefaultClassLoader()))
 				.isTrue();
+	}
+	
+	/**
+	 * Unit test case of {@link org.springside.modules.utils.reflect.ClassUtil#isSubClassOrInterfaceOf(Class, Class)}
+	 */
+	@Test
+	public void testIsSubClassOrInterfaceOf() {
+		assertTrue("TestBean should be subclass of ParentBean",
+				ClassUtil.isSubClassOrInterfaceOf(BClass.class, AClass.class));
+		assertTrue("BInterface should be subinterface of AInterface",
+				ClassUtil.isSubClassOrInterfaceOf(BInterface.class, AInterface.class));
+		assertTrue("BClass should be an implementation of BInterface",
+				ClassUtil.isSubClassOrInterfaceOf(BClass.class, BInterface.class));
+		assertTrue("BClass should be an implementation of AInterface",
+				ClassUtil.isSubClassOrInterfaceOf(BClass.class, AInterface.class));
 	}
 
 	public static class ParentBean<T, ID> {

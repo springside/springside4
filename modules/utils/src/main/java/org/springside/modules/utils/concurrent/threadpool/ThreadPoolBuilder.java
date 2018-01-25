@@ -83,9 +83,9 @@ public class ThreadPoolBuilder {
 		private int poolSize = 1;
 		private int queueSize = -1;
 
-		private ThreadFactory threadFactory = null;
-		private String threadNamePrefix = null;
-		private Boolean daemon = null;
+		private ThreadFactory threadFactory;
+		private String threadNamePrefix;
+		private Boolean daemon;
 
 		private RejectedExecutionHandler rejectHandler;
 
@@ -181,9 +181,9 @@ public class ThreadPoolBuilder {
 		private int maxSize = Integer.MAX_VALUE;
 		private int keepAliveSecs = 10;
 
-		private ThreadFactory threadFactory = null;
-		private String threadNamePrefix = null;
-		private Boolean daemon = null;
+		private ThreadFactory threadFactory;
+		private String threadNamePrefix;
+		private Boolean daemon;
 
 		private RejectedExecutionHandler rejectHandler;
 
@@ -258,8 +258,8 @@ public class ThreadPoolBuilder {
 	public static class ScheduledThreadPoolBuilder {
 
 		private int poolSize = 1;
-		private ThreadFactory threadFactory = null;
-		private String threadNamePrefix = null;
+		private ThreadFactory threadFactory;
+		private String threadNamePrefix;
 
 		/**
 		 * 默认为1
@@ -300,9 +300,9 @@ public class ThreadPoolBuilder {
 		private int keepAliveSecs = 10;
 		private int queueSize = 100;
 
-		private ThreadFactory threadFactory = null;
-		private String threadNamePrefix = null;
-		private Boolean daemon = null;
+		private ThreadFactory threadFactory;
+		private String threadNamePrefix;
+		private Boolean daemon;
 
 		private RejectedExecutionHandler rejectHandler;
 

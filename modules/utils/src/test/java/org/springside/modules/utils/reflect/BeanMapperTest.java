@@ -7,8 +7,6 @@ import java.util.List;
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
 
-import ma.glasnost.orika.metadata.Type;
-
 public class BeanMapperTest {
 
 	@Test
@@ -22,15 +20,6 @@ public class BeanMapperTest {
 		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
 		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 
-		//////////
-		Type<Student> studentType = BeanMapper.getType(Student.class);
-		Type<StudentVO> studentVoType = BeanMapper.getType(StudentVO.class);
-		studentVo = BeanMapper.map(student, studentType, studentVoType);
-
-		assertThat(studentVo.name).isEqualTo("zhang3");
-		assertThat(studentVo.getAge()).isEqualTo(20);
-		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
-		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 	}
 
 	@Test
@@ -40,7 +29,7 @@ public class BeanMapperTest {
 		Student student3 = new Student("zhang5", 40, new Teacher("li6"), ListUtil.newArrayList("chinese3", "english5"));
 		List<Student> studentList = ListUtil.newArrayList(student1, student2, student3);
 
-		List<StudentVO> studentVoList = BeanMapper.mapList(studentList, Student.class, StudentVO.class);
+		List<StudentVO> studentVoList = BeanMapper.mapList(studentList, StudentVO.class);
 		assertThat(studentVoList).hasSize(3);
 		StudentVO studentVo = studentVoList.get(0);
 
@@ -49,19 +38,6 @@ public class BeanMapperTest {
 		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
 		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 
-		/////////
-		Type<Student> studentType = BeanMapper.getType(Student.class);
-		Type<StudentVO> studentVoType = BeanMapper.getType(StudentVO.class);
-		studentVoList = BeanMapper.mapList(studentList, studentType, studentVoType);
-
-		studentVoList = BeanMapper.mapList(studentList, Student.class, StudentVO.class);
-		assertThat(studentVoList).hasSize(3);
-		studentVo = studentVoList.get(0);
-
-		assertThat(studentVo.name).isEqualTo("zhang3");
-		assertThat(studentVo.getAge()).isEqualTo(20);
-		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
-		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 	}
 
 	@Test
@@ -70,8 +46,7 @@ public class BeanMapperTest {
 		Student student2 = new Student("zhang4", 30, new Teacher("li5"), ListUtil.newArrayList("chinese2", "english4"));
 		Student student3 = new Student("zhang5", 40, new Teacher("li6"), ListUtil.newArrayList("chinese3", "english5"));
 		Student[] studentList = new Student[] { student1, student2, student3 };
-		StudentVO[] studentVoList = new StudentVO[studentList.length];
-		BeanMapper.mapArray(studentVoList, studentList, StudentVO.class);
+		StudentVO[] studentVoList = BeanMapper.mapArray(studentList, StudentVO.class);
 		assertThat(studentVoList).hasSize(3);
 		StudentVO studentVo = studentVoList[0];
 
@@ -80,19 +55,6 @@ public class BeanMapperTest {
 		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
 		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 
-		/////////
-		Type<Student> studentType = BeanMapper.getType(Student.class);
-		Type<StudentVO> studentVoType = BeanMapper.getType(StudentVO.class);
-
-		StudentVO[] studentVoList2 = new StudentVO[studentList.length];
-		BeanMapper.mapArray(studentVoList2, studentList, studentType, studentVoType);
-		assertThat(studentVoList).hasSize(3);
-		studentVo = studentVoList2[0];
-
-		assertThat(studentVo.name).isEqualTo("zhang3");
-		assertThat(studentVo.getAge()).isEqualTo(20);
-		assertThat(studentVo.getTeacher().getName()).isEqualTo("li4");
-		assertThat(studentVo.getCourse()).containsExactly("chinese", "english");
 	}
 
 	public static class Student {
@@ -101,6 +63,9 @@ public class BeanMapperTest {
 		private Teacher teacher;
 		private List<String> course = ListUtil.newArrayList();
 
+		public Student(){
+			
+		}
 		public Student(String name, int age, Teacher teacher, List<String> course) {
 			this.name = name;
 			this.age = age;
@@ -131,12 +96,24 @@ public class BeanMapperTest {
 		public void setTeacher(Teacher teacher) {
 			this.teacher = teacher;
 		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		
 
 	}
 
 	public static class Teacher {
 		private String name;
 
+		public Teacher(){
+			
+		}
+		
 		public Teacher(String name) {
 			super();
 			this.name = name;
@@ -158,6 +135,9 @@ public class BeanMapperTest {
 		private TeacherVO teacher;
 		private List<String> course = ListUtil.newArrayList();
 
+		public StudentVO(){
+			
+		}
 		public StudentVO(String name, int age, TeacherVO teacher, List<String> course) {
 			this.name = name;
 			this.age = age;
@@ -188,12 +168,21 @@ public class BeanMapperTest {
 		public void setTeacher(TeacherVO teacher) {
 			this.teacher = teacher;
 		}
-
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
 	}
 
 	public static class TeacherVO {
 		private String name;
 
+		public TeacherVO(){
+			
+		}
+		
 		public TeacherVO(String name) {
 			super();
 			this.name = name;

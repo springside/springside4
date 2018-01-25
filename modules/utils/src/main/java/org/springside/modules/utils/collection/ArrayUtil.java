@@ -1,10 +1,8 @@
 package org.springside.modules.utils.collection;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -35,50 +33,65 @@ public class ArrayUtil {
 	 * 
 	 * Array.newInstance()的性能并不差
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T[] newArray(Class<T> type, int length) {
 		return (T[]) Array.newInstance(type, length);
 	}
 
 	/**
-	 * 从collection转为Array, 以 list.toArray(new String[0]); 最快
-	 * 不需要创建list.size()的数组.
+	 * 从collection转为Array, 以 list.toArray(new String[0]); 最快 不需要创建list.size()的数组.
 	 * 
 	 * 本函数等价于list.toArray(new String[0]); 用户也可以直接用后者.
 	 * 
 	 * https://shipilev.net/blog/2016/arrays-wisdom-ancients/
 	 */
+	@SuppressWarnings("unchecked")
 	public static <T> T[] toArray(Collection<T> col, Class<T> type) {
-		return col.toArray((T[])Array.newInstance(type, 0));
+		return col.toArray((T[]) Array.newInstance(type, 0));
+	}
+
+	/**
+	 * Swaps the two specified elements in the specified array.
+	 */
+	private static void swap(Object[] arr, int i, int j) {
+		Object tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
 	}
 
 	/**
 	 * 将传入的数组乱序
 	 */
 	public static <T> T[] shuffle(T[] array) {
-		List<T> list = new ArrayList<T>(array.length);
-		Collections.addAll(list, array);
-		Collections.shuffle(list);
-		return list.toArray(array);
+		if (array != null && array.length > 1) {
+			Random rand = new Random();
+			return shuffle(array, rand);
+		} else {
+			return array;
+		}
 	}
 
 	/**
 	 * 将传入的数组乱序
 	 */
 	public static <T> T[] shuffle(T[] array, Random random) {
-		List<T> list = new ArrayList<T>(Arrays.asList(array));
-		Collections.shuffle(list, random);
-		return list.toArray(array);
+		if (array != null && array.length > 1 && random != null) {
+			for (int i = array.length; i > 1; i--) {
+				swap(array, i - 1, random.nextInt(i));
+			}
+		}
+		return array;
 	}
 
 	/**
-	 * 添加元素到数组头，没有银弹，复制扩容.
+	 * 添加元素到数组头.
 	 */
 	public static <T> T[] concat(@Nullable T element, T[] array) {
 		return ObjectArrays.concat(element, array);
 	}
 
 	/**
-	 * 添加元素到数组末尾，没有银弹，复制扩容.
+	 * 添加元素到数组末尾.
 	 */
 	public static <T> T[] concat(T[] array, @Nullable T element) {
 		return ObjectArrays.concat(array, element);

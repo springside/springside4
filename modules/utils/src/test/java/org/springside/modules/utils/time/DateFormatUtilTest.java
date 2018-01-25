@@ -36,7 +36,7 @@ public class DateFormatUtilTest {
 	@Test
 	public void parseWithPattern() throws ParseException {
 		Date date = new Date(116, 10, 1, 12, 23, 44);
-		Date resultDate = DateFormatUtil.pareDate(DateFormatUtil.PATTERN_DEFAULT, "2016-11-01 12:23:44.000");
+		Date resultDate = DateFormatUtil.parseDate(DateFormatUtil.PATTERN_DEFAULT, "2016-11-01 12:23:44.000");
 		assertThat(resultDate.getTime() == date.getTime()).isTrue();
 	}
 

@@ -21,13 +21,13 @@ public class FileTreeWalkerTest {
 		List<File> files = FileTreeWalker.listFile(tmpDir);
 		assertThat(files).hasSize(0);
 
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
+		FileUtil.touch(FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
+		FileUtil.touch(FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
 
-		String childDir = FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
+		String childDir = FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
 		FileUtil.makesureDirExists(childDir);
 
-		FileUtil.touch(FilePathUtil.contact(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
+		FileUtil.touch(FilePathUtil.concat(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
 
 		all = FileTreeWalker.listAll(tmpDir);
 		assertThat(all).hasSize(5);

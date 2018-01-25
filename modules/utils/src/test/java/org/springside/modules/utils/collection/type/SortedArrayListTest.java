@@ -3,8 +3,8 @@ package org.springside.modules.utils.collection.type;
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.Test;
-import org.springside.modules.utils.collection.ExLists;
 import org.springside.modules.utils.collection.ListUtil;
+import org.springside.modules.utils.collection.MoreLists;
 
 import com.google.common.collect.Ordering;
 
@@ -12,7 +12,7 @@ public class SortedArrayListTest {
 
 	@Test
 	public void sortedArrayList() {
-		SortedArrayList<String> list = ExLists.createSortedArrayList();
+		SortedArrayList<String> list = MoreLists.createSortedArrayList();
 		list.add("9");
 		list.add("1");
 		list.add("6");
@@ -41,7 +41,7 @@ public class SortedArrayListTest {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		SortedArrayList<String> list2 = ExLists.createSortedArrayList(Ordering.natural());
+		SortedArrayList<String> list2 = MoreLists.createSortedArrayList(Ordering.natural());
 		list2.addAll(ListUtil.newArrayList("3", "1", "2"));
 		assertThat(list2).containsExactly("1", "2", "3");
 	}

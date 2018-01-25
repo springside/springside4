@@ -7,9 +7,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.concurrent.ExecutionException;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.ExceptionUtil.CloneableException;
-import org.springside.modules.utils.base.ExceptionUtil.CloneableRuntimeException;
-import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
+import org.springside.modules.utils.base.type.CloneableException;
+import org.springside.modules.utils.base.type.CloneableRuntimeException;
+import org.springside.modules.utils.base.type.UncheckedException;
 
 public class ExceptionUtilTest {
 
@@ -67,7 +67,7 @@ public class ExceptionUtilTest {
 		Exception e = new Exception("my exception");
 		ExecutionException ee2 = new ExecutionException(e);
 		try{
-		ExceptionUtil.uncheckedAndWrap(ee2);
+		ExceptionUtil.unwrapAndUnchecked(ee2);
 		}catch (Throwable t) {
 			assertThat(t).isInstanceOf(UncheckedException.class).hasCauseExactlyInstanceOf(Exception.class);
 		}
@@ -83,7 +83,7 @@ public class ExceptionUtilTest {
 	}
 
 	@Test
-	public void isCausedBy() {
+	public void cause() {
 		IOException ioexception = new IOException("my exception");
 		IllegalStateException illegalStateException = new IllegalStateException(ioexception);
 		RuntimeException runtimeException = new RuntimeException(illegalStateException);
@@ -92,6 +92,10 @@ public class ExceptionUtilTest {
 		assertThat(ExceptionUtil.isCausedBy(runtimeException, IllegalStateException.class, IOException.class)).isTrue();
 		assertThat(ExceptionUtil.isCausedBy(runtimeException, Exception.class)).isTrue();
 		assertThat(ExceptionUtil.isCausedBy(runtimeException, IllegalAccessException.class)).isFalse();
+		
+		assertThat(ExceptionUtil.findCause(runtimeException, IllegalStateException.class)).isSameAs(illegalStateException);
+		assertThat(ExceptionUtil.findCause(runtimeException, IOException.class)).isSameAs(ioexception);
+		assertThat(ExceptionUtil.findCause(runtimeException, UncheckedException.class)).isNull();
 	}
 
 	@Test
@@ -136,21 +140,21 @@ public class ExceptionUtilTest {
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 		assertThat(ExceptionUtil.stackTraceText(TIMEOUT_EXCEPTION2)).hasLineCount(2)
-				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableException: Timeout")
+				.contains("org.springside.modules.utils.base.type.CloneableException: Timeout")
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 		CloneableException timeoutException = TIMEOUT_EXCEPTION2.clone("Timeout for 30ms");
 		assertThat(ExceptionUtil.stackTraceText(timeoutException)).hasLineCount(2)
-				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableException: Timeout for 30ms")
+				.contains("org.springside.modules.utils.base.type.CloneableException: Timeout for 30ms")
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 		assertThat(ExceptionUtil.stackTraceText(TIMEOUT_EXCEPTION3)).hasLineCount(2)
-				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableRuntimeException: Timeout")
+				.contains("org.springside.modules.utils.base.type.CloneableRuntimeException: Timeout")
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 		CloneableRuntimeException timeoutRuntimeException = TIMEOUT_EXCEPTION3.clone("Timeout for 40ms");
 		assertThat(ExceptionUtil.stackTraceText(timeoutRuntimeException)).hasLineCount(2)
-				.contains("org.springside.modules.utils.base.ExceptionUtil$CloneableRuntimeException: Timeout for 40ms")
+				.contains("org.springside.modules.utils.base.type.CloneableRuntimeException: Timeout for 40ms")
 				.contains("at org.springside.modules.utils.base.ExceptionUtilTest.hello(Unknown Source)");
 
 	}

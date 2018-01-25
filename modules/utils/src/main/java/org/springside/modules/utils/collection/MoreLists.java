@@ -7,7 +7,7 @@ import org.springside.modules.utils.collection.type.SortedArrayList;
 /**
  * 特殊的List类型
  */
-public class ExLists {
+public class MoreLists {
 
 	/**
 	 * 排序的ArrayList.

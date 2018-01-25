@@ -16,18 +16,20 @@ public class ThreadUtilTest {
 	}
 	
 	private void hello(){
-		assertThat(RuntimeUtil.getCallerClass()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest");
-		assertThat(RuntimeUtil.getCallerMethod()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest.testCaller()");
 		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 		System.out.println(ObjectUtil.toPrettyString(stacktrace));
+	
+		assertThat(RuntimeUtil.getCallerClass()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest");
+		assertThat(RuntimeUtil.getCallerMethod()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest.testCaller()");
 	}
 
 	public static class MyClass{
 		public void hello(){
-			assertThat(RuntimeUtil.getCallerClass()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest");
-			assertThat(RuntimeUtil.getCallerMethod()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest.testCaller()");
 			StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
 			System.out.println(ObjectUtil.toPrettyString(stacktrace));
+		
+			assertThat(RuntimeUtil.getCallerClass()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest");
+			assertThat(RuntimeUtil.getCallerMethod()).isEqualTo("org.springside.modules.utils.concurrent.ThreadUtilTest.testCaller()");
 		}
 	}
 }

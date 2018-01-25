@@ -92,4 +92,10 @@ public class RandomUtilTest {
 		assertThat(RandomUtil.randomAsciiFixLength(RandomUtil.threadLocalRandom(), 5)).hasSize(5);
 	}
 
+	public void test0() {
+		double a = 0.0;
+		double b = 1.0;
+		int x = 0x7fffffff;
+	}
+
 }

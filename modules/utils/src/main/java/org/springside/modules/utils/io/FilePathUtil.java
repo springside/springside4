@@ -7,7 +7,9 @@ import org.springside.modules.utils.text.MoreStringUtil;
 import com.google.common.io.Files;
 
 /**
- * 关于文件路径的工具集
+ * 关于文件路径的工具集. 这个类只适合处理纯字符串的路径，如果是File对象或者Path对象的路径处理，建议直接使用Path类的方法。
+ * 
+ * @see {@link java.nio.file.Path}
  */
 public class FilePathUtil {
 
@@ -34,25 +36,25 @@ public class FilePathUtil {
 	/**
 	 * 以拼接路径名
 	 */
-	public static String contact(String baseName, String... appendName) {
+	public static String concat(String baseName, String... appendName) {
 		if (appendName.length == 0) {
 			return baseName;
 		}
 
-		String contactName;
+		StringBuilder concatName = new StringBuilder();
 		if (MoreStringUtil.endWith(baseName, Platforms.FILE_PATH_SEPARATOR_CHAR)) {
-			contactName = baseName + appendName[0];
+			concatName.append(baseName).append(appendName[0]);
 		} else {
-			contactName = baseName + Platforms.FILE_PATH_SEPARATOR_CHAR + appendName[0];
+			concatName.append(baseName).append(Platforms.FILE_PATH_SEPARATOR_CHAR).append(appendName[0]);
 		}
 
 		if (appendName.length > 1) {
 			for (int i = 1; i < appendName.length; i++) {
-				contactName += Platforms.FILE_PATH_SEPARATOR_CHAR + appendName[i];
+				concatName.append(Platforms.FILE_PATH_SEPARATOR_CHAR).append(appendName[i]);
 			}
 		}
 
-		return contactName;
+		return concatName.toString();
 	}
 
 	/**

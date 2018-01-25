@@ -10,10 +10,10 @@
 
 	<properties>
 		<guava.version>20.0</guava.version>
-		<commons-lang3.version>3.5</commons-lang3.version>
-		<slf4j.version>1.7.22</slf4j.version>
-		<orika.version>1.5.2</orika.version>
+		<commons-lang3.version>3.7</commons-lang3.version>
+		<slf4j.version>1.7.25</slf4j.version>
 		<logback.version>1.1.8</logback.version>
+		<dozer.version>5.5.1</dozer.version>
 		<junit.version>4.12</junit.version>
 		<assertj.version>2.6.0</assertj.version>
 		<mockito.version>1.10.19</mockito.version>
@@ -47,13 +47,11 @@
 		</dependency>
 		<!-- LOGGING end -->
 
-		<!-- OPTIONAL begin -->
-		<!-- for ObjectMapper -->
+		<!-- optional for BeanMapper -->
 		<dependency>
-			<groupId>ma.glasnost.orika</groupId>
-			<artifactId>orika-core</artifactId>
-			<version>${orika.version}</version>
-			<optional>true</optional>
+			<groupId>net.sf.dozer</groupId>
+			<artifactId>dozer</artifactId>
+			<version>${dozer.version}</version>
 		</dependency>
 
 		<!-- TEST begin -->

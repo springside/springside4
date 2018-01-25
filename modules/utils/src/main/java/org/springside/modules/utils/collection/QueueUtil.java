@@ -73,7 +73,7 @@ public class QueueUtil {
 	/**
 	 * 创建并发阻塞情况下，长度受限，头队尾两把锁, 但使用更多内存的队列.
 	 */
-	public static <E> LinkedBlockingQueue<E> newLinkedBlockingQeque(int capacity) {
+	public static <E> LinkedBlockingQueue<E> newLinkedBlockingQueue(int capacity) {
 		return new LinkedBlockingQueue<E>(capacity);
 	}
 

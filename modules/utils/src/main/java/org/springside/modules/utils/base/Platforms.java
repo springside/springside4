@@ -5,7 +5,7 @@ import java.io.File;
 import org.apache.commons.lang3.SystemUtils;
 
 /**
- * 关于系统设定，平台信息的变量(via Common Lang)
+ * 关于系统设定，平台信息的变量(via Common Lang SystemUtils)
  */
 public class Platforms {
 
@@ -46,6 +46,4 @@ public class Platforms {
 	public static final boolean IS_LINUX = SystemUtils.IS_OS_LINUX;
 	public static final boolean IS_UNIX = SystemUtils.IS_OS_UNIX;
 	public static final boolean IS_WINDOWS = SystemUtils.IS_OS_WINDOWS;
-
-
 }

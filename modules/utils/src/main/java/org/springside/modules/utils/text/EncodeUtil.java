@@ -3,7 +3,7 @@ package org.springside.modules.utils.text;
 import com.google.common.io.BaseEncoding;
 
 /**
- * string/url -> hex/base64 编解码工具集，依赖Guava
+ * string/url -> hex/base64 编解码工具集(via guava BaseEncoding)
  */
 public class EncodeUtil {
 

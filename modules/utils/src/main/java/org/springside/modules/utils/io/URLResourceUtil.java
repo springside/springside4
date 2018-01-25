@@ -14,7 +14,7 @@ import org.apache.commons.lang3.Validate;
 
 /**
  * 兼容url为无前缀，file://与classpath:// 三种情况的工具集
- * 
+ * <p>
  * 参考Spring ResourceUtils
  */
 public class URLResourceUtil {

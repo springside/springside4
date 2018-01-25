@@ -112,37 +112,37 @@ public class MapUtilTest {
 
 	@Test
 	public void weakMap() {
-		ConcurrentMap<MyBean, MyBean> weakKeyMap = ExMaps.createWeakKeyConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap = MoreMaps.createWeakKeyConcurrentMap(10, 1);
 		initExpireAllMap(weakKeyMap);
 		System.gc();
 		assertThat(weakKeyMap.get(new MyBean("A"))).isNull();
 		assertThat(weakKeyMap).hasSize(1); // key仍然在
 
-		ConcurrentMap<MyBean, MyBean> weakKeyMap2 = ExMaps.createWeakKeyConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap2 = MoreMaps.createWeakKeyConcurrentMap(10, 1);
 		MyBean value = new MyBean("B");
 		initExpireKeyMap(weakKeyMap2, value);
 		System.gc();
 		assertThat(weakKeyMap2.get(new MyBean("A"))).isNull();
 
-		ConcurrentMap<MyBean, MyBean> weakKeyMap3 = ExMaps.createWeakKeyConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakKeyMap3 = MoreMaps.createWeakKeyConcurrentMap(10, 1);
 		MyBean key = new MyBean("A");
 		initExpireValueMap(weakKeyMap3, key);
 		System.gc();
 		assertThat(weakKeyMap3.get(key)).isEqualTo(new MyBean("B"));
 
 		// weak value
-		ConcurrentMap<MyBean, MyBean> weakValueMap = ExMaps.createWeakValueConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakValueMap = MoreMaps.createWeakValueConcurrentMap(10, 1);
 		initExpireAllMap(weakValueMap);
 		System.gc();
 		assertThat(weakValueMap.get(new MyBean("A"))).isNull();
 
-		ConcurrentMap<MyBean, MyBean> weakValueMap2 = ExMaps.createWeakValueConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakValueMap2 = MoreMaps.createWeakValueConcurrentMap(10, 1);
 		MyBean value2 = new MyBean("B");
 		initExpireKeyMap(weakValueMap2, value2);
 		System.gc();
 		assertThat(weakValueMap2.get(new MyBean("A"))).isEqualTo(new MyBean("B"));
 
-		ConcurrentMap<MyBean, MyBean> weakValueMap3 = ExMaps.createWeakValueConcurrentMap(10, 1);
+		ConcurrentMap<MyBean, MyBean> weakValueMap3 = MoreMaps.createWeakValueConcurrentMap(10, 1);
 		MyBean key3 = new MyBean("A");
 		initExpireValueMap(weakValueMap3, key3);
 		System.gc();

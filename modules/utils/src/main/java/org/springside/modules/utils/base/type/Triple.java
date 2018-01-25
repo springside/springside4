@@ -3,28 +3,36 @@ package org.springside.modules.utils.base.type;
 import org.springside.modules.utils.base.annotation.Nullable;
 
 /**
- * 引入一个简简单单的Pair, 用于返回值返回两个元素.
+ * 引入一个简简单单的Triple, 用于返回值返回三个元素.
  *
  * copy from Twitter Common
  */
-public class Pair<L, R> {
+public class Triple<L, M, R> {
 
 	@Nullable
 	private final L left;
 	@Nullable
+	private final M middle;
+	@Nullable
 	private final R right;
 
 	/**
-	 * Creates a new pair.
+	 * Creates a new Triple.
 	 */
-	public Pair(@Nullable L left, @Nullable R right) {
+	public Triple(@Nullable L left, @Nullable M middle, @Nullable R right) {
 		this.left = left;
+		this.middle = middle;
 		this.right = right;
 	}
 
 	@Nullable
 	public L getLeft() {
 		return left;
+	}
+
+	@Nullable
+	public M getMiddle() {
+		return middle;
 	}
 
 	@Nullable
@@ -37,6 +45,7 @@ public class Pair<L, R> {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((left == null) ? 0 : left.hashCode());
+		result = prime * result + ((middle == null) ? 0 : middle.hashCode());
 		return prime * result + ((right == null) ? 0 : right.hashCode());
 	}
 
@@ -48,12 +57,19 @@ public class Pair<L, R> {
 		if (obj == null || getClass() != obj.getClass()) {
 			return false;
 		}
-		Pair other = (Pair) obj;
+		Triple other = (Triple) obj;
 		if (left == null) {
 			if (other.left != null) {
 				return false;
 			}
 		} else if (!left.equals(other.left)) {
+			return false;
+		}
+		if (middle == null) {
+			if (other.middle != null) {
+				return false;
+			}
+		} else if (!middle.equals(other.middle)) {
 			return false;
 		}
 		if (right == null) {
@@ -68,13 +84,13 @@ public class Pair<L, R> {
 
 	@Override
 	public String toString() {
-		return "Pair [left=" + left + ", right=" + right + ']';
+		return "Triple [left=" + left + ", middle=" + middle + ", right=" + right + ']';
 	}
 
 	/**
-	 * 根据等号左边的泛型，自动构造合适的Pair
+	 * 根据等号左边的泛型，自动构造合适的Triple
 	 */
-	public static <L, R> Pair<L, R> of(@Nullable L left, @Nullable R right) {
-		return new Pair<L, R>(left, right);
+	public static <L, M, R> Triple<L, M, R> of(@Nullable L left, @Nullable M middle, @Nullable R right) {
+		return new Triple<L, M, R>(left, middle, right);
 	}
 }

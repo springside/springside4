@@ -2,13 +2,14 @@ package org.springside.modules.utils.concurrent;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Semaphore;
 
 import org.springside.modules.utils.concurrent.jsr166e.LongAdder;
 
 import com.google.common.util.concurrent.RateLimiter;
 
 /**
- * 并发工具类型
+ * 并发常用工具类
  */
 public class Concurrents {
 
@@ -33,6 +34,20 @@ public class Concurrents {
 	 */
 	public static CyclicBarrier cyclicBarrier(int count) {
 		return new CyclicBarrier(count);
+	}
+
+	/**
+	 * 返回默认的非公平信号量，先请求的线程不一定先拿到信号量
+	 */
+	public static Semaphore nonFairSemaphore(int permits) {
+		return new Semaphore(permits);
+	}
+	
+	/**
+	 * 返回公平的信号量，先请求的线程先拿到信号量
+	 */
+	public static Semaphore fairSemaphore(int permits) {
+		return new Semaphore(permits,true);
 	}
 
 	/////////// 限流采样 //////

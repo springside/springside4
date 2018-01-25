@@ -12,6 +12,7 @@ import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardOpenOption;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
@@ -34,22 +35,12 @@ import org.springside.modules.utils.text.Charsets;
 public class FileUtil {
 
 	// fileVisitor for file deletion on Files.walkFileTree
-	private static FileVisitor<Path> deleteFileVisitor = new FileVisitor<Path>() {
-
-		@Override
-		public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-			return FileVisitResult.CONTINUE;
-		}
+	private static FileVisitor<Path> deleteFileVisitor = new SimpleFileVisitor<Path>() {
 
 		@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
 			Files.delete(file);
 			return FileVisitResult.CONTINUE;
-		}
-
-		@Override
-		public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-			throw exc;
 		}
 
 		@Override
@@ -257,9 +248,9 @@ public class FileUtil {
 	 * @param to 如果to为null，或文件存在但是一个目录，抛出异常
 	 */
 	public static void copyFile(@NotNull Path from, @NotNull Path to) throws IOException {
-		Validate.isTrue(Files.exists(from), from + " is not exist or not a file");
+		Validate.isTrue(Files.exists(from), "%s is not exist or not a file", from);
 		Validate.notNull(to);
-		Validate.isTrue(!FileUtil.isDirExists(to), to + " is exist but it is a dir");
+		Validate.isTrue(!FileUtil.isDirExists(to), "%s is exist but it is a dir", to);
 		Files.copy(from, to);
 	}
 
@@ -267,7 +258,7 @@ public class FileUtil {
 	 * 复制目录
 	 */
 	public static void copyDir(@NotNull File from, @NotNull File to) throws IOException {
-		Validate.isTrue(isDirExists(from), from + " is not exist or not a dir");
+		Validate.isTrue(isDirExists(from), "%s is not exist or not a dir", from);
 		Validate.notNull(to);
 
 		copyDir(from.toPath(), to.toPath());
@@ -277,7 +268,7 @@ public class FileUtil {
 	 * 复制目录
 	 */
 	public static void copyDir(@NotNull Path from, @NotNull Path to) throws IOException {
-		Validate.isTrue(isDirExists(from), from + " is not exist or not a dir");
+		Validate.isTrue(isDirExists(from), "%s is not exist or not a dir", from);
 		Validate.notNull(to);
 		makesureDirExists(to);
 
@@ -306,9 +297,9 @@ public class FileUtil {
 	 * @see {@link Files#move}
 	 */
 	public static void moveFile(@NotNull Path from, @NotNull Path to) throws IOException {
-		Validate.isTrue(isFileExists(from), from + " is not exist or not a file");
+		Validate.isTrue(isFileExists(from), "%s is not exist or not a file", from);
 		Validate.notNull(to);
-		Validate.isTrue(!isDirExists(to), to + " is  exist but it is a dir");
+		Validate.isTrue(!isDirExists(to), "%s is  exist but it is a dir", to);
 
 		Files.move(from, to);
 	}
@@ -317,9 +308,9 @@ public class FileUtil {
 	 * 目录移动/重命名
 	 */
 	public static void moveDir(@NotNull File from, @NotNull File to) throws IOException {
-		Validate.isTrue(isDirExists(from), from + " is not exist or not a dir");
+		Validate.isTrue(isDirExists(from), "%s is not exist or not a dir", from);
 		Validate.notNull(to);
-		Validate.isTrue(!isFileExists(to), to + " is exist but it is a file");
+		Validate.isTrue(!isFileExists(to), "%s is exist but it is a file", to);
 
 		final boolean rename = from.renameTo(to);
 		if (!rename) {
@@ -358,7 +349,7 @@ public class FileUtil {
 	 * 如果文件不存在或者是目录，则不做修改
 	 */
 	public static void deleteFile(@Nullable File file) throws IOException {
-		Validate.isTrue(isFileExists(file), file + " is not exist or not a file");
+		Validate.isTrue(isFileExists(file), "%s is not exist or not a file", file);
 		deleteFile(file.toPath());
 	}
 
@@ -368,7 +359,7 @@ public class FileUtil {
 	 * 如果文件不存在或者是目录，则不做修改
 	 */
 	public static void deleteFile(@Nullable Path path) throws IOException {
-		Validate.isTrue(isFileExists(path), path + " is not exist or not a file");
+		Validate.isTrue(isFileExists(path), "%s is not exist or not a file", path);
 
 		Files.delete(path);
 	}
@@ -379,7 +370,7 @@ public class FileUtil {
 	 * @see {@link Files#walkFileTree}
 	 */
 	public static void deleteDir(Path dir) throws IOException {
-		Validate.isTrue(isDirExists(dir), dir + " is not exist or not a dir");
+		Validate.isTrue(isDirExists(dir), "%s is not exist or not a dir", dir);
 
 		// 后序遍历，先删掉子目录中的文件/目录
 		Files.walkFileTree(dir, deleteFileVisitor);
@@ -389,7 +380,7 @@ public class FileUtil {
 	 * 删除目录及所有子目录/文件
 	 */
 	public static void deleteDir(File dir) throws IOException {
-		Validate.isTrue(isDirExists(dir), dir + " is not exist or not a dir");
+		Validate.isTrue(isDirExists(dir), "%s is not exist or not a dir", dir);
 		deleteDir(dir.toPath());
 	}
 
@@ -397,11 +388,14 @@ public class FileUtil {
 	 * 判断目录是否存在, from Jodd
 	 */
 	public static boolean isDirExists(String dirPath) {
+		if (dirPath == null) {
+			return false;
+		}
 		return isDirExists(getPath(dirPath));
 	}
 
 	public static boolean isDirExists(Path dirPath) {
-		return Files.exists(dirPath) && Files.isDirectory(dirPath);
+		return dirPath != null && Files.exists(dirPath) && Files.isDirectory(dirPath);
 	}
 
 	/**
@@ -443,11 +437,10 @@ public class FileUtil {
 	/**
 	 * 确保父目录及其父目录直到根目录都已经创建.
 	 *
-	 * @see Files#createParentDirs(File)
 	 */
 	public static void makesureParentDirExists(File file) throws IOException {
 		Validate.notNull(file);
-		makesureDirExists(file.toPath());
+		makesureDirExists(file.getParentFile());
 	}
 
 	/**
@@ -457,6 +450,9 @@ public class FileUtil {
 	 * @see {@link Files#isRegularFile}
 	 */
 	public static boolean isFileExists(String fileName) {
+		if (fileName == null) {
+			return false;
+		}
 		return isFileExists(getPath(fileName));
 	}
 

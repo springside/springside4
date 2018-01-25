@@ -9,7 +9,7 @@ import java.util.Date;
  */
 public class ClockUtil {
 
-	private static Clock INSTANCE = new DefaultClock();
+	private static Clock instance = new DefaultClock();
 
 	/**
 	 * 计算流逝的时间
@@ -22,52 +22,52 @@ public class ClockUtil {
 	 * 切换为DummyClock，使用系统时间为初始时间, 单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock() {
-		INSTANCE = new DummyClock();
-		return (DummyClock) INSTANCE;
+		instance = new DummyClock();
+		return (DummyClock) instance;
 	}
 
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock(long timeStampMills) {
-		INSTANCE = new DummyClock(timeStampMills);
-		return (DummyClock) INSTANCE;
+		instance = new DummyClock(timeStampMills);
+		return (DummyClock) instance;
 	}
 
 	/**
 	 * 切换为DummyClock，单个测试完成后需要调用useDefaultClock()切换回去.
 	 */
 	public static synchronized DummyClock useDummyClock(Date date) {
-		INSTANCE = new DummyClock(date);
-		return (DummyClock) INSTANCE;
+		instance = new DummyClock(date);
+		return (DummyClock) instance;
 	}
 
 	/**
 	 * 重置为默认Clock
 	 */
 	public static synchronized void useDefaultClock() {
-		INSTANCE = new DefaultClock();
+		instance = new DefaultClock();
 	}
 
 	/**
 	 * 系统当前时间
 	 */
 	public static Date currentDate() {
-		return INSTANCE.currentDate();
+		return instance.currentDate();
 	}
 
 	/**
 	 * 系统当前时间戳
 	 */
 	public static long currentTimeMillis() {
-		return INSTANCE.currentTimeMillis();
+		return instance.currentTimeMillis();
 	}
 
 	/**
 	 * 操作系统启动到现在的纳秒数，与系统时间是完全独立的两个时间体系
 	 */
 	public static long nanoTime() {
-		return INSTANCE.nanoTime();
+		return instance.nanoTime();
 	}
 
 	public interface Clock {

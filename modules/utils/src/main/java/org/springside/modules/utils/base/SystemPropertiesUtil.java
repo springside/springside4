@@ -9,7 +9,7 @@ import org.springside.modules.utils.number.NumberUtil;
 /**
  * 关于SystemProperties的工具类
  * 
- * 1. 统一的读取系统变量，其中Boolean.readBoolean的风格不统一，Double则不支持，都进行了扩展.
+ * 1. 统一风格的读取系统变量到各种数据类型，其中Boolean.readBoolean的风格不统一，Double则不支持，都进行了扩展.
  * 
  * 2. 简单的合并系统变量(-D)，环境变量 和默认值，以系统变量优先，在未引入Commons Config时使用.
  * 
@@ -80,14 +80,14 @@ public class SystemPropertiesUtil {
 	 * 读取Double类型的系统变量，为空时返回null.
 	 */
 	public static Double getDouble(String propertyName) {
-		return NumberUtil.toDoubleObject(System.getProperty(propertyName));
+		return NumberUtil.toDoubleObject(System.getProperty(propertyName), null);
 	}
 
 	/**
 	 * 读取Double类型的系统变量，为空时返回默认值.
 	 */
 	public static Double getDouble(String propertyName, Double defaultValue) {
-		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName));
+		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName), null);
 		return propertyValue != null ? propertyValue : defaultValue;
 	}
 
@@ -112,11 +112,11 @@ public class SystemPropertiesUtil {
 	 */
 	public static Integer getInteger(String propertyName, String envName, Integer defaultValue) {
 		checkEnvName(envName);
-		Integer propertyValue = NumberUtil.toIntObject(System.getProperty(propertyName));
+		Integer propertyValue = NumberUtil.toIntObject(System.getProperty(propertyName), null);
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = NumberUtil.toIntObject(System.getenv(envName));
+			propertyValue = NumberUtil.toIntObject(System.getenv(envName), null);
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
@@ -126,11 +126,11 @@ public class SystemPropertiesUtil {
 	 */
 	public static Long getLong(String propertyName, String envName, Long defaultValue) {
 		checkEnvName(envName);
-		Long propertyValue = NumberUtil.toLongObject(System.getProperty(propertyName));
+		Long propertyValue = NumberUtil.toLongObject(System.getProperty(propertyName), null);
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = NumberUtil.toLongObject(System.getenv(envName));
+			propertyValue = NumberUtil.toLongObject(System.getenv(envName), null);
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
@@ -140,11 +140,11 @@ public class SystemPropertiesUtil {
 	 */
 	public static Double getDouble(String propertyName, String envName, Double defaultValue) {
 		checkEnvName(envName);
-		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName));
+		Double propertyValue = NumberUtil.toDoubleObject(System.getProperty(propertyName), null);
 		if (propertyValue != null) {
 			return propertyValue;
 		} else {
-			propertyValue = NumberUtil.toDoubleObject(System.getenv(envName));
+			propertyValue = NumberUtil.toDoubleObject(System.getenv(envName), null);
 			return propertyValue != null ? propertyValue : defaultValue;
 		}
 	}
@@ -168,7 +168,7 @@ public class SystemPropertiesUtil {
 	 */
 	private static void checkEnvName(String envName) {
 		if (envName == null || envName.indexOf('.') != -1) {
-			throw new IllegalArgumentException("envName " + envName + " has dot which is not valid");
+			throw new IllegalArgumentException("envName " + envName + "is null or has dot which is not valid");
 		}
 	}
 
@@ -193,16 +193,16 @@ public class SystemPropertiesUtil {
 	}
 
 	/**
-	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了一个ListenableProperties,
+	 * Properties 本质上是一个HashTable，每次读写都会加锁，所以不支持频繁的System.getProperty(name)来检查系统内容变化 因此扩展了Properties子类,
 	 * 在其所关心的属性变化时进行通知.
 	 * 
 	 * @see PropertiesListener
 	 */
-	public static class ListenableProperties extends Properties { // NOSONAR
+	public static class ListenableProperties extends Properties {
 
 		private static final long serialVersionUID = -8282465702074684324L;
 
-		protected List<PropertiesListener> listeners = new CopyOnWriteArrayList<PropertiesListener>();
+		protected transient List<PropertiesListener> listeners = new CopyOnWriteArrayList<PropertiesListener>();
 
 		public ListenableProperties(Properties properties) {
 			super(properties);

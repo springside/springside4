@@ -19,7 +19,7 @@ import com.google.common.util.concurrent.AtomicLongMap;
 /**
  * 来自Guava，Netty等的特殊Map类型
  */
-public class ExMaps {
+public class MoreMaps {
 
 	/**
 	 * 创建Key为弱引用的ConcurrentMap，Key对象可被回收.
@@ -43,8 +43,8 @@ public class ExMaps {
 	/**
 	 * 创建移植自Netty的key为int的优化HashMap
 	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
+	 * @param initialCapacity 默认为8
+	 * @param loadFactor 默认为0.5
 	 */
 	public static <V> IntObjectHashMap<V> createPrimitiveIntKeyMap(int initialCapacity, float loadFactor) {
 		return new IntObjectHashMap<V>(initialCapacity, loadFactor);
@@ -53,8 +53,8 @@ public class ExMaps {
 	/**
 	 * 创建移植自Netty的key为long的优化HashMap
 	 * 
-	 * @param initialCapacity 建议为16
-	 * @param loadFactor 建议为0.5
+	 * @param initialCapacity 默认为8
+	 * @param loadFactor 默认为0.5
 	 */
 	public static <V> LongObjectHashMap<V> createPrimitiveLongKeyMap(int initialCapacity, float loadFactor) {
 		return new LongObjectHashMap<V>(initialCapacity, loadFactor);

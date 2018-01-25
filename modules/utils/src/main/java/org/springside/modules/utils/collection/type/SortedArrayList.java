@@ -32,13 +32,17 @@ import java.util.Iterator;
 /**
  * 从Jodd整体复制，部分指定了index的操作不支持，如 add(index, element)
  * 
+ * 修改包括：改进Comparator泛型定义，findInsertionPoint的位移改进
+ * 
+ * https://github.com/oblac/jodd/blob/master/jodd-core/src/main/java/jodd/util/collection/SortedArrayList.java
+ * 
  * An extension of <code>ArrayList</code> that insures that all of the items
  * added are sorted. <b>This breaks original list contract!</b>.
  * A binary search method is used to provide a quick way to
  * auto sort this list.Note: Not all methods for adding and
  * removing elements are supported.
  */
-public final class SortedArrayList<E> extends ArrayList<E> { // NOSONAR
+public final class SortedArrayList<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -8301136559614447593L;
 
@@ -65,7 +69,7 @@ public final class SortedArrayList<E> extends ArrayList<E> { // NOSONAR
 	 */
 	public SortedArrayList(Collection<? extends E> c) {
 		comparator = null;
-		addAll(c); //
+		addAll(c);
 	}
 
 	/**

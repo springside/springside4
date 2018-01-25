@@ -34,6 +34,8 @@ import com.google.common.base.Splitter;
  * 
  * 从Jodd移植，匹配以通配符比较字符串（比正则表达式简单），以及Ant Path风格如比较目录Path
  * 
+ * https://github.com/oblac/jodd/blob/master/jodd-core/src/main/java/jodd/util/Wildcard.java
+ * 
  * Checks whether a string or path matches a given wildcard pattern. Possible patterns allow to match single characters
  * ('?') or any count of characters ('*'). Wildcard characters can be escaped (by an '\'). When matching path, deep tree
  * wildcard also can be used ('**').
@@ -139,7 +141,7 @@ public class WildcardMatcher {
 	 * Matches string to at least one pattern. Returns index of matched pattern, or <code>-1</code> otherwise.
 	 * @see #match(CharSequence, CharSequence)
 	 */
-	public static int matchOne(String src, String[] patterns) {
+	public static int matchOne(String src, String... patterns) {
 		for (int i = 0; i < patterns.length; i++) {
 			if (match(src, patterns[i])) {
 				return i;
@@ -157,7 +159,7 @@ public class WildcardMatcher {
 	 * Matches path to at least one pattern. Returns index of matched pattern or <code>-1</code> otherwise.
 	 * @see #matchPath(String, String, char)
 	 */
-	public static int matchPathOne(String platformDependentPath, String[] patterns) {
+	public static int matchPathOne(String platformDependentPath, String... patterns) {
 		for (int i = 0; i < patterns.length; i++) {
 			if (matchPath(platformDependentPath, patterns[i])) {
 				return i;
@@ -255,7 +257,7 @@ public class WildcardMatcher {
 				}
 
 				ndx = tokNdxStart + i;
-				break; // NOSONAR
+				break;
 				// this is a double-loop, cannot be refactor to break statement directly
 			}
 

@@ -9,6 +9,9 @@ import org.springside.modules.utils.base.annotation.Nullable;
  * 通过正则表达判断是否正确的URL， 邮箱，手机号，固定电话，身份证，邮箱等.
  * 
  * 从AndroidUtilCode的RegexUtils移植, 性能优化将正则表达式为预编译, 并修改了TEL的正则表达式.
+ * 
+ * https://github.com/Blankj/AndroidUtilCode/blob/master/utilcode/src/main/java/com/blankj/utilcode/util/RegexUtils.java
+ * https://github.com/Blankj/AndroidUtilCode/blob/master/utilcode/src/main/java/com/blankj/utilcode/constant/RegexConstants.java
  */
 public class TextValidator {
 
@@ -21,13 +24,13 @@ public class TextValidator {
 	/**
 	 * 正则：手机号（精确）, 已知3位前缀＋8位数字
 	 * <p>
-	 * 移动：134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、178、182、183、184、187、188
+	 * 移动：134(0-8)、135、136、137、138、139、147、150、151、152、157、158、159、178、182、183、184、187、188、198
 	 * </p>
 	 * <p>
-	 * 联通：130、131、132、145、155、156、175、176、185、186
+	 * 联通：130、131、132、145、155、156、166、171、175、176、185、186
 	 * </p>
 	 * <p>
-	 * 电信：133、153、173、177、180、181、189
+	 * 电信：133、153、173、177、180、181、189、199
 	 * </p>
 	 * <p>
 	 * 全球星：1349
@@ -36,7 +39,7 @@ public class TextValidator {
 	 * 虚拟运营商：170
 	 * </p>
 	 */
-	private static final String REGEX_MOBILE_EXACT = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|(147))\\d{8}$";
+	public static final String REGEX_MOBILE_EXACT = "^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(16[6])|(17[0,1,3,5-8])|(18[0-9])|(19[8,9]))\\d{8}$";
 	private static final Pattern PATTERN_REGEX_MOBILE_EXACT = Pattern.compile(REGEX_MOBILE_EXACT);
 
 	/**

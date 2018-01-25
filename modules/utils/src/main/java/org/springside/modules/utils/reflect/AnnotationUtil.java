@@ -37,7 +37,7 @@ public class AnnotationUtil {
 
 		Set<Annotation> superAnnotations = new HashSet<Annotation>();
 		for (Annotation ann : anns) {
-			getSupperAnnotations(ann.annotationType(), superAnnotations);
+			getSuperAnnotations(ann.annotationType(), superAnnotations);
 		}
 
 		anns.addAll(superAnnotations);
@@ -45,12 +45,12 @@ public class AnnotationUtil {
 		return anns;
 	}
 
-	private static <A extends Annotation> void getSupperAnnotations(Class<A> annotationType, Set<Annotation> visited) {
+	private static <A extends Annotation> void getSuperAnnotations(Class<A> annotationType, Set<Annotation> visited) {
 		Annotation[] anns = annotationType.getDeclaredAnnotations();
 
 		for (Annotation ann : anns) {
 			if (!ann.annotationType().getName().startsWith("java.lang") && visited.add(ann)) {
-				getSupperAnnotations(ann.annotationType(), visited);
+				getSuperAnnotations(ann.annotationType(), visited);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class AnnotationUtil {
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 * 
-	 * from org.unitils.util.AnnotationUtils
+	 * copy from org.unitils.util.AnnotationUtils
 	 */
 	public static <T extends Annotation> Set<Field> getAnnotatedPublicFields(Class<? extends Object> clazz,
 			Class<T> annotation) {
@@ -86,7 +86,7 @@ public class AnnotationUtil {
 	 * 
 	 * 暂未支持Spring风格Annotation继承Annotation
 	 * 
-	 * from org.unitils.util.AnnotationUtils
+	 * copy from org.unitils.util.AnnotationUtils
 	 */
 	public static <T extends Annotation> Set<Field> getAnnotatedFields(Class<? extends Object> clazz,
 			Class<T> annotation) {

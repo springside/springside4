@@ -7,7 +7,11 @@ import org.apache.commons.lang3.EnumUtils;
 /**
  * 枚举工具集
  * 
- * 1. 将多个枚举值按bit保存到long中
+ * 1. 将多个枚举值按bit与long的转换
+ * 
+ * 2. 与String的转换
+ * 
+ * 封装 {@code org.apache.commons.lang3.EnumUtils}
  */
 public class EnumUtil {
 
@@ -28,7 +32,21 @@ public class EnumUtil {
 	/**
 	 * long重新解析为若干个枚举值，用于使用long保存多个选项的情况.
 	 */
-	public static <E extends Enum<E>> EnumSet<E> processBits(final Class<E> enumClass, final long value) { // NOSONAR
+	public static <E extends Enum<E>> EnumSet<E> processBits(final Class<E> enumClass, final long value) {
 		return EnumUtils.processBitVector(enumClass, value);
+	}
+
+	/**
+	 * Enum转换为String
+	 */
+	public static String toString(Enum e) {
+		return e.name();
+	}
+
+	/**
+	 * String转换为Enum
+	 */
+	public static <T extends Enum<T>> T fromString(Class<T> enumClass, String value) {
+		return Enum.valueOf(enumClass, value);
 	}
 }

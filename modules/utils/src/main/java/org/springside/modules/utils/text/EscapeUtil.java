@@ -9,9 +9,9 @@ import org.apache.commons.lang3.StringEscapeUtils;
 /**
  * 转义工具集.
  * 
- * 1.JDK提供的URL 转义，转义后的URL可作为URL中的参数
+ * 1.URL 转义，转义后的URL可作为URL中的参数 (via JDK)
  * 
- * 2.Commons-Lang的xml/html 转义
+ * 2.xml/html 转义(via Commons-Lang StringEscapeUtils ,但已被废弃, 建议用Common-Text）
  * 
  * 比如 "bread" & "butter" 转化为 &quot;bread&quot; &amp; &quot;butter&quot;
  */

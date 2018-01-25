@@ -141,7 +141,7 @@ public class ListUtil {
 	 * @see java.util.Collections#emptyList()
 	 */
 	public static final <T> List<T> emptyList() {
-		return (List<T>) Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -294,7 +294,7 @@ public class ListUtil {
 	/**
 	 * list1, list2的交集（同时在list1和list2的对象），产生新List
 	 * 
-	 * from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
+	 * copy from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
 	 * 
 	 * 与List.retainAll()相比，考虑了的List中相同元素出现的次数, 如"a"在list1出现两次，而在list2中只出现一次，则交集里会保留一个"a".
 	 */
@@ -337,7 +337,7 @@ public class ListUtil {
 	/**
 	 * list1, list2的补集（在list1或list2中，但不在交集中的对象，又叫反交集）产生新List.
 	 * 
-	 * from Apache Common Collection4 ListUtils，但其并集－交集时，没有对交集*2，所以做了修改
+	 * copy from Apache Common Collection4 ListUtils，但其并集－交集时，初始大小没有对交集*2，所以做了修改
 	 */
 	public static <T> List<T> disjoint(final List<? extends T> list1, final List<? extends T> list2) {
 		List<T> intersection = intersection(list1, list2);

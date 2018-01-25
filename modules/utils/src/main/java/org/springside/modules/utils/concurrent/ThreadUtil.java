@@ -18,7 +18,7 @@ public class ThreadUtil {
 		try {
 			Thread.sleep(durationMillis);
 		} catch (InterruptedException e) {
-			handleInterruptedException();
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -29,7 +29,7 @@ public class ThreadUtil {
 		try {
 			Thread.sleep(unit.toMillis(duration));
 		} catch (InterruptedException e) {
-			handleInterruptedException();
+			Thread.currentThread().interrupt();
 		}
 	}
 

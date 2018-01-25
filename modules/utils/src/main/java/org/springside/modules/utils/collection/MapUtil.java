@@ -17,12 +17,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentSkipListMap;
 
+import org.apache.commons.lang3.Validate;
 import org.springside.modules.utils.base.annotation.NotNull;
 import org.springside.modules.utils.base.annotation.Nullable;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 
 /**
  * 关于Map的工具集合，
@@ -137,10 +139,8 @@ public class MapUtil {
 	 * 同时初始化元素.
 	 */
 	public static <K, V> HashMap<K, V> newHashMap(@NotNull final K[] keys, @NotNull final V[] values) {
-		if (keys.length != values.length) {
-			throw new IllegalArgumentException(
-					"keys.length is " + keys.length + " but values.length is " + values.length);
-		}
+		Validate.isTrue(keys.length == values.length, "keys.length is %s  but values.length is %s", keys.length,
+				values.length);
 
 		HashMap<K, V> map = new HashMap<K, V>(keys.length * 2);
 
@@ -157,9 +157,8 @@ public class MapUtil {
 	 * 同时初始化元素.
 	 */
 	public static <K, V> HashMap<K, V> newHashMap(@NotNull final List<K> keys, @NotNull final List<V> values) {
-		if (keys.size() != values.size()) {
-			throw new IllegalArgumentException("keys.size is " + keys.size() + " but values.size is " + values.size());
-		}
+		Validate.isTrue(keys.size() == values.size(), "keys.length is %s  but values.length is %s", keys.size(),
+				values.size());
 
 		HashMap<K, V> map = new HashMap<K, V>(keys.size() * 2);
 		Iterator<K> keyIt = keys.iterator();
@@ -212,9 +211,6 @@ public class MapUtil {
 		return new ConcurrentSkipListMap<K, V>();
 	}
 
-	
-	
-
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
@@ -225,7 +221,7 @@ public class MapUtil {
 	 * @see java.util.Collections#emptyMap()
 	 */
 	public static final <K, V> Map<K, V> emptyMap() {
-		return Collections.EMPTY_MAP;
+		return Collections.emptyMap();
 	}
 
 	/**
@@ -290,7 +286,7 @@ public class MapUtil {
 	 * @param reverse 按Value的倒序 or 正序排列
 	 */
 	public static <K, V extends Comparable> Map<K, V> sortByValue(Map<K, V> map, final boolean reverse) {
-		return sortByValueInternal(map, reverse ? new ComparableEntryValueReverseComparator<K, V>()
+		return sortByValueInternal(map, reverse ? Ordering.from(new ComparableEntryValueComparator<K, V>()).reverse()
 				: new ComparableEntryValueComparator<K, V>());
 	}
 
@@ -303,7 +299,7 @@ public class MapUtil {
 
 	private static <K, V> Map<K, V> sortByValueInternal(Map<K, V> map, Comparator<Entry<K, V>> comparator) {
 		Set<Entry<K, V>> entrySet = map.entrySet();
-		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[entrySet.size()]);
+		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[0]);
 
 		Arrays.sort(entryArray, comparator);
 
@@ -319,7 +315,7 @@ public class MapUtil {
 	 * @param reverse 按Value的倒序 or 正序排列
 	 */
 	public static <K, V extends Comparable> Map<K, V> topNByValue(Map<K, V> map, final boolean reverse, int n) {
-		return topNByValueInternal(map, n, reverse ? new ComparableEntryValueReverseComparator<K, V>()
+		return topNByValueInternal(map, n, reverse ? Ordering.from(new ComparableEntryValueComparator<K, V>()).reverse()
 				: new ComparableEntryValueComparator<K, V>());
 	}
 
@@ -332,7 +328,7 @@ public class MapUtil {
 
 	private static <K, V> Map<K, V> topNByValueInternal(Map<K, V> map, int n, Comparator<Entry<K, V>> comparator) {
 		Set<Entry<K, V>> entrySet = map.entrySet();
-		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[entrySet.size()]);
+		Entry<K, V>[] entryArray = entrySet.toArray(new Entry[0]);
 		Arrays.sort(entryArray, comparator);
 
 		Map<K, V> result = new LinkedHashMap<K, V>();
@@ -349,14 +345,6 @@ public class MapUtil {
 		@Override
 		public int compare(Entry<K, V> o1, Entry<K, V> o2) {
 			return (o1.getValue()).compareTo(o2.getValue());
-		}
-	}
-
-	private static final class ComparableEntryValueReverseComparator<K, V extends Comparable>
-			implements Comparator<Entry<K, V>> {
-		@Override
-		public int compare(Entry<K, V> o1, Entry<K, V> o2) {
-			return -(o1.getValue()).compareTo(o2.getValue());
 		}
 	}
 

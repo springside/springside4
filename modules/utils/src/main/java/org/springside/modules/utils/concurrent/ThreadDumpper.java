@@ -67,7 +67,7 @@ public class ThreadDumpper {
 		// 两条日志间的时间间隔，是VM被thread dump堵塞的时间.
 		logger.info("Finish the threads snapshot");
 
-		StringBuilder sb = new StringBuilder(8192 * 20).append("\n");
+		StringBuilder sb = new StringBuilder(8192 * 20).append('\n');
 
 		for (Entry<Thread, StackTraceElement[]> entry : threads.entrySet()) {
 			dumpThreadInfo(entry.getKey(), entry.getValue(), sb);
@@ -80,7 +80,7 @@ public class ThreadDumpper {
 	 * 打印全部的stack，重新实现threadInfo的toString()函数，因为默认最多只打印8层的stack. 同时，不再打印lockedMonitors和lockedSynchronizers.
 	 */
 	private String dumpThreadInfo(Thread thread, StackTraceElement[] stackTrace, StringBuilder sb) {
-		sb.append("\"").append(thread.getName()).append("\" Id=").append(thread.getId()).append(' ')
+		sb.append('\"').append(thread.getName()).append("\" Id=").append(thread.getId()).append(' ')
 				.append(thread.getState());
 		sb.append('\n');
 		int i = 0;

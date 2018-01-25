@@ -8,48 +8,49 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springside.modules.utils.io.type.StringBuilderWriter;
 import org.springside.modules.utils.text.Charsets;
 
+import com.google.common.io.ByteStreams;
+import com.google.common.io.CharStreams;
+import com.google.common.io.Closeables;
+
 /**
- * IO Stream/Reader相关工具集
+ * IO Stream/Reader相关工具集. 固定encoding为UTF8.
  * 
- * 建议使用Apache Commons IO, 在未引入Commons IO时可以用本类做最基本的事情.
+ * 建议使用Apache Commons IO和Guava关于IO的工具类(com.google.common.io.*), 在未引入Commons IO时可以用本类做最基本的事情.
  * 
- * 代码基本从Apache Commmons IO中化简移植, 固定encoding为UTF8.
- * 
+ * <p>
  * 1. 安静关闭Closeable对象
- * 
- * 2. 读出InputStream/Reader内容到String 或 List<String>(from Commons IO)
- * 
- * 3. 将String写到OutputStream/Writer(from Commons IO)
- * 
- * 4. InputStream/Reader与OutputStream/Writer之间复制的copy(from Commons IO)
+ * <p>
+ * 2. 读出InputStream/Reader内容到String 或 List<String>
+ * <p>
+ * 3. 将String写到OutputStream/Writer
+ * <p>
+ * 4. InputStream/Reader与OutputStream/Writer之间复制的copy
  * 
  */
 public class IOUtil {
-	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
-
-	private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
-	private static final int EOF = -1;
-
 	private static final String CLOSE_ERROR_MESSAGE = "IOException thrown while closing Closeable.";
+
+	private static final Logger logger = LoggerFactory.getLogger(IOUtil.class);
 
 	/**
 	 * 在final中安静的关闭, 不再往外抛出异常避免影响原有异常，最常用函数. 同时兼容Closeable为空未实际创建的情况.
+	 * 
+	 * @see {@link Closeables#close}
 	 */
 	public static void closeQuietly(Closeable closeable) {
-		if (closeable != null) {
-			try {
-				closeable.close();
-			} catch (IOException e) {
-				logger.warn(CLOSE_ERROR_MESSAGE, e);
-			}
+		if (closeable == null) {
+			return;
+		}
+		try {
+			closeable.close();
+		} catch (IOException e) {
+			logger.warn(CLOSE_ERROR_MESSAGE, e);
 		}
 	}
 
@@ -63,12 +64,11 @@ public class IOUtil {
 
 	/**
 	 * 简单读取Reader到String
+	 * 
+	 * @see {@link CharStreams#toString}
 	 */
 	public static String toString(Reader input) throws IOException {
-		final BufferedReader reader = toBufferedReader(input);
-		StringBuilderWriter sw = new StringBuilderWriter();
-		copy(reader, sw);
-		return sw.toString();
+		return CharStreams.toString(input);
 	}
 
 	/**
@@ -80,16 +80,11 @@ public class IOUtil {
 
 	/**
 	 * 简单读取Reader的每行内容到List<String>
+	 * 
+	 * @see {@link CharStreams#readLines}
 	 */
 	public static List<String> toLines(final Reader input) throws IOException {
-		final BufferedReader reader = toBufferedReader(input);
-		final List<String> list = new ArrayList<String>();
-		String line = reader.readLine();
-		while (line != null) {
-			list.add(line);
-			line = reader.readLine();
-		}
-		return list;
+		return CharStreams.readLines(toBufferedReader(input));
 	}
 
 	/**
@@ -112,31 +107,20 @@ public class IOUtil {
 
 	/**
 	 * 在Reader与Writer间复制内容
+	 * 
+	 * @see {@link CharStreams#copy}
 	 */
 	public static long copy(final Reader input, final Writer output) throws IOException {
-		final char[] buffer = new char[DEFAULT_BUFFER_SIZE];
-		long count = 0;
-		int n;
-		while (EOF != (n = input.read(buffer))) {
-			output.write(buffer, 0, n);
-			count += n;
-		}
-		return count;
+		return CharStreams.copy(input, output);
 	}
 
 	/**
 	 * 在InputStream与OutputStream间复制内容
+	 * 
+	 * @see {@link ByteStreams#copy}
 	 */
 	public static long copy(final InputStream input, final OutputStream output) throws IOException {
-
-		final byte[] buffer = new byte[DEFAULT_BUFFER_SIZE];
-		long count = 0;
-		int n;
-		while (EOF != (n = input.read(buffer))) {
-			output.write(buffer, 0, n);
-			count += n;
-		}
-		return count;
+		return ByteStreams.copy(input, output);
 	}
 
 	public static BufferedReader toBufferedReader(final Reader reader) {

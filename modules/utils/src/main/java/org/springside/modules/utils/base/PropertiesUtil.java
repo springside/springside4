@@ -15,7 +15,7 @@ import org.springside.modules.utils.text.Charsets;
 /**
  * 关于Properties的工具类
  * 
- * 1. 统一读取Properties
+ * 1. 统一风格读取Properties到各种数据类型
  * 
  * 2. 从文件或字符串装载Properties
  */
@@ -72,5 +72,5 @@ public class PropertiesUtil {
 		}
 		return p;
 	}
-
+	
 }

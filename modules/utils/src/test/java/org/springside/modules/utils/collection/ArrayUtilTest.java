@@ -1,6 +1,8 @@
 package org.springside.modules.utils.collection;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +15,15 @@ public class ArrayUtilTest {
 	@Test
 	public void shuffle() {
 		String[] arrays = new String[] { "d", "a", "c", "b", "e", "i", "g" };
+		String[] arraysClone = Arrays.copyOf(arrays, arrays.length);
 		Arrays.sort(arrays);
 		assertThat(arrays).containsExactly("a", "b", "c", "d", "e", "g", "i");
 		ArrayUtil.shuffle(arrays);
-		System.out.println(Arrays.toString(arrays));
+		assertFalse("should not be equal to origin array", Arrays.equals(arrays, arraysClone));
+		// System.out.println(Arrays.toString(arrays));
 		Arrays.sort(arrays);
-
 		ArrayUtil.shuffle(arrays, RandomUtil.secureRandom());
+		assertFalse("should not be equal to origin array", Arrays.equals(arrays, arraysClone));
 	}
 
 	@Test

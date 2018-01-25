@@ -26,7 +26,7 @@ public class QueueUtilTest {
 		LinkedBlockingQueue<String> queue4 = QueueUtil.newBlockingUnlimitQueue();
 		LinkedBlockingDeque<String> queue8 = QueueUtil.newBlockingUnlimitDeque();
 
-		LinkedBlockingQueue<String> queue5 = QueueUtil.newLinkedBlockingQeque(100);
+		LinkedBlockingQueue<String> queue5 = QueueUtil.newLinkedBlockingQueue(100);
 		ArrayBlockingQueue<String> queue6 = QueueUtil.newArrayBlockingQueue(100);
 		LinkedBlockingDeque<String> queue9 = QueueUtil.newBlockingDeque(100);
 	}
@@ -34,8 +34,8 @@ public class QueueUtilTest {
 	@Test
 	public void stack() {
 
-		Queue<String> stack = ExQueues.createStack(10);
-		Queue<String> stack2 = ExQueues.createConcurrentStack();
+		Queue<String> stack = MoreQueues.createStack(10);
+		Queue<String> stack2 = MoreQueues.createConcurrentStack();
 
 		stack.offer("1");
 		stack.offer("2");

@@ -62,7 +62,7 @@ public class FileTreeWalker {
 	 */
 	public static List<File> listFileWithAntPath(final File rootDir, final String antPathPattern) {
 		return Files.fileTreeTraverser().preOrderTraversal(rootDir)
-				.filter(new AntPathFilter(FilePathUtil.contact(rootDir.getAbsolutePath(), antPathPattern))).toList();
+				.filter(new AntPathFilter(FilePathUtil.concat(rootDir.getAbsolutePath(), antPathPattern))).toList();
 	}
 
 	/**

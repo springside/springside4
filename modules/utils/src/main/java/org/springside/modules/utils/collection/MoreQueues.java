@@ -9,7 +9,7 @@ import com.google.common.collect.EvictingQueue;
 /**
  * 特殊类型Queue:LIFO的Stack, LRU的Queue
  */
-public class ExQueues {
+public class MoreQueues {
 
 	//////////////// 特殊类型Queue：Stack ///////////
 

@@ -191,7 +191,7 @@ public class DateUtil {
 	 * 获得日期是一周的第几天. 已改为中国习惯，1 是Monday，而不是Sundays.
 	 */
 	public static int getDayOfWeek(@NotNull final Date date) {
-		int result = get(date, Calendar.DAY_OF_WEEK);
+		int result = getWithMondayFirst(date, Calendar.DAY_OF_WEEK);
 		return result == 1 ? 7 : result - 1;
 	}
 
@@ -223,7 +223,6 @@ public class DateUtil {
 	private static int get(final Date date, int field) {
 		Validate.notNull(date, "The date must not be null");
 		Calendar cal = Calendar.getInstance();
-		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
 
 		return cal.get(field);
@@ -374,7 +373,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * 是否闰年，移植Jodd Core的TimeUtil
+	 * 是否闰年，copy from Jodd Core的TimeUtil
 	 * 
 	 * 参数是公元计数, 如2016
 	 */

@@ -6,7 +6,9 @@ import org.springside.modules.utils.number.RandomUtil;
 /**
  * 采样器
  * 
- * from Twitter Common, 优化使用ThreadLocalRandom
+ * 移植 Twitter Common, 优化使用ThreadLocalRandom
+ * 
+ * https://github.com/twitter/commons/blob/master/src/java/com/twitter/common/util/Sampler.java
  * 
  */
 public class Sampler {

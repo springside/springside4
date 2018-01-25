@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
+import org.springside.modules.utils.base.type.UncheckedException;
 import org.springside.modules.utils.collection.ListUtil;
 
 public class ReflectionUtilTest {
@@ -43,15 +43,13 @@ public class ReflectionUtilTest {
 		try {
 			ReflectionUtil.getFieldValue(bean, "notExist");
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-
+		} catch (IllegalArgumentException e) { // NOSONAR
 		}
 
 		try {
 			ReflectionUtil.setFieldValue(bean, "notExist", 2);
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-
+		} catch (IllegalArgumentException e) { // NOSONAR
 		}
 	}
 
@@ -64,13 +62,6 @@ public class ReflectionUtilTest {
 		// 通过setter的函数将+1
 		ReflectionUtil.invokeSetter(bean, "publicField", 10);
 		assertThat(bean.inspectPublicField()).isEqualTo(10 + 1);
-	}
-
-	@Test
-	public void invokeMethodWithObjectType() {
-		// 使用函数名+参数类型的匹配,原子类型测试
-		TestBean bean = new TestBean();
-
 	}
 
 	@Test

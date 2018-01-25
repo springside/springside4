@@ -13,6 +13,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.springside.modules.utils.base.ExceptionUtil;
 import org.springside.modules.utils.number.RandomUtil;
+import org.springside.modules.utils.text.Charsets;
 
 /**
  * 支持HMAC-SHA1消息签名 及 DES/AES对称加密的工具类.
@@ -105,7 +106,7 @@ public class CryptoUtil {
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key) {
 		byte[] decryptResult = aes(input, key, Cipher.DECRYPT_MODE);
-		return new String(decryptResult);
+		return new String(decryptResult, Charsets.UTF_8);
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class CryptoUtil {
 	 */
 	public static String aesDecrypt(byte[] input, byte[] key, byte[] iv) {
 		byte[] decryptResult = aes(input, key, iv, Cipher.DECRYPT_MODE);
-		return new String(decryptResult);
+		return new String(decryptResult, Charsets.UTF_8);
 	}
 
 	/**

@@ -6,6 +6,8 @@ import org.apache.commons.lang3.BooleanUtils;
  * 1. 从String(true/false, yes/no)，转换为Boolean或boolean
  * 
  * 2. 逻辑运算：取反，多个boolean的and,or 计算
+ * 
+ * 封装 {@code org.apache.commons.lang3.BooleanUtils}
  */
 public class BooleanUtil {
 

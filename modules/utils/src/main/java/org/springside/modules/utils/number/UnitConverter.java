@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * 1.将带单位的时间，大小字符串转换为数字. from Facebook
+ * 1.将带单位的时间，大小字符串转换为数字. copy from Facebook
  * https://github.com/facebook/jcommon/blob/master/config/src/main/java/com/facebook/config/ConfigUtil.java
  *
  * 2.将数字转为带单位的字符串
@@ -45,35 +45,34 @@ public class UnitConverter {
 	public static long toDurationMillis(String duration) {
 		Matcher matcher = NUMBER_AND_UNIT.matcher(duration);
 
-		if (matcher.matches()) {
-			long number = Long.parseLong(matcher.group(1));
+		if (!matcher.matches()) {
+			throw new IllegalArgumentException("malformed duration string: " + duration);
+		}
 
-			if (matcher.group(2) != null) {
-				String unitStr = matcher.group(2).toLowerCase();
-				char unit = unitStr.charAt(0);
+		long number = Long.parseLong(matcher.group(1));
+		String unitStr = matcher.group(2);
+		if (unitStr == null) {
+			return number;
+		}
 
-				switch (unit) {
-				case 's':
-					return number * MILLIS_PER_SECOND;
-				case 'm':
-					// if it's an m, could be 'minutes' or 'millis'. default minutes
-					if (unitStr.length() >= 2 && unitStr.charAt(1) == 's') {
-						return number;
-					}
+		char unit = unitStr.toLowerCase().charAt(0);
 
-					return number * MILLIS_PER_MINUTE;
-				case 'h':
-					return number * MILLIS_PER_HOUR;
-				case 'd':
-					return number * MILLIS_PER_DAY;
-				default:
-					throw new IllegalArgumentException("unknown time unit :" + unit);
-				}
-			} else {
+		switch (unit) {
+		case 's':
+			return number * MILLIS_PER_SECOND;
+		case 'm':
+			// if it's an m, could be 'minutes' or 'millis'. default minutes
+			if (unitStr.length() >= 2 && unitStr.charAt(1) == 's') {
 				return number;
 			}
-		} else {
-			throw new IllegalArgumentException("malformed duration string: " + duration);
+
+			return number * MILLIS_PER_MINUTE;
+		case 'h':
+			return number * MILLIS_PER_HOUR;
+		case 'd':
+			return number * MILLIS_PER_DAY;
+		default:
+			throw new IllegalArgumentException("unknown time unit :" + unit);
 		}
 	}
 
@@ -90,8 +89,9 @@ public class UnitConverter {
 		if (matcher.matches()) {
 			long number = Long.parseLong(matcher.group(1));
 
-			if (matcher.group(2) != null) {
-				char unit = matcher.group(2).toLowerCase().charAt(0);
+			String unitStr = matcher.group(2);
+			if (unitStr != null) {
+				char unit = unitStr.toLowerCase().charAt(0);
 
 				switch (unit) {
 				case 'b':
@@ -129,18 +129,18 @@ public class UnitConverter {
 		}
 
 		if (bytes < M) {
-			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + "." + scale + "fk", bytes * 1d / K);
+			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + '.' + scale + "fk", bytes * 1d / K);
 		}
 
 		if (bytes < G) {
-			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + "." + scale + "fm", bytes * 1d / M);
+			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + '.' + scale + "fm", bytes * 1d / M);
 		}
 
 		if (bytes < T) {
-			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + "." + scale + "fg", bytes * 1d / G);
+			return String.format("%" + (scale == 0 ? 4 : 5 + scale) + '.' + scale + "fg", bytes * 1d / G);
 		}
 
-		return String.format("%" + (scale == 0 ? 4 : 5 + scale) + "." + scale + "ft", bytes * 1d / T);
+		return String.format("%" + (scale == 0 ? 4 : 5 + scale) + '.' + scale + "ft", bytes * 1d / T);
 	}
 
 	/**
@@ -154,18 +154,21 @@ public class UnitConverter {
 		}
 
 		if (millis < MILLIS_PER_MINUTE) {
-			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + "." + scale + "fs", millis * 1d / MILLIS_PER_SECOND);
+			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + '.' + scale + "fs",
+					millis * 1d / MILLIS_PER_SECOND);
 		}
 
 		if (millis < MILLIS_PER_HOUR) {
-			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + "." + scale + "fm", millis * 1d / MILLIS_PER_MINUTE);
+			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + '.' + scale + "fm",
+					millis * 1d / MILLIS_PER_MINUTE);
 		}
 
 		if (millis < MILLIS_PER_DAY) {
-			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + "." + scale + "fh", millis * 1d / MILLIS_PER_HOUR);
+			return String.format("%" + (scale == 0 ? 2 : 3 + scale) + '.' + scale + "fh",
+					millis * 1d / MILLIS_PER_HOUR);
 		}
 
-		return String.format("%" + (scale == 0 ? 2 : 3 + scale) + "." + scale + "fd", millis * 1d / MILLIS_PER_DAY);
+		return String.format("%" + (scale == 0 ? 2 : 3 + scale) + '.' + scale + "fd", millis * 1d / MILLIS_PER_DAY);
 	}
 
 	/**

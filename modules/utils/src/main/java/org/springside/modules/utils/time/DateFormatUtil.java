@@ -51,7 +51,7 @@ public class DateFormatUtil {
 	 * 
 	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
 	 */
-	public static Date pareDate(@NotNull String pattern, @NotNull String dateString) throws ParseException {
+	public static Date parseDate(@NotNull String pattern, @NotNull String dateString) throws ParseException {
 		return FastDateFormat.getInstance(pattern).parse(dateString);
 	}
 
@@ -126,7 +126,7 @@ public class DateFormatUtil {
 	/**
 	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
 	 * 
-	 * from AndroidUtilCode
+	 * copy from AndroidUtilCode
 	 */
 	public static String formatFriendlyTimeSpanByNow(@NotNull Date date) {
 		return formatFriendlyTimeSpanByNow(date.getTime());
@@ -135,7 +135,7 @@ public class DateFormatUtil {
 	/**
 	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
 	 * 
-	 * from AndroidUtilCode
+	 * copy from AndroidUtilCode
 	 */
 	public static String formatFriendlyTimeSpanByNow(long timeStampMillis) {
 		long now = ClockUtil.currentTimeMillis();

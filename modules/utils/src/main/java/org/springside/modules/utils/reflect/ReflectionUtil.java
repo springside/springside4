@@ -12,8 +12,8 @@ import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springside.modules.utils.base.ExceptionUtil;
-import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
 import org.springside.modules.utils.base.ObjectUtil;
+import org.springside.modules.utils.base.type.UncheckedException;
 
 /**
  * 反射工具类.
@@ -141,7 +141,7 @@ public class ReflectionUtil {
 			throw new IllegalArgumentException(
 					"Could not find getter method [" + propertyName + "] on target [" + obj + ']');
 		}
-		return (T) invokeMethod(obj, method);
+		return invokeMethod(obj, method);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class ReflectionUtil {
 		if (method != null) {
 			return invokeMethod(obj, method);
 		} else {
-			return (T) getFieldValue(obj, propertyName);
+			return getFieldValue(obj, propertyName);
 		}
 	}
 
@@ -249,7 +249,7 @@ public class ReflectionUtil {
 	public static <T> T invokeMethod(Object obj, String methodName, Object... args) {
 		Object[] theArgs = ArrayUtils.nullToEmpty(args);
 		final Class<?>[] parameterTypes = ClassUtils.toClass(theArgs);
-		return (T) invokeMethod(obj, methodName, theArgs, parameterTypes);
+		return invokeMethod(obj, methodName, theArgs, parameterTypes);
 	}
 
 	/**
@@ -292,12 +292,12 @@ public class ReflectionUtil {
 		try {
 			return (T) method.invoke(obj, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.uncheckedAndWrap(e);
+			throw ExceptionUtil.unwrapAndUnchecked(e);
 		}
 	}
 
 	////////// 构造函数 ////////
-	//TODO:更多函数的封装
+	// TODO:更多函数的封装
 	/**
 	 * 调用构造函数.
 	 */
@@ -305,7 +305,7 @@ public class ReflectionUtil {
 		try {
 			return ConstructorUtils.invokeConstructor(cls, args);
 		} catch (Exception e) {
-			throw ExceptionUtil.uncheckedAndWrap(e);
+			throw ExceptionUtil.unwrapAndUnchecked(e);
 		}
 	}
 
