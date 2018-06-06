@@ -1,4 +1,7 @@
-travis-ci status:[![Build Status](https://api.travis-ci.org/springside/springside4.png?branch=master)](https://travis-ci.org/springside/springside4/)
+## 最新项目： [VJTools－唯品会Java核心项目](https://github.com/vipshop/vjtools)
+
+
+[![Build Status](https://api.travis-ci.org/springside/springside4.png?branch=master)](https://travis-ci.org/springside/springside4/)
 
 SpringSide是以Spring Framework为核心的，Pragmatic风格的JavaEE应用参考示例，是JavaEE世界中的主流技术选型，最佳实践的总结与演示。
   
