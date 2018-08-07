@@ -11,8 +11,6 @@ script:
   - jdk_switcher use oraclejdk7
   - "mvn test"
   - "mvn clean package -Dmaven.test.skip=true" 
-  - jdk_switcher use oraclejdk7
-  - "mvn test"  
 
 branches:
   only:
