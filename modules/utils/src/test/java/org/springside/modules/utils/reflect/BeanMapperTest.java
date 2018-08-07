@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.springside.modules.utils.collection.ListUtil;
+import org.springside.modules.utils.mapper.BeanMapper;
 
 public class BeanMapperTest {
 

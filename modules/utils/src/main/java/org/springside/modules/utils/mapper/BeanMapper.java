@@ -1,4 +1,4 @@
-package org.springside.modules.utils.reflect;
+package org.springside.modules.utils.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
