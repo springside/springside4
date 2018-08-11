@@ -29,3 +29,4 @@ SpringSide是以Spring Framework为核心的，Pragmatic风格的JavaEE应用参
 Offical Site: http://springside.io（域名过期）
 
 Document: https://github.com/springside/springside4/wiki
+我且个人和体育
