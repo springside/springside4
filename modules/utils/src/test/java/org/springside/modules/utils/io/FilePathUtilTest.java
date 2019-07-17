@@ -13,10 +13,10 @@ public class FilePathUtilTest {
 
 	@Test
 	public void pathName() {
-		String filePath = FilePathUtil.contact(sep + "abc", "ef");
+		String filePath = FilePathUtil.concat(sep + "abc", "ef");
 		assertThat(filePath).isEqualTo(FilePathUtil.normalizePath("/abc/ef"));
 
-		String filePath2 = FilePathUtil.contact(sep + "stuv" + sep, "xy");
+		String filePath2 = FilePathUtil.concat(sep + "stuv" + sep, "xy");
 		assertThat(filePath2).isEqualTo(FilePathUtil.normalizePath("/stuv/xy"));
 
 		assertThat(FilePathUtil.simplifyPath("../dd/../abc")).isEqualTo("../abc");

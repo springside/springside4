@@ -1,8 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2014 springside.github.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
 package org.springside.modules.utils.text;
 
 import java.io.IOException;
@@ -32,12 +27,15 @@ import com.google.common.hash.Hashing;
  * 2.crc32, murmur32这些不追求安全性, 性能较高, 返回int.
  * 
  * 其中crc32基于JDK, murmurhash基于guava
- * 
- * @author calvin
  */
 public class HashUtil {
 
-	public static final int MURMUR_SEED = 1318007700;
+	public static final int MURMUR_SEED = 1_318_007_700;
+
+	private static final ThreadLocal<MessageDigest> MD5_DIGEST = createThreadLocalMessageDigest("MD5");
+	private static final ThreadLocal<MessageDigest> SHA_1_DIGEST = createThreadLocalMessageDigest("SHA-1");
+
+	private static SecureRandom random = new SecureRandom();
 
 	// ThreadLocal重用MessageDigest
 	private static ThreadLocal<MessageDigest> createThreadLocalMessageDigest(final String digest) {
@@ -48,16 +46,11 @@ public class HashUtil {
 					return MessageDigest.getInstance(digest);
 				} catch (NoSuchAlgorithmException e) {
 					throw new RuntimeException(
-							"unexpected exception creating MessageDigest instance for [" + digest + "]", e);
+							"unexpected exception creating MessageDigest instance for [" + digest + ']', e);
 				}
 			}
 		};
 	}
-
-	private static final ThreadLocal<MessageDigest> MD5_DIGEST = createThreadLocalMessageDigest("MD5");
-	private static final ThreadLocal<MessageDigest> SHA_1_DIGEST = createThreadLocalMessageDigest("SHA-1");
-
-	private static SecureRandom random = new SecureRandom();
 
 	////////////////// SHA1 ///////////////////
 	/**

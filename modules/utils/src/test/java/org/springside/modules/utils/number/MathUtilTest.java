@@ -45,17 +45,6 @@ public class MathUtilTest {
 	}
 
 	@Test
-	public void gcd() {
-		assertThat(MathUtil.gcd(5, 6)).isEqualTo(1);
-		assertThat(MathUtil.gcd(12, 18)).isEqualTo(6);
-		assertThat(MathUtil.gcd(100, 1000)).isEqualTo(100);
-
-		assertThat(MathUtil.gcd(5L, 6L)).isEqualTo(1L);
-		assertThat(MathUtil.gcd(12L, 18L)).isEqualTo(6L);
-		assertThat(MathUtil.gcd(100L, 1000L)).isEqualTo(100L);
-	}
-
-	@Test
 	public void caculate() {
 		assertThat(MathUtil.mod(15, 10)).isEqualTo(5);
 		assertThat(MathUtil.mod(-15, 10)).isEqualTo(5);
@@ -64,17 +53,17 @@ public class MathUtilTest {
 		assertThat(MathUtil.mod(15l, 10l)).isEqualTo(5);
 		assertThat(MathUtil.mod(-15l, 10l)).isEqualTo(5);
 		assertThat(MathUtil.mod(-5l, 3l)).isEqualTo(1);
-		
+
 		assertThat(MathUtil.mod(15l, 10)).isEqualTo(5);
 		assertThat(MathUtil.mod(-15l, 10)).isEqualTo(5);
 		assertThat(MathUtil.mod(-5l, 3)).isEqualTo(1);
-		
+
 		assertThat(MathUtil.pow(2, 3)).isEqualTo(8);
 		assertThat(MathUtil.pow(2, 0)).isEqualTo(1);
-		
+
 		assertThat(MathUtil.pow(2l, 3)).isEqualTo(8);
 		assertThat(MathUtil.pow(2l, 0)).isEqualTo(1);
-		
+
 		assertThat(MathUtil.sqrt(15, RoundingMode.HALF_UP)).isEqualTo(4);
 		assertThat(MathUtil.sqrt(16, RoundingMode.HALF_UP)).isEqualTo(4);
 		assertThat(MathUtil.sqrt(10l, RoundingMode.HALF_UP)).isEqualTo(3);
@@ -82,7 +71,8 @@ public class MathUtilTest {
 
 	@Test
 	public void divide() {
-		assertThat(10 / 4).isEqualTo(2);
+		assertThat(11 / 4).isEqualTo(2);
+		assertThat(10L / 4).isEqualTo(2);
 		assertThat(MathUtil.divide(10, 4, RoundingMode.HALF_UP)).isEqualTo(3);
 		assertThat(MathUtil.divide(10L, 4L, RoundingMode.HALF_DOWN)).isEqualTo(2);
 	}

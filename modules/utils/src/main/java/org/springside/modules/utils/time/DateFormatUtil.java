@@ -12,7 +12,7 @@ import org.springside.modules.utils.base.annotation.NotNull;
  * 
  * 注意Common Lang版本，3.5版才使用StringBuilder，3.4及以前使用StringBuffer.
  * 
- * 1. 常用格式的FastDateFormat定义
+ * 1. 常用格式的FastDateFormat定义, 常用格式直接使用这些FastDateFormat
  * 
  * 2. 日期格式不固定时的String<->Date 转换函数.
  * 
@@ -21,8 +21,6 @@ import org.springside.modules.utils.base.annotation.NotNull;
  * @see FastDateFormat#parse(String)
  * @see FastDateFormat#format(java.util.Date)
  * @see FastDateFormat#format(long)
- * 
- * @author calvin
  */
 public class DateFormatUtil {
 
@@ -53,7 +51,7 @@ public class DateFormatUtil {
 	 * 
 	 * FastDateFormat.getInstance()已经做了缓存，不会每次创建对象，但直接使用对象仍然能减少在缓存中的查找.
 	 */
-	public static Date pareDate(@NotNull String pattern, @NotNull String dateString) throws ParseException {
+	public static Date parseDate(@NotNull String pattern, @NotNull String dateString) throws ParseException {
 		return FastDateFormat.getInstance(pattern).parse(dateString);
 	}
 
@@ -84,6 +82,8 @@ public class DateFormatUtil {
 	 * 按HH:mm:ss.SSS格式，格式化时间间隔.
 	 * 
 	 * endDate必须大于startDate，间隔可大于1天，
+	 * 
+	 * @see DurationFormatUtils
 	 */
 	public static String formatDuration(@NotNull Date startDate, @NotNull Date endDate) {
 		return DurationFormatUtils.formatDurationHMS(endDate.getTime() - startDate.getTime());
@@ -93,6 +93,8 @@ public class DateFormatUtil {
 	 * 按HH:mm:ss.SSS格式，格式化时间间隔
 	 * 
 	 * 单位为毫秒，必须大于0，可大于1天
+	 * 
+	 * @see DurationFormatUtils
 	 */
 	public static String formatDuration(long durationMillis) {
 		return DurationFormatUtils.formatDurationHMS(durationMillis);
@@ -102,6 +104,8 @@ public class DateFormatUtil {
 	 * 按HH:mm:ss格式，格式化时间间隔
 	 * 
 	 * endDate必须大于startDate，间隔可大于1天
+	 * 
+	 * @see DurationFormatUtils
 	 */
 	public static String formatDurationOnSecond(@NotNull Date startDate, @NotNull Date endDate) {
 		return DurationFormatUtils.formatDuration(endDate.getTime() - startDate.getTime(), "HH:mm:ss");
@@ -111,6 +115,8 @@ public class DateFormatUtil {
 	 * 按HH:mm:ss格式，格式化时间间隔
 	 * 
 	 * 单位为毫秒，必须大于0，可大于1天
+	 * 
+	 * @see DurationFormatUtils
 	 */
 	public static String formatDurationOnSecond(long durationMillis) {
 		return DurationFormatUtils.formatDuration(durationMillis, "HH:mm:ss");
@@ -120,7 +126,7 @@ public class DateFormatUtil {
 	/**
 	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
 	 * 
-	 * from AndroidUtilCode
+	 * copy from AndroidUtilCode
 	 */
 	public static String formatFriendlyTimeSpanByNow(@NotNull Date date) {
 		return formatFriendlyTimeSpanByNow(date.getTime());
@@ -129,7 +135,7 @@ public class DateFormatUtil {
 	/**
 	 * 打印用户友好的，与当前时间相比的时间差，如刚刚，5分钟前，今天XXX，昨天XXX
 	 * 
-	 * from AndroidUtilCode
+	 * copy from AndroidUtilCode
 	 */
 	public static String formatFriendlyTimeSpanByNow(long timeStampMillis) {
 		long now = ClockUtil.currentTimeMillis();

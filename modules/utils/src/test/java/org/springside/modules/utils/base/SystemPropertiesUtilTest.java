@@ -92,7 +92,7 @@ public class SystemPropertiesUtilTest {
 		assertThat(result).isEqualTo("123");
 
 		// env值
-		String result2 = SystemPropertiesUtil.getString(name, "HOME", "123");
+		String result2 = SystemPropertiesUtil.getString(name, "PATH", "123");
 		assertThat(result2).isNotEqualTo("123");
 
 		// system properties值

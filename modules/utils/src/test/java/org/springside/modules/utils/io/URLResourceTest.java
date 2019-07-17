@@ -37,7 +37,7 @@ public class URLResourceTest {
 
 	@Test
 	public void file() throws IOException {
-		File file = FileUtil.createTempFile();
+		File file = FileUtil.createTempFile().toFile();
 		FileUtil.write("haha", file);
 		try {
 			File file2 = URLResourceUtil.asFile("file://" + file.getAbsolutePath());

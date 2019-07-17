@@ -2,12 +2,14 @@ package org.springside.modules.utils.concurrent;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.Test;
 import org.springside.modules.utils.base.ExceptionUtil;
+import org.springside.modules.utils.concurrent.type.BasicFuture;
 
 public class BasicFutureTest {
 
@@ -73,9 +75,15 @@ public class BasicFutureTest {
 		// 取消
 		MyFuture<String> future4 = new MyFuture<String>();
 		Tasks.cancel(future4);
-		String result4 = future4.get();
-		assertThat(result4).isNull();
 		assertThat(future4.isCancelled()).isTrue();
+		try{
+			String result4 = future4.get();
+			fail("should fail here");
+		}catch(CancellationException cae){
+			
+		}
+		
+		
 	}
 
 }

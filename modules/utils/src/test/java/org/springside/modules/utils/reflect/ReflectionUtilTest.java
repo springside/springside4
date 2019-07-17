@@ -1,16 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2005, 2014 springside.github.io
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- *******************************************************************************/
 package org.springside.modules.utils.reflect;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import org.junit.Test;
-import org.springside.modules.utils.base.ExceptionUtil.UncheckedException;
+import org.springside.modules.utils.base.type.UncheckedException;
+import org.springside.modules.utils.collection.ListUtil;
 
 public class ReflectionUtilTest {
 
@@ -46,15 +43,13 @@ public class ReflectionUtilTest {
 		try {
 			ReflectionUtil.getFieldValue(bean, "notExist");
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-
+		} catch (IllegalArgumentException e) { // NOSONAR
 		}
 
 		try {
 			ReflectionUtil.setFieldValue(bean, "notExist", 2);
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-
+		} catch (IllegalArgumentException e) { // NOSONAR
 		}
 	}
 
@@ -63,17 +58,10 @@ public class ReflectionUtilTest {
 		TestBean bean = new TestBean();
 		assertThat(ReflectionUtil.invokeGetter(bean, "publicField")).isEqualTo(bean.inspectPublicField() + 1);
 
-		MethodInvoker invoker = MethodInvoker.createGetter(TestBean.class, "publicField");
-		assertThat(invoker.invoke(bean)).isEqualTo(bean.inspectPublicField() + 1);
-
 		bean = new TestBean();
 		// 通过setter的函数将+1
 		ReflectionUtil.invokeSetter(bean, "publicField", 10);
 		assertThat(bean.inspectPublicField()).isEqualTo(10 + 1);
-
-		MethodInvoker invoker2 = MethodInvoker.createSetter(TestBean.class, "publicField", Integer.class);
-		invoker2.invoke(bean, 12);
-		assertThat(bean.inspectPublicField()).isEqualTo(12 + 1);
 	}
 
 	@Test
@@ -87,26 +75,30 @@ public class ReflectionUtilTest {
 		assertThat(ReflectionUtil.invokeMethod(bean, "privateMethod", new Object[] { "calvin" },
 				new Class[] { String.class })).isEqualTo("hello calvin");
 
-		// MethodInvoker
-		MethodInvoker invoker = MethodInvoker.createMethod(bean.getClass(), "privateMethod", String.class);
-		assertThat(invoker.invoke(bean, new Object[] { "calvin" })).isEqualTo("hello calvin");
-
 		// 仅匹配函数名
 		assertThat(ReflectionUtil.invokeMethodByName(bean, "privateMethod", new Object[] { "calvin" }))
 				.isEqualTo("hello calvin");
+
+		// 各种类型
+		assertThat(ReflectionUtil.invokeMethod(bean, "intType", new Object[] { 1 }, new Class[] { int.class }))
+				.isEqualTo(1);
+
+		assertThat(ReflectionUtil.invokeMethod(bean, "integerType", new Object[] { 1 }, new Class[] { Integer.class }))
+				.isEqualTo(1);
+
+		assertThat(ReflectionUtil.invokeMethod(bean, "listType", new Object[] { ListUtil.newArrayList("1", "2") },
+				new Class[] { List.class })).isEqualTo(2);
+
+		assertThat(ReflectionUtil.invokeMethod(bean, "intType", 1)).isEqualTo(1);
+
+		assertThat(ReflectionUtil.invokeMethod(bean, "integerType", 1)).isEqualTo(1);
+
+		assertThat(ReflectionUtil.invokeMethod(bean, "listType", ListUtil.newArrayList("1", "2"))).isEqualTo(2);
 
 		// 函数名错
 		try {
 			ReflectionUtil.invokeMethod(bean, "notExistMethod", new Object[] { "calvin" },
 					new Class[] { String.class });
-			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
-
-		}
-
-		// 函数名错
-		try {
-			MethodInvoker.createMethod(bean.getClass(), "notExistMethod", String.class);
 			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
 		} catch (IllegalArgumentException e) {
 
@@ -118,14 +110,6 @@ public class ReflectionUtilTest {
 					new Class[] { Integer.class });
 			failBecauseExceptionWasNotThrown(RuntimeException.class);
 		} catch (RuntimeException e) {
-
-		}
-
-		// 参数类型错
-		try {
-			MethodInvoker.createMethod(bean.getClass(), "privateMethod", Integer.class);
-			failBecauseExceptionWasNotThrown(IllegalArgumentException.class);
-		} catch (IllegalArgumentException e) {
 
 		}
 
@@ -198,6 +182,21 @@ public class ReflectionUtilTest {
 
 		private String privateMethod(String text) {
 			return "hello " + text;
+		}
+
+		// 测试原子类型转换
+		public Integer integerType(Integer i) {
+			return i;
+		}
+
+		// 测试原子类型转换
+		public int intType(int i) {
+			return i;
+		}
+
+		// 测试类型为接口
+		public int listType(List<?> list) {
+			return list.size();
 		}
 	}
 

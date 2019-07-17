@@ -9,7 +9,8 @@ package org.springside.modules.utils.concurrent.jsr166e;
 import java.util.Random;
 
 /**
- * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/Striped64.java 1.10
+ * 移植
+ * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/Striped64.java Revision 1.10
  * 
  * A package-local class holding common representation and mechanics
  * for classes supporting dynamic striping on 64bit values. The class

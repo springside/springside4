@@ -28,7 +28,7 @@ public class ThreadDumpperTest {
 	@Test
 	public void test() throws InterruptedException {
 		ExecutorService executor = ThreadPoolBuilder.fixedPool().setPoolSize(10).build();
-		CountDownLatch countDownLatch= ConcurrentTools.countDownLatch(10);
+		CountDownLatch countDownLatch= Concurrents.countDownLatch(10);
 		for(int i=0;i<10;i++){
 			executor.execute(new LongRunTask(countDownLatch));
 		}

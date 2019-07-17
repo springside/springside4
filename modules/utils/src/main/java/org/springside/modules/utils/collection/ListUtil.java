@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.springside.modules.utils.collection.type.SortedArrayList;
-
 import com.google.common.collect.Lists;
 
 /**
@@ -23,8 +21,6 @@ import com.google.common.collect.Lists;
  * 3. 各种扩展List类型的创建函数
  * 
  * 5. 集合运算：交集，并集, 差集, 补集，from Commons Collection，但对其不合理的地方做了修正
- * 
- * @author calvin
  */
 @SuppressWarnings("unchecked")
 public class ListUtil {
@@ -135,27 +131,6 @@ public class ListUtil {
 		return new CopyOnWriteArrayList<T>(elements);
 	}
 
-	////////////// 特别类型的List//////////////
-
-	/**
-	 * 构造排序的ArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
-	 */
-	@SuppressWarnings("rawtypes")
-	public static <T extends Comparable> SortedArrayList<T> createSortedArrayList() {
-		return new SortedArrayList<T>();
-	}
-
-	/**
-	 * 构造排序的ArrayList.
-	 * 
-	 * from Jodd的新类型，插入时排序，但指定插入index的方法如add(index,element)不支持
-	 */
-	public static <T> SortedArrayList<T> createSortedArrayList(Comparator<? super T> c) {
-		return new SortedArrayList<T>(c);
-	}
-
 	///////////////// from JDK Collections的常用构造函数 ///////////////////
 
 	/**
@@ -166,7 +141,7 @@ public class ListUtil {
 	 * @see java.util.Collections#emptyList()
 	 */
 	public static final <T> List<T> emptyList() {
-		return (List<T>) Collections.EMPTY_LIST;
+		return Collections.emptyList();
 	}
 
 	/**
@@ -241,7 +216,7 @@ public class ListUtil {
 	}
 
 	/**
-	 * 倒序排序, 采用JDK认为最优的排序算法, 使用Comparetor
+	 * 倒序排序, 采用JDK认为最优的排序算法, 使用Comparator
 	 * 
 	 * @see java.util.Collections#sort(List, Comparator)
 	 */
@@ -319,7 +294,7 @@ public class ListUtil {
 	/**
 	 * list1, list2的交集（同时在list1和list2的对象），产生新List
 	 * 
-	 * from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
+	 * copy from Apache Common Collection4 ListUtils，但其做了不合理的去重，因此重新改为性能较低但不去重的版本
 	 * 
 	 * 与List.retainAll()相比，考虑了的List中相同元素出现的次数, 如"a"在list1出现两次，而在list2中只出现一次，则交集里会保留一个"a".
 	 */
@@ -362,7 +337,7 @@ public class ListUtil {
 	/**
 	 * list1, list2的补集（在list1或list2中，但不在交集中的对象，又叫反交集）产生新List.
 	 * 
-	 * from Apache Common Collection4 ListUtils，但其并集－交集时，没有对交集*2，所以做了修改
+	 * copy from Apache Common Collection4 ListUtils，但其并集－交集时，初始大小没有对交集*2，所以做了修改
 	 */
 	public static <T> List<T> disjoint(final List<? extends T> list1, final List<? extends T> list2) {
 		List<T> intersection = intersection(list1, list2);

@@ -11,17 +11,12 @@ import org.springside.modules.utils.base.annotation.NotNull;
  * 日期工具类.
  * 
  * 在不方便使用joda-time时，使用本类降低Date处理的复杂度与性能消耗, 封装Common Lang及移植Jodd的最常用日期方法
- * 
- * @author calvin
  */
 public class DateUtil {
 
 	public static final long MILLIS_PER_SECOND = 1000; // Number of milliseconds in a standard second.
-
 	public static final long MILLIS_PER_MINUTE = 60 * MILLIS_PER_SECOND; // Number of milliseconds in a standard minute.
-
 	public static final long MILLIS_PER_HOUR = 60 * MILLIS_PER_MINUTE; // Number of milliseconds in a standard hour.
-
 	public static final long MILLIS_PER_DAY = 24 * MILLIS_PER_HOUR; // Number of milliseconds in a standard day.
 
 	private static final int[] MONTH_LENGTH = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
@@ -196,7 +191,7 @@ public class DateUtil {
 	 * 获得日期是一周的第几天. 已改为中国习惯，1 是Monday，而不是Sundays.
 	 */
 	public static int getDayOfWeek(@NotNull final Date date) {
-		int result = get(date, Calendar.DAY_OF_WEEK);
+		int result = getWithMondayFirst(date, Calendar.DAY_OF_WEEK);
 		return result == 1 ? 7 : result - 1;
 	}
 
@@ -228,7 +223,6 @@ public class DateUtil {
 	private static int get(final Date date, int field) {
 		Validate.notNull(date, "The date must not be null");
 		Calendar cal = Calendar.getInstance();
-		cal.setFirstDayOfWeek(Calendar.MONDAY);
 		cal.setTime(date);
 
 		return cal.get(field);
@@ -379,7 +373,7 @@ public class DateUtil {
 	}
 
 	/**
-	 * 是否闰年，移植Jodd Core的TimeUtil
+	 * 是否闰年，copy from Jodd Core的TimeUtil
 	 * 
 	 * 参数是公元计数, 如2016
 	 */

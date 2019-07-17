@@ -1,6 +1,8 @@
 package org.springside.modules.utils.collection;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.junit.Assert.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +15,15 @@ public class ArrayUtilTest {
 	@Test
 	public void shuffle() {
 		String[] arrays = new String[] { "d", "a", "c", "b", "e", "i", "g" };
+		String[] arraysClone = Arrays.copyOf(arrays, arrays.length);
 		Arrays.sort(arrays);
 		assertThat(arrays).containsExactly("a", "b", "c", "d", "e", "g", "i");
 		ArrayUtil.shuffle(arrays);
-		System.out.println(Arrays.toString(arrays));
+		assertFalse("should not be equal to origin array", Arrays.equals(arrays, arraysClone));
+		// System.out.println(Arrays.toString(arrays));
 		Arrays.sort(arrays);
-
 		ArrayUtil.shuffle(arrays, RandomUtil.secureRandom());
+		assertFalse("should not be equal to origin array", Arrays.equals(arrays, arraysClone));
 	}
 
 	@Test
@@ -34,15 +38,7 @@ public class ArrayUtilTest {
 			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
 		}
 
-		List<String> list2 = ArrayUtil.asList("d", new String[] { "a", "c", "b", "e", "i", "g" });
-		assertThat(list2).hasSize(7).containsExactly("d", "a", "c", "b", "e", "i", "g");
-
-		try {
-			list2.add("a");
-			fail("should fail before");
-		} catch (Throwable t) {
-			assertThat(t).isInstanceOf(UnsupportedOperationException.class);
-		}
+		
 
 		List<Integer> list3 = ArrayUtil.intAsList(1, 2, 3);
 		assertThat(list3).hasSize(3).containsExactly(1, 2, 3);

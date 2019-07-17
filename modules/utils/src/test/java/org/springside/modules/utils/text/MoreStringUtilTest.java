@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.google.common.base.Splitter;
+
 public class MoreStringUtilTest {
 	@Test
 	public void split() {
@@ -23,6 +25,13 @@ public class MoreStringUtilTest {
 
 		assertThat(MoreStringUtil.split("", '.', 4)).hasSize(0);
 
+		Splitter splitter =MoreStringUtil.charsSplitter("/\\").omitEmptyStrings();
+		result = splitter.splitToList("/a/b/c");
+		assertThat(result).hasSize(3).containsSequence("a", "b", "c");
+
+		result =  splitter.splitToList("\\a\\b\\c");
+		assertThat(result).hasSize(3).containsSequence( "a", "b", "c");
+
 	}
 
 	@Test
@@ -32,7 +41,7 @@ public class MoreStringUtilTest {
 		assertThat(MoreStringUtil.startWith(str, 'b')).isFalse();
 		assertThat(MoreStringUtil.startWith(null, 'b')).isFalse();
 		assertThat(MoreStringUtil.startWith("", 'b')).isFalse();
-		
+
 		assertThat(MoreStringUtil.endWith(str, 'c')).isTrue();
 		assertThat(MoreStringUtil.endWith(str, 'b')).isFalse();
 		assertThat(MoreStringUtil.endWith(null, 'b')).isFalse();
@@ -42,7 +51,7 @@ public class MoreStringUtilTest {
 		assertThat(MoreStringUtil.replaceFirst("abcc", 'c', 'c')).isEqualTo("abcc");
 		assertThat(MoreStringUtil.replaceFirst("", 'c', 'c')).isEqualTo("");
 		assertThat(MoreStringUtil.replaceFirst(null, 'c', 'c')).isNull();
-		
+
 		assertThat(MoreStringUtil.replaceLast("abbc", 'b', 'c')).isEqualTo("abcc");
 		assertThat(MoreStringUtil.replaceLast("abcc", 'c', 'c')).isEqualTo("abcc");
 		assertThat(MoreStringUtil.replaceLast("", 'c', 'c')).isEqualTo("");

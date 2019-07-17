@@ -13,7 +13,7 @@ public class FileTreeWalkerTest {
 
 	@Test
 	public void listFile() throws IOException {
-		File tmpDir = FileUtil.createTempDir();
+		File tmpDir = FileUtil.createTempDir().toFile();
 
 		List<File> all = FileTreeWalker.listAll(tmpDir);
 		assertThat(all).hasSize(1);
@@ -21,13 +21,13 @@ public class FileTreeWalkerTest {
 		List<File> files = FileTreeWalker.listFile(tmpDir);
 		assertThat(files).hasSize(0);
 
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
-		FileUtil.touch(FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
+		FileUtil.touch(FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".tmp");
+		FileUtil.touch(FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt()) + ".abc");
 
-		String childDir = FilePathUtil.contact(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
+		String childDir = FilePathUtil.concat(tmpDir.getAbsolutePath(), "tmp-" + RandomUtil.nextInt());
 		FileUtil.makesureDirExists(childDir);
 
-		FileUtil.touch(FilePathUtil.contact(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
+		FileUtil.touch(FilePathUtil.concat(childDir, "tmp-" + RandomUtil.nextInt()) + ".tmp");
 
 		all = FileTreeWalker.listAll(tmpDir);
 		assertThat(all).hasSize(5);
@@ -53,15 +53,15 @@ public class FileTreeWalkerTest {
 		assertThat(files).hasSize(2);
 		files = FileTreeWalker.listFileWithRegexFileName(tmpDir, ".*\\.tp");
 		assertThat(files).hasSize(0);
-		
-		
+
+
 		//antpath
-		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**/*.tmp");
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "**" + File.separator + "*.tmp");
 		assertThat(files).hasSize(2);
-		
-		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*/*.tmp");
+
+		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*" + File.separator + "*.tmp");
 		assertThat(files).hasSize(1);
-		
+
 		files = FileTreeWalker.listFileWithAntPath(tmpDir, "*.tp");
 		assertThat(files).hasSize(0);
 

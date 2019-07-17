@@ -13,7 +13,8 @@ import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/LongAdder.java 1.17
+ * 移植
+ * http://gee.cs.oswego.edu/cgi-bin/viewcvs.cgi/jsr166/src/jsr166e/LongAdder.java Revision.1.17
  * 
  * One or more variables that together maintain an initially zero
  * {@code long} sum.  When updates (method {@link #add}) are contended
@@ -53,6 +54,7 @@ public class LongAdder extends Striped64 implements Serializable {
      * Creates a new adder with initial sum of zero.
      */
     public LongAdder() {
+    		//empty
     }
 
     /**
